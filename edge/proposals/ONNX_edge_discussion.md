@@ -1,0 +1,76 @@
+#ONNX Edge Discussion
+
+##Introduction
+Edge computing is coming. While we can benefit from the excellent interoperability of ONNX to be framework-agnostic, some issues critical for running ONNX model in an edge/mobile/IoT device still remains, therefore we gather here to discuss and try to solve these issues.
+
+We are open to any discussion about ONNX edge, we will appreciate if you have any more issues/ideas or solutions. You can either edit in this doc or talk in the Gitter channel of Edge.
+
+##Ultimate Goal
+By definition, ONNX is an open specification that consists of the following components:
+
+1. A definition of an extensible computation graph model.
+
+2. Definitions of standard data types.
+
+3. Definitions of built-in operators.
+
+so, we should strive for complete support for ONNX model to run on edge device with:
+
+1. The computation graph of ONNX model that is compatible with Edge device with relatively small size
+
+2. Specific data types that used on edge device 
+
+   Presumably low bits data types that define the input and output
+
+3. Low-precision operators
+
+   The community seems no to be very interested in adding low-precision ops. Meanwhile it is more a vendor-specific problem than a consensus low-precision op set, custom low-precision op is another option for all the vendors
+
+##Scenario Coverage
+Right now most edge/mobile devices are doing the following things:
+
+1. Image processing
+
+  Face recognition, license plate recognition and gesture recognition technologies are widely used in a smart city scenario. Based on traditional image classification, Object detection and image segmentation models can we build the specific app to solve the problem. OCR for id card/ postcard or any card is also another way to use our image processing technology. We can leverage the ONNX model zoo, a collection of pre-trained state-of-the-art models in deep learning, available in the ONNX format, to help us build the app. Many powerful models like ResNet101, VGG-SSD are already collected in ONNX model zoo, but accuracy, size are the problems we must face against.
+
+2. Video Processing
+
+  Combining with the Image processing and video processing technology, traffic control, video analysis for security or other video processing scenario will be covered. Facility inspection is also a use case if we mount our edge device on a drone. The capability of multi-channel (HD) videos processing will be key to the performance of the edge device, while speed and latency are two problems that users concerned with.
+
+3. NLP Problem
+
+  Modern NLP (Natural Language Processing) is an important domain in which deep learning is applied especially in Edge. NLP in ONNX: A Strategy Proposal [1] is already proposed to the ONNX community.
+
+
+More other scenarios and use cases are welcomed here, feel free to add.
+
+##Challenges
+
+1. Accuracy
+
+ The ONNX model zoo collected many wide-used models for image classification, face recognition and image segmentation. While the accuracy number varies, the top-5 accuracy seems acceptable with VGG, resent and mobile net are all above or close to 90%. If put these models in edge device in the future, how to keep the accuracy still in a decent level while compressing the model and changing ops to low-bit version? There are some discussion in the quantization Gitter  channel where further detailed work can be achieved cooperating with the quantization WG.
+
+2. Size
+
+ In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, obviously we do not want such huge models running and consuming the precious memory. The problem is that how should we compress our model while keeping the accuracy? There are some papers we can refer to: Universal Deep Neural Network Compression [2] (thanks to @Danilo Pau sharing the information) on resNet32, 47.36 compression factor and only 0.5% loss of accuracy. There are also plenty of papers that demonstrates that by carefully quantizing to ternary bit width a net keep accuracy with dramatic hw simplification, eg. Ternary Neural Networks for Resource-Efficient AI Applications [3], so it is our job to talk about the approach we should use and compress our model.
+
+3. Speed
+
+ In many scenarios, fast processing speed and low latency are required. Vendor-specific runtime optimization are encouraged while we should also keep our optimization work going.
+
+4. Power consumption
+
+ This is a field that we rarely talked about, but power consumption is critical for an edge device. MLPerf community is a broad ML benchmark suite for measuring performance of ML software frameworks, ML hardware accelerators, and ML cloud platforms. In MLPerf Edge Inference WG, power consumption is outlined as a metrics to be measured thus I suggest that our community can cooperate with MLPerf community to improve our power consumption performance. MLPerf Edge Inference Power/Energy [4] is the official document of MLPerf on how to handle the measurement and benchmarking for the power/ energy consumption. I suggest we look into the doc and cooperate with the MLPerf community to improve our power/ energy consumption performance based on the Spec mentioned.
+
+##Cooperation with other WG
+
+Two of the three components in our design of the ONNX Edge are tightly connected with the work from the quantization WG. It is important for Edge WG to work together with the quantization WG
+Three topics we’ve covered in quantization WG:
+
+1. Input/Output type specification update for quantize ops.
+
+2. Quantized data (weights) representation. (say, min/max or min/scale representation).
+
+3. Quantize OPs (including Quantize/Dequantize and other existing ONNX ops' quantization version)
+
+In order to complete the ONNX Edge work, those topics should be more detailed and implemented based on the result. We’d like to see more suggestions in the quantization part and contribute to push the low-precision ops into the op list.
