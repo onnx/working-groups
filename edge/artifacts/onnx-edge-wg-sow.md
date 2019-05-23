@@ -15,9 +15,9 @@ Examine collaboration with [MLPerf organization](https://mlperf.org/) and their 
 
 ## Collaboration
 The edge WG will collaborate with the following ONNX groups:
-* Quantization WG
-* Model Zoo SIG
-* Compliance SIG
+* Operators SIG (in context of quantization)
+* Model Zoo SIG 
+* Architecture/Infrastructure SIG (in context of compliance)
 
 The WG should avoid overlapping work with the mentioned WGs and SIGs. 
 
