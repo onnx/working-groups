@@ -56,9 +56,9 @@ Power consumption is critical for an edge device.
 
 //MLPerf community is a broad ML benchmark suite for measuring performance of ML software frameworks, ML hardware accelerators, and ML cloud platforms. In MLPerf Edge Inference WG, power consumption is outlined as a metrics to be measured thus I suggest that our community can cooperate with MLPerf community to improve our power consumption performance. MLPerf Edge Inference Power/Energy [4] is the official document of MLPerf on how to handle the measurement and benchmarking for the power/ energy consumption. I suggest we look into the doc and cooperate with the MLPerf community to improve our power/ energy consumption performance based on the Spec mentioned.//
 
-### Security
+#### Security
 
-### Bandwidth
+#### Bandwidth
 
 
 
