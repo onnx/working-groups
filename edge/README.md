@@ -22,7 +22,7 @@ Structure of the space will evolve over time.
 * Will post a message to [ONNX Edge Gitter Channel](https://gitter.im/onnx/edge) with agenda and meeting invite link
   * Up to 7 days before the meeting by WG chair, but proposals to agenda item updates are welcomed from all contributors via gitter
 * Meeting/Telepresence tool: Zoom
-  * Meetings will be recorded and published to ONNX YouTube channel
+  * Meetings will be recorded and published to [ONNX YouTube channel](https://www.youtube.com/channel/UCIg4Cceqra3rtJEC5LPTdtw)
 
 ## Discussion mechanics
 * [ONNX Edge WG Gitter Channel](https://gitter.im/onnx/edge)
