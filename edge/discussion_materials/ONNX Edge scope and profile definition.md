@@ -1,5 +1,5 @@
-# ONNX Edge scope and profiling
-Author: Yedong Liu
+# ONNX Edge scope and profile definition
+Author: Yedong Liu, Milan Oljaca, Saurabh Tangri
 
 ## Scope of Edge
 
@@ -19,13 +19,13 @@ In another scenario which requires low latency like auto pilot cars. A notable a
 
 ## Edge device
 
-An edge device is a device which provides an entry point into enterprise or service provider core networks. Examples include routers, routing switches, terminals and other devices. Edge devices also provide connections into carrier and internet service provider networks.
+An edge device is a device which has the capability to enter into service provider core networks or connected to other smart devices to share the workload of a certain scenario. Examples include routers, routing switches, terminals and other devices. In those cases, ddge devices provide connections into carrier and internet service provider networks. An edge device doesn't need to be at connected state at all time, like mobile phones and smart cameras which can still work at offline state, but sharing of these data requires connectivity between those devices.
 
-In general, edge devices are normally routers and terminals that provide authenticated access to faster, more efficient backbone and core networks. Edge device is usually smart and has access to the core devices, often include Quality of Service (QoS) and multi-service functions to manage different types of traffic.
+In general, edge devices are normally routers and terminals that provide authenticated access to faster, more efficient backbone and core networks. Edge device like edge station can handle different kinds of works, it connect to cameras, sensors and other smart devices and is has access to the upper level core devices, often include Quality of Service (QoS) and multi-service functions to manage different types of traffic.
 
 ## ONNX Edge profile
 
-The work of the ONNX Edge profile includes:
+The ONNX Edge profile is described with the following:
 
 1. Attributes / characteristics: Power, Size, accuracy, speed, Security, etc.
 
@@ -36,7 +36,7 @@ The work of the ONNX Edge profile includes:
 Work to define strict subsets of the operator sets which apply to edge devices which avoid complex operations imposed by limitations on edge devices with high computational complexity. Exclude use-cases not applicable to the edge (e.g. large scale training scenarios)
 
 
-###Metrics for ONNX Edge
+### Edge profile attributes
 
 #### Accuracy
 
@@ -44,32 +44,29 @@ The ONNX model zoo collected many wide-used models for image classification, fac
 
 #### Size
 
-In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There will always be compromises between performance, speed, cost and consumption. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. ONNX Edge WG works to define the compression method for ONNX model and to develope quantized ops.
+Size here refers to both the model on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There will always be compromises between performance, speed, cost and consumption. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. 
 
-#### Speed
+#### Latency
 
 In many scenarios, fast processing speed and low latency are required. Vendor-specific runtime optimization are encouraged while we should also keep our optimization work going. works on the speed over laps with some of the work on the bandwidth, since a broader bandwidth always provide less latency thus improving overall speed.
 
 #### Power consumption
 
-Power consumption is critical for an edge device. 
+Power consumption is critical for an edge device. Methods are to be defined to reduce the power consumption/extend the service time of this edge device while maintaining the same level of performance:
 
-//MLPerf community is a broad ML benchmark suite for measuring performance of ML software frameworks, ML hardware accelerators, and ML cloud platforms. In MLPerf Edge Inference WG, power consumption is outlined as a metrics to be measured thus I suggest that our community can cooperate with MLPerf community to improve our power consumption performance. MLPerf Edge Inference Power/Energy [4] is the official document of MLPerf on how to handle the measurement and benchmarking for the power/ energy consumption. I suggest we look into the doc and cooperate with the MLPerf community to improve our power/ energy consumption performance based on the Spec mentioned.//
+1. A larger battery which extend the servie time of an edge device.
 
-#### Security
+2. A better chipset which utilized with more advanced algorithms and technique to lower consumption in every clock time.
 
-#### Bandwidth
+3. New scheduling system to switch off some unused applicatio or parts
 
+4. Better cooling system that doesn't consume like the old fashioned fan
 
-
-
-
-
+5. etc. 
 
 
+#### Data locality
 
-
-
-
-
-
+Depending on the application, in particular on the required data type and format, it is up to the developer to select the best transmission technology. Sometimes, it is possible to create a local network and to send the data to the cloud for further processing or for being stored. However, future IoT nodes will heavily depend on cellular communication, e.g. 5G technology.
+Attacks can involve sensors nodes to collect privacy data from users, which could be used for analysis purposes or to profile users, or involve in auto pilot cars, healthcare devices (like smart watch) or literally every electrical item that will potentially be equipped with a network access. 
+Edge devices will be built with hardware cryptographic accelerators for optimizing power consumption and latency of data transmission. These hardware accelerators can (and should) also be used for blocking the basic IP stealing attempts, encrypting the data for a better security.
