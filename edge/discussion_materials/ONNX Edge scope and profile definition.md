@@ -8,7 +8,7 @@ Edge computing is computing that’s done at or near the source of the data, ins
 
 ## Edge scenario
 
-Computation offloading for real-time applications, such as facial recognition, smart city, intelligent traffic control, industrial IoT, video analysis and monitoring, border control, unattended shops, auto pilot and smart drones are all considered within edge computing scope. 
+Doing the computing at the edge may be due to various reasons - need for real-time, privacy, latency, connectivity and more. A few examples for edge usage scenarios there are: face recognition, smart assistant, smart city, intelligent traffic control, industrial IoT, video analysis and monitoring, border control, unattended shops, autonomous cars and smart drones.
 
 Edge provides lower latency and reduces transmission costs, and edge computing still varies is highly scenario dependent. 
 
