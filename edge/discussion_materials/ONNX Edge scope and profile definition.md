@@ -41,7 +41,7 @@ Work to define strict subsets of the operator sets which apply to edge devices w
 
 ### Edge profile attributes
 
-In edge computing, there are always compromises to be made, such as latency vs power or memory utilization. Computing at the edge is no exception. We can think of edge profile attributes as dimensions along which trade-offs are being made in edge scenarios.
+In computing, there are always compromises to be made, such as latency vs power or memory utilization. Computing at the edge is no exception. We can think of edge profile attributes as dimensions along which trade-offs are being made in edge scenarios.
 
 #### Accuracy
 
