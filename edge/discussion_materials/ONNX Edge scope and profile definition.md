@@ -1,5 +1,5 @@
 # ONNX Edge scope and profile definition
-Author: Yedong Liu, Milan Oljaca, Saurabh Tangri
+Author: Yedong Liu, Milan Oljaca, Saurabh Tangri, Ofer Rosenberg
 
 ## Scope of Edge
 
