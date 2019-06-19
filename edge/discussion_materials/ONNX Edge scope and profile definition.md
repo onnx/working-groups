@@ -26,8 +26,6 @@ In another scenario which requires low latency like auto pilot cars. A notable a
 
 An edge device is a device which has the capability to connect to the internet or to a private network/data-center/cloud or connected to other smart devices to share the workload of a certain scenario. Examples include routers, routing switches, terminals, mobile phones, IoT devices, autonomous cars, etc. In those cases, edge devices provide connections into carrier and internet service provider networks. An edge device doesn't need to be at connected state at all time, like mobile phones and smart cameras which can still work at offline state, but sharing of these data requires connectivity between those devices.
 
-In general, edge devices are normally routers and terminals that provide authenticated access to faster, more efficient backbone and core networks. Edge device like edge station can handle different kinds of works, it connect to cameras, sensors and other smart devices and is has access to the upper level core devices, often include Quality of Service (QoS) and multi-service functions to manage different types of traffic.
-
 ## ONNX Edge profile
 
 The ONNX Edge profile is described with the following:
