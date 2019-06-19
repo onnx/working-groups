@@ -49,7 +49,7 @@ The ONNX model zoo collected many wide-used models for image classification, fac
 
 #### Size
 
-Size here refers to both the model on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There will always be compromises between performance, speed, cost and consumption. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. 
+Size here refers to both the model on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. 
 
 #### Latency
 
