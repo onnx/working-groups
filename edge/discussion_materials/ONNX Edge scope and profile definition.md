@@ -72,6 +72,6 @@ Power consumption is critical for an edge device. Methods are to be defined to r
 
 #### Data locality
 
-Depending on the application, in particular on the required data type and format, it is up to the developer to select the best transmission technology. Sometimes, it is possible to create a local network and to send the data to the cloud for further processing or for being stored. However, future IoT nodes will heavily depend on cellular communication, e.g. 5G technology.
+Data locality is tightly connected with data privacy and security aspects of a scenario. Depending on the application, in particular on the required data type and format, it is up to the developer to select the best transmission technology. Sometimes, it is possible to create a local network and to send the data to the cloud for further processing or for being stored. However, future IoT nodes will heavily depend on cellular communication, e.g. 5G technology.
 Attacks can involve sensors nodes to collect privacy data from users, which could be used for analysis purposes or to profile users, or involve in auto pilot cars, healthcare devices (like smart watch) or literally every electrical item that will potentially be equipped with a network access. 
 Edge devices will be built with hardware cryptographic accelerators for optimizing power consumption and latency of data transmission. These hardware accelerators can (and should) also be used for blocking the basic IP stealing attempts, encrypting the data for a better security.
