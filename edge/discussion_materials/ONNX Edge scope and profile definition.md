@@ -41,6 +41,8 @@ Work to define strict subsets of the operator sets which apply to edge devices w
 
 ### Edge profile attributes
 
+In edge computing, there are always compromises to be made, such as latency vs power or memory utilization. Computing at the edge is no exception. We can think of edge profile attributes as dimensions along which trade-offs are being made in edge scenarios.
+
 #### Accuracy
 
 The ONNX model zoo collected many wide-used models for image classification, face recognition and image segmentation. While the accuracy number varies, the top-5 accuracy seems acceptable with VGG, resent and mobile net are all above or close to 90%. Accuracy is critical for scenarios like smart city, face recognition and smart monitoring. If put these models in edge device in actual use, primary work is to keep the accuracy still in a decent level while compressing the model and changing ops to low-bit version. Detailed work can be achieved cooperating with the quantization WG.
