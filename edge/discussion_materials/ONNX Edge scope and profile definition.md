@@ -5,13 +5,11 @@ Author: Yedong Liu, Milan Oljaca, Saurabh Tangri, Ofer Rosenberg
 
 The following document provides a description of terminology related to "edge" : what is the scope of "edge", what are the scenarios, example to devices which map into the edge, and more. The goal is to define what is contained inside an edge profile , based on attributes.
 
-The next step would be using these definitions to create a per profile document which contains: the definition of a profile,
-scenario/s which are relevant to this profile, scenario mapping to list of ONNX models (and hence derived ONNX operators).
+The next step would be using these definitions to create a per profile document which contains: the definition of a profile, scenario/s which are relevant to this profile, scenario mapping to list of ONNX models (and hence derived ONNX operators).
 
 ## Scope of Edge
 
-Edge computing is computing that’s done at or near the source of the data, instead of relying on the cloud at one of a dozen data centers to do all the work. Edge computation is largely or completely performed on distributed edge devices. The target of edge computing is any application or general functionality needing to be closer to the source of the action where system can process and interact with the real world instantly.
-
+Broadly speaking, scope of edge can be defined as "not cloud". Edge computing is computing that’s done at or near the source of the data, without relying on the cloud computing resources in data centers. Edge computation is largely or completely performed on distributed edge devices. The consumer of edge computing is any application or general functionality needing to be closer to the source of the action where system can process and interact with the real world instantly.
 
 ## Edge scenario
 
