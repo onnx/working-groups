@@ -30,7 +30,7 @@ An edge device is a device which has the capability to connect to the internet o
 
 The ONNX Edge profile is described with the following:
 
-1. Attributes / characteristics: Power, Size, accuracy, speed, Security, etc.
+1. Attributes / characteristics, such as power consumption, memory size, accuracy, latency, etc.
 
 2. ONNX operations subset
 
