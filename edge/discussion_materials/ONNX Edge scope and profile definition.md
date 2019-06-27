@@ -45,7 +45,7 @@ In computing, there are always compromises to be made, such as latency vs power 
 
 #### Accuracy
 
-The ONNX model zoo collected many wide-used models for image classification, face recognition and image segmentation. While the accuracy number varies, the top-5 accuracy seems acceptable with VGG, resent and mobile net are all above or close to 90%. Accuracy is critical for scenarios like smart city, face recognition and smart monitoring. If put these models in edge device in actual use, primary work is to keep the accuracy still in a decent level while compressing the model and changing ops to low-bit version.
+The ONNX model zoo collects many wide-used neural network models, for use cases such as image classification, object detection, face recognition, image segmentation, etc. While the accuracy number varies, the top-5 accuracy seems acceptable in many cases; e.g. VGG, Resnet and MobileNet models all have top-5 accuracy above or close to 90%. Acceptable accuracy is very much use case or scenario dependent. Accuracy is critical for scenarios like smart city, face recognition and smart camera. Challenge in deploying these models on an edge device is to keep the accuracy still at acceptable level while employing various techniques to reduce model's computational complexity and size (e.g. via model compression or low-bit integer math computation).
 
 #### Size
 
