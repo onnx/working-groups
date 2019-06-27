@@ -23,10 +23,6 @@ Doing the computing at the edge may be due to various reasons - need for real-ti
 
 Edge computing requirements are highly scenario dependent.
 
-<p align="center">
-	<img src="Edge scenario radar chart.png" width="50%"/>
-</p>
-
 In one of the scenarios, specifically for IoT devices, data comes in from the physical world via various sensors, and actions are taken to change physical state via various forms of output; by performing analytics and generating output directly at the site, communications bandwidth between edge and cloud is reduced. Edge computing takes advantage of proximity to the physical items of interest and also exploits the relationships those items may have to each other.
 
 In another scenario which requires low latency like autonomous driving cars. A notable applications include online gaming. Game servers are running in the cloud and the rendered video is transferred to lightweight clients such as AR devices (mobile phone), VR glasses, etc. Conventional cloud games may suffer from high latency and insufficient bandwidth. As real-time games have strict constraints on latency, processing game simulation at the edge node is necessary for the immersive game plays.
@@ -46,12 +42,15 @@ The ONNX Edge profile is described with the following:
 
 3. Other ONNX related limitations 
 
-Work to define strict subsets of the operator sets which apply to edge devices which avoid complex operations imposed by limitations on edge devices with high computational complexity. Exclude use-cases not applicable to the edge (e.g. large scale training scenarios)
-
+Defining a strict subsets of the operators which apply to edge device profiles is important and relevant due to limitations imposed with computational complexity and device capabilities. Use-cases not applicable to the edge (e.g. large scale training scenarios) need to be excluded.
 
 ### Edge profile attributes
 
 In computing, there are always compromises to be made, such as latency vs power or memory utilization. Computing at the edge is no exception. We can think of edge profile attributes as dimensions along which trade-offs are being made in edge scenarios.
+
+<p align="center">
+	<img src="Edge scenario radar chart.png" width="50%"/>
+</p>
 
 #### 1. Accuracy
 
@@ -59,28 +58,28 @@ The ONNX model zoo collects many wide-used neural network models, for use cases 
 
 #### 2. Size
 
-Size here refers to both the model on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. 
+Size here refers to both the neural network's on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge devices, such huge models are usually not practical due to memory resource constraints. There are ways to reduce size of neural network models while keeping the accuracy, like using quantized operators, model compression etc. 
 
 #### 3. Latency
 
-In many scenarios, fast processing speed and low latency are required. Vendor-specific runtime optimization are encouraged while we should also keep our optimization work going. works on the speed over laps with some of the work on the bandwidth, since a broader bandwidth always provide less latency thus improving overall speed.
+In many scenarios, fast processing speed and low latency are required. Optimizations are always encouraged, either through vendor-specific runtime optimizations or general neural network and operator optimizations. Optimizing processing speed overlaps with optimizations in data bandwidth, since a broader data bandwidth usually provide less latency thus improving overall processing speed.
 
 #### 4. Power consumption
 
-Power consumption is critical for an edge device. Methods are to be defined to reduce the power consumption/extend the service time of this edge device while maintaining the same level of performance:
+Power consumption is important and often critical for an edge device. In this context, inferences/second/watt metric is often used. There are ways to reduce the power consumption and extend the service time of edge device while maintaining the same level of performance, e.g.:
 
 1. A larger battery which extend the servie time of an edge device.
 
-2. A better chipset which utilized with more advanced algorithms and technique to lower consumption in every clock time.
+2. A better chipset which utilized with more advanced algorithms and techniques yields lower power consumption.
 
-3. New scheduling system to switch off some unused applicatio or parts
+3. New scheduling system to switch off some unused applications or hardware parts
 
-4. Better cooling system that doesn't consume like the old fashioned fan
+4. Better more efficient cooling system 
 
 5. etc. 
 
 
 #### 5. Data locality
 
-Data locality is tightly connected with data privacy and security aspects of a scenario. Depending on the application, in particular on the required data type and format, it is up to the developer to select the best transmission technology. Sometimes, it is possible to create a local network and to send the data to the cloud for further processing or for being stored. However, future IoT nodes will heavily depend on cellular communication, e.g. 5G technology.
-Attacks can involve sensors nodes to collect privacy data from users, which could be used for analysis purposes or to profile users, or involve in auto pilot cars, healthcare devices (like smart watch) or literally every electrical item that will potentially be equipped with a network access. Thus cryptography is needed for edge devices to improve transmission security. This technique can (and should) be used for blocking the basic IP stealing attempts, and encrypting data for a better security.
+Data locality is tightly connected with data privacy and security aspects of a scenario. In some cases keeping data local on device is a must. It is also possible to have a local on edge device neural network and to send the data to the cloud for further processing or for storage. With faster cellular communication technology advancements, such as 5G, it is likely that future IoT devices will heavily depend on it. In such cases and depending on the application, in particular on the required data type and format, it is up to the developer to select the best data transmission technology.
+Security attacks target connected sensor nodes and personal devices to collect privacy data, which could be used for analysis purposes or to profile users. In such cases, encryption techniques and cryptography may be needed in edge devices to improve data transmission security.
