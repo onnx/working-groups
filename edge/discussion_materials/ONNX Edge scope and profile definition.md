@@ -13,7 +13,7 @@ Broadly speaking, scope of edge can be defined as "not cloud". Edge computing is
 
 ## Edge scenario
 
-Doing the computing at the edge may be due to various reasons - need for real-time, privacy, latency, connectivity and more. A few examples for edge usage scenarios there are: face recognition, smart assistant, smart city, intelligent traffic control, industrial IoT, video analysis and monitoring, border control, unattended shops, autonomous cars and smart drones.
+Doing the computing at the edge may be due to various reasons - need for real-time, privacy, latency, connectivity and more. A few examples for edge usage scenarios there are: face recognition, smart assistant, smart city, intelligent traffic control, industrial IoT, video analysis and monitoring, autonomous cars and smart drones.
 
 Edge computing requirements are highly scenario dependent.
 
