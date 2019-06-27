@@ -10,6 +10,10 @@ The next step would be using these definitions to create a per profile document 
 
 ## Scope of Edge
 
+<p align="center">
+	<img src="Scope of Edge.png" width="65%"/>
+</p>
+
 Broadly speaking, scope of edge can be defined as "not cloud". Edge computing is computing that’s done at or near the source of the data, without relying on the cloud computing resources in data centers. Edge computation is largely or completely performed on distributed edge devices. The consumer of edge computing is any application or general functionality needing to be closer to the source of the action where system can process and interact with the real world instantly.
 
 ## Edge scenario
@@ -17,6 +21,10 @@ Broadly speaking, scope of edge can be defined as "not cloud". Edge computing is
 Doing the computing at the edge may be due to various reasons - need for real-time, privacy, latency, connectivity and more. A few examples for edge usage scenarios there are: face recognition, smart assistant, smart city, intelligent traffic control, industrial IoT, video analysis and monitoring, autonomous cars and smart drones.
 
 Edge computing requirements are highly scenario dependent.
+
+<p align="center">
+	<img src="Edge scenario radar chart.png" width="50%"/>
+</p>
 
 In one of the scenarios, specifically for IoT devices, data comes in from the physical world via various sensors, and actions are taken to change physical state via various forms of output; by performing analytics and generating output directly at the site, communications bandwidth between edge and cloud is reduced. Edge computing takes advantage of proximity to the physical items of interest and also exploits the relationships those items may have to each other.
 
@@ -44,19 +52,19 @@ Work to define strict subsets of the operator sets which apply to edge devices w
 
 In computing, there are always compromises to be made, such as latency vs power or memory utilization. Computing at the edge is no exception. We can think of edge profile attributes as dimensions along which trade-offs are being made in edge scenarios.
 
-#### Accuracy
+#### 1. Accuracy
 
 The ONNX model zoo collects many wide-used neural network models, for use cases such as image classification, object detection, face recognition, image segmentation, etc. While the accuracy number varies, the top-5 accuracy seems acceptable in many cases; e.g. VGG, Resnet and MobileNet models all have top-5 accuracy above or close to 90%. Acceptable accuracy is very much use case or scenario dependent. Accuracy is critical for scenarios like smart city, face recognition and smart camera. Challenge in deploying these models on an edge device is to keep the accuracy still at acceptable level while employing various techniques to reduce model's computational complexity and size (e.g. via model compression or low-bit integer math computation).
 
-#### Size
+#### 2. Size
 
 Size here refers to both the model on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge device, we do not want such huge models running and consuming the precious memory. There are many ways to compress our models while keeping the accuracy like changing to quantized ops, model compression etc. 
 
-#### Latency
+#### 3. Latency
 
 In many scenarios, fast processing speed and low latency are required. Vendor-specific runtime optimization are encouraged while we should also keep our optimization work going. works on the speed over laps with some of the work on the bandwidth, since a broader bandwidth always provide less latency thus improving overall speed.
 
-#### Power consumption
+#### 4. Power consumption
 
 Power consumption is critical for an edge device. Methods are to be defined to reduce the power consumption/extend the service time of this edge device while maintaining the same level of performance:
 
@@ -71,7 +79,7 @@ Power consumption is critical for an edge device. Methods are to be defined to r
 5. etc. 
 
 
-#### Data locality
+#### 5. Data locality
 
 Data locality is tightly connected with data privacy and security aspects of a scenario. Depending on the application, in particular on the required data type and format, it is up to the developer to select the best transmission technology. Sometimes, it is possible to create a local network and to send the data to the cloud for further processing or for being stored. However, future IoT nodes will heavily depend on cellular communication, e.g. 5G technology.
 Attacks can involve sensors nodes to collect privacy data from users, which could be used for analysis purposes or to profile users, or involve in auto pilot cars, healthcare devices (like smart watch) or literally every electrical item that will potentially be equipped with a network access. Thus cryptography is needed for edge devices to improve transmission security. This technique can (and should) be used for blocking the basic IP stealing attempts, and encrypting data for a better security.
