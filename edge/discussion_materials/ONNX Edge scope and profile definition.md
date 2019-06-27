@@ -1,5 +1,6 @@
 # ONNX Edge scope and profile definition
 Author: Yedong Liu, Milan Oljaca, Saurabh Tangri, Ofer Rosenberg
+
 Version: 0.1
 
 ## Motivation
