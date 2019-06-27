@@ -3,7 +3,7 @@ Author: Yedong Liu, Milan Oljaca, Saurabh Tangri, Ofer Rosenberg
 
 ## Motivation
 
-The following document provides a description of terminology related to "edge" : what is the scope of "edge", what are the scenarios, example to devices which map into the edge, and more. The goal is to define what is contained inside an edge profile , based on attributes.
+The following document provides a description of terminology related to "edge" : what is the scope of "edge", what are the scenarios, example of devices which map into the edge, and more. The goal is to define elements that identify an edge profile, based on attributes.
 
 The next step would be using these definitions to create a per profile document which contains: the definition of a profile, scenario/s which are relevant to this profile, scenario mapping to list of ONNX models (and hence derived ONNX operators).
 
