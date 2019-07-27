@@ -11,7 +11,6 @@ Structure of the space will evolve over time.
 * Milan Oljaca (Qualcomm) (co-chair)
 * Ofer Rosenberg (Qualcomm) (co-chair)
 * Yedong Liu (Huawei)
-* Howard Huang (Huawei)
 * Saurabh Tangri (Intel)
 
 ## Meeting logistics
