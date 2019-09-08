@@ -21,7 +21,10 @@ Structure of the space will evolve over time.
 * Will post a message to [ONNX Training Gitter Channel](https://gitter.im/onnx/training) with meeting invite link
   * Up to 7 days before the meeting by WG chair, but proposals to agenda item updates are welcomed from all contributors via gitter
 * Meeting/Telepresence tool: Webex
-  * Meetings will be recorded and saved to GitHub 
+  * Meetings will be recorded and the recordings posted to YouTube, with links here:
+
+* Recording of July 23, 2019 meeting: https://youtu.be/uProIFfvQ7M
+* Recording of September 3, 2019 meeting: https://youtu.be/8VCbSbJHODA 
 
 ## Discussion mechanics
 * [ONNX Training WG Gitter Channel](https://gitter.im/onnx/training)
