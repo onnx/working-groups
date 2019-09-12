@@ -21,7 +21,8 @@ This repository is where ONNX Foundation WG will capture various artifacts and d
 * Will post a message to [ONNX Foundation Gitter Channel](https://gitter.im/onnx/foundation) with agenda and meeting invite link
   * Up to 7 days before the meeting by WG chair, but proposals to agenda item updates are welcomed from all contributors via gitter
 * Meeting/Telepresence tool: WebEx  
-  * Meetings will be recorded and saved on GitHub
+  * Meetings will be recorded and published to [ONNX YouTube channel](https://www.youtube.com/channel/UCIg4Cceqra3rtJEC5LPTdtw)  
+   * September 10, 2019 meeting with Eclipse: https://youtu.be/uX74-EyGp7Q  
 
 ## Discussion mechanics  
 * [ONNX Foundation WG Gitter Channel](https://gitter.im/onnx/foundation)
