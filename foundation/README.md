@@ -22,7 +22,8 @@ This repository is where ONNX Foundation WG will capture various artifacts and d
   * Up to 7 days before the meeting by WG chair, but proposals to agenda item updates are welcomed from all contributors via gitter
 * Meeting/Telepresence tool: WebEx  
   * Meetings will be recorded and published to [ONNX YouTube channel](https://www.youtube.com/channel/UCIg4Cceqra3rtJEC5LPTdtw)  
-   * September 10, 2019 meeting with Eclipse: https://youtu.be/uX74-EyGp7Q  
+    * September 10, 2019 meeting with Eclipse: https://youtu.be/uX74-EyGp7Q  
+    * September 11, 2019 meeting with LF AI: https://youtu.be/9xSPLnCDRMc  
 
 ## Discussion mechanics  
 * [ONNX Foundation WG Gitter Channel](https://gitter.im/onnx/foundation)
