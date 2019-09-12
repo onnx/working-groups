@@ -24,9 +24,9 @@ This repository is where ONNX Foundation WG will capture various artifacts and d
   * Meetings will be recorded and published to [ONNX YouTube channel](https://www.youtube.com/channel/UCIg4Cceqra3rtJEC5LPTdtw)  
     * September 10, 2019 meeting with Eclipse: https://youtu.be/uX74-EyGp7Q  
     * September 11, 2019 meeting with LF AI: https://youtu.be/9xSPLnCDRMc  
-        * [LF AI slide deck](https://github.com/ryan-nervana/working-groups/foundation/LF%20AI%20-%20ONNX%20Community%20Discussion.pdf)
+        * [LF AI slide deck](https://github.com/onnx/working-groups/blob/master/foundation/LF%20AI%20-%20ONNX%20Community%20Discussion.pdf)
     * September 12, 2019 meeting with Apache: https://youtu.be/t5HENqpEdRw  
-    
+
 
 ## Discussion mechanics  
 * [ONNX Foundation WG Gitter Channel](https://gitter.im/onnx/foundation)
