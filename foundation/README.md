@@ -25,7 +25,8 @@ This repository is where ONNX Foundation WG will capture various artifacts and d
     * September 10, 2019 meeting with Eclipse: https://youtu.be/uX74-EyGp7Q  
     * September 11, 2019 meeting with LF AI: https://youtu.be/9xSPLnCDRMc  
         * [LF AI slide deck](https://github.com/onnx/working-groups/blob/master/foundation/LF%20AI%20-%20ONNX%20Community%20Discussion.pdf)
-    * September 12, 2019 meeting with Apache: https://youtu.be/t5HENqpEdRw  
+    * September 12, 2019 meeting with Apache: https://youtu.be/t5HENqpEdRw 
+    * September 20, 2019 meeting with LF JDF: https://youtu.be/IpDFHC0mzqY 
 
 
 ## Discussion mechanics  
@@ -34,3 +35,7 @@ This repository is where ONNX Foundation WG will capture various artifacts and d
 * Document reviews
   * We will use Google docs for draft reviews until we get to final doc proposal, at which point it will get transcribed into .md and committed to [ONNX Foundation WG repo](https://github.com/onnx/working-groups/foundation).
   * [Link to draft proposal](https://docs.google.com/document/d/1nGV8un_BcOeAbIiDP-Ze9Ar2_QUpp5okoCWhxv0cyAo/edit?usp=sharing)  
+  * [Foundation Options Summary](https://github.com/onnx/working-groups/blob/master/foundation/foundation-options.md)
+    * A summary of the options considered is published on onnx/working-groups/foundation repo.
+  * [Foundation Options Poll](https://forms.gle/RSfhq12oPG3hgXGH7)
+    * We are collecting input from the ONNX Community on their preferences for each option. Please vote for your top choices using the Poll. 
