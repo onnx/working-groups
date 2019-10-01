@@ -23,7 +23,7 @@ We are collecting preferences from the ONNX Community. If you haven't already, [
 * September 20, 2019 meeting with LF JDF: https://youtu.be/IpDFHC0mzqY  
 
 
-# Evaluation Summary  
+### Evaluation Summary  
 | | Onboarding Lead Time | Requirements/Process to join | Pros | Cons |
 |:-----------:|:-----:|:-------------------|:------|:------------------------------------------------------------------------------|
 |   **Linux Foundation**   |       ~2 weeks       | <ol><li>Use approved OSI open source license (Done)</li> <li>Be sponsored by a LF AI or JDF member (Done)</li> <li>Fit within the mission and scope of LF AI of JDF (Done)</li> <li>Allow a neutral ownership of project assets such as a trademark, domain or GitHub account (the community can define rules and manage them)</li> <li>Have a governance structure documented that allows anyone to participate in the technical community, whether or not a financial member or supporter of the foundation (Done)</li></ol> | <ul><li>We have already satisfied most of the LF AI or JDF New Project Requirements and just need to submit a proposal to Technical Advisory Committee (TAC) and transfer of trademark assets from Facebook</li> <li>TAC meets every 2 weeks and will vote to approve during their meeting</li> <li>ONNX allowed to self govern</li></ul> | 
