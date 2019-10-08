@@ -147,10 +147,10 @@ All three top options require information…
 | Process | https://lfai.foundation/proposal-and-hosting-process | Already mostly complete |
 | Recent Example | https://github.com/lfai/proposing-projects/blob/master/proposals/adlik.adoc | ZTE Adlik example |
 
-From:       Michael Dolan <mdolan@linuxfoundation.org>  
-CC:         Scott Nicholas <snicholas@linuxfoundation.org>  
-CC:         Ibrahim Haddad <ibrahim@linuxfoundation.org>  
-Part of the challenge communicating on this topic is the entity structure is typically discussed and decided by the companies' legal counsel working with us…  JDF is a "check the box" menu that enables rapid spin up of governance for a standards/specification project. LF Projects LLC is a completely customized structure…. We heard that ONNX wanted to retain much of its existing governance. What we suggested in that case was using the LF Projects, LLC series entity which allows for complete customization.  
+>From:       Michael Dolan <mdolan@linuxfoundation.org>  
+>CC:         Scott Nicholas <snicholas@linuxfoundation.org>  
+>CC:         Ibrahim Haddad <ibrahim@linuxfoundation.org>  
+>Part of the challenge communicating on this topic is the entity structure is typically discussed and decided by the companies' legal counsel working with us…  JDF is a "check the box" menu that enables rapid spin up of governance for a standards/specification project. LF Projects LLC is a completely customized structure…. We heard that ONNX wanted to retain much of its existing governance. What we suggested in that case was using the LF Projects, LLC series entity which allows for complete customization.  
 
 
 #### D. Apache Software Foundation Summary
