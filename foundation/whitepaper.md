@@ -99,7 +99,7 @@ __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and ot
 |-|-|-|
 | GitHub page | https://github.com/onnx/working-groups/tree/master/foundation | Overlaps with information here |
 | Gitter Channel | https://gitter.im/onnx/foundation | Please join, post questions/comments |
-| Founding Core Members | Jim Spohrer, Ryan Loney (co-chairs), Alex Sergeev, David Aronchick, Wenjing Chu, Thomas Truong | All invited to weekly call, Thurs 1pm PT |
+| Founding Core Members | [Jim Spohrer](https://github.com/jimspohrer), [Ryan Loney](https://github.com/ryan-nervana) (co-chairs), [Alex Sergeev](https://github.com/alsrgv), [David Aronchick](https://github.com/aronchick), [Wenjing Chu](https://github.com/wenjing), [Thomas Truong](https://github.com/ibmjedi) | All invited to weekly call, Thurs 1pm PT |
 | Straw Poll/Ranking Three Options | https://forms.gle/ZSehUYLPERaUAuFR8 | Vote early and often ☺ |
 | Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |
 
