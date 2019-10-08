@@ -87,11 +87,11 @@ ONNX Values:  These values guide members of the community as they make decisions
   * Welcoming and respectful
   * Transparent and accessible: Work and collaboration should be done in public.
   * Merit: Ideas and contributions are accepted according to their technical merit and alignment with project objectives, scope and design principles. Engineering investment >> corporate sponsorship
-  * Speed: Contributing time and effort to ensure fast decision-making and that specifications produced are aligned to the fast iteration of machine learning technologies.
+  * Speed: Contributing time and effort to ensure fast decision-making and that specifications produced are aligned to the fast iteration of machine learning technologies.  
 
-__ONNX Members:__  The definition of an ONNX member for polling/voting purposes is very broad, and included ONNX Twitter Account Followers (1000+), attendees at ONNX Community Events (200+), members of ONNX Working Groups on various Gitters (200+). A working email address is required to vote, and those who vote may be contacted for additional information about their interest in ONNX.
+__ONNX Members:__  The definition of an ONNX member for polling/voting purposes is very broad, and included ONNX Twitter Account Followers (1000+), attendees at ONNX Community Events (200+), members of ONNX Working Groups on various Gitters (200+). A working email address is required to vote, and those who vote may be contacted for additional information about their interest in ONNX.  
 
-__Member Organizations:__  Member representative of each organization on the ONNX homepage will be encouraged to  vote their ranking preference (alphabetically): Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcomm, SAS, Skymizer, Synopsys, Tencent, Unity.
+__Member Organizations:__  Member representative of each organization on the ONNX homepage will be encouraged to  vote their ranking preference (alphabetically): Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcomm, SAS, Skymizer, Synopsys, Tencent, Unity.  
 
 __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and other information about the WG which was established by invitation of the ONNX steering committee at the last community meeting in August 2019.
 
@@ -101,7 +101,7 @@ __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and ot
 | Gitter Channel | https://gitter.im/onnx/foundation | Please join, post questions/comments |
 | Founding Core Members | [Jim Spohrer](https://github.com/jimspohrer), [Ryan Loney](https://github.com/ryan-nervana) (co-chairs), [Alex Sergeev](https://github.com/alsrgv), [David Aronchick](https://github.com/aronchick), [Wenjing Chu](https://github.com/wenjing), [Thomas Truong](https://github.com/ibmjedi) | All invited to weekly call, Thurs 1pm PT |
 | Straw Poll/Ranking Three Options | https://forms.gle/ZSehUYLPERaUAuFR8 | Vote early and often ☺ |
-| Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |
+| Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |  
 
 
 ### B. The ONNX Steering Committee Organization Contacts
