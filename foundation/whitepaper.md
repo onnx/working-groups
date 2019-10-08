@@ -101,7 +101,7 @@ __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and ot
 | Gitter Channel | https://gitter.im/onnx/foundation | Please join, post questions/comments |
 | Founding Core Members | Jim Spohrer, Ryan Loney (co-chairs), Alex Sergeev, David Aronchick, Wenjing Chu, Thomas Truong | All invited to weekly call, Thurs 1pm PT |
 | Straw Poll/Ranking Three Options | https://forms.gle/ZSehUYLPERaUAuFR8 | Vote early and often ☺ |
-| Voting Results | https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing | See who thinks what – changing OK |
+| Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |
 
 
 ### B. The ONNX Steering Committee Organization Contacts
