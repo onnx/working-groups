@@ -22,44 +22,28 @@ Angel: https://github.com/Angel-ML/angel
 
 *License*: MIT
 
-*Source control*: https://github.com/onnx/onnx
+*Source control*: 
+There are multiple repositories under the ONNX GitHub organization at https://github.com/onnx/
 
 *External dependencies*:
-
-Depends on:
-
-* protobuf
-
+  * protobuf
 
 *Initial committers:*
 
-ONNX Steering Committee, Initial Committers, and Contributors:
-Steering Committee - Announcement message to community: https://github.com/onnx/onnx/wiki/Expanded-ONNX-Steering-Committee-Announced!
-•	Prasanth Pulavarthi (Microsoft)
-•	Joe Spisak (Facebook)
-•	Vin Sharma (Amazon)
-•	Harry Kim (Intel)
-•	Dilip Sequeira (Nvidia)
-Committers and Contributors:
+ONNX [open governance](https://github.com/onnx/onnx/tree/master/community) defines Contributors and Approvers. SIGs are responsible for different parts of the code base. GitHub permissions are managed via a [set of teams](https://github.com/orgs/onnx/teams) defined in the GitHub organization corresponding to the SIGs.
 
 *Infrastructure requests:*
-In order to facilitate external development, we need to make it easy for anyone to run integration
-tests. Currently, we’re using Travis CI for integration tests which provides CPU tests only. There has
-been a number of issues where only GPU components failed, while CPU tests were passing.
-This forces developers to run integration tests on GPU boxes manually.
-We’d like to make use of LF continuous integration environment and request a GPU support.
-Since AWS is planning to be involved in the project, we should discuss the potential of running
-the integration tests on AWS GPUs.
+  * Email list server (see below)
 
 *Current mailing lists:*
-None, we will request LF to create lists for users, developers, and TSC.
+ONNX currenlty does not have mailing lists.  We request that LF setup several lists using the onnx.ai domain name.
 
 *Resources:*
-
-  *	CI - https://travis-ci.org/onnx/onnx/
-  *	Issue tracker - https://github.com/onnx/onnx/issues
-  *	DockerHub - https://github.com/onnx/onnx-docker 
-  *	PyPI - https://pypi.org/project/onnx/
+  * Discussions - https://gitter.im/onnx/
+  * CI - each project repository under the ONNX GitHub organization has a CI (Travis CI, Azure Pipelines, or Appveyor). 
+  * Issues - each repo tracks its issues via GitHub.
+  *	DockerHub - https://hub.docker.com/r/onnx/onnx-ecosystem
+  *	packages - each repo publishes it's own packages to pypi and/or nuget
 
 *Website:*
 The website is at https://onnx.ai and aliases onnx.github.io which serves content from https://github.com/onnx/onnx.github.io/.
@@ -69,12 +53,12 @@ Microsoft has sponsored a website refresh which is will go live in November.
 The release is performed according to community agreed process: https://github.com/onnx/onnx/blob/master/RELEASE-MANAGEMENT.md
 
 *Social media accounts:*
-https://twitter.com/onnxai
-https://facebook.com/onnxai
+  * https://twitter.com/onnxai
+  * https://facebook.com/onnxai
 
 *Existing sponsorship:*
 Microsoft, Facebook, Intel, NVIDIA, Amazon, IBM, Qualcomm, NVIDIA, Apple are some of the active contributors to repositories in the ONNX  Github organization.
-Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcom, SAS, Skymizer, Synopsys, Tencent, Unity.
+Other member companies include Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcom, SAS, Skymizer, Synopsys, Tencent, Unity.
 
 
 *CII Best Practices Badge:*
