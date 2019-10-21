@@ -14,7 +14,7 @@ ONNX is a mature project with [138 contributors, over 7K stars and over 1K forks
 
 ONNX is already being used in LFAI (Linux Foundation – Artificial Intelligence Foundation) projects.  LFAI and ONNX values are strongly aligned:  Open, welcoming and respectful, transparent and accessible, merit, speed.  ONNX community is large and growing and LFAI can help education and onboard more ONNX users, as well as grow the community of contributors and capabilities.  
 
-*Possible integrations with existing LF DL projects:*
+*Possible integrations with existing LFAI projects:*
 
 Acumos: https://docs.acumos.org/en/boreas/submodules/on-boarding/docs/onboarding-ONNX-PFA-guide.html
 Adlik: https://github.com/Adlik/Adlik
