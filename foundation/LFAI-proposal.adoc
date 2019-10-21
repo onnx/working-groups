@@ -6,8 +6,12 @@
 
 *Description*
 
-ONNX is an open format to represent deep learning models that execute on a variety of hardware platforms and clouds, which can be optimized for ONNX.  ONNX allows AI developers to more easily move AI models between tools that are part of trusted AI/ML/DL workflows.  The ONNX community was established in 2017 by Facebook and Microsoft to create an open ecosystem for interchangeable models.  Support for ONNX has grown to over 30 organizations.   The most recent ONNX community meeting had over 150 attendees in Santa Clara, CA.  The upcoming community meeting at Microsoft Shanghai on November 18this capped at 100 attendees and will blend both the most active community contributors with a healthy number of new organizations and contributors ready to join the community and start contributing.
-ONNX is a mature project with 138 contributors, over 7K stars and over 1K forks and with a steady stream of ongoing commits.  ONNX is used by and has active contributors from Microsoft, Facebook, Amazon, Intel, Nvidia, Qualcomm, Apple, Uber, IBM (e.g., Z mainframe, P Power systems, I Intel systems, etc. as well as new hardware architectures under development).  ONNX is being adopted by numerous startups with edge and IoT devices – which of interest to LF Edge and LF Energy. 
+ONNX is an open format to represent machine learning and deep learning models that can execute on a variety of hardware platforms and clouds.  ONNX provides portability, allowing AI developers to more easily move AI models between tools that are part of trusted AI/ML/DL workflows.  An ecosystem of products supporting ONNX provide model creation/export, visualization, optimization, and acceleration capabilities.  ONNX currently focuses on inference but is actively being expanded to support training.
+
+The ONNX community was established in 2017 by Facebook and Microsoft to create an open ecosystem for interchangeable models.  Support for ONNX has grown to over 30 registered companies and many more using ONNX around the world.  Quarterly community workshops attract many participants.  The most recent ONNX community meeting had over 150 attendees in Santa Clara, CA.  The upcoming community meeting at Microsoft in Shanghai on November 18th is capped at 100 attendees and will blend both the most active community contributors with a healthy number of new organizations and contributors ready to join the community and start contributing.
+
+ONNX is a mature project with [138 contributors, over 7K stars and over 1K forks](https://github.com/onnx/onnx/graphs/contributors) and with a steady stream of ongoing commits.  ONNX is used by and has active contributors from Microsoft, Facebook, Amazon, Intel, NVIDIA, Qualcomm, Apple, Uber, IBM.  ONNX is being adopted by companies with edge and IoT devices – which of interest to LF Edge and LF Energy.
+
 ONNX is already being used in LFAI (Linux Foundation – Artificial Intelligence Foundation) projects.  LFAI and ONNX values are strongly aligned:  Open, welcoming and respectful, transparent and accessible, merit, speed.  ONNX community is large and growing and LFAI can help education and onboard more ONNX users, as well as grow the community of contributors and capabilities.  
 
 *Possible integrations with existing LF DL projects:*
@@ -24,10 +28,7 @@ Angel: https://github.com/Angel-ML/angel
 
 Depends on:
 
-
-
-Includes code from:
-
+* protobuf
 
 
 *Initial committers:*
