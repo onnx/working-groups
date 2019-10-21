@@ -57,9 +57,8 @@ The release is performed according to community agreed process: https://github.c
   * https://facebook.com/onnxai
 
 *Existing sponsorship:*
-Microsoft, Facebook, Intel, NVIDIA, Amazon, IBM, Qualcomm, NVIDIA, Apple are some of the active contributors to repositories in the ONNX  Github organization.
-Other member companies include Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcom, SAS, Skymizer, Synopsys, Tencent, Unity.
-
+The [ONNX website](https://onnx.ai) lists the companies who support ONNX in their projects. The list includes Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Nvidia, NXP, Oath, Preferred Networks, Qualcom, SAS, Skymizer, Synopsys, Tencent, Xiaomi, Unity.
+Microsoft, Facebook, Intel, NVIDIA, Amazon, IBM, Qualcomm, NVIDIA, Apple are some of the active contributors to repositories in the ONNX  GitHub organization.
 
 *CII Best Practices Badge:*
 https://bestpractices.coreinfrastructure.org/en/projects/3313
