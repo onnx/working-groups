@@ -1,6 +1,15 @@
+__Status update__: _On October 17, 2019 the ONNX Steering Committee voted to join Linux Foundation AI (LF AI). On October 24, 2019 the LF AI Technical Advisory Board voted to accept our [proposal](https://github.com/lfai/proposing-projects/blob/master/proposals/onnx.adoc) to join LF AI and on October 31, 2019 the LF AI board unanimously approved ONNX joining LF AI as a Graduate Project._
+
+_A formal announcement will be made on November 14, 2019. If you are an ONNX member company and would like to provide a quote for the press release from LF AI, please contact [Prasanth Pulavarthi](mailto:Prasanth.Pulavarthi@microsoft.com)._
+
 # ONNX Foundation Working Group
 
 This repository is where ONNX Foundation WG will capture various artifacts and deliverables. The purpose of this WG is to identify and evaluate non-profit foundation options for the ONNX consortium, then execute on best option.
+
+__Status update__: _On October 17, 2019 the ONNX Steering Committee voted to join Linux Foundation AI (LF AI). On October 24, 2019 the LF AI Technical Advisory Board voted to accept our [proposal](https://github.com/lfai/proposing-projects/blob/master/proposals/onnx.adoc) to join LF AI and on October 31, 2019 the LF AI board unanimously approved ONNX joining LF AI as a Graduate Project._
+
+_A formal announcement will be made on November 14, 2019. If you are an ONNX member company and would like to provide a quote for the press release from LF AI, please contact [Prasanth Pulavarthi](mailto:Prasanth.Pulavarthi@microsoft.com)._
+
 
 ## Working Group Status
 **ACTIVE**
