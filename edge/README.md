@@ -12,6 +12,7 @@ Structure of the space will evolve over time.
 * Ofer Rosenberg (Qualcomm) (co-chair)
 * Yedong Liu (Huawei)
 * Saurabh Tangri (Intel)
+* Manash Goswami (Microsoft)
 
 ## Meeting logistics
 * WG chair(s) will drive and facilitate the meetings
