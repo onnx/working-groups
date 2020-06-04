@@ -18,6 +18,7 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 | ------------------ | ------------- |
 | [Training](https://gitter.im/onnx/training) | Expand ONNX to support training as well as inference |
 | [Data Pipelines](https://gitter.im/onnx/pipelines) | Define new operators for processing the data that goes in and comes out |
+| [Release](https://gitter.im/onnx/Releases) | Document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule |
 
 ## Completed working groups
 
