@@ -16,7 +16,7 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
-| [Release](https://gitter.im/onnx/Releases) | Improve the release process for ONNX |
+| [Release](https://gitter.im/onnx/Releases) | Improve and document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule |
 | [Training](https://gitter.im/onnx/training) | Expand ONNX to support training as well as inference |
 
 ## Completed working groups
