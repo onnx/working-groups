@@ -16,9 +16,8 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
+| [Release](https://gitter.im/onnx/Releases) | Improve and document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule |
 | [Training](https://gitter.im/onnx/training) | Expand ONNX to support training as well as inference |
-| [Data Pipelines](https://gitter.im/onnx/pipelines) | Define new operators for processing the data that goes in and comes out |
-| [Release](https://gitter.im/onnx/Releases) | Document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule |
 
 ## Completed working groups
 
@@ -34,3 +33,4 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 | ------------------ | ------------- | ------ |
 | [Testing/Compliance](https://gitter.im/onnx/test_compliance) | Create tools, tests and APIs to ensure models and backends comply with the ONNX specification | became part of the ArchInfra SIG for now |
 | [Edge/Mobile](https://gitter.im/onnx/edge) | Enable deployment of ONNX models to edge platforms by identifying the ONNX operators that must be supported by mobile and IoT runtimes, defining tool chain requirements, and contributing to ONNX compatibility tests | Stopped as of January 2020 |
+| [Data Pipelines](https://gitter.im/onnx/pipelines) | Define new operators for processing the data that goes in and comes out | No recent activity |
