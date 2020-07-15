@@ -27,10 +27,14 @@ Release Verification Process:
 
 Problems need to address in Scenario 2:
 1. What is the selected backend runtime? ONNX Runtime? Or some other runtime?
+```ONNX Runtime is the selected backend runtime.```
 2. Who in charge of making sure the selected backend runtime supports all the latest ONNX operators before the next ONNX release?
+```ONNX Runtime community is responsible to implement all ONNX operators in a reasonable timeframe.```
 3. Should the author of the PR that introduce the new/updated operator implement the support for that operator on the selected backend runtime? Or the author just needs to open an issue on the selected runtime and let the runtime to prioritize when to implement it?
+```No. ONNX Runtime community is responsible to implement all ONNX operators in a reasonable timeframe.```
 4. Who is responsible to create the test cases that is not covered in ONNX backend tests and the selected backend runtime?
 5. How to verify those ONNX operators that are not supported in the selected runtime? Wait until the selected runtime support them and if there are any problem open issue in ONNX at that time?
+```ONNX Runtime community is responsible to implement all ONNX operators in a reasonable timeframe. Any operators that are not supported by ONNX Runtime are not fully verify yet. ONNX Runtime community will open issue for ONNX operator specification problem identify during their implementation time. ONNX Runtime community will try to align with the ONNX release schedule.```
 6. What converters are ONNX depend on? Frontend or backend converter or both? TensorFlow-ONNX converter? Or some other frontend converter? How about backend converter? How does the converter verify ONNX? What test need to run?
 
 
