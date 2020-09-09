@@ -6,6 +6,9 @@ Structure of the space will evolve over time.
 ## Working Group Status
 **ACTIVE**
 
+## Slack channel
+**Please sign up at https://slack.lfai.foundation/ and join [onnx-training](https://lfaifoundation.slack.com/archives/C018K560U14) channel.**
+
 ## Contributors
 *Note: Contributors list will be updated as per participation and contributions.*
 * Svetlana Levitan (IBM) (chair)
