@@ -16,7 +16,7 @@ Examine collaboration with [MLPerf organization](https://mlperf.org/) and their 
 ## Collaboration
 The edge WG will collaborate with the following ONNX groups:
 * Operators SIG (in context of quantization)
-* Model Zoo SIG 
+* Model Zoo SIG (update : SIG does not exist at this point)
 * Architecture/Infrastructure SIG (in context of compliance)
 
 The WG should avoid overlapping work with the mentioned WGs and SIGs. 
@@ -36,13 +36,14 @@ Recommendations of the working group will be delivered to the relevant SIGs.
    1. Attributes / characteristics: Power, Compute resources, Size, Connectivity, Security, …
    1. ONNX operations subset
    1. Other ONNX related limitations 
-3. Definition of specific profiles covered by the Edge working group: e.g. Mobile Profile, Smart-Device Profile, Infra-Edge profile, etc.
-4. Collaborate with Quantization working group to define the following:
+3. Definition of method for topology mapping of profiles (sensor based, model type based, other)
+4. Definition of profiles which are covered by the Edge working group. 
+5. Collaborate with Operator SIG to define the following:
    1. Data types
    1. Representation of quantization parameters in the model
    1. Set of quantized operations
    1. Accuracy impact of quantization on set of defined models/use-cases
-5. Collaborate with ModelZoo and Operator Standardization SIGs to define the following:
+6. Collaborate with Operator SIGs to define the following:
    1. Define compliance workflow 
    1. Define content of test packages for Edge "profiles"
 
