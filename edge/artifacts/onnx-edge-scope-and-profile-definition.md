@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Edge scope and profile definition
 Author: Yedong Liu, Milan Oljaca, Saurabh Tangri, Ofer Rosenberg
 
@@ -40,7 +42,7 @@ The ONNX Edge profile is described with the following:
 
 2. ONNX operations subset
 
-3. Other ONNX related limitations 
+3. Other ONNX related limitations
 
 Defining a strict subsets of the operators which apply to edge device profiles is important and relevant due to limitations imposed with computational complexity and device capabilities. Use-cases not applicable to the edge (e.g. large scale training scenarios) need to be excluded.
 
@@ -58,7 +60,7 @@ The ONNX model zoo collects many wide-used neural network models, for use cases 
 
 #### 2. Size
 
-Size here refers to both the neural network's on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge devices, such huge models are usually not practical due to memory resource constraints. There are ways to reduce size of neural network models while keeping the accuracy, like using quantized operators, model compression etc. 
+Size here refers to both the neural network's on-disk storage size and the memory that the runtime reqiures to run the inference. In ONNX 1.4 release, support for large models (larger than 2GB) and store the data externally is added as a new feature. But in edge devices, such huge models are usually not practical due to memory resource constraints. There are ways to reduce size of neural network models while keeping the accuracy, like using quantized operators, model compression etc.
 
 #### 3. Latency
 
@@ -74,9 +76,9 @@ Power consumption is important and often critical for an edge device. In this co
 
 3. New scheduling system to switch off some unused applications or hardware parts
 
-4. Better more efficient cooling system 
+4. Better more efficient cooling system
 
-5. etc. 
+5. etc.
 
 
 #### 5. Data locality

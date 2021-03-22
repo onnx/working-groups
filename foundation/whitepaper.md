@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 __Status update__: _On October 17, 2019 the ONNX Steering Committee voted to join Linux Foundation AI (LF AI). On October 24, 2019 the LF AI Technical Advisory Board voted to accept our [proposal](https://github.com/lfai/proposing-projects/blob/master/proposals/onnx.adoc) to join LF AI and on October 31, 2019 the LF AI board unanimously approved ONNX joining LF AI as a Graduate Project._
 
 _A formal announcement will be made on November 14, 2019. If you are an ONNX member company and would like to provide a quote for the press release from LF AI, please contact [Prasanth Pulavarthi](mailto:Prasanth.Pulavarthi@microsoft.com)._
@@ -50,7 +52,7 @@ October 10th is available for a 20-25 minute presentation of the required ONNX 2
 
 Aside from a presentation that can happen on October 10th – LF indicates it is mostly legal review of documents and signatures required by ONNX SC members, and owners of ONNX IP and assets to be transferred.
 
-![LF summary](https://lh6.googleusercontent.com/7FzdC_tSIPF-PjOXfPb2iL5oXkTZ5Y3Uev0-ircKGpEZiLApxeDEzEfkyFOWiS0XNF_qDYWI4ny6CphG_BzjKf-LxzxudteOJVdxV2Ch-Kc9rI3B77OxR3Grqpe4=w1976) 
+![LF summary](https://lh6.googleusercontent.com/7FzdC_tSIPF-PjOXfPb2iL5oXkTZ5Y3Uev0-ircKGpEZiLApxeDEzEfkyFOWiS0XNF_qDYWI4ny6CphG_BzjKf-LxzxudteOJVdxV2Ch-Kc9rI3B77OxR3Grqpe4=w1976)
 
 
 ### 2.2 Apache Software Foundation
@@ -59,7 +61,7 @@ __History and Mission:__ In 1999, The Apache Software Foundation (ASF) was estab
 
 __Speed to incubator is good, and pathway to top level project is good:__  ONNX could become an incubator project within Apache in a few weeks, and within several months become a top-level project.
 
-![Apache summary](https://lh5.googleusercontent.com/6v5It8KCooAJZnfXDEKkUAjilR2h4gBBIbRlFOivrS60cDVxj8y-yB0noFXYEWm0TswwIsBDyUIZL9LNPI7Nfs0Yh-cvM-lzZ4dHGvvKopRYr2K26eXtt0FgIxHF=w965) 
+![Apache summary](https://lh5.googleusercontent.com/6v5It8KCooAJZnfXDEKkUAjilR2h4gBBIbRlFOivrS60cDVxj8y-yB0noFXYEWm0TswwIsBDyUIZL9LNPI7Nfs0Yh-cvM-lzZ4dHGvvKopRYr2K26eXtt0FgIxHF=w965)
 
 
 ### 2.3 Eclipse Foundation
@@ -68,7 +70,7 @@ __History and Mission:__ In 2001, the Eclipse Foundation (EF) was established (R
 
 Speed is at least two months.
 
-![Eclipse summary](https://lh4.googleusercontent.com/uHtDmGEOgGm1wNKTCtg0PH4-cPBHZJJ32S7SldW-JAVsbsGpnKUdbKG4MgZBZp29yi8HhdzvFQHJdwZMM8wZsNiS9K-lx2WsZztHwV54YHe04_vshkTJ5yBX5b7g=w967) 
+![Eclipse summary](https://lh4.googleusercontent.com/uHtDmGEOgGm1wNKTCtg0PH4-cPBHZJJ32S7SldW-JAVsbsGpnKUdbKG4MgZBZp29yi8HhdzvFQHJdwZMM8wZsNiS9K-lx2WsZztHwV54YHe04_vshkTJ5yBX5b7g=w967)
 
 
 ### 3. Concluding Remarks
@@ -92,11 +94,11 @@ ONNX Values:  These values guide members of the community as they make decisions
   * Welcoming and respectful
   * Transparent and accessible: Work and collaboration should be done in public.
   * Merit: Ideas and contributions are accepted according to their technical merit and alignment with project objectives, scope and design principles. Engineering investment >> corporate sponsorship
-  * Speed: Contributing time and effort to ensure fast decision-making and that specifications produced are aligned to the fast iteration of machine learning technologies.  
+  * Speed: Contributing time and effort to ensure fast decision-making and that specifications produced are aligned to the fast iteration of machine learning technologies.
 
-__ONNX Members:__  The definition of an ONNX member for polling/voting purposes is very broad, and included ONNX Twitter Account Followers (1000+), attendees at ONNX Community Events (200+), members of ONNX Working Groups on various Gitters (200+). A working email address is required to vote, and those who vote may be contacted for additional information about their interest in ONNX.  
+__ONNX Members:__  The definition of an ONNX member for polling/voting purposes is very broad, and included ONNX Twitter Account Followers (1000+), attendees at ONNX Community Events (200+), members of ONNX Working Groups on various Gitters (200+). A working email address is required to vote, and those who vote may be contacted for additional information about their interest in ONNX.
 
-__Member Organizations:__  Member representative of each organization on the ONNX homepage will be encouraged to  vote their ranking preference (alphabetically): Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcomm, SAS, Skymizer, Synopsys, Tencent, Unity.  
+__Member Organizations:__  Member representative of each organization on the ONNX homepage will be encouraged to  vote their ranking preference (alphabetically): Alibaba, AMD, ARM, AWS, Baidu, BITMAIN, CEVA, Facebook, Graphcore, Habana, HP, Huawei, IBM, Idein, Intel, Mathworks, Mediatek, Microsoft, Neural Network Libraries, NII, Nvidia, NXP, Oath, Preferred Networks, Qualcomm, SAS, Skymizer, Synopsys, Tencent, Unity.
 
 __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and other information about the WG which was established by invitation of the ONNX steering committee at the last community meeting in August 2019.
 
@@ -106,7 +108,7 @@ __ONNX Foundation Working Group (WG):__ The table is a handy list of URLs and ot
 | Gitter Channel | https://gitter.im/onnx/foundation | Please join, post questions/comments |
 | Founding Core Members | [Jim Spohrer](https://github.com/jimspohrer), [Ryan Loney](https://github.com/ryan-nervana) (co-chairs), [Alex Sergeev](https://github.com/alsrgv), [David Aronchick](https://github.com/aronchick), [Wenjing Chu](https://github.com/wenjing), [Thomas Truong](https://github.com/ibmjedi) | All invited to weekly call, Thurs 1pm PT |
 | Straw Poll/Ranking Three Options | https://forms.gle/ZSehUYLPERaUAuFR8 | Vote early and often ☺ |
-| Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |  
+| Voting Results | [View Google Sheet](https://docs.google.com/spreadsheets/d/1rPqWDqkZOqGcCAZcrago6cMXfZMTIZ9UHQLCevejVzc/edit?usp=sharing) | See who thinks what – changing OK |
 
 
 ### B. The ONNX Steering Committee Organization Contacts
@@ -130,7 +132,7 @@ All three top options require information…
 |  |  Amazon | Legal Contact |  |
 |  |  Amazon | Communications Contact |  |
 |  |  Amazon | Finance Contact |  |
-| Harry Kim <<harry.kim@intel.com>> | Intel | Executive Contact | Intel hosted the second big community meeting at the Computer History Museum | 
+| Harry Kim <<harry.kim@intel.com>> | Intel | Executive Contact | Intel hosted the second big community meeting at the Computer History Museum |
 | Ryan Loney <<ryan.loney@intel.com>> | Intel | Technical Contact | |
 | Stefanie Neuhierl <<stefanie.neuhierl@intel.com>> | Intel | Legal Contact |
 | | Intel | Communications Contact |  |
@@ -147,15 +149,15 @@ All three top options require information…
 | - | - | - |
 | Point-of-Contacts | Ibrahim Haddad, Mike Dolan, Scott Nicholas | They have been “courting” ONNX and indicate most of process is already complete |
 | Video | [LFAI](https://www.youtube.com/watch?v=9xSPLnCDRMc), [LF JDF](https://www.youtube.com/watch?v=IpDFHC0mzqY) | |
-| Wikipedia | https://en.wikipedia.org/wiki/Linux_Foundation | | 
+| Wikipedia | https://en.wikipedia.org/wiki/Linux_Foundation | |
 | Home Page | https://www.linuxfoundation.org | |
 | Process | https://lfai.foundation/proposal-and-hosting-process | Already mostly complete |
 | Recent Example | https://github.com/lfai/proposing-projects/blob/master/proposals/adlik.adoc | ZTE Adlik example |
 
->From:       Michael Dolan <mdolan@linuxfoundation.org>  
->CC:         Scott Nicholas <snicholas@linuxfoundation.org>  
->CC:         Ibrahim Haddad <ibrahim@linuxfoundation.org>  
->Part of the challenge communicating on this topic is the entity structure is typically discussed and decided by the companies' legal counsel working with us…  JDF is a "check the box" menu that enables rapid spin up of governance for a standards/specification project. LF Projects LLC is a completely customized structure…. We heard that ONNX wanted to retain much of its existing governance. What we suggested in that case was using the LF Projects, LLC series entity which allows for complete customization.  
+>From:       Michael Dolan <mdolan@linuxfoundation.org>
+>CC:         Scott Nicholas <snicholas@linuxfoundation.org>
+>CC:         Ibrahim Haddad <ibrahim@linuxfoundation.org>
+>Part of the challenge communicating on this topic is the entity structure is typically discussed and decided by the companies' legal counsel working with us…  JDF is a "check the box" menu that enables rapid spin up of governance for a standards/specification project. LF Projects LLC is a completely customized structure…. We heard that ONNX wanted to retain much of its existing governance. What we suggested in that case was using the LF Projects, LLC series entity which allows for complete customization.
 
 
 #### D. Apache Software Foundation Summary
@@ -163,7 +165,7 @@ All three top options require information…
 | Topic | Info/Link | Comments |
 | - | - | - |
 | Point-Of-Contacts | Luciano Resende, Sam Ruby | They mentor project from incubation to top level over six-month to a year. |
-| Video | ASF https://www.youtube.com/watch?v=t5HENqpEdRw | | 
+| Video | ASF https://www.youtube.com/watch?v=t5HENqpEdRw | |
 | Wikipedia | https://en.wikipedia.org/wiki/The_Apache_Software_Foundation | |
 | Home Page | https://apache.org | |
 | Contributor Agreements | https://www.apache.org/licenses/contributor-agreements.html | Sam Ruby mentioned this step would likely take some time to complete | |
@@ -173,7 +175,7 @@ Sam Ruby/Raleigh/IBM regarding getting to Apache top-level project without incub
 
 #### E. Eclipse Foundation Summary
 
-| Topic | Info/Link | Comments | 
+| Topic | Info/Link | Comments |
 | - | - | - |
 Point-Of-Contacts | Mike Milinkovich | |
 | Video | EF https://www.youtube.com/watch?v=uX74-EyGp7Q | |

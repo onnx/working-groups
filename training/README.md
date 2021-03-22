@@ -1,7 +1,9 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Training Working Group
 
-This is artifacts repository where ONNX Training working group will capture various artifacts and deliverables. 
-Structure of the space will evolve over time. 
+This is artifacts repository where ONNX Training working group will capture various artifacts and deliverables.
+Structure of the space will evolve over time.
 
 ## Working Group Status
 **ACTIVE**
@@ -9,9 +11,9 @@ Structure of the space will evolve over time.
 ## Contributors
 *Note: Contributors list will be updated as per participation and contributions.*
 * Svetlana Levitan (IBM) (chair)
-* Wei-Sheng Chin (Microsoft) 
+* Wei-Sheng Chin (Microsoft)
 * Chin Huang (IBM)
-* 
+*
 
 ## Meeting logistics
 * WG chair will drive and facilitate the meetings
@@ -24,7 +26,7 @@ Structure of the space will evolve over time.
   * Meetings will be recorded and the recordings posted to YouTube, with links here:
 
 * Recording of July 23, 2019 meeting: https://youtu.be/uProIFfvQ7M
-* Recording of September 3, 2019 meeting: https://youtu.be/8VCbSbJHODA 
+* Recording of September 3, 2019 meeting: https://youtu.be/8VCbSbJHODA
 
 ## Discussion mechanics
 * [ONNX Training WG Gitter Channel](https://gitter.im/onnx/training)

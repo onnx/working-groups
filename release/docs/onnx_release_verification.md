@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Release Verification
 
 ## SCENARIO 1 (Ideal case)

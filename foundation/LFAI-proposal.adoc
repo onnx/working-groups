@@ -12,7 +12,7 @@ The ONNX community was established in 2017 by Facebook and Microsoft to create a
 
 ONNX is a mature project with [138 contributors, over 7K stars and over 1K forks](https://github.com/onnx/onnx/graphs/contributors) and with a steady stream of ongoing commits.  ONNX is used by and has active contributors from Microsoft, Facebook, Amazon, Intel, NVIDIA, Qualcomm, Apple, Uber, IBM.  ONNX is being adopted by companies with edge and IoT devices – which of interest to LF Edge and LF Energy.
 
-ONNX is already being used in LFAI (Linux Foundation – Artificial Intelligence Foundation) projects.  LFAI and ONNX values are strongly aligned:  Open, welcoming and respectful, transparent and accessible, merit, speed.  ONNX community is large and growing and LFAI can help education and onboard more ONNX users, as well as grow the community of contributors and capabilities.  
+ONNX is already being used in LFAI (Linux Foundation – Artificial Intelligence Foundation) projects.  LFAI and ONNX values are strongly aligned:  Open, welcoming and respectful, transparent and accessible, merit, speed.  ONNX community is large and growing and LFAI can help education and onboard more ONNX users, as well as grow the community of contributors and capabilities.
 
 *Possible integrations with existing LFAI projects:*
 
@@ -20,9 +20,9 @@ Acumos: https://docs.acumos.org/en/boreas/submodules/on-boarding/docs/onboarding
 Adlik: https://github.com/Adlik/Adlik
 Angel: https://github.com/Angel-ML/angel
 
-*License*: MIT
+*License*: Apache License v2.0
 
-*Source control*: 
+*Source control*:
 There are multiple repositories under the ONNX GitHub organization at https://github.com/onnx/
 
 *External dependencies*:
@@ -40,7 +40,7 @@ ONNX currenlty does not have mailing lists.  We request that LF setup several li
 
 *Resources:*
   * Discussions - https://gitter.im/onnx/
-  * CI - each project repository under the ONNX GitHub organization has a CI (Travis CI, Azure Pipelines, or Appveyor). 
+  * CI - each project repository under the ONNX GitHub organization has a CI (Travis CI, Azure Pipelines, or Appveyor).
   * Issues - each repo tracks its issues via GitHub.
   *	DockerHub - https://hub.docker.com/r/onnx/onnx-ecosystem
   *	packages - each repo publishes it's own packages to pypi and/or nuget

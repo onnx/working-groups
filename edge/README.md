@@ -1,7 +1,9 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Edge Working Group
 
-This is artifacts repository where ONNX Edge working group will capture various artifacts and deliverables. 
-Structure of the space will evolve over time. 
+This is artifacts repository where ONNX Edge working group will capture various artifacts and deliverables.
+Structure of the space will evolve over time.
 
 ## Working Group Status
 **ACTIVE**
