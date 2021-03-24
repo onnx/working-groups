@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Stationary IoT device with AV profile (prototype)
 Author: Ofer Rosenberg
 
@@ -7,21 +9,21 @@ Version: 0.1
 
 *This document is a prototyping effort to describe a profile using the method and definitions provided in "ONNX Edge scope and profile definition"*
 
-The profile described in this document is of a stationary IoT device with Audio/Video interface (input and output). 
+The profile described in this document is of a stationary IoT device with Audio/Video interface (input and output).
 The family of edge devices covered by this profile are devices which remain in the same location (fixed to a wall, lying on a table, etc), constantly connected to the web (wired ro wireless) and have audio and video interfaces - inputs, outputs or both.
-The next section provides a few examples for devices which fit into this profile. 
+The next section provides a few examples for devices which fit into this profile.
 
 
-## Profile Examples 
+## Profile Examples
 Here are a few examples for devices which fit this profile :
 
- 1. IP Security Camera : This is an IoT device which is stationary, usually fixed to a wall or placed in some fixed location. It has a video input, which may range from low-resolution to 4K images, and possibly an audio input. It also has web connectivity, used to report on events and sometimes send video sections or still images. It is constantly connected to a power source. In terms of processing, it usually processes the AV information on the device, to ensure low latency of event detection.   
- 2. Smart Speaker : This is an IoT device which usually located on some table of shelf, has audio inputs and outputs, and has web connectivity (wired or wireless). It may be connected to a power source or runs on batteries. In terms of processing, it usually uses a hybrid model, where some preliminary processing runs on the device, and the rest runs in the cloud. 
- 3. Smart Display : Similar to a smart speaker, but has a video display and a camera. In terms of connectivity, power supply and processing model, similar to the smart speaker. 
+ 1. IP Security Camera : This is an IoT device which is stationary, usually fixed to a wall or placed in some fixed location. It has a video input, which may range from low-resolution to 4K images, and possibly an audio input. It also has web connectivity, used to report on events and sometimes send video sections or still images. It is constantly connected to a power source. In terms of processing, it usually processes the AV information on the device, to ensure low latency of event detection.
+ 2. Smart Speaker : This is an IoT device which usually located on some table of shelf, has audio inputs and outputs, and has web connectivity (wired or wireless). It may be connected to a power source or runs on batteries. In terms of processing, it usually uses a hybrid model, where some preliminary processing runs on the device, and the rest runs in the cloud.
+ 3. Smart Display : Similar to a smart speaker, but has a video display and a camera. In terms of connectivity, power supply and processing model, similar to the smart speaker.
 
 
 ## Profile attributes
-This sections describes the attribute values for Stationary IoT device with AV profile, referred in this section in short as "the device" 
+This sections describes the attribute values for Stationary IoT device with AV profile, referred in this section in short as "the device"
 
 ### 1. Accuracy
 
@@ -33,12 +35,12 @@ The ONNX model zoo collects many wide-used neural network models, for use cases 
 
 ### 3. Latency
 
-In case of a Video input, the device should be able to process any of the defined classification networks in less than 33mSec (fitting 30FPS rate). 
+In case of a Video input, the device should be able to process any of the defined classification networks in less than 33mSec (fitting 30FPS rate).
 In case of Audio input, the device should process the RNN based networks in less than 20mSec
 
 ### 4. Power consumption
 
-The device would be limited to a power consumption of 5W. The expectation is to have 60% of the use cases consume 3W or less. 
+The device would be limited to a power consumption of 5W. The expectation is to have 60% of the use cases consume 3W or less.
 
 
 ### 5. Data locality
@@ -46,7 +48,7 @@ The following set of video classification models are required to be supported fu
 
  - List TBD
  The following set of audio models are expected to run in hybrid mode, where only part of the model run on the device :
- 
+
  - List TBD
 
 ## Required Networks
@@ -57,5 +59,5 @@ TBD
 ### MobileNet v2
 TBD
 
-## ONNX Operations 
+## ONNX Operations
 TBD

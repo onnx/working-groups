@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Edge Scenario Analysis Document
 Author: Yedong Liu, Zhipeng Huang
 
@@ -70,7 +72,7 @@ This is a field that we rarely talked about, but power consumption is critical f
 
 ## ONNX Runtime for Edge
 
-The runtime for Edge devices differs from the runtime for data centers. In edge scenario, HW-related optimization (eg. quantization) is defined by vendors in the lower level, as a result, it is hard to unify while the graph optimization can be unified if there is a runtime specifically for Edge devices to run ONNX model. It also helps covering all scenarios with ONNX Runtime. 
+The runtime for Edge devices differs from the runtime for data centers. In edge scenario, HW-related optimization (eg. quantization) is defined by vendors in the lower level, as a result, it is hard to unify while the graph optimization can be unified if there is a runtime specifically for Edge devices to run ONNX model. It also helps covering all scenarios with ONNX Runtime.
 
 We propose ONNX Runtime for Edge which is based on the ONNX Runtime. It is a moduler design where graph optimization (eg. constant folding) is separated from HW-related optimization (eg. quantization), see Huawei ONNX Runtime For Edge Proposal ( https://docs.google.com/presentation/d/1UZrEHY_7AQYUXXRs1q4_FTKsS1KRuGMXzg0Vq7P5uBc/edit?ts=5cb0051a#slide=id.g50dabc0fb2_0_107 ) for more details.
 
@@ -97,6 +99,6 @@ In order to complete the ONNX Edge work, those topics should be more detailed an
 
 [2]. Universal Deep Neural Network Compression: https://arxiv.org/abs/1802.02271
 
-[3]. Ternary Neural Networks for Resource-Efficient AI Applications: https://arxiv.org/abs/1609.00222 
+[3]. Ternary Neural Networks for Resource-Efficient AI Applications: https://arxiv.org/abs/1609.00222
 
 [4]. MLPerf Edge Inference Power/Energy: https://docs.google.com/document/d/1XdX5-PHFuckeZYUJpEupvOgPmn_wmOHPY3JLP8-fjLs/edit#heading=h.7muvnvqgd1ss or https://docs.google.com/document/d/15BY2nYZYU2O-1sfppy544clwuT3dRJ6hxI0NdvkY8Lg/edit?usp=sharing in case you are not a member of the MLPerf community

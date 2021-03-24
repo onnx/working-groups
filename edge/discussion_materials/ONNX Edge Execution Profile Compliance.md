@@ -1,3 +1,5 @@
+<!--- SPDX-License-Identifier: Apache-2.0 -->
+
 # ONNX Edge Execution Mode Proposal
 Author: Saurabh Tangri, Milan Oljaca, Yedong Liu, Ofer Rosenberg
 
@@ -13,7 +15,7 @@ For multi-function devices such as a PC, ONNX Edge profile execution mode is an 
 To ensure unambiguous usage of ONNX edge execution modes and profile attributes during training and inference we need to describe runtime behavior.
 
 ## Scope
-ONNX execution modes describe the minimum deployment configuration needed to successfully run a particular model. It should describe the assumptions that were made when authoring the model and are needed to comply to the requirements of edge profiles. These can be viewed as a contract between author of a ML model and the executor of the model. 
+ONNX execution modes describe the minimum deployment configuration needed to successfully run a particular model. It should describe the assumptions that were made when authoring the model and are needed to comply to the requirements of edge profiles. These can be viewed as a contract between author of a ML model and the executor of the model.
 
 |              | Details                                                             | How to populate                                  | Data Type                                          | Example |
 |--------------|---------------------------------------------------------------------|--------------------------------------------------|----------------------------------------------------|---------|
@@ -23,13 +25,13 @@ ONNX execution modes describe the minimum deployment configuration needed to suc
 | Power        | What power performance is expected by this profile                  | What is minimum steady state throughput per watt | IPS/W                                              |         |
 | Data Locality | Is model intended to run on a network connected device?             | What is Network QoS required to run the model    | Yes/No or QoS                                      |         |
 
-Following are the implications of adding Edge Execution Modes 
+Following are the implications of adding Edge Execution Modes
 1. A producer of a ONNX model(Training frameworks or conversion tools) should be able to store profiles and attributes.
 2. Visualization tools like(ex: Netron) should be able to show profile attributes.
 
 
 ## Compliance Policy
-In order to be compliant the executing entity:example a runtime or framework needs to run the model in a configuration that meets the requirements described by the attributes. 
+In order to be compliant the executing entity:example a runtime or framework needs to run the model in a configuration that meets the requirements described by the attributes.
 
 ## Compliance Procedure
 
