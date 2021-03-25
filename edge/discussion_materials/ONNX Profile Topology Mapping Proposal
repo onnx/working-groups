@@ -1,0 +1,39 @@
+# ONNX Profile Topology Mapping Proposal
+Author: Ofer Rosenberg, Milan Oljaca
+
+Version: 0.1
+
+## Introduction
+
+A part of the Edge working group charter is to define a set of profiles for edge devices. The goal is for an edge device to be tested for compliance with a set of profiles. 
+During the working group discussions turned out that there can be a few approaches to breaking down of the edge devices functionality space. 
+Intent with such profile breakdown is to establish categorization of edge profiles based on use cases and profile attributes identified in [onnx-edge-scope-and-profile-definition.md](https://github.com/onnx/working-groups/blob/master/edge/artifacts/onnx-edge-scope-and-profile-definition.md) document.
+The goal of this document is to describe the few possible ways to do the topology mapping, and drive towards deciding on one of these. 
+There are two decisions that need to be made :
+1. Define 3-level topology or 2-level topology
+2. Define the mapping type (sensor based, network based, etc.)
+
+## Topology Level
+
+In defining the profiles, we can take two approaches :
+1. A three-level topology mapping, where the top level categories are identified as per [Scope of Edge.png](https://github.com/onnx/working-groups/blob/master/edge/artifacts/Scope%20of%20Edge.png).
+   1. First level  : Edge Infrastructure, Edge Device
+   1. Second level : Based on mapping type (see next section)
+   1. Third level  : Complexity (Basic / Intermediate / Advanced)
+2. A two-level topology mapping. Instead of top level categories, roll it into more complexity levels
+   1. First level  : Based on mapping type (see next section)
+   1. Second level : Complexity (1-N)
+
+
+## Mapping Type
+
+In defining the mapping type, we suggest the following two approaches :
+1. Based on Sensor type : 2D Image, Audio, Voice, Text, ...
+2. Based on Network type : Classification, SSD, Image Reconstruction, Speech Recognition, ...
+
+## Selection Criteria: 
+
+The selection criteria between the various mapping options will focus on 
+1. Defining a set of profiles which covers the range of target devices
+2. Creating a clear profile definition that will serve for compliance purpose
+
