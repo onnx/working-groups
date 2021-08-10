@@ -8,7 +8,7 @@ As described in the ONNX [governance](https://github.com/onnx/onnx/tree/master/c
 New Working Groups are created when there is sufficient interest in a topic area and someone volunteers to be the chair for the group and submits a proposal to the steering committee. The chair facilitates the discussion and helps synthesize proposals and decisions.
 
 ## Joining a working group
-Working Groups have most of their discussions on Gitter. If you are interested in participating, please join the discussion in the respective Gitter room.
+Working Groups have their discussions on Slack in dedicated channels. (Older working groups used Gitter rooms which are now archived)
 
 You can find the schedule of meetings on the [LF AI wiki](https://wiki.lfai.foundation/pages/viewpage.action?pageId=18481196)
 
@@ -18,13 +18,14 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
-| [Training](https://gitter.im/onnx/training) | Expand ONNX to support training as well as inference |
+| [Training](https://lfaifoundation.slack.com/archives/C018K560U14) | Expand ONNX to support training as well as inference |
+| [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Expand ONNX to support training as well as inference |
 
 ## Completed working groups
 
 | Working Group      | Objectives    | Status |
 | ------------------ | ------------- | ------ |
-| [Release](https://gitter.im/onnx/Releases) | Improve and document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule | Completed - release process enhanced and documented at https://github.com/onnx/onnx/blob/master/docs/OnnxReleases.md
+| [Release](https://lfaifoundation.slack.com/archives/C018VGGJUGK) | Improve and document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule | Completed - release process enhanced and documented at https://github.com/onnx/onnx/blob/master/docs/OnnxReleases.md
 | [Control Flow and Loops](https://gitter.im/onnx/ControlFlowWG) | Enable dynamic control structures to enable advanced models for NLP, speech, and video/image processing | Completed - If, Loop, and Scan operators were added in ONNX 1.3 release. |
 | [Quantization](https://gitter.im/onnx/quantization) | Enhance ONNX to support quantized data types and operators on a variety of runtimes and hardware devices | Completed - added in ONNX 1.5 release. |
 | [Foundation](https://gitter.im/onnx/foundation) | Identify and evaluate non-profit foundation options for the ONNX consortium.  Execute on best option. | Completed - ONNX joined LF AI in November 2019|
