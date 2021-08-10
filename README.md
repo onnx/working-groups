@@ -19,7 +19,7 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
 | [Training](https://lfaifoundation.slack.com/archives/C018K560U14) | Expand ONNX to support training as well as inference |
-| [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Expand ONNX to support training as well as inference |
+| [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization |
 
 ## Completed working groups
 
