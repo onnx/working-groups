@@ -22,6 +22,7 @@ This repository is where ONNX Preprocessing WG will capture various artifacts an
 * Matteo Interlandi (Microsoft)
 * Prasanth Pulavarthi (Microsoft)
 * Ohara Moriyoshi (IBM)
+* Konstantinos Karanasos (Microsoft)
 
 ## Meeting logistics
 * WG chair(s) will drive and facilitate the meetings
@@ -31,7 +32,7 @@ This repository is where ONNX Preprocessing WG will capture various artifacts an
 * Will post a message to [ONNX Preprocessing Slack Channel](https://lfaifoundation.slack.com/archives/C02AANGFBJB) with agenda and meeting invite link
   * Up to 7 days before the meeting by WG chair, but proposals to agenda item updates are welcomed from all contributors via Slack
 * Meeting/Telepresence tool: Zoom
-  * Meetings will be recorded and published to: TBD
+  * Meetings will be recorded and published to the [onnx-wg-preprocessing space](https://lists.lfaidata.foundation/g/onnx-wg-preprocessing/files)
 
 ## Discussion mechanics
 * [ONNX Preprocessing WG Slack Channel](https://lfaifoundation.slack.com/archives/C02AANGFBJB)
