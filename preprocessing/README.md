@@ -7,22 +7,28 @@ This repository is where ONNX Preprocessing WG will capture various artifacts an
 ## Working Group Status
 **ACTIVE**
 
-## Contributors
-*Note: Contributors list will be updated as per participation and contributions.*
+## Contributors/Attendees
+*Note: Contributors/Attendees list will be updated as per participation and contributions.*
 
-* Joaquin Anton (NVIDIA) (co-chair)
-* Alexander Shirkov (Amazon, Autogluon) (co-chair)
-* Janusz Lisiecki (NVIDIA)
-* Michal Szolucha (NVIDIA)
-* Mayank Kaushik (NVIDIA)
-* Ashwini Khade (Microsoft)
-* Rodolfo G Esteves (Intel)
+* Joaquin Anton (NVIDIA) (chair)
 * Ganesan Ramalingan (Microsoft)
+* Natalie Kershaw (Microsoft)
+* Janusz Lisiecki (NVIDIA)
+* Liqun Fu (Microsoft)
+* Xavier Dupre (Microsoft)
+* Rodolfo G Esteves (Intel)
+* Wenbing Li (Microsoft)
 * Jacky Chen (Microsoft)
+* Ashwini Khade (Microsoft)
+* Michal Szolucha (NVIDIA)
+* Michal Zientkiewicz (NVIDIA)
+* Mayank Kaushik (NVIDIA)
 * Matteo Interlandi (Microsoft)
 * Prasanth Pulavarthi (Microsoft)
 * Ohara Moriyoshi (IBM)
 * Konstantinos Karanasos (Microsoft)
+* Muthu Baskaran (Qualcomm)
+* Andreas Fehlner (TRUMPF Laser GmbH)
 
 ## Meeting logistics
 * WG chair(s) will drive and facilitate the meetings
