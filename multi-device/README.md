@@ -7,7 +7,7 @@ This repository is where the ONNX Multi-device WG will capture various artifacts
 ## Objective
 
 The AI industry has grown model size at a faster rate than the growth in hardware capabilities. To enable running SoTA models with ONNX, the ONNX spec needs support for expressing execution of the network on multiple devices. We propose a new Multi-device Working Group, whose exit criteria would be a ratified extension to the ONNX spec for expressing multi-device capability in an ONNX model.
-To seed discussion in the proposed WG, we have a proposal from NVIDIA that introduces a few extensions to ONNX that allow expression of multi-device capability with minor changes relative to a single device network. By expressing some optional information to an ONNX network, the model can be scaled to multiple devices.
+To seed discussion in the proposed WG, we have an initial proposal that introduces a few extensions to ONNX that allow expression of multi-device capability with minor changes relative to a single device network. By expressing some optional information to an ONNX network, the model can be scaled to multiple devices.
 
 ## Working Group Status
 **ACTIVE**
