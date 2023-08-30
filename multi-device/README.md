@@ -17,7 +17,8 @@ Please sign up at https://slack.lfai.foundation/ and join the [onnx-multi-device
 
 # WG Lead(s)
 
-* TBD
+* Kevin Chen (NVIDIA)
+* Ganesan Ramalingam (Microsoft)
 
 # Logistics
 
