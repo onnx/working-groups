@@ -19,6 +19,7 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
 | [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization |
+| [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX               |
 
 ## Completed working groups
 
