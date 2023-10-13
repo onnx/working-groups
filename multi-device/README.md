@@ -29,7 +29,8 @@ Please sign up at https://slack.lfai.foundation/ and join the [onnx-multi-device
 
 # WG Meeting Info
 
-* TBD
+* Planned meetings can be found at the [group homepage](https://lists.lfaidata.foundation/g/onnx-wg-multidevice)
+* Recordings will be uploaded to the [group files page](https://lists.lfaidata.foundation/g/onnx-wg-multidevice/files/Meeting%20Recordings)
 
 # Meeting notes
 
