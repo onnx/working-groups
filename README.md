@@ -16,6 +16,8 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 ## Active working groups
 
+Contact e-mail addresses of WG leads can be found [here](https://wiki.lfaidata.foundation/pages/viewpage.action?pageId=18481196).
+
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
 | [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization |
