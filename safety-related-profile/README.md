@@ -17,7 +17,7 @@ We also consider that these needs are specific and that the proposed changes and
 **ACTIVE**
 
 # Slack channel
-Please sign up at https://slack.lfai.foundation/ and join [onnx-srp](to be completed) channel.
+Please sign up at https://slack.lfai.foundation/ and join [onnx-safety-related-profile-wg](https://app.slack.com/client/TPUCV58TG/CPS6Y3N21) channel.
 
 # WG Lead(s)
 
