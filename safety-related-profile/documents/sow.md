@@ -96,19 +96,15 @@ The activities defined below are per domain.
 
 -   UNAct3: Description of the development process objectives and
     activities that:
-
--   Produce the TMD
-
--   Take the TMD as input
+    -   Produce the TMD
+    -   Take the TMD as input
 
 -   UNAct4: Description of the development process verification
     objectives and activities that apply to the TMD
 
 -   UNAct5: Constraints on the TDM, that come from:
-
--   the Development and verification activities
-
--   the Industrial context
+    -   the Development and verification activities
+    -   the Industrial context
 
 -   UNAct6: Expression of the needs
 
@@ -118,47 +114,33 @@ The activities below take the end-user needs as inputs
 
 -   ORAct1: Definition of the list of the aspects to which the
     requirements for a safety-related ONNX profile will apply, e.g.,
-
--   Semantics of the operators
-
--   Semantics of the graph
-
--   Data types
-
--   Metamodel
-
--   Concrete syntax (format)
-
--   Documentation
-
--   Traceability
-
--   Versioning
-
--   etc.
+    -   Semantics of the operators
+    -   Semantics of the graph
+    -   Data types
+    -   Metamodel
+    -   Concrete syntax (format)
+    -   Documentation
+    -   Traceability
+    -   Versioning
+    -   etc.
 
 -   ORAct2: For each aspect of the list, definition of the requirements
-
     *Examples of requirements that may be expressed:*
-
--   The semantics of the Trained Model Description Language (TMDL) used
+    -   The semantics of the Trained Model Description Language (TMDL) used
     to describe the TMD shall be defined both informally (for
     documentation purposes) and formally using a mathematically-grounded
     language. This covers all that is needed for tooled and/or human
     interpretation of any valid TMD described using the TMDL (including,
     (e.g., operators and graphs).
-
--   The formal definition of the TMDL shall define precisely and
+    -   The formal definition of the TMDL shall define precisely and
     accurately the expected results of the interpretation of any valid
     TMDL model. The level of precision and accuracy may be a parameter
     of the description of the semantics.
-
--   A reference implementation shall be provided for each operator. The
+    -   A reference implementation shall be provided for each operator. The
     reference implementation shall be accompanied with all the necessary
     information describing the execution environment used to validate
     compliance with the formal specification.
-
--   In the TMD, it should be possible to indicate the meaning of each
+    -   In the TMD, it should be possible to indicate the meaning of each
     dimension of the tensors
 
 ### A2: Consolidate Requirements for the ONNX profile
