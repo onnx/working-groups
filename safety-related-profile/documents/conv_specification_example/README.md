@@ -133,15 +133,9 @@ Where
 - attributes `strides` and `dilations` are described later in this
   section.
 
-The effect of the operator is depicted on
-Figure <a href="#fig:conv_basic_effect" data-reference-type="ref"
-data-reference="fig:conv_basic_effect">1</a>.
+The effect of the operator is depicted on the following picture.
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv.png)
 
-<figure id="fig:conv_basic_effect">
-<embed src="./figs/figs/conv.pdf" />
-<figcaption>Illustration of the effect of the <code>conv</code> operator
-(1 channel)</figcaption>
-</figure>
 
 #### Inputs and outputs
 
@@ -252,15 +246,9 @@ $\mbox{\texttt{strides}}[1]=2$, the kernel is moved of 1 unit in the
 first spatial axis and 2 units in the second spatial axis at each step
 of the convolution.
 
-This effect is illustrated on
-Figure <a href="#fig:conv_stride" data-reference-type="ref"
-data-reference="fig:conv_stride">2</a>.
+This effect is illustrated on the following figure:
 
-<figure id="fig:conv_stride">
-<embed src="./figs/figs/conv_stride.pdf" />
-<figcaption>Illustration of the effect of the <code>strides</code>
-attribute</figcaption>
-</figure>
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv_stride.png)
 
 ###### Constraints
 
@@ -337,16 +325,9 @@ attribute (see below). Otherwise, padding is done according to the
 
   - $\floor{pad_h/2}$ (resp. $\floor{pad_w/2}$)at the end.
 
-The effect of the `auto_pad` attribute is illustrated on
-Figure <a href="#fig:conv_autopad" data-reference-type="ref"
-data-reference="fig:conv_autopad">3</a> for `auto_pad`=`SAME_LOWER` and
-`auto_pad`=`SAME_UPPER`
+The effect of the `auto_pad` attribute is illustrated on the following figure:
 
-<figure id="fig:conv_autopad">
-<embed src="./figs/figs/conv_autopad.pdf" />
-<figcaption>Illustration of the effect of the <code>auto_pad</code>
-attribute</figcaption>
-</figure>
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/autopad.png)
 
 ###### Constraints
 
@@ -380,15 +361,10 @@ spatial axis.
 
 The value of the elements added by the padding is 0.
 
-The effect of padding illustrated on
-Figure <a href="#fig:conv_pad" data-reference-type="ref"
-data-reference="fig:conv_pad">4</a> for a 2D tensor.
+The effect of padding illustrated on the following figure:
 
-<figure id="fig:conv_pad">
-<embed src="./figs/figs/conv_pads.pdf" />
-<figcaption>Illustration of the effect of the <code>pads</code>
-attribute (2D tensor)</figcaption>
-</figure>
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/pad.png)
+
 
 ###### Constraints.
 
@@ -431,15 +407,9 @@ non-null integer values where each value gives the dilation factor for
 spatial axis $i$. If the dilation factor is greater than 1 for a axis
 $i$, then the kernel points are spaced out by the dilation factor.
 
-Figure <a href="#fig:conv_dilation" data-reference-type="ref"
-data-reference="fig:conv_dilation">5</a> depicts the effect of the
-`dilations` attribute for a tensor with two spatial axes.
+The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-<figure id="fig:conv_dilation">
-<embed src="./figs/figs/conv_dilation.pdf" />
-<figcaption>Illustration of the effect of the <code>dilation</code>
-attribute</figcaption>
-</figure>
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/dilation.png)
 
 ###### Constraints
 
@@ -484,15 +454,11 @@ actual Safety-Related Profile.
 
 </div>
 
-Figure <a href="#fig:groupedconvolution" data-reference-type="ref"
-data-reference="fig:groupedconvolution">6</a> depicts the effect of the
-`group` attribute for a tensor with two spatial axes.
+The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-<figure id="fig:groupedconvolution">
-<img src="./figs/figs/groupedConvolution.png" />
-<figcaption>Groups in convolution (taken from <a
-href="https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)">eli.thegreenplace.net</a>)</figcaption>
-</figure>
+![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/grouped_convolution.png)
+
+(Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
   
 For example, with `group` set to 2 and an input `X` and an output `Y`
@@ -972,4 +938,3 @@ Inference](https://onnx.ai/onnx/repo-docs/ShapeInference.html).
 
 [^4]: See [Frama-C
     documentation](https://www.frama-c.com/html/documentation.html)
-
