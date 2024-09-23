@@ -28,11 +28,11 @@ meeting planned for the end of September.
 Provide a definition of the formalism used to represent a trained ML
 model\...
 
--   *\... that has an understandable and non ambiguous syntax and
+-   *\... that has an understandable and non-ambiguous syntax and
     semantics.*
 
     The description of the ML model expressed using this formalism must
-    be a Low level Requirement for the implementation phase in the sense
+    be a Low-level Requirement for the implementation phase in the sense
     that its interpretation and implementation shall not require any
     further information that the one given by the description of the ML
     model.
@@ -41,7 +41,7 @@ model\...
     description of a given model.*
 
     The language used to describe the model (i.e., its syntax and
-    semantics) must be non ambiguous, but a model may be ambiguous if
+    semantics) must be non-ambiguous, but a model may be ambiguous if
     this ambiguity is acceptable or even necessary to leave some freedom
     to the implementer (e.g., for optimization). The objective is to
     identify, control, and possibly remove this ambiguity by an
@@ -52,24 +52,21 @@ model\...
 This section presents the different activities of the workgroup. Their
 dependencies are expressed via their inputs/outputs.
 
-### A1 - Elicitation of industrial needs and requirements
+### A1 - Elicitation of industrial needs
 
 #### Objectives
 
--   Elicit end-users needs related to the ONNX format, i.e., What are
-    the activities using ONNX models?, What are the evidences required
-    by certification authorities that involve the ONNX model[^1]?, How
-    do the ONNX model impact these activities?,
+Elicit end users' needs related to the ONNX format, i.e., What are the activities using ONNX models? What are the evidences required by certification authorities that involve the ONNX model? How do the ONNX model impact these activities?
 
--   Elicit requirements applicable to the ONNX standard to satisfy the
-    end-users needs. Those requirements shall cover all aspects of the
-    standard, including documentation, graphs and operators semantics,
-    file format, reference implementation, etc.
+#### Rationale
 
-#### Rationales {#rationales .unnumbered}
+The definition of the scope of the safety-related profile (SR profile) and the elicitation of the end users' needs within that scope set the frame for the SR profile development.
 
-Clarify the expectation of end-users. Ensure that the requirements for
-ONNX are traceable to one or several end-users' needs.
+#### Activity overview
+
+First define the scope of the safety-related profile in terms of operators and constructs on the basis of use cases coming from the various industrial domains.
+Then describe the needs per domain and consolidate them for the whole SR profile.
+ 
 
 #### Inputs
 
@@ -78,319 +75,215 @@ ONNX are traceable to one or several end-users' needs.
 
 -   Company-specific requirements
 
+-   End users' use cases
+
 #### Outputs
 
--   D1.a.\<x\>: End users needs and requirements for domain \<x\>.
+-   D1.a.\<x\>: End users' needs and requirements for domain \<x\>.
+-   D1.b: Consolidated needs for all industrial domains
+-   D1.c: Safety-related Profile Scope Definition
 
 #### Detailed activities
 
-The activities defined below are per domain.
+The activities defined below are per domain <x>.
 
-##### End-Users Needs Elicitation
+##### SC: SR profile Scope Definition
 
--   UNAct1: Definition of the *Trained Model Description (TMD)* artefact
-    (e.g., the Machine Learning Model Description (MLMD) in ARP6983)
+- SCAct1: Identification/definition of the Safety-related industrial use case reference models
 
--   UNAct2: Description (overview) of the machine learning development
+- SCAct2: Extraction of the operators and constructs from the Safety-related industrial use cases reference models
+
+- SSAct3: Consolidation of the set of operators and constructs to be included in the Safety-related profile (from the reference models possibly augmented with necessary additional operators and constructs).
+
+##### EN: End Users' Needs Elicitation
+
+-   ENAct1.\<x\>: Description (overview) of the machine learning development
     process
 
--   UNAct3: Description of the development process objectives and
-    activities that:
-    -   Produce the TMD
-    -   Take the TMD as input
+-   ENAct2.\<x\>: Description of the development process objectives and
+    activities that produce the TMD and take it as input
 
--   UNAct4: Description of the development process verification
+-   ENAct3.\<x\>: Definition of the *Trained Model Description (TMD)* artefact
+    (e.g., the Machine Learning Model Description (MLMD) in ARP6983)
+
+-   UENAct4.\<x\>: Description of the development process verification
     objectives and activities that apply to the TMD
 
--   UNAct5: Constraints on the TDM, that come from:
-    -   the Development and verification activities
-    -   the Industrial context
+-   ENAct5.\<x\>: Expression of constraints on the TDM, that come from the Development and verification activities the Industrial context
 
--   UNAct6: Expression of the needs
+-   ENAct6.\<x\>: Expression of the needs
 
-##### *ONNX Requirements Expression*
+-   ENAct7.\<x\>:Consolidation of industrial needs from all domains
 
-The activities below take the end-user needs as inputs
 
--   ORAct1: Definition of the list of the aspects to which the
-    requirements for a safety-related ONNX profile will apply, e.g.,
-    -   Semantics of the operators
-    -   Semantics of the graph
-    -   Data types
-    -   Metamodel
-    -   Concrete syntax (format)
-    -   Documentation
-    -   Traceability
-    -   Versioning
-    -   etc.
-
--   ORAct2: For each aspect of the list, definition of the requirements
-    *Examples of requirements that may be expressed:*
-    -   The semantics of the Trained Model Description Language (TMDL) used
-    to describe the TMD shall be defined both informally (for
-    documentation purposes) and formally using a mathematically-grounded
-    language. This covers all that is needed for tooled and/or human
-    interpretation of any valid TMD described using the TMDL (including,
-    (e.g., operators and graphs).
-    -   The formal definition of the TMDL shall define precisely and
-    accurately the expected results of the interpretation of any valid
-    TMDL model. The level of precision and accuracy may be a parameter
-    of the description of the semantics.
-    -   A reference implementation shall be provided for each operator. The
-    reference implementation shall be accompanied with all the necessary
-    information describing the execution environment used to validate
-    compliance with the formal specification.
-    -   In the TMD, it should be possible to indicate the meaning of each
-    dimension of the tensors
-
-### A2: Consolidate Requirements for the ONNX profile
+### A2: Specification of the ONNX SR profile
 
 #### Objectives
 
--   Consolidate, filter, and prioritize the requirements identified for
-    the different industrial domains in D1.a.\<x\>.
-
--   Discriminate requirements aimed at the preservation of the model
-    semantics from requirements aimed at facilitating / supporting other
-    development assurance activities.
+Elaborate the list of requirements applicable to the SR profile in order to comply with the end users' needs. Consolidate, filter, and prioritize the needs identified for the different industrial domains in D1.a.<x>. Discriminate requirements aimed at the preservation of the model semantics from requirements aimed at facilitating / supporting other development assurance activities.
 
 #### Rationale
 
-The ONNX Safety-related profile must be unique whereas the needs comes
-from different industrial domains, referring different certification
-standards. This activity is aimed at defining a consensual and
-consistent set of requirements.
+Before starting the development of the constituents of the SR profile, it is mandatory to express requirements in compliance with the users' needs, in order to guarantee the satisfaction of the latter.
+
+#### Activity overview
+
+Before writing the requirements for the SR profile, the various aspects to consider shall be identified clearly.
+Then the requirements are elaborated, grouped, prioritized and verified against the end users' needs, within the SR profile scope.
+Furthermore, the requirements for ONNX will be made traceable to one or several end users’ needs.
 
 #### Inputs
 
--   D1.a.\<x\>: End users needs and requirements for domain \<x\>.
+-   D1.a.\<x\>: End users' needs for domain \<x\>.
+-   D1.b: Consolidated needs for all industrial domains
+-   D1.c: Safety-related Profile Scope Definition
 
 #### Outputs
 
--   (D2.a) ONNX safety-related Profile Requirements
+-  D2.a: ONNX safety-related Profile Requirements
 
 #### Detailed activities
 
-##### Consolidation of requirements
+##### OR: ONNX SR profile requirements specification
 
--   CRAct1: Consolidation and fusion of semantically equivalent
-    requirements
+-  ORAct1: Definition of the list of the aspects (e.g., accuracy, completeness, traceability, etc.) to which the requirements for a safety-related ONNX profile will apply
 
--   CRAct2: Grouping and prioritization of requirements
+-  ORAct2: For each aspect, definition of the requirements applicable to the standard
 
-### A3: Definition of the Scope of the ONNX Safety related profile
+-  ORAct3: Grouping and prioritization of requirements
+
+-  ORAct4: Verification / traceability of the requirements against the end users' needs.
+
+### A3: Development of the ONNX SR profile
 
 #### Objectives
 
--   Selection of the set of operators and constructs to be considered in
-    the Safety-related profile.
+Development of the ONNX Safety-related profile (syntax and semantics) in compliance with the ONNX safety-related Profile Requirements (D2.a)
 
 #### Rationale
 
-In order to keep the effort reasonable and maximize or chance to produce
-useful results within a reasonable time frame, we propose to work on a
-restricted set of operators and constructs. This set will be defined
-according to the actual needs of the end-users (i.e., the models they
-want to implement).
+The compliance of the SR profile with its requirements, together with the fact that the requirements are expressed from the end users' needs, leads to the satisfaction of the end users' needs.
+
+#### Activity overview
+
+Guidelines for the development of the SR profile are first written thanks to a proof of concept that consists in developing a limited subset of the SR profile.
+Then, these guidelines are used to develop the SR profile graph semantics, the semantics of the operators of the SR profile scope, the exchange format and the reference implementation.
+The SR profile constituents shall be verifiable against their requirements (verification) and against the end users' needs (validation).
 
 #### Inputs
 
--   End user use cases
+-  D2.a: ONNX safety-related Profile Requirements
 
 #### Outputs
 
--   (D3.a) Safety-related Profile Scope Definition
+-   D3.a: ONNX Safety-related profile - proof of concept
+-   D3.b: ONNX Safety-related profile - graph
+-   D3.c: ONNX Safety-related profile - operators
+-   D3.d: ONNX Safety-related profile - format
+-   D3.e: ONNX Safety-related profile - reference implementation
+-   D3.f: ONNX Safety-related profile - rules
 
 #### Detailed activities
 
-##### Definition of the Safety-related Standard Scope
+##### POC: Proof of concept
 
--   DSCAct1: Identification/definition of the Safety-related industrial
-    use case reference models
+-   PROAct1: Elaborate a first set of (informal + formal) specification guidelines and apply them on a few operators (e.g., conv) and constructs in order to discussed and reviewed by the workgroup. They will serve as a baseline for other operators
 
--   DSCAct2: Extraction of the operators and constructs from the
-    Safety-related industrial use cases reference models
+##### GR: Graph execution semantics
 
--   DSCAct3: Consolidation of the TMDL operators and constructs for the
-    Safety-related profile, from the reference models possibly augmented
-    with necessary additional operators and constructs.
+-   GRAct1: Development of the ONNX SR profile graph semantics in compliance with specification D2.a
 
-### A4: Analysis of the ONNX standard
+##### OP: Operator semantics
+
+-   OPAct1: Development of the ONNX SR profile operators' semantics in compliance with specification D2.a
+
+##### FO: Format
+
+-  FOAct1: Development of the ONNX SR profile exchange format in compliance with specification D2.a
+
+##### RI: Reference implementation
+
+-  RIAct1: Development of a reference implementation (on the basis of the existing ref imp.). This covers the development of the graph execution engine and operators.
+
+### A4: V&V of the ONNX Safety-related profile
 
 #### Objectives
 
--   Identify the parts of the standard that need to be updated /
-    clarified / modified in order to comply with the Safety-related
-    Profile Requirements defined in D2.a, for the subset of the standard
-    identified in D3.a.
+Verification (validation) of the ONNX Safety-related profile vs the requirements (resp. needs) expressed in D2.a (resp D1.b and D1.c)
 
-#### Rationales
+#### Rationale
 
-Once the requirements for the format are defined, the work consists to
-find what needs to be described, improved, fixed,\... in the existing
-ONNX standard. In particular, all elements that are unclear or which
-interpretation is left to the implementer shall be spotted, analysed,
-discussed, and a proposal for clarification/correction may be proposed
-if required. These proposals may be applicable to a whole part of the
-standard e.g. a recommendation may concern the documentation of all
-operators).
+Since the SR profile aims at becoming the ONNX standard for safety-related applications, it is important to verify/validate it before end users can use it. 
+
+#### Activity overview
+
+The SR profile is verified against the requirements and validated against the end users' needs. Verification/validation cases and results shall be documented in order to give evidences about the activity.
 
 #### Inputs
 
--   (D2.a) Requirements applicable to the ONNX profile
+-   D3.b: ONNX Safety-related profile - graph
 
--   (D3.a) Safety-related Profile Scope Definition
+-   D3.c: ONNX Safety-related profile - operators
+
+-   D3.d: ONNX Safety-related profile - format
 
 #### Outputs
 
--   (D4.a) ONNX Analysis and Recommendations for the Safety-related
+-   D4.a: ONNX Safety-related profile verification report
     Profile
+-   D4.b: ONNX Safety-related profile validation report. 
 
 #### Detailed activities
 
-##### Analysis of the ONNX standard
+##### VE: Verification
 
--   AnaAct1: Analysis of the compliance of the ONNX standard with
-    respect to each of the requirements and identification of
-    non-compliances.
+-   VEAct1: Review of the ONNX SR profile against the requirements in D2.a 
 
--   AnaAct2: Provision of recommendations, solutions, guidance to modify
-    the ONNX standard.
+##### VA: Validation
 
-### A5: Elaboration of the specification guidelines
+-   VAAct1: Validation of the ONNX SR profile via its application to one or several industrial use cases 
+
+
+### A5: Tooling
 
 #### Objectives
 
-State of the Art and proposal of guidelines for the specification of the
-graph and operators to comply with D4.a.
+Expression of the needs and requirements of a toolset aimed at supporting the exploitation of the ONNX SR model, e.g., model inspection and review tool, according to the end users' ML development process objectives, activities, and to the definition of the SR profile and associated rules.
 
-#### Rationales
+#### Rationale
 
-Various approaches and notations may be used to specify the graph and
-operators in a formal way. This activity is aimed at proposing a
-solution acceptable with respect to the end-users needs and
-requirements.
+Automatic rule checkers (for, e.g, consistency checks) or tools supporting model inspection and review might be the industrial answer to the fulfilment of regulatory constraints
+
+#### Activity overview
+
+The needs of tools and the list of them are first established.
+Then the requirements applicable to each tool of the list are written. 
 
 #### Inputs
 
--   (D2.a) Requirements applicable to the ONNX profile
+-   D1.b: Consolidated needs for all industrial domains
+-   D3.a: ONNX Safety-related profile - proof of concept
+-   D3.b: ONNX Safety-related profile - graph
+-   D3.c: ONNX Safety-related profile - operators
+-   D3.d: ONNX Safety-related profile - format
+-   D3.e: ONNX Safety-related profile - reference implementation
+-   D3.f: ONNX Safety-related profile - rules
 
 #### Outputs
 
--   (D5.a) Specification Guidelines
+- D5.a: Expression of the needs / tool list 
+- D5.b.\<tool\>: Requirements of tool \<tool\>
 
 #### Detailed activities
 
-##### Prototype guidelines
+##### TN: Tool needs elicitation
 
--   ProAct1: Elaborate a first set of (informal + formal) specification
-    guidelines and apply them on a few operators (e.g., conv) and
-    constructs in order to discussed and reviewed by the workgroup
+- TNAct1: Expression of the needs for tools
 
-##### Elaborate guidelines
+##### TS: Tool requirements
 
--   • ElaAct1: Elaborate the final set of guidelines (including
-    notation, presentation of the specification, etc. to ensure a
-    consistent presentation of the specification)
+- TSAct2.\<tool\>: Expression of the requirements of tool \<tool\>
 
-### A6: Development of the ONNX Safety-related profile - semantics
 
-#### Objectives
 
-Development of the ONNX Safety-related profile semantics to address
-issues identified in (D4.a), using the formalism and approach defined in
-D5.a
 
-#### Inputs
-
--   (D4.a) ONNX Analysis and Recommendations for the Safety-related
-    Profile
-
--   (D5.a) Formal Specification Guidelines
-
-#### Outputs
-
--   (D6.a) ONNX Safety-related profile (graph execution part)
-
--   (D6.b) ONNX Safety-related profile (operators part)
-
--   (D6.c) ONNX Safety-related profile reference implementation
-
-Detailed activities *To be completed.*
-
-### A7: Development of the ONNX Satefy-related profile - format
-
-#### Objectives
-
-Development of the ONNX Safety-related exchange format in compliance
-with the recommendations given in (D4.a).
-
-#### Inputs
-
--   (D4.a) ONNX Analysis for the Safety-related Profile
-
--   ONNX standard
-
-#### Outputs
-
--   (D7.a) ONNX Safety-related profile format
-
-#### Detailed activities
-
-*To be completed.*
-
-### A8: Verification of the ONNX Safety-related profile
-
-#### Objectives
-
-Verification of the ONNX Safety-related profile vs the requirements
-expressed in (D2.a), the recommendations identified in (D4.a) and the
-guidelines defined in (D5.a)
-
-#### Inputs
-
--   (D4.a) ONNX Analysis and Recommendations for the Safety-related
-    Profile
-
--   (D5.a) Formal Specification Guidelines
-
--   (D6.a) ONNX Safety-related profile (graph execution part)
-
--   (D6.b) ONNX Safety-related profile (operators part)
-
--   (D6.c) ONNX Safety-related profile reference implementation
-
--   (D7.a) ONNX Safety-related profile format
-
-#### Outputs
-
--   (D8.a) ONNX Safety-related profile verification report
-
-Detailed activities *To be completed.*
-
-### A9: Validation of the ONNX Safety-related profile
-
-#### Objectives
-
-Validation of the ONNX Safety-related profile vs the End-users needs
-expressed in the various per domain D1.a.\<x\> documents.
-
-#### Inputs
-
--   D1.a.\<x\>: End users needs and requirements for domain \<x\>.
-
--   (D6.a) ONNX Safety-related profile (graph execution part)
-
--   (D6.b) ONNX Safety-related profile (operators part)
-
--   (D6.c) ONNX Safety-related profile reference implementation
-
--   (D7.a) ONNX Safety-related profile format
-
-#### Outputs
-
--   (D9.a) ONNX Safety-related profile validation report
-
-Detailed activities *To be completed.*
-
-[^1]: E.g., those concerning the MLMD in the ARP6983/ED-324.
