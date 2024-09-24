@@ -79,9 +79,9 @@ Then describe the needs per domain and consolidate them for the whole SR profile
 
 #### Outputs
 
--   D1.a.\<x\>: End users' needs and requirements for domain \<x\>.
--   D1.b: Consolidated needs for all industrial domains
--   D1.c: Safety-related Profile Scope Definition
+-   D1.a: Safety-related Profile Scope Definition
+-   D1.b.\<x\>: End users' needs and requirements for domain \<x\>.
+-   D1.c: Consolidated needs for all industrial domains
 
 #### Detailed activities
 
@@ -134,9 +134,9 @@ Furthermore, the requirements for ONNX will be made traceable to one or several 
 
 #### Inputs
 
--   D1.a.\<x\>: End users' needs for domain \<x\>.
--   D1.b: Consolidated needs for all industrial domains
--   D1.c: Safety-related Profile Scope Definition
+-   D1.a: Safety-related Profile Scope Definition
+-   D1.b.\<x\>: End users' needs for domain \<x\>.
+-   D1.c: Consolidated needs for all industrial domains
 
 #### Outputs
 
@@ -147,11 +147,8 @@ Furthermore, the requirements for ONNX will be made traceable to one or several 
 ##### OR: ONNX SR profile requirements specification
 
 -  ORAct1: Definition of the list of the aspects (e.g., accuracy, completeness, traceability, etc.) to which the requirements for a safety-related ONNX profile will apply
-
 -  ORAct2: For each aspect, definition of the requirements applicable to the standard
-
 -  ORAct3: Grouping and prioritization of requirements
-
 -  ORAct4: Verification / traceability of the requirements against the end users' needs.
 
 ### A3: Development of the ONNX SR profile
@@ -261,7 +258,7 @@ Then the requirements applicable to each tool of the list are written.
 
 #### Inputs
 
--   D1.b: Consolidated needs for all industrial domains
+-   D1.c: Consolidated needs for all industrial domains
 -   D3.a: ONNX Safety-related profile - proof of concept
 -   D3.b: ONNX Safety-related profile - graph
 -   D3.c: ONNX Safety-related profile - operators
