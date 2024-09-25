@@ -1,5 +1,5 @@
-| Last name | First name | COMPANY |           Contribution         |
-|-----------|------------|---------|--------------------------------|
+| Last name | First name | COMPANY |    Activity   |   Contributuion (R/W)  |
+|-----------|------------|---------|---------------|------------------------|
 | BARRETEAU | Michel | Thales |
 | BELEGUER ALMECIJA | Salvador | Airbus DS |
 | BELFY | Henri | THALES AVS |
@@ -25,7 +25,7 @@
 | GARION | Christophe | ISAE |
 | GIRARD | Julien | CEA |
 | HARNOUFI | Bouchra | Airbus DS |
-| JENN | Eric | IRT St Ex | Co-lead, aeronautics specs
+| JENN | Eric | IRT St Ex | All | WG co-lead
 | JIMENEZ | Arnaud | CS-SOPRASTERIA |
 | KLUGE | Regina | INFINEON |
 | KRISHNA | Ram | |
@@ -49,7 +49,7 @@
 | SADOCK | Christiano | Embraer |
 | SCHMIDT | Bernard | BOSCH |
 | SCHORN | Christoph | BOSCH |
-| SOUYRIS | Jean | Airbus Operations SAS | WG Co-lead, aeronautics specs
+| SOUYRIS | Jean | Airbus Operations SAS | All | WG Co-lead
 | THIERION | Philippe | AMPERE |
 | TOSTES | Pedro | Embraer |
 | TURKI | Mariem | IRT St Ex |
