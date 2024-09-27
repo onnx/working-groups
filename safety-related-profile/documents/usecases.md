@@ -1,4 +1,4 @@
-# Use case <<name of the use case - <provider>>
+# Use case `<name of the use case>` - `<provider>`
 
 ## Description
 _Brief description of the use case. This description is optional, but providing a short description will make your need easier to understand._
