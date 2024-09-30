@@ -1,8 +1,8 @@
-| Last name | First name | COMPANY |    Activity   |   Contributuion (R/W)  |
+| Last name | First name | COMPANY |    Activity   |   Contributions (R/W)  |
 |-----------|------------|---------|---------------|------------------------|
 | BARRETEAU | Michel | Thales |
 | BELEGUER ALMECIJA | Salvador | Airbus DS |
-| BELFY | Henri | THALES AVS |
+| BELFY | Henri | THALES AVS | Relative ONNX embedded part (Operators Definitions...) | R/W (limited W)|
 | BERJON | Pierre | Airbus Operations SAS |
 | BEYER | Michael | BOSCH |
 | BOBLEST | Sebastian | BOSCH |
