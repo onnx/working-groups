@@ -4,6 +4,7 @@
     - scope definition (use cases)
     - elicitation of needs
 - Discussion about the creation of a sub-group on formal methods
+- Brief presentation of the Linux Fundation support to our activities (Andreas, to be confirmed)
 
 #### Minutes
 (to be completed)
