@@ -1,8 +1,6 @@
-| Last name | First name | COMPANY |    Activity   | Contribution (R/W)                             |
-|-----------|------------|---------|---------------|-------------------------------------------------|
 | BARRETEAU | Michel | Thales |
 | BELEGUER ALMECIJA | Salvador | Airbus DS |
-| BELFY | Henri | THALES AVS |
+| BELFY | Henri | THALES AVS | Relative ONNX embedded part (Operators Definitions...) | R/W (limited W)|
 | BERJON | Pierre | Airbus Operations SAS |
 | BEYER | Michael | BOSCH |
 | BOBLEST | Sebastian | BOSCH | | R/(W) final contribution clearance in progress |
