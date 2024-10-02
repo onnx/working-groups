@@ -6,9 +6,10 @@
     - identificaiton of [issues ](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/issues.md)
 - Discussion about the creation of a sub-group (who?)
     - on formal methods
-    - on numerical issues
-- Brief presentation of the Linux Fundation support to our activities (Andreas, to be confirmed)
-
+    - on numerical issues (?)
+- Status of integration with ONNX community
+    - Brief presentation of the Linux Fundation support to our activities (=> Andreas, Friday, report during next meeting)
+    - 
 #### Minutes
 (to be completed)
 
