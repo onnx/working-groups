@@ -1,3 +1,5 @@
+| Last name | First name | COMPANY |    Activity   |   Contributions (R/W)  |
+|-----------|------------|---------|---------------|------------------------|
 | BARRETEAU | Michel | Thales |
 | BELEGUER ALMECIJA | Salvador | Airbus DS |
 | BELFY | Henri | THALES AVS | Relative ONNX embedded part (Operators Definitions...) | R/W (limited W)|
