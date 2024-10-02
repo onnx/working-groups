@@ -22,7 +22,7 @@
 | FERREIRA DE OLIVEIRA | Helen | Embraer |
 | GABORIAU | Nicolas | Airbus Protect |
 | GABREAU | Christophe | Airbus Operations SAS |
-| GARION | Christophe | ISAE |
+| GARION | Christophe | ISAE | Formal specification of ONNX operators | R/W (limited W) |
 | GIRARD | Julien | CEA |
 | HARNOUFI | Bouchra | Airbus DS |
 | JENN | Eric | IRT St Ex | All | WG co-lead
