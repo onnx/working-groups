@@ -9,10 +9,13 @@
     - on numerical issues (?)
 - Status of integration with ONNX community
     - Brief presentation of the Linux Fundation support to our activities (=> Andreas, Friday, report during next meeting)
-    - 
+  
 ## Participants
 (Was not able to retrieve the list from TEAMS)
 ## Minutes
+- Status of actions
+- Presentation of the three templates.
+  
 ### About the “Steering Committee”
 - EMB will not be able to participate to our periodic meetings (every two weeks) but is nevertheless willing to contribute to our effort via a *Streeing Committe* (SC). The objective of the SC is to monitor important (”key”) moments in the progression of activities (“gates” , “phase transitions”, etc.).
 - The SC shall be planned in advance. Basically: one SC every SC will be fine.
