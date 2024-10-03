@@ -8,7 +8,7 @@ A need expresses what a SONNX user must achieve. A requirement express what SONN
 
 ## Recommendations
 Here are a few questions that you may ask yourself when trying to identify your needs:
-- Properies
+- Properties
   - What are the properties verified on the ONNX model? Robustness? fairness? other?
   - What properties do you want to preserve during the model implementation
 - Derived requirements 
