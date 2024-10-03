@@ -13,13 +13,12 @@
 ## Participants
 (Was not able to retrieve the list from TEAMS)
 ## Minutes
-- Status of actions
-- Presentation of the three templates.
+- See agenda
   
 ### About the “Steering Committee”
 - EMB will not be able to participate to our periodic meetings (every two weeks) but is nevertheless willing to contribute to our effort via a *Streeing Committe* (SC). The objective of the SC is to monitor important (”key”) moments in the progression of activities (“gates” , “phase transitions”, etc.).
 - The SC shall be planned in advance. Basically: one SC every SC will be fine.
-- [ ]  (eric) Plan meetings of the SC
+- [ ] (A008 - leads) Plan SC meetings
 
 ### About the templates
 3 “template” document were presented (see link above)
@@ -27,19 +26,19 @@
     - Dumitru proposes to add a description / illustration of the effects of an issue. ⇒ to be added in the template
     - Concerning issue #2 (order of operations)
         - Dumitru (following a remark already done by Sebastian, a long time ago…)  emphasizes that there is not problem of non determinism / interpretation on the order of processing of operator: if one follows the topological ordering,  result of floating point computations are completely and unambiguoulsy determined. There may still be issues with random numbers.
-        - [ ]  (Dumitru) Correct  / complete description of issue #2
+        - [ ]  (A009 - Dumitru) Correct  / complete description of issue #2
 - Use case / scope template
     - Nicolas : a description can simply refer to an existing model in the Hugging Face repository using a hypertext link.
     - Nicolas proposes a script to extract the list of operators. (To be placed in the “tools” area)...
-    - [ ] (Eric) Create a “tools” area
-    - [ ] (Nicolas) Deposit his operator extraction tool in the repository.
-    - [ ] (Nicolas) Review the the "issues" document
+    - [ ] (A010 - leads) Create a “tools” area
+    - [ ] (A011 - Nicolas) Deposit his operator extraction tool in the repository
+    - [ ] (A012 - Nicolas) Review the the "issues" document
   
 ### About sub-groups
 
 - Floating point computation
-    - [ ]  (Eric) Organize a meeting on numerical computations (fp-sg)
-    - [ ]  (fp-sg) Provide a clear statement of the issue with numerical computations.
+    - [ ]  (A013 - leads) Organize a meeting on numerical computations (fp-sg)
+    - [ ]  (A014 - fp-sg) Provide a clear statement of the numerical computations issues.
 
 - Formal methods
     - The PoC must be completed, incl. aspect about formal methods
@@ -51,7 +50,7 @@ Other (off-meeting)
 - [ ]  (Nicolas) See if we can involve the authors of the paper on ONNX conversion in order to identify Exploiter le papier / probblème
       
 #### New actions
-- [ ] (A008 - leads) Plan meeting of the SCs
+- [ ] (A008 - leads) Plan SC meetings
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
 - [X] (A010 - leads) Create a “tools” area <closed on 03/10>
 - [X] (A011 - Nicolas) Deposit his operator extraction tool in the repository. <closed on 03/10>
