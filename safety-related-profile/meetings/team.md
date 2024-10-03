@@ -43,7 +43,7 @@
 | PAGETTI | Claire | ONERA |
 | PONTES | Fabricio | Embraer |
 | POPESCU | Francesca | Airbus Protect |
-| POTOP-BUTUCARU | Dumitru | INRIA |
+| POTOP-BUTUCARU | Dumitru | INRIA | Strong interest in execution model and control primitives of ONNX
 | REVERDY | Céline | THALES R&T |
 | RIBAS de AMARAL | Janaina | Airbus DS |
 | SADOCK | Christiano | Embraer |
