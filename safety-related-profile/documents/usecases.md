@@ -77,6 +77,18 @@ These operators allow MobileNetSSDv2 to perform the necessary computations for f
 32) LSTM - Long Short-Term Memory, another type of recurrent neural network (RNN) layer.
 
 
+# Use case Visual Based Landing (VBL) - Airbus Commercial Aircrafts
+
+## Description
+The objective of the VBL is to provide the relative position of the A/C in relation to the runway.
+
+## Models architecture
+YoloNAS
+
+## Operators
+Priority 1 list: Conv2D (no grouping nor depthwise), ConvTranspose/Deconvolution, MaxPool, ReLU, Add, Mul and Concat
+
+Priority 2 list: FullyConnected, Conv2D (grouping & depthwise), Sub, Abs, ReduceSum, Transpose, Split, Slice, Gather, Squeeze, Unsqueeze, Reshape and Flatten.
 
 # Use case `<name of the use case>` - `<provider>`
 
@@ -88,3 +100,4 @@ _Description of the model architecture(s). This can be provided explicitly (e.g.
 
 ## Operators
 _List of operators_
+
