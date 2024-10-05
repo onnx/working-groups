@@ -1,14 +1,24 @@
+# Miscelleeous
+
+- The replication croteria must be expresse din terms of ML performance, stability, robustness, etc. that are properties of the ML model.
+- The replication creterion can mention a reference implementation, otherwise, the replication refers to the formal specification given by the model itself
+  -  Providing a bitwise accurate implementation is a means to satisfy *all* replication criteria (except temporal ones, if we consider that temporal critera ust be expressed)
+-  The accurracy of operator need to be specified *if we want a developper to to be able to provide a useful library*. It could be possible to provide a implementation without specifying accuracies of operators, but in this case, verifiyng the satisfaction of the replication criteria will be extremely difficult (it could still be feasible if the test can be exhaustive).
+-  Check if formal methods (e.g., fluctuat) could be used.
+-  Be careful of the input domain of variables... 
+
+
 # The needs
 
 *What are the needs related to computational accurracy/precision*
 
-- Reproducibility : an experiment (learning or inference) must be reproducible.
+- Reproducibility: an experiment (learning or inference) must be reproducible.
   - For training: *to be clarified*
-  - For inference: given the same inpout the implementation of the model must provide the same outputs...
+  - For inference:
+    - given the same input the implementation of the model must provide the same outputs...
 
 ## Industrial needs
 
-- What are the 
 - Do we care about *training* reproducibility?
 
 ## Certification "needs"
