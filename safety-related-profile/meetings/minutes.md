@@ -1,3 +1,34 @@
+# 2024/11/06
+## Agenda
+(Floating point numbers)
+In the last meeting, we have identified that precision and accuracy (of computations) is an issue.
+Here is a list of questions to be discussed (and possibly addressed) :
+- Current practices for non-AI systems
+    - How are requirements about computation errors expressed ?
+    - How are those requirements verified ?
+    - What are the impacts of errors on repeatability, debuggability ?
+- Sources of errors
+    - What are the sources of errors ?
+    - How does time impact errors ?
+    - Are all hardware (GPUs, accelerators) implementing the IEEE754 standard ?
+    - Are all hardware devices IEEE754 compliant (GPUs, FPGA and ASIC accelerators) ?
+    - What about the ML-specific formats (Tensor32,...) ?
+- Means of analysis 
+    - What are the technical means available to estimate the impact of errors on results?
+- Effects of FP errors on ML
+    - To what extent is the question of accurracy/precision pertinent with respect to the XXXXX of Machine Learning algorithsm?
+    - Effects on robustness
+    - Use of formal methods
+- Specification
+    - How can we specify errors at the model level?
+    - What are the derived requirements to be introduced to handle/preent computation errors?
+- General questions
+    - Do we need the intervention of FP experts?
+
+# 2024/10/23
+## Agenda
+(shorter meeting due to holidauys)
+
 # 2024/10/02
 ## Agenda
 - Presentation of "templates" to start of activies on
