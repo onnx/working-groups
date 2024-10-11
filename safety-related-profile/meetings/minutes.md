@@ -16,7 +16,7 @@ Here is a list of questions to be discussed (and possibly addressed) :
 - Means of analysis 
     - What are the technical means available to estimate the impact of errors on results?
 - Effects of FP errors on ML
-    - To what extent is the question of accurracy/precision pertinent with respect to the XXXXX of Machine Learning algorithsm?
+    - To what extent is the question of computation errors pertinent with respect to the other sources of errors in Machine Learning algorithms (or 'how do computaton errors compare to other sources of errors")?
     - Effects on robustness
     - Use of formal methods
 - Specification
