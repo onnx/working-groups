@@ -27,7 +27,7 @@ Here is a list of questions to be discussed (and possibly addressed) :
 
 # 2024/10/23
 ## Agenda
-(shorter meeting due to holidauys)
+(shorter meeting due to holidays)
 
 # 2024/10/02
 ## Agenda
