@@ -1,5 +1,5 @@
 # 2024/11/06
-## Agenda
+## Agenda (proposal)
 (Floating point numbers)
 In the last meeting, we have identified that precision and accuracy (of computations) is an issue.
 Here is a list of questions to be discussed (and possibly addressed) :
@@ -26,7 +26,7 @@ Here is a list of questions to be discussed (and possibly addressed) :
     - Do we need the intervention of FP experts?
 
 # 2024/10/23
-## Agenda
+## Agenda  (proposal)
 (shorter meeting due to holidays)
 
 # 2024/10/02
