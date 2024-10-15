@@ -1,3 +1,3 @@
-| Subject              |    Who       | When (proposed)  | When (actual) |
-|----------------------|--------------|------------------|---------------|
-| _my topic_ | John Doe | 2024/10 | 2024/10/03 |
+| Subject                             | Who                       | When (proposed)  | When (actual) |
+|-------------------------------------|---------------------------|------------------|---------------|
+| Code generation for neural networks | Sebastian Boblest (Bosch) | 2024/11          | ?  |
