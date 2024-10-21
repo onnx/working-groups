@@ -30,7 +30,7 @@ External needs
   - Do you plan to instrument the implementation of the model? at what level?
 
 
-### NEED <XXX>: `<Need title>`
+### NEED `<XXX>`: `<Need title>`
 #### Description
 _Brief description of the need_
 #### Rationale 
