@@ -1,34 +1,34 @@
 # 2024/11/06
 ## Agenda (proposal)
 (Floating point numbers)
-In the last meeting, we have identified that precision and accuracy (of computations) is an issue.
-Here is a list of questions to be discussed (and possibly addressed) :
-- Current practices for non-AI systems
-    - How are requirements about computation errors expressed ?
-    - How are those requirements verified ?
-    - What are the impacts of errors on repeatability, debuggability ?
-- Sources of errors
-    - What are the sources of errors ?
-    - How does time impact errors ?
-    - Are all hardware (GPUs, accelerators) implementing the IEEE754 standard ?
-    - Are all hardware devices IEEE754 compliant (GPUs, FPGA and ASIC accelerators) ?
-    - What about the ML-specific formats (Tensor32,...) ?
-- Means of analysis 
-    - What are the technical means available to estimate the impact of errors on results?
-- Effects of FP errors on ML
-    - To what extent is the question of computation errors pertinent with respect to the other sources of errors in Machine Learning algorithms (or 'how do computaton errors compare to other sources of errors")?
-    - Effects on robustness
-    - Use of formal methods
-- Specification
-    - How can we specify errors at the model level?
-    - What are the derived requirements to be introduced to handle/preent computation errors?
-- General questions
-    - Do we need the intervention of FP experts?
+In the last meeting, we have identified that precision and accuracy (of computations) is an issue. This subject deserves a dedicated meeting and work. All material concerning this topics can be found [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues). A first list of questions and some "food for thought" are available [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md)
 
 # 2024/10/23
 ## Agenda  (proposal)
-(shorter meeting due to holidays)
+- Status of actions(shorter meeting due to holidays)
+## Participants
+(Was not able to retrieve the list from TEAMS)
+## Minutes
+(To be completed)
 
+#### New actions
+(To be completed)
+
+#### Previous actions
+- [ ] (A008 - leads) Plan SC meetings
+- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+- [X] (A010 - leads) Create a “tools” area <closed on 03/10>
+- [X] (A011 - Nicolas) Deposit his operator extraction tool in the repository. <closed on 03/10>
+- [ ] (A012 - Nicolas) Review the the "issues" document
+- [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
+- [ ] (A014 - fp-sg) Provide a clear statement of the numerical computations issues.- [X] (A001 - Embraer) Clarify the role / organisation of the "Steering Committe". <closed on 02/10>
+- [ ] (A002 - all) Add / remove your name for the [participant list ](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/team.md) and provide information about your possible contribution
+- [X] (A003 - leads) Create templates to start feeding the list of **use cases**, **needs**, **requirements**, **issues**. <closed on 02/10>
+- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/presentation_proposals.md).
+- [ ] (A005 - leads) Organize sub-group on formal methods (fm-sg).
+- [ ] (A006 - leads) Finalize the organization of the WG's repository. Define procedure to use it (inc. issues, wiki,...)
+- [ ] (A007 - leads) Setup a mailing list
+      
 # 2024/10/02
 ## Agenda
 - Presentation of "templates" to start of activies on
