@@ -39,8 +39,11 @@ _Brief justification of
 ### NEED 001: `Compliance with ARP6983`
 #### Description
 The development of Machine Learning constituents in avionics needs to comply with the ARP6983 regulation document. The Safety-related ONNX profile (SONNX) shall constitute a language in which the Machine Learning Model Description (MLMD), as defnined by ARP6983, can be expressed.
+
+The SONNX Safety-related profile shall allow the specfication of the replication criterion, exact or approximate, that the implementation must ensure.
+
 #### Rationale 
-The MLMD must exist as defined by the ARP6983 document. It shall be the pivot between the trained model and the implementation for embedded inference, which is the basic aim of ONNX.
+The MLMD must exist as defined by the ARP6983 document. It shall be the pivot between the trained model and the implementation for embedded inference, which is the basic aim of ONNX. The ARP6983 document requires that a replication criterion be defined in the MLMD, which constitutes a strong constraint applying to the implementation from the MLMD.
 
 # Requirements 
 
