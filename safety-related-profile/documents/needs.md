@@ -42,10 +42,8 @@ _Brief justification of
 #### Description
 Need for an ML description "language" with well-defined syntax and semantics enabling one to produce an accurate, precise a consistent description of the ML model, leaving no room to interpretation nor unspecified approximations.
 
-
 #### Rationale
 Safety-related systems require the demonstration that the ML model implementation process preserves the safety/functional/operational properties of the model developed during the design process.
-
 
 ### NEED 002: `SONNX variability`
 #### Description
@@ -56,8 +54,19 @@ Whether this build-time variability should lead to a set of pre-defined sub-prof
 #### Rationale
 There are ONNX features that might be of interest in some applicative domain but not in another one.
 
+### NEED 003: `SONNX “product” definition, configuration and change management`
+#### Description
+The various kinds of constituents of the Safety-related profile must be identified before the start of its development. 
 
-### NEED 003: `Compliance with ARP6983`
+The principles of the configuration and change management shall be defined and implemented thanks to appropriate tools (presumably in github), before the actual development of the profile.
+
+The configuration management includes the versioning of the Safety-related profile.
+
+#### Rationale
+Mastering the configuration, the evolutions and the correction of anomalies is crucial, moreover for safety-related systems.
+
+
+### NEED 004: `Compliance with ARP6983`
 #### Description
 The development of Machine Learning constituents in avionics needs to comply with the ARP6983 regulation document. The Safety-related ONNX profile (SONNX) shall constitute a language in which the Machine Learning Model Description (MLMD), as defined by ARP6983, can be expressed.
 
