@@ -230,3 +230,22 @@ Introduce a maximal number of parameters.
 ONNX supports __typed__ and __raw__ serialization of data. When __raw_data__ are used, the standard specifies that data must be stored in as "fixed-width, little endian order" with other specific constraints for float64, complex64, etc. data.
 
 Do we need to specify our own encoding format?
+
+## Issue #10: Quantization consistency
+
+- CAT: (TBC)
+- CRI: LOW
+- REQ: (TBC)
+- LOC: (TBC)
+
+### Issue
+
+### Consequence
+(TBC)
+
+### Proposal
+
+### Remarks
+
+ONNX supports __Quantization__ operators. Quantization data types are not consistent accross operators.
+[QuantizeLinear](https://onnx.ai/onnx/operators/onnx__QuantizeLinear.html) is able to output int16, uint16, but [QLinearMatMul](https://onnx.ai/onnx/operators/onnx__QLinearMatMul.html) and [QLinearConv](https://onnx.ai/onnx/operators/onnx__QLinearConv.html) do not support these types.
