@@ -90,6 +90,21 @@ Priority 1 list: Conv2D (no grouping nor depthwise), ConvTranspose/Deconvolution
 
 Priority 2 list: FullyConnected, Conv2D (grouping & depthwise), Sub, Abs, ReduceSum, Transpose, Split, Slice, Gather, Squeeze, Unsqueeze, Reshape and Flatten.
 
+# Use case `Helicopters` - `Valot Nicolas`
+
+## Description
+Computer vision use cases using object detectors.
+Sequencial MLP, Fully connected, small dimensions.
+Tree based models.
+
+## Models architecture
+* Object detection: Yolov5, Yolov8... probably up to Yolov11 in the comming years
+* Fully connected, MLP
+* GradientBoost, RandomForest, DecitionTree
+
+## Operators
+MatMul Add Concat Constant Div Gather MaxPool Resize Shape Mul Relu Tanh Sigmoid Softmax Gemm Conv Reshape SoftPlus Split Sub Slice Transpose Pow
+
 # Use case `<name of the use case>` - `<provider>`
 
 ## Description
