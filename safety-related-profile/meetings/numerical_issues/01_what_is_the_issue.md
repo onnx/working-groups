@@ -113,7 +113,8 @@ Other:
 
 # The State-o-the-art 
 
-*(to be completed)*
+[Deterministic and probabilistic backward error analysis of neural networks in floating-point arithmetic
+](https://theses.hal.science/IRIT-APO/hal-04663142v1)
 
 # Means of analysis 
 - What are the technical means available to estimate the impact of errors on results? (e.g., fluctuat...)
