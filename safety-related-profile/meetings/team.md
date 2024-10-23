@@ -3,10 +3,10 @@
 | BARRETEAU | Michel | Thales |
 | BELEGUER ALMECIJA | Salvador | Airbus DS |
 | BELFY | Henri | THALES AVS | Relative ONNX embedded part (Operators Definitions...) | R/W (limited W)|
+| BELKACEM | Thiziri | Airbus Protect | (W) D1.b.x / D2.a / D4.a ; (R) D1.a / D1.c / D3.x / D5.x | R/W |
 | BERJON | Pierre | Airbus Operations SAS |
 | BEYER | Michael | BOSCH |
 | BOBLEST | Sebastian | BOSCH | | R/(W) final contribution clearance in progress |
-| BOUCHON | Stephane | Airbus Protect |
 | BRIAND | Julien | DGA-TA |
 | CHICHIN | Sergei | Airbus Operations SAS |
 | COMBES | Yohann | Sopra-stéria |
@@ -20,7 +20,6 @@
 | FEHLNER | Andreas | TRUMPF |
 | FERREIRA | Oseias | Embraer |
 | FERREIRA DE OLIVEIRA | Helen | Embraer |
-| GABORIAU | Nicolas | Airbus Protect |
 | GABREAU | Christophe | Airbus Operations SAS |
 | GARION | Christophe | ISAE | Formal specification of ONNX operators | R/W (limited W) |
 | GIRARD | Julien | CEA |
@@ -36,16 +35,16 @@
 | MARCADE | Jean-Paul | Mathworks |
 | ELO | Marko | CROSSCONTROL |
 | MAXIM | Cristian | IRT SystemX |
-| MAZARS | David | Airbus Protect |
 | MENDONCA | Guiliano | Embraer |
 | MESSNER | Jonas | BOSCH |
 | OLIVIO | Paula | Embraer |
 | PAGETTI | Claire | ONERA |
 | PONTES | Fabricio | Embraer |
-| POPESCU | Francesca | Airbus Protect |
+| POPESCU | Francesca | Airbus Protect | Stay informed 
 | POTOP-BUTUCARU | Dumitru | INRIA | Strong interest in execution model and control primitives of ONNX
 | REVERDY | Céline | THALES R&T |
 | RIBAS de AMARAL | Janaina | Airbus DS |
+| ROUFFET | Jean-Baptiste | Airbus Protect | (W) D1.b.x / D2.a / D4.a ; (R) D1.a / D1.c / D3.x / D5.x | R/W |
 | SADOCK | Christiano | Embraer |
 | SCHMIDT | Bernard | BOSCH |
 | SCHORN | Christoph | BOSCH |
@@ -54,4 +53,5 @@
 | TOSTES | Pedro | Embraer |
 | TURKI | Mariem | IRT St Ex |
 | VALOT | Nicolas | Airbus Helicopters |
+| VIDALIE | Julien | Airbus Protect | (W) D1.a / D1.b.x / D1.c ; (R) D3.a / D5.a | R/W |
 | VILLANI | Anaisa | Embraer |
