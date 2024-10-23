@@ -143,8 +143,14 @@ Enforce that all tensor data types and shapes are explicit in the model.
 ### Issue
 The broadcasting logic is insufficiently specified on the ONNX documentation.
 
+MatMul is using numpy broadcast spec : [MatMul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html)
+
+[Gemm](https://onnx.ai/onnx/operators/onnx__Gemm.html) is unidirectional broadcast-able
+
+element wise Add, Mul, Sub... are multidirectional broadcast-able
+
 ### Consequence
-(TBC)
+Several reported issues with onnx to C code generators, which complexity increases with this broadcast capability.
 
 ### Proposal
 (TBC)
