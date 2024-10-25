@@ -34,6 +34,8 @@ Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian
 - Claire and Christophe to make a presentation to [ISCLP ](https://www.defense.gouv.fr/dga/evenements/ouverture-inscriptions-au-seminaire-futur-lembarque-critique-systemes-combat) about ARP, replication, etc.
 - [ ] (Eric) Provide one slide about SONNX.
 - Eric and Jean will discuss with people from the [DeepGreen](https://deepgreen.ai/) project in order to see how we coud share the effort / reference implementation
+- **/!\PLEASE CONTRIBUTE TO THE DESCRIPTION OF [USE CASES](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md) AND [NEEDS/REQS](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/needs.md) /!\\**
+  - Concerning use cases, please provide links to the standard models (when applicable)
 
 #### New actions
 - [ ] (231001 - All) Check Nicolas' classification proposal 
@@ -41,7 +43,7 @@ Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian
 - [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [ ] (231002 - Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
-- [ ] (231002 - Luis) Provide contact(s) with medical domain
+- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
 - [ ] (231002 - Eric) Provide one slide about SONNX.
 
 
