@@ -1,5 +1,5 @@
 ## Participants
-Mariem, Augustin, Pierre, Cyril, Yrina, Filippo, Loïc, Jean, Eric [ed]
+Mariem, Augustin, Michele, Pierre, Cyril, Yrina, Filippo, Loïc, Jean, Eric [ed]
 
 ## Dissemination 
 Participants + SONNX.
