@@ -1,28 +1,26 @@
 # The issue
 
-## Numerical errors
+## Floating point computations
 - Let us consider one operator. The operation is usually specified done using a mathematical formula 
   - showing how to compute the result considering "ideal" real or integer numbers, 
-  - expressing the relations the inputs and the outputs (e.g., $y=\pm\sqrt x)$, or $y^2=x$.\ 
+  - expressing the relations the inputs and the outputs (e.g., $y=\pm\sqrt x)$, or $y^2=x$.\
   Usually, operations are described using a small corpus of basic operators such as $+$, $-$, $\times$, etc. or $\surd$, etc. 
 
-- When using *floating-point* or *fixed-point* numbers,  computations are done with some slight error with respect to what would be obtained by calculating the formula in R. Those numbers being represented by a finite number of bits, not all numbers can be represented exactly, leading to rounding error (including representation errors). 
-- In addition, due to the finitness of the nuber of bits, overflow and underflow conditions may occur.  
-  
-- In order to prevent errors, input values of operators may require to belong to some input domain (preconditions). In principle, these preconditions should be be part of the specification of the network (otherwise, there may be conditions in which the model doesn't produce any sensible result).
+- *Floating-point* or *fixed-point* numbers are encoded on a finite number of bits. Since all real numbers can't be represented exactly, non-representable  numbers are rounded to representable numbers according to a rounding strategy. Concerning operations, the principle (IEEE 754) is that the result of an operation on rounded values shall be the same as the result that would be obtained by rounding the result computed using exact values.
+-  In addition, due to the finitness of the nuber of bits, overflow and underflow conditions may occur.  Conditions may apply on input values to prevent runtime errors. At least, runtime errors shall be signaled. In principle, these preconditions should be be part of the specification of the network (otherwise, there may be conditions in which the model doesn't produce any sensible result).
 
-## Non-determinism
-- Depending on some internal conditions, the same piece of code given the same inputs may lead to different sequences of operations, then different numerical results due to the non associativity of floating point operations. Those internal conditions may be difficult to determine in the absence of a full description of the execution platform. 
+## Non-reproductibility
+- Depending on some internal conditions, the same piece of code given the same inputs may lead to different sequences of operations, then different numerical results due to the non associativity of floating point operations. Those internal conditions may be difficult to determine in the absence of a full description of the execution platform. See for instance [Dem-15, Col-15]. In [Dem-15], this effect is studied for a simple parallel summation.  
 - Some operators ay use random number generation (which sequence depends on a seed). 
 
 
 ## IEEE-754 and non IEEE-754 data types
 
-IEEE 754 provides a set of guarantees [ieee754]. However :
+IEEE 754 provides a set of guarantees about floating point computations [IEEE-754], howwever :
 
-- Are all hardware (GPUs, accelerators) implementing the IEEE-754 standard ?
+- Are all hardware (GPUs, accelerators) implementing the IEEE-754 standard?
   - No: NVIDUA uses TF32.
-- Are all hardware devices IEEE-754 compliant (GPUs, FPGA and ASIC accelerators) ?
+- Are all hardware devices IEEE-754 compliant (GPUs, FPGA and ASIC accelerators)?
 - Some of the data types used in machine learning to not belong to the IEEE 754 standards. For example: [BF16](https://en.wikipedia.org/wiki/Bfloat16_floating-point_format) (bfloat16), [TF32](https://en.wikipedia.org/wiki/TensorFloat-32) (TensorFlow 32 bits)
   - What are the properties of those representations (do they respect the same principle as IEEE 754 numbers?)
   - Should we only allow IEEE 754 standard?
@@ -36,7 +34,6 @@ IEEE 754 provides a set of guarantees [ieee754]. However :
 
 
 ### Mitigation means
-
 - See previous links.
 
 ## Numerical errors in CPUs / DSPs
@@ -62,18 +59,56 @@ IEEE 754 provides a set of guarantees [ieee754]. However :
 
 
 # The current practice 
-- How do we manage numerical errors (inc. floating point errors) in current, non-AI systems?
+  - How do we manage numerical errors (inc. floating point errors) in current, non-AI systems?
     - How are requirements about computation errors expressed for those systems?
     - How are those requirements verified?
+  - What do the industrial standards say about computation errors (in space, avionics, automotive)?
+  - How are standard mathematical libraries specified?
+    - The newlib mathematical library does not give the accuracy of operations. (Note that the way mathematical operations are described could be inspiring) In addition, as stated in [Dar-06] "current [as of 2006] libm implementation do not always return the floating point number that is closest to the exact mathematical result. As a consequence, different libm implementation will return different results fotr the same input, which prevents fill portability for floating-point applications". The same claim can be read in [Gla-24]:
+    > The IEEE 754 standard, even in its latest 2019 revision [17], does not require correctly rounded mathematical functions, it only recommends them. In turn, current athematical libraries do not provide correct rounding, which is the best possible result. Thus, users might get different results with different libraries, or different versions of the same library. This can have dramatic consequences: for example missed collisions in the Large Hadron Collider [5] or reproducibility issues in neuroimaging [13].
+    - BLAS is not accurately rounded. For an accurately rounded BLAS, see e.g., [Cho-16].
+  - How are floating point operations specified in C and other languages?
+    - In the C99 standard [C99], nothing is said about the accuraty of operator. For the sin operator, the specification is the following:
+``` 
+    Description
+    The sin functions compute the sine of x (measured in radians).
+    Returns
+    The sin functions return sin x.
+```
+  - The [LibmCS Mathematical Library for Critical Systems](https://essr.esa.int/project/libmcs-mathematical-library-for-critical-systems) developed for ESA does not provide any data about the accuracy of operations. Special cases are well defined. An example of specification is given below, for the sin operator:
+  > REQ-BL-0200//GTD-TR-01-BL-0015/T\
+  > The sin and sinf procedures shall evaluate the sine of their argument x in radians. 
+
+  > REQ-BL-0203//GTD-TR-01-BL-0015/R\
+  >The sin and sinf procedures shall use a minimax polynomial for the calculation. 
+
+  > REQ-BL-0210//GTD-TR-01-BL-0015, GTD-TR-01-BL-0026/T\
+  > The sin and sinf procedures shall return NaN if the argument is NaN. 
+
+  > REQ-BL-0220//GTD-TR-01-BL-0015, GTD-TR-01-BL-0026/T
+  > The sin and sinf procedures shall return the value of the argument if the argument is ±0. 
+
+> REQ-BL-0240//GTD-TR-01-BL-0015, GTD-TR-01-BL-0026/T\
+> The sin and sinf procedures shall return NaN if x is ±Inf. 
+  
+- The "ground truth" could be computed using a multi-precision library. For instance, the [GNU mpfr, Hou-07](https://www.mpfr.org/) library "provide a library for multiple-precision floating-point computation which is both efficient and has a well-defined semantics"
+
+# What we can / cannot do...
+  - Specifying the error seems not possible...
+  - Describing how operations are done seems to be the obly way to ensure replicability of results... 
+  - Could we provide a test suite? (qualification kit as for [ESA's MLFS](https://nebula.esa.int/content/pre-qualification-mathematical-library-flight-software))
 
 # Means of analysis techniques and tools
 - What are the technical means available to estimate the impact of errors on results? (e.g., fluctuat, CADNA...)
-  - See [Beu-24, Ch. 4] who proposes forward / backward error estiation for neural networks, taking into account nn linear activation functions.
+ - See [Beu-24, Ch. 4] who proposes forward / backward error estiation for neural networks, taking into account nn linear activation functions.
 - Do we need the intervention of some FP experts? Who?
-- 
+ 
 
 # The needs
+**What to we actually need, for what purpose?**
+
 ## Industrial needs
+- [Needs] Inferences must be reproducible *to support* debugging activities. 
 - [Needs] If a property is verified on a given source model (e.g, a PyTorch model) $M_{org}$, the SONNX model generated from the PyTorch model $M_{saved}$ must preserve the property in the sense that if P hold on $M_{org}$, then $P$ also holds on $M_{saved}$.\
 In particular, this means that the (meta-) model (i.e., the SONNX standard) must preserve the data ensuring the property.\
 For instance, using floating point can lead to unsound verification results in the sense that a model that is robust in $\mathbb{R}$ (i.e, verified formally to be robust considering  values in R) may not be robust when implemented using finite precision numbers [???]. In this example, the MLMD would have to be implemented in R (if it were possible) for the robustness property to be preserved. 
@@ -143,9 +178,18 @@ attaques adverses ](https://theses.hal.science/tel-04622129v1/document)
 and Verena Wolf. Vol. 11785. Lecture Notes in Computer Science. Springer,
 2019, pp. 129–143.
 - [Sin-18] Gagandeep Singh, Timon Gehr, Matthew Mirman, Markus Püschel, and Martin T. Vechev. “[Fast and Effective Robustness Certification](https://papers.nips.cc/paper_files/paper/2018/file/f2f446980d8e971ef3da97af089481c3-Paper.pdf)”. In: Advances in Neural Information Processing Systems 31: Annual Conference on Neural Information Processing Systems 2018, NeurIPS 2018, December 3-8, 2018, Montréal, Canada. Ed. by Samy Bengio, Hanna M. Wallach, Hugo Larochelle, Kristen Grauman, Nicolò Cesa-Bianchi, and Roman Garnett. 2018, pp. 10825–10836.
-- [ieee754] 
+- [ieee754] IEEE Standard for Floating-Point Arithmetic, IEEE Computer Society, IEEE 754-2019, 2019/06/13
 - [Mic-22] P. Micikeviciuset al., "[FP8 formats for deep learning](https://arxiv.org/abs/2209.05433)," arXiv (Cornell University), Sep. 2022, doi: 10.48550/arxiv.2209.05433
-
+- [Dar-06]  C. Daramy-Loirat and D. Defour, ‘CR-LIBM A library of correctly rounded elementary functions in double-precision’. Dec. 2006. [Online](https://ens-lyon.hal.science/ensl-01529804/file/crlibm.pdf)
+- [Sch-18] Fabian Schriever, Software User-Manual - Basic mathematical Library for Flight Software, E1356-GTD-SUM01, 2018/05/23
+- [Mpfr-2023] GNU MPFR - The Multiple Precision Floating-Point Reliable Library, August 2013, [Online](https://www.mpfr.org/mpfr-current/mpfr.pdf)
+- [Hou-07] L. Fousse, G. Hanrot, V. Lefèvre, P. Pélissier, and P. Zimmermann, ‘MPFR: A multiple-precision binary floating-point library with correct rounding’, ACM Trans. Math. Softw., vol. 33, no. 2, p. 13, Jun. 2007, doi: 10.1145/1236463.1236468.
+- [Dyd-23] Anton Ry[Online](https://dl.acm.org/doi/fullHtml/10.1145/3624062.3624166)
+- [Gla-24] B. Gladman, V. Innocente, J. Mather, and P. Zimmermann, ‘Accuracy of Mathematical Functions in Single, Double, Double Extended, and Quadruple Precision’. [Online](https://inria.hal.science/hal-03141101)
+- [Cho-16] Chohra, C., Langlois, P., Parello, D. (2017). Reproducible, Accurately Rounded and Efficient BLAS. In: Desprez, F., et al. Euro-Par 2016: Parallel Processing Workshops. Euro-Par 2016. Lecture Notes in Computer Science(), vol 10104. Springer, Cham. https://doi.org/10.1007/978-3-319-58943-5_49
+- [Dem-15] J. Demmel and H. D. Nguyen, ‘Parallel Reproducible Summation’, IEEE Transactions on Computers, vol. 64, no. 7, pp. 2060–2070, Jul. 2015, doi: 10.1109/TC.2014.2345391.
+- [Col-15] C. Collange, D. Defour, S. Graillat, and R. Iakymchuk, ‘Numerical reproducibility for the parallel reduction on multi- and many-core architectures’, Parallel Computing, vol. 49, pp. 83–97, Nov. 2015, doi: 10.1016/j.parco.2015.09.001.
+- [Bru-15] N. Brunie, F. De Dinechin, O. Kupriianova, and C. Lauter, ‘Code Generators for Mathematical Functions’, in 2015 IEEE 22nd Symposium on Computer Arithmetic, Lyon: IEEE, Jun. 2015, pp. 66–73. doi: 10.1109/ARITH.2015.22.
 
 # Attic
 - Do we really need to add the replication in the SONNX standard? I would say "yes" in the sense that the replication criteria (which I would call "implementation criteria" since these criteria allow discriminating a correct implementation from an incorrect one)
