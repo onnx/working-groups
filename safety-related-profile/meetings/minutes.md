@@ -21,7 +21,7 @@ Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian
           - Dumitru would be interrested in having a presentation of the Use case? In particular what are the use cases using recurrent networks... (no action at this point)
           - Jean: there are significant differences between the operator sets. In fact, THAV has listed the operators from the standard models (e.g., Yolo) they plan to use.
   - Classification of operators
-      - Nicolas proposes a tentative classification (see [here](to be defined)).
+      - Nicolas proposes a tentative classification (see [here]([to be defined](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/ONNX_Op_classification.xlsx))).
           - [ ] (All) Check Nicolas' classification proposal 
       - [ ] (Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
       - Jean-Loup proposes to add a classification criterion concerning certification in order to group operators raising similar issues. (Sebastian: e.g. operators potentially raising to numerical exceptions...)
@@ -53,7 +53,7 @@ Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
 - [X] (A010 - leads) Create a “tools” area <closed on 03/10>
 - [X] (A011 - Nicolas) Deposit his operator extraction tool in the repository. <closed on 03/10>
-- [ ] (A012 - Nicolas) Review the the "issues" document
+- [X] (A012 - Nicolas) Review the the "issues" document
       - Pending
 - [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
       - Pending. Subject to be addressed durint the next meeting 2024/11/06. Draft material is available [here]{https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
