@@ -1,7 +1,10 @@
 # 2024/11/06
 ## Agenda (proposal)
-(Floating point numbers)
-In the last meeting, we have identified that the precision (of computations) of computations are issue. This subject deserves a dedicated meeting and work. All material concerning this topics can be found [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues). A first list of questions and some "food for thought" are available [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md)
+- Review of actions
+- Feedback on CONV operator review (Sebastian and Luis)
+- Computations accuracy
+  - In the last meeting, we have identified that the precision (of computations) of computations are issue. This subject deserves a dedicated meeting and work. All material concerning this topics can be found [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues). A first list of questions and some "food for thought" are available [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md)
+  
 
 # 2024/10/23
 ## Agenda
@@ -12,8 +15,7 @@ In the last meeting, we have identified that the precision (of computations) of 
 - Other events
 ## Participants
 
-JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rouffet, BELCAID Mohammed, Nicolas Valot, BELFY Henri, Luís Conde, BONNAFOUS Eric, Jean-Loup Farges, Jean Souyris, 
-Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian 
+JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rouffet, BELCAID Mohammed, Nicolas Valot, BELFY Henri, Luís Conde, BONNAFOUS Eric, Jean-Loup Farges, Jean Souyris, Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Sebastian Boblest  
 
 ## Minutes
 - Presentation of the Use Case document
@@ -30,7 +32,7 @@ Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Boblest Sebastian
       - [ ] (Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - Review of the PoC specification
   - [ ] (Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
-  - [ ] (Luis) Provide contact(s) with medical domain
+  - [ ] (Luis) Provide contact(s) with medical and railway domains.
 - Claire and Christophe to make a presentation to [ISCLP ](https://www.defense.gouv.fr/dga/evenements/ouverture-inscriptions-au-seminaire-futur-lembarque-critique-systemes-combat) about ARP, replication, etc.
 - [ ] (Eric) Provide one slide about SONNX.
 - Eric and Jean will discuss with people from the [DeepGreen](https://deepgreen.ai/) project in order to see how we coud share the effort / reference implementation
