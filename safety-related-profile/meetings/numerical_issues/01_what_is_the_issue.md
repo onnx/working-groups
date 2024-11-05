@@ -29,7 +29,6 @@ IEEE 754 provides a set of guarantees about floating point computations [IEEE-75
 
 ## Numerical errors in GPUs
 
-See e.g., : 
 - [Precision and performance: Floating point and IEEE 754 Compliance for NVIDIA GPUs](https://developer.download.nvidia.com/assets/cuda/files/NVIDIA-CUDA-Floating-Point.pdf)
 -NVIDIA's presentation at GTC 2019 ([video](https://www.youtube.com/watch?v=TB07_mUMt0U), [slides](https://drive.google.com/file/d/18pmjeiXWqzHWB8mM2mb3kjN4JSOZBV4A/view?pli=1))
 
@@ -49,13 +48,12 @@ This section deals with the relation between computaton errors due to (e.g.,) ro
 
 ## About the effects of floating point errors on ML model performance...
 - To what extent is the question of computation errors pertinent with respect to the other sources of errors in Machine Learning algorithms (or "how do computation errors compare to other sources of errors")?
-
 - *(to be completed)*
   
 ## About accuracy and robustness...
 - See Th. Beuzeville about floating point errors and robustness attacks. e.g., [Beu-24]
 - *(to be completed)*
-- 
+  
 ## About accuracy and quantification...
 - There has been a lot of work about quantization. How does it relate to our problem?
 - *(to be completed)*
@@ -90,18 +88,24 @@ All programming languages come with a set of basic mathematical operators, eithe
 How are floating point operations specified in programming languages?
 Here are a few examples:
 - C
-  - In the C99 standard [C99], nothing is said about the accuraty of operator. For the sin operator, the specification is the following:
+  - In the C99 standard [C99], nothing is said about the accuraty of operator. For instance, for the sin operator, the specification is the following:
   ``` 
       Description
       The sin functions compute the sine of x (measured in radians).
       Returns
       The sin functions return sin x.
   ```
+  - In C99, "an expression of successive add or multiply operators in interpreted with left-associativity, i.e., ``a+b+c+d `` is syntactically equivalent to ``((a+b)+c)+d)``.[Mul-10]
 - Ada
   - The [Ada LRM Section G.2.4 ](http://www.ada-auth.org/standards/22rm/RM.pdf) gives some requirements about the accuracy for elementary functions": 
   >![Excerpt of section G.2.4](images/ada_accuracy.png) 
 
-  
+Note 1:  the result of a computation also depends on the compiler, on the hardware and, also, on the operating system. In the latter case, the same code compiled with the same compiler and ame option may give different results whether it is executed on OpenBSD or Linux since the two OSes initialize the FPU differently (round to double precision for OpenBSD, and round to double-extended precision for Linux). [Mul-10] gives many other useful insights about the way compilers handle floating-point operations. In particular, it lists the pragmas that have an effect on those operations.
+
+Note 2: an interesting quotation from [Mul-10]: 
+> As pointed out by David Goldberg [...] ) all these uncertainties make it impossible, in many cases, to figure out the exact semantics of a floating-point C program just by reading its code.
+Several examples of strange behaviours are given in the book. One example considers the case where a symmetric function (e.g., a function $f(x,y)$ computing the distance between $x$ and $y$) may be compiled in an asymetrical way using, e.g., ``fma`` in such a way that $f(x,y) \neq f(y,x)$, potentially breaking algorithms relying on the symmetry of the fonction (such as sorting algorithms).
+
 ### Industrial standards
 
 What do the industrial standards say about computation errors (in space, aeronautics, automotive)?
@@ -157,13 +161,18 @@ For instance, using floating point can lead to unsound verification results in t
 
 What are the certification recommendations/objectives that may be impacted by computation errors (determinism, predictability, reproducibility...)?
 
-### Replication criteria
+### EASA concept paper 
+*To be completed.*
 
-The concept of "replication criteria" is introduced in the ARP6983. Two "levels" of replication are defined (the following definitions are taken from the ARP6983 preliminary version):
+### ARP6983
+
+#### Replication criteria
+
+The concept of "replication criteria" is introduced in [ARP6983]. Two "levels" of replication are defined (the following definitions are taken from the ARP6983 preliminary version):
 - __Approximated replication__: ML inference model implemented in software or Airborne Electronic Hardware (AEH) in which some differences with regards to the ML model semantics are acceptable.
 - __Exact replication__: ML inference Model implemented in software or Airborne Electronic Hardware (AEH) in which no difference is introduced with regards to the ML Model semantics.
 
-More precisely (still from the ARP6983): 
+More precisely, in [ARP6983, §6.4.3.6]: 
   >e. The replication criterion (either exact or approximated) is defined from the ML Constituent requirements and if applicable from the ML Model requirements:
   >- Exact replication: In this first case, the ML Model description should contain sufficient details on the ML Model semantic to fully preserve this semantic in the implemented ML Model. For example, an exact replication criterion may be the direct and faithful implementation of the ML Model description so that the implemented ML Model meets the same performance, generalization, stability, and robustness requirements.
   >- Approximated replication: ln this second case, the ML Model description should contain sufficient details on the ML Model semantics to approximate this semantic in the implemented ML Model with a specified tolerance. For example, an approximation metric may be expressed for a given dataset by the maximal gap between the trained ML Model outputs and the implemented ML Model outputs. The corresponding approximation replication requirement may be that this maximal gap should not exceed a given value epsilon.
@@ -173,14 +182,14 @@ For instance:
 - The use of the term "replication" is misleading. To "replicate" means to reproduce. But we do not want to "reproduce" the model itself, but to implement it, i.e., to reproduce its behaviour. 
 - The definition of "semantic" in this context is not clear. The usual meaning of the word "semantic" is "the meaning of something". But what is the "meaning" of a ML model? Furthermore, in the definition, the term semantic is associated with properties such as performance (ML performance?), generalization, stability,... Do these properties relate to the "semantic"?
 - "[...] the ML Model description should contain sufficient details on the ML Model semantic to fully preserve this semantic in the implemented ML Model." : 
-  - (wording) The model cannot "preserve [the] semantic of the implemented model".
+  - (wording) The model cannot "preserve [the] semantic of the implemented model": it is up to the developer to preserve the semantic of the model (which must have a clear semantic). 
   - What does "fully preserve" mean, precisely? 
-    A naive (but clear) interpretation would be that the semantic of the model is "fully preserved" by an implementation iff, for any input, the outputs of the  implementation are strictly identical to the ones that would be produced by a strict interpretation of the model. 
-    By "strict interpretation", I mean an interpretation strictly compliant with the mathematical definition of the model. Interpretation could be intellectual or based on some mathematical tooling. But since this is usually not applicable in practice, a more operational definition could refer to some well defined, or possibly "reference", implementation. In that case, an implementation would be considered "semantically identical" to the model if, for the same inputs, it provides exactly the same outputs as the reference implementation. By exactly, I mean "bitwise identical". 
+    A naive (but clear) interpretation would be that the semantic of the model is "fully preserved" by an implementation iff, for any input, the outputs of the  implementation are **strictly** identical to the ones that would be produced by a strict interpretation of the model. 
+    By "strict interpretation", I mean an interpretation strictly compliant with the mathematical definition of the model. Interpretation could be intellectual or based on some mathematical tooling. But since this is usually not applicable in practice, a more operational definition could refer to some well defined, or possibly "reference", implementation. In that case, an implementation would be considered "semantically identical" to the model if, for the same inputs, it provides exactly the same outputs as the reference implementation. By "exactly", I mean "bitwise identical". 
 
 - According to the ARP's definitions, the replication criteria could be expressed in terms of "high-level" (or "end-user') properties such as:  ML performance, stability, robustness, etc., which are all properties of the model, not properties of the implementation (as would be the "accuracy", for instance).
 
- - In this context, providing a bitwise accurate implementation would be a means to satisfy *all* replication criteria (except temporal ones, if we consider that temporal criteria ust be expressed). 
+ - In this context, providing a bitwise accurate implementation would be a means to satisfy *all* replication criteria (except temporal ones). 
 
 ## Numerical accuracy
 
@@ -250,11 +259,15 @@ and Verena Wolf. Vol. 11785. Lecture Notes in Computer Science. Springer,
 - [DO178C] RTCA, "Software Considerations in Airborne Systems and Equipment Certification", DO-178C
 - [ARP6983] SAE International, "Recommended Practice for Development and Certification/Approval of Aeronautical Safety-Related Products Implementing ML", preliminary version.
 - [Del] David Delmas, Eric Goubault, Sylve Putot, Jean Souyris, Karim Tekkal, Franck Védrine. "Towards an Industrial Use of FLUCTUAT on Safety-Critical Avionics Software." [Available online](https://www.researchgate.net/publication/220992758_Towards_an_Industrial_Use_of_FLUCTUAT_on_Safety-Critical_Avionics_Software#fullTextFileContent). 
+- [Mul-10] J.-M. Muller et al., Handbook of Floating-Point Arithmetic. Birkhäuser Verlag, 2010.
+
+
+
 # Attic
 - Do we really need to add the replication in the SONNX standard? I would say "yes" in the sense that the replication criteria (which I would call "implementation criteria" since these criteria allow discriminating a correct implementation from an incorrect one)
 - Check if formal methods (e.g., *fluctuat*) could be used.
 - Be careful of the input domain of variables... 
 - The replication criterion can mention a reference implementation, otherwise, the replication refers to the formal specification given by the model itself (see above)
-- - In practice, what are the verifications performed on the ML model that will not be performed on the implementation of the model? What shall the ML model contain to be able to preserve these properties?
+- In practice, what are the verifications performed on the ML model that will not be performed on the implementation of the model? What shall the ML model contain to be able to preserve these properties?
 - Do we have to care about *training* reproducibility?
 - Up to what level of requirements shall we go considering (i) the type of algorithms (that are inherently erroneous in th general case) and (ii) the assurance level targeted (DAL C in aeronautics)?
