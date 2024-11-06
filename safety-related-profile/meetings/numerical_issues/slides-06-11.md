@@ -1,59 +1,130 @@
 ---
 marp: true
+footer: '_2024-11-06 SONNX WG meeting_ - Eric'
 ---
 
-# 2024-06-11 SONNX WG Meeting
+# 2024-11-06 SONNX WG Meeting
 
 
-SONNX and numerical accuracy 
+SONNX and numerical accuracy
+(Elements of discussion) 
 
 ---
-<!-- theme: default --> 
+<!-- 
+theme: default 
+style: |
+  section {
+    background-color: #fff;
+    %justify-content: start;    
+    }       
+-->
+<!--style scoped>    
+  h1 {
+    font-size: 90px;
+    color: #09c;
+    }
+</style-->
 <!-- paginate: true -->
+<!-- footer: '_2024-11-06 SONNX WG meeting_' -->
+# Reminder 
+- The MLMD specifies the model to be implemented.
+- The MLMD shall be such that any correct implementation preserves some <**property**>
+ 
+_(What is this <property>? ML performance? behaviour? structure?,... But how do you estimate the performance/behaviour of a model without executing it? Does it actually express a relation with the training model?)_
 
-<!-- footer: '_SONNX WG meeting 2024-11-06_' -->
+Let's consider that <property> = function, i.e., the relation between inputs and ouputs expressed by the MLMD
 
-- Numerical computations are not done in $\mathbb{R}$  
-  - Numbers are represented with a finite number of bits
-- All numbers can't be represented exactly
-- When using ``float``, ``double``, etc. rounding occurs.
-- The result of a computation depends on the implementation (even when using IEEE754...)
-- Values may over- or under-flow...
+---
+# Facts
+- An inference is essentially a huge sequence of numerical computations
+- On computers, numerical computations are not done in $\mathbb{R}$ since numbers are represented with a finite number of bits
+  - All numbers can't be represented exactly so numbers are rounded to a representable value...
+  - Operations may over- / under-flow...
+  - (Catastrophic) cancellation effects may occur...
+  - Associativity property is lost : $(a+b)+c \neq a+(b+c)$)
+  - Computation results depend on the implementation of operations
+
 - ___How shall we handle this in SONNX?___
 
+---
+# Shall we?
+
+---
+# Summary of previous discussions
+## Premices
+- With no formal requirement about accuracy, what does the following requirement mean?
+  > "Operator ``sin`` shall compute $sin(x)$"
+- Formally, it means that value returned by the function must be **exactly** the sine of the input.
+- But we already no that that this can't be achieved. So it means that theere is an error. If th eerror is not specified,it can be anything in $[-\infty,+\infty]$. Not very useful.
+- In practice (computer science) it means that the value returned by the function but be *as close as possible* to the actual sine.
+
+---
+# Summary of previous discussions
+## Conclusions
+- The MLMD standard shall specify the minimum expected accuracy of all operators
+- The MLMD standard shall provide a means to specify the accuracy of any of its implementation (i.e., an implementation is deemed correct if it complies with the specified accuracy)
+
+- **What is actually really necessary / required?****
 
 ---
 # Questions 
-- Is numerical accuracy a concern for us?
-- Is it a new problem? Is it specific to ML?
+- Is numerical accuracy a problem for us?
+- Is it a new problem? 
+- Is it a particularly serious problem for ML?
 - Is it solved by IEEE754?
 - How is it handled today?
 - Is it more crucial important for ML algorithms?
 
 ---
-# Is it a problem for us?
-(Element of context: we are not targeting DAL-A systems...)
-- How is it related to our main objective, i.e,  __to be able to preserve the semantics of the model__ ?
-- Level 1: operators are specified in $\mathbb{R}$
-  - the implementation may be "completely different" from the specification
-- Level 2: operators are specified for a given data type
+# Is numerical accuracy a problem for us?
+### Element of context 
+- We are not targeting DAL-A systems...
+- ML algorithms are inherently erroneous. How does numerical error compare to the computation errors due to floating point operations?  
 
 ---
-# Is it a new problem? Is it specific to ML?
-- It is not a new problem.
-- ML involves many computations (esp. deep learning), for which errors may accumulate. This has to be compared with real-time system for which stated is renewed due to the renewal of inputs.
-- On the other side: ML algorithms are pretty robust to computation errors (but potential way for attacks) [to be discussed]
+# Is numerical accuracy a problem for us?
+## Semantic preservation
+- How is it related the capability __to preserve the semantics of the model__?
+  - If we specify the operators in $\mathbb{R}$, how can an implementation using ``float``, ``double`` comply with this specification?
+    - It can't... there are numerous examples where operations using floats give not only different, but __strange__ results... 
+  - If we specify operators for a given datatype (``float32``, ``float64``, etc.), will it be sufficient?
+    - Will we be specifying the operation or providing an implementation?
+    - Will it be different from providing a reference implementation?
+---
+
+# Is numerical accuracy a problem for us?
+## Reproducibility
+- Reproducibility (weak)
+  - For an implementation complying with the MLMD, all executions of the same inference (same inputs) shall provide the same output.
+- Reproducibility (strong)
+  - For all implementations complying with the the MLMD, all executions of the same inference (same inputs) shall provide the same outputs  
+
+---
+# Is it a new problem? 
+- No, it is not
+- IEEE 754 was created to solve some of those problems (not all)
+
+---
+# Is it a particularly serious problem for ML?
+- ML involves many computations (esp. deep learning)
+  - In a unique inference, errors may accumulate leading to results completely different from those that would be obtained in $\mathbb{R}$.
+  - This has to be compared with real-time system for which state is (usually) renewed due to the renewal of inputs.
+- On the other side
+  - ML algorithms are pretty robust (performance-wise) to quantization errors
+  - There are many examples where quantization does not alter performance that much. 
 
 ---
 # Is is solved by IEEE754
 - IEE754 defines what a correctly rounded operation is: 
   > "[...] each of the computational operations specified by this standard that returns a numeric result shall be performed as if it first produced an intermediate result correct to infinite precision and with unbounded range, and then rounded that intermediate result, if necessary, to fit in the destination’s format"
-- Not all hardware usd in ML computations are IEEE754 compliant: no, BF16, TF32,...
+- But 
+  - Not all hardware used in ML computations are IEEE754 compliant: BF16, TF32,...
+  - IEEE 754 aims at standardizing te way floating point computatoin are done, not to mitigate issues due to rounding (such as catastrophic cancellation)
 
 ---
 # How is it handled today?
 - In industrial applications?
-  - Testing? Formal verification (fluctuat)? 
+  - Testing? Formal verification (``fluctuat``)? 
 - In development assurance standards
   - Aero.: nothing specifically said about computation errors. Covered by "normal" verification activities...
   - Other: ???
@@ -73,22 +144,24 @@ SONNX and numerical accuracy
 ---
 # Should we specify maximal errors on a per operator basis?
 - What about the global error?
-- 
+- How can we give a value to the error?
 
 ---
 # Over and under flow
 - Define conditions on the inputs in which no overflow / underflow will never occur?
+  - Easy for an addition, not feasible for a convolution..
 - Define the expected behaviour in case of over- under- flow?
-- 
 
 --- 
 # Semantic preservation by design
-- The description of the operation is prescriptive, i.e., operations shall be done in a specific way. 
+- The description of the operation is prescriptive, i.e., operations shall be done in the way defined by the standard. 
 
 
 ---
-# Semantic preservation by verification
-
+# "Semantic preservation" by verification
+- The implementation is deemed corect if it passes some test set  
+  - The test set is part of the specification
+- The implementation is deemed correct if it is proved (in the formal sense) to be correct... 
 ---
 
 # The question of replication [ARP6983, §6.4.3.6]
@@ -100,13 +173,6 @@ SONNX and numerical accuracy
 - Approximated replication 
   >- [...] the ML Model description should contain sufficient details on the ML Model semantics ___to approximate this semantic___ in the implemented ML Model with a specified tolerance. For example, an approximation metric may be expressed for a given dataset by __the maximal gap between the trained ML Model outputs and the implemented ML Model outputs___. The corresponding approximation replication requirement may be that this maximal gap should not exceed a given value epsilon.
 
----
-
-# Needs / Industrial
-- Reproducibility
-    - 
-- Preservation of properties: __if a property holds on a given "source" model, the SONNX model must preserve the property in the sense that an implementation that follows strictly the specification will satisfy the property...
-  - If verificaton activities are done on implement #1
 
 ---
 # Requirements (illustration)
