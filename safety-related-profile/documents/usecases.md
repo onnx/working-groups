@@ -86,9 +86,29 @@ The objective of the VBL is to provide the relative position of the A/C in relat
 YoloNAS
 
 ## Operators
-Priority 1 list: Conv2D (no grouping nor depthwise), ConvTranspose/Deconvolution, MaxPool, ReLU, Add, Mul and Concat
+### Priority 1 list: 
+1) Conv2D (no grouping nor depthwise)
+2) ConvTranspose/Deconvolution
+3) MaxPool
+4) ReLU
+5) Add
+6) Mul
+7) Concat
 
-Priority 2 list: FullyConnected, Conv2D (grouping & depthwise), Sub, Abs, ReduceSum, Transpose, Split, Slice, Gather, Squeeze, Unsqueeze, Reshape and Flatten.
+### Priority 2 list:
+8) FullyConnected
+9) Conv2D (grouping & depthwise)
+10) Sub
+11) Abs
+12) ReduceSum
+13) Transpose
+14) Split
+15) Slice
+16) Gather
+17) Squeeze
+18) Unsqueeze
+19) Reshape
+20) Flatten
 
 # Use case `Helicopters` - `Valot Nicolas`
 
