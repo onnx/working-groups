@@ -1,10 +1,54 @@
 # 2024/11/06
 ## Agenda (proposal)
 - Review of actions
-- Feedback on CONV operator review (Sebastian and Luis)
+- Feedback on ``conv2d`` operator review (Sebastian)
 - Computations accuracy
   - In the last meeting, we have identified that the precision (of computations) of computations are issue. This subject deserves a dedicated meeting and work. All material concerning this topics can be found [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues). A first list of questions and some "food for thought" are available [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md)
-  
+- Other events
+  - [ISCLP meeting](https://www.defense.gouv.fr/dga/evenements/ouverture-inscriptions-au-seminaire-futur-lembarque-critique-systemes-combat) at DGA-TA Toulouse
+  - Collab. with [DeepGreen](https://deepgreen.ai/) project about reference implementation (followup to [10/25 meeting minutes](safety-related-profile/meetings/Other_meetings/2024-10-25-DeepGreen.md) )
+#### New actions
+(to be completed)
+#### Previous actions
+- [ ] (231001 - All) Check Nicolas' classification proposal 
+- [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
+- [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
+- [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
+- [X] (231002 - Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
+  - Done: to be discussed with Sebastian on 11/06
+- [X] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
+  - Done:  
+  > Regarding the invitation of experts to participate in the WG:
+  > - Health sector: [METTLER]  the contacts were identified, the emails were sent, and we are waiting on their response.
+  > - Railway sector: [ALSTOM] the contacts were identified.
+  > Meanwhile do you think relevant to get more experts into the WG from the automotive industry (working in autonomous drive)?
+  > I have good contacts in the H2020 project consortium Hi-Drive (www.hi-drive.eu [...]  Should I try to get some of them onboard?
+- [X] (231002 - Eric) Provide one slide about SONNX.
+  - Done: See [here]()
+
+
+- [ ] (A008 - leads) Plan SC meetings
+  - No action.
+- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+- [X] (A012 - Nicolas) Review the the "issues" document
+- [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
+      - Pending. Subject to be addressed durint the next meeting 2024/11/06. Draft material is available [here]{https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
+      - First discussion in the WG on 11/06
+- [ ] (A015) All : Complete description of use cases
+      - Pending
+- [ ] (A016) All : Complete description of needs
+      - Pending
+- [ ] (A002 - all) Add / remove your name for the [participant list ](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/team.md) and provide information about your possible contribution
+- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/presentation_proposals.md).
+  - Sebastian Boblest (Bosch), on their tool (to be planned)
+  - Alexandre Eichenberger (IBM),  on onnx-mlir (to be planned)
+  - ??? on specification and verification of FP computations
+- [ ] (A006 - leads) Finalize the organization of the WG's repository. Define procedure to use it (inc. issues, wiki,...)
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+- [ ] (A007 - leads) Setup a mailing list
+      - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
 
 # 2024/10/23
 ## Agenda
@@ -45,21 +89,20 @@ JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rou
 - [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [ ] (231002 - Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
+  - Done: to be discussed with Sebastian on 11/06
 - [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
-- [ ] (231002 - Eric) Provide one slide about SONNX.
-
 
 #### Previous actions
 - [ ] (A008 - leads) Plan SC meetings
-      - No action.
+  - No action.
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
 - [X] (A010 - leads) Create a “tools” area <closed on 03/10>
 - [X] (A011 - Nicolas) Deposit his operator extraction tool in the repository. <closed on 03/10>
 - [X] (A012 - Nicolas) Review the the "issues" document
-      - Pending
 - [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
       - Pending. Subject to be addressed durint the next meeting 2024/11/06. Draft material is available [here]{https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
-- [ ] (A014 - fp-sg) Provide a clear statement of the numerical computations issues.
+      - First discussion in the WG on 11/06
+- [X] (A014 - fp-sg) Provide a clear statement of the numerical computations issues.
       - See A013.
 - [ ] (A015) All : Complete description of use cases
       - Pending
@@ -67,15 +110,17 @@ JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rou
       - Pending
 - [ ] (A002 - all) Add / remove your name for the [participant list ](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/team.md) and provide information about your possible contribution
 - [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/presentation_proposals.md).
-      - Sebastian Boblest (Bosch), on their tool (to be planned)
-      - Alexandre Eichenberger (IBM),  on onnx-mlir (to be planned)
-      - ??? on specification and verification of FP computations
+  - Sebastian Boblest (Bosch), on their tool (to be planned)
+  - Alexandre Eichenberger (IBM),  on onnx-mlir (to be planned)
+  - ??? on specification and verification of FP computations
 - [X] (A005 - leads) Organize sub-group on formal methods (fm-sg).
       => Meeting planned on 29/10
 - [ ] (A006 - leads) Finalize the organization of the WG's repository. Define procedure to use it (inc. issues, wiki,...)
-      - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
 - [ ] (A007 - leads) Setup a mailing list
       - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
 # 2024/10/02
 ## Agenda
 - Presentation of "templates" to start of activies on
