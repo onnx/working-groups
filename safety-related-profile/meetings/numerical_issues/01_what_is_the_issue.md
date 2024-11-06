@@ -261,6 +261,8 @@ and Verena Wolf. Vol. 11785. Lecture Notes in Computer Science. Springer,
 - [ARP6983] SAE International, "Recommended Practice for Development and Certification/Approval of Aeronautical Safety-Related Products Implementing ML", preliminary version.
 - [Del] David Delmas, Eric Goubault, Sylve Putot, Jean Souyris, Karim Tekkal, Franck Védrine. "Towards an Industrial Use of FLUCTUAT on Safety-Critical Avionics Software." [Available online](https://www.researchgate.net/publication/220992758_Towards_an_Industrial_Use_of_FLUCTUAT_on_Safety-Critical_Avionics_Software#fullTextFileContent). 
 - [Mul-10] J.-M. Muller et al., Handbook of Floating-Point Arithmetic. Birkhäuser Verlag, 2010.
+- [Mur-19] A. Murthy, H. Das, and M. A. Islam, ‘Robustness of Neural Networks to Parameter Quantization’, Mar. 26, 2019, arXiv: arXiv:1903.10672. Accessed: Nov. 06, 2024. [Online](http://arxiv.org/abs/1903.10672)
+
 
 # Attic
 - Do we really need to add the replication in the SONNX standard? I would say "yes" in the sense that the replication criteria (which I would call "implementation criteria" since these criteria allow discriminating a correct implementation from an incorrect one)
