@@ -127,7 +127,7 @@ What do the industrial standards say about computation errors (in space, aeronau
 > REQ-BL-0240//GTD-TR-01-BL-0015, GTD-TR-01-BL-0026/T\
 > The sin and sinf procedures shall return NaN if x is ±Inf. 
   
-- The "ground truth" could be computed using a multi-precision library. For instance, the [GNU mpfr, Hou-07](https://www.mpfr.org/) library "provide a library for multiple-precision floating-point computation which is both efficient and has a well-defined semantics"
+- The "ground truth" could be computed using a multi-precision library. For instance, [``mpfr``](https://www.mpfr.org/) is a library for multiple-precision floating-point computation "which is both efficient and has a well-defined semantics" [Hou-07]
 
 #### Aeronautical standards
 - The DO-178C [DO-178C] doesn't say much besides that the source code must be correct with respect to floating point arithmetic (§6.3.4.f) (the term "floating point" appears only once).
@@ -136,7 +136,7 @@ What do the industrial standards say about computation errors (in space, aeronau
 #### Automotive standards 
 - The ISO 26262-6 [ISO26262] ("Product development at the software level") doesn't say much about floating point computations. 
 
-# The needs
+# Needs
 What are our needs concerning computation accuracy, and **for what purpose**?
 
 ## Industrial needs and requirement on SONNX
@@ -152,7 +152,6 @@ What are our needs concerning computation accuracy, and **for what purpose**?
 - [**Reqs**] If a property is verified on a given source model (e.g, a PyTorch model) $M_{org}$, the SONNX model generated from the PyTorch model $M_{saved}$ must preserve the property in the sense that if P hold on $M_{org}$, then $P$ also holds on $M_{saved}$.\
 In particular, this means that the (meta-)model (i.e., the SONNX standard) must preserve the data ensuring the property.\
 For instance, using floating point can lead to unsound verification results in the sense that a model that is robust in $\mathbb{R}$ (i.e, verified formally to be robust considering  values in R) may not be robust when implemented using finite precision numbers [???]. In this example, the MLMD would have to be implemented in R (if it were possible) for the robustness property to be preserved. 
-
 
 *Note (a): "Reproduction" is different from "replication" because the former concerns the relation between different executions of the same model implementation, whereas the latter concerns the relation between the model and its implementation(s).*\
 *Note (b): Instead of specifiying requirements about accuracy and precision, couldn't we just specify implementation requirements, i.e, the way computations must be done.* 
@@ -212,18 +211,20 @@ Nota (a): This is not mandatory or even not possible... As demonstrated earlier,
 From the previous needs, what are the requirements applicable to SONNX? The following list is an unsorted set of potential requirements. Some of them may be applicable to a specific (sub-)profile.  
 
 - [**REQ**] The MLMD shall specify the the exact ordering of operations, the representation of numbers, the roundings.
-- [**REQ**] The MLMD shall specify the accuracy of all 
+- [**REQ**] The MLMD shall specify the accuracy of all operations
 - [**REQ**] The MLMD shall specify the exact input domain in which the model  shall provide an output.  
-- [**REQ**] The SONNX standard shall specify the exact input domain of each operator. 
-- [**REQ**] The SONNX standard shall specify th eexpected behaviour shoud a runtim error occur (over/under-flow, division by zero,...).
-- [**REQ**] The SONNX standard shall specify the expected behaviour shoud a runtim error occur (over/under-flow, division by zero,...).
-- [REQ] The SONNX standard shall provide exactly rounded operators. 
+- [**REQ**] The SONNX standard shall specify th eexpected behaviour should a runtim error occur (over/under-flow, division by zero,...).
+- [**REQ**] The SONNX standard shall provide exactly rounded operators. 
+- ...
 
+# Solutions
 
-# What we can / cannot do...
-  - Specifying the error seems not possible...
-  - Describing how operations are done seems to be the obly way to ensure replicability of results... 
-  - Could we provide a test suite? (qualification kit as for [ESA's MLFS](https://nebula.esa.int/content/pre-qualification-mathematical-library-flight-software))
+## What we can / cannot do...
+- Specifying the error seems not possible...
+- Describing how operations are done seems to be the obly way to ensure replicability of results... 
+- Could we provide a test suite? (qualification kit as for [ESA's MLFS](https://nebula.esa.int/content/pre-qualification-mathematical-library-flight-software))
+- ** Could we provide a multiprecision implementation using e.g., ``mpfr`` [mpfr]?
+
 
 # Means of analysis techniques and tools
 - What are the technical means available to estimate the impact of errors on results? (e.g., fluctuat, CADNA...)
@@ -247,7 +248,7 @@ and Verena Wolf. Vol. 11785. Lecture Notes in Computer Science. Springer,
 - [Mic-22] P. Micikeviciuset al., "[FP8 formats for deep learning](https://arxiv.org/abs/2209.05433)," arXiv (Cornell University), Sep. 2022, doi: 10.48550/arxiv.2209.05433
 - [Dar-06]  C. Daramy-Loirat and D. Defour, ‘CR-LIBM A library of correctly rounded elementary functions in double-precision’. Dec. 2006. [Available online](https://ens-lyon.hal.science/ensl-01529804/file/crlibm.pdf)
 - [Sch-18] Fabian Schriever, Software User-Manual - Basic mathematical Library for Flight Software, E1356-GTD-SUM01, 2018/05/23
-- [Mpfr-2023] GNU MPFR - The Multiple Precision Floating-Point Reliable Library, August 2013, [Available online](https://www.mpfr.org/mpfr-current/mpfr.pdf)
+- [mpfr] GNU MPFR - The Multiple Precision Floating-Point Reliable Library, August 2013, [Available online](https://www.mpfr.org/mpfr-current/mpfr.pdf)
 - [Hou-07] L. Fousse, G. Hanrot, V. Lefèvre, P. Pélissier, and P. Zimmermann, ‘MPFR: A multiple-precision binary floating-point library with correct rounding’, ACM Trans. Math. Softw., vol. 33, no. 2, p. 13, Jun. 2007, doi: 10.1145/1236463.1236468.
 - [Dyd-23] Anton Rydahl, Joseph Huber, Ethan uis Mcdonnough, Johannes Doerfert, "Precision and Performance Analysis of C Standard Math Library Functions on GPUs", [Available online](https://dl.acm.org/doi/fullHtml/10.1145/3624062.3624166)
 - [Gla-24] B. Gladman, V. Innocente, J. Mather, and P. Zimmermann, ‘Accuracy of Mathematical Functions in Single, Double, Double Extended, and Quadruple Precision’. [Available online](https://inria.hal.science/hal-03141101)
@@ -260,8 +261,6 @@ and Verena Wolf. Vol. 11785. Lecture Notes in Computer Science. Springer,
 - [ARP6983] SAE International, "Recommended Practice for Development and Certification/Approval of Aeronautical Safety-Related Products Implementing ML", preliminary version.
 - [Del] David Delmas, Eric Goubault, Sylve Putot, Jean Souyris, Karim Tekkal, Franck Védrine. "Towards an Industrial Use of FLUCTUAT on Safety-Critical Avionics Software." [Available online](https://www.researchgate.net/publication/220992758_Towards_an_Industrial_Use_of_FLUCTUAT_on_Safety-Critical_Avionics_Software#fullTextFileContent). 
 - [Mul-10] J.-M. Muller et al., Handbook of Floating-Point Arithmetic. Birkhäuser Verlag, 2010.
-
-
 
 # Attic
 - Do we really need to add the replication in the SONNX standard? I would say "yes" in the sense that the replication criteria (which I would call "implementation criteria" since these criteria allow discriminating a correct implementation from an incorrect one)
