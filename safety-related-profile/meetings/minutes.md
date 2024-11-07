@@ -7,12 +7,59 @@
 - Other events
   - [ISCLP meeting](https://www.defense.gouv.fr/dga/evenements/ouverture-inscriptions-au-seminaire-futur-lembarque-critique-systemes-combat) at DGA-TA Toulouse
   - Collab. with [DeepGreen](https://deepgreen.ai/) project about reference implementation (followup to [10/25 meeting minutes](safety-related-profile/meetings/Other_meetings/2024-10-25-DeepGreen.md) )
+
+## Participants
+JENN Eric, Adrian Evans, Pierre Gaillard, Nicolas Valot , Edoardo Manino, Jean-Loup , Julien VIDALIE, COMBES Yohann, BELCAID Mohammed, Jean-Baptiste Rouffet, Jean Souyris , Cong Liu, Jean-Loup Farges, Claire Pagetti , Thiziri Belkacem Airbus Protect , Dumitru Potop, Sebastian Boblest , Sergei CHICHIN, Boblest Sebastian, Vo Duy Khoi
+
+## Minutes
+- Discussion about computation errors (see presentation in [markdown](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/slides-06-11.md) and [pdf](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/2024-11-06%20-%20Numerical%20issues.pdf))
+  - **Slide 10: About weak and strong reproducibility**\
+      - Statement is not clear.\
+      The idea is that complying with the specification (the MLMD) does not ensure reproducibility: if the specification allows some error with respect to the true value, an implementation may compy with the specification without complying with reproducibility. Therefore, this is another property.  How compliance with the MLMD is ensured is another problem. We may use the "reference implementation" (RI), but it only moves the problem since we will have to demonstrate compliance of the RI to the MLMD... 
+      - What does "all implementation" mean?\
+        It refers to the set of all *potential* implementations that would comply to the MLMD, not the *actual* set of implementations (which is a subset of the former...). 
+      - About the empirical evaluation of the effects of computation errors, see paper "[Causes and effects of unanticipated numerical deviations in neural networks inference frameworks](https://proceedings.neurips.cc/paper_files/paper/2023/file/af076c3bdbf935b81d808e37c5ede463-Paper-Conference.pdf)"
+      - About non-determinism: here, we only care about inference, not training ; we only consider non-determinism due to numerical computations, not other sources such as random number generators...
+      - Reproducibility is also a concern for audit activities (or "auditability").
+      - [ ] (Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
+      - [ ] (Eric) Integrate paper in [document](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md). 
+  - **Slide 12: importance of accuracy for ML**
+      The effects of mathematical error may strongly depend on the type of application (e.g., regression *vs.* classification) 
+  - **Slide 15: mathematical libraries**
+    - There are version of ``libm`` that give explicitly accuracy requirements. See e.g., [sleef](https://github.com/shibatch/sleef/tree/master/docs/2-references/libm)
+  - **Slide 17**
+    - Over/under flow can be easily avoided using "accumulator" with a sufficient size. <off meeting: but overflow may occur in other situations>
+    - **General** 
+      - The slide are focus on the second part of the W cycle. Howver, as the MLMD is at he transition  between the two Vs, we also have to consider the relation between the ML model used during training and evaluation and the MLMD. In particular, what needs to be put in the MLMD to support the activities occuring in the ascending part of the first V (in order to ensure that the MLML delivered to the developper is correct)? 
+      - In fact, what is (could be considered as) the actual reference is the model used for the training and evaluation that is executed using e.g., TensorFlow. Therefore, we shall provide all embed all the necessary information (metadata) in the MLMD to precisely designate this environment (framework, version of framework, machine, operating system,etc.). Note that the current version of ONNX aleady has this capability. <off meeting: another approach would be to consider that the evaluation of the model should be done using the reference implementation. This would really make the SONNX model THE specification.../>
+  - [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+  
+- Review of Sebastian's remarks on the ``conv2d`` operator specification
+  - Detailled remarks are in [Sebastian's branch](https://github.com/SebastianBoblest/working-groups/tree/lookAtConvSpec/safety-related-profile/documents/conv_specification_example). 
+  - Major remarks:
+    - Some restrictions (of the current version) prevent the description of some of the use models. For instance, the ``group`` attribute must support depthwise convolution with channel multiplier 1.
+    - Many attributes of the ONNX spec are optional or "redundant" in the sense that their role can be played using other, more primitive attribnutes. For instance, the ``auto_pad`` attribute can be replaced by an explicit choice of padding. 
+    - The SONNX profile shall provide a single solution without restricting capabilities ("There shall be a unique way to do things").
+    - It also makes life of "customers" (aka "users") simpler.
+    - The presentation is OK. The diagram must be kept, but corrected (see detailled comments)
+    - [ ] (Jean-Loup) Review the conv2d operator
+    - [ ] (Eric, Mariem) Update conv2d spec according to Sebastian's and Jean-Loup's reviews
+  
+
 #### New actions
-(to be completed)
+- [ ] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
+- [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+- [ ] (0611-3 - Eric) Integrate paper in [document](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md).
+- [ ] (0611-4 - Jean-Loup) Review the conv2d operator
+- [ ] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
+   
 #### Previous actions
 - [ ] (231001 - All) Check Nicolas' classification proposal 
 - [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
+      - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
 - [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
+      - In progress. Under validation. 
+      - First draft version to be delivered on next week. To be reviewed.
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [X] (231002 - Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
   - Done: to be discussed with Sebastian on 11/06
@@ -24,16 +71,15 @@
   > Meanwhile do you think relevant to get more experts into the WG from the automotive industry (working in autonomous drive)?
   > I have good contacts in the H2020 project consortium Hi-Drive (www.hi-drive.eu [...]  Should I try to get some of them onboard?
 - [X] (231002 - Eric) Provide one slide about SONNX.
-  - Done: See [here]()
-
-
+  - Done: see [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/Other_meetings/2024-11%20-%20ISCLP%20meeting%20-%20SONNX.pptx)
 - [ ] (A008 - leads) Plan SC meetings
   - No action.
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+      - Dumitru will check this...
 - [X] (A012 - Nicolas) Review the the "issues" document
 - [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
       - Pending. Subject to be addressed durint the next meeting 2024/11/06. Draft material is available [here]{https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
-      - First discussion in the WG on 11/06
+      - First discussion in the 11/06 WG meeting
 - [ ] (A015) All : Complete description of use cases
       - Pending
 - [ ] (A016) All : Complete description of needs
@@ -57,6 +103,7 @@
 - Work sharing and commitments (who can contribute to what?)
 - Work on the PoC : review of the informal description, improvements
 - Other events
+
 ## Participants
 
 JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rouffet, BELCAID Mohammed, Nicolas Valot, BELFY Henri, Luís Conde, BONNAFOUS Eric, Jean-Loup Farges, Jean Souyris, Cong Liu, Dumitru Potop, Claire Pagetti, Edoardo Manino, Sebastian Boblest  

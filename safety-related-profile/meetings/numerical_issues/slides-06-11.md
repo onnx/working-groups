@@ -64,7 +64,7 @@ Let's consider that <property> = function, i.e., the relation between inputs and
 - The MLMD standard shall specify the minimum expected accuracy of all operators
 - The MLMD standard shall provide a means to specify the accuracy of any of its implementation (i.e., an implementation is deemed correct if it complies with the specified accuracy)
 
-- **What is actually really necessary / required?****
+- **What is actually really necessary / required?**
 
 ---
 # Questions 
@@ -73,7 +73,6 @@ Let's consider that <property> = function, i.e., the relation between inputs and
 - Is it a particularly serious problem for ML?
 - Is it solved by IEEE754?
 - How is it handled today?
-- Is it more crucial important for ML algorithms?
 
 ---
 # Is numerical accuracy a problem for us?
