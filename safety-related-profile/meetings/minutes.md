@@ -1,5 +1,5 @@
 # 2024/11/06
-## Agenda (proposal)
+## Agenda
 - Review of actions
 - Feedback on ``conv2d`` operator review (Sebastian)
 - Computations accuracy
