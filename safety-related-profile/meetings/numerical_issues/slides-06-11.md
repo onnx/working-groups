@@ -94,9 +94,9 @@ Let's consider that <property> = function, i.e., the relation between inputs and
 # Is numerical accuracy a problem for us?
 ## Reproducibility
 - Reproducibility (weak)
-  - For an implementation complying with the MLMD, all executions of the same inference (same inputs) shall provide the same output.
+  - Complying with MLMD ensures that all executions of the same inferences (same inputs) on the same platform provide the same outputs.
 - Reproducibility (strong)
-  - For all implementations complying with the the MLMD, all executions of the same inference (same inputs) shall provide the same outputs  
+  - Complying with MLMD ensures that all executions of the same inferences (same inputs) on all implementations provide the same outputs.
 
 ---
 # Is it a new problem? 
