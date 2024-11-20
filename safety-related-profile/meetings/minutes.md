@@ -1,3 +1,71 @@
+# 2024/11/20
+
+## Agenda
+- Review of actions
+- Status of deliverables
+  - D1.a: Safety-related Profile Scope Definition
+  - D1.b.<x>: End users' needs and requirements for domain <x>.
+  - D1.c: Consolidated needs for all industrial domains
+![image](https://github.com/user-attachments/assets/7b081310-cf71-4136-b796-e254faf72483)
+- Discussion about modalities
+## Participants
+Marko, Sebastian, Julien, Jean, Henri, Augustin, Yohann, Mohammed, Eric B., Eric J.
+
+## Minutes
+- We are late: deliverable D1.1 was due Oct. 2024, and D1.2 was due Nov. 2024. We have very few needs / reqs, and all from the aero domain. Additional reqs will certainly come from Jean-Baptiste analysis of Aero standards (see action ). Airbus will propose material to complete the list of needs / reqs by the end of this week.
+  - [ ] (Jean, Eric) Integrate Airbus' additional nededs / reqs.
+- Providing a first list of needs/reqs will certainly clarify what is expected in D1.2...
+- In order to accelerate the process, Jean proposes to set up a "core team" composed of representatives of the different industrial domains (or other interested people too). Those people will work specifically on "needs" and "requirements". They will meet in specific meetings... Sebastian and Henri will participate (thanks!). A local physical meeting with people from Airbus, Thales, ADS, TAS, IRT could also be organized in order to speed up the process.  
+  - [ ] (Eric) Make a call for participation to the req core team.    
+  
+#### New actions
+- [ ] (2011-1 - Jean, Eric) Integrate Airbus' additional needs/reqs.
+- [ ] (2011-2 - Eric) Make a call for participation to the req core team. 
+#### Previous actions
+- [ ] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
+      - On going, see [this note](../documents/analysis_of_standards/2024-11-08%20-%20Replication%20criteria.md)
+- [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+- [X] (0611-3 - Eric) Integrate paper in [document](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md).
+- [X] (0611-4 - Jean-Loup) Review the conv2d operator
+      - Reviews are [here](../documents/conv_specification_example/reviews)
+- [ ] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
+  - To be done by next meeting.
+- [ ] (231001 - All) Check Nicolas' classification proposal 
+- [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
+      - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
+      - To be done by next meeting.
+- [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
+      - In progress. Under validation. 
+      - First draft version to be delivered on next week. To be reviewed.
+      - No document received as of 20/11/2024. Eric contacted Jean-Baptiste on 20/11/2024.
+- [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
+- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
+    - On-going (see previous meeting)
+- [ ] (A008 - leads) Plan SC meetings
+- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+      - Dumitru will check this...
+profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
+      - First discussion in the 11/06 WG meeting
+- [ ] (A015) All : Complete description of use cases
+      - On-going
+- [ ] (A016) All : Complete description of needs
+      - On-going
+- [ ] (A002 - all) Add / remove your name for the [participant list ](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/team.md) and provide information about your possible contribution
+- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/presentation_proposals.md).
+  - [X] Sebastian Boblest (Bosch) on their tool (2024/12/18)
+  - Alexandre Eichenberger (IBM),  on onnx-mlir (2025/??/??)
+  - ??? on specification and verification of FP computations (2025/??/??)
+  - Eduardo (Manchester U) on "Evaluation and improvement of SW verifiers on FP Neural Networks" (2025/??/??)
+- [ ] (A006 - leads) Finalize the organization of the WG's repository. Define procedure to use it (inc. issues, wiki,...)
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+  - Meeting moved to 2024/11/21
+- [ ] (A007 - leads) Setup a mailing list
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+  - Meeting moved to 2024/11/21
+
+
 # 2024/11/06
 ## Agenda
 - Review of actions
@@ -63,8 +131,8 @@ JENN Eric, Adrian Evans, Pierre Gaillard, Nicolas Valot , Edoardo Manino, Jean-L
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [X] (231002 - Sebastian and Luis) Review of the [Conv2d operator](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example).
   - Done: to be discussed with Sebastian on 11/06
-- [X] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
-  - Done:  
+- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
+  - On-going:  
   > Regarding the invitation of experts to participate in the WG:
   > - Health sector: [METTLER]  the contacts were identified, the emails were sent, and we are waiting on their response.
   > - Railway sector: [ALSTOM] the contacts were identified.
@@ -77,7 +145,7 @@ JENN Eric, Adrian Evans, Pierre Gaillard, Nicolas Valot , Edoardo Manino, Jean-L
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
       - Dumitru will check this...
 - [X] (A012 - Nicolas) Review the the "issues" document
-- [ ] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
+- [X] (A013 - leads) Organize a meeting on numerical computations (fp-sg)
       - Pending. Subject to be addressed durint the next meeting 2024/11/06. Draft material is available [here]{https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
       - First discussion in the 11/06 WG meeting
 - [ ] (A015) All : Complete description of use cases
