@@ -5,10 +5,11 @@ This discussion is necessary since the replication objectives (i.e., the replica
 *Please add your own comments / remarks. Use ``[my name]`` (e.g., ``[eric]``*) to indentify your comment. 
 
 # Exact replication
+
 ## Statement (from ARP683) 
 > [...] the ML Model description should contain sufficient details on the ML Model semantic to fully preserve this semantic in the implemented ML Model. For example, an exact replication criterion may be the direct and faithful implementation of the ML Model description so that the implemented ML Model meets the same performance, generalization, stability, and robustness requirements.
 
-## Comments and discussions 
+## Eric comments
 
 - "[...] sufficient **details** on the ML model semantic [...]"
 - What does "details" mean here? 
@@ -38,7 +39,7 @@ This discussion is necessary since the replication objectives (i.e., the replica
 > [...] the ML Model description should contain sufficient details on the ML Model semantics to approximate this semantic in the implemented ML Model with a specified tolerance. For example, an approximation metric may be expressed for a given dataset by the maximal gap between the trained ML Model outputs and the
 implemented ML Model outputs. The corresponding approximation replication requirement may be that this maximal gap should not exceed a given value epsilon.
 
-## Comments and discussions
+## Eric's comments
 - The notion of "gap" is not precise. We may use the term "distance" and, in this case, the metric that is used must be defined. 
   - This metric will depend on the model. Nota that it may be easier to define for a regression function than for a classifier.  
   - If the metric is "user dependant", it means that it should be specified in the MLMD. 
@@ -46,4 +47,11 @@ implemented ML Model outputs. The corresponding approximation replication requir
   - However, this is not the case for the moment since the definition of "exact replication" does not refer to the ouputs of the model...
   - Basicaly, we would expect a unique criterion, let's call it "replication criterion" that will refer to $\epsilon". Then, the definition of "exact replication" would not be necessary any more. 
 - If replication is defined using an $\epsilon$, how will a designer estimate this value?
+
+## Jean-Loup's comments (translated using ChatGPT)
+"In fact, I feel that the examples given for exact replication and approximate replication are derived from two ways of expressing semantics: either through a relationship between inputs (memory before) and outputs (memory after) — the example provided for approximate replication — or through execution specification — the example provided for exact replication. In this Wikipedia article, this would correspond to denotational semantics and operational semantics, with, as stated, 'two operationally equivalent programs are denotationally equivalent.' But actually, it seems to me that it is more difficult to define an approximation over a sequence of operations than over an input-output relationship."
+
+
+# Synthesis
+_To be completed_
 
