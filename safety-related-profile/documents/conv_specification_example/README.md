@@ -271,24 +271,22 @@ If it is not set or set to `NOTSET`, padding is determined by the pads
 attribute (see below). Otherwise, padding is done according to the
 `auto_pad` value, as follows:
 
-- if $\mbox{\texttt{auto\_pad}} = \mbox{\texttt{VALID}}$: no padding is
+- if auto_pad = VALID: no padding is
   done.
 
-- if $\mbox{\texttt{auto\_pad}} = \mbox{\texttt{NOTSET}}$: padding is
+- if auto_pad = NOTSET: padding is
   done according to the `pads` attribute. If attribute `pads` is not
   set, it takes its default value, i.e., $(0,0,0,0)$. In that case, the
   result is identical to the one that would be obtained if
-  $\mbox{\texttt{auto\_pad}} = \mbox{\texttt{VALID}}$ (i.e., no padding
+  auto_pad = VALID (i.e., no padding
   is done).
 
-- if $\mbox{\texttt{auto\_pad}} = \mbox{\texttt{SAME\_UPPER}}$: for each
-  axis, padding must be added so that constraint
-  <a href="#sec:conv_x" data-reference-type="ref"
-  data-reference="sec:conv_x">3.2.1</a>-<a href="#it:shape_consist" data-reference-type="ref"
-  data-reference="it:shape_consist">[it:shape_consist]</a> holds.
-  $$\floor*{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
+- if auto_pad = SAME_UPPER: for each
+  axis, padding must be added so that [constraint (3) holds](#shape_consist)
+
+  $$\lfloor{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} \rfloor +1  = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
   and
-  $$\floor*{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
+  $$\lfloor{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
 
   If the total padding $pad_h$ (resp. $pad_w$) is even then padding
   shall be
@@ -299,18 +297,15 @@ attribute (see below). Otherwise, padding is done according to the
 
   otherwise padding shall be
 
-  - $\floor{pad_h/2}$ (resp. $\floor{pad_w/2}$) at the beginning and
+  - $\lfloor{pad_h/2} \rfloor$ (resp. $\lfloor{pad_w/2} \rfloor$) at the beginning and
 
-  - $\floor{pad_h/2}+1$ (resp. $\floor{pad_w/2}+1$) at the end.
+  - $\lfloor{pad_h/2} \rfloor +1$ (resp. $\lfloor{pad_w/2} \rfloor +1$) at the end.
 
-- $\mbox{\texttt{auto\_pad}} = \mbox{\texttt{SAME\_LOWER}}$: For each
-  axis, padding must be added so that constraint
-  <a href="#sec:conv_x" data-reference-type="ref"
-  data-reference="sec:conv_x">3.2.1</a>-<a href="#it:shape_consist" data-reference-type="ref"
-  data-reference="it:shape_consist">[it:shape_consist]</a> holds.
-  $$\floor*{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
+- auto_pad = SAME_LOWER: For each
+  axis, padding must be added so that [constraint (3) holds](#shape_consist)
+  $$\lfloor{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
   and
-  $$\floor*{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
+  $$\lfloor{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
 
   If the total padding $pad_h$ (resp. $pad_w$) is even then padding
   shall be
@@ -321,9 +316,9 @@ attribute (see below). Otherwise, padding is done according to the
 
   otherwise padding shall be
 
-  - $\floor{pad_h/2+1}$ (resp. $\floor{pad_w/2+1}$) at the beginning and
+  - $\lfloor{pad_h/2+1} \rfloor$ (resp. $\lfloor{pad_w/2+1} \rfloor$) at the beginning and
 
-  - $\floor{pad_h/2}$ (resp. $\floor{pad_w/2}$)at the end.
+  - $\lfloor{pad_h/2} \rfloor$ (resp. $\lfloor{pad_w/2} \rfloor$)at the end.
 
 The effect of the `auto_pad` attribute is illustrated on the following figure:
 
