@@ -34,10 +34,11 @@ Marko, Sebastian, Julien, Jean, Henri, Augustin, Yohann, Mohammed, Eric B., Eric
 - [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
       - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
       - To be done by next meeting.
-- [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
+- [X] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
       - In progress. Under validation. 
       - First draft version to be delivered on next week. To be reviewed.
       - No document received as of 20/11/2024. Eric contacted Jean-Baptiste on 20/11/2024.
+      - Document received on 2024/11/21, see [here](../documents/analysis_of_standards/SONNX_requirements_draft1.docx)
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
     - On-going (see previous meeting)
