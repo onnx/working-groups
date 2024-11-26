@@ -360,7 +360,7 @@ The effect of padding illustrated on the following figure:
 
 ###### Constraints.
 
-1.  Consistency between `pads` and `auto_pad`.
+1.  Consistency between `pads` and `auto_pad` (see constraint (2) of `auto_pad`).
 
 2.  Value domain
 
