@@ -117,13 +117,13 @@ $$\begin{gathered}
 
 Where
 
-- $b$ is the batch index, $b \in [0,Y.B-1]$ and $Y.B$ is the batch size of
+- $b$ is the batch index, $b \in [0,nb(Y)-1]$ and $nb(Y)$ is the batch size of
   the output `Y`
 
-- $c$ is the data channel, $c \in [0,Y.C-1]$ and $Y.C$ is the number of data
+- $c$ is the data channel, $c \in [0,nch(Y)-1]$ and $nch(Y)$ is the number of data
   channels of the output `Y`
 
-- $m \in [0,Y.H-1]$ (resp. $n \in [0,Y.W-1]$) is the index of the
+- $m \in [0,nl(Y)-1]$ (resp. $n \in [0,nc(Y)-1]$) is the index of the
   first (resp. second) spatial axis of the output `Y`
 
 - $nch_{in}(W)$ is the number of input channels of kernel `W`
@@ -164,10 +164,10 @@ where
 2. <a name="channel_consist"></a> Consistency between the number of channels of `X`, `W`, `B`, and
     `Y`.  
 
-    - Statement: $nc(X)=Y.C=nch_{in}(W)=nc(B)$
+    - Statement: $nc(X)=nch(Y)=nch_{in}(W)=nc(B)$
 
     - Rationale: This is a particular case of the more general relation
-      $nc(X)=Y.C=nch_{in}(W)\cdot\mbox{\texttt{groups}}$ when
+      $nc(X)=nch(Y)=nch_{in}(W)\cdot\mbox{\texttt{groups}}$ when
       $\mbox{\texttt{groups}}=1$.
 
 3. <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and
@@ -176,11 +176,11 @@ where
 
     - Statement: If parameter `pads` is not empty
  
-       *  $$\lfloor{\frac{L.H-(\mbox{\texttt{dilations[0]}} \times nl(W)-1)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+\mbox{\texttt{pads[0]}}+\mbox{\texttt{pads[2]}}$$
+       *  $$\lfloor{\frac{a-(\mbox{\texttt{dilations[0]}} \times nl(W)-1)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{nl(Y)}} \mbox{ with }  a=nl(X)+\mbox{\texttt{pads[0]}}+\mbox{\texttt{pads[2]}}$$
   
       and
  
-       * $$\lfloor{\frac{L.W-(\mbox{\texttt{dilations[1]}} \times nc(W)-1)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}}  \mbox{ with } L.W=nc(X)+\mbox{\texttt{pads[1]}}+\mbox{\texttt{pads[3]}}$$
+       * $$\lfloor{\frac{b-(\mbox{\texttt{dilations[1]}} \times nc(W)-1)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{nc(Y)}}  \mbox{ with } b=nc(X)+\mbox{\texttt{pads[1]}}+\mbox{\texttt{pads[3]}}$$
 
     - Rationale: The size of the output is determined by the number of
       times the kernel can be applied on a given spatial axis.
@@ -236,14 +236,14 @@ $(nc(B) \times 1)$.
     [see constraint (2) of X](#channel_consist)
 #### Attributes
 
-##### `strides`: integer (optional, default value 1)
+##### `strides`: list of int (optional, default value 1)
 
 The `strides` attributes determines how the kernel is moved on the input
 tensor `X` during the convolution.
 
-For instance, with $\mbox{\texttt{strides}}[0]=1$ and
-$\mbox{\texttt{strides}}[1]=2$, the kernel is moved of 1 unit in the
-first spatial axis and 2 units in the second spatial axis at each step
+For instance, with $\mbox{\texttt{strides}}[0]=2$ and
+$\mbox{\texttt{strides}}[1]=3$, the kernel is shifted by 2 units in the
+first spatial axis and 3 units in the second spatial axis at each step
 of the convolution.
 
 This effect is illustrated on the following figure:
@@ -284,41 +284,41 @@ attribute (see below). Otherwise, padding is done according to the
 - if auto_pad = SAME_UPPER: for each
   axis, padding must be added so that [constraint (3) holds](#shape_consist)
 
-  $$\lfloor{\frac{L.H-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1  = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+pad_h$$
+  $$\lfloor{\frac{a-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1  = \mbox{\texttt{nl(Y)}} \mbox{ with }  a=nl(X)+pad_l$$
   and
-  $$\lfloor{\frac{L.W-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=nc(X)+pad_w$$
+  $$\lfloor{\frac{b-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{nc(Y)}} \mbox{ with }  b=nc(X)+pad_c$$
 
-  If the total padding $pad_h$ (resp. $pad_w$) is even then padding
+  If the total padding $pad_l$ (resp. $pad_c$) is even then padding
   shall be
 
-  - $pad_h/2$ (resp. $pad_w/2$) at the beginning and
+  - $pad_l/2$ (resp. $pad_c/2$) at the beginning and
 
-  - $pad_h/2$ (resp. $pad_w/2$) at the end.
+  - $pad_l/2$ (resp. $pad_c/2$) at the end.
 
   otherwise padding shall be
 
-  - $\lfloor{pad_h/2} \rfloor$ (resp. $\lfloor{pad_w/2} \rfloor$) at the beginning and
+  - $\lfloor{pad_l/2} \rfloor$ (resp. $\lfloor{pad_c/2} \rfloor$) at the beginning and
 
-  - $\lfloor{pad_h/2} \rfloor +1$ (resp. $\lfloor{pad_w/2} \rfloor +1$) at the end.
+  - $\lfloor{pad_l/2} \rfloor +1$ (resp. $\lfloor{pad_c/2} \rfloor +1$) at the end.
 
 - auto_pad = SAME_LOWER: For each
   axis, padding must be added so that [constraint (3) holds](#shape_consist)
-  $$\lfloor{\frac{L.H-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+pad_h$$
+  $$\lfloor{\frac{a-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{nl(Y)}} \mbox{ with }  a=nl(X)+pad_l$$
   and
-  $$\lfloor{\frac{L.W-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=nc(X)+pad_w$$
+  $$\lfloor{\frac{b-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{nc(Y)}} \mbox{ with }  b=nc(X)+pad_c$$
 
-  If the total padding $pad_h$ (resp. $pad_w$) is even then padding
+  If the total padding $pad_l$ (resp. $pad_c$) is even then padding
   shall be
 
-  - $pad_h/2$ (resp. $pad_w/2$) at the beginning and
+  - $pad_l/2$ (resp. $pad_c/2$) at the beginning and
 
-  - $pad_h/2$ (resp. $pad_w/2$) at the end.
+  - $pad_l/2$ (resp. $pad_c/2$) at the end.
 
   otherwise padding shall be
 
-  - $\lfloor{pad_h/2+1} \rfloor$ (resp. $\lfloor{pad_w/2+1} \rfloor$) at the beginning and
+  - $\lfloor{pad_l/2+1} \rfloor$ (resp. $\lfloor{pad_c/2+1} \rfloor$) at the beginning and
 
-  - $\lfloor{pad_h/2} \rfloor$ (resp. $\lfloor{pad_w/2} \rfloor$)at the end.
+  - $\lfloor{pad_l/2} \rfloor$ (resp. $\lfloor{pad_c/2} \rfloor$)at the end.
 
 The effect of the `auto_pad` attribute is illustrated on the following figure:
 
@@ -378,7 +378,7 @@ The effect of padding illustrated on the following figure:
 
 3.  Consistency between the shape of `X` and the length of `pads`
 
-    - Statement: The length of the `pads` list shall be equal to 2 times
+    - Statement: The length of the `pads` list shall be proportional
       the number of spatial axes
 
     - Rationale: If padding is given, it shall be given for all spatial
@@ -399,7 +399,7 @@ The effect of padding illustrated on the following figure:
 The `dilations` attribute specifies the spacing between the kernel
 elements for each spatial axis of the filter `W`. It is a list of
 non-null integer values where each value gives the dilation factor for
-spatial axis $i$. If the dilation factor is greater than 1 for a axis
+spatial axis $i$. If the dilation factor is greater than 1 for axis
 $i$, then the kernel points are spaced out by the dilation factor.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure:
@@ -412,14 +412,6 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 
     - Statement: All values in the `dilation` attribute shall be an
       integer value strictly greater than 0
-
-    - Rationale:
-
-      <div class="note">
-
-      ONNX accepts dilations equal to 0 or negative...
-
-      </div>
 
 2.  (C2) Relation between `dilations` and `W`
 
@@ -482,25 +474,25 @@ This parameter specifies the shape of the convolution kernel `W`.
 
     - Rationale: A size is always positive.
 
-2.  Consistency between `W` and `[`kernel_shape
+2.  Consistency between `W` and `[`kernel_shape`]`
 
     - Statement: If set, the values of `kernel_shape` for a given axis
       must be equal to the size of `W` for that axis.
 
-    - Rationale: `kernel_shape` represents the shape of `W`.
+    - Rationale: `kernel_shape` represents the shape of `W`, where kernel_shape[0] = nc(W) and kernel_shape[1] = nl(W).
 
 #### Outputs
 
 ##### `Y`
 
 The size of the output `Y` will be
-$(Y.B \times Y.C \times Y.H \times Y.W)$ where
+$(nb(Y) \times nch(Y) \times nl(Y) \times nc(Y))$ where
 
-- $Y.B$ is the number of batches
+- $nb(Y)$ is the number of batches
 
-- $Y.C$ is the number of channels,
+- $nch(Y)$ is the number of channels,
 
-- $Y.H$ and $Y.W$ are the sizes of the output for the two spatial axis.
+- $nl(Y)$ and $nc(Y)$ are the sizes of the output for the two spatial axis.
 
 ###### Constraints.
 
@@ -578,20 +570,20 @@ module Conv
                                 
      (0 <= x_h_idx < inp.x_h /\ 0 <= x_w_idx < inp.x_w) ->
         let x_idx = bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + x_h_idx * inp.x_w + x_w_idx in
-        let w_idx = ci * (kernel.w_c_in * kernel.w_h * kernel.w_w) + ci_in * (kernel.w_h * kernel.w_w) + ki_h * kernel.w_w + ki_w in
-        res.elts (y_idx) = bias.b[ci] +. (inp.x[x_idx] *. kernel.w[w_idx])
+        let w_idx = ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w in
+        res.elts (y_idx) = bias.b[ci] +. (inp.x[x_idx] *. kerneb[w_idx])
 
   val conv (inp: input_tensor)(kernel: convolution_kernel)(bias: bias_tensor)(attr: attributes)(out: output_tensor): array real
-    requires{inp.x_c = out.y_c = kernel.w_c_in = bias.b_c} 
-    requires{out.y_h = (div (inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_h)) attr.stride[0]) + 1}
-    requires{out.y_w = (div (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_w)) attr.stride[1]) +1}
+    requires{inp.x_c = out.y_c = kerneb_c_in = bias.b_c} 
+    requires{out.y_h = (div (inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h)) attr.stride[0]) + 1}
+    requires{out.y_w = (div (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w)) attr.stride[1]) +1}
     requires { inp.x_h > 0 /\ inp.x_w > 0 /\ inp.x_c > 0 /\ inp.x_b > 0}
-    requires{kernel.w_h > 0 /\ kernel.w_w > 0 /\ kernel.w_c_in > 0 /\ kernel.w_c_out > 0}
+    requires{kerneb_h > 0 /\ kerneb_w > 0 /\ kerneb_c_in > 0 /\ kerneb_c_out > 0}
     requires { out.y_b > 0 /\ out.y_c > 0 /\ out.y_h > 0 /\ out.y_w > 0}
     requires { length inp.x = inp.x_h * inp.x_w * inp.x_c * inp.x_b}
-    requires{length kernel.w = kernel.w_h * kernel.w_w * kernel.w_c_in * kernel.w_c_out}
-    requires{inp.x_h >= kernel.w_h}
-    requires{inp.x_w >= kernel.w_w}
+    requires{length kerneb = kerneb_h * kerneb_w * kerneb_c_in * kerneb_c_out}
+    requires{inp.x_h >= kerneb_h}
+    requires{inp.x_w >= kerneb_w}
     requires{length bias.b = bias.b_c}
     requires{length attr.stride = 2}
     requires{length attr.dilations = 2}
@@ -605,9 +597,9 @@ module Conv
               0 <= ci < out.y_c ->
               0 <= hi < out.y_h ->
               0 <= wi < out.y_w ->
-              0 <= ci_in < kernel.w_c_in ->
-              0 <= ki_h < kernel.w_h ->
-              0 <= ki_w < kernel.w_w -> conv_result inp kernel bias attr out result bi ci hi wi ci_in ki_h ki_w }
+              0 <= ci_in < kerneb_c_in ->
+              0 <= ki_h < kerneb_h ->
+              0 <= ki_w < kerneb_w -> conv_result inp kernel bias attr out result bi ci hi wi ci_in ki_h ki_w }
 
 end
 
@@ -634,8 +626,8 @@ let test_conv () =
   let pads = Array.make 4 0 in  (* No padding *)
   let dilations = Array.make 2 1 in  (* Dilation of 1 *)
   let attr = { stride = stride; pads = pads; auto_pad = 0; dilations = dilations } in
-  let out_h = (div (inp.x_h + pads[0] + pads[2] - (dilations[0] * kernel.w_h)) stride[0]) + 1 in
-  let out_w = (div (inp.x_w + pads[1] + pads[3] - (dilations[1] * kernel.w_w)) stride[1]) + 1 in
+  let out_h = (div (inp.x_h + pads[0] + pads[2] - (dilations[0] * kerneb_h)) stride[0]) + 1 in
+  let out_w = (div (inp.x_w + pads[1] + pads[3] - (dilations[1] * kerneb_w)) stride[1]) + 1 in
   let out = { y_b = 1; y_c = 1; y_h = out_h ; y_w = out_w  } in
   (* Call the conv function *)
   let result = conv inp kernel bias attr out in
@@ -697,26 +689,26 @@ behavior valid:
 
 behavior same_upper:
     assumes (auto_pad == "SAME_UPPER") ;
-    ensures \let pad_h = (y_h - 1) * stride[0] + w_h - x_h;
-            \let pad_w = (y_w - 1) * stride[1] + w_w - x_w;
-            ((pad_h  % 2 == 0) && (pad_w  % 2 == 0)) ==> 
-                (result[0] == (pad_w / 2) && result[1] == (pad_h / 2) && result[2] == (pad_w / 2) && result[3] == (pad_h / 2)) &&
-            (pad_h % 2 != 0) && (pad_w % 2 != 0) ==> 
-            (result[0] == (pad_w / 2) && result[1] == (pad_h / 2) && result[2] == ((pad_w / 2) + 1) && result[3] == ((pad_h / 2) + 1));   
+    ensures \let pad_l = (y_h - 1) * stride[0] + w_h - x_h;
+            \let pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+            ((pad_l  % 2 == 0) && (pad_c  % 2 == 0)) ==> 
+                (result[0] == (pad_c / 2) && result[1] == (pad_l / 2) && result[2] == (pad_c / 2) && result[3] == (pad_l / 2)) &&
+            (pad_l % 2 != 0) && (pad_c % 2 != 0) ==> 
+            (result[0] == (pad_c / 2) && result[1] == (pad_l / 2) && result[2] == ((pad_c / 2) + 1) && result[3] == ((pad_l / 2) + 1));   
 
 behavior same_lower:
     assumes (auto_pad == "SAME_LOWER");
-    ensures \let pad_h = (y_h - 1) * stride[0] + w_h - x_h;
-            \let pad_w = (y_w - 1) * stride[1] + w_w - x_w;
-            ((pad_h % 2 == 0) && (pad_w % 2 == 0)) ==> 
-                (result[0] == (pad_w / 2) &&  result[2] == (pad_w / 2) && result[1] == (pad_h / 2) && result[3] == (pad_h == 2)) &&
-            ((pad_h % 2 != 0) && (pad_w % 2 != 0)) ==> 
-                (result[0] == ((pad_w / 2) + 1) && result[1] == ((pad_h / 2) + 1) && result[2] == (pad_w / 2) && result[3] == (pad_h / 2));
+    ensures \let pad_l = (y_h - 1) * stride[0] + w_h - x_h;
+            \let pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+            ((pad_l % 2 == 0) && (pad_c % 2 == 0)) ==> 
+                (result[0] == (pad_c / 2) &&  result[2] == (pad_c / 2) && result[1] == (pad_l / 2) && result[3] == (pad_l == 2)) &&
+            ((pad_l % 2 != 0) && (pad_c % 2 != 0)) ==> 
+                (result[0] == ((pad_c / 2) + 1) && result[1] == ((pad_l / 2) + 1) && result[2] == (pad_c / 2) && result[3] == (pad_l / 2));
 complete behaviors empty_or_notset, valid, same_upper, same_lower;
 disjoint behaviors empty_or_notset, valid, same_upper, same_lower;            
 */
 void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int x_w, int w_h, int w_w, int y_h, int y_w, int result[4]) {
-    int pad_h, pad_w;
+    int pad_l, pad_c;
 
     if ((auto_pad == "")  || (auto_pad == "NOTSET")) {
         for (int i = 0; i < 4; i++) {
@@ -727,30 +719,30 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
             result[i] = 0;
         }
     } else if ((auto_pad == "SAME_UPPER")) {
-        pad_h = (y_h - 1) * stride[0] + w_h - x_h;
-        pad_w = (y_w - 1) * stride[1] + w_w - x_w;
+        pad_l = (y_h - 1) * stride[0] + w_h - x_h;
+        pad_c = (y_w - 1) * stride[1] + w_w - x_w;
 
-        if ((pad_h % 2 == 0) && (pad_w % 2 == 0)) {
-            result[0] = result[2] = pad_w / 2;
-            result[1] = result[3] = pad_h / 2;
-        } else if ((pad_h % 2 != 0) && (pad_w % 2 != 0)) {
-            result[0] = pad_w / 2;
-            result[1] = pad_h / 2;
-            result[2] = (pad_w / 2) + 1;
-            result[3] = (pad_h / 2) + 1;
+        if ((pad_l % 2 == 0) && (pad_c % 2 == 0)) {
+            result[0] = result[2] = pad_c / 2;
+            result[1] = result[3] = pad_l / 2;
+        } else if ((pad_l % 2 != 0) && (pad_c % 2 != 0)) {
+            result[0] = pad_c / 2;
+            result[1] = pad_l / 2;
+            result[2] = (pad_c / 2) + 1;
+            result[3] = (pad_l / 2) + 1;
         }
     } else if ((auto_pad == "SAME_LOWER")) {
-        pad_h = (y_h - 1) * stride[0] + w_h - x_h;
-        pad_w = (y_w - 1) * stride[1] + w_w - x_w;
+        pad_l = (y_h - 1) * stride[0] + w_h - x_h;
+        pad_c = (y_w - 1) * stride[1] + w_w - x_w;
 
-        if ((pad_h % 2 == 0) && (pad_w % 2 == 0)) {
-            result[0] = result[2] = pad_w / 2;
-            result[1] = result[3] = pad_h / 2;
-        } else if ((pad_h % 2 != 0) && (pad_w % 2 != 0)) {
-            result[0] = (pad_w / 2) + 1;
-            result[1] = (pad_h / 2) + 1;
-            result[2] = pad_w / 2;
-            result[3] = pad_h / 2;
+        if ((pad_l % 2 == 0) && (pad_c % 2 == 0)) {
+            result[0] = result[2] = pad_c / 2;
+            result[1] = result[3] = pad_l / 2;
+        } else if ((pad_l % 2 != 0) && (pad_c % 2 != 0)) {
+            result[0] = (pad_c / 2) + 1;
+            result[1] = (pad_l / 2) + 1;
+            result[2] = pad_c / 2;
+            result[3] = pad_l / 2;
         }
     }
 }
@@ -760,22 +752,22 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
 
 /*@
   requires \valid_read(inp.x + (0..(inp.x_h*inp.x_w*inp.x_b*inp.x_c)-1));
-  requires \valid_read(kernel.w + (0..(kernel.w_h*kernel.w_w*kernel.w_c_in*kernel.w_c_out)-1));
+  requires \valid_read(kerneb + (0..(kerneb_h*kerneb_w*kerneb_c_in*kerneb_c_out)-1));
   requires \valid_read(bias.b + (0..bias.b_c-1));
   requires \valid_read(attr.stride+(0..1));
   requires \valid_read(attr.pads+(0..3));
   requires \valid_read(attr.dilations+(0..1));
   requires inp.x_c == out.y_c;
-  requires out.y_c == kernel.w_c_in;
-  requires kernel.w_c_in == bias.b_c;
-  requires out.y_h == ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_h )) / attr.stride[0]) + 1;
-  requires out.y_w == ((inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_w )) / attr.stride[1]) + 1;
+  requires out.y_c == kerneb_c_in;
+  requires kerneb_c_in == bias.b_c;
+  requires out.y_h == ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h )) / attr.stride[0]) + 1;
+  requires out.y_w == ((inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w )) / attr.stride[1]) + 1;
   requires inp.x_h > 0 && inp.x_w > 0 && inp.x_c > 0 && inp.x_b > 0;
-  requires kernel.w_h > 0 && kernel.w_w > 0 && kernel.w_c_in > 0 && kernel.w_c_out > 0;
+  requires kerneb_h > 0 && kerneb_w > 0 && kerneb_c_in > 0 && kerneb_c_out > 0;
   requires bias.b_c > 0;
   requires out.y_h > 0 && out.y_w > 0 && out.y_c > 0 && out.y_b > 0;
-  requires inp.x_h >= kernel.w_h;
-  requires inp.x_w >= kernel.w_w;
+  requires inp.x_h >= kerneb_h;
+  requires inp.x_w >= kerneb_w;
   requires \forall integer i; 0 <= i < 4 ==> attr.pads[i] >= 0;
   requires \forall integer i; 0 <= i < 2 ==> attr.dilations[i] >= 1;
   requires \forall integer i; 0 <= i < 2 ==> attr.stride[i] >= 1;
@@ -788,14 +780,14 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
                 0 <= ci < out.y_c ==>
                     0 <= hi < out.y_h ==>
                         0 <= wi < out.y_w ==>  
-                            0 <= ci_in <kernel.w_c_in ==>
-                                0 <= ki_h < kernel.w_h ==>
-                                    0 <= ki_w < kernel.w_w ==> 
+                            0 <= ci_in <kerneb_c_in ==>
+                                0 <= ki_h < kerneb_h ==>
+                                    0 <= ki_w < kerneb_w ==> 
                                         (0 <= hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) && 
                                         (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]  < inp.x_h) && 
                                         (0 <= wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1]) && 
                                         (wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] < inp.x_w) ==>
-                                            out.y[bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi] == inp.x[bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_w + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kernel.w[ci * (kernel.w_c_in * kernel.w_h * kernel.w_w) + ci_in * (kernel.w_h * kernel.w_w) + ki_h * kernel.w_w + ki_w] + bias.b[ci];
+                                            out.y[bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi] == inp.x[bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_w + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kerneb[ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w] + bias.b[ci];
                           
               
                           
@@ -806,8 +798,8 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
   */
 float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attributes attr, output_tensor out) {
     
-    out.y_h = ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_h )) / attr.stride[0]) + 1;
-    out.y_w = ( (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_w )) / attr.stride[1]) +1;
+    out.y_h = ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h )) / attr.stride[0]) + 1;
+    out.y_w = ( (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w )) / attr.stride[1]) +1;
     int y_size = out.y_b * out.y_c * out.y_h * out.y_w;
     out.y = (float *)malloc(y_size * sizeof(float));
 
@@ -817,7 +809,7 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
     }
 
     // Compute padding
-   // compute_pad(attr.auto_pad, attr.pads, attr.stride, inp.x_h, inp.x_w, kernel.w_h, kernel.w_w, out.y_h, out.y_w, attr.pads);
+   // compute_pad(attr.auto_pad, attr.pads, attr.stride, inp.x_h, inp.x_w, kerneb_h, kerneb_w, out.y_h, out.y_w, attr.pads);
 
     // Initialize result tensor to bias values
     for (int bi = 0; bi < out.y_b; ++bi) {
@@ -838,18 +830,18 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
                 for (int wi = 0; wi < out.y_w; ++wi) {
                     int y_idx = bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi;
 
-                    for (int ci_in = 0; ci_in < kernel.w_c_in; ++ci_in) {
-                        for (int ki_h = 0; ki_h < kernel.w_h; ++ki_h) {
-                            for (int ki_w = 0; ki_w < kernel.w_w; ++ki_w) {
+                    for (int ci_in = 0; ci_in < kerneb_c_in; ++ci_in) {
+                        for (int ki_h = 0; ki_h < kerneb_h; ++ki_h) {
+                            for (int ki_w = 0; ki_w < kerneb_w; ++ki_w) {
                                 int x_h_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0];
                                 int x_w_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1];
 
                                 if (x_h_idx >= 0 && x_h_idx < inp.x_h && x_w_idx >= 0 && x_w_idx < inp.x_w) {
                                     int x_idx = bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + x_h_idx * inp.x_w + x_w_idx;
-                                    int w_idx = ci * (kernel.w_c_in * kernel.w_h * kernel.w_w) + ci_in * (kernel.w_h * kernel.w_w) + ki_h * kernel.w_w + ki_w;
+                                    int w_idx = ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w;
 
-                                    if (x_idx < inp.x_h * inp.x_w * inp.x_c * inp.x_b && w_idx < kernel.w_h * kernel.w_w * kernel.w_c_in * kernel.w_c_out) {
-                                        out.y[y_idx] += inp.x[x_idx] * kernel.w[w_idx];
+                                    if (x_idx < inp.x_h * inp.x_w * inp.x_c * inp.x_b && w_idx < kerneb_h * kerneb_w * kerneb_c_in * kerneb_c_out) {
+                                        out.y[y_idx] += inp.x[x_idx] * kerneb[w_idx];
                                     }
                                 }
                             }
