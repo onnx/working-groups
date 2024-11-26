@@ -57,7 +57,7 @@ needs that will be captured in phase 1 of our work.
 
 # Conventions
 
-- Notation $nl(X)$ (resp. $nc(X)$) denotes the *height* (resp. *width*) of
+- Notation $nl(X) (resp. nc(X))$ denotes the *height* (resp. *width*) of
   tensor $X$.
 
 - “height” (resp. “width”) denotes the first (resp. second) spatial
