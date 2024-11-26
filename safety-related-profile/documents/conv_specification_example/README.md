@@ -46,7 +46,7 @@ needs that will be captured in phase 1 of our work.
 ### References
 
 - About Why3, used to write the formal specification, see
-  <https://www.why3.org/>.
+  <https://wwnc(W)hy3.org/>.
 
 - About the ONNX semantics, see the “[Open Neural Network Exchange
   Intermediate Representation
@@ -57,7 +57,7 @@ needs that will be captured in phase 1 of our work.
 
 # Conventions
 
-- Notation $X.H$ (resp. $X.W$) denotes the *height* (resp. *width*) of
+- Notation $nl(X)$ (resp. $nc(X)$) denotes the *height* (resp. *width*) of
   tensor $X$.
 
 - “height” (resp. “width”) denotes the first (resp. second) spatial
@@ -79,7 +79,7 @@ safety-related profile:
   operator does a standard convolution.
 
 In the rest of the document, restrictions with respect to the ONNX
-standard `conv` operator are indicated in the text with the tag.
+standard `conv` operator are indicated in the text with the tag `[restrict]`.
 
 ### Signature
 
@@ -112,7 +112,7 @@ same formula applies, in which `X` is represents the padded version of
 the actual input `X`.
 
 $$\begin{gathered}
-    \mbox{\texttt{Y}}[b, c, m, n] = \sum_{c_i=0}^{W.C_{in}-1} \sum_{k_h=0}^{W.H-1} \sum_{k_w=0}^{W.W-1} \\ (\mbox{\texttt{X}}[b,c_i,m \cdot \mbox{\texttt{strides[0]}}+k_h\cdot \mbox{\texttt{dilation[0]}}, n \cdot \mbox{\texttt{strides[1]}}+k_w\cdot \mbox{\texttt{dilations[1]}}] \times \mbox{\texttt{W}}[c, c_i, k_h, k_w]) \\ + \mbox{\texttt{B}}[c_i]
+    \mbox{\texttt{Y}}[b, c, m, n] = \sum_{c_i=0}^{nch_{in}(W)-1} \sum_{k_h=0}^{nl(W)-1} \sum_{k_w=0}^{nc(W)-1} \\ (\mbox{\texttt{X}}[b,c_i,m \cdot \mbox{\texttt{strides[0]}}+k_h\cdot \mbox{\texttt{dilation[0]}}, n \cdot \mbox{\texttt{strides[1]}}+k_w\cdot \mbox{\texttt{dilations[1]}}] \times \mbox{\texttt{W}}[c, c_i, k_h, k_w]) \\ + \mbox{\texttt{B}}[c_i]
 \end{gathered}$$
 
 Where
@@ -126,15 +126,15 @@ Where
 - $m \in [0,Y.H-1]$ (resp. $n \in [0,Y.W-1]$) is the index of the
   first (resp. second) spatial axis of the output `Y`
 
-- $W.C_{in}$ is the number of input channels of kernel `W`
+- $nch_{in}(W)$ is the number of input channels of kernel `W`
 
-- $W.H$ and $W.W$ are the sizes of the two spatial axis of tensor `W`
+- $nl(W)$ and $nc(W)$ are the sizes of the two spatial axis of tensor `W`
 
 - attributes `strides` and `dilations` are described later in this
   section.
 
 The effect of the operator is depicted on the following picture.
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv.png)
 
 
 #### Inputs and outputs
@@ -144,14 +144,14 @@ The effect of the operator is depicted on the following picture.
 `X` is the input tensor on which convolution with kernel `W` is
 computed.
 
-The shape of tensor `X` is $(X.B \times X.C \times X.H \times X.W)$
+The shape of tensor `X` is $(bs(X) \times nc(X) \times nl(X) \times nc(X))$
 where
 
-- $X.B$ is the batch size
+- $bs(X)$ is the batch size
 
-- $X.C$ is the number of data channels
+- $nc(X)$ is the number of data channels
 
-- $X.H$ and $X.W$ are the sizes of the tensor for the two spatial axis
+- $nl(X)$ and $nc(X)$ are the sizes of the tensor for the two spatial axis
 
 ###### Constraints
 
@@ -164,10 +164,10 @@ where
 2. <a name="channel_consist"></a> Consistency between the number of channels of `X`, `W`, `B`, and
     `Y`.  
 
-    - Statement: $X.C=Y.C=W.C_{in}=B.C$
+    - Statement: $nc(X)=Y.C=nch_{in}(W)=nc(B)$
 
     - Rationale: This is a particular case of the more general relation
-      $X.C=Y.C=W.C_{in}\cdot\mbox{\texttt{groups}}$ when
+      $nc(X)=Y.C=nch_{in}(W)\cdot\mbox{\texttt{groups}}$ when
       $\mbox{\texttt{groups}}=1$.
 
 3. <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and
@@ -176,11 +176,11 @@ where
 
     - Statement: If parameter `pads` is not empty
  
-       *  $$\lfloor{\frac{L.H-(\mbox{\texttt{dilations[0]}} \times W.H-1)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+\mbox{\texttt{pads[0]}}+\mbox{\texttt{pads[2]}}$$
+       *  $$\lfloor{\frac{L.H-(\mbox{\texttt{dilations[0]}} \times nl(W)-1)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+\mbox{\texttt{pads[0]}}+\mbox{\texttt{pads[2]}}$$
   
       and
  
-       * $$\lfloor{\frac{L.W-(\mbox{\texttt{dilations[1]}} \times W.W-1)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}}  \mbox{ with } L.W=X.W+\mbox{\texttt{pads[1]}}+\mbox{\texttt{pads[3]}}$$
+       * $$\lfloor{\frac{L.W-(\mbox{\texttt{dilations[1]}} \times nc(W)-1)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}}  \mbox{ with } L.W=nc(X)+\mbox{\texttt{pads[1]}}+\mbox{\texttt{pads[3]}}$$
 
     - Rationale: The size of the output is determined by the number of
       times the kernel can be applied on a given spatial axis.
@@ -196,13 +196,13 @@ where
 ##### `W`
 
 Tensor `W` is the convolution kernel. The shape of the kernel is
-$(W.C_{out} \times W.C_{in} \times W.H \times W.W)$, where
+$(nch_{out}(W) \times nch_{in}(W) \times nl(W) \times nc(W))$, where
 
-- $W.C_{out}$ is the number of output channels or number of feature maps
+- $nch_{out}(W)$ is the number of output channels or number of feature maps
 
-- $W.C_{in}$ is the number of input channels,
+- $nch_{in}(W)$ is the number of input channels,
 
-- $W.H$ and $W.W$ are the sizes of the kernel for the two spatial axis.
+- $nl(W)$ and $nc(W)$ are the sizes of the kernel for the two spatial axis.
 
 Optionally,
 
@@ -227,7 +227,7 @@ Optionally,
 ##### `B`, optional
 
 Tensor `B` is the optional bias. The shape of the bias tensor is
-$(B.C \times 1)$.
+$(nc(B) \times 1)$.
 
 
 ###### Constraints
@@ -248,7 +248,7 @@ of the convolution.
 
 This effect is illustrated on the following figure:
 
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv_stride.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv_stride.png)
 
 ###### Constraints
 
@@ -284,9 +284,9 @@ attribute (see below). Otherwise, padding is done according to the
 - if auto_pad = SAME_UPPER: for each
   axis, padding must be added so that [constraint (3) holds](#shape_consist)
 
-  $$\lfloor{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} \rfloor +1  = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
+  $$\lfloor{\frac{L.H-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1  = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+pad_h$$
   and
-  $$\lfloor{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
+  $$\lfloor{\frac{L.W-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=nc(X)+pad_w$$
 
   If the total padding $pad_h$ (resp. $pad_w$) is even then padding
   shall be
@@ -303,9 +303,9 @@ attribute (see below). Otherwise, padding is done according to the
 
 - auto_pad = SAME_LOWER: For each
   axis, padding must be added so that [constraint (3) holds](#shape_consist)
-  $$\lfloor{\frac{L.H-W.H}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=X.H+pad_h$$
+  $$\lfloor{\frac{L.H-nl(W)}{\mbox{\texttt{stride[0]}}}} \rfloor +1 = \mbox{\texttt{Y.H}} \mbox{ with }  L.H=nl(X)+pad_h$$
   and
-  $$\lfloor{\frac{L.W-W.W}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=X.W+pad_w$$
+  $$\lfloor{\frac{L.W-nc(W)}{\mbox{\texttt{stride[1]}}}} \rfloor +1 = \mbox{\texttt{Y.W}} \mbox{ with }  L.W=nc(X)+pad_w$$
 
   If the total padding $pad_h$ (resp. $pad_w$) is even then padding
   shall be
@@ -322,7 +322,7 @@ attribute (see below). Otherwise, padding is done according to the
 
 The effect of the `auto_pad` attribute is illustrated on the following figure:
 
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/autopad.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/autopad.png)
 
 ###### Constraints
 
@@ -358,7 +358,7 @@ The value of the elements added by the padding is 0.
 
 The effect of padding illustrated on the following figure:
 
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/pad.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/pad.png)
 
 
 ###### Constraints.
@@ -404,7 +404,7 @@ $i$, then the kernel points are spaced out by the dilation factor.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/dilation.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/dilation.png)
 
 ###### Constraints
 
@@ -451,7 +451,7 @@ actual Safety-Related Profile.
 
 The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-![](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/grouped_convolution.png)
+![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/grouped_convolution.png)
 
 (Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
@@ -873,7 +873,7 @@ Representation) page](https://onnx.ai/onnx/repo-docs/IR.html) of the
 ONNX web site. In addition, a Python “reference implementation” is also
 provided (see <https://onnx.ai/onnx/api/reference.html>). The source
 code of this implementation can be found at
-<https://github.com/onnx/onnx/tree/main/onnx/reference>.
+<https://githunc(B)om/onnx/onnx/tree/main/onnx/reference>.
 
 Very informally, the semantics is pretty simple: each operator (or
 function) is called according to its position in the topological sorting
@@ -884,7 +884,7 @@ graph. Normally (?) each order should generate the same result, even in
 the presence of floating point operations.
 
 The Python code to execute a graph is given in class
-[`ReferenceEvaluator`](https://github.com/onnx/onnx/blob/main/onnx/reference/reference_evaluator.py)).
+[`ReferenceEvaluator`](https://githunc(B)om/onnx/onnx/blob/main/onnx/reference/reference_evaluator.py)).
 After having processed the inputs and the initializers (i.e., fed the
 `results` dictorionary with these data), the nodes are executed in
 sequence. For each operator, the interpretor checks that its inputs are
@@ -903,7 +903,7 @@ total order of operators.)
 
 The semantics of an ONNX model is given in Section "Model Semantics" of
 the [Intermediate
-Representation](https://github.com/onnx/onnx/blob/main/docs/IR.md) page.
+Representation](https://githunc(B)om/onnx/onnx/blob/main/docs/IR.md) page.
 Basically, an inference-model is a stateless function (except possibly
 for some specific nodes such as a random-generation node) represented by
 an acyclic `graph` of nodes. The `graph` is mainly represented by a set
@@ -929,7 +929,7 @@ Inference](https://onnx.ai/onnx/repo-docs/ShapeInference.html).
 [^2]: Note: in the ONNX runtime implementation, the padding value may be
     negative, which corresponds to reducing the size of the tensor.
 
-[^3]: See [Why3 documentation](https://www.why3.org/)
+[^3]: See [Why3 documentation](https://wwnc(W)hy3.org/)
 
 [^4]: See [Frama-C
     documentation](https://www.frama-c.com/html/documentation.html)
