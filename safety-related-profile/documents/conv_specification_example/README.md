@@ -332,9 +332,6 @@ The effect of the `auto_pad` attribute is illustrated on the following figure:
       `"NOTSET"`, `"SAME_UPPER"`, `"SAME_LOWER"`, `"VALID"`.
 
 2.  Consistency between `pads` and `auto_pad`
-    <span id="it:pads_autopad_consist"
-    label="it:pads_autopad_consist"></span>
-
     - Statement: If attribute `pads` is not empty, attribute `auto_pad`
       shall be either empty or set to `NOTSET`.
 
@@ -363,10 +360,7 @@ The effect of padding illustrated on the following figure:
 
 ###### Constraints.
 
-1.  Consistency between `pads` and `auto_pad`, see
-    <a href="#sec:autopad" data-reference-type="ref"
-    data-reference="sec:autopad">3.3.2</a>-<a href="#it:pads_autopad_consist" data-reference-type="ref"
-    data-reference="it:pads_autopad_consist">[it:pads_autopad_consist]</a>
+1.  Consistency between `pads` and `auto_pad`.
 
 2.  Value domain
 
