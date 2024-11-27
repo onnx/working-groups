@@ -629,7 +629,7 @@ total order of operators.)
 
 The semantics of an ONNX model is given in Section "Model Semantics" of
 the [Intermediate
-Representation](https://githunc(B)om/onnx/onnx/blob/main/docs/IR.md) page.
+Representation](https://github.com/onnx/onnx/blob/main/docs/IR.md) page.
 Basically, an inference-model is a stateless function (except possibly
 for some specific nodes such as a random-generation node) represented by
 an acyclic `graph` of nodes. The `graph` is mainly represented by a set
