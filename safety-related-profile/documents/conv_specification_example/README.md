@@ -57,10 +57,10 @@ needs that will be captured in phase 1 of our work.
 
 # Conventions
 
-- Notation $nl(X) (resp. nc(X))$ denotes the *height* (resp. *width*) of
+- Notation $nl(X) (resp. nc(X))$ denotes the *lines* (resp. *columns*) of
   tensor $X$.
 
-- “height” (resp. “width”) denotes the first (resp. second) spatial
+- “lines” (resp. “columns”) denotes the first (resp. second) spatial
   axis.
 
 - inputs, outputs and attributes are represented using a non-serif font
