@@ -51,7 +51,7 @@ Where
 Attributes `strides` and `dilations` are described later in this  section.
 
 The effect of the operator for a standard convolution (attribute `group`= 1) is illustrated on the following picture.
-![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv.png)
+![](./imgs/conv.png)
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels. 
@@ -94,7 +94,7 @@ The shape of tensor `X` is $(nb(X) \times nch_{in}(X) \times nl(X) \times nc(X))
 Tensor `W` is the convolution kernel. The shape of the kernel is
 $(nch_{out}(W) \times nch_{in}(W) \times nl(W) \times nc(W))$, where
 - $nch_{out}(W)$ is the number of output channels or number of feature maps
-- $nch_{in}(W)$ is the number of input channels,
+- $nch_{in}(W)$ is the number of input channels
 - $nl(W)$ and $nc(W)$ are the sizes of the kernel for the two spatial axis.
 
 ###### Constraints
@@ -126,12 +126,12 @@ of the convolution.
 
 This effect is illustrated on the following figure:
 
-![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/conv_stride.png)
+![](./imgs/conv_stride.png)
 
 ###### Constraints
 - (C1) Size of `strides`
-    - Statement: the number of elements in the `strides` attribute must be equal to 2.
-    - Rationale: Striding is done on each spatial axis.
+    - Statement: the number of elements in the `strides` list is equal to 2.
+    - Rationale: Striding is done on the two spatial axis.
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
@@ -155,37 +155,33 @@ The value of the elements added by the padding is 0.
 
 The effect of padding illustrated on the following figure:
 
-![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/pad.png)
+![](./imgs/pad.png)
 
 
 ###### Constraints
 - (C1) Value domain
-    - Statement: Each element of the `pads` list shall be greater or equal to 0
+    - Statement: All elements of the `pads` list are positive or null integers
     - Rationale: A padding value gives a number of elements to be added to some spatial axis. This is strictly positive[^2].
 - (C2) Consistency between the shape of `X` and the length of `pads`
-    - Statement: The length of the `pads` list shall be proportional the number of spatial axes
-    - Rationale: Padding shall be given for all spatial axes.
-- (C3) Length of `pads`
-    - Statement: The length of the `pads` list shall be a multiple of 2
-    - Rationale: For each axis, two values must be given: one for the beginning and one for the end.
-- (C4) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+    - Statement: The length of the `pads` list shall two times the number of spatial axes
+    - Rationale: Padding shall be given for all spatial axe, and a begginging and an end value must be given for each axis.
+- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
-##### `dilations`: list of ints
+##### `dilations`: list of int
 
 The `dilations` attribute specifies the spacing between the kernel elements for each spatial axis of the filter `W`. It is a list of non-null integer values where each value gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel points are spaced out by the dilation factor.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/dilation.png)
+![](./imgs/dilation.png)
 
 ###### Constraints
-
 - (C1) Value domain
-    - Statement: All values in the `dilation` attribute shall be an integer value strictly greater than 0
+    - Statement: All elements of the `dilation` list are strictly positive integers
 - (C2) Relation between `dilations` and `W`
-    - Statement: If the `dilations` attribute is not empty, its length shall be equal to the number of spatial axes of `W`.
-    - Rationale: Dilations shall be defined for all spatial axes of `W`.
+    - Statement: The lenght of the `dilations` list is equal to number of spatial axes of `W`.
+    - Rationale: Dilations is defined for all spatial axes of `W`.
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
@@ -196,7 +192,7 @@ When group is greater than 1, convolution is computed for each group separately 
 
 The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure:
 
-![](https://githunc(B)om/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example/imgs/grouped_convolution.png)
+![](./imgs/grouped_convolution.png)
 
 (Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
@@ -207,18 +203,18 @@ For example, with `group` set to 2 and an input `X` and an output `Y` with 6 cha
     - Statement: `group`=1 (standard convolution) or `group`$=nch_{in}(X)$ (depthwise convolution)
     - Rationale: Only standard convolutions and depthwise convolutions are supported by the SONNX profile
 
-##### `kernel_shape`: list of ints
+##### `kernel_shape`: list of int
 
 This parameter specifies the shape of the convolution kernel `W`.
 
 ###### Constraints.
 
 - (C1) Value domain
-    - Statement: All elements of `kernel_shape` must be integers greater or equal to 1
-    - Rationale: A size is always positive.
+    - Statement: All elements of `kernel_shape` list are integers greater or equal to 1
+    - Rationale: A dimension is always positve and cannot be null.
 ( (C2) Consistency between `W` and `kernel_shape`
     - Statement: The values of `kernel_shape` for a given axis must be equal to the size of `W` for that axis.
-    - Rationale: `kernel_shape` represents the shape of `W`, where kernel_shape[0] = nc(W) and kernel_shape[1] = nl(W).
+    - Rationale: `kernel_shape` represents the shape of `W`, where `kernel_shape[0]` = $nc(W)$ and `kernel_shape[1]` = $nl(W)$.
 
 #### Outputs
 
@@ -599,7 +595,7 @@ Representation) page](https://onnx.ai/onnx/repo-docs/IR.html) of the
 ONNX web site. In addition, a Python “reference implementation” is also
 provided (see <https://onnx.ai/onnx/api/reference.html>). The source
 code of this implementation can be found at
-<https://githunc(B)om/onnx/onnx/tree/main/onnx/reference>.
+<https://github.com/onnx/onnx/tree/main/onnx/reference>.
 
 Very informally, the semantics is pretty simple: each operator (or
 function) is called according to its position in the topological sorting
@@ -610,7 +606,7 @@ graph. Normally (?) each order should generate the same result, even in
 the presence of floating point operations.
 
 The Python code to execute a graph is given in class
-[`ReferenceEvaluator`](https://githunc(B)om/onnx/onnx/blob/main/onnx/reference/reference_evaluator.py)).
+[`ReferenceEvaluator`](https://github.com/onnx/onnx/blob/main/onnx/reference/reference_evaluator.py)).
 After having processed the inputs and the initializers (i.e., fed the
 `results` dictorionary with these data), the nodes are executed in
 sequence. For each operator, the interpretor checks that its inputs are
