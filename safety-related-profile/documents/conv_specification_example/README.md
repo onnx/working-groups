@@ -468,7 +468,7 @@ This parameter specifies the shape of the convolution kernel `W`.
 
     - Rationale: A size is always positive.
 
-2.  Consistency between `W` and `[`kernel_shape`]`
+2.  Consistency between `W` and `kernel_shape`
 
     - Statement: If set, the values of `kernel_shape` for a given axis
       must be equal to the size of `W` for that axis.
