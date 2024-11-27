@@ -133,7 +133,7 @@ This effect is illustrated on the following figure:
     - Statement: the number of elements in the `strides` attribute must be equal to 2.
     - Rationale: Striding is done on each spatial axis.
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
-    - Statement: See constraint (3) of X](#shape_consist)
+    - Statement: [See constraint (3) of X](#shape_consist)
 
 ##### `auto_pad` : string
 
@@ -204,7 +204,7 @@ For example, with `group` set to 2 and an input `X` and an output `Y` with 6 cha
 
 ###### Constraints
 - (C1) Support for standard and depthwise convolutions
-    - Statement: `group`=1 (standard convolution) or `group`=$nch_{in}(X)$ (depthwise convolution)
+    - Statement: `group`=1 (standard convolution) or `group`$=nch_{in}(X)$ (depthwise convolution)
     - Rationale: Only standard convolutions and depthwise convolutions are supported by the SONNX profile
 
 ##### `kernel_shape`: list of ints
@@ -251,18 +251,18 @@ module Conv
 
   type input_tensor = {
     x: array real;
-    x_h: int;
-    x_w: int;
-    x_b: int;
+    x_l: int;
     x_c: int;
+    x_b: int;
+    x_ch: int;
   }
 
     type convolution_kernel = {
     w: array real;
-    w_h: int;
-    w_w: int;
-    w_c_in: int;
-    w_c_out: int;
+    w_l: int;
+    w_c: int;
+    w_ch_in: int;
+    w_ch_out: int;
   }
   
   type bias_tensor = {
@@ -280,14 +280,14 @@ module Conv
   type output_tensor = {
 
    y_b: int;
+   y_ch: int;
+   y_l: int;
    y_c: int;
-   y_h: int;
-   y_w: int;
 
   }
 
   function conv_size (out: output_tensor) : int =
-    out.y_b * out.y_c * out.y_h * out.y_w
+    out.y_b * out.y_ch * out.y_l * out.y_c
 
   predicate conv_result
     (inp: input_tensor)
@@ -298,26 +298,26 @@ module Conv
     (res: array real)
     (bi ci hi wi: int)
     (ci_in ki_h ki_w: int) =
-     let y_idx = bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi in
-     let x_h_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0] in
-     let x_w_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] in
+     let y_idx = bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi in
+     let x_l_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0] in
+     let x_c_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] in
                                 
-     (0 <= x_h_idx < inp.x_h /\ 0 <= x_w_idx < inp.x_w) ->
-        let x_idx = bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + x_h_idx * inp.x_w + x_w_idx in
-        let w_idx = ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w in
+     (0 <= x_l_idx < inp.x_l /\ 0 <= x_c_idx < inp.x_c) ->
+        let x_idx = bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + x_l_idx * inp.x_c + x_c_idx in
+        let w_idx = ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w in
         res.elts (y_idx) = bias.b[ci] +. (inp.x[x_idx] *. kerneb[w_idx])
 
   val conv (inp: input_tensor)(kernel: convolution_kernel)(bias: bias_tensor)(attr: attributes)(out: output_tensor): array real
-    requires{inp.x_c = out.y_c = kerneb_c_in = bias.b_c} 
-    requires{out.y_h = (div (inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h)) attr.stride[0]) + 1}
-    requires{out.y_w = (div (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w)) attr.stride[1]) +1}
-    requires { inp.x_h > 0 /\ inp.x_w > 0 /\ inp.x_c > 0 /\ inp.x_b > 0}
-    requires{kerneb_h > 0 /\ kerneb_w > 0 /\ kerneb_c_in > 0 /\ kerneb_c_out > 0}
-    requires { out.y_b > 0 /\ out.y_c > 0 /\ out.y_h > 0 /\ out.y_w > 0}
-    requires { length inp.x = inp.x_h * inp.x_w * inp.x_c * inp.x_b}
-    requires{length kerneb = kerneb_h * kerneb_w * kerneb_c_in * kerneb_c_out}
-    requires{inp.x_h >= kerneb_h}
-    requires{inp.x_w >= kerneb_w}
+    requires{inp.x_ch = out.y_ch = kernel.w_ch_in = bias.b_c} 
+    requires{out.y_l = (div (inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l)) attr.stride[0]) + 1}
+    requires{out.y_c = (div (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c)) attr.stride[1]) +1}
+    requires { inp.x_l > 0 /\ inp.x_c > 0 /\ inp.x_ch > 0 /\ inp.x_b > 0}
+    requires{kernel.w_l > 0 /\ kernel.w_c > 0 /\ kernel.w_ch_in > 0 /\ kernel.w_ch_out > 0}
+    requires { out.y_b > 0 /\ out.y_ch > 0 /\ out.y_l > 0 /\ out.y_c > 0}
+    requires { length inp.x = inp.x_l * inp.x_c * inp.x_ch * inp.x_b}
+    requires{length kernel.w = kernel.w_l * kernel.w_c * kernel.w_ch_in * kernel.w_ch_out}
+    requires{inp.x_l >= kernel.w_l}
+    requires{inp.x_c >= kernel.w_c}
     requires{length bias.b = bias.b_c}
     requires{length attr.stride = 2}
     requires{length attr.dilations = 2}
@@ -328,12 +328,12 @@ module Conv
     ensures { length result = conv_size out }
     ensures { forall bi ci hi wi ci_in ki_h ki_w: int.
               0 <= bi < out.y_b ->
-              0 <= ci < out.y_c ->
-              0 <= hi < out.y_h ->
-              0 <= wi < out.y_w ->
-              0 <= ci_in < kerneb_c_in ->
-              0 <= ki_h < kerneb_h ->
-              0 <= ki_w < kerneb_w -> conv_result inp kernel bias attr out result bi ci hi wi ci_in ki_h ki_w }
+              0 <= ci < out.y_ch ->
+              0 <= hi < out.y_l ->
+              0 <= wi < out.y_c ->
+              0 <= ci_in < kernel.w_ch_in ->
+              0 <= ki_h < kernel.w_l ->
+              0 <= ki_w < kernel.w_c -> conv_result inp kernel bias attr out result bi ci hi wi ci_in ki_h ki_w }
 
 end
 
@@ -349,10 +349,10 @@ module Test_conv
 
 let test_conv () =
   let inp_x = Array.make 9 1.0 in
-  let inp = { x = inp_x; x_h = 3; x_w = 3; x_b = 1; x_c = 1 } in
+  let inp = { x = inp_x; x_l = 3; x_c = 3; x_b = 1; x_ch = 1 } in
   
   let kernel_w = Array.make 4 0.0 in  
-  let kernel = { w = kernel_w; w_h = 2; w_w = 2; w_c_in = 1; w_c_out = 1 } in
+  let kernel = { w = kernel_w; w_l = 2; w_c = 2; w_ch_in = 1; w_ch_out = 1 } in
   
   let bias_b = Array.make 1 0.5 in 
   let bias = { b = bias_b; b_c = 1 } in
@@ -360,9 +360,9 @@ let test_conv () =
   let pads = Array.make 4 0 in  (* No padding *)
   let dilations = Array.make 2 1 in  (* Dilation of 1 *)
   let attr = { stride = stride; pads = pads; auto_pad = 0; dilations = dilations } in
-  let out_h = (div (inp.x_h + pads[0] + pads[2] - (dilations[0] * kerneb_h)) stride[0]) + 1 in
-  let out_w = (div (inp.x_w + pads[1] + pads[3] - (dilations[1] * kerneb_w)) stride[1]) + 1 in
-  let out = { y_b = 1; y_c = 1; y_h = out_h ; y_w = out_w  } in
+  let out_h = (div (inp.x_l + pads[0] + pads[2] - (dilations[0] * kernel.w_l)) stride[0]) + 1 in
+  let out_w = (div (inp.x_c + pads[1] + pads[3] - (dilations[1] * kernel.w_c)) stride[1]) + 1 in
+  let out = { y_b = 1; y_ch = 1; y_l = out_h ; y_c = out_w  } in
   (* Call the conv function *)
   let result = conv inp kernel bias attr out in
   let actual_result = result.elts 0 in
@@ -384,12 +384,12 @@ language[^4] is presented below.
 /* Data Structures */
 typedef struct {
     float *x;
-    int x_h, x_w, x_b, x_c;
+    int x_l, x_c, x_b, x_ch;
 } input_tensor;
 
 typedef struct {
     float *w;
-    int w_h, w_w, w_c_in, w_c_out;
+    int w_l, w_c, w_ch_in, w_ch_out;
 } convolution_kernel;
 
 typedef struct {
@@ -405,13 +405,13 @@ typedef struct {
 
 typedef struct {
     float *y;
-    int y_b, y_c, y_h, y_w;
+    int y_b, y_ch, y_l, y_c;
 } output_tensor;
 /*@
  requires \valid_read(pads + (0 .. 3));
  requires \valid_read(stride + (0 .. 1));
  requires \valid_read(result + (0 .. 3));
- requires x_h > 0 && x_w > 0 && w_h > 0 && w_w > 0 && y_h > 0 && y_w > 0;
+ requires x_l > 0 && x_c > 0 && w_l > 0 && w_c > 0 && y_l > 0 && y_c > 0;
  assigns result[0 .. 3];
  behavior empty_or_notset:
     assumes (auto_pad == "")  || (auto_pad == "NOTSET");
@@ -423,8 +423,8 @@ behavior valid:
 
 behavior same_upper:
     assumes (auto_pad == "SAME_UPPER") ;
-    ensures \let pad_l = (y_h - 1) * stride[0] + w_h - x_h;
-            \let pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+    ensures \let pad_l = (y_l - 1) * stride[0] + w_l - x_l;
+            \let pad_c = (y_c - 1) * stride[1] + w_c - x_c;
             ((pad_l  % 2 == 0) && (pad_c  % 2 == 0)) ==> 
                 (result[0] == (pad_c / 2) && result[1] == (pad_l / 2) && result[2] == (pad_c / 2) && result[3] == (pad_l / 2)) &&
             (pad_l % 2 != 0) && (pad_c % 2 != 0) ==> 
@@ -432,8 +432,8 @@ behavior same_upper:
 
 behavior same_lower:
     assumes (auto_pad == "SAME_LOWER");
-    ensures \let pad_l = (y_h - 1) * stride[0] + w_h - x_h;
-            \let pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+    ensures \let pad_l = (y_l - 1) * stride[0] + w_l - x_l;
+            \let pad_c = (y_c - 1) * stride[1] + w_c - x_c;
             ((pad_l % 2 == 0) && (pad_c % 2 == 0)) ==> 
                 (result[0] == (pad_c / 2) &&  result[2] == (pad_c / 2) && result[1] == (pad_l / 2) && result[3] == (pad_l == 2)) &&
             ((pad_l % 2 != 0) && (pad_c % 2 != 0)) ==> 
@@ -441,7 +441,7 @@ behavior same_lower:
 complete behaviors empty_or_notset, valid, same_upper, same_lower;
 disjoint behaviors empty_or_notset, valid, same_upper, same_lower;            
 */
-void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int x_w, int w_h, int w_w, int y_h, int y_w, int result[4]) {
+void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int x_c, int w_l, int w_c, int y_l, int y_c, int result[4]) {
     int pad_l, pad_c;
 
     if ((auto_pad == "")  || (auto_pad == "NOTSET")) {
@@ -453,8 +453,8 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
             result[i] = 0;
         }
     } else if ((auto_pad == "SAME_UPPER")) {
-        pad_l = (y_h - 1) * stride[0] + w_h - x_h;
-        pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+        pad_l = (y_l - 1) * stride[0] + w_l - x_l;
+        pad_c = (y_c - 1) * stride[1] + w_c - x_c;
 
         if ((pad_l % 2 == 0) && (pad_c % 2 == 0)) {
             result[0] = result[2] = pad_c / 2;
@@ -466,8 +466,8 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
             result[3] = (pad_l / 2) + 1;
         }
     } else if ((auto_pad == "SAME_LOWER")) {
-        pad_l = (y_h - 1) * stride[0] + w_h - x_h;
-        pad_c = (y_w - 1) * stride[1] + w_w - x_w;
+        pad_l = (y_l - 1) * stride[0] + w_l - x_l;
+        pad_c = (y_c - 1) * stride[1] + w_c - x_c;
 
         if ((pad_l % 2 == 0) && (pad_c % 2 == 0)) {
             result[0] = result[2] = pad_c / 2;
@@ -482,46 +482,46 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
 }
 
 /* Function to compute the convolution */
-//void compute_pad(int auto_pad, int *pads, int *stride, int x_h, int x_w, int w_h, int w_w, int y_h, int y_w, int *result);
+//void compute_pad(int auto_pad, int *pads, int *stride, int x_l, int x_c, int w_l, int w_c, int y_l, int y_c, int *result);
 
 /*@
-  requires \valid_read(inp.x + (0..(inp.x_h*inp.x_w*inp.x_b*inp.x_c)-1));
-  requires \valid_read(kerneb + (0..(kerneb_h*kerneb_w*kerneb_c_in*kerneb_c_out)-1));
+  requires \valid_read(inp.x + (0..(inp.x_l*inp.x_c*inp.x_b*inp.x_ch)-1));
+  requires \valid_read(kernel.w + (0..(kernel.w_l*kernel.w_c*kernel.w_ch_in*kernel.w_ch_out)-1));
   requires \valid_read(bias.b + (0..bias.b_c-1));
   requires \valid_read(attr.stride+(0..1));
   requires \valid_read(attr.pads+(0..3));
   requires \valid_read(attr.dilations+(0..1));
-  requires inp.x_c == out.y_c;
-  requires out.y_c == kerneb_c_in;
-  requires kerneb_c_in == bias.b_c;
-  requires out.y_h == ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h )) / attr.stride[0]) + 1;
-  requires out.y_w == ((inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w )) / attr.stride[1]) + 1;
-  requires inp.x_h > 0 && inp.x_w > 0 && inp.x_c > 0 && inp.x_b > 0;
-  requires kerneb_h > 0 && kerneb_w > 0 && kerneb_c_in > 0 && kerneb_c_out > 0;
+  requires inp.x_ch == out.y_ch;
+  requires out.y_ch == kernel.w_ch_in;
+  requires kernel.w_ch_in == bias.b_c;
+  requires out.y_l == ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l )) / attr.stride[0]) + 1;
+  requires out.y_c == ((inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c )) / attr.stride[1]) + 1;
+  requires inp.x_l > 0 && inp.x_c > 0 && inp.x_ch > 0 && inp.x_b > 0;
+  requires kernel.w_l > 0 && kernel.w_c > 0 && kernel.w_ch_in > 0 && kernel.w_ch_out > 0;
   requires bias.b_c > 0;
-  requires out.y_h > 0 && out.y_w > 0 && out.y_c > 0 && out.y_b > 0;
-  requires inp.x_h >= kerneb_h;
-  requires inp.x_w >= kerneb_w;
+  requires out.y_l > 0 && out.y_c > 0 && out.y_ch > 0 && out.y_b > 0;
+  requires inp.x_l >= kernel.w_l;
+  requires inp.x_c >= kernel.w_c;
   requires \forall integer i; 0 <= i < 4 ==> attr.pads[i] >= 0;
   requires \forall integer i; 0 <= i < 2 ==> attr.dilations[i] >= 1;
   requires \forall integer i; 0 <= i < 2 ==> attr.stride[i] >= 1;
 
 
-  assigns out.y[0..(out.y_b * out.y_c * out.y_h * out.y_w)-1];
+  assigns out.y[0..(out.y_b * out.y_ch * out.y_l * out.y_c)-1];
 
   ensures \forall integer bi, ci, hi, wi, ci_in, ki_h, ki_w; 
             0 <= bi < out.y_b ==>
-                0 <= ci < out.y_c ==>
-                    0 <= hi < out.y_h ==>
-                        0 <= wi < out.y_w ==>  
-                            0 <= ci_in <kerneb_c_in ==>
-                                0 <= ki_h < kerneb_h ==>
-                                    0 <= ki_w < kerneb_w ==> 
+                0 <= ci < out.y_ch ==>
+                    0 <= hi < out.y_l ==>
+                        0 <= wi < out.y_c ==>  
+                            0 <= ci_in <kernel.w_ch_in ==>
+                                0 <= ki_h < kernel.w_l ==>
+                                    0 <= ki_w < kernel.w_c ==> 
                                         (0 <= hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) && 
-                                        (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]  < inp.x_h) && 
+                                        (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]  < inp.x_l) && 
                                         (0 <= wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1]) && 
-                                        (wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] < inp.x_w) ==>
-                                            out.y[bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi] == inp.x[bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_w + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kerneb[ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w] + bias.b[ci];
+                                        (wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] < inp.x_c) ==>
+                                            out.y[bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi] == inp.x[bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_c + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kerneb[ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w] + bias.b[ci];
                           
               
                           
@@ -532,9 +532,9 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_h, int 
   */
 float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attributes attr, output_tensor out) {
     
-    out.y_h = ((inp.x_h + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kerneb_h )) / attr.stride[0]) + 1;
-    out.y_w = ( (inp.x_w + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kerneb_w )) / attr.stride[1]) +1;
-    int y_size = out.y_b * out.y_c * out.y_h * out.y_w;
+    out.y_l = ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l )) / attr.stride[0]) + 1;
+    out.y_c = ( (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c )) / attr.stride[1]) +1;
+    int y_size = out.y_b * out.y_ch * out.y_l * out.y_c;
     out.y = (float *)malloc(y_size * sizeof(float));
 
     if (out.y == NULL) {
@@ -543,14 +543,14 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
     }
 
     // Compute padding
-   // compute_pad(attr.auto_pad, attr.pads, attr.stride, inp.x_h, inp.x_w, kerneb_h, kerneb_w, out.y_h, out.y_w, attr.pads);
+   // compute_pad(attr.auto_pad, attr.pads, attr.stride, inp.x_l, inp.x_c, kernel.w_l, kernel.w_c, out.y_l, out.y_c, attr.pads);
 
     // Initialize result tensor to bias values
     for (int bi = 0; bi < out.y_b; ++bi) {
-        for (int ci = 0; ci < out.y_c; ++ci) {
-            for (int hi = 0; hi < out.y_h; ++hi) {
-                for (int wi = 0; wi < out.y_w; ++wi) {
-                    int y_idx = bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi;
+        for (int ci = 0; ci < out.y_ch; ++ci) {
+            for (int hi = 0; hi < out.y_l; ++hi) {
+                for (int wi = 0; wi < out.y_c; ++wi) {
+                    int y_idx = bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi;
                     out.y[y_idx] = bias.b[ci];
                 }
             }
@@ -559,22 +559,22 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
 
     // Convolution computation
     for (int bi = 0; bi < out.y_b; ++bi) {
-        for (int ci = 0; ci < out.y_c; ++ci) {
-            for (int hi = 0; hi < out.y_h; ++hi) {
-                for (int wi = 0; wi < out.y_w; ++wi) {
-                    int y_idx = bi * (out.y_c * out.y_h * out.y_w) + ci * (out.y_h * out.y_w) + hi * out.y_w + wi;
+        for (int ci = 0; ci < out.y_ch; ++ci) {
+            for (int hi = 0; hi < out.y_l; ++hi) {
+                for (int wi = 0; wi < out.y_c; ++wi) {
+                    int y_idx = bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi;
 
-                    for (int ci_in = 0; ci_in < kerneb_c_in; ++ci_in) {
-                        for (int ki_h = 0; ki_h < kerneb_h; ++ki_h) {
-                            for (int ki_w = 0; ki_w < kerneb_w; ++ki_w) {
-                                int x_h_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0];
-                                int x_w_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1];
+                    for (int ci_in = 0; ci_in < kernel.w_ch_in; ++ci_in) {
+                        for (int ki_h = 0; ki_h < kernel.w_l; ++ki_h) {
+                            for (int ki_w = 0; ki_w < kernel.w_c; ++ki_w) {
+                                int x_l_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0];
+                                int x_c_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1];
 
-                                if (x_h_idx >= 0 && x_h_idx < inp.x_h && x_w_idx >= 0 && x_w_idx < inp.x_w) {
-                                    int x_idx = bi * (inp.x_c * inp.x_h * inp.x_w) + ci_in * (inp.x_h * inp.x_w) + x_h_idx * inp.x_w + x_w_idx;
-                                    int w_idx = ci * (kerneb_c_in * kerneb_h * kerneb_w) + ci_in * (kerneb_h * kerneb_w) + ki_h * kerneb_w + ki_w;
+                                if (x_l_idx >= 0 && x_l_idx < inp.x_l && x_c_idx >= 0 && x_c_idx < inp.x_c) {
+                                    int x_idx = bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + x_l_idx * inp.x_c + x_c_idx;
+                                    int w_idx = ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w;
 
-                                    if (x_idx < inp.x_h * inp.x_w * inp.x_c * inp.x_b && w_idx < kerneb_h * kerneb_w * kerneb_c_in * kerneb_c_out) {
+                                    if (x_idx < inp.x_l * inp.x_c * inp.x_ch * inp.x_b && w_idx < kernel.w_l * kernel.w_c * kernel.w_ch_in * kernel.w_ch_out) {
                                         out.y[y_idx] += inp.x[x_idx] * kerneb[w_idx];
                                     }
                                 }
