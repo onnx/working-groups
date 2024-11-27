@@ -1,6 +1,6 @@
 ---
 marp: true
-footer: '_2024-11-26 SONNX WG "formal methods" meeting_ - Eric'
+footer: '_2024-11-29 SONNX WG "formal methods" meeting_ - Eric'
 ---
 # SONNX
 ## Formal methods meeting #2
