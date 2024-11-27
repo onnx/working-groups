@@ -305,7 +305,7 @@ module Conv
      (0 <= x_l_idx < inp.x_l /\ 0 <= x_c_idx < inp.x_c) ->
         let x_idx = bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + x_l_idx * inp.x_c + x_c_idx in
         let w_idx = ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w in
-        res.elts (y_idx) = bias.b[ci] +. (inp.x[x_idx] *. kerneb[w_idx])
+        res.elts (y_idx) = bias.b[ci] +. (inp.x[x_idx] *. kernel.w[w_idx])
 
   val conv (inp: input_tensor)(kernel: convolution_kernel)(bias: bias_tensor)(attr: attributes)(out: output_tensor): array real
     requires{inp.x_ch = out.y_ch = kernel.w_ch_in = bias.b_c} 
@@ -521,7 +521,7 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int 
                                         (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]  < inp.x_l) && 
                                         (0 <= wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1]) && 
                                         (wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] < inp.x_c) ==>
-                                            out.y[bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi] == inp.x[bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_c + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kerneb[ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w] + bias.b[ci];
+                                            out.y[bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi] == inp.x[bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_c + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kernel.w[ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w] + bias.b[ci];
                           
               
                           
@@ -575,7 +575,7 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
                                     int w_idx = ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w;
 
                                     if (x_idx < inp.x_l * inp.x_c * inp.x_ch * inp.x_b && w_idx < kernel.w_l * kernel.w_c * kernel.w_ch_in * kernel.w_ch_out) {
-                                        out.y[y_idx] += inp.x[x_idx] * kerneb[w_idx];
+                                        out.y[y_idx] += inp.x[x_idx] * kernel.w[w_idx];
                                     }
                                 }
                             }
