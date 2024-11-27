@@ -237,6 +237,7 @@ JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rou
 - [ ] (A007 - leads) Setup a mailing list
       - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
   - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+
 # 2024/10/02
 ## Agenda
 - Presentation of "templates" to start of activies on
@@ -310,3 +311,140 @@ Other (off-meeting)
 
 #### Closed actions
 (to be completed)
+
+# SONNX meeting (04/09)
+
+## Object
+- ONNX Safety-related workgroup meeting
+
+## Attendees
+- Jean, Eric (ed.), Claire, Dumitru, Sergei, Henri, Nicolas,  Mariem
+  
+## Agenda
+- Status of actions (see below)
+  - [X]  <21/08> (Mariem) Convert the CONV operator specification to markdown. (see [here](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example))
+  - [X]  <21/08> (eric+Jean) Clarifies the use of github… => SeeMariem's presentation below.
+  - [X]  (eric+jean) Propose an agenda for the KOM => see text below.
+  - [X]  (all) Read the SOW and provide your feedback
+  - [X]  <21/08> (Eric+Jean) In the SoW, Add to the SoW activities related to the validation of the WG results through its application to a practical use case
+
+- KOM Agenda and organisation
+  - Invitation text:
+  >Dear Colleague,
+  > On September 25th, 17:00-19:00, we organize the kick-off meeting of the Safety-Related Profile ONNX Working Group (WG).
+  > The objective of this working group is to refine and clarify the semantics and syntax of the existing ONNX standard, ensuring unequivocal interpretation of models during the implementation phase.
+  > This initiative was presented to the ONNX community during the ONNX MeetUp (June 26th, 2024) and the creation of the WG was accepted by the ONNX community on July 18th, 2024.
+  > You will find the slides presented during this meeting here.  We will come back to this presentation and go into more details during the KOM. 
+  > The agenda is available here. 
+  > The "outlook invitation" will be sent in another mail. 
+  > If you want to participate and have not received this invitation directly, please send a message to Eric (eric.jenn@irt-saintexupery.com) and Jean (jean.souyris@airbus.com).
+  > Looking forward to meeting you on September 25th,
+  > The co-chairs,
+  > Eric JENN (IRT Saint-Exupéry) et Jean SOUYRIS (Airbus)
+
+  - Proposed agenda
+      1. **Introduction**: Presentation of the general objectives of the workgroup based on the slides shown during the meetup (Eric + Jean, 10 min)
+      2. **Phase 1: Why?**
+         1. Presentation of an example of regulatory requirements: the ARP. (Christophe, 15 min)
+         2. Presentation of a few examples of issues posed by the current standard, choosing problems of various natures (Nicolas, 15 min)
+      3. **Phase 2: What?**
+         1. Presentation of an example of a set of requirements (???, to be prepared, 10 min)
+         2. Presentation of an example of what the output of the work could be for the specification of an operator (Mariem + Eric, 15 min)
+      4. **Phase 3: How?**
+         1. Presentation of the work plan and the organization of the working group (Eric + Jean, 15 min)
+         2. Brief presentation of the "hard points" that we have already identified (10 min)
+      5. **Discussion** (All, 30 min)
+      - Use of Github: See _Mariem presentation_
+    
+- Workplan (simplified)
+    - See [here](https://extranet.irt-saintexupery.com/Extranet/Projets/SONNX/Work/_layouts/15/WopiFrame.aspx?sourcedoc=/Extranet/Projets/SONNX/Work/Documents%20partages/Admin/Workplan.xlsx&action=default)
+
+## Minutes
+- Discussion about the github structure and management.
+    - Question was raised about the nature of the document we could put on the github:
+      - The principle is that ANY document put on our repo is publicly accessible. So, **no document with restiction** shall be placed in the repo.
+      - Concerning the possible publications of the workgroup, we will use a private Overleaf (e.g.) account to work in common. 
+    - Mariem has reminded us the (usual) way to use github. See her [slides](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/procedures/ModifGithubONNX.pdf)
+    - This approach seems a bit complicated, especially if we are working in common on documents.It is necessary because the project is public and so requires some control before accepting modifications. Using a private project could be simpler. 
+    - [X] (05/09) Henri to propose document edition / sharing modalities
+      - See [proposal](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/procedures/collaborative_docs.md)
+    - Currently, we are working on Eric's branch that is hosted in a private account (github.com/ericjenn/...). It may be cleaner to use a specific account for our workgroup (e.g., github.com/sonnx./...)
+
+## Actions
+  - [ ] (09/09) Eric to check if we could create a SONNX account in github
+  - [ ] (05/09) Eric to check with Ram if there is any "rule"/ "contraint" imposed by ONNX on the use of github 
+  - [X] (05/09) Henri to propose document edition / sharing modalities
+    - See [proposal]()
+  - [ ]  <21/08> (Mariem, eric, Loïc) Propose an first axiomatization of tensors (3D, 4D) and use it to specify the CONV operator.
+  - [ ]  <21/08> (Mariem, Loïc, Eric, Augustin) Specify the CONV operator for int8 and (e.g., ) float16….
+  - [ ]  <21/08> (Eric+Jean) In the SoW, avoid the use of the term “ambiguity”. Be more explicit about the different types of requirements. Introduce the concept of "replication" 
+  - [ ]  <10/07>(eric+jean) Organize some meetings as “advisory boards”
+
+# SONNX meeting (21/08)
+
+## Object
+
+- ONNX Safety-related workgroup meeting
+
+## Attendees
+
+- Mariem, Nicolas, Augustin, Eric
+
+## Minutes
+
+- Status of actions (see below)
+- Brief recap of the work done on the CONV operator (Mariem)
+    - The Why3 specification is now complete thanks to Loïc. A FrameC implementation is also available.
+        
+        
+        - [ ]  <21/08> (Mariem) Convert the CONV operator specification to markdown.
+    - After discussion with Loïc, the appropriate solution would be first to “axiomatize” tensors (in the same way it has already been done for matrices).
+        
+        
+        - [ ]  <21/08> (Mariem, eric, Loïc) Propose an first axiomatization of tensors (3D, 4D) and use it to specify the CONV operator.
+- Discussion of Nicolas’ comments on the SOW
+    - Four points were discussed
+        - We have introduced new terms (”TMD, TMDL) that are neither used in the ONNX community (where the term “ONNX IR” is used) nor in the ARP (where the term “MLMD” is used). We have either to stick to one of those — possibly ONNX’ — or at least explain the correspondence between them…
+        - Nicolas mentioned that we have to “address the semantic of the model storage (ONNX IR for safety critical) […]”.
+            - Yes, this should be covered by the activities concerning the semantics and the syntax of the model description language. Nicolas also raised the question about discriminating the model used during the design and the model used as the starting point of the implementation. *But it is not clear whether we really need to discriminate them: we are only concerned by the semantics of the model, whatever its used.* However, we will not consider operators used during training, so our profile will only be applicable during inference…
+        - Nicolas what not happy with the remark about “ambiguous” models  (sentence  “[…] ambiguous if this ambiguity is acceptable or even necessary to leave some freedom to the implementer […]): *I do not see any reason for that. The model shall be unambiguous. If the implementer chooses to implement a surrogate model (optimized), then this model is the MLMD to be specified using ONNX. ARP6983 specifies that replication criteria shall be specified*.
+            - This is an important point. The model shall actually be non ambiguous. The user may introduce derived requirements about implementation (e.g., the order in which operators have to be executed). This contingency is what was meant by the term “ambiguity”. We have to be more explicit in the SoW: the specification will not be ambiguous, but there will be some “flexibility” about the set of derived requirements applicable to a given model.
+            
+            - [ ]  <21/08> (Eric+Jeans) In the SoW, avoid the use of the term “ambiguity”. Be more explicit about the different types of requirements. Introduce the concept of “replication criteria” and clarify its relation to requirements.
+        - Nicolas mentioned that “All the activities consist in paper work. Is there some room for POC for formal verification, extension of the definition of the format, tools to build, review, verify a SONNX MLMD ? Who are the users/recipients of the outputs ? (I would guess that some output are for us, some others for ONNX community...).”
+            - Only the first part of the remark was discussed: we actually need some “practical” work in order to validate our proposal. We should introduce a “running example” (e.g., MobileNet) that will be specified using SONNX, implemented, compared with a reference implementation, etc.  Those “practical” implementation activities have to be described in the SoW too.
+                
+                
+                - [ ]  <21/08> (Eric+Jeans) Add to the SoW activities related to the validation of the WG results through its application to a practical use case
+- Discussion about polymorphic operators: *we have to provide a specific specification for every types supported by an operator,* i.e., there will be a specification of the CONV operator for int8, float16, etc. This is in particular necessary for ints for which saturation is necessary. We should do the exercise on the CONV operator.
+    
+    
+    - [ ]  <21/08> (Mariem, Loïc, Eric, Augustin) Specify the CONV operator for int8 and (e.g., ) float16….
+- We have to specify the broadcasting rules (see [https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md](https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md)).
+- Logistics
+    - All documents should be in the same place. At the moment, some documents are on the IRT’s sharepoint while some other at in the ONNX github. Office documents where placed in the Sharepoint for they were directly editable by some users. For other (e.g., Airbus), Sharepoint documents need to be downloaded first, which make Sharepoint pointless. 
+    - [X]  <21/08> (Eric) Convert the SOW to markdown, move all documents to github
+        - Documents have moved [here](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents).
+    - The Sharepoint has moved in order to match the new project name, which is “SONNX”. The URL is now : [https://extranet.irt-saintexupery.com/Extranet/Projets/SONNX/Pages/default.aspx](https://extranet.irt-saintexupery.com/Extranet/Projets/SONNX/Pages/default.aspx)
+    - The github repository is accessible at  [https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile).
+    
+    - [ ]  <21/08> (eric+Jean) Clarifies the use of github…
+    
+
+## Actions
+
+- [x]  (eric) Put the examples of mails (in French and English) to be used for dissemination purposes.
+
+- [x]  (eric) Propose a poll for the project’s name, (all) answer the poll
+    - (Updated 21/08) SONNX
+
+- [ ]  (eric+jean) Propose an agenda for the KOM
+
+- [ ]  (all) Read the SOW and provide your feedback )
+- (Updated 21/08) Comments by Nicolas, see doc.
+
+- [x]  (Nicolas) Collect the analysis done so far and put it in one document (on sharepoint or on the ONNX git, it’s up to you)
+    - Done, the document is on the sharepoint ([https://extranet.irt-saintexupery.com/Extranet/Projets/SONNX/Work/_layouts/15/WopiFrame.aspx?sourcedoc=/Extranet/Projets/SONNX/Work/Documents partages/SoW/ONNX format comments v0.1.docx&action=default](https://extranet.irt-saintexupery.com/Extranet/Projets/SONNX/Work/_layouts/15/WopiFrame.aspx?sourcedoc=/Extranet/Projets/SONNX/Work/Documents%20partages/SoW/ONNX%20format%20comments%20v0.1.docx&action=default)”)
+
+- [ ]  <10/07>(eric+jean) Organize some meetings as “advisory boards”
+- [x]  <21/08> (Eric) Convert the SOW to markdown
