@@ -1,3 +1,31 @@
+# Additionnal comment from Henri (to be integrated):ED324-ARP6983 Draft5b
+
+## Chapitre : 7.1.3 / 22-23
+
+Inadequate or incorrect inputs detected during the ML Constituent architecture design process should be provided to the Machine Learning lifecycle processes as feedback for clarification or correction.
+
+- When they say ML Constituent architecture design (they are talking about the learning phase) or in the inference design?
+- Because in this case how do you know that an input is incorrect in the inference phase?
+
+## Chapitre 7.3.3 / 17-21
+
+The assessment should provide justification that stability on the target platform is unchanged from the ML Model in the training environment. This may be 
+accomplished by comparison of the characteristics of the training and target platforms (if they can be shown to be similar enough to preserve these properties), by analysis, or by additional testing to demonstrate the equivalence.
+
+- "Similar enough" ? what level of similarity? relative or absolute? between the 2 simulated theoretical values ​​and inferred values?
+
+
+## Chapitre 7.3.3 / 31
+
+I don't generally understand this notion of "approximate replication"
+
+ 
+
+
+
+
+
+
 Dear Colleagues,
 
 We are working on a specific profile of the ONNX standard for "critical" systems.
@@ -145,3 +173,8 @@ It may be the case that the definitions of "exact replication" and "approximate 
 Should this interpretation be the actual one, we would have to distriguish "exact" and "approximate" denotational and operational semantics. Two implementations would be approximately identical in the operational sense if the sequence of operations carried out would be "approximately" the same. 
 
 *Is this interpretation correct?*
+
+
+
+
+
