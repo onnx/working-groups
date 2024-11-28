@@ -52,7 +52,7 @@ The model implementer needs a clear, complete and unabiguous description of the 
 #### Description
 The model implementer needs High Level requirements about the model performance. Those requirements may concern:
 - the ML performance, which may depend on the task performed by the model (e.g., Mean Squared error or Mean Absolute error for regression tasks, or precision or accuracy for classification tasks)
-- numerical precision measured at the output of the model or at intermediate stages, and measured at specific points for a specific referece dataset.
+- the numerical accuracy measured at the output of the model or at intermediate stages (e.g, all activations, activations at a certain layer, etc.), and specific inputs (reference dataset).
 
 ### NEED XXX: `Expression of Implementation Requirements'
 
@@ -62,7 +62,6 @@ In some cases, the model implementer may express specific needs concerning the i
 - the target hardware n which the model or part of the model must be deployed,
 - etc.
 
-
 ### NEED XXX: `Support for traceability`
 
 #### Description
@@ -71,7 +70,7 @@ The desing, development, and V&V engineers need data (metadata) to support trace
 ### NEED XXX: `Support for change management`
 
 #### Description
-The model designer and model implementer need to manage changes done on the model: all changes to the model must be tracked and linked to requirements. Model versions must be managed.
+The model designers and implementers need to manage changes done on the model: all changes to the model must be tracked and linked to requirements. Model versions must be managed.
 
 ### NEED XXX: `Support for model integrity`
 
@@ -83,7 +82,7 @@ Means shall be provided to guarantee the integrity of the model throughout the d
 ### NEED XXX: `Support for model verification`
 
 #### Description
-The model designer and implementer need means to verify intrinsic properties of the model including: 
+The model designers and implementers need to verify that some intrinsic properties of the model hold. This include: 
 -	Model integrity and completeness: graph structure is well formed, all required metadata is present
 -	Semantic consistency: operators consistency (input/output shapes match definitions, data types are compatible between layers), operators are mathematically well-defined
 -	Safety compliance: validate compliance with bounded arithmetic constraints, check for unsupported operators (stochastic, non-deterministics, other)
