@@ -1,13 +1,15 @@
-# Additionnal comment from Henri (to be integrated):ED324-ARP6983 Draft5b
+# Additionnal comments
 
-## Chapitre : 7.1.3 / 22-23
+## Henri (to be integrated)
+
+### Chapitre : 7.1.3 / 22-23
 
 Inadequate or incorrect inputs detected during the ML Constituent architecture design process should be provided to the Machine Learning lifecycle processes as feedback for clarification or correction.
 
 - When they say ML Constituent architecture design (they are talking about the learning phase) or in the inference design?
 - Because in this case how do you know that an input is incorrect in the inference phase?
 
-## Chapitre 7.3.3 / 17-21
+### Chapitre 7.3.3 / 17-21
 
 The assessment should provide justification that stability on the target platform is unchanged from the ML Model in the training environment. This may be 
 accomplished by comparison of the characteristics of the training and target platforms (if they can be shown to be similar enough to preserve these properties), by analysis, or by additional testing to demonstrate the equivalence.
@@ -15,15 +17,25 @@ accomplished by comparison of the characteristics of the training and target pla
 - "Similar enough" ? what level of similarity? relative or absolute? between the 2 simulated theoretical values ​​and inferred values?
 
 
-## Chapitre 7.3.3 / 31
+### Chapitre 7.3.3 / 31
 
 I don't generally understand this notion of "approximate replication"
 
  
+## Jean-Loup (to be integrated)
+
+Concernant le 8.4, je reste relativement perplexe et cela conduit à me poser la question de la nature du ML model :
+
+* Soit le ML model est descriptif, c'est à dire qu'il indique les constituants du RN, et alors je ne vois pas trop la différence avec le MLMD à moins de parler de description de description.
+
+* Soit le ML model est prescriptif, c'est à dire qu'il indique les opérations devant être effectuées à l'inférence, et là je peux entrevoir une différence entre ML model et MLMD.
+
+Mais de toute façon c'est pas très clair pour moi.
 
 
+----
 
-
+# Synthesis 
 
 
 Dear Colleagues,
