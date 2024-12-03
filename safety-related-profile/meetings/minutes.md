@@ -1,3 +1,57 @@
+# 2024/12/18
+## Agenda
+- Sebastian's presentation on Bosch's code generation tool.
+
+# 2024/12/04
+## Agenda
+- Review of actions
+- Feedback on meeting about formal methods (see minutes [here](../meetings/formal_methods/minutes.md))
+- Review of Airbus' needs
+- Review of [Jean-Baptiste's analysis of the ARP6983](../documents/analysis_of_standards/SONNX_requirements_draft1.docx)
+- Review of [questions about ARP6983](../documents/analysis_of_standards/clarification_replication,.md)
+- Review of [CONV2D updated version](../documents/conv_specification_example/README.md)
+- Discussion about new modalities for meetings
+
+#### New actions
+#### Past actions
+- [X] (2011-1 - Jean, Eric) Integrate Airbus' additional needs/reqs.
+- [X] (2011-2 - Eric) Make a call for participation to the req core team. 
+- [X] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
+      - On going, see [this note](../documents/analysis_of_standards/2024-11-08%20-%20Replication%20criteria.md)
+- [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+- [ ] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
+  - To be done by next meeting.
+- [ ] (231001 - All) Check Nicolas' classification proposal 
+- [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
+      - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
+      - To be done by next meeting.
+- [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
+- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
+    - On-going (see previous meeting)
+- [ ] (A008 - leads) Plan SC meetings
+- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+      - Dumitru will check this...
+profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your ideas / remarks...
+      - First discussion in the 11/06 WG meeting
+- [ ] (A015) All : Complete description of use cases
+      - On-going
+- [ ] (A016) All : Complete description of needs
+      - On-going
+- [ ] (A002 - all) Add / remove your name for the [participant list ](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/team.md) and provide information about your possible contribution
+- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/da1fb275bcbfb32af95fd8ef54589cde0e14f927/safety-related-profile/meetings/presentation_proposals.md).
+  - Alexandre Eichenberger (IBM),  on onnx-mlir (2025/??/??)
+  - ??? on specification and verification of FP computations (2025/??/??)
+  - Eduardo (Manchester U) on "Evaluation and improvement of SW verifiers on FP Neural Networks" (2025/??/??)
+- [ ] (A006 - leads) Finalize the organization of the WG's repository. Define procedure to use it (inc. issues, wiki,...)
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+  - Meeting moved to 2024/11/21
+- [ ] (A007 - leads) Setup a mailing list
+  - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
+  - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
+  - Meeting moved to 2024/11/21
+
+
 # 2024/11/20
 
 ## Agenda
