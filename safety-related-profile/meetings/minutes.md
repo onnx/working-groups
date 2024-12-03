@@ -10,6 +10,7 @@
 - Review of [Jean-Baptiste's analysis of the ARP6983](../documents/analysis_of_standards/SONNX_requirements_draft1.docx)
 - Review of [questions about ARP6983](../documents/analysis_of_standards/clarification_replication,.md)
 - Review of [CONV2D updated version](../documents/conv_specification_example/README.md)
+- Status about SONNX mailing list
 - Discussion about new modalities for meetings
 
 #### New actions
