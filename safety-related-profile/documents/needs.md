@@ -1,5 +1,3 @@
-test test test
-
 # Needs
 
 This section capture the needs of the users of the ONNX model. By _users_, we mean both people generating the model and  using it during the early verification and validation phases (before implementation), and those of people using the model during the implementation, and late verificaton and validation phases. 
@@ -12,7 +10,7 @@ This section capture the needs of the users of the ONNX model. By _users_, we me
 Here are a few questions that you may ask yourself when trying to identify your needs:
 - Properties
   - What are the properties verified on the ONNX model? Robustness? fairness? other?
-  - What properties do you want to preserve during the model implementation
+  - What properties do you want to preserve during the model implementation?
 - Derived requirements 
   - Do you have specific needs in terms of implementation that coud determine some SONNX feature?
   - Do you have specific needs about the traceability between the implementation of the model and the model? 
@@ -25,18 +23,47 @@ External needs
     - Do you plan to test it? (for what proprty)
     - Do you plan to use formal verification techniques and tools (and for what property)?
 - Model transformation
-  - Do you plan to use the model to generate code?
-    - using some automated tool?
-    - manually?
+  - Do you plan to use the model to generate code? using some automated tool? manually?
 - Instrumentation 
   - Do you plan to instrument the implementation of the model? at what level?
 
+## Template
 
 ### NEED `<XXX>`: `<Need title>`
 #### Description
 _Brief description of the need_
 #### Rationale (optional) 
 If necessary, a _brief justification of the need_ 
+
+
+---------------------
+Contributions from Henri, to be integrated
+
+**NEED XXX: Capability to Embed Compatible ONNX Models in Avionic Databases with a DO200 Process**
+**Description**
+There is a need for a format consistency checker for ONNX format itself not only operator to ensure that ONNX models can be integrated into avionic databases in compliance with the DO200 process.
+
+**NEED XXX: Version Index in the ONNX Model**
+**Description**
+The ONNX model must include a version index to indicate the compatibility of the ONNX format version with a particular version of an ONNX execution engine.
+
+**NEED XXX: Typing of Data Handled by Implementation Operators**
+**Description**
+There is a need to know the typing of data handled by implementation operators, whether they are float or int (32-bit/16-bit/8-bit), bool (8-bit/32-bit), or text string size max, and to specify which representation is used (ASCII, UTF8, UTF16, Unicode) as well as the support for accented characters.
+
+
+**NEED XXX: Support for Dynamic Sizing of Input/Output Arrays in ONNX Format**
+**Description**
+There is a need to determine whether the ONNX format should support dynamic sizing of input/output arrays (often used for batch size). It is necessary to address if we should limit this to purely static sizes or allow dynamic sizing to be possible.
+
+This need ensures flexibility in handling input/output dimensions within ONNX models, which is particularly important for optimizing batch processing and other dynamic use cases.
+
+These needs ensure that ONNX models can be reliably and compatibly integrated and used in avionic environments and other critical systems.
+
+---------------------
+
+
+
 
 
 ### NEED XXX: `Expression of Low Level Requirements`
