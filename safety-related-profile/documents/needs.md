@@ -4,7 +4,7 @@ This section capture the needs of the users of the ONNX model. By _users_, we me
 
 **A need must refer to some activity / goal that a SONNX user must do / achieve. The expression of a need should be of the form: "The <role> needs <something> to do <something>."  For instance, "The ML model developer needs a non-ambiguous description of each operator in order to build a model." or "The ML model implementer needs a non-ambogiguous description of the model operator and execution logic in order to implement the model.", etc.**
 
-**A requirement expresses what SONNX must provide for the user to do his/her activity. provide a user with.**
+**A requirement expresses what SONNX must provide with for the user to do his/her activity.
 
 ## Recommendations
 Here are a few questions that you may ask yourself when trying to identify your needs:
