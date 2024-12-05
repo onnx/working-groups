@@ -1,3 +1,25 @@
+
+# Use case `Tracking with VideoSwin` - `CSGROUP`
+
+## Description
+We aim to evaluate Video Swin Transformer for tracking purposes,  leveraging its transformer-based architecture that utilizes self-attention mechanisms to process patched video data.
+This model allow us to analyze and track objects across video frames, with the attention computation from spatial domain to spatiotemporaldomain.
+
+## Models architecture
+* Object detection & Tracking : VideoSwin transformers (based on torchvision)
+
+## Operators
+Main component of VideoSwin :
+-	3D Shifted Window Multi-Head Self-Attention (3DSW-MSA) : 
+	For example, based on the ONNX operator :  MatMul, Softmax, Reshape, Transpose, Add, Concat, Gather, Unsqueeze
+-	3D Patch Partition
+-	Patch Merging 
+
+Both Based on the subset of the following list of ONNX operator 
+
+list of all ONNX operators : Add, Cast, Concat, Constant, ConstantOfShape, Conv, Div, Equal, Erf, Expand, Flatten, Gather, Gemm, GlobalAveragePool, Identity,
+MatMul, Mod, Mul, Neg, Not, Pad, Pow, Range, ReduceMean, Reshape, ScatterND, Shape, Slice, Softmax, Sqrt, Sub, Transpose, Unsqueeze, Where
+
 # Use case `Code generation` - `Robert Bosch GmbH`
 
 ## Description
