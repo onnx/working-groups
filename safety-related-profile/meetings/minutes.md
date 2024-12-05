@@ -6,26 +6,62 @@
 ## Agenda
 - Review of actions
 - Feedback on meeting about formal methods (see minutes [here](../meetings/formal_methods/minutes.md))
-- Review of Airbus' needs
+- Review of [Airbus' needs](../documents/needs.md)
 - Review of [Jean-Baptiste's analysis of the ARP6983](../documents/analysis_of_standards/SONNX_requirements_draft1.docx)
-- Review of [questions about ARP6983](../documents/analysis_of_standards/clarification_replication,.md)
+- Review of [questions about ARP6983](../documents/analysis_of_standards/clarification_replication.md)
 - Review of [CONV2D updated version](../documents/conv_specification_example/README.md)
 - Status about SONNX mailing list
 - Discussion about new modalities for meetings
 
+## Participants
+Eric, Mariem, Edoardo, Pierre B., Jean-Loup, Pierre G., Mohammed, Jean-Baptiste, Thiziri, Henri, Jean, Julien, Eric B., Andreas F., Nicolas, Cong, Dittberner Andreas D.,  Sebastian
+
+## Minutes
+- CS case study.
+- Mohamed has provided a short description of CS' use case. To be integrated in the [list of use cases](../documents/usecases.md). See action (0412-1).
+      - Review of Airbus' needs.
+      - Current content is a raw integration of material provided by Sergei and discussed with Jean and Eric.
+      - The needs have first to be checked by the authors in oder to remove redundancy, ensure that the needs are clear (see e.g., need about resource usage). See action (0412-2)
+- Review of [Jean-Baptiste's analysis of the ARP6983](../documents/analysis_of_standards/SONNX_requirements_draft1.docx) Several question where raised during the presentation:
+      - The standard requires the MLMD to carry the hyperparameters used during training.
+            - What do they call "hyperparameters", exactly? According to some interpretation, the architecture of the model is itself described by "hyperparameters" (in the sense that when using AutoML, the architecture is also "learnt"). This has to be clarified. 
+            - Why do they require this? To ensure the repeatability of the training process? But in that case, we need more that this. We need a complete description of the training environment, possibly the exact scheduling of the training operations, etc.  What is the exact intent?
+                  - Pseudo Random Number Generators must be "controlled" in order to ensure repeatabilty of training. There is a discussion in ONNX "operators" SIG about this subject. See Andreas F.'s [note](https://gist.github.com/Craigacp/883f7e628ce91a370ce4bc3519c9cca0). See also [here](https://github.com/onnx/onnx/issues/6302) and [there](https://github.com/onnx/onnx/issues/6408). Other discussions on theat subject took place in the ONNX Operators SIG's slack channel. Those interested could joint the [SIG's meeting](https://zoom-lfx.platform.linuxfoundation.org/meeting/93845487316?password=87cf871b-389e-416b-ae73-60fbe608bc6b)
+      - The standard is not very demanding concerning the relation between the model used during training and the MLMD (only "traceability" is required, not "conformity"). Is this really sufficient? If conformity is required, than this ** may ** require additional data to be put in the MLMD. 
+- Review of [comments from Henri on the ARP6983](../documents/analysis_of_standards/clarification_replication.md).
+      - Questions were raised about
+            - the "inadequate or incorrect inputs detected during the ML Constituent architecture design process" (about what input are we talking? what does "inadequate" mean?).
+            - the comparison of the characteristics of the training and target platform (the platform must be "similar". What does "similar" mean? What is the intent of this requirement?)
+            - Jean-Loup's comments were not discussed.
+      - Eric to integrate Henri's and Jean-Loup's comments, complete the list of questions, propose a mail to the WG114. The objective is to have a feedback fro them ASAP. See action (0412-3)
+- CON2D operator: Reviews from Jean-Loup and Sebastian have nee taken into account.See the [presentation of the modifications after review](./general/slides/2024-12-04-modifiedconv2Dinformalspec.pdf). A last review is necessary to obtain the "template" that will be used to do the work for the other operators. see action (0412-4).
+      - Integrate Jean-Loup proposal to avoid the terms "moved", "shifted": ""the kernel is shifted by 2 units in the first spatial axis and 3 units in the second spatial axis" => "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis". See action (0412-5)
+- Formal methods:
+      - A meeting took place about the use of formal methods to describe operators. See the [presentation](./formal_methods/slides-29-11.pdf) that was done at that occasion, and the [incremental minutes](./formal_methods/minutes.md). The main conclusion are that (i) a formal specification is useful, (ii) ACSL could be the most appropriate formalism. 
+- Other subjects:
+      - Sub-group on Reqs: no new contributors besides Sebastian's and Henri...  
+      - Set-up a sub-group to analyse the ONNX standard to continue Nicolas' work which is collected in document [issues](../documents/issues.md). See action (0412-6)
 #### New actions
+- [X] (0412-1, Eric) Integrate Cs' use case in the [list of use cases](../documents/usecases.md)
+      - Contribution added.
+- [ ] (0412-2, Eric, Jean) Check Airbus's needs.
+- [ ] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about (i) hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose? 
+- [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
+
+- [ ] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
+- [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
 #### Past actions
 - [X] (2011-1 - Jean, Eric) Integrate Airbus' additional needs/reqs.
 - [X] (2011-2 - Eric) Make a call for participation to the req core team. 
 - [X] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
       - On going, see [this note](../documents/analysis_of_standards/2024-11-08%20-%20Replication%20criteria.md)
 - [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
-- [ ] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
+- [X] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
   - To be done by next meeting.
 - [ ] (231001 - All) Check Nicolas' classification proposal 
-- [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
+- [X] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
       - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
-      - To be done by next meeting.
+      - Done. The application is an object detection based on transformers. See [description](...)
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
     - On-going (see previous meeting)
@@ -47,7 +83,7 @@ profile/meetings/numerical_issues/01_what_is_the_issue.md}. Please add your idea
   - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
   - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
   - Meeting moved to 2024/11/21
-- [ ] (A007 - leads) Setup a mailing list
+- [X] (A007 - leads) Setup a mailing list
   - Meeting with Nathan and Andreas to be organized (use of [Linux Foundations' LFX](https://sso.linuxfoundation.org/)) 
   - Reply from Nathan on 11/05. Mailing list, etc. should be available by week 11/18
   - Meeting moved to 2024/11/21
