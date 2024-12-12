@@ -1,6 +1,33 @@
 # 2024/12/18
 ## Agenda
+- Review of actions
 - Sebastian's presentation on Bosch's code generation tool.
+- Output from ``conv2d`` last review.
+  
+#### New actions
+#### Past actions
+- [X] (0412-1, Eric) Integrate CS' use case in the [list of use cases](../documents/usecases.md)
+- [X] (0412-2, Eric, Jean) Check Airbus's needs.
+- [X] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose?
+- [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
+- [ ] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
+- [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
+#### Past actions
+- [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+- [ ] (231001 - All) Check Nicolas' classification proposal 
+- [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
+- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
+  - On-going (see previous meeting)
+- [ ] (A008 - leads) Plan SC meetings
+- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
+  - Dumitru will check this...
+- [ ] (A015) All : Complete description of use cases
+  - On-going
+- [ ] (A016) All : Complete description of needs
+  - On-going
+- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/presentation_proposals.md).
+  - On-going 
+
 
 # 2024/12/04
 ## Agenda
@@ -36,7 +63,7 @@ Eric, Mariem, Edoardo, Pierre B., Jean-Loup, Pierre G., Mohammed, Jean-Baptiste,
     - the comparison of the characteristics of the training and target platform (the platform must be "similar". What does "similar" mean? What is the intent of this requirement?)
   - Jean-Loup's comments: not discussed.
   - Eric to integrate Henri's and Jean-Loup's comments, complete the list of questions, propose a mail to the WG114. The objective is to have a feedback fro them ASAP. See action (0412-3)
-- CON2D operator: Reviews from Jean-Loup and Sebastian have nee taken into account.See the [presentation of the modifications after review](./general/slides/2024-12-04-modifiedconv2Dinformalspec.pdf). A last review is necessary to obtain the "template" that will be used to do the work for the other operators. see action (0412-4).
+- CONV2D operator: Reviews from Jean-Loup and Sebastian have nee taken into account.See the [presentation of the modifications after review](./general/slides/2024-12-04-modifiedconv2Dinformalspec.pdf). A last review is necessary to obtain the "template" that will be used to do the work for the other operators. see action (0412-4).
   - Integrate Jean-Loup proposal to avoid the terms "moved", "shifted": ""the kernel is shifted by 2 units in the first spatial axis and 3 units in the second spatial axis" => "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis". See action (0412-5)
 - Formal methods:
   - A meeting took place about the use of formal methods to describe operators. See the [presentation](./formal_methods/slides-29-11.pdf) that was done at that occasion, and the [incremental minutes](./formal_methods/minutes.md). The main conclusion are that (i) a formal specification is useful, (ii) ACSL could be the most appropriate formalism. 
@@ -44,10 +71,9 @@ Eric, Mariem, Edoardo, Pierre B., Jean-Loup, Pierre G., Mohammed, Jean-Baptiste,
   - Sub-group on Reqs: no new contributors besides Sebastian's and Henri...  
   - Set-up a sub-group to analyse the ONNX standard to continue Nicolas' work which is collected in document [issues](../documents/issues.md). See action (0412-6)
 #### New actions
-- [X] (0412-1, Eric) Integrate Cs' use case in the [list of use cases](../documents/usecases.md)
-  - Contribution added.
+- [ ] (0412-1, Eric) Integrate Cs' use case in the [list of use cases](../documents/usecases.md)
 - [ ] (0412-2, Eric, Jean) Check Airbus's needs.
-- [ ] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about (i) hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose? 
+- [ ] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about (i) hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose?
 - [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
 - [ ] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
