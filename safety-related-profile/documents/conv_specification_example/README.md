@@ -14,7 +14,7 @@ The following restrictions apply to the `conv` operator for the SONNX profile:
 - All inputs are in the real domain ($\mathbb R$) 
 - The number of spatial axes of the tensors shall be equal to 2
 - Attribute `auto_pad` shall be set to `NOTSET
-- Attribute `group` is either set to 1 (stsanrd convolution) or to the number of channel of the input tensor (depthwise convolution)
+- Attribute `group` is either set to 1 (standard convolution) or to the number of channel of the input tensor (depthwise convolution)
 - Default values for attributes are not supported (i.e., all attributes shall be be given explicit values)
 
 ### Signature
@@ -147,8 +147,7 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 
 The `pads` attribute determines the padding at the beginning and ending along each spatial axis of the input tensor `X`.
 
-The value represents the number of elements added to the beginning and end part of the corresponding axis. The `pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$. If not present, the padding defaults to 0 for the beginning and end of each
-spatial axis.
+The value represents the number of elements added to the beginning and end part of the corresponding axis. The `pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
 
 The value of the elements added by the padding is 0.
 
