@@ -36,7 +36,7 @@ The mathematical definition of the operator is given hereafter for the 2D case, 
 The formal specification is given in Section <a href="#sec:conv_formal" data-reference-type="ref" data-reference="sec:conv_formal">3.5</a>. When considering padding, the same formula applies, in which `X` represents the padded version of the actual input `X`.
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{c_i=0}^{nch_{in}(W)-1} \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1} \\ (X[b,c_i,m \cdot stride[0]+k_l \cdot dilation[0], n \cdot stride[1]+k_c \cdot dilation[1]] \cdot W[c, c_i, k_l, k_c]) \\ + B[c_i]
+    Y[b, c, m, n] = \sum_{c_i=0}^{nch_{in}(W)-1} \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1} \\ (X[b,c_i,m \cdot stride[0]+k_l \cdot dilation[0], n \cdot stride[1]+k_c \cdot dilation[1]] \cdot W[c, c_i, k_l, k_c]) \\ + B[c]
 \end{gathered}$$
 
 Where
@@ -59,7 +59,7 @@ A _depthwise convolution_ applies a specific kernel (or "filter") to each input 
 The mathematical definition is given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1}\\ (X[b, c, m \cdot stride[0] + k_l \cdot dilation[0], n \cdot stride[1] + k_c \cdot stride[1]] \cdot W[c, 0, k_l, k_c] ) + B[c]
+    Y[b, c, m, n] = \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1}\\ (X[b, c, m \cdot stride[0] + k_l \cdot dilation[0], n \cdot stride[1] + k_c \cdot dilation[1]] \cdot W[c, 0, k_l, k_c] ) + B[c]
 \end{gathered}$$
 
 #### Inputs and outputs
@@ -109,7 +109,7 @@ $(nch_{out}(W) \times nch_{in}(W) \times nl(W) \times nc(W))$, where
 
 ##### `B`
 
-Tensor `B` is the bias. The shape of the bias tensor is $(nc(B) \times 1)$.
+`B` is the bias. Its dimension is $1$.
 
 ###### Constraints
 - (C1) Consistency between the number of channels of `X`, `W`,`B`, and `Y`,
