@@ -2,7 +2,7 @@
 
 This document capture the needs of the users of the ONNX model. By _users_, we mean both people generating the model and  using it during the early verification and validation phases (before implementation), and those of people using the model during the implementation, and late verificaton and validation phases. 
 
-**A need must refer to some activity / goal that a SONNX user must do / achieve. The expression of a need should be of the form: "The <role> needs <something> to do <something>."  For instance, "The ML model developer needs a non-ambiguous description of each operator in order to build a model." or "The ML model implementer needs a non-ambogiguous description of the model operator and execution logic in order to implement the model.", etc.**
+**A need must refer to some activity / goal that a SONNX user must do / achieve. The expression of a need should be of the form: "The `<role>` needs `<something>` to do `<something>`."  For instance, "The ML model developer needs a non-ambiguous description of each operator in order to build a model." or "The ML model implementer needs a non-ambogiguous description of the model operator and execution logic in order to implement the model.", etc.**
 
 **A requirement expresses what SONNX must provide with for the user to do his/her activity.
 
@@ -65,12 +65,13 @@ There is a need to determine whether the ONNX format should support dynamic sizi
 #### Rationale
 This need ensures flexibility in handling input/output dimensions within ONNX models, which is particularly important for optimizing batch processing and other dynamic use cases. These needs ensure that ONNX models can be reliably and compatibly integrated and used in avionic environments and other critical systems.
 
+> [TODO] To be discussed.
 
 # AIRBUS needs
 
-### NEED `AI-000`: `Compliance with ARP6983`
+### NEED `AI-000`: `Compliance with ARP6983, EASA Concept Paper`
 #### Description
-The development of Machine Learning constituents in avionics needs to comply with the ARP6983 regulation document. The Safety-related ONNX profile (SONNX) shall constitute a language in which the Machine Learning Model Description (MLMD), as defined by ARP6983, can be expressed.
+The development of Machine Learning constituents in avionics needs to comply with the ARP6983 regulation document and other documents produced by Certification Authorities (e.g., EASA Concept Paper). The Safety-related ONNX profile (SONNX) shall constitute a language in which the Machine Learning Model Description (MLMD), as defined by ARP6983, can be expressed.
 
 The SONNX Safety-related profile shall allow the specification of the replication criterion, exact or approximate, that the implementation must ensure.
 
@@ -82,6 +83,7 @@ The MLMD must exist as defined by the ARP6983 document. It shall be the pivot be
 #### Description
 We need an ML description "language" with a well-defined syntax and semantics enabling one to produce an accurate, precise a consistent description of the ML model, leaving no room to interpretation nor unspecified approximations.
 This concerns in particular
+- the operators
 - the graph structure (i.e., the structure of interconnected operators)
 - the graph parameters (i.e., the weights, biases, activation thresholds)
 - the description of the semantics of the graph and all elements of the graph. 
@@ -146,9 +148,14 @@ The model implementation shall behave in a deterministic and possibly predictabl
 ### NEED `AI-009`: `Resource usage determinism and predictability`
 
 #### Description
-The model implementer need to provide an upper bound of memory usage. This forbids the use of any construct which memory usage would varies along time. 
+The model implementer needs to provide an upper bound of memory usage. Therefore, constructs which memory usage would vary dynamically (e.g., depending on an input) should be prevented. 
 
-### NEED `AI-010`: `Support for verification`
+### NEED `AI-010`: `Execution time determinism and predictability`
+
+#### Description
+The model implementer needs to provide an upper bound of execution time. Therefore, contructs which execution time would vary "significantly" (in particular: in an unpredictable way) should be prevented. 
+
+### NEED `AI-011`: `Support for verification`
 
 #### Description
 The model developer needs means to support verifying compliance of his/her implementation of the model to the model. This concerns in particular demonstration of compliance with the operator and graph semantics. 
@@ -157,7 +164,7 @@ Should formal verification of the implementation against the specification be im
 
 Provision of test cases to verify compliance of an implementation against the specification would be useful. Those test cases may be those used to verify compliance of the reference implementation against the formal or informal specification. Those test cases need to cover all aspects of the specification, including those related to precision and stablity (e.g., inputs and expected outputs for softmax under typical and edge cases). 
 
-### NEED `AI-011`: `SONNX variability`
+### NEED `AI-012`: `SONNX variability`
 #### Description
 The Safety-related profile shall implement the notion of build-time variability. For that, a set of variability points must be defined, together with their allowed variants (instantiation values).
 
@@ -166,7 +173,7 @@ Whether this build-time variability should lead to a set of pre-defined sub-prof
 #### Rationale
 There are ONNX features that might be of interest in some applicative domain but not in another one.
 
-### NEED `AI-012`: `SONNX “product” definition, configuration and change management`
+### NEED `AI-013`: `SONNX “product” definition, configuration and change management`
 #### Description
 The various kinds of constituents of the Safety-related profile must be identified before the start of its development. 
 

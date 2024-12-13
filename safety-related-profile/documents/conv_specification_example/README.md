@@ -36,7 +36,7 @@ The mathematical definition of the operator is given hereafter for the 2D case, 
 The formal specification is given in Section <a href="#sec:conv_formal" data-reference-type="ref" data-reference="sec:conv_formal">3.5</a>. When considering padding, the same formula applies, in which `X` represents the padded version of the actual input `X`.
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{c_i=0}^{nch_{in}(W)-1} \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1} \\ (X[b,c_i,m \cdot strides[0]+k_l \cdot dilation[0], n \cdot strides[1]+k_c \cdot dilations[1]] \cdot W[c, c_i, k_l, k_c]) \\ + B[c_i]
+    Y[b, c, m, n] = \sum_{c_i=0}^{nch_{in}(W)-1} \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1} \\ (X[b,c_i,m \cdot stride[0]+k_l \cdot dilation[0], n \cdot stride[1]+k_c \cdot dilation[1]] \cdot W[c, c_i, k_l, k_c]) \\ + B[c_i]
 \end{gathered}$$
 
 Where
@@ -48,7 +48,7 @@ Where
 - $n \in [0,nc(Y)-1]$ is the index of the second spatial axis of output `Y`
 - $nch_{in}(W)$ is the number of input channels of kernel `W`
 - $nl(W)$ and $nc(W)$ are the sizes of the two spatial axis of kernel `W`
-Attributes `strides` and `dilations` are described later in this  section.
+Attributes `stride` and `dilation` are described later in this  section.
 
 The effect of the operator for a standard convolution (attribute `group`= 1) is illustrated on the following picture.
 ![](./imgs/conv.png)
@@ -59,7 +59,7 @@ A _depthwise convolution_ applies a specific kernel (or "filter") to each input 
 The mathematical definition is given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1}\\ (X[b, c, m \cdot strides[0] + k_l \cdot dilation[0], n \cdot strides[1] + k_c \cdot strides[1]] \cdot W[c, 0, k_l, k_c] ) + B[c]
+    Y[b, c, m, n] = \sum_{k_l=0}^{nl(W)-1} \sum_{k_c=0}^{nc(W)-1}\\ (X[b, c, m \cdot stride[0] + k_l \cdot dilation[0], n \cdot stride[1] + k_c \cdot stride[1]] \cdot W[c, 0, k_l, k_c] ) + B[c]
 \end{gathered}$$
 
 #### Inputs and outputs
@@ -77,12 +77,12 @@ The shape of tensor `X` is $(nb(X) \times nch_{in}(X) \times nl(X) \times nc(X))
     - Rationale: This is a restriction of the SONNX profile.
 - (C2) <a name="channel_consist"></a> Consistency between the number of channels of `X`, `W` 
     - Statement:  $nch_{in}(X)=nch_{in}(W)$
-- (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
+- (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilation` and `stride`
     <span id="it:shape_consist" label="it:shape_consist"></span>
     - Statement: If parameter `pads` is not empty then
-       *  $$\lfloor{\frac{a-(dilations[0] \times nl(W)-1)}{stride[0]}} \rfloor +1 = nl(Y) \mbox{ with }  a=nl(X)+pads[0]+pads[2]$$
+       *  $$\lfloor{\frac{a-(dilation[0] \times nl(W)-1)}{stride[0]}} \rfloor +1 = nl(Y) \mbox{ with }  a=nl(X)+pads[0]+pads[2]$$
       and
-       * $$\lfloor{\frac{b-(dilations[1] \times nc(W)-1)}{stride[1]}} \rfloor +1 = nc(Y)  \mbox{ with } b=nc(X)+pads[1]+pads[3]$$
+       * $$\lfloor{\frac{b-(dilation[1] \times nc(W)-1)}{stride[1]}} \rfloor +1 = nc(Y)  \mbox{ with } b=nc(X)+pads[1]+pads[3]$$
     - Rationale: The size of the output is determined by the number of
       times the kernel can be applied on a given spatial axis.
 - (C4) Axis denotations
@@ -100,7 +100,7 @@ $(nch_{out}(W) \times nch_{in}(W) \times nl(W) \times nc(W))$, where
 ###### Constraints
 - (C1) Consistency between the number of channels of `X` and `W`
    - Statement: $nch_{in}(W)=nch_{in}(X)$
-- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilation` and `stride`.
    - Statement: [See constraint (3) of X](#shape_consist)
 - (C3) Axis denotations
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to arrive with the axis denotation of \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`,
@@ -117,22 +117,21 @@ Tensor `B` is the bias. The shape of the bias tensor is $(nc(B) \times 1)$.
 
 #### Attributes
 
-##### `strides`: list of int
+##### `stride`: list of int
 
-The `strides` attributes determines how the kernel is applied ("shifted") on tensor `X` during the convolution.
+The `stride` attributes determines how the kernel is applied on tensor `X` during the convolution.
 
-For instance, with $\mbox{\texttt{strides}}[0]=2$ and $\mbox{\texttt{strides}}[1]=3$, the kernel is shifted by 2 units in the first spatial axis and 3 units in the second spatial axis at each step
-of the convolution.
+For instance, with $\mbox{\texttt{stride}}[0]=2$ and $\mbox{\texttt{stride}}[1]=3$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
 
 This effect is illustrated on the following figure:
 
 ![](./imgs/conv_stride.png)
 
 ###### Constraints
-- (C1) Size of `strides`
-    - Statement: the number of elements in the `strides` list is equal to 2.
+- (C1) Size of `stride`
+    - Statement: the number of elements in the `stride` list is equal to 2.
     - Rationale: Striding is done on the two spatial axis.
-- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilation` and `stride`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
 ##### `auto_pad` : string
@@ -165,24 +164,24 @@ The effect of padding illustrated on the following figure:
 - (C2) Consistency between the shape of `X` and the length of `pads`
     - Statement: The length of the `pads` list shall two times the number of spatial axes
     - Rationale: Padding shall be given for all spatial axe, and a begginging and an end value must be given for each axis.
-- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilation` and `stride`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
-##### `dilations`: list of int
+##### `dilation`: list of int
 
-The `dilations` attribute specifies the spacing between the kernel elements for each spatial axis of the filter `W`. It is a list of non-null integer values where each value gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel points are spaced out by the dilation factor.
+The `dilation` attribute specifies the spacing between the kernel elements for each spatial axis of the filter `W`. It is a list of non-null integer values where each value gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel points are spaced out by the dilation factor.
 
-The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure:
+The effect of the `dilation` attribute for a tensor with two spatial axes is depicted on the following figure:
 
 ![](./imgs/dilation.png)
 
 ###### Constraints
 - (C1) Value domain
     - Statement: All elements of the `dilation` list are strictly positive integers
-- (C2) Relation between `dilations` and `W`
-    - Statement: The lenght of the `dilations` list is equal to number of spatial axes of `W`.
-    - Rationale: Dilations is defined for all spatial axes of `W`.
-- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`.
+- (C2) Relation between `dilation` and `W`
+    - Statement: The lenght of the `dilation` list is equal to number of spatial axes of `W`.
+    - Rationale: dilation is defined for all spatial axes of `W`.
+- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilation` and `stride`.
     - Statement: [See constraint (3) of X](#shape_consist)
 
 ##### `group`: int 
@@ -227,14 +226,14 @@ The size of the output `Y` will be $(nb(Y) \times nch_{in}(Y) \times nl(Y) \time
 
 ###### Constraints.
 
-- (C1) Consistency between the shape of tensors `X`, `W`, `Y`, attributes `pads` and `strides`,
+- (C1) Consistency between the shape of tensors `X`, `W`, `Y`, attributes `pads` and `stride`,
     - Statement: [see constraint (3) of X](#shape_consist)
 
 #### Formal specification
 
 The following code specifies the `conv` operator using the Why3 language[^3].
 
-###### Nota: the specification does not cover all attributes values. Currently, there is no padding (`pads` is not set and `auto_pad = NOTSET`) and `dilations` is not set.
+###### Nota: the specification does not cover all attributes values. Currently, there is no padding (`pads` is not set and `auto_pad = NOTSET`) and `dilation` is not set.
 
 ``` ocaml
 module Conv
@@ -270,7 +269,7 @@ module Conv
   stride: array int;
   pads: array int;
   auto_pad: int;
-  dilations: array int; 
+  dilation: array int; 
   }
 
   type output_tensor = {
@@ -295,8 +294,8 @@ module Conv
     (bi ci hi wi: int)
     (ci_in ki_h ki_w: int) =
      let y_idx = bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi in
-     let x_l_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0] in
-     let x_c_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] in
+     let x_l_idx = hi * attr.stride[0] + ki_h * attr.dilation[0] - attr.pads[0] in
+     let x_c_idx = wi * attr.stride[1] + ki_w * attr.dilation[1] - attr.pads[1] in
                                 
      (0 <= x_l_idx < inp.x_l /\ 0 <= x_c_idx < inp.x_c) ->
         let x_idx = bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + x_l_idx * inp.x_c + x_c_idx in
@@ -305,8 +304,8 @@ module Conv
 
   val conv (inp: input_tensor)(kernel: convolution_kernel)(bias: bias_tensor)(attr: attributes)(out: output_tensor): array real
     requires{inp.x_ch = out.y_ch = kernel.w_ch_in = bias.b_c} 
-    requires{out.y_l = (div (inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l)) attr.stride[0]) + 1}
-    requires{out.y_c = (div (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c)) attr.stride[1]) +1}
+    requires{out.y_l = (div (inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilation[0] * kernel.w_l)) attr.stride[0]) + 1}
+    requires{out.y_c = (div (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilation[1] * kernel.w_c)) attr.stride[1]) +1}
     requires { inp.x_l > 0 /\ inp.x_c > 0 /\ inp.x_ch > 0 /\ inp.x_b > 0}
     requires{kernel.w_l > 0 /\ kernel.w_c > 0 /\ kernel.w_ch_in > 0 /\ kernel.w_ch_out > 0}
     requires { out.y_b > 0 /\ out.y_ch > 0 /\ out.y_l > 0 /\ out.y_c > 0}
@@ -316,10 +315,10 @@ module Conv
     requires{inp.x_c >= kernel.w_c}
     requires{length bias.b = bias.b_c}
     requires{length attr.stride = 2}
-    requires{length attr.dilations = 2}
+    requires{length attr.dilation = 2}
     requires{length attr.pads = 4}
     requires{forall i. 0 <= i < length attr.pads -> attr.pads[i] = 0}
-    requires{forall j. 0 <= j < length attr.dilations -> attr.dilations[j] >= 1}
+    requires{forall j. 0 <= j < length attr.dilation -> attr.dilation[j] >= 1}
     requires{forall k. 0 <= k < length attr.stride -> attr.stride[k] >= 1}
     ensures { length result = conv_size out }
     ensures { forall bi ci hi wi ci_in ki_h ki_w: int.
@@ -354,10 +353,10 @@ let test_conv () =
   let bias = { b = bias_b; b_c = 1 } in
   let stride = Array.make 2 1 in  (* Stride of 1 *)
   let pads = Array.make 4 0 in  (* No padding *)
-  let dilations = Array.make 2 1 in  (* Dilation of 1 *)
-  let attr = { stride = stride; pads = pads; auto_pad = 0; dilations = dilations } in
-  let out_h = (div (inp.x_l + pads[0] + pads[2] - (dilations[0] * kernel.w_l)) stride[0]) + 1 in
-  let out_w = (div (inp.x_c + pads[1] + pads[3] - (dilations[1] * kernel.w_c)) stride[1]) + 1 in
+  let dilation = Array.make 2 1 in  (* Dilation of 1 *)
+  let attr = { stride = stride; pads = pads; auto_pad = 0; dilation = dilation } in
+  let out_h = (div (inp.x_l + pads[0] + pads[2] - (dilation[0] * kernel.w_l)) stride[0]) + 1 in
+  let out_w = (div (inp.x_c + pads[1] + pads[3] - (dilation[1] * kernel.w_c)) stride[1]) + 1 in
   let out = { y_b = 1; y_ch = 1; y_l = out_h ; y_c = out_w  } in
   (* Call the conv function *)
   let result = conv inp kernel bias attr out in
@@ -396,7 +395,7 @@ typedef struct {
 typedef struct {
     int *stride;
     int *pads;
-    int *dilations;
+    int *dilation;
 } attributes;
 
 typedef struct {
@@ -486,12 +485,12 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int 
   requires \valid_read(bias.b + (0..bias.b_c-1));
   requires \valid_read(attr.stride+(0..1));
   requires \valid_read(attr.pads+(0..3));
-  requires \valid_read(attr.dilations+(0..1));
+  requires \valid_read(attr.dilation+(0..1));
   requires inp.x_ch == out.y_ch;
   requires out.y_ch == kernel.w_ch_in;
   requires kernel.w_ch_in == bias.b_c;
-  requires out.y_l == ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l )) / attr.stride[0]) + 1;
-  requires out.y_c == ((inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c )) / attr.stride[1]) + 1;
+  requires out.y_l == ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilation[0] * kernel.w_l )) / attr.stride[0]) + 1;
+  requires out.y_c == ((inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilation[1] * kernel.w_c )) / attr.stride[1]) + 1;
   requires inp.x_l > 0 && inp.x_c > 0 && inp.x_ch > 0 && inp.x_b > 0;
   requires kernel.w_l > 0 && kernel.w_c > 0 && kernel.w_ch_in > 0 && kernel.w_ch_out > 0;
   requires bias.b_c > 0;
@@ -499,7 +498,7 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int 
   requires inp.x_l >= kernel.w_l;
   requires inp.x_c >= kernel.w_c;
   requires \forall integer i; 0 <= i < 4 ==> attr.pads[i] >= 0;
-  requires \forall integer i; 0 <= i < 2 ==> attr.dilations[i] >= 1;
+  requires \forall integer i; 0 <= i < 2 ==> attr.dilation[i] >= 1;
   requires \forall integer i; 0 <= i < 2 ==> attr.stride[i] >= 1;
 
 
@@ -513,11 +512,11 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int 
                             0 <= ci_in <kernel.w_ch_in ==>
                                 0 <= ki_h < kernel.w_l ==>
                                     0 <= ki_w < kernel.w_c ==> 
-                                        (0 <= hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) && 
-                                        (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]  < inp.x_l) && 
-                                        (0 <= wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1]) && 
-                                        (wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1] < inp.x_c) ==>
-                                            out.y[bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi] == inp.x[bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + (hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0]) * inp.x_c + ( wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1])] * kernel.w[ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w] + bias.b[ci];
+                                        (0 <= hi * attr.stride[0] + ki_h * attr.dilation[0] - attr.pads[0]) && 
+                                        (hi * attr.stride[0] + ki_h * attr.dilation[0] - attr.pads[0]  < inp.x_l) && 
+                                        (0 <= wi * attr.stride[1] + ki_w * attr.dilation[1] - attr.pads[1]) && 
+                                        (wi * attr.stride[1] + ki_w * attr.dilation[1] - attr.pads[1] < inp.x_c) ==>
+                                            out.y[bi * (out.y_ch * out.y_l * out.y_c) + ci * (out.y_l * out.y_c) + hi * out.y_c + wi] == inp.x[bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + (hi * attr.stride[0] + ki_h * attr.dilation[0] - attr.pads[0]) * inp.x_c + ( wi * attr.stride[1] + ki_w * attr.dilation[1] - attr.pads[1])] * kernel.w[ci * (kernel.w_ch_in * kernel.w_l * kernel.w_c) + ci_in * (kernel.w_l * kernel.w_c) + ki_h * kernel.w_c + ki_w] + bias.b[ci];
                           
               
                           
@@ -528,8 +527,8 @@ void compute_pad(const char* auto_pad, int pads[4], int stride[2], int x_l, int 
   */
 float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attributes attr, output_tensor out) {
     
-    out.y_l = ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilations[0] * kernel.w_l )) / attr.stride[0]) + 1;
-    out.y_c = ( (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilations[1] * kernel.w_c )) / attr.stride[1]) +1;
+    out.y_l = ((inp.x_l + attr.pads[0] + attr.pads[2] - (attr.dilation[0] * kernel.w_l )) / attr.stride[0]) + 1;
+    out.y_c = ( (inp.x_c + attr.pads[1] + attr.pads[3] - (attr.dilation[1] * kernel.w_c )) / attr.stride[1]) +1;
     int y_size = out.y_b * out.y_ch * out.y_l * out.y_c;
     out.y = (float *)malloc(y_size * sizeof(float));
 
@@ -563,8 +562,8 @@ float* conv(input_tensor inp, convolution_kernel kernel, bias_tensor bias, attri
                     for (int ci_in = 0; ci_in < kernel.w_ch_in; ++ci_in) {
                         for (int ki_h = 0; ki_h < kernel.w_l; ++ki_h) {
                             for (int ki_w = 0; ki_w < kernel.w_c; ++ki_w) {
-                                int x_l_idx = hi * attr.stride[0] + ki_h * attr.dilations[0] - attr.pads[0];
-                                int x_c_idx = wi * attr.stride[1] + ki_w * attr.dilations[1] - attr.pads[1];
+                                int x_l_idx = hi * attr.stride[0] + ki_h * attr.dilation[0] - attr.pads[0];
+                                int x_c_idx = wi * attr.stride[1] + ki_w * attr.dilation[1] - attr.pads[1];
 
                                 if (x_l_idx >= 0 && x_l_idx < inp.x_l && x_c_idx >= 0 && x_c_idx < inp.x_c) {
                                     int x_idx = bi * (inp.x_ch * inp.x_l * inp.x_c) + ci_in * (inp.x_l * inp.x_c) + x_l_idx * inp.x_c + x_c_idx;
