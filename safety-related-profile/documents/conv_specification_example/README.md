@@ -119,10 +119,9 @@ Tensor `B` is the bias. The shape of the bias tensor is $(nc(B) \times 1)$.
 
 ##### `strides`: list of int
 
-The `strides` attributes determines how the kernel is applied ("shifted") on tensor `X` during the convolution.
+The `strides` attributes determines how the kernel is applied on tensor `X` during the convolution.
 
-For instance, with $\mbox{\texttt{strides}}[0]=2$ and $\mbox{\texttt{strides}}[1]=3$, the kernel is shifted by 2 units in the first spatial axis and 3 units in the second spatial axis at each step
-of the convolution.
+For instance, with $\mbox{\texttt{strides}}[0]=2$ and $\mbox{\texttt{strides}}[1]=3$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
 
 This effect is illustrated on the following figure:
 
