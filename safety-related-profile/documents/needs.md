@@ -184,4 +184,8 @@ The configuration management includes the versioning of the Safety-related profi
 #### Rationale
 Mastering the configuration, the evolutions and the correction of anomalies is crucial, moreover for safety-related systems.
 
+# ARCYS need
 
+### NEED `ARCYS-001`: `Final Prediction`
+#### Description
+The Safety-related profile shall provide an interpretation on the model output. For example, the last layer of the yolov8 model is a convolution and an image comes out. How to interpret the classes that were identified on the objects found in the input image from the output matrix ?
