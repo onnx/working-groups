@@ -1,3 +1,22 @@
+# Use case `Real-time object detection on FPGA` - `ARCYS`
+
+## Description
+We develop a VHDL architecture which implements neural networks to be embedded in FPGA for real-time applications. Particularly, we optimize the architecture to embed object detection models for vision applications. The developed VHDL IP must receive as input the description of the trained and 8-bit quantized model in ONNX format. A use case of VHDL IP uses the YOLOv8n model. 
+
+## Models architecture
+YOLOv8n (nano version of YOLOv8) quantized 8-bit 
+![image](https://github.com/user-attachments/assets/429355d0-1d1a-4089-b7e2-40f5c6661dcc)
+
+## Operators
+- Convolution
+- Batch Normalization
+- SiLu
+- Split : How are the image channels separated? For a division by 2, is it the first part of the channels which is kept for the rest of the operations or is it the second part ?
+- Add : How does the operator handle overflow in an addition of two signed 8-bit numbers ?
+- Concatenation : What order are the channels of the two different images concatenated in ?
+- MaxPool
+- Upsample
+- QuantizeLinear (after Post-Training Quantization)
 
 # Use case `Tracking with VideoSwin` - `CSGROUP`
 
