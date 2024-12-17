@@ -72,7 +72,7 @@ There is a need to determine whether the ONNX format should support dynamic sizi
 #### Rationale
 This need ensures flexibility in handling input/output dimensions within ONNX models, which is particularly important for optimizing batch processing and other dynamic use cases. These needs ensure that ONNX models can be reliably and compatibly integrated and used in avionic environments and other critical systems.
 #### Analysis
-[TBC]
+The batch size could actually be considered as an implementation choice rather than a design choice since it does not modify the computed values.  
 > [TODO] Need to be discussed.
 
 # AIRBUS needs
