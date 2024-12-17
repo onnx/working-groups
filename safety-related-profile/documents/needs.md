@@ -37,6 +37,8 @@ External needs
 _Brief description of the need_.
 #### Rationale (optional) 
 If necessary, a _brief justification of the need_ 
+#### Analysis
+Analysis of the need. The objective is to determine whether it leads to a requirement for the SONNX profile or not. 
 
 # GENERAL needs
 
@@ -45,27 +47,33 @@ If necessary, a _brief justification of the need_
 # THAV needs
 
 ### NEED THAV-000: Capability to Embed Compatible ONNX Models in Avionic Databases with a DO200 Process
-
 #### Description
 There is a need for a format consistency checker for ONNX format itself not only operator to ensure that ONNX models can be integrated into avionic databases in compliance with the DO200 process.
+#### Analysis
+[TBC]
 
 > [TODO] Clarify the relationship between the DO200 (applicable to avionics databases) and the MLMD.
 
 ### NEED THAV-001: Version Index in the ONNX Model
 #### Description
 The ONNX model must include a version index to indicate the compatibility of the ONNX format version with a particular version of an ONNX execution engine.
+#### Analysis
+[TBC]
 
 ### NEED THAV-002: Typing of Data Handled by Implementation Operators
 #### Description
 There is a need to know the typing of data handled by implementation operators, whether they are float or int (32-bit/16-bit/8-bit), bool (8-bit/32-bit), or text string size max, and to specify which representation is used (ASCII, UTF8, UTF16, Unicode) as well as the support for accented characters.
+#### Analysis
+[TBC]
 
 ### NEED THAV-003: Support for Dynamic Sizing of Input/Output Arrays in ONNX Format
 #### Description
 There is a need to determine whether the ONNX format should support dynamic sizing of input/output arrays (often used for batch size). It is necessary to check if we should limit this to purely static sizes or allow dynamic sizing to be possible.
 #### Rationale
 This need ensures flexibility in handling input/output dimensions within ONNX models, which is particularly important for optimizing batch processing and other dynamic use cases. These needs ensure that ONNX models can be reliably and compatibly integrated and used in avionic environments and other critical systems.
-
-> [TODO] To be discussed.
+#### Analysis
+[TBC]
+> [TODO] Need to be discussed.
 
 # AIRBUS needs
 
@@ -77,6 +85,9 @@ The SONNX Safety-related profile shall allow the specification of the replicatio
 
 #### Rationale 
 The MLMD must exist as defined by the ARP6983 document. It shall be the pivot between the trained model and the implementation for embedded inference, which is the basic aim of ONNX. The ARP6983 document requires that a replication criterion be defined in the MLMD, which constitutes a strong constraint applying to the implementation from the MLMD.
+
+#### Analysis
+[TBC]
 
 ### NEED `AI-001`: `Accurate and Precise Trained Model Description`
 
@@ -91,30 +102,52 @@ This concerns in particular
 #### Rationale
 Safety-related systems require the demonstration that the ML model implementation process preserves the safety/functional/operational properties of the model developed during the design process.
 
+#### Analysis
+[TBC]
+
 ### NEED `AI-002`: `Expression of High Level Requirement`
 
 #### Description
-The model implementer needs High Level requirements about the model performance. Those requirements may concern:
+The model implementer needs High Level requirements about the model performance.\
+Those requirements may concern:
 - the ML performance, which measurement metric may depend on the task performed by the model (e.g., Mean Squared error or Mean Absolute error for regression tasks, or precision or accuracy for classification tasks)
 - the numerical accuracy measured at the output of the model or at intermediate stages (e.g, all activations, activations at a certain layer, etc.), and specific inputs (reference dataset).
 
-### NEED `AI-003`: `Expression of Implementation Requirements'
+#### Analysis
+[TBC]
+
+> Shall it be part of the MLMD?
+
+### NEED `AI-003`: `Expression of Implementation Requirements`
 
 #### Description
 In some cases, the model implementer may express specific needs concerning the implementation of the model. These requirements may concern any part of the model including:
 - the order in which operators must be executed
-- the target hardware n which the model or part of the model must be deployed,
+- the target hardware on which the model or part of the model must be deployed
 - etc.
+
+#### Analysis
+[TBC]
 
 ### NEED `AI-004`: `Support for traceability`
 
 #### Description
 The design, development, and V&V engineers need data (metadata) to support traceability analysis between the model elements (operators, graph), the requirements, the model and hyperparameters used during training, the development artifacts (code), and the verification artifacts (tests).
 
+#### Analysis
+[TBC]
+
+> At what level shall traceaibility be maintained? Dos it make sense to trace an operator, a layer, to sole higher level requirement? Will it be such a high level requirement to trace to? 
+ 
 ### NEED `AI-005`: `Support for change management`
 
 #### Description
 The model designers and implementers need to manage changes done on the model: all changes to the model must be tracked and linked to requirements. Model versions must be managed.
+
+#### Analysis
+Change management shall be done on the file containing the SONNX model. 
+
+> What is the granularity of change management? 
 
 ### NEED `AI-006`: `Support for model integrity`
 
@@ -122,6 +155,9 @@ The model designers and implementers need to manage changes done on the model: a
 Means shall be provided to guarantee the integrity of the model throughout the development process, down to the deployment:
 -	Provide cryptographic signatures for model files to ensure integrity.
 -	Allow checksum or hash metadata to verify model integrity during deployment.
+
+#### Analysis
+Data to support model integrity must be carried in an additional file that would provide, e.g., a SHA. Consequently, no additional data shall is needed in the SONNX file. 
 
 ### NEED `AI-007`: `Support for model verification`
 
@@ -134,28 +170,45 @@ The model designers and implementers need to verify that some intrinsic properti
 -	Error propagation analysis: assess sensitivity of outputs to small perturbations
 -	Traceability: verify that all model components (nodes, operators, weights) are linked to requirements
 
+#### Analysis
+[TBC]
+
+> Refine what is actually needed in terms of traceability. 
 
 ### NEED `AI-008`: `Behavioral determinism and predictability`
 
 #### Description
 The model implementation shall behave in a deterministic and possibly predictable manner:
-- All inputs that may have an impact on the functioncperformed by the model must be identified and documented. 
+- All inputs that may have an impact on the function performed by the model must be identified and documented. 
 - No operator having a stochastic or unpredictable behavior must be allowed.
 - The effects of rounding must be documented. The precision of the operators must be specified. The valid range for the operators must be defined. The behaviour in case of error (e.g., overflow) must be documented.
 - Numerical instability of operators must be precluded or at least documented. 
 - The model structure must be completely described by the model description. In particular, the size of all  tensors and the structure of the graph must be completely described in the model. More generally, all operations done on the tensors must be explicitely described in the model (e.g., no implicit type casting, [broadcasting](https://www.tensorflow.org/api_docs/python/tf/broadcast_to), shape inference).
+
+#### Analysis
+[TBC]
+
+> Define unstability in this context.
 
 ### NEED `AI-009`: `Resource usage determinism and predictability`
 
 #### Description
 The model implementer needs to provide an upper bound of memory usage. Therefore, constructs which memory usage would vary dynamically (e.g., depending on an input) should be prevented. 
 
+#### Analysis
+The objective is **not** to provide a means to estimate memory usage at model level since this actually depends on the implementation, but to preclude operators for which predictability would be intrinsically impossible.
+[TBC]
+
 ### NEED `AI-010`: `Execution time determinism and predictability`
 
 #### Description
 The model implementer needs to provide an upper bound of execution time. Therefore, contructs which execution time would vary "significantly" (in particular: in an unpredictable way) should be prevented. 
 
-### NEED `AI-011`: `Support for verification`
+#### Analysis
+The objective is **not** to provide a means to estimate WCETs at model level since this actually depends on the implementation, but to preclude operators for which predictability would be intrinsically impossible.
+[TBC]
+
+### NEED `AI-011`: `Support for verification activities`
 
 #### Description
 The model developer needs means to support verifying compliance of his/her implementation of the model to the model. This concerns in particular demonstration of compliance with the operator and graph semantics. 
@@ -163,6 +216,9 @@ The model developer needs means to support verifying compliance of his/her imple
 Should formal verification of the implementation against the specification be impossible to perform, the model developer needs a reference against which comparing his/her own implementation. This reference will be  considered to be compliant with the specification. 
 
 Provision of test cases to verify compliance of an implementation against the specification would be useful. Those test cases may be those used to verify compliance of the reference implementation against the formal or informal specification. Those test cases need to cover all aspects of the specification, including those related to precision and stablity (e.g., inputs and expected outputs for softmax under typical and edge cases). 
+
+#### Analysis
+[TBC]
 
 ### NEED `AI-012`: `SONNX variability`
 #### Description
@@ -172,6 +228,9 @@ Whether this build-time variability should lead to a set of pre-defined sub-prof
 
 #### Rationale
 There are ONNX features that might be of interest in some applicative domain but not in another one.
+
+#### Analysis
+[TBC]
 
 ### NEED `AI-013`: `SONNX “product” definition, configuration and change management`
 #### Description
@@ -184,8 +243,14 @@ The configuration management includes the versioning of the Safety-related profi
 #### Rationale
 Mastering the configuration, the evolutions and the correction of anomalies is crucial, moreover for safety-related systems.
 
-# ARCYS need
+#### Analysis
+[TBC]
+
+# ARCYS needs
 
 ### NEED `ARCYS-001`: `Final Prediction`
 #### Description
-The Safety-related profile shall provide an interpretation on the model output. For example, the last layer of the yolov8 model is a convolution and an image comes out. How to interpret the classes that were identified on the objects found in the input image from the output matrix ?
+The Safety-related profile shall provide an interpretation on the model output. For example, the last layer of the yolov8 model is a convolution and an image comes out. How to interpret the classes that were identified on the objects found in the input image from the output matrix?
+
+#### Analysis
+[TBC]
