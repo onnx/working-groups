@@ -1,8 +1,11 @@
 # 2024/12/18
 ## Agenda
-- Review of actions
 - Sebastian's presentation on Bosch's code generation tool.
-- Output from ``conv2d`` last review.
+- Review of actions
+- Results of last review of ``conv2d``
+- Overview of the first version of the [list of requirements](../documents/reqs.md)
+- Discussion about the operators to integrate in the profile (see the [list of operators](../documents/profile_opset/ONNX_operators_for_Use_Cases.xlsx))
+- Call for contributors to reqs and description of ops. 
   
 #### New actions
 #### Past actions
