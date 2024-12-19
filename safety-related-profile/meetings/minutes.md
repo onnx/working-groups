@@ -22,7 +22,8 @@ Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean S
 - Sebastian raised an important remark concerning the actual capability of people to contribute to the effort. Everyone has to check the legal aspects of contributing to the SONNX effort which, eventually, will be part of ONNX (exact modalities have to be addressed). See action (1812-6)
 #### New actions
 - [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
-- [ ] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
+- [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
+  - See mail dated 19/12.
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
 - [X] (1812-4, Eric) Provide a "complexity" estimation for each operator
     - Done, see [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
