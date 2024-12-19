@@ -1,7 +1,11 @@
 # 2024/12/18
 ## Agenda
-- Review of actions
 - Sebastian's presentation on Bosch's code generation tool.
+- Review of actions
+- Results of last review of ``conv2d``
+- Overview of the first version of the [list of requirements](../documents/reqs.md)
+- Discussion about the operators to integrate in the profile (see the [list of operators](../documents/profile_opset/ONNX_operators_for_Use_Cases.xlsx))
+- Call for contributors to reqs and description of ops. 
 - Output from ``conv2d`` last review.
 # Attendees
 Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean Souyris, Jean-Baptiste Rouffet, Jean-Loup Farges, Sebastian Boblest, Mohammed, Anne-Sophie Lalloyer, Andreas Dittberner, Benjamin Wagner, Duy Khoi Vo, Julien Vidalie, Thiziri Belkacem, Nicolas Valot, Henri Belfy
