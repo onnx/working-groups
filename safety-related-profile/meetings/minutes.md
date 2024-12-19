@@ -3,17 +3,38 @@
 - Review of actions
 - Sebastian's presentation on Bosch's code generation tool.
 - Output from ``conv2d`` last review.
-  
+# Attendees
+Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean Souyris, Jean-Baptiste Rouffet, Jean-Loup Farges, Sebastian Boblest, Mohammed, Anne-Sophie Lalloyer, Andreas Dittberner, Benjamin Wagner, Duy Khoi Vo, Julien Vidalie, Thiziri Belkacem, Nicolas Valot, Henri Belfy
+# Minutes
+(The meeting has been recorded and is available [here](https://zoom.us/rec/play/Gp1BMRCA01sUw-m0lXeewLgfPIPRlluJ3Cfi_AakBAruDRvm5CSWSf_bj19PHA6Ky99dXm2mlASBkEKu.Ws8R97q6D_W-k0a_?canPlayFromShare=true&from=share_recording_detail&continueMode=true&componentName=rec-play&originRequestUrl=https%3A%2F%2Fzoom.us%2Frec%2Fshare%2FPTdcIxVJaVSPh1Ze39mu3zmVqjYJ0sB33oR76VOsWpsKlbnaGtQwa7r4bkp1OF3a.5BpTwCuQlXolU4uC) for those who have an LFX account. Note that there is also a full textual transcript of the meeting, which includes all the Mmmm, the hesitations, the globbish, etc. Nevertheless, this is extremely handy, you can even click on the text and the video will move at the appropriate place. If we were able to cut /paste the transcript in ChatGPT to generate a synthesis, that'll be perfect...)
+- Sebastian's presentation on Bosch's Embedded Ai coder.
+  - Two things (please refer to the video for the full contents):
+    - Bosch is (in particular) targetting very small models (starting with a few hundrerds parameters) to be run on very small targets (microcontrollers).
+    - One important expectation for Bosch: having a tool to check the (S)ONNX model... 
+    - One important expectation for Bosch's customer: be able to reproduce results on a long time span. 
+- Brief overview of the first version of the [requirement list](../documents/reqs.md). There has been quite a few comments on reqs 19 and 20 about errors. This issue will be addressed in a separate discussion (see action 1812-2) 
+- Discussion about the list of operators and the way we have to "process them"
+  - We have to share the work! Eric will add a "complexoity" evaluation to the current list of operators (1812-4), then every contributor can put his/her name in front of the operator on which he/she can contribute (as a writer, a reviewer). See action (1812-5). Note that we will start the work when the specification of the ``conv`` operator is completed (since it will be used as a template).
+- Sebastian raised an important remark concerning the actual capability of people to contribute to the effort. Everyone has to check the legal aspects of contributing to the SONNX effort which, eventually, will be part of ONNX (exact modalities have to be addressed). See action (1812-6)
 #### New actions
+- [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
+- [ ] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
+- [ ] (1812-3, Mariem) Complete the formal specificaiton of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+- [ ] (1812-4, Eric) Provide a "complexity" estimation for each operator
+- [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md))
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 #### Past actions
 - [X] (0412-1, Eric) Integrate CS' use case in the [list of use cases](../documents/usecases.md)
 - [X] (0412-2, Eric, Jean) Check Airbus's needs.
 - [X] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose?
 - [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
-- [ ] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
+    - Reviews from Henri, Nicolas and Jean-Loup received and processed.
+    - Review from Thiziri to be received on 2024/12/20.
+- [X] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
 #### Past actions
-- [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+- [X] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
+  - Followup: (1218-2)
 - [ ] (231001 - All) Check Nicolas' classification proposal 
 - [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
 - [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
