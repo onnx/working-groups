@@ -24,7 +24,7 @@ Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean S
 - [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
 - [ ] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
-- [ ] (1812-4, Eric) Provide a "complexity" estimation for each operator
+- [X] (1812-4, Eric) Provide a "complexity" estimation for each operator
     - Done, see [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
