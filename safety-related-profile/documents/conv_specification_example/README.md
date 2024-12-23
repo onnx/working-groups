@@ -54,13 +54,21 @@ Where
 The effect of the operator is illustrated on the following figure. In this example
 - shape of `Y` is $1\times 1 \times 4 \times 4$ (batch size is 1, number of data channels is 1)
 - shape of `X` is $1 \times 1 \times 8 \times 8$ (batch size is 1, number of data channels is 1)
-- shape of `W` is $1 \times 3 \times 2$ (number of data channels is 1)
+- shape of `W` is $1 \times 1 \times 3 \times 2$  (number of data channels is 1)
 - shape of `B` is $1$
 - `pads` is  set to (1,2,2,2) (1 column on the left, 2 columns on the right, 2 rows on the top, 2 rows on the bottom)
 - `dilations` is set to (2,2)
 - `strides` is set to (2,3)
 
-![](./imgs/conv.png)
+The following figure shows the case where the number of channels of `X` is 3. In this example:
+- shape of `Y` is $1 \times 1 \times 4 \times 4$ 
+- shape of `X` is $1 \times 3 \times 8 \times 8$ 
+- shape of `W` is $1 \times 3 \times 3 \times 2$
+- shape of `B` is $1$
+- `groups` is  set to 1 
+- the other attributes have the same values as in the previous figure.
+
+![](./imgs/conv-std.png)
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $c(X)$. 
@@ -72,6 +80,15 @@ $$\begin{gathered}
 \end{gathered}$$
 
 Variables are defined as for the standard convolution.
+The effect of the operator is illustrated on the following figure. In this example,
+- shape of `Y` is $1\times 3 \times 4 \times 4$ 
+- shape of `X` is $1 \times 3 \times 8 \times 8$
+- shape of `W` is $3 \times 1 \times 3 \times 2$
+- shape of `B` is $3$
+- `groups` is  set to 3
+- the other attributes have the same values as in the previous figure.
+
+![](./imgs/conv-dep.png)
 
 #### Inputs and outputs
 
