@@ -37,7 +37,7 @@ The mathematical definition of the operator without padding is given hereafter.
 The formal specification is given in Section <a href="#sec:conv_formal" data-reference-type="ref" data-reference="sec:conv_formal">Formal specification</a>. When considering padding, the same formula applies, in which `X` represents the padded version of the actual input `X`.
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{c_i=0}^{fm(W)-1} \sum_{k_l=0}^{h(W)-1} \sum_{k_c=0}^{w(W)-1} \\ (X[b,c_i,m \cdot strides[0]+k_l \cdot dilations[0], n \cdot strides[1]+k_c \cdot dilations[1]] \cdot W[c, c_i, k_l, k_c]) \\ + B[c]
+    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} \\ (X[b,i,m \cdot strides[0]+ j \cdot dilations[0], n \cdot strides[1]+ z \cdot dilations[1]] \cdot W[c, i, j, z]) \\ + B[c]
 \end{gathered}$$
 
 Where
@@ -79,7 +79,7 @@ A _depthwise convolution_ applies a specific kernel (or "filter") to each input 
 The mathematical definition is given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{k_l=0}^{h(W)-1} \sum_{k_c=0}^{w(W)-1}\\ (X[b, c, m \cdot strides[0] + k_l \cdot dilations[0], n \cdot strides[1] + k_c \cdot dilations[1]] \cdot W[c, 0, k_l, k_c] ) + B[c]
+    Y[b, c, m, n] = \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1}\\ (X[b, c, m \cdot strides[0] + j \cdot dilations[0], n \cdot strides[1] + z \cdot dilations[1]] \cdot W[c, 0, j , z] ) + B[c]
 \end{gathered}$$
 
 Variables are defined as for the standard convolution.
@@ -111,11 +111,11 @@ The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
 - (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>
     - Statement: 
-       *  $$\left\lfloor{\frac{a-(dilations[0] \cdot h(W)-1)}{strides[0]}} \right\rfloor +1 = h(Y) \mbox{ with }  a=h(X)+pads[0]+pads[2]$$
+       *  $$\left\lfloor{\frac{alpha-(dilations[0] \cdot h(W)-1)}{strides[0]}} \right\rfloor +1 = h(Y) \mbox{ with }  alpha=h(X)+pads[0]+pads[2]$$
          
       and
       
-       * $$\left\lfloor{\frac{b-(dilations[1] \cdot w(W)-1)}{strides[1]}} \right\rfloor +1 = w(Y)  \mbox{ with } b=w(X)+pads[1]+pads[3]$$
+       * $$\left\lfloor{\frac{beta-(dilations[1] \cdot w(W)-1)}{strides[1]}} \right\rfloor +1 = w(Y)  \mbox{ with } beta=w(X)+pads[1]+pads[3]$$
     - Rationale: The size of the output is determined by the number of times the kernel can be applied on a given spatial axis.
 - (C4) Axis denotations
     - Statement: If axis denotation is in effect, the operation expects input data tensor to have axis denotation \[`DATA_BATCH`, `DATA_CHANNEL`, `DATA_FEATURE`, `DATA_FEATURE`\].
@@ -135,7 +135,8 @@ The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
    - Statement: [See constraint (C2) of X](#channel_consist).
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
    - Statement: [See constraint (C3) of X](#shape_consist).
-- (C3) Consistency between `W` and `kernel_shape`
+- (C3) <a name="kernel_shape_w"></a> Consistency between `W` and `kernel_shape`
+    <span id="it:kernel_shape_w" label="it:kernel_shape_w"></span> 
    - Statement:  The size of `W` for an axis must bve equal to the value of `kernel_shape` for that axis
    - Rationale: `kernel_shape` represents the shape of `W`, where `kernel_shape[0]` = $w(W)$ and `kernel_shape[1]` = $h(W)$.
 - (C4) Axis denotations
@@ -174,7 +175,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values are used in the denominator of expression in [constraint (C3) of X](#shape_consist) 
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
-    - Statement: [See constraint (3) of X](#shape_consist)
+    - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `auto_pad` : string
 
@@ -205,7 +206,7 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
     - Statement: The length of the `pads` list is two times the number of spatial axes of `X`
     - Rationale: Padding shall be given for all spatial axes, and a beggining value and an end value must be given for each axis.
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
-    - Statement: [See constraint (3) of X](#shape_consist)
+    - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `dilations`: list of int
 
@@ -225,7 +226,7 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
     - Statement: The length of the `dilations` list is equal to number of spatial axes of `W`.
     - Rationale: Dilation is defined for all spatial axes of `W`.
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`.
-    - Statement: [See constraint (3) of X](#shape_consist)
+    - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `group`: int 
 
@@ -255,7 +256,7 @@ This parameter specifies the shape of the convolution kernel `W`.
     - Statement: `kernel_shape` is a list of strictly positive integers
     - Rationale: A dimension is always positive and cannot be null.
 - (C2) Consistency between `W` and `kernel_shape`
-    - Statement: HYPERLIEN VERS W / constraint kernel shape
+    - Statement: [See constraint (C3) of W](#kernel_shape_w)
 
 #### Outputs
 
@@ -270,7 +271,7 @@ The size of the output `Y` will be $(b(Y) \times c(Y) \times h(Y) \times w(Y))$ 
 - (C1) Consistency between the number of channels of `B` and `Y`
     - Statement:  HYPERLIEN VERS W / constraint kernel shape
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y`, attributes `pads` and `strides`,
-    - Statement: [see constraint (3) of X](#shape_consist)
+    - Statement: [see constraint (C3) of X](#shape_consist)
 
 #### Formal specification
 
