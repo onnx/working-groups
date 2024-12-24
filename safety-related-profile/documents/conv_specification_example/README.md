@@ -70,7 +70,7 @@ The following figure shows the case where the number of channels of `X` is 3. In
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
 
-![](./imgs/conv-std-3 channels.png) 
+![](./imgs/conv-std-3-channels.png) 
 
 
 ##### Depthwise convolution
@@ -164,7 +164,7 @@ For instance, with $\mbox{\texttt{stride}}[0]=2$ and $\mbox{\texttt{stride}}[1]=
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(2,3).
 
-![](./imgs/conv_stride.png)
+<img src="./imgs/conv_stride.png" width="300" />
 
 ###### Constraints
 - (C1) Size of `strides`
@@ -195,8 +195,7 @@ The padding value is 0.
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(1,3,2,2).
 
-![](./imgs/conv_pad.png)
-
+<img src="./imgs/conv_pad.png" width="300" />
 
 ###### Constraints
 - (C1) Value domain
@@ -216,7 +215,8 @@ The spacing value is 0.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure. In this example, `dilations`=(2,2). 
 
-![](./imgs/dilation.png)
+<img src="./imgs/dilation.png" width="300" />
+
 
 ###### Constraints
 - (C1) Value domain
@@ -234,7 +234,7 @@ When group is greater than 1, convolution is computed for each group separately 
 
 The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure. In this example `group`=3.
 
-![](./imgs/grouped_convolution.png)
+<img src="./imgs/grouped_convolution.png" width="300" />
 
 (Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
