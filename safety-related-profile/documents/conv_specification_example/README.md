@@ -13,10 +13,11 @@ A synthesis of all restrictions is given in section "Restrictions".
 
 ### Restrictions
 The following restrictions apply to the `conv` operator for the SONNX profile:
-- The number of spatial axes of the tensors is restricted to 2 `[Rx]`
-- Attribute `auto_pad` is restricted to `NOTSET`
-- Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution)
-- All attributes shall be be given explicit values (i.e., default values for attributes are not supported)
+- The number of spatial axes of the tensors is restricted to 2 `[R1]`
+- Attribute `auto_pad` is restricted to `NOTSET` `[R2]`
+- Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution) `[R3]`
+- All attributes shall be be given explicit values (i.e., default values for attributes are not supported) `[R4]`
+- The number of elements in the `strides` list is equal to 2. `[R5]`
 
 ### Signature
 `Y = conv(X,W,[B])`
@@ -28,7 +29,7 @@ where
   
 #### Informal specification
 
-Operator `conv` computes the convolution of the input tensor `X` with the kernel `W` and adds bias `B` to the result. Two types of convolutions are supported: _standard convolution_ and _depthwise convolution_ [restriction]. The SONNX profile limits the number of spatial axes to 2 [restriction].
+Operator `conv` computes the convolution of the input tensor `X` with the kernel `W` and adds bias `B` to the result. Two types of convolutions are supported: _standard convolution_ and _depthwise convolution_ `[R3]`. The SONNX profile limits the number of spatial axes to 2 `[R1]`.
 
 ##### Standard convolution
 A _standard convolution_ applies a kernel (also called "filter") to the input tensor, aggregating information accross both spatial axes and channels. For a given output channel, the kernel operates accross all input channels and all contributions are summed to produce the output. This corresponds to the case where `group`= 1. 
@@ -104,7 +105,7 @@ The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
 ###### Constraints
 
 - (C1) Number of spatial axes of tensor `X`
-    - Statement: The number of spatial axes of tensor `X` is 2. `[restriction]`
+    - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
     - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
 - (C2) <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W` 
     - Statement:  $c(X)=fm(W)$
@@ -169,7 +170,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 
 ###### Constraints
 - (C1) Size of `strides`
-    - Statement: the number of elements in the `strides` list is equal to 2. [restrictions]
+    - Statement: the number of elements in the `strides` list is equal to 2. `[R5]`
     - Rationale: The SONNX profile only supports 2 spatial axes. 
 - (C2) Value domain
     - Statement: `strides` is a list of strictly positive integers.
@@ -183,7 +184,7 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 
 ###### Constraints
 - (C1) Explicit padding
-    - Statement: `auto_pad` shall be set to `NOTSET` `[restriction]`
+    - Statement: `auto_pad` shall be set to `NOTSET` `[R3]`
     - Rationale: The SONNX profile imposes explicit padding.
 
 ##### `pads`: list of int
