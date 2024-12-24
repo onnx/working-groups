@@ -60,6 +60,8 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `dilations` is set to (2,2)
 - `strides` is set to (2,3)
 
+![](./imgs/conv-std.png)
+
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is $1 \times 1 \times 4 \times 4$ 
 - shape of `X` is $1 \times 3 \times 8 \times 8$ 
@@ -68,7 +70,8 @@ The following figure shows the case where the number of channels of `X` is 3. In
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
 
-![](./imgs/conv-std.png)
+![](./imgs/conv-std-3 channels.png) 
+
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $c(X)$. 
@@ -88,7 +91,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
 
-![](./imgs/conv-dep.png)
+![](./imgs/conv-dep-3-channels.png)
 
 #### Inputs and outputs
 
