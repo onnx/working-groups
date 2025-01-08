@@ -11,16 +11,16 @@
 | Operator                     | Writers            | Reviewers         |
 |------------------------------|--------------------|-------------------|
 | Abs                          |                    |                   |
-| Add                          |                    |                   |
+| Add                          |hb?,                |hb                 |
 | Cast                         |                    |                   |
 | Clip                         |                    |                   |
 | Concat                       |                    |                   |
-| Constant                     |                    |                   |
+| Constant                     |                    |hb                 |
 | ConstantOfShape              |                    |                   |
 | Conv                         |ej,mt               |jlf,sb,tb,hb       |
 | ConvTranspose                |                    |                   |
 | Dense                        |                    |                   |
-| Div                          |                    |                   |
+| Div                          |hb?,                |hb                 |
 | Equal                        |                    |                   |
 | Erf                          |                    |                   |
 | Exp                          |                    |                   |
@@ -34,6 +34,7 @@
 | HardSwish                    |                    |                   |
 | Identity                     |                    |                   |
 | LeakyRelu                    |                    |                   |
+| Less                         |hb?,                |hb                 |
 | Log                          |                    |                   |
 | LSTM                         |                    |                   |
 | MatMul                       |                    |                   |
@@ -41,7 +42,7 @@
 | MaxPool                      |                    |                   |
 | Min                          |                    |                   |
 | Mod                          |                    |                   |
-| Mul                          |                    |                   |
+| Mul                          |hb?,                |hb                 |
 | Neg                          |                    |                   |
 | Not                          |                    |                   |
 | Pad                          |                    |                   |
@@ -62,11 +63,11 @@
 | Split                        |                    |                   |
 | Sqrt                         |                    |                   |
 | Squeeze                      |                    |                   |
-| Sub                          |                    |                   |
+| Sub                          |hb?,                |hb                 |
 | Tanh                         |                    |                   |
 | Transpose                    |                    |                   |
 | ConvTransposeDeconvolution   |                    |                   |
 | Unsqueeze                    |                    |                   |
-| Where                        |                    |                   |
+| Where                        |hb?,                |hb                 |
 
 
