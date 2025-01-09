@@ -338,3 +338,56 @@ The "shape" input is a shape tensor which specifies the output shape. If one dim
 1. Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
 2. Specify exactly how the dimension '-1' transform the tensor to be reshaped.
 3. Specify exactly how the data from the tensor is reorganized.
+
+
+## Issue #15: Incomplete specification of SOFTMAX operator 
+
+- CAT: Operator
+- CRIT: High
+- REQ:	(TBC)
+- LOC: 	https://onnx.ai/onnx/operators/onnx__Softmax.html
+
+### Issue
+Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1)
+The “axis” attribute indicates the dimension along which Softmax will be performed. But the onnx documentation does not specify the correspondance between the integer given to the "axis" attribute and the axe of the input tensor. If 'axis=1', does it mean that Softmax is performed along the channels of the input tensor ? 
+
+### Consequence
+The values of elements in the feature maps of the output tensor could be incorrect if the softmax was performed along the wrong axe of the input tensor. 
+
+### Proposal
+Specify in the documentation the correspondance between the integer given to the "axis" attribute and the axe of the input tensor.
+
+
+## Issue #16 : Incomplete specification of SHAPE operator 
+
+- CAT: Operator
+- CRIT: High
+- REQ:	(TBC)
+- LOC: 	https://onnx.ai/onnx/operators/onnx__Shape.html
+
+### Issue
+The "shape" operator outputs an 1D tensor containing the shape of the input tensor. But the onnx documentation does not specify the correspondance between the dimension of the input tensor and the position of the element on the 'shape' output tensor. If the input was a tensor containing 16 channels of feature maps with size 80x80, what would the output tensor look like ? 'shape' = [16,80,80] ? Or the sizes of each dimension of the input tensor should be written to the output tensor in another order ? 
+
+### Consequence
+The output tensor could be incorrect if the implementation of the 'shape' operator did not list the dimensions of the input tensor in the correct order. 
+
+### Proposal
+1. Specify in the documentation the correspondance between the dimension of the input tensor and the position of the value on the 'shape' output tensor.
+2. Note in the onnx file of description of the neural network the shape of the layer input as well as the layer output. 
+
+
+## Issue #17 : Incomplete specification of SLICE operator 
+
+- CAT: Operator 
+- CRIT: High
+- REQ:	(TBC)
+- LOC: 	https://onnx.ai/onnx/operators/onnx__Slice.html
+
+### Issue
+The "axes" attribute gives an integer which defines the axis along which the input tensor should be sliced. The onnx documentation does not specify the correspondance between the integer and the axis of the tensor. 
+
+### Consequence
+When implementing a neural network containing a "slice" operator, the slice operation on an input tensor can be performed on the wrong axis et so it would give an incorrect result. 
+
+### Proposal
+Define in the documentation a dictionary associating integers with axis of tensors. 
