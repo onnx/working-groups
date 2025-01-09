@@ -268,7 +268,7 @@ ONNX supports __Quantization__ operators. Quantization data types are not consis
 1. The "axis" attribute gives an integer to define the axis along which split the input tensor into a list of tensors. The onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? : 
 - axis = '0' <=> batch ?
 - axis = '1' <=> channels ?
-- axis = '2' <=> lines ?
+- axis = '2' <=> rows ?
 - axis = '3' <=> columns ?
 
 2. Moreover, the "split" input gives a tensor which indicate the length of the 'axis' specified for each output tensor. For example, if the shape of the input tensor is [1,32,320,320] (assuming 32=channels, 320=lines and 320=columns) and the "split" input is [16,16] with the "axis" attribute = 1, then the operator splits the input tensor into two output tensors [1,16,320,320] and [1,16,320,320]. In general, the next layer of the network applies its operation on one of the two output tensors and the other one is kept for use in a deeper layer of the network. But the documentation does not specify which 16 channels are used in the next layer and which 16 channels are set aside. Is it the first 16 or the last 16 channels of the input tensor ?
@@ -309,12 +309,32 @@ The onnx description should specify the order in which the input tensors are con
 - LOC: 	https://onnx.ai/onnx/operators/onnx__Resize.html
 
 ### Issue
-1. The "scales" input gives a tensor which indicate the resize of each dimension. Each element of 'scales' corresponds to an axe of the input tensor. The onnx documentation indicates that the "scales" tensor takes value greater than 0. If it’s less than 1, it’s sampling down, otherwise, it’s upsampling. But the documentation does not specify the correspondance between the position of the element on the 'scales' tensor and the axe of the input tensor. Does the first element of the 'scales' tensor correspond to batch of the input tensor ? Does the second element of the 'scales' tensor correspond to the channels of the input tensor ? Does the third element of the 'scales' tensor correspond to the lines of the input tensor ? ... Moreover, if it's the value '2', we understand that the dimension of the corresponding axis is upsampling but by how much ? Does it mean that it is multiplied by 2 ?
+1. The "scales" input gives a tensor which indicate the resize of each dimension. Each element of 'scales' corresponds to an axe of the input tensor. The onnx documentation indicates that the "scales" tensor takes value greater than 0. If it’s less than 1, it’s sampling down, otherwise, it’s upsampling. But the documentation does not specify the correspondance between the position of the element on the 'scales' tensor and the axe of the input tensor. Does the first element of the 'scales' tensor correspond to batch of the input tensor ? Does the second element of the 'scales' tensor correspond to the channels of the input tensor ? Does the third element of the 'scales' tensor correspond to the rows of the input tensor ? ... Moreover, if it's the value '2', we understand that the dimension of the corresponding axis is upsampling but by how much ? Does it mean that it is multiplied by 2 ?
 2. The "nearest_mode" attribute indicates how to get “nearest” pixel in input tensor from x_original. There are 4 modes : "round_prefer_floor", "round_prefer_ceil", "floor", "ceil" but for no mode the documentation explains which operation applies to the tensor. What difference applies depending on the mode? 
 
 ### Consequence
-(TBC)
+The ouput tensor could be the incorrect shape with incorrect elements in the feature maps if the rescaling of the dimension was misunderstood. The operations of the next layers would be distorted. 
 
 ### Proposal
 1. Specify the correspondance between the elements of the "scales" input and the axis of the input tensor to be resized.
 2. Specify exactly the transformation applied to the input tensor depending on the assigned upsampling mode. Give an example of what the output tensor looks like from an input tensor for each of the modes
+
+
+## Issue #14: Incomplete specification of RESHAPE operator 
+
+- CAT: Operator
+- CRIT: High
+- REQ:	(TBC)
+- LOC:  https://onnx.ai/onnx/operators/onnx__Reshape.html
+
+### Issue
+The "shape" input is a shape tensor which specifies the output shape. If one dimension of the new shape is -1, the value of the output dimension is inferred from the size of the input tensor and the remaining dimensions. Let's suppose an input tensor with size [1,c,l,w] and 'shape'=[1,c,-1], in this case where the shape of the output tensor is inferior to the shape of the input tensor, does it mean that we have to reorganize the matrix lxw of feature map into an unique row of size l*w in order to obtain an output tensor with the shape [1,c,l*w] ? And how are the rows of w columns organized on a single line ? Are they concatenated one after the other ? Is an order to be respected ? The onnx documentation does not specify exactly how the dimension '-1' transform the tensor to be reshaped. And vice versa, if shape of the output tensor > shape of the input tensor (input tensor's size = [1,c,L] and 'shape'=[1,c,l,w]), then how is the data from a row organized into matrices (L=l*w) ? The onnx documentation does not specify exactly how the data from the input tensor is reorganized. Moreover, the documentation does not specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
+
+### Consequence
+1. The output tensor may be incorrect if the input tensor was reshaped based on the wrong axes.
+2. The output tensor may be incorrect if the reordering data in one dimension was done in the wrong order --> the operations of the next layers would be distorted. 
+
+### Proposal
+1. Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
+2. Specify exactly how the dimension '-1' transform the tensor to be reshaped.
+3. Specify exactly how the data from the tensor is reorganized.
