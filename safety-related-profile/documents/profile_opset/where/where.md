@@ -253,42 +253,6 @@ tensor where(const tensor* cond, const tensor* X, const tensor* Y) {
 ```
 
 
-
-
-# Graph execution semantics
-
-The execution semantics of the `where` operator adheres to the general execution semantics specified for ONNX models. This involves executing the nodes of the graph in a topologically sorted order, ensuring that all required inputs for a node are available before execution.
-
-The elements of the execution semantics are given on the [IR (Intermediate Representation) page](https://onnx.ai/onnx/repo-docs/IR.html) of the ONNX web site. Additionally, a Python "reference implementation" is also provided (see <https://onnx.ai/onnx/api/reference.html>). The source code of this implementation can be found at <https://github.com/onnx/onnx/tree/main/onnx/reference>.
-
-In summary, each operator (or function) is executed according to its position in the topological sorting of the graph nodes. This ensures an operator is executed only when its inputs are available. Multiple valid orders might exist for a given graph, but each order should yield the same result.
-
-The Python code to execute a graph can be found in the class [`ReferenceEvaluator`](https://github.com/onnx/onnx/blob/main/onnx/reference/reference_evaluator.py)). After processing inputs and initializers, the nodes are executed in sequence, checking the availability of required inputs before executing each.
-
-### Informal specification
-
-<div class="note">
-
-The semantics of an ONNX model is given in Section "Model Semantics" of
-the [Intermediate
-Representation](https://github.com/onnx/onnx/blob/main/docs/IR.md) page.
-Basically, an inference-model is a stateless function (except possibly
-for some specific nodes such as a random-generation node) represented by
-an acyclic `graph` of nodes. The `graph` is mainly represented by a set
-of inputs and outputs and a topologically sorted list of nodes. Each
-node represents a call to an operator or a function. A `function` is
-itself a graph.
-
-Note that the types of inputs and outputs are not systematically
-required because they can be inferred. In our case, I guess that we will
-forbib shape inference and rely on static tensor shapes (or, at least,
-shape inference can be bone before serializing the model). The proecss
-of shape inference is described in Section  [ONNX Shape
-Inference](https://onnx.ai/onnx/repo-docs/ShapeInference.html).
-
-</div>
-
-
 [^1]: See [Why3 documentation](https://www(W)hy3.org/)
 
 [^2]: See [Frama-C
