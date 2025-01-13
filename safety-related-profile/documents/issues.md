@@ -1,45 +1,27 @@
-# ONNX analysis 
+# Template
 
-## Issue #TEMPLATE: Title of the issue
+## Issue `<issue id>`: `<issue title>`
 
-- CAT: category in {__OPERATOR__ , __GRAPH__ , __FORMAT__}
-- CRIT: criticality in { __LOW__  , __HIGH__ }
+- CAT: _category in {__OPERATOR__ , __GRAPH__ , __FORMAT__}_
+- CRIT: _criticality in { __LOW__  , __HIGH__ }_
 - REQ:	_Identification of the SONNX requirement that can't be satisfied due to this issue_
-- LOC: 	__Identification of the exact location in the standard, possibly using an hyperlink__
+- LOC: 	_Location in the standard, possibly using an hyperlink__
 
 ### Issue
-__Description of the issue (in a synthetic way)__
+_Description of the issue (in a synthetic way)_
 
 ### Consequence
-__Brief description of the effect the issue on the development activities.__
+_Brief description of the effect the issue on the development activities._
 
 ### Proposal
-__Proposal to solve the issue or mitigate the consequences__
+_Proposal to solve the issue or mitigate its consequences_
 
 ### Remarks (opt)
-__Additional remarks__
+_Additional remarks_
 
+# Issues - Non operators
 
-## Issue #1: incomplete specification of CONV operator
-- CAT: Operator
-- CRI: HIGH
-- REQ: (TBC)
-- LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__Conv.html), but this issue appear in other operators
-
-### Issue
-The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
-
-The value of the padding is not defined (it is actually 0).
-
-Presentation of attributes makes it difficult to check if all dependencies are expressed. 
-
-### Consequence
-Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementation may lead to different results.
-
-### Proposal
-See [example](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example)
-
-## Issue #2: Execution order of graph nodes
+## Issue #1.1: Execution order of graph nodes
 - CAT: GRAPH
 - CRI: LOW
 - REQ: (TBC)
@@ -63,7 +45,7 @@ Other constraints are given in the [onnx-ml.proto3](https://github.com/onnx/onnx
     // One FunctionProto can reference other FunctionProto in the model, however, recursive reference
     // is not allowed.
 
-## Issue #3: Overloading
+## Issue #1.2: Overloading
 
 - CAT: (to be completed)
 - CRIT: (to be completed)
@@ -87,8 +69,7 @@ A [function in ONNX](https://onnx.ai/onnx/intro/concepts.html) is a way to reuse
 ### Remarks (opt)
 (TBC)
 
-
-## Issue #4: opset resolution
+## Issue #1.3: opset resolution
 
 - CAT: (to be completed)
 - CRIT: (to be completed)
@@ -115,7 +96,7 @@ As per the ONNX IR documentation: "each function contained in a Model (also refe
 From opset10 onwards, a function is uniquely identified by the triple (domain, name, overload).
 
 
-## Issue #4: Function polymorphism
+## Issue #1.4: Function polymorphism
 
 - CAT: (TBC)
 - CRI: (TBC)
@@ -133,7 +114,7 @@ Enforce that all tensor data types and shapes are explicit in the model.
 
 ### Remarks (opt)
 
-## Issue #5: Shape broadcasting
+## Issue #1.5: Shape broadcasting
 
 - CAT: (TBC)
 - CRI: (TBC)
@@ -158,7 +139,7 @@ Several reported issues with onnx to C code generators, which complexity increas
 ### Remarks
 About broadcasting, see the [dedicated section of the NumPy manual ](https://numpy.org/doc/stable/user/basics.broadcasting.html#general-broadcasting-rules)
 
-## Issue #6: Overloading
+## Issue #1.6: Overloading
 
 - CAT: (TBC)
 - CRI: (TBC)
@@ -168,15 +149,13 @@ About broadcasting, see the [dedicated section of the NumPy manual ](https://num
 ### Issue
 IR version 10 introduces overloading, i.e. the capability to have several definitions for the same function, and select them using a new ‘overloading’ field.
 
-
 ### Consequence
 (TBC)
 
 ### Proposal
 (TBC)
 
-
-## Issue #7: Variadic inputs
+## Issue #1.7: Variadic inputs
 
 - CAT: (TBC)
 - CRI: (TBC)
@@ -195,7 +174,7 @@ Introduce a maximal number of parameters.
 
 ### Remarks
 
-## Issue #8: Dynamic (Node input) vs static (Node attribute)
+## Issue #1.8: Dynamic (Node input) vs static (Node attribute)
 
 - CAT: (TBC)
 - CRI: (TBC)
@@ -206,8 +185,6 @@ Introduce a maximal number of parameters.
 The semantics is not clear that Node  input is dynamic and Node attribute is static.
 As attributes can take Tensor values, these values might come from other Nodes (constant or not)
 
-
-
 ### Consequence
 (TBC)
 
@@ -217,7 +194,7 @@ Introduce a maximal number of parameters.
 ### Remarks
 
 
-## Issue #9: Data storage
+## Issue #1.9: Data storage
 
 - CAT: (TBC)
 - CRI: LOW
@@ -237,7 +214,7 @@ ONNX supports __typed__ and __raw__ serialization of data. When __raw_data__ are
 
 Do we need to specify our own encoding format?
 
-## Issue #10: Quantization consistency
+## Issue #1.10: Quantization consistency
 
 - CAT: (TBC)
 - CRI: LOW
@@ -256,8 +233,9 @@ Do we need to specify our own encoding format?
 ONNX supports __Quantization__ operators. Quantization data types are not consistent accross operators.
 [QuantizeLinear](https://onnx.ai/onnx/operators/onnx__QuantizeLinear.html) is able to output int16, uint16, but [QLinearMatMul](https://onnx.ai/onnx/operators/onnx__QLinearMatMul.html), [QLinearConv](https://onnx.ai/onnx/operators/onnx__QLinearConv.html), [MatMulInteger](https://onnx.ai/onnx/operators/onnx__MatMulInteger.html) and [ConvInteger](https://onnx.ai/onnx/operators/onnx__ConvInteger.html#l-onnx-doc-convinteger) do not support these types.
 
+# Operators
 
-## Issue #11: Incomplete specification of SPLIT operator
+## Issue #2.1: Incomplete specification of SPLIT operator
 
 - CAT: Operator
 - CRIT: High
@@ -282,7 +260,7 @@ Define in the documentation a dictionary associating integers with axis of tenso
 The onnx description should specify exactly how the axis of the input tensor is splited and indicate precisely where each of the outputs in the following layers of the network are used.
 
 
-## Issue #12: Incomplete specification of CONCAT operator 
+## Issue #2.2: Incomplete specification of CONCAT operator 
 
 - CAT: Operator
 - CRIT: High
@@ -300,8 +278,7 @@ If the concatenation was done along the wrong axis of the input tensors or in th
 Define in the documentation a dictionary associating integers with axis of tensors. 
 The onnx description should specify the order in which the input tensors are concatenated.
 
-
-## Issue #13: Incomplete specification of RESIZE operator 
+## Issue #2.3: Incomplete specification of RESIZE operator 
 
 - CAT: Operator
 - CRIT: High
@@ -320,7 +297,7 @@ The ouput tensor could be the incorrect shape with incorrect elements in the fea
 2. Specify exactly the transformation applied to the input tensor depending on the assigned upsampling mode. Give an example of what the output tensor looks like from an input tensor for each of the modes
 
 
-## Issue #14: Incomplete specification of RESHAPE operator 
+## Issue #2.4: Incomplete specification of RESHAPE operator 
 
 - CAT: Operator
 - CRIT: High
@@ -340,7 +317,7 @@ The "shape" input is a shape tensor which specifies the output shape. If one dim
 3. Specify exactly how the data from the tensor is reorganized.
 
 
-## Issue #15: Incomplete specification of SOFTMAX operator 
+## Issue #2.5: Incomplete specification of SOFTMAX operator 
 
 - CAT: Operator
 - CRIT: High
@@ -358,7 +335,7 @@ The values of elements in the feature maps of the output tensor could be incorre
 Specify in the documentation the correspondance between the integer given to the "axis" attribute and the axe of the input tensor.
 
 
-## Issue #16 : Incomplete specification of SHAPE operator 
+## Issue #2.6 : Incomplete specification of SHAPE operator 
 
 - CAT: Operator
 - CRIT: High
@@ -376,7 +353,7 @@ The output tensor could be incorrect if the implementation of the 'shape' operat
 2. Note in the onnx file of description of the neural network the shape of the layer input as well as the layer output. 
 
 
-## Issue #17 : Incomplete specification of SLICE operator 
+## Issue #2.7 : Incomplete specification of SLICE operator 
 
 - CAT: Operator 
 - CRIT: High
@@ -391,3 +368,23 @@ When implementing a neural network containing a "slice" operator, the slice oper
 
 ### Proposal
 Define in the documentation a dictionary associating integers with axis of tensors. 
+
+
+## Issue #2.8: incomplete specification of CONV operator
+- CAT: Operator
+- CRI: HIGH
+- REQ: (TBC)
+- LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__Conv.html), but this issue appear in other operators
+
+### Issue
+The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
+
+The value of the padding is not defined (it is actually 0).
+
+Presentation of attributes makes it difficult to check if all dependencies are expressed. 
+
+### Consequence
+Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementation may lead to different results.
+
+### Proposal
+See [example](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example)
