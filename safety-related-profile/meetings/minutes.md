@@ -1,3 +1,36 @@
+# 2025/01/15
+## Agenda
+- Edoardo's presentation about the "Evaluation and improvement of SW verifiers on FP Neural Networks"
+- Recall of the workplan, current status of the WG achievements
+- Review of actions
+- Status of CONV operator, review of Henri's `WHERE`operator
+- Discussion on the behavior in the presence of errors (see action 1812-2)
+- Brief review of issues identified by Anne-Sophie, see [Issues](../documents/issues.md)
+  
+## Attendees
+*(To be completed)*
+
+## Minutes 
+*(To be completed)*
+
+## New actions
+*(To be completed)*
+
+## Past actions
+- [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
+- [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
+  - See mail dated 19/12.
+- [ ] (1812-3, Mariem) Complete the formal specification of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Discussion on-going with Loïc on the formal specification strategy. Meeting planned to reach a final consensus. ..
+- [X] (1812-4, Eric) Provide a "complexity" estimation for each operator
+    - Done, see [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
+- [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
+    - Review from Thiziri to be received on 2024/12/20.
+- [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+
 # 2024/12/18
 ## Agenda
 - Sebastian's presentation on Bosch's code generation tool.
@@ -7,9 +40,9 @@
 - Discussion about the operators to integrate in the profile (see the [list of operators](./operator_spec_sub_wg/SONNX_Operator_List.xlsx))
 - Call for contributors to reqs and description of ops. 
 - Output from ``conv2d`` last review.
-# Attendees
+## Attendees
 Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean Souyris, Jean-Baptiste Rouffet, Jean-Loup Farges, Sebastian Boblest, Mohammed, Anne-Sophie Lalloyer, Andreas Dittberner, Benjamin Wagner, Duy Khoi Vo, Julien Vidalie, Thiziri Belkacem, Nicolas Valot, Henri Belfy
-# Minutes
+## Minutes
 (The meeting has been recorded and is available [here](https://zoom.us/rec/play/Gp1BMRCA01sUw-m0lXeewLgfPIPRlluJ3Cfi_AakBAruDRvm5CSWSf_bj19PHA6Ky99dXm2mlASBkEKu.Ws8R97q6D_W-k0a_?canPlayFromShare=true&from=share_recording_detail&continueMode=true&componentName=rec-play&originRequestUrl=https%3A%2F%2Fzoom.us%2Frec%2Fshare%2FPTdcIxVJaVSPh1Ze39mu3zmVqjYJ0sB33oR76VOsWpsKlbnaGtQwa7r4bkp1OF3a.5BpTwCuQlXolU4uC) for those who have an LFX account. Note that there is also a full textual transcript of the meeting, which includes all the Mmmm, the hesitations, the globbish, etc. Nevertheless, this is extremely handy, you can even click on the text and the video will move at the appropriate place. If we were able to cut /paste the transcript in ChatGPT to generate a synthesis, that'll be perfect...)
 - Sebastian's presentation on Bosch's Embedded Ai coder.
   - Two things (please refer to the video for the full contents):
@@ -20,7 +53,7 @@ Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean S
 - Discussion about the list of operators and the way we have to "process them"
   - We have to share the work! Eric will add a "complexoity" evaluation to the current list of operators (1812-4), then every contributor can put his/her name in front of the operator on which he/she can contribute (as a writer, a reviewer). See action (1812-5). Note that we will start the work when the specification of the ``conv`` operator is completed (since it will be used as a template).
 - Sebastian raised an important remark concerning the actual capability of people to contribute to the effort. Everyone has to check the legal aspects of contributing to the SONNX effort which, eventually, will be part of ONNX (exact modalities have to be addressed). See action (1812-6)
-#### New actions
+## New actions
 - [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
 - [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
   - See mail dated 19/12.
@@ -29,7 +62,7 @@ Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean S
     - Done, see [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
-#### Past actions
+## Past actions
 - [X] (0412-1, Eric) Integrate CS' use case in the [list of use cases](../documents/usecases.md)
 - [X] (0412-2, Eric, Jean) Check Airbus's needs.
 - [X] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose?
@@ -38,23 +71,6 @@ Andreas Fehlner, Christophe Garion, Cong Liu, Edoardo Manino,  Eric Jenn, Jean S
     - Review from Thiziri to be received on 2024/12/20.
 - [X] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
-#### Past actions
-- [X] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
-  - Followup: (1218-2)
-- [ ] (231001 - All) Check Nicolas' classification proposal 
-- [ ] (231002 - Sebastian) Get in touch with other people in the automotive partners (e.g. ETAS).
-- [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
-  - On-going (see previous meeting)
-- [ ] (A008 - leads) Plan SC meetings
-- [ ] (A009 - Dumitru) Correct  / complete description of issue #2
-  - Dumitru will check this...
-- [ ] (A015) All : Complete description of use cases
-  - On-going
-- [ ] (A016) All : Complete description of needs
-  - On-going
-- [ ] (A004 - all) Propose a short communication during the next WG meetings. The list is [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/presentation_proposals.md).
-  - On-going 
-
 
 # 2024/12/04
 ## Agenda
@@ -97,14 +113,14 @@ Eric, Mariem, Edoardo, Pierre B., Jean-Loup, Pierre G., Mohammed, Jean-Baptiste,
 - Other subjects:
   - Sub-group on Reqs: no new contributors besides Sebastian's and Henri...  
   - Set-up a sub-group to analyse the ONNX standard to continue Nicolas' work which is collected in document [issues](../documents/issues.md). See action (0412-6)
-#### New actions
+## New actions
 - [ ] (0412-1, Eric) Integrate Cs' use case in the [list of use cases](../documents/usecases.md)
 - [ ] (0412-2, Eric, Jean) Check Airbus's needs.
 - [ ] (0412-3, Eric) Integrate Henri's comments in the list of questions to WG114. Integrate questions raised by Jean-Baptiste presentation about (i) hyperparameters (what are those hyperparameters, precisely), why do they need to carry this information in the MLMD, for what purpose?
 - [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
 - [ ] (0412-5, Mariem) Replace the sentence that uses "shifted" by "the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis"
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
-#### Past actions
+## Past actions
 - [X] (2011-1 - Jean, Eric) Integrate Airbus' additional needs/reqs.
 - [X] (2011-2 - Eric) Make a call for participation to the req core team. 
 - [X] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
@@ -163,10 +179,10 @@ Marko, Sebastian, Julien, Jean, Henri, Augustin, Yohann, Mohammed, Eric B., Eric
 - In order to accelerate the process, Jean proposes to set up a "core team" composed of representatives of the different industrial domains (or other interested people too). Those people will work specifically on "needs" and "requirements". They will meet in specific meetings... Sebastian and Henri will participate (thanks!). A local physical meeting with people from Airbus, Thales, ADS, TAS, IRT could also be organized in order to speed up the process.  
   - [ ] (Eric) Make a call for participation to the req core team.    
   
-#### New actions
+## New actions
 - [ ] (2011-1 - Jean, Eric) Integrate Airbus' additional needs/reqs.
 - [ ] (2011-2 - Eric) Make a call for participation to the req core team. 
-#### Previous actions
+## Previous actions
 - [ ] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
       - On going, see [this note](../documents/analysis_of_standards/2024-11-08%20-%20Replication%20criteria.md)
 - [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
@@ -259,15 +275,14 @@ JENN Eric, Adrian Evans, Pierre Gaillard, Nicolas Valot , Edoardo Manino, Jean-L
     - [ ] (Jean-Loup) Review the conv2d operator
     - [ ] (Eric, Mariem) Update conv2d spec according to Sebastian's and Jean-Loup's reviews
   
-
-#### New actions
+## New actions
 - [ ] (0611-1 - Eric, Nicolas, Jean-Loup) Finish the discussion about "reproducibility"...
 - [ ] (0611-2 - Eric) Prepare a followup to the discussion about computation errors: what is the impact on the MLMD?
 - [ ] (0611-3 - Eric) Integrate paper in [document](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/numerical_issues/01_what_is_the_issue.md).
 - [ ] (0611-4 - Jean-Loup) Review the conv2d operator
 - [ ] (0611-5 - Eric, Mariem) Update conv2d spec from Sebastian's and Jean-Loup's reviews
    
-#### Previous actions
+## Previous actions
 - [ ] (231001 - All) Check Nicolas' classification proposal 
 - [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
       - In progress. The case study is drone tracking. Transformers are used, but the model remains "simple"  enough to be embedded...
@@ -344,7 +359,7 @@ JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rou
 - **/!\PLEASE CONTRIBUTE TO THE DESCRIPTION OF [USE CASES](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md) AND [NEEDS/REQS](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/needs.md) /!\\**
   - Concerning use cases, please provide links to the standard models (when applicable)
 
-#### New actions
+## New actions
 - [ ] (231001 - All) Check Nicolas' classification proposal 
 - [ ] (231002 - Mohammed) Propose a use case for CS, [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/usecases.md)
 - [ ] (231002 - Jean-Baptiste) Provide a first analysis of the ARP 6983 / EASA concept paper
@@ -353,7 +368,7 @@ JENN Eric, TURKI Mariem, Filipo PEROTTO, Julien VIDALIE, Andreas Fehlner, JB Rou
   - Done: to be discussed with Sebastian on 11/06
 - [ ] (231002 - Luis) Provide contact(s) with other industrial domains (medical,...)
 
-#### Previous actions
+## Previous actions
 - [ ] (A008 - leads) Plan SC meetings
   - No action.
 - [ ] (A009 - Dumitru) Correct  / complete description of issue #2
