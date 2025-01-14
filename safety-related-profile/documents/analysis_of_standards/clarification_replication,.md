@@ -1,27 +1,4 @@
 
-Dear Colleagues,
-
-We are working on a specific profile of the ONNX standard for "critical" systems.
-
-[ONNX](https://onnx.ai/) is an open standard for the exchange of machine learning models. 
-
-Our objective is to 
-- provide a clear definition of operators and graph semantics (consistent, non ambiguous, etc.) 
-- provide a clear definition of the ONNX file format (consistent, non ambiguous, etc.).
-  
-This activity is hosted by the ONNX community. The material produced by the working group is available on github (https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile).
-
-Our work is driven by industrial needs and the recommendations of regulatory bodies. Specifically, we aim to ensure that our proposal supports and facilitates compliance with ARP 6983. Achieving this requires a thorough understanding of the ARP's recommendations and, at times, its underlying intent.
-
-Therefore, we would be deeply grateful to your working group for considering the  set of questions attached to this mail (pdf). 
-
-For the SONNX working group,
-
-Eric JENN (IRT Saint-Exupery) and Jean SOUYRIS  (Airbus)
-
-(ps) Note that the source document (Markdown format) is also available [here](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/documents/analysis_of_standards/clarification_replication%2C.md).  
-
-
 ##  (§6.4.3.6) ML Model description 
 
 ### Q1: Model interfaces, control and data flows
