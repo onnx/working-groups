@@ -6,7 +6,7 @@
 | sb | Sebastian | 
 | tb | Thiziri |
 | hb | Henri |
-
+| nv | Nicolas |
 
 | Operator                     | Writers            | Reviewers         |
 |------------------------------|--------------------|-------------------|
@@ -28,7 +28,7 @@
 | Flatten                      |                    |                   |
 | FullyConnected               |                    |                   |
 | Gather                       |                    |                   |
-| Gemm                         |                    |                   |
+| Gemm                         |nv                  |                   |
 | GlobalAveragePool            |                    |                   |
 | GRU                          |                    |                   |
 | HardSwish                    |                    |                   |
@@ -37,7 +37,7 @@
 | Less                         |hb?,                |hb                 |
 | Log                          |                    |                   |
 | LSTM                         |                    |                   |
-| MatMul                       |                    |                   |
+| MatMul                       |nv                  |                   |
 | Max                          |                    |                   |
 | MaxPool                      |                    |                   |
 | Min                          |                    |                   |
