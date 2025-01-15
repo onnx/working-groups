@@ -10,13 +10,32 @@
 - Discussion on the behavior in the presence of errors (see action 1812-2)
 
 ## Attendees
-*(To be completed)*
+Eduardo, Eric, Jean, Mariem, Sebastian, Augustin, Dumitru, Henri, Nicolas, Cong, Jean-Loup [sorry, some names are probably missing ; I don't know how to obtain the list of attendees using LFAI...]
 
 ## Minutes 
-*(To be completed)*
-
+- Edorado's slides can be found [here](./slides/2025-01-15-Edoardo_Manino_SONNX_slides.pdf)
+- Status of the current results. 
+  - Concerning the specification work, we can take `conv` as an example, even though it may be later modified thanks to the lessons learnt on other operators.
+  - We have to find people to work on the specification. See action [1501-1] and [1501-2] 
+- Status of the work on formal methods. 
+  - Mariem organizes a meeting to find a consensual formalization strategy. See action [1501-3].
+- Discussion on Henri's specification of the `where` operator. See action [1501-4].
+  - In order to enforce determinism, broadcasting must be forbidden. This is a general rule to be applied to all operators. 
+  - In a conservative manner, we may express restriction in the first version of the operator and relax those restrictions later should they represent too strong a constrainst.
+  - Discussion about the `if` operator which allows different subgraphs to be executed depending on a boolean value. Note that this operator does not violate the general rule about the execution condition of an operator: by construction, the `if` operator execute either one or another graph that are completely separated (they do not join).  
+  - Discussion about `if`concern the specification of the graph execution semantics, which is an activity that has not yet started. 
+-  Presentation of some of the issues identified by Anne-Sophie. 
+   -  Some issues concern the graph execution semantics. See action [1501-5].
+   -  Remarks have to be reviewed (action [1501-6])in order to see if there reveal an actual issue and, if yes, how to address it. When there is an ambiguity, we may rely on an actual implementation of the ONNX specification to determine the actual semantics. But which implementation should be taken as a reference? OnnexRuntime, another? One solution may be to ask the ONNX committee in charge of the operators.  (see action [1501-7]).
 ## New actions
-*(To be completed)*
+- [ ] (1501-1, Sebastian) Specify some operators...
+- [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+- [ ] (1501-3, all) Drop an e-mail to Mariem should you be interested in the work on formal methods
+- [ ] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<you_name>.md`) or send them to me.
+- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
+- [ ] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
+
 
 ## Past actions
 - [X] (1812-1, Mariem et Eric) Process reviews of `conv`. 
