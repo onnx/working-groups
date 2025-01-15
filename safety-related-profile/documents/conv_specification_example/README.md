@@ -1,3 +1,10 @@
+
+# /!\ WARNING /!\
+THIS VERSION IS NOW OBSOLETE.
+PLEASE DO NOT MAKE ANY MODIFICATIONS TO THIS VERSION.\
+INSTEAD, USE THE VERSION LOCATED [HERE](../profile_opset/conv/conv.md)
+
+
 # Conventions
 ## Notations
 - Notations $h(X)$ and $w(X)$ respectively denote the _height_ and the _width_ of tensor $X$. If the tensor represents an image, $h(X)$ and $w(X)$ represent the _height_ and the _width_ of the image.
