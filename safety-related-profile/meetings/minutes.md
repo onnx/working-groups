@@ -3,11 +3,12 @@
 - Edoardo's presentation about the "Evaluation and improvement of SW verifiers on FP Neural Networks"
 - Recall of the workplan, current status of the WG achievements
 - Review of actions
+- Status on [questions about the ARP ](../documents/analysis_of_standards/clarification_replication,.md)
 - Status of CONV operator, review of Henri's `WHERE`operator
-- Discussion on the behavior in the presence of errors (see action 1812-2)
 - Brief review of issues identified by Anne-Sophie, see [Issues](../documents/issues.md)
 - Status on formal methods
-  
+- Discussion on the behavior in the presence of errors (see action 1812-2)
+
 ## Attendees
 *(To be completed)*
 
@@ -18,7 +19,8 @@
 *(To be completed)*
 
 ## Past actions
-- [ ] (1812-1, Mariem et Eric) Process reviews of `conv2D`. 
+- [X] (1812-1, Mariem et Eric) Process reviews of `conv`. 
+  - Done. Spec moved [here](../documents/profile_opset/conv/)
 - [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
   - See mail dated 19/12.
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
@@ -30,7 +32,7 @@
 - [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
     - Review from Thiziri to be received on 2024/12/20.
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
-  - Contribution of Anne-Sophie. But WG to till to be created... Opportunity to organize a physical meeting in Toulouse. 
+  - Contribution of Anne-Sophie. But WG to be set. 
 
 # 2024/12/18
 ## Agenda
