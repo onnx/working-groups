@@ -6,6 +6,7 @@
 - Status of CONV operator, review of Henri's `WHERE`operator
 - Discussion on the behavior in the presence of errors (see action 1812-2)
 - Brief review of issues identified by Anne-Sophie, see [Issues](../documents/issues.md)
+- Status on formal methods
   
 ## Attendees
 *(To be completed)*
@@ -29,7 +30,7 @@
 - [ ] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
     - Review from Thiziri to be received on 2024/12/20.
 - [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
-  - Contribution of Anne-Sophie. But WG to be set. 
+  - Contribution of Anne-Sophie. But WG to till to be created... Opportunity to organize a physical meeting in Toulouse. 
 
 # 2024/12/18
 ## Agenda
