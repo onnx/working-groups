@@ -30,6 +30,7 @@
 | KRISHNA | Ram | |
 | LAVAL | Damien | Naval Group |
 | LEMESLE | Augustin | CEA |
+| LIU | Cong | Collins Aerospace|
 | MANINO | Edoardo | Manchester U | | |
 | MARABOTTO | Christophe | IRT Saint-Exupéry |
 | MARANDAS | David-Gilles | Airbus Operations SAS |
