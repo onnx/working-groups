@@ -39,15 +39,17 @@ Eduardo, Eric, Jean, Mariem, Sebastian, Augustin, Dumitru, Henri, Nicolas, Cong,
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
 - [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
 - [ ] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
-- [ ] (1508-1, Eric) Send the list of questions to the WG 114 leader.
+- [X] (1508-1, Eric) Send the list of questions to the WG 114 leader.
+  - List of questions sent to the WG114 chairwoman on Jan. 16th.
 
 ## Past actions
 - [X] (1812-1, Mariem et Eric) Process reviews of `conv`. 
   - Done. Spec moved [here](../documents/profile_opset/conv/)
 - [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
   - See mail dated 19/12.
-- [ ] (1812-3, Mariem) Complete the formal specification of `conv2d` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
-  - Discussion on-going with Loïc on the formal specification strategy. Meeting planned to reach a final consensus. ..
+- [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Discussion on-going with Loïc on the formal specification strategy...
+  - Meeting planned to reach a final consensus...
 - [X] (1812-4, Eric) Provide a "complexity" estimation for each operator
     - Done, see [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)

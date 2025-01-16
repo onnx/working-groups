@@ -43,7 +43,7 @@ In §7.1.3, we read:
 
 ## (§7.3) ML Constituent Architecture Design Process
 
-### Q2: Stability
+### Q1: Stability
 
 In §7.3.3, we read:
 > The assessment should provide justification that stability on the target platform is unchanged from the ML Model in the training environment. This may be accomplished by comparison of the characteristics of the training and target platforms (if they can be shown to be **similar enough** to preserve **these properties**), by analysis, or by additional testing to demonstrate the equivalence.
@@ -84,9 +84,9 @@ In the sentence:
 
 The ML model is required to include data about the "model execution environment".
 
-*What is actually required? Any data characterizing an element of the execution platform that may have an impact on the behavior of output of the ML model (e.g., target proc, operting system, ML framework, Python version, etc.) or, stated differently, all data allowing the strict (or approximate) replication of the ML model behaviour and output?*
+*What is actually required? Any data characterizing an element of the execution platform that may have an impact on the behavior of output of the ML model (e.g., target proc, operating system, ML framework, Python version, etc.) or, stated differently, all data allowing the strict (or approximate) replication of the ML model behaviour and output?*
 
-### Q5 - "not part of the ML model description"
+### Q4 - "not part of the ML model description"
 
 We read:
 > NOTE: Additional information may be included for clarification purposes, 
