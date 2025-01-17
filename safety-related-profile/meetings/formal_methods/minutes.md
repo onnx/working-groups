@@ -1,7 +1,7 @@
 # 2025/01/28
 
 ## Agenda
-The objective of the meeting is to answer the following quesiotns:
+The objectives of the meeting are the following :
 - Determine the approach for operator specification. On the basis of Loïc’s proposal:
     * Option 1: use C code
         * The reference implementation (in C) is the specification. Compliance of an implementation to this specification will be demonstrated by     testing with epsilon precision. No formal specification language (e.g., ACSL, Why3, etc.) is required.
