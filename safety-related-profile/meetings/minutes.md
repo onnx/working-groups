@@ -34,11 +34,12 @@ Eduardo, Eric, Jean, Mariem, Sebastian, Augustin, Dumitru, Henri, Nicolas, Cong,
 ## New actions
 - [ ] (1501-1, Sebastian) Specify some operators...
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
-- [ ] (1501-3, all) Drop an e-mail to Mariem should you be interested in the work on formal methods
+- [X] (1501-3, all) Drop an e-mail to Mariem should you be interested in the work on formal methods
 - [ ] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<you_name>.md`) or send them to me.
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
 - [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
-- [ ] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
+- [X] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
+    - The best solution is probably to use the [ONNX] test suite, which covers operators and graph. "Just in case", I have also contacted RAM at ONNX.
 - [X] (1508-1, Eric) Send the list of questions to the WG 114 leader.
   - List of questions sent to the WG114 chairwoman on Jan. 16th.
 
