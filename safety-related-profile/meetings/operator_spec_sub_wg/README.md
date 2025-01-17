@@ -1,0 +1,1 @@
+This directory contains the material used/produced by the operator specification sub working group.
