@@ -1,3 +1,21 @@
+# 2025/01/28
+
+## Agenda
+The objective of the meeting is to answer the following quesiotns:
+- Determine the approach for operator specification. On the basis of Loïc’s proposal:
+    * Option 1: use C code
+        * The reference implementation (in C) is the specification. Compliance of an implementation to this specification will be demonstrated by     testing with epsilon precision. No formal specification language (e.g., ACSL, Why3, etc.) is required.
+    * Option 2: use Why3
+        * O2.1:  Write a reference algorithm in Why3 (without loops). Compliance of an implementation to this specification will be demonstrated by testing with epsilon precision.
+        * O2.2: O2.1 + Prove the correctness of the C reference implementation against the Why3 reference algorithm under the assumption F = ℝ
+        * Algebraic Properties: Show some good algebraic properties of the reference algorithm in Why3 (in ℝ) (e.g., linearity, commutativity,     associativity, distributivity with respect to addition, existence of a neutral element, symmetry, etc.).
+    * Option 3: use ACSL
+      * Similar to the Why3 versions above, but using ACSL/Frama-C.
+     
+- Determine the best approach for developing the reference specification for the Conv operator.
+## Participants
+## Minutes
+
 # 2024/11/29
 
 ## Agenda
