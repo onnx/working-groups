@@ -7,14 +7,14 @@ A synthesis of all restrictions is given in section "Restrictions".
 ## Types
 - Operators are first described for values in the domain of real numbers. A specific description is given for the other types (floats, integers).
  
-# `matmul` operator (real)
+# `MatMul` operator (real)
 
 ### Restrictions
-The following restrictions apply to the `matmul` operator for the SONNX profile:
-- The number of spatial axes of the tensors is restricted to <= 2 ========TBC======`[R1]`
+The following restrictions apply to the `MatMul` operator for the SONNX profile:
+- The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
 
 ### Signature
-`Y = matmul(A,B)`
+`Y = MatMul(A,B)`
 where
 - `A`: first input tensor
 - `B`: second input tensor
@@ -22,13 +22,23 @@ where
   
 #### Informal specification
 
-Operator `matmul` computes the matrix multiplication of the input tensors `A` and `B` into the output matrix `Y`.
-
-##### Standard convolution
+Operator `MatMul` computes the matrix multiplication of the input tensors `A` and `B` into the output matrix `Y`.
 
 The mathematical definition of the operator is given hereafter.
 
+$$     
+   Y = A \times B  
 $$
+
+
+$$
+     \begin{bmatrix}
+         y_{11} & y_{12} & \cdots & y_{1p}\\
+         y_{21} & y_{22} & \cdots & y_{2p}\\ 
+         \vdots & \vdots & \ddots & \vdots\\ 
+         y_{m1} & y_{m2} & \cdots & y_{mp} 
+     \end{bmatrix}
+      =
      \begin{bmatrix}
          a_{11} & a_{12} & \cdots & a_{1n}\\
          a_{21} & a_{22} & \cdots & a_{2n}\\ 
@@ -42,13 +52,6 @@ $$
          \vdots & \vdots & \ddots & \vdots\\ 
          b_{n1} & b_{n2} & \cdots & b_{np} 
      \end{bmatrix}
-      =
-     \begin{bmatrix}
-         y_{11} & y_{12} & \cdots & y_{1p}\\
-         y_{21} & y_{22} & \cdots & y_{2p}\\ 
-         \vdots & \vdots & \ddots & \vdots\\ 
-         y_{m1} & y_{m2} & \cdots & y_{mp} 
-     \end{bmatrix}
 $$
 $$     
    y_{ij}= a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} + b_{nj} = \sum_{k=1}^n a_{ik}b_{kj}  
@@ -56,8 +59,8 @@ $$
 
 Where
 - $y$ is the output matrix,
-- $b$ is the first input matrix,
-- $c$ is the second input matrix,
+- $a$ is the first input matrix,
+- $b$ is the second input matrix,
 - $m$ the first input matrix number of rows,
 - $n$ the first input matrix number of columns and second input matrix number of rows,
 - $p$ the second input matrix number of columns
@@ -66,13 +69,19 @@ Where
 The behavior depends on the arguments in the following way.
 
 - If both input are 2-D they are multiplied like conventional matrices.
+```
+These particularities are linked to numpy specification referenced by ONNX MatMul.
+
+The assumption for SONNX is that the following is managed by splitting matrices and duplicating call to MatMul.
 
 - If either input is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
+
+The assumption for SONNX is that the following is managed by insterting Reshape before and after MatMul.
 
 - If the first input is 1-D, it is promoted to a matrix by prepending a 1 to its dimensions. After matrix multiplication the prepended 1 is removed.
 
 - If the second input is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed.
-
+```
 #### Inputs and outputs
 
 ##### `A`
