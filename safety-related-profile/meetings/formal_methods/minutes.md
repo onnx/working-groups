@@ -17,6 +17,7 @@ The objectives of the meeting are the following :
 ## Participants
 Edoardo, Loïc, Nicolas, Jean, Christophe Gar., Eric, Augustin, Mariem
 ## Minutes
+This document summarizes the discussions and conclusions from our meeting on the specification approaches for ONNX operators and graphs.
 ### What is the purpose of the specification (ACSL or Why3)? What is the added value? Is the C reference algorithm not enough? (Eric)
 (Loïc) It depends on our needs. If we only require tests, then the C implementation is sufficient. However, if we need proofs, we require a specification in a formal language.
 The specification cannot be written in C. It should either be a reference implementation (in Coq, Why3, etc.) or a mathematical specification.
