@@ -22,18 +22,21 @@ This document summarizes the discussions and conclusions from our meeting on the
 - (Loïc) It depends on our needs. If we only require tests, then the C implementation is sufficient. However, if we need proofs, we require a specification in a formal language.
 The specification cannot be written in C. It should either be a reference implementation (in Coq, Why3, etc.) or a mathematical specification.
 - (Jean) ACSL specification is suitable for industrial purposes.
-### What can we do with Why3 specification ?
-- Generate C program
-- Execute the Why3 specification
+- (Eric) We have to ensure that what we propose is useful and useable for the type of targeted systems, operators, etc. If people develop fancy optimized implementations, proof will be complex, possibly out of the economically-viable domain with respect to the targeted development assurance level.  
+### What can we do with Why3 specification?
+- Execute the specification, which may contribute to its validation.
+- Generate C program that complies with the specification 
 - Generate coq program
-- Use it as input to ACSL
+- Provide the axiomatization to facilitate ACSL-level verifications (easier than doing everything in ACSL)
+- Even if no formal proof is done, Why3 is an appropriate and efficient formalism to describe the operators' algorithms.  
 ### What do we need to succeed with the Why3 specification?
-  - Libraries such as matrices, algebraic signatures, logical signatures, etc.
+  - Developing libraries such as matrices, algebraic signatures, logical signatures, etc. would reduce the specification effort. 
+  - Having a detailled Why3 description of those libraries are not mandatory in the first place. We may rely on C implementations to execute the spec. 
 ### Is graph specification the same as operator specifications?
 (Loïc) No, it is not the same. It is a separate subject and likely more complex than operator specifications.
 The specification technique used for graph specification differs from that used for operator specifications, as we need to find a way to describe the graph.
 ### Conclusion on objectives 1 and 2
-- We will use the Why3 specification approach. This involves implementing the reference algorithm of ONNX operators in Why3.
+- We will use the Why3 specification approach. This involves describing the reference algorithm of ONNX operators in Why3.
 - From the Why3 implementation, it is possible to generate C programs and other implementations.
 - This template can be integrated into Edge.
 ### How will we proceed with developing the reference operator (e.g., convolution or others)?
@@ -41,6 +44,12 @@ The specification technique used for graph specification differs from that used 
 ### Conclusion on objective 3
 - We will implement the specification of the reference operator together during a workshop to be held in Toulouse in March.
 - The date of the workshop is to be determined.
+### New Actions
+[ ] (280125-01 - Mariem) Organize Why3 workshop (mid-march)
+[ ] (280125-02 - Eric) Check how this work fits wit DeepGreen's objectives and check possible funding. 
+[ ] (280125-03 - All) Check if/how we could fund this work... 
+
+
 
 # 2024/11/29
 
