@@ -233,7 +233,32 @@ Do we need to specify our own encoding format?
 ONNX supports __Quantization__ operators. Quantization data types are not consistent accross operators.
 [QuantizeLinear](https://onnx.ai/onnx/operators/onnx__QuantizeLinear.html) is able to output int16, uint16, but [QLinearMatMul](https://onnx.ai/onnx/operators/onnx__QLinearMatMul.html), [QLinearConv](https://onnx.ai/onnx/operators/onnx__QLinearConv.html), [MatMulInteger](https://onnx.ai/onnx/operators/onnx__MatMulInteger.html) and [ConvInteger](https://onnx.ai/onnx/operators/onnx__ConvInteger.html#l-onnx-doc-convinteger) do not support these types.
 
-# Operators
+
+## Issue #1.11: Axis attributes 
+
+- CAT: Tensors as input of layers in CNNs
+- CRI: LOW
+- REQ: (TBC)
+- LOC: https://onnx.ai/onnx/operators/onnx__Split.html
+       https://onnx.ai/onnx/operators/onnx__Concat.html
+       https://onnx.ai/onnx/operators/onnx__Softmax.html
+       
+### Issue
+Several operators identified in CNNs present the « axis » attribute (ex : Split, Concat, Softmax). This attribute gives an integer to define the axis of the input tensor on which the operation applies. But the onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? 
+- axis = '0' <=> batch ?
+- axis = '1' <=> channels ?
+- axis = '2' <=> rows ?
+- axis = '3' <=> columns ?
+If the « axis » attribute is set to ‘1’, does this mean that the channels of the input tensors are operated (concatenated or splitted for example) ?
+
+### Consequence
+If the operation was performed along the wrong axis of the input tensors, the values of elements in the feature maps of the output tensor could be incorrect and then the next layer of the CNN would give an incorrect result by applying its operation on the wrong data.
+
+### Proposal
+Define in the documentation a dictionary associating integers with axis of tensors. 
+
+
+# Issues - Operators
 
 ## Issue #2.1: Incomplete specification of SPLIT operator
 
