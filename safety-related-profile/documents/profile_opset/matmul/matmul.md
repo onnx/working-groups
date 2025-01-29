@@ -1,12 +1,4 @@
-# Conventions
-## Notations
-## Usage of fonts
-- Inputs, outputs, and attributes are represented using a non-serif font. ## Tags
-- Restrictions with respect to the ONNX standard are indicated in the text with the tag `[Ri]` where `i` is a number.\
-A synthesis of all restrictions is given in section "Restrictions".
-## Types
-- Operators are first described for values in the domain of real numbers. A specific description is given for the other types (floats, integers).
- 
+
 # `MatMul` operator (real)
 
 ### Restrictions

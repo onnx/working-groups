@@ -1,17 +1,6 @@
-# Conventions
-## Notations
-- The notation $N(X)$ denotes the _number of elements_ in tensor $X$.
-- Notations $h(X)$ and $w(X)$ respectively denote the _height_ and the _width_ of tensor $X$.
-
-
-## Usage of fonts
-- Inputs, outputs, and attributes are represented using a non-serif font. For instance, the "condition" attribute is represented by `condition`.
-
-## Tags
-- Restrictions with respect to the ONNX standard are indicated in the text with the tag `[Ri]` where `i` is a number. A synthesis of all restrictions is given in section "Restrictions".
-
+# Preliminary remarks
 ## Types
-- Operators are first described for values in the domain of real numbers. Because the `WHERE` put in ouput the same type of X or Y according to the condition the ouput is of the same type of X or Y and could be of every possible type as tensor(bfloat16), tensor(bool), tensor(complex128), tensor(complex64), tensor(double), tensor(float), tensor(float16), tensor(int16), tensor(int32), tensor(int64), tensor(int8), tensor(string), tensor(uint16), tensor(uint32), tensor(uint64), tensor(uint8).
+- Operators are first described for values in the domain of real numbers. Because the `WHERE` put in ouput the same type of X or Y according to the condition the output is of the same type of X or Y and could be of every possible type as tensor(bfloat16), tensor(bool), tensor(complex128), tensor(complex64), tensor(double), tensor(float), tensor(float16), tensor(int16), tensor(int32), tensor(int64), tensor(int8), tensor(string), tensor(uint16), tensor(uint32), tensor(uint64), tensor(uint8).
 
 # `where` operator (real)
 
@@ -32,7 +21,7 @@ where
 
 #### Informal specification
 
-The `where` operator selects elements from two input tensors `X` and `Y` based on the values in the `condition` tensor. For each element, if the corresponding entry in `condition` is True, the resulting tensor `Z` will contain the element from `X`. Otherwise, the resulting tensor `Z` will contain the element from `Y`.
+The `where` operator selects elements from two input tensors `X` and `Y` based on the values of the `condition` tensor. For each element, if the corresponding entry in `condition` is True, the resulting tensor `Z` contains the element from `X`. Otherwise, the resulting tensor `Z` contains the element from `Y`.
 
 The mathematical definition of the operator is given hereafter.
 

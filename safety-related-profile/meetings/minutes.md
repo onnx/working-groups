@@ -1,12 +1,25 @@
+
 # 2025/01/29
 ## Agenda
+- Review of actions
+- Other news
+  - Contact with AMD.
+- Operator specifications
+  - Overview of the `matmul` and 
+  - Current status of the [operators](./operator_spec_sub_wg/SONNX_Operator_List.xlsx) and [contributors](./operator_spec_sub_wg/worksharing.md) list.
+- Formal specification
+  - Feedback on [last meeting](./formal_methods/minutes.md).
+- Other topics: 
+  - Verification tool
+  - talks in 2025
 ## Attendees
 ## Minutes
 ## New actions
 ## Past actions
 - [ ] (1501-1, Sebastian) Specify some operators...
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
-- [ ] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<you_name>.md`) or send them to me.
+  - *Thinking...*
+- [ ] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<your_name>.md`) or send them to me (eric).
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
 - [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
 - [X] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
@@ -14,10 +27,10 @@
     - After a discussion with Ram : We can use the LFx slack channel (Operator SIG). Two contacts : G. Ramalingam and Justin Chu
 - [X] (1508-1, Eric) Send the list of questions to the WG 114 leader.
   - List of questions sent to the WG114 chairwoman on Jan. 16th.
-  - They'll analyse them and come back to us.
+  - They'll analyze them and come back to us.
 - [ ] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
   - See mail dated 19/12.
-  - See ne version of the document
+  - See [new version of the document](./errors/error_specification.md)
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
   - Discussion on-going with Loïc on the formal specification strategy...
   - Meeting planned to reach a final consensus...
@@ -25,8 +38,8 @@
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [X] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
     - Review from Thiziri to be received on 2024/12/20.
-    - *Closed*
-- [ ] (0412-6, Eric) Create a sub working group to analyse the existing standard in a systematic way...
+    - *No answer => Closed*
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
 
 
@@ -668,3 +681,11 @@ Other (off-meeting)
 
 - [ ]  <10/07>(eric+jean) Organize some meetings as “advisory boards”
 - [x]  <21/08> (Eric) Convert the SOW to markdown
+
+<style> 
+    .off{
+        color:violet;
+        font-style: italic;
+        font-size: 10px
+    }
+</style>

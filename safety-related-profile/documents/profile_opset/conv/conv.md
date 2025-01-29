@@ -1,14 +1,3 @@
-# Conventions
-## Notations
-- Notations $h(X)$ and $w(X)$ respectively denote the _height_ and the _width_ of tensor $X$. If the tensor represents an image, $h(X)$ and $w(X)$ represent the _height_ and the _width_ of the image.
-## Usage of fonts
-- Inputs, outputs, and attributes are represented using a non-serif font. For instance, the "pads" attribute is represented by `pads`.
-## Tags
-- Restrictions with respect to the ONNX standard are indicated in the text with the tag `[Ri]` where `i` is a number.\
-A synthesis of all restrictions is given in section "Restrictions".
-## Types
-- Operators are first described for values in the domain of real numbers. A specific description is given for the other types (floats, integers).
- 
 # `conv` operator (real)
 
 ### Restrictions
@@ -94,7 +83,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 
 ![](./imgs/conv-dep-3-channels.png)
 
-#### Inputs and outputs
+#### Inputs
 
 ##### `X`
 

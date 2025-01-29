@@ -15,13 +15,15 @@ Déf. : a constraint that is expressed in the specification as a relation involv
 Those constraints are pre-conditions for the operator. For this reason they don't involve outputs.
 
 Note that outputs aren't considered to be potentially part of the precondition. The cases where we want the shape of the output to be explicitly given by the user (and not "inferred") shall be managed using attributes. 
-** This is to be discussed...**
+**To be discussed...**
 
 ### A.1 - Statically verifiable constraints
-Those constraints may depend on tensor's values, but those tensors are constants given in the ONNX file (e.g., biases, weights, etc.)
+
+Those constraints may depend on values, but those values are known before runtime (e.g., biases, weights, etc.). They are stored in the ONNX file or in some external  file.  
 
 ### A.2 - Non-statically verifiable constraints
-Those constraints cannot be checked on the ONNX file because they depend on the values of non-constant tensors, i.e. infered tensors. This is the case for simple operators such as "log" (input values must be strictly positive)  or for more complicated operators such as "unsqueeze" (input "axes"  must not contain duplicate values).
+
+Those constraints cannot be checked before execution because they depend on the values of non-constant inputs. This is the case for simple operators such as "log" (input values must be strictly positive)  or for more complicated operators such as "unsqueeze" (input "axes"  must not contain duplicate values).
 
 ## B. - Non expressed constraints
 
@@ -35,19 +37,19 @@ Déf. : A constraint that is not expressed in the specification, because definin
 - Case B : Error conditions cannot be checked neither the ONNX file nor on the (inputs,outputs,attributes). Those errors can be checked by instrumenting the code (in the previous example, by checking that f(y) is not zero before doing the division), by hardware error handling mechanims (traps) or by using singular values (NaN, inf, etc.).
 
 
-## Recommandations 
+## Recommendations  
 
 ### All cases
 
-- The specification of operators shall state that the behaviour of the operator is undefined should any constraints (in A or B) be violated. 
+- The specification of operators shall state that the behaviour of the operator is undefined if any constraints (in A or B) be violated. 
 
-### Case A.1 
+### Case A.1 (Statically verifiable constraints)
 
 - A model that violates constraints in class A.1 for at least one of its operators is an **invalid model**. 
 - An **invalid model** can be detected by a "model checker"
 - Those constraints must be clearly identified because they will constitute the specification for the model checker.
 
-### Case A.2 
+### Case A.2 (Non statically verifiable constraints)
 - Option 1: 
   - The error condition is specified and the behaviour (incl. output) in case of error is precisely defined.
 - Option 2:  
@@ -55,9 +57,9 @@ Déf. : A constraint that is not expressed in the specification, because definin
 
 Note that this may be part of the specification of the graph execution, not only the operator. It may also involves the Operational Design Domain (ODD) of the model.
 
-### Case B
+### Case B (Non expressed constraints)
 
-The specification shall indicate that an error may occur during computations even though we may not be able to describe precisely the conditions at the (inputs and attributes) level. 
+The specification shall indicate that an error may occur during computation even though we may not be able to describe precisely the conditions at the (inputs and attributes) level. 
 
 The low-level error condition (e.g., "division by zero") must be described.
 
