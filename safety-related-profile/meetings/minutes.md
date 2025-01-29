@@ -15,6 +15,7 @@
 ## Attendees
 ## Minutes
 ## New actions
+- [ ] (2901-1, ???) Concept paper analysis 
 ## Past actions
 - [ ] (1501-1, Sebastian) Specify some operators...
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
