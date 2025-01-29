@@ -3,9 +3,9 @@
 ## Agenda
 - Review of actions
 - Other news
-  - Contact with AMD.
+  - Contact with Altera.
 - Operator specifications
-  - Overview of the `matmul` and 
+  - Overview of the [`matmul`](../documents/profile_opset/matmul/matmul.md) and [`where`](../documents/profile_opset/matmul/where.md) operators
   - Current status of the [operators](./operator_spec_sub_wg/SONNX_Operator_List.xlsx) and [contributors](./operator_spec_sub_wg/worksharing.md) list.
 - Formal specification
   - Feedback on [last meeting](./formal_methods/minutes.md).
@@ -13,14 +13,65 @@
   - Verification tool
   - talks in 2025
 ## Attendees
+Jean, Julien, Eric, Mariem, Dumitru, Jean-Loup, Andreas, Sebastian, Jean-Baptiste, Tomé, João, Augustin
+<div class="off"> (Zoom does not give me a list of participants and I have not noted who was there...so the list if incomplete, sorry about that. Please add your name... </div>
+
 ## Minutes
+- ONNX model verification tool
+  - This tool will implement the constraints and restrictions identified at operator and graph level
+  - The tool shall be part of the ONNX distribution
+  - Using (e.g.) DeepGreen's ONNX parser could make sense but (i) we have to be sure that we can distribute it as part of ONNX, (ii) it will bring with it part of the AIDGE framework (iii) it may be overkill with respect to the level of parsing that we actually need.
+  - Developing our own parser (possibly from something already available...) could also be a way to specify formally the file format (i.e., a correct ONNX file is a file that can be parsed successfully by our parser).
+- Review of the comments on the [`where`](../documents/profile_opset/matmul/where.md) operator
+  - Sparse tensors have to be forbidden. This can be checked at the file level by looking for the usage of the SparseTensorProto class. 
+    - In the specification of operators, we should state that such tensors cannot be used. This should be part of the operators' signatures. To be elaborated, see action [2901-1]
+  - Henri has given an example in Python. Should we generalize this?
+    - We propose to add a few example in a  Jupyter Notebook for each operator. 
+    - The examples must use ONNX. 
+    - Those examples are not a test suite. They allow the user to get acquainted  / play with of the operator. 
+    - The behaviour of the operator in the Jupytrer notebook may be different from the one of reference implementation. 
+      - In the Jupyter notebook, we have to be clear that the example is given for documentation only. 
+    - See action [2901-3].
+- Specification work
+  - Nicolas has added LSTM to the operator's list. Dumitru proposes to help. See action [2901-4].
+  - It could be useful to start thinking about the graph semantics... See action [2901-5].
+  - The work moves slowly...
+    - We lack volunteers to do the hard work... 
+    - We may become more visible and reach out a larger community (and hopefully, have more volunteers) once we have a first set of specification, completed documents. 
+    - Edoardo proposes to use students to help us on the specification activity. (Jean will have one student to work on this topic) See action [2901-6].
+  <div class="off"> Note that the initial list of interested people was pretty large... we may ask if some of them are still interested to contribute... </div> 
+- List of issues
+  - Anne-Sophie has removed some entries from [issues.md](../deliverables/issues/issues.md) since some of the ambiguities have been solved thanks to Sebastian.
+  - However, it make sense to keep them in the list since part of our job is to prevent such ambiguities... See action [2901-2].
+- On the specification of behavior in case of errors
+  - At operator level
+    - Whenever a value is out of the operator's domain, its behavior is "undefined" (e.g. xi<=0 in x for operator log(x)). In that case, the specification shall (i) indicate the domain constraint and (ii) state that the behaviour of the operator is undefined should the constraint be violated.
+    - For some operators, some inputs will generally be static, even though the ONNX does not enforce this. In that case, we may add a restriction to ensure that the tensor's value will be known before runtime, and add a constraints on its value to prevent runtime error. 
+  - At graph level
+    - In some cases, the structure of the graph can ensure that the inputs values of an operator will always be in domain even though, they may be not in the general case. 
+    - We may also propagate the domain constraints backward up to the inputs, and provide the user with these constraint (which would restrict the graph input domain). This could be interesting, but goes further than a verification.  
+    - Whenever we cannot guarantee the absence of runtime error, the model wil be considered "unsafe".
+- Compliance with regulatory docs.
+  - It would be useful to identify the constraints/reqs in the EASA's concept paper that are relevant to our work. See action [2901-7]
+- Formal methods.
+  - See [minutes](../meetings/formal_methods/minutes.md) of FM sub-group on Feb. 28th.
+  - Main conclusion: We will be using Why3 as the specification language. Work will start with a training session (being planned mid-march) done by Loïc. 
 ## New actions
-- [ ] (2901-1, ???) Concept paper analysis 
+- [ ] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
+- [ ] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answer given by Seb.
+- [ ] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
+- [ ] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
+- [ ] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
+- [ ] (2901-6, Edoardo) Check how to involve students in the specification work.
+- [ ] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
+- [ ] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
 ## Past actions
-- [ ] (1501-1, Sebastian) Specify some operators...
+- [X] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops. 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
   - *Thinking...*
-- [ ] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<your_name>.md`) or send them to me (eric).
+- [X] (1501-4, All) Review the specification of the [`where` operator](../documents/profile_opset/where/where.md). Put your remarks in the [reviews](../documents/profile_opset/where/reviews/) directory (in file `<your_name>.md`) or send them to me (eric).
+  - See Eric's [remarks](../documents/profile_opset/where/reviews/eric.md).
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
 - [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
 - [X] (1501-7, Eric) Check how to communicate with ONNX to sort out ambiguities...
@@ -29,12 +80,13 @@
 - [X] (1508-1, Eric) Send the list of questions to the WG 114 leader.
   - List of questions sent to the WG114 chairwoman on Jan. 16th.
   - They'll analyze them and come back to us.
-- [ ] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
+- [X] (1812-2, Eric) Complete the discussion about numerical accuracy and error management.
   - See mail dated 19/12.
   - See [new version of the document](./errors/error_specification.md)
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
   - Discussion on-going with Loïc on the formal specification strategy...
   - Meeting planned to reach a final consensus...
+  - Meeting done. See [minutes](../meetings/formal_methods/minutes.md).
 - [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [X] (0412-4, Thiziri, Nicolas, Jean, Sebastian, Jean-Loup) Review of the [updated version of CONV2D](../documents/conv_specification_example/README.md)
