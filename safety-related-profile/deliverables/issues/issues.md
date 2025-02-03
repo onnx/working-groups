@@ -236,26 +236,53 @@ ONNX supports __Quantization__ operators. Quantization data types are not consis
 
 ## Issue #1.11: Axis attributes 
 
-- CAT: Tensors as input of layers in CNNs
+- CAT: Format
 - CRI: LOW
 - REQ: (TBC)
 - LOC: https://onnx.ai/onnx/operators/onnx__Split.html
        https://onnx.ai/onnx/operators/onnx__Concat.html
        https://onnx.ai/onnx/operators/onnx__Softmax.html
+       https://onnx.ai/onnx/operators/onnx__Slice.html
        
 ### Issue
-Several operators identified in CNNs present the « axis » attribute (ex : Split, Concat, Softmax). This attribute gives an integer to define the axis of the input tensor on which the operation applies. But the onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? 
+Several operators identified in CNNs present the « axis » attribute (ex : Split, Concat, Softmax, Slice). This attribute gives an integer to define the axis of the input tensor on which the operation applies. But the onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? 
 - axis = '0' <=> batch ?
 - axis = '1' <=> channels ?
 - axis = '2' <=> rows ?
 - axis = '3' <=> columns ?
-If the « axis » attribute is set to ‘1’, does this mean that the channels of the input tensors are operated (concatenated or splitted for example) ?
+If the « axis » attribute is set to ‘1’, does this mean that the channels of the input tensors are operated (concatenated or splitted or sliced for example) ?
 
 ### Consequence
 If the operation was performed along the wrong axis of the input tensors, the values of elements in the feature maps of the output tensor could be incorrect and then the next layer of the CNN would give an incorrect result by applying its operation on the wrong data.
 
 ### Proposal
 Define in the documentation a dictionary associating integers with axis of tensors. 
+
+
+## Issue #1.12: Associate dimensions of input tensors with reshaping tensors 
+
+- CAT: Format
+- CRI: LOW
+- REQ: (TBC)
+- LOC: https://onnx.ai/onnx/operators/onnx__Resize.html
+       https://onnx.ai/onnx/operators/onnx__Reshape.html
+       https://onnx.ai/onnx/operators/onnx__Shape.html
+       
+### Issue
+This issue is linked to the previous issue (1.11). Some operators take as input a tensor defining the dimensions of the output tensor based on the input data tensor(s). But the onnx documentation does not specify exactly the correspondance between this reshaping tensor and the axis of the input data tensor to be reshaped. 
+- The input named 'scales' of the RESIZE operator (in CNNs) gives a tensor which indicate the resize of each dimension of the input data tensor. Each element of 'scales' corresponds to an axis of the input data tensor. But the documentation does not specify the correspondance between the position of the element on the 'scales' tensor and the axe of the input tensor. Does the first element of the 'scales' tensor correspond to batch of the input tensor ? Does the second element of the 'scales' tensor correspond to the channels of the input tensor ? Does the third element of the 'scales' tensor correspond to the rows of the input tensor ? ...
+- The input named 'shape' of the RESHAPE operator is a shape tensor which specifies the output shape. But the documentation does not specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor. Is it the value of the third element of the 'shape' tensor that determines the size of the ouput tensor rows (in case of CNNs) ? 
+- The SHAPE operator outputs an 1D tensor containing the shape of the input tensor. But the documentation does not specify the correspondance between the dimension of the input data tensor and the position of the element on the 'shape' output tensor. In case of CNNs, if the input was a tensor containing 16 channels of feature maps with size 80x80, what would the output tensor look like ? Would it be : 'shape' = [16,80,80] ? Or the sizes of each dimension of the input tensor should be written to the output tensor in another order ? 
+
+### Consequence
+- For RESIZE operator : The ouput tensor could be the incorrect shape with incorrect elements in the feature maps if the rescaling of the dimension was misunderstood. The operations of the next layers would be distorted.
+- For RESHAPE operator : The output tensor may be incorrect if the input tensor was reshaped based on the wrong axes.
+- For SHAPE operator : The output tensor could be incorrect if the implementation of the 'shape' operator did not list the dimensions of the input tensor in the correct order. 
+
+### Proposal
+- For RESIZE operator : Specify the correspondance between the elements of the "scales" input and the axis of the input tensor to be resized.
+- For RESHAPE operator : Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
+- For SHAPE operator : Specify in the documentation the correspondance between the dimension of the input tensor and the position of the value on the 'shape' output tensor.
 
 
 # Issues - Operators
