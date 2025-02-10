@@ -10,7 +10,7 @@
 
 The following restrictions apply to the `Sub` operator for the SONNX profile:
 - The tensors `A` and `B` must have the same shape or be broadcastable to a common shape `[R1]`
-- The operator supports sparse tensors `[R2]`
+- The operator does not support sparse tensors `[R2]`
 - All input elements `A` and `B` shall have explicit subtractive types `[R3]`
 
 ### Signature
