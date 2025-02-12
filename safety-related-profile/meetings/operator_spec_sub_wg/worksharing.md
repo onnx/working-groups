@@ -47,7 +47,7 @@
 | Not                          |                    |                   |
 | Pad                          |                    |                   |
 | Padding                      |                    |                   |
-| Pow                          |                    |                   |
+| Pow                          |hb,                 |                   |
 | Range                        |                    |                   |
 | ReduceMean                   |                    |                   |
 | ReduceSum                    |                    |                   |
