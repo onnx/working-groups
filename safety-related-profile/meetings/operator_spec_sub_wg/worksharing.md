@@ -15,7 +15,7 @@
 | Cast                         |                    |                   |
 | Clip                         |                    |                   |
 | Concat                       |                    |                   |
-| Constant                     |                    |hb                 |
+| Constant                     |hb,                 |                   |
 | ConstantOfShape              |                    |                   |
 | Conv                         |ej,mt               |jlf,sb,tb,hb       |
 | ConvTranspose                |                    |                   |
