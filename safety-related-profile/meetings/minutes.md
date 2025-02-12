@@ -13,7 +13,7 @@
   - Verification tool
   - talks in 2025
 ## Attendees
-Jean, Julien, Eric, Mariem, Dumitru, Jean-Loup, Andreas, Sebastian, Jean-Baptiste, Tomé, João, Augustin
+Jean, Julien, Eric, Mariem, Dumitru, Jean-Loup, Andreas, Sebastian, Jean-Baptiste, Tomé, João, Augustin, Anne-Sophie
 <div class="off"> (Zoom does not give me a list of participants and I have not noted who was there...so the list if incomplete, sorry about that. Please add your name... </div>
 
 ## Minutes
