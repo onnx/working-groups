@@ -1,4 +1,89 @@
 
+# 2025/02/12
+## Agenda
+- Presentation of ONNX MLIR (Alexandre Eichenberger) [postponed]
+- Review of actions
+- Some questions from Sebastian
+  > I'm still not 100% clear, what we want to achieve with our operator specifications. 
+
+  > **Is it intended that they appear in the official ONNX documentation and then the restrictions for SONNX may be below in the same text?** 
+  > Otherwise, they will probably not be very visible to the public... <span style="color:blue"> See action (1202-0)  </span>
+
+  > And is it clear that the norms you have to fulfill will require these formal specifications?
+  
+  > We work in very safety-critical projects and so far, it seems that a formal verification of numerical correctness compared to the original trained model is enough for most customers on our side (...]
+
+  > For me the most critical operators are those that can create overflow or division by zero and there are a lot of them: Div, Exp, Log, Pow, Softmax, SoftPlus, Sqrt <span style="color:blue"> See action (1202-3) </span>
+- "Review" of Henri's work
+- Review of Jean-Baptiste work (<span style="color:blue"> See action (1202-2) </span>)
+- Reply from the WG114 on our questions
+
+## Attendees
+
+## Minutes
+- Presentation of ONNX MLIR (Alexandre Eichenberger) to be rescheduled. (<span style="color:blue"> See action (1202-1) </span>)
+- "Review" of Henri's work
+  - <span style="color:blue"> See action (1202-3) </span>
+  - See new operators [here](../documents/profile_opset/) 
+  - Question about error conditions: *How do we specify as the expected behaviour of an operator when a parameter is out of range (e.g., denominator of `div` is 0?)*
+    - In the `div`spec, for instance, Henri has proposed to return `inf` (when the numerator is different from zero, otherwise a NaN shall be returned).
+    - We have proposed a [first set of rules](./errors/error_specification.md). Basically, the behaviour of the operator is not defined when we cannot guarantee that its parameter are in range. However:
+      - This raises a problem because more often than not, we cannot guarantee that the error condition (e.g., $x<=0$ for operator `log`) will not occur.
+      - This would mean that any output value would be suspicious while we could actually be able to handle appropriately some singular values (such as /0)...
+      - *This is clearly not satisfying.* We have to propose a better way to handle these cases. We may get some inspiration from the C standard: our interpretation would be determined according to the semantics of ISO C.  
+    - Note that we have to discriminate cases where the operation is mathematically undefined (e.g. /0) from cases where the implementation of the operator may go wrong (e.g., overflow). Considering the `div` operator, if we are in $\mathcal R$ >, there is no `inf` value to be returned: the operation is simply undefined.
+    - <span style="color:blue"> See action (1202-4) </span>
+  - Question about types
+    - The first batch of operators are specified in $\mathcal R$, so there should be no reference to types. In a second phase, we will have to specify the operators with actual types. When an operator has multiple parameters, we should either require all parameters to have a specific type, or the same types, etc. This may lead to many specifications...  
+    - <span style="color:blue"> See action (1202-5) </span>
+- Discussion about the integration of our work in ONNX (see Sebastian's question above). 
+  - Our work must be part of the official ONNX documentation
+  - Our spec could be added to the existing doc as a link to "SONNX".
+  - A process shall be defined in order to ensure the consistent evolution of ONNX and SONNX.
+    - We propose to wait until we have fully covered a few operators (incl. with their implementation types)
+  - <span style="color:blue"> See action (1202-6) </span>
+- Presentation of Jean-Baptiste's work
+  - <span style="color:blue"> See action (1202-2) </span>
+  - This work makes a mapping between the EASA's concept paper and the ARP. it also identifies the EASA's objectives that are relevant to SONNX. Note that Mohamed and Jean-oup have done a similar (yet more focused) work in the context of the DeepGreen project.
+  - First draft to be validated at Airbus and with people from WG114.
+- About the management of operators and reviews:
+  - /!\ Don't forget to indicate on which operator you are working (in this [table](./operator_spec_sub_wg/worksharing.md)) in order to prevent overap... /!\
+  - Please use the gconf to do your review. And when taking account of reviews, authors shall indicate in the review form what has been taken into account (KO/OK/TBD).
+## New actions
+
+- [X] (1202-1, Eric) Reschedule Alexandre presentation
+- [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
+- [ ] (1202-3, All) Review new operators processed by Henri 
+  - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
+- [ ] (1202-4, All) Define the appropriate way to specify the behaviour of operators for value out of range. Apply the approach on the `div` operator, for parameters in $\mathcal R$ and, `double`and `int`.
+- [ ] (1202-5, All) Define appropriate rule to handle multiples types without multiplying the specifications. 
+- [ ] (1202-6, Eric) Check with ONNX how to integrate our work.
+## Past actions
+
+- [ ] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
+- [ ] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
+- [ ] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
+- [ ] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
+- [ ] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
+- [ ] (2901-6, Edoardo) Check how to involve students in the specification work.
+- [ ] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
+- [ ] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
+- [ ] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops. 
+- [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+  - *Thinking...*
+- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
+- [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Discussion on-going with Loïc on the formal specification strategy...
+  - Meeting planned to reach a final consensus...
+  - Meeting done. See [minutes](../meetings/formal_methods/minutes.md).
+- [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+
+
 # 2025/01/29
 ## Agenda
 - Review of actions
@@ -66,7 +151,7 @@ Jean, Julien, Eric, Mariem, Dumitru, Jean-Loup, Andreas, Sebastian, Jean-Baptist
 - [ ] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
 - [ ] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
 ## Past actions
-- [X] (1501-1, Sebastian) Specify some operators...
+- [ ] (1501-1, Sebastian) Specify some operators...
   - Sebastian is working on `reshape`and other ops. 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
   - *Thinking...*
