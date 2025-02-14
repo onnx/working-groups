@@ -26,7 +26,7 @@ where
 
 The `Div` operator divides input tensors `A` and `B` element-wise and place the result in output tensor `C`. Each element `C` is the result of the division of the corresponding element in `A` by the corresponding element in `B`.
 
-The mathematical definition of the operator is given hereafter for a unidimensional tensor, with $i$ the index covering the :
+The mathematical definition of the operator is given hereafter for a unidimensional tensor, with $i$ covering all valid indexes:
 
 $$
 C[i] = 
