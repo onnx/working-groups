@@ -15,7 +15,8 @@
   - [X] Eric: review and modification of operator `Div`(see [here](../documents/profile_opset/div/div.md))
 - [ ] (1202-5, All) Define appropriate rule to handle multiples types without multiplying the specifications. 
 - [ ] (1202-6, Eric) Check with ONNX how to integrate our work.
-- [ ] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
+- [X] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
+  - Only tensors of class Tensors are supported (SparseTensor are not supported). Such restriction applies to all operators. They are placed in document [General restrictions](../documents/profile_opset/general_restrictions.md) 
 - [ ] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
 - [ ] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
   - Done for operator `Div`.

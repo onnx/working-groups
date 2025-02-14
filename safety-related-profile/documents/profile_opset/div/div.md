@@ -1,7 +1,7 @@
 # Contents
 - `Div` [operator (real)](#real)
 - `Div` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
-- `Div` [operator (INT8, INT16, INT32)](#int)
+- `Div` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64, )](#int)
 
 
 
@@ -12,6 +12,7 @@
 
 The following restrictions apply to the `Div` operator for the SONNX profile:
 - Tensors `A`, `B` and `C` must have the same shape.  `[R1]` 
+- Tensors of class `SparseTensor` are not supported [`[GR1]`](../general_restrictions.md) 
 
 ### Signature
 
@@ -109,7 +110,7 @@ The `Div` operator does not require any attributes.
 The following restrictions apply to the `Div` operator for the SONNX profile:
 - Tensors `A`, `B` and `C` must have the same shape.  `[R1]` 
 - Tensors `A`, `B` and `C` shall have the same numerical type. `[R2]`
-- Sparse tensors are not supported. `[RG1]`
+- Tensors of class `SparseTensor` are not supported [`[GR1]`](../general_restrictions.md) 
 
 ### Signature
 
