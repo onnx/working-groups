@@ -1,3 +1,11 @@
+# Contents
+- `Div` [operator (real)](#real)
+- `Div` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
+- `Div` [operator (INT8, INT16, INT32)](#int)
+
+
+
+<a id="real"></a>
 # `Div` operator (real)
 
 ### Restrictions
@@ -83,7 +91,6 @@ Tensor `B` is the denominator of the division.
 
 Tensor `C` is the output tensor formed by element-wise division of `A` by `B`.
 
-
 ###### Constraints
 
 - (C1) Shape consistency
@@ -94,16 +101,15 @@ Tensor `C` is the output tensor formed by element-wise division of `A` by `B`.
 The `Div` operator does not require any attributes.
 
 ---
-
+<a id="float"></a>
 # `Div` operator (FP16, FP32, FP64, BFLOAT16)
-
 
 ### Restrictions
 
 The following restrictions apply to the `Div` operator for the SONNX profile:
 - Tensors `A`, `B` and `C` must have the same shape.  `[R1]` 
-- Tensors `A`, `B` and `C` shall have the same numerical type `[R2]`
-- Sparse tensors are not supported `[RG1]`
+- Tensors `A`, `B` and `C` shall have the same numerical type. `[R2]`
+- Sparse tensors are not supported. `[RG1]`
 
 ### Signature
 
@@ -156,7 +162,6 @@ B =  \begin{bmatrix} 3 & 2 \\ 4 & 0 \\ 5 & 4 \end{bmatrix}
 C =  \begin{bmatrix} 1 & 2 \\ 4 & \text{nan} \\ 5 & 6 \end{bmatrix}
 ```
 
-
 #### Inputs and outputs
 
 ##### `A`
@@ -172,7 +177,6 @@ Tensor `A` is the numerator of the division.
 
 Tensor `B` is the denominator of the division.
 
-
 ###### Constraints
 
 - (C1) Range 
@@ -186,7 +190,6 @@ Tensor `B` is the denominator of the division.
 
 Tensor `C` is the output tensor formed by element-wise division of `A` by `B`.
 
-
 ###### Constraints
 
 - (C1) Shape consistency
@@ -197,7 +200,7 @@ Tensor `C` is the output tensor formed by element-wise division of `A` by `B`.
 The `Div` operator does not require any attributes.
 
 ---
-
+<a id="int"></a>
 # `Div` operator (INT8, INT16, INT32)
 
 *To be completed.*
