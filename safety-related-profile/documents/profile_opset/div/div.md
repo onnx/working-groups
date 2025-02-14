@@ -162,6 +162,8 @@ B =  \begin{bmatrix} 3 & 2 \\ 4 & 0 \\ 5 & 4 \end{bmatrix}
 C =  \begin{bmatrix} 1 & 2 \\ 4 & \text{nan} \\ 5 & 6 \end{bmatrix}
 ```
 
+Examples are available in [google collab.](https://colab.research.google.com/drive/1j9VlF-uYN4AitOglPkTWsvjoRe4L9-qb#scrollTo=rEKyVwTun7hf)
+
 #### Inputs and outputs
 
 ##### `A`

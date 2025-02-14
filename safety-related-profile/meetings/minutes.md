@@ -1,3 +1,45 @@
+# 2025/0X/XX
+## Agenda
+*To be completed.*
+## Minutes
+*To be completed.*
+## New actions
+*To be completed.*
+## Past actions
+- [X] (1202-1, Eric) Reschedule Alexandre presentation
+- [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
+- [ ] (1202-3, All) Review new operators processed by Henri 
+  - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
+  - [X] Eric: review and modification of operator `Div`(see [here](../documents/profile_opset/div/div.md))
+- [ ] (1202-4, All) Define the appropriate way to specify the behaviour of operators for value out of range. Apply the approach on the `div` operator, for parameters in $\mathcal R$ and, `double`and `int`.
+  - [X] Eric: review and modification of operator `Div`(see [here](../documents/profile_opset/div/div.md))
+- [ ] (1202-5, All) Define appropriate rule to handle multiples types without multiplying the specifications. 
+- [ ] (1202-6, Eric) Check with ONNX how to integrate our work.
+- [ ] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
+- [ ] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
+- [ ] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
+  - Done for operator `Div`.
+- [ ] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
+- [ ] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
+- [ ] (2901-6, Edoardo) Check how to involve students in the specification work.
+- [ ] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
+- [ ] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
+- [ ] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops. 
+- [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+  - *Thinking...*
+- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
+- [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Discussion on-going with Loïc on the formal specification strategy...
+  - Meeting planned to reach a final consensus...
+  - Meeting done. See [minutes](../meetings/formal_methods/minutes.md).
+- [ ] (1812-5, All) Indicate on which operator one can contribute (writer/reviewer). Put your id in this [table](./operator_spec_sub_wg/worksharing.md) The list of operators with their "complexity" and links to the ONNX doc are in this [Excel sheet](./operator_spec_sub_wg/SONNX_Operator_List.xlsx)
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+
+
 
 # 2025/02/12
 ## Agenda
@@ -19,6 +61,7 @@
 - Reply from the WG114 on our questions
 
 ## Attendees
+(???)
 
 ## Minutes
 - Presentation of ONNX MLIR (Alexandre Eichenberger) to be rescheduled. (<span style="color:blue"> See action (1202-1) </span>)
@@ -49,8 +92,8 @@
 - About the management of operators and reviews:
   - /!\ Don't forget to indicate on which operator you are working (in this [table](./operator_spec_sub_wg/worksharing.md)) in order to prevent overap... /!\
   - Please use the gconf to do your review. And when taking account of reviews, authors shall indicate in the review form what has been taken into account (KO/OK/TBD).
-## New actions
 
+## New actions
 - [X] (1202-1, Eric) Reschedule Alexandre presentation
 - [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
 - [ ] (1202-3, All) Review new operators processed by Henri 
