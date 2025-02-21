@@ -1,25 +1,29 @@
 
-# `MatMul` operator (real)
+# `Gemm` operator (real)
 
 ### Restrictions
-The following restrictions apply to the `MatMul` operator for the SONNX profile:
+The following restrictions apply to the `Gemm` operator for the SONNX profile:
 - The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
+- alpha, beta, transA, transB ONNX attributes are not supported. A similar behaviour can be optained using `Mul` or `Transpose` operators. ========TBC======`[R2]`
+- `Gemm` is not unidirectionnaly broadcastable.  ========TBC======`[R3]`
+- `C` input is not optional. `MatMul` shall be used in this case. ========TBC======`[R4]`
 
 ### Signature
-`Y = MatMul(A,B)`
+`Y = Gemm(A,B,C)`
 where
 - `A`: first input tensor
 - `B`: second input tensor
+- `C`: bias input tensor
 - `Y`: output tensor
   
 #### Informal specification
 
-Operator `MatMul` computes the matrix multiplication of the input tensors `A` and `B` into the output matrix `Y`.
+Operator `Gemm` computes the matrix multiplication of the input tensors `A` and `B`, then add the `C` bias tensor into the output tensor `Y`.
 
 The mathematical definition of the operator is given hereafter.
 
 $$     
-   Y = A \times B  
+   Y = (A \times B) + C
 $$
 
 
@@ -44,36 +48,27 @@ $$
          \vdots & \vdots & \ddots & \vdots\\ 
          b_{n1} & b_{n2} & \cdots & b_{np} 
      \end{bmatrix}
+     +
+     \begin{bmatrix}
+         c_{11} & c_{12} & \cdots & c_{1p}\\
+         c_{21} & c_{22} & \cdots & c_{2p}\\ 
+         \vdots & \vdots & \ddots & \vdots\\ 
+         c_{m1} & c_{m2} & \cdots & c_{mp} 
+     \end{bmatrix}
 $$
 $$     
-   y_{ij}= a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} = \sum_{k=1}^n a_{ik}b_{kj}  
+   y_{ij}= a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} + c_{ij} = \sum_{k=1}^n a_{ik}b_{kj} + c_{ij} 
 $$
 
 Where
 - $y$ is the output matrix,
 - $a$ is the first input matrix,
 - $b$ is the second input matrix,
+- $c$ is the bias input matrix,
 - $m$ the first input matrix number of rows,
 - $n$ the first input matrix number of columns and second input matrix number of rows,
 - $p$ the second input matrix number of columns
 
-##### Note
-The behavior depends on the arguments in the following way.
-
-- If both input are 2-D they are multiplied like conventional matrices.
-```
-These particularities are linked to numpy specification referenced by ONNX MatMul.
-
-The assumption for SONNX is that the following is managed by splitting matrices and duplicating call to MatMul.
-
-- If either input is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
-
-The assumption for SONNX is that the following is managed by insterting Reshape before and after MatMul.
-
-- If the first input is 1-D, it is promoted to a matrix by prepending a 1 to its dimensions. After matrix multiplication the prepended 1 is removed.
-
-- If the second input is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed.
-```
 #### Inputs and outputs
 
 ##### `A`
@@ -93,6 +88,12 @@ The shape of tensor `A` is $(m \times n)$.
 Tensor `B` is the second input tensor.
 
 The shape of tensor `B` is $(n \times p)$.
+
+##### `C`
+
+Tensor `C` is the bias input tensor.
+
+The shape of tensor `C` is $(m \times p)$.
 
 ##### `Y`
 

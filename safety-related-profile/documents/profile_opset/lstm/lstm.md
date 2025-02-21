@@ -1,84 +1,73 @@
 
-# `MatMul` operator (real)
+# `LSTM` operator (real)
+
+## DRAFT : NOT READY TO BE REVIEWED
 
 ### Restrictions
-The following restrictions apply to the `MatMul` operator for the SONNX profile:
+The following restrictions apply to the `LSTM` operator for the SONNX profile:
 - The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
+- initial_h, initial_c attributes defaults to 0 initialized arrays ========TBC======`[R2]`
+
+### Notations
+$\odot$ identifies the Hadamard product, i.e. element wise multiplication.
 
 ### Signature
-`Y = MatMul(A,B)`
+`Y = LSTM(X,W,R,B)`
 where
-- `A`: first input tensor
-- `B`: second input tensor
-- `Y`: output tensor
-  
+- `X`: input tensor
+- `W`: weight tensor
+- `R`: recurrence weight tensor  
+- `B`: bias tensor
+
 #### Informal specification
 
-Operator `MatMul` computes the matrix multiplication of the input tensors `A` and `B` into the output matrix `Y`.
+Operator `LSTM` computes the Long Term Short Term Memory Cell forward, backward, or bidirectional.
 
-The mathematical definition of the operator is given hereafter.
-
-$$     
-   Y = A \times B  
+The mathematical definition of the LSTM_Forward operator is given hereafter.
 $$
-
-
+h_0 = initial\_h
 $$
-     \begin{bmatrix}
-         y_{11} & y_{12} & \cdots & y_{1p}\\
-         y_{21} & y_{22} & \cdots & y_{2p}\\ 
-         \vdots & \vdots & \ddots & \vdots\\ 
-         y_{m1} & y_{m2} & \cdots & y_{mp} 
-     \end{bmatrix}
-      =
-     \begin{bmatrix}
-         a_{11} & a_{12} & \cdots & a_{1n}\\
-         a_{21} & a_{22} & \cdots & a_{2n}\\ 
-         \vdots & \vdots & \ddots & \vdots\\ 
-         a_{m1} & a_{m2} & \cdots & a_{mn} 
-     \end{bmatrix}
-     \times
-     \begin{bmatrix}
-         b_{11} & b_{12} & \cdots & b_{1p}\\
-         b_{21} & b_{22} & \cdots & b_{2p}\\ 
-         \vdots & \vdots & \ddots & \vdots\\ 
-         b_{n1} & b_{n2} & \cdots & b_{np} 
-     \end{bmatrix}
 $$
-$$     
-   y_{ij}= a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} = \sum_{k=1}^n a_{ik}b_{kj}  
+c_0 = initial\_c
+$$
+$$
+x_t = X[t]
+$$
+$$
+i_t = act1(W_{i}x_t + B_{wi} + R_i h_{t-1}+B_{ri})
+$$
+$$
+o_t  = act1(W_{o}x_t+B_{wo}+R_o h_{t-1} +B_{ro})
+$$
+$$
+f_t = act1(W_{f}x_t+B_{wf}+R_f h_{t-1}+B_{rf})
+$$
+$$
+g_t = act2(W_{g}x_t+B_{wg}+R_g h_{t-1}+B_{rg})
+$$
+$$
+c_t = f_t\odot c_{t-1}+i_t\odot g_t
+$$
+$$
+h_t = o_t\odot act3(c_t)
+$$
+$$
+Y[t] = h_t
 $$
 
 Where
-- $y$ is the output matrix,
-- $a$ is the first input matrix,
-- $b$ is the second input matrix,
-- $m$ the first input matrix number of rows,
-- $n$ the first input matrix number of columns and second input matrix number of rows,
-- $p$ the second input matrix number of columns
+- $i$ is the input gate matrix,
+- $o$ is the output gate matrix,
+- $f$ is the forget gate matrix,
+- $g$ is the cell input gate matrix,
+- $c$ is the cell state,
+- $h$ is the hidden state,
 
-##### Note
-The behavior depends on the arguments in the following way.
-
-- If both input are 2-D they are multiplied like conventional matrices.
-```
-These particularities are linked to numpy specification referenced by ONNX MatMul.
-
-The assumption for SONNX is that the following is managed by splitting matrices and duplicating call to MatMul.
-
-- If either input is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
-
-The assumption for SONNX is that the following is managed by insterting Reshape before and after MatMul.
-
-- If the first input is 1-D, it is promoted to a matrix by prepending a 1 to its dimensions. After matrix multiplication the prepended 1 is removed.
-
-- If the second input is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed.
-```
 #### Inputs and outputs
 
-##### `A`
+##### `X`
 
-Tensor `A` is the first input tensor.
+Tensor `X` is the input tensor.
 
 The shape of tensor `A` is $(m \times n)$.
 
@@ -88,17 +77,85 @@ The shape of tensor `A` is $(m \times n)$.
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
     - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
 
+##### `W`
+
+Tensor `W` is the weight input tensor.
+
+The shape of tensor `W` is $(n \times p)$.
+
+W matrix concatenates 
+$ 
+\begin{bmatrix}
+W_{i} \\
+W_{o} \\
+W_{f} \\ 
+W_{g} \\
+\end{bmatrix}
+$
+
+##### `R`
+
+Tensor `R` is the recurrence weight input tensor.
+
+The shape of tensor `R` is $(m \times p)$.
+
+R matrix concatenates 
+$ 
+\begin{bmatrix}
+R_{i} \\
+R_{o} \\
+R_{f} \\ 
+R_{g} \\
+\end{bmatrix}
+$
+
 ##### `B`
 
-Tensor `B` is the second input tensor.
+Tensor `B` is the bias input tensor.
 
-The shape of tensor `B` is $(n \times p)$.
+The shape of tensor `B` is $(m \times p)$.
 
-##### `Y`
+B matrix concatenates 
+$ 
+\begin{bmatrix}
+B_{wi} \\
+B_{wo} \\
+B_{wf} \\ 
+B_{wg} \\
+B_{ri} \\
+B_{ro} \\
+B_{rf} \\
+B_{rg}
+\end{bmatrix}
+$
+#### Attributes
 
-Tensor `Y` is the output tensor.
+##### `direction` - STRINGS
 
-The shape of tensor `Y` is $(m \times p)$.
+Specify if the RNN is forward, reverse, or bidirectional. Must be one of `forward` (default), `reverse`, or `bidirectional`.
+```
+Y = LSTM(X){
+   if direction == bidirectional
+        Y_for = LSTM_Forward(X)
+        Y_rev = revert(  LSTM_Forward  (revert(X)))
+        Y = concat(Y_for, Y_rev)
+   else if direction == forward
+        Y =  LSTM_Forward  (X)
+   else if direction == backward
+        Y =  LSTM_Forward  (revert(X))
+}
+```
+
+
+##### `activations` - STRINGS
+
+The value is a coma separated $3 \times STRINGS$ where 'act1, act2, act3' values can be taken in {`Relu`, `Tanh`, `Sigmoid`}.
+
+Defaults to 'Sigmoid, Tanh, Tanh'.
+
+if `direction` is `bidirectional`, the value is a coma separated $6 \times STRINGS$.
+
+Defaults to 'Sigmoid, Tanh, Tanh, Sigmoid, Tanh, Tanh'.
 
 # Graph execution semantics
 
