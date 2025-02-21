@@ -36,7 +36,7 @@
 | LeakyRelu                    |                    |                   |
 | Less                         |hb,                 |                   |
 | Log                          |                    |                   |
-| LSTM                         |                    |                   |
+| LSTM                         |nv                  |                   |
 | MatMul                       |nv                  |                   |
 | Max                          |                    |                   |
 | MaxPool                      |                    |                   |
