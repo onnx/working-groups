@@ -6,18 +6,24 @@
 ### Restrictions
 The following restrictions apply to the `LSTM` operator for the SONNX profile:
 - The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
-- initial_h, initial_c attributes defaults to 0 initialized arrays ========TBC======`[R2]`
+- initial_h, initial_c shall be explicitely set to 0. ========TBC======`[R2]`
+- `B` bias tensor is not optional. ========TBC======`[R3]`
+- `sequence_length` is not supported . ========TBC======`[R4]`
+- `P` is not supported . ========TBC======`[R5]`
 
 ### Notations
 $\odot$ identifies the Hadamard product, i.e. element wise multiplication.
 
 ### Signature
-`Y = LSTM(X,W,R,B)`
+`Y = LSTM(X,W,R,B,initial_h,initial_c)`
 where
+- `Y`: output tensor
 - `X`: input tensor
 - `W`: weight tensor
 - `R`: recurrence weight tensor  
 - `B`: bias tensor
+- `initial_h`: value of hidden vector h at $t_0$
+- `initial_c`: value of the cell tensor c at $t_0$
 
 #### Informal specification
 
@@ -25,34 +31,52 @@ Operator `LSTM` computes the Long Term Short Term Memory Cell forward, backward,
 
 The mathematical definition of the LSTM_Forward operator is given hereafter.
 $$
+\forall t \in [1, seq\_length],
+$$
+$$
 h_0 = initial\_h
 $$
 $$
 c_0 = initial\_c
 $$
 $$
-x_t = X[t]
+x_t = X[t-1]
 $$
 $$
-i_t = act1(W_{i}x_t + B_{wi} + R_i h_{t-1}+B_{ri})
+\begin{bmatrix}
+i_t \\
+o_t \\
+f_t \\
+g_t 
+\end{bmatrix}
+=
+\begin{bmatrix}
+W_{i} & R_{i} \\
+W_{o} & R_{o} \\
+W_{f} & R_{f} \\
+W_{g} & R_{g}
+\end{bmatrix}
+\times
+\begin{bmatrix}
+x_t \\
+h_{t-1}
+\end{bmatrix}
++
+\begin{bmatrix}
+B_{wi} + B_{ri} \\
+B_{wo} + B_{ro} \\
+B_{wf} + B_{rf} \\
+B_{wg} + B_{rg}
+\end{bmatrix}
 $$
 $$
-o_t  = act1(W_{o}x_t+B_{wo}+R_o h_{t-1} +B_{ro})
+c_t = act1(f_t) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
 $$
 $$
-f_t = act1(W_{f}x_t+B_{wf}+R_f h_{t-1}+B_{rf})
+h_t = act1(o_t) \odot act3(c_t)
 $$
 $$
-g_t = act2(W_{g}x_t+B_{wg}+R_g h_{t-1}+B_{rg})
-$$
-$$
-c_t = f_t\odot c_{t-1}+i_t\odot g_t
-$$
-$$
-h_t = o_t\odot act3(c_t)
-$$
-$$
-Y[t] = h_t
+Y[t-1] = h_t
 $$
 
 Where
@@ -68,12 +92,11 @@ Where
 ##### `X`
 
 Tensor `X` is the input tensor.
-
-The shape of tensor `A` is $(m \times n)$.
+The shape of tensor `X` is $(seq\_length \times batch\_size \times input\_size)$.
 
 ###### Constraints
 
-- (C1) Number of spatial axes of tensor `A`
+- (C1) Number of spatial axes of tensor `X`
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
     - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
 
@@ -81,10 +104,10 @@ The shape of tensor `A` is $(m \times n)$.
 
 Tensor `W` is the weight input tensor.
 
-The shape of tensor `W` is $(n \times p)$.
+The shape of tensor `W` is $(num\_directions \times 4*hidden\_size \times input\_size)$.
 
-W matrix concatenates 
 $ 
+W = 
 \begin{bmatrix}
 W_{i} \\
 W_{o} \\
@@ -97,10 +120,10 @@ $
 
 Tensor `R` is the recurrence weight input tensor.
 
-The shape of tensor `R` is $(m \times p)$.
+The shape of tensor `R` is $(num\_directions \times 4*hidden\_size \times hidden\_size)$.
 
-R matrix concatenates 
 $ 
+R = 
 \begin{bmatrix}
 R_{i} \\
 R_{o} \\
@@ -113,10 +136,10 @@ $
 
 Tensor `B` is the bias input tensor.
 
-The shape of tensor `B` is $(m \times p)$.
+The shape of tensor `B` is $(num\_directions \times 8*hidden\_size)$.
 
-B matrix concatenates 
-$ 
+$
+B =
 \begin{bmatrix}
 B_{wi} \\
 B_{wo} \\
@@ -128,6 +151,13 @@ B_{rf} \\
 B_{rg}
 \end{bmatrix}
 $
+
+##### `Y`
+
+Tensor `Y` is the output tensor.
+
+The shape of tensor `Y` is $(seq\_length \times num\_directions \times batch\_size \times hidden\_size)$.
+
 #### Attributes
 
 ##### `direction` - STRINGS
@@ -135,7 +165,9 @@ $
 Specify if the RNN is forward, reverse, or bidirectional. Must be one of `forward` (default), `reverse`, or `bidirectional`.
 ```
 Y = LSTM(X){
+   num_directions = 1
    if direction == bidirectional
+        num_directions = 2
         Y_for = LSTM_Forward(X)
         Y_rev = revert(  LSTM_Forward  (revert(X)))
         Y = concat(Y_for, Y_rev)
