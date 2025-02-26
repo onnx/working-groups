@@ -35,7 +35,7 @@
 | Identity                     |                    |                   |
 | LeakyRelu                    |                    |                   |
 | Less                         |hb,                 |                   |
-| Log                          |                    |                   |
+| Log                          |hb,                 |                   |
 | LSTM                         |nv                  |                   |
 | MatMul                       |nv                  |                   |
 | Max                          |                    |                   |
