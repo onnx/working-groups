@@ -43,7 +43,7 @@
 | Min                          |                    |                   |
 | Mod                          |                    |                   |
 | Mul                          |hb,                 |                   |
-| Neg                          |                    |                   |
+| Neg                          |hb,                 |                   |
 | Not                          |                    |                   |
 | Pad                          |                    |                   |
 | Padding                      |                    |                   |
