@@ -61,7 +61,7 @@
 | Softmax                      |                    |                   |
 | SoftPlus                     |                    |                   |
 | Split                        |                    |                   |
-| Sqrt                         |                    |                   |
+| Sqrt                         |hb,                 |                   |
 | Squeeze                      |                    |                   |
 | Sub                          |hb,                 |                   |
 | Tanh                         |                    |                   |
