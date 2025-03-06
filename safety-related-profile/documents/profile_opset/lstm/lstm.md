@@ -30,53 +30,54 @@ where
 Operator `LSTM` computes the Long Term Short Term Memory Cell forward, backward, or bidirectional.
 
 The mathematical definition of the LSTM_Forward operator is given hereafter.
+
 $$
-\forall t \in [1, seq\_length],
-$$
-$$
-h_0 = initial\_h
+     \forall t \in [1, seq\textunderscore length],
 $$
 $$
-c_0 = initial\_c
+     h_0 = initial\textunderscore h
 $$
 $$
-x_t = X[t-1]
+     c_0 = initial\textunderscore c
 $$
 $$
-\begin{bmatrix}
-i_t \\
-o_t \\
-f_t \\
-g_t 
-\end{bmatrix}
-=
-\begin{bmatrix}
-W_{i} & R_{i} \\
-W_{o} & R_{o} \\
-W_{f} & R_{f} \\
-W_{g} & R_{g}
-\end{bmatrix}
-\times
-\begin{bmatrix}
-x_t \\
-h_{t-1}
-\end{bmatrix}
-+
-\begin{bmatrix}
-B_{wi} + B_{ri} \\
-B_{wo} + B_{ro} \\
-B_{wf} + B_{rf} \\
-B_{wg} + B_{rg}
-\end{bmatrix}
+     x_t = X[t-1]
 $$
 $$
-c_t = act1(f_t) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
+     \begin{bmatrix}
+     i_t \\
+     o_t \\
+     f_t \\
+     g_t 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     W_{i} & R_{i} \\
+     W_{o} & R_{o} \\
+     W_{f} & R_{f} \\
+     W_{g} & R_{g}
+     \end{bmatrix}
+     \times
+     \begin{bmatrix}
+     x_t \\
+     h_{t-1}
+     \end{bmatrix}
+     +
+     \begin{bmatrix}
+     B_{wi} + B_{ri} \\
+     B_{wo} + B_{ro} \\
+     B_{wf} + B_{rf} \\
+     B_{wg} + B_{rg}
+     \end{bmatrix}
 $$
 $$
-h_t = act1(o_t) \odot act3(c_t)
+     c_t = act1(f_t) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
 $$
 $$
-Y[t-1] = h_t
+     h_t = act1(o_t) \odot act3(c_t)
+$$
+$$
+     Y[t-1] = h_t
 $$
 
 Where
@@ -92,7 +93,7 @@ Where
 ##### `X`
 
 Tensor `X` is the input tensor.
-The shape of tensor `X` is $(seq\_length \times batch\_size \times input\_size)$.
+The shape of tensor `X` is $(seq\textunderscore length \times batch\textunderscore size \times input\textunderscore size)$.
 
 ###### Constraints
 
@@ -104,59 +105,59 @@ The shape of tensor `X` is $(seq\_length \times batch\_size \times input\_size)$
 
 Tensor `W` is the weight input tensor.
 
-The shape of tensor `W` is $(num\_directions \times 4*hidden\_size \times input\_size)$.
+The shape of tensor `W` is $(num\textunderscore directions \times 4*hidden\textunderscore size \times input\textunderscore size)$.
 
-$ 
-W = 
-\begin{bmatrix}
-W_{i} \\
-W_{o} \\
-W_{f} \\ 
-W_{g} \\
-\end{bmatrix}
-$
+$$
+     W = 
+     \begin{bmatrix}
+     W_{i} \\
+     W_{o} \\
+     W_{f} \\ 
+     W_{g} \\
+     \end{bmatrix}
+$$
 
 ##### `R`
 
 Tensor `R` is the recurrence weight input tensor.
 
-The shape of tensor `R` is $(num\_directions \times 4*hidden\_size \times hidden\_size)$.
+The shape of tensor `R` is $(num\textunderscore directions \times 4*hidden\textunderscore size \times hidden\textunderscore size)$.
 
-$ 
-R = 
-\begin{bmatrix}
-R_{i} \\
-R_{o} \\
-R_{f} \\ 
-R_{g} \\
-\end{bmatrix}
-$
+$$ 
+     R = 
+     \begin{bmatrix}
+     R_{i} \\
+     R_{o} \\
+     R_{f} \\ 
+     R_{g} \\
+     \end{bmatrix}
+$$
 
 ##### `B`
 
 Tensor `B` is the bias input tensor.
 
-The shape of tensor `B` is $(num\_directions \times 8*hidden\_size)$.
+The shape of tensor `B` is $(num\textunderscore directions \times 8*hidden\textunderscore size)$.
 
-$
-B =
-\begin{bmatrix}
-B_{wi} \\
-B_{wo} \\
-B_{wf} \\ 
-B_{wg} \\
-B_{ri} \\
-B_{ro} \\
-B_{rf} \\
-B_{rg}
-\end{bmatrix}
-$
+$$
+     B =
+     \begin{bmatrix}
+     B_{wi} \\
+     B_{wo} \\
+     B_{wf} \\ 
+     B_{wg} \\
+     B_{ri} \\
+     B_{ro} \\
+     B_{rf} \\
+     B_{rg}
+     \end{bmatrix}
+$$
 
 ##### `Y`
 
 Tensor `Y` is the output tensor.
 
-The shape of tensor `Y` is $(seq\_length \times num\_directions \times batch\_size \times hidden\_size)$.
+The shape of tensor `Y` is $(seq\textunderscore length \times num\textunderscore directions \times batch\textunderscore size \times hidden\textunderscore size)$.
 
 #### Attributes
 
