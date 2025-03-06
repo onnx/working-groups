@@ -5,10 +5,9 @@
 
 ### Restrictions
 The following restrictions apply to the `LSTM` operator for the SONNX profile:
-- The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
 - initial_h, initial_c shall be explicitely set to 0. ========TBC======`[R2]`
 - `B` bias tensor is not optional. ========TBC======`[R3]`
-- `sequence_length` is not supported . ========TBC======`[R4]`
+- `sequence_lens` is not supported . ========TBC======`[R4]`
 - `P` is not supported . ========TBC======`[R5]`
 
 ### Notations
