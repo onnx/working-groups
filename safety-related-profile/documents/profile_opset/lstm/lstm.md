@@ -1,34 +1,55 @@
 
 # `LSTM` operator (real)
 
-## DRAFT : NOT READY TO BE REVIEWED
+### Hyper-parameters
 
-### Restrictions
-The following restrictions apply to the `LSTM` operator for the SONNX profile:
-- initial_h, initial_c shall be explicitely set to 0. ========TBC======`[R2]`
-- `B` bias tensor is not optional. ========TBC======`[R3]`
-- `sequence_lens` is not supported . ========TBC======`[R4]`
-- `P` is not supported . ========TBC======`[R5]`
-
-### Notations
-$\odot$ identifies the Hadamard product, i.e. element wise multiplication.
+Hyper-parameters are constants used to define tensor shapes:
+- `seq_length`: defines the number of time steps for the LSTM Cell.
+- `batch_size`: defines the size of the batch.
+- `input_size`: number of feature of the input tensor.
+- `hidden_size` : number of feature of the hidden layer.
+- `num_directions` : 1 if foward or backward LSTM, 2 if bidirectional LSTM.
 
 ### Signature
-`Y = LSTM(X,W,R,B,initial_h,initial_c)`
+`Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P)`
 where
-- `Y`: output tensor
-- `X`: input tensor
-- `W`: weight tensor
-- `R`: recurrence weight tensor  
-- `B`: bias tensor
-- `initial_h`: value of hidden vector h at $t_0$
-- `initial_c`: value of the cell tensor c at $t_0$
+- `Y`: the output tensor
+- `X`: the input tensor
+- `W`: the weight tensor
+- `R`: the recurrence weight tensor  
+- `B`: the bias tensor
+- `sequence_lens`: the lengths of the sequences in a batch
+- `initial_h`: the value of hidden vector h at $t_0$
+- `initial_c`: the value of the cell tensor c at $t_0$
+- `P`: the weight tensor for peepholes.
 
 #### Informal specification
 
 Operator `LSTM` computes the Long Term Short Term Memory Cell forward, backward, or bidirectional.
 
-The mathematical definition of the LSTM_Forward operator is given hereafter.
+The algorithm of the LSTM Cell is described as follows:
+```
+Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P){
+   num_directions = 1
+   if direction == bidirectional
+        num_directions = 2
+        Y_for = LSTM_Forward(X,...)
+        Y_rev = revert(  LSTM_Forward  (revert(X),...))
+        Y = concat(Y_for, Y_rev)
+   else if direction == forward
+        Y =  LSTM_Forward  (X,...)
+   else if direction == backward
+        Y =  LSTM_Forward  (revert(X),...)
+}
+
+revert(X) returns the reversed X tensor along `seq_length` axis.
+concat(X1,X2) concatenates X1 and X2 tensor along `seq_length` axis.
+```
+
+### Notations
+$\odot$ identifies the Hadamard product, i.e. element wise multiplication.
+
+### Mathematical definition of LSTM_Forward
 
 $$
      \forall t \in [1, seq\textunderscore length],
@@ -89,7 +110,7 @@ Where
 
 #### Inputs and outputs
 
-##### `X`
+##### `X` (heterogeneous) - T:
 
 Tensor `X` is the input tensor.
 The shape of tensor `X` is $(seq\textunderscore length \times batch\textunderscore size \times input\textunderscore size)$.
@@ -100,7 +121,7 @@ The shape of tensor `X` is $(seq\textunderscore length \times batch\textundersco
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
     - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
 
-##### `W`
+##### `W` (heterogeneous) - T:
 
 Tensor `W` is the weight input tensor.
 
@@ -116,7 +137,7 @@ $$
      \end{bmatrix}
 $$
 
-##### `R`
+##### `R` (heterogeneous) - T:
 
 Tensor `R` is the recurrence weight input tensor.
 
@@ -132,7 +153,7 @@ $$
      \end{bmatrix}
 $$
 
-##### `B`
+##### `B` (optional, heterogeneous) - T:
 
 Tensor `B` is the bias input tensor.
 
@@ -152,6 +173,22 @@ $$
      \end{bmatrix}
 $$
 
+##### `sequence_lens` (optional, heterogeneous) - T1:
+
+Optional tensor specifying lengths of the sequences in a batch. If not specified - assumed all sequences in the batch to have length `seq_length`. It has shape [`batch_size`].
+
+##### `initial_h` (optional, heterogeneous) - T:
+
+Optional initial value of the hidden. If not specified - assumed to be 0. It has shape [`num_directions`, `batch_size`, `hidden_size`].
+
+##### `initial_c` (optional, heterogeneous) - T:
+
+Optional initial value of the cell. If not specified - assumed to be 0. It has shape [`num_directions`, `batch_size`, `hidden_size`].
+
+##### `P` (optional, heterogeneous) - T:
+
+The weight tensor for peepholes. Concatenation of P[iof] and PB[iof] (if bidirectional) along dimension 0. It has shape [`num_directions`, 3*`hidden_size`]. Optional: If not specified - assumed to be 0.
+
 ##### `Y`
 
 Tensor `Y` is the output tensor.
@@ -160,24 +197,13 @@ The shape of tensor `Y` is $(seq\textunderscore length \times num\textunderscore
 
 #### Attributes
 
-##### `direction` - STRINGS
+##### `activation_alpha` - FLOATS :
 
-Specify if the RNN is forward, reverse, or bidirectional. Must be one of `forward` (default), `reverse`, or `bidirectional`.
-```
-Y = LSTM(X){
-   num_directions = 1
-   if direction == bidirectional
-        num_directions = 2
-        Y_for = LSTM_Forward(X)
-        Y_rev = revert(  LSTM_Forward  (revert(X)))
-        Y = concat(Y_for, Y_rev)
-   else if direction == forward
-        Y =  LSTM_Forward  (X)
-   else if direction == backward
-        Y =  LSTM_Forward  (revert(X))
-}
-```
+Optional scaling values used by some activation functions. The values are consumed in the order of activation functions, for example (f, g, h) in LSTM. Default values are the same as of corresponding ONNX operators.For example with LeakyRelu, the default alpha is 0.01.
 
+##### `activation_beta` - FLOATS :
+
+Optional scaling values used by some activation functions. The values are consumed in the order of activation functions, for example (f, g, h) in LSTM. Default values are the same as of corresponding ONNX operators.
 
 ##### `activations` - STRINGS
 
@@ -188,6 +214,39 @@ Defaults to 'Sigmoid, Tanh, Tanh'.
 if `direction` is `bidirectional`, the value is a coma separated $6 \times STRINGS$.
 
 Defaults to 'Sigmoid, Tanh, Tanh, Sigmoid, Tanh, Tanh'.
+
+#### `clip` - FLOAT :
+
+Cell clip threshold. Clipping bounds the elements of a tensor in the range of [-threshold, +threshold] and is applied to the input of activations. No clip if not specified.
+
+##### `direction` - STRINGS
+
+Specify if the RNN is forward, reverse, or bidirectional. Must be one of `forward` (default), `reverse`, or `bidirectional`.
+
+##### `hidden_size` - INT :
+
+Number of neurons in the hidden layer. Shall be set to the hyper-parameter `hidden_size`
+
+##### `input_forget` - INT (default is '0'):
+
+Couple the input and forget gates if 1.
+
+##### `layout` - INT (default is '0'):
+
+The shape format of inputs X, initial_h, initial_c and outputs Y, Y_h, Y_c. If 0, the following shapes are expected: X.shape = [seq_length, batch_size, input_size], Y.shape = [seq_length, num_directions, batch_size, hidden_size], initial_h.shape = Y_h.shape = initial_c.shape = Y_c.shape = [num_directions, batch_size, hidden_size]. If 1, the following shapes are expected: X.shape = [batch_size, seq_length, input_size], Y.shape = [batch_size, seq_length, num_directions, hidden_size], initial_h.shape = Y_h.shape = initial_c.shape = Y_c.shape = [batch_size, num_directions, hidden_size].
+
+### SONNX Profile
+
+## Explicit input and attributes
+
+The following input and attributes shall be explicitely defined:
+- `initial_h`, `initial_c` shall be set to a 0 tensor if not used.
+- `B` shall be set to a 0 tensor if not used.
+- `batch_size` shall be set to 1 when batch is not supported.
+- `sequence_lens` shall be set to `batch_size` if not used.
+- `P` shall be set to a 0 tensor if not used. 
+- `input_forget` shall be set to 0 if not used.
+- `layout` shall be set to 0 if not used.
 
 # Graph execution semantics
 
