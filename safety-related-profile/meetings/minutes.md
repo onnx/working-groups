@@ -1,24 +1,48 @@
-# 2025/0X/XX
+# 2025/03/12
 ## Agenda
-*To be completed.*
+  - Review of actions
+  - Review of newly described operators (see DIV, LSTM)
+  - Subjects raised by Andreas and Sebastian and further discussed with Nicolas (see [minutes](../documents/profile_opset/lstm/reviews/meeting_mom.md)):
+    - Relations with ONNX
+      - Compliance with ONNX spec
+        - Nicolas:
+          > I propose that for each operator .md file, we specify the full compliance with ONNX spec and we add a bottom section SONNX in the operator page, where we express the restrictions like : this input XXX shall be static, the B bias shall be explicitly defined, Broadcast not supported (reshape shall be prepended when required)...
+          > This will show our specification work (math expressions, illustrations) mainstream to all the ONNX community from the ONNX documentation entry point, and also the SONNX 'value' for curious/interested people at the bottom of each operator page.
+      - Visibility 
+        - Sebastian/Nicolas:
+          > For visibility and adoption, we shall avoid having a SONNX documentation entry point different from mainstream ONNX.
+        - Andreas 
+          > 1.  One if not the central meeting at Onnx is the SIG Operators meeting. It takes place every month.  
+          > I think we should actively bring our points there to\
+          > a. Get a discussion about our thoughts, from the experts who know operators, know how the way would be to implement them.\
+          > b) We could also draw more attention to our initiative there.
+          > 2. The next Onnx Community Meetup will probably take place in June 2025. (https://github.com/onnx/steering-committee/blob/main/meeting-notes/2025/20250305.md)\
+          There we will have the opportunity to present what we are doing and what we have achieved.
+          > 3. I think we need to create a lot more issues at https://github.com/onnx/onnx in order to work out the concerns more clearly,or to be able to discuss them even more with the community there, or to be able to refer to them in the Operators Meeting.
+          > 4) As there are certainly already issues concerning SONNX at the moment, I could well imagine a new label “sonnx” for this, so that we can filter even better according to the topics. => you could ping me "andife" directly at the github issue and I add that specific label
+    - Tooling
+      - ONNX to SONNX converter
+      - Model checker
+      - *How to fund those developments?*
 ## Minutes
 *To be completed.*
 ## New actions
 *To be completed.*
 ## Past actions
 - [X] (1202-1, Eric) Reschedule Alexandre presentation
+  - Presentation planned on April 9th. 
 - [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
 - [ ] (1202-3, All) Review new operators processed by Henri 
   - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
-  - [X] Eric: review and modification of operator `Div`(see [here](../documents/profile_opset/div/div.md))
+  - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
 - [ ] (1202-4, All) Define the appropriate way to specify the behaviour of operators for value out of range. Apply the approach on the `div` operator, for parameters in $\mathcal R$ and, `double`and `int`.
-  - [X] Eric: review and modification of operator `Div`(see [here](../documents/profile_opset/div/div.md))
+  - [X] Eric: See operator [`Div`](../documents/profile_opset/div/div.md)
 - [ ] (1202-5, All) Define appropriate rule to handle multiples types without multiplying the specifications. 
-- [ ] (1202-6, Eric) Check with ONNX how to integrate our work.
+  - See example of operator [`Div`](../documents/profile_opset/div/div.md))
 - [X] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
   - Only tensors of class Tensors are supported (SparseTensor are not supported). Such restriction applies to all operators. They are placed in document [General restrictions](../documents/profile_opset/general_restrictions.md) 
-- [ ] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
-- [ ] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
+- [X] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
+- [X] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
   - Done for operator `Div`.
 - [ ] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
 - [ ] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
@@ -40,7 +64,8 @@
 - [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
 
-
+# 2025/02/26
+*Canceled.*
 
 # 2025/02/12
 ## Agenda
