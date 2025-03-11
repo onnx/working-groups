@@ -24,6 +24,8 @@
       - ONNX to SONNX converter
       - Model checker
       - *How to fund those developments?*
+    - Other 
+      - Graph semantics... Who?
 ## Minutes
 *To be completed.*
 ## New actions
