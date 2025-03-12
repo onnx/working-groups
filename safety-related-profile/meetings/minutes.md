@@ -1,4 +1,7 @@
 # 2025/03/12
+## Participants
+  - Nicolas, Cong, Dumitru, Anne-Sophie, Eric, Jean-Baptiste, Henri, Jean-Loup, Andreas (partially) (at least).
+  - As usual, the meeting has been recorded. See [here]
 ## Agenda
   - Problem with meeting invitations (?)
   - Review of actions
@@ -31,9 +34,40 @@
     - Other 
       - Graph semantics... Who?
 ## Minutes
-*To be completed.*
+- [Presentation of the ONNX graph semantics by Dumitru](./slides/2025-03-12-Dumitru%20on%20ONNX-graph-semantics.pdf)
+  - The semantics is pretty simple (as far as I [eric] understand
+    - considering a Directed Graph composed of nodes and edges, where 
+      - a node is an operator
+      - a edge connects a node output to a node input 
+      - the graph is acyclic
+    - considering that an edge carries either no value of a value(ii) the graph contains no cycle, 
+    - considering that all edges carry no value initially
+    - considering that an edge gets a value when the node whose output is associated with is executed
+    - considering that a node can ony be executed when all edges associated with its inputs have a value 
+    - executing a graph means executing every node until all nodes have been executed.
+  - The graph is stateless, so if the computation requires a state, this state shall be managed outside of the graph. Such question are (very) relevant when dealing with reactive systems, but they do not concern the SONNX spec. 
+  - Pipelining or other implementation concerns (e.g., scheduling of nodes execution) are not relevant to the specification
+  - Questions were raised about 
+    - operators implementing a random behaviour 
+      - a deterministic behavior can be achieved by providing seeds to each and every random op. 
+    - batch norm
+      - batch norm is replaced by a constant at inference time
+  - Brief presentation of the DIV operator that shows of implementation of the same operator for Real, Float and Int number can be specified. 
+  - Presentation of the LSTM operator 
+    -  A few verifications and corrections needs to be done, see action [1203-4].
+ - Discussion about the presentation of our work to ONNX
+   - Eric: I would prefer to present our results once we are completely happy with a first subset of operators. This will hopefully be the case in for the Meetup in June. In the meantime, we have to figure out with ONNX people who our work needs to be "integrated" with theirs. See action [1203-5]
+ - Discussion about the tooling
+   - We have identified two tools: one to check a model with respect to SONNX, and one to convert a model from standard ONNX to SONNX.
+     - With respect to certification, the second one may not be a "good idea" <off-meeting (eric): it may still be useful during the first debugging phases>. see acton [1205-6].
+ - The last point about "issues" has not been discussed.
 ## New actions
-*To be completed.*
+- [ ] (1203-1, Eric) Propose a first specification of the graph execution semantics on the basis of Dumitru's slied and ONNX doc.
+- [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
+- [ ] (1203-3, Jean-loup) Do a review of the LSTM operator
+- [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
 ## Past actions
 - [X] (1202-1, Eric) Reschedule Alexandre presentation
   - Presentation planned on April 9th. 
