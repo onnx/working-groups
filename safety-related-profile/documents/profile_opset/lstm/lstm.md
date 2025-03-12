@@ -3,7 +3,7 @@
 
 ### Notations
 
-Hyper-parameters are constants used to define tensor shapes:
+These constants are used to define tensor shapes:
 - `seq_length`: number of time steps for the LSTM Cell.
 - `batch_size`: size of the batch.
 - `input_size`: number of feature of the input tensor.
@@ -13,6 +13,8 @@ Hyper-parameters are constants used to define tensor shapes:
 $\odot$ identifies the Hadamard product, i.e. element wise multiplication.
 
 ### Signature
+Operator `LSTM` computes forward, backward, or bidirectional Long Term Short Term Memory Cell.
+
 `Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P)`
 where
 - `Y`: the output tensor
@@ -25,87 +27,6 @@ where
 - `initial_c`: the value of the cell tensor c at $t_0$
 - `P`: the weight tensor for peepholes.
 
-### Informal specification
-
-Operator `LSTM` computes forward, backward, or bidirectional Long Term Short Term Memory Cell.
-
-The algorithm of the LSTM Cell is the following:
-```
-Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P){
-   num_directions = 1
-   if direction is bidirectional
-        num_directions = 2
-        Y_for = LSTM_Forward(X,...)
-        Y_rev = revert(  LSTM_Forward  (revert(X),...))
-        Y = concat(Y_for, Y_rev)
-   else if direction is forward
-        Y =  LSTM_Forward  (X,...)
-   else if direction is backward
-        Y =  LSTM_Forward  (revert(X),...)
-}
-
-revert(X) returns the reversed X tensor along `seq_length` axis.
-concat(X1,X2) concatenates X1 and X2 tensor along `seq_length` axis.
-```
-
-### Mathematical definition of LSTM_Forward
-
-$$
-     \forall t \in [1, seq\textunderscore length],
-$$
-$$
-     h_0 = initial\textunderscore h
-$$
-$$
-     c_0 = initial\textunderscore c
-$$
-$$
-     x_t = X[t-1]
-$$
-$$
-     \begin{bmatrix}
-     i_t \\
-     o_t \\
-     f_t \\
-     g_t 
-     \end{bmatrix}
-     =
-     \begin{bmatrix}
-     W_{i} & R_{i} \\
-     W_{o} & R_{o} \\
-     W_{f} & R_{f} \\
-     W_{g} & R_{g}
-     \end{bmatrix}
-     \times
-     \begin{bmatrix}
-     x_t \\
-     h_{t-1}
-     \end{bmatrix}
-     +
-     \begin{bmatrix}
-     B_{wi} + B_{ri} \\
-     B_{wo} + B_{ro} \\
-     B_{wf} + B_{rf} \\
-     B_{wg} + B_{rg}
-     \end{bmatrix}
-$$
-$$
-     c_t = act1(f_t) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
-$$
-$$
-     h_t = act1(o_t) \odot act3(c_t)
-$$
-$$
-     Y[t-1] = h_t
-$$
-
-Where
-- $i$ is the input gate matrix,
-- $o$ is the output gate matrix,
-- $f$ is the forget gate matrix,
-- $g$ is the cell input gate matrix,
-- $c$ is the cell state,
-- $h$ is the hidden state,
 
 #### Inputs and outputs
 
@@ -206,7 +127,7 @@ Optional scaling values used by some activation functions. The values are consum
 
 ##### `activations` - STRINGS
 
-The value is a string of 3 comma separated values where $'act1, act2, act3' where act_i \in {`Relu`, `Tanh`, `Sigmoid`}$.
+The value is a string of 3 comma separated values 'act1, act2, act3' where act_i $\in$ {`Relu`, `Tanh`, `Sigmoid`}
 
 Defaults to 'Sigmoid, Tanh, Tanh'.
 
@@ -233,6 +154,86 @@ Couple the input and forget gates if 1.
 ##### `layout` - INT (default is '0'):
 
 The shape format of inputs X, initial_h, initial_c and outputs Y, Y_h, Y_c. If 0, the following shapes are expected: X.shape = [seq_length, batch_size, input_size], Y.shape = [seq_length, num_directions, batch_size, hidden_size], initial_h.shape = Y_h.shape = initial_c.shape = Y_c.shape = [num_directions, batch_size, hidden_size]. If 1, the following shapes are expected: X.shape = [batch_size, seq_length, input_size], Y.shape = [batch_size, seq_length, num_directions, hidden_size], initial_h.shape = Y_h.shape = initial_c.shape = Y_c.shape = [batch_size, num_directions, hidden_size].
+
+### Informal specification
+
+The algorithm of the LSTM Cell is the following:
+```
+Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P){
+   num_directions = 1
+   if direction is bidirectional
+        num_directions = 2
+        Y_for = LSTM_Forward(X,...)
+        Y_rev = revert(  LSTM_Forward  (revert(X),...))
+        Y = concat(Y_for, Y_rev)
+   else if direction is forward
+        Y =  LSTM_Forward  (X,...)
+   else if direction is backward
+        Y =  LSTM_Forward  (revert(X),...)
+}
+
+revert(X) returns the reversed X tensor along `seq_length` axis.
+concat(X1,X2) concatenates X1 and X2 tensor along `seq_length` axis.
+```
+
+### Mathematical definition of LSTM_Forward
+
+$$
+     \forall t \in [1, seq\textunderscore length],
+$$
+$$
+     h_0 = initial\textunderscore h
+$$
+$$
+     c_0 = initial\textunderscore c
+$$
+$$
+     x_t = X[t-1]
+$$
+$$
+     \begin{bmatrix}
+     i_t \\
+     o_t \\
+     f_t \\
+     g_t 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     W_{i} & R_{i} \\
+     W_{o} & R_{o} \\
+     W_{f} & R_{f} \\
+     W_{g} & R_{g}
+     \end{bmatrix}
+     \times
+     \begin{bmatrix}
+     x_t \\
+     h_{t-1}
+     \end{bmatrix}
+     +
+     \begin{bmatrix}
+     B_{wi} + B_{ri} \\
+     B_{wo} + B_{ro} \\
+     B_{wf} + B_{rf} \\
+     B_{wg} + B_{rg}
+     \end{bmatrix}
+$$
+$$
+     c_t = act1(f_t) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
+$$
+$$
+     h_t = act1(o_t) \odot act3(c_t)
+$$
+$$
+     Y[t-1] = h_t
+$$
+
+Where
+- $i$ is the input gate matrix,
+- $o$ is the output gate matrix,
+- $f$ is the forget gate matrix,
+- $g$ is the cell input gate matrix,
+- $c$ is the cell state,
+- $h$ is the hidden state,
 
 ### SONNX Profile
 
