@@ -1,7 +1,10 @@
 # 2025/03/12
 ## Agenda
+  - Problem with meeting invitations (?)
   - Review of actions
-  - Review of newly described operators (see DIV, LSTM)
+  - Status on ARP
+    - First set of answers received. Will be completed by Friday 14th
+  - Review of newly described operators (see [DIV](../documents/profile_opset/div/div.md), [LSTM](../documents/profile_opset/lstm/lstm.md), other?)
   - Subjects raised by Andreas and Sebastian and further discussed with Nicolas (see [minutes](../documents/profile_opset/lstm/reviews/meeting_mom.md)):
     - Relations with ONNX
       - Compliance with ONNX spec
@@ -39,24 +42,25 @@
   - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
 - [ ] (1202-4, All) Define the appropriate way to specify the behaviour of operators for value out of range. Apply the approach on the `div` operator, for parameters in $\mathcal R$ and, `double`and `int`.
   - [X] Eric: See operator [`Div`](../documents/profile_opset/div/div.md)
-- [ ] (1202-5, All) Define appropriate rule to handle multiples types without multiplying the specifications. 
+- [ ] (1202-5, All) Define appropriate rules to handle multiples types without multiplying the specifications. 
   - See example of operator [`Div`](../documents/profile_opset/div/div.md))
 - [X] (2901-1, Eric) Check how to express constraints about SparseTensor at operator level.
-  - Only tensors of class Tensors are supported (SparseTensor are not supported). Such restriction applies to all operators. They are placed in document [General restrictions](../documents/profile_opset/general_restrictions.md) 
-- [X] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Seb.
+  - Only tensors of class "Tensors" are supported (SparseTensor are not supported). Such restriction applies to all operators. They are placed in document [General restrictions](../documents/profile_opset/general_restrictions.md) 
+- [X] (2901-2, Anne-Sophie) Put back the issues (in the appropriate section) and add the answers given by Sebastian.
 - [X] (2901-3, Eric) Provide a Jupyter notebook for the `conv` operator (see [here](../documents/profile_opset/conv/tests/conv_onnx.ipynb)).
   - Done for operator `Div`.
 - [ ] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
 - [ ] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
-- [ ] (2901-6, Edoardo) Check how to involve students in the specification work.
-- [ ] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
+- [X] (2901-6, Edoardo) Check how to involve students in the specification work.
+  - On 12/02 : Edoardo has done some internal advertisement... waiting...
+- [X] (2901-7, Jean-Baptiste) Analysis of EASA's Concept Paper.
 - [ ] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
 - [ ] (1501-1, Sebastian) Specify some operators...
   - Sebastian is working on `reshape`and other ops. 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
   - *Thinking...*
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
-- [ ] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
+- [X] (1501-6, All) Review issues reported by Anne-Sophie in file [issues.md](../documents/issues.md). Put your remarks in the [reviews](../deliverables/issues/reviews/) directory (in file `<you_name>.md`) or send them to me.
 - [ ] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
   - Discussion on-going with Loïc on the formal specification strategy...
   - Meeting planned to reach a final consensus...
@@ -115,10 +119,10 @@
   - <span style="color:blue"> See action (1202-6) </span>
 - Presentation of Jean-Baptiste's work
   - <span style="color:blue"> See action (1202-2) </span>
-  - This work makes a mapping between the EASA's concept paper and the ARP. it also identifies the EASA's objectives that are relevant to SONNX. Note that Mohamed and Jean-oup have done a similar (yet more focused) work in the context of the DeepGreen project.
+  - This work makes a mapping between the EASA's concept paper and the ARP. it also identifies the EASA's objectives that are relevant to SONNX. Note that Mohamed and Jean-oup have done a similar work (yet more focused) in the context of the DeepGreen project.
   - First draft to be validated at Airbus and with people from WG114.
 - About the management of operators and reviews:
-  - /!\ Don't forget to indicate on which operator you are working (in this [table](./operator_spec_sub_wg/worksharing.md)) in order to prevent overap... /!\
+  - /!\ Don't forget to indicate on which operator you are working (in this [table](./operator_spec_sub_wg/worksharing.md)) in order to prevent overlaps... /!\
   - Please use the gconf to do your review. And when taking account of reviews, authors shall indicate in the review form what has been taken into account (KO/OK/TBD).
 
 ## New actions
