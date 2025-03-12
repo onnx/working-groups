@@ -2,6 +2,7 @@
 ## Agenda
   - Problem with meeting invitations (?)
   - Review of actions
+  - Presentation of ONNX graph semantics (Dumitru)
   - Status on ARP
     - First set of answers received. Will be completed by Friday 14th
   - Review of newly described operators (see [DIV](../documents/profile_opset/div/div.md), [LSTM](../documents/profile_opset/lstm/lstm.md), other?)
