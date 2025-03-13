@@ -260,5 +260,5 @@ The following input and attributes shall be explicitely defined:
 - `P` shall be set to a constant tensor or 0 tensor if not used. 
 - `input_forget` shall be set to 0 if not used.
 - `layout` shall be set to 0 if not used.
-
+- `activation` is restricted to 'Sigmoid, Tanh, Tanh' or 'Relu, Tanh, Tanh'
 
