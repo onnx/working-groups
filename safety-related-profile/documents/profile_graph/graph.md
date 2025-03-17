@@ -1,46 +1,71 @@
+## Preamble
+
+This document gives a high level description of how the execution execution of an ONNX graph. How the graph graph elements are described in the ONNX file is given in the Intermediate Representation (IR) specification document.
+
+In the context of SONNX, the specification of the semantics of an ONNX graph is limited to the inference phase.  
+
 ## Graph
 
-- An ONNX graph is a set of  **nodes** connected by **edges** 
- 
+- A **graph** is a set of  **nodes** and **edges**
+- A **graph** has 
+  - zero or more inputs and 
+  - at least one output
+- An input of the graph is an input of one of the graph's nodes
+- An output of the graph is an output of one of the graph's nodes
+- A graph is acyclic. This allows nodes to be sorted topologically and be executed according to that order.
+   
+The following picture gives a simple example of a graph composed of 4 nodes.
+
+ In this example, the inputs of the graph are the inputs of more than one node and the output of the `sub` node is not used.
+ - a node output may be unused.  
+- 
 <p align="center">
 <img src="./imgs/graph.png" width="200" />
 </p>
 
-*I don't really like mixing mathematical concepts (e.g. graph, nodes) with computer-science concepts (e.g., input, output). Talking about the "input of a graph" sounds pretty strange. This has to be clarified. We may write that an ONNX model is a specific node encapsulating a graph. See tentative below*
-
-## Model
-- A **model** is a node encapsulating a graph. 
-- A model has zero or more inputs and at least one output
-- A model input is connected to one or several inputs of the graph's nodes.
-- A model output is connected to the output of one of the graph's nodes.
-
-## Node
-- A **node** refers to an ONNX operator. 
-- A node has the inputs, outputs and attributes of the operator it represents.  
-
+*Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. Please note that the `sub` operator has been removed since it is bnot used by any other node or as an output of the graph. *
+```
+graph Test (
+  %I1[FLOAT, ?x?]
+  %I2[FLOAT, ?x?]
+) {
+  %O1 = Add(%I1, %I2)
+  %op2_out = Constant[value = <Tensor>]()
+  %O2 = Mul(%O1, %op2_out)
+  %op4_out = Sub(%I1, %I2)
+  return %O1, %O2
+}
+```
 ## Edges
-- An **edge** represents a connection between the input of a node and the output of another node. 
-
-## Constraints
-- A graph is acyclic. This allows nodes to be sorted topologically and be executed according to that order.
+- An **edge** represents a connection between 
+  - the output of a node and the input of another node. 
+  - the input of the graph and the input of a node
+  - the output of a node and the output of the graph
+  
+## Node
+- A **node** refers to a fully qualified and configured operator ONNX **operator** (version of the operator is defined, attributes of the operators are set) )
+- A node has 
+  - zero or more inputs and 
+  - at least one output
+- The inputs and outputs of the node corresponds to the inputs and outputs of the referenced operator.  
 - The input of a node is either 
   - connected to the output of another node or
-  - connected to an input of the graph
+  - an input of the graph
 - The output of a node is either 
   - connected to the input of another node or
-  - connected to the output of the model or
+  - an output of the graph or
   - not connected.
 
-## Execution of a model
-- Executing a model means evaluating all outputs of the model.
-- Evaluating an output of the model means evaluating the output of the node to which its is connected 
-- Evaluating an output of a node means executing the node
-- An output of a node is evaluated (defined) by executing the node according its specification
-- Executing a node can only be done if all its inputs are defined
+## Execution of a graph
+- Executing a graph means evaluating the outputs of the graph
+- Evaluating an output of the graph means evaluating the output of the node to which it is connected
+- Evaluating an output of a node is achieved by executing the node
+- Executing a node means computing the output of the node according to the operator's specification
+- Executing a node can be done when all its inputs are defined
 - The value of an input is 
   - the value the node output to which it is connected (internal connection) or 
   - the value of the graph input to which it is connected (external connection). 
-- Initially, the values of all outputs are undefined. 
+- Initially, the values of all outputs are not defined. 
 
 ## Special nodes
 ONNX provides some "special operators" that deserve a specific description:  
