@@ -1,29 +1,40 @@
-## Preamble
+# Preamble
 
 This document gives a high level description of how the execution execution of an ONNX graph. How the graph graph elements are described in the ONNX file is given in the Intermediate Representation (IR) specification document.
 
 In the context of SONNX, the specification of the semantics of an ONNX graph is limited to the inference phase.  
 
-## Graph
+# Informal specification
 
-- A **graph** is a set of  **nodes** and **edges**
-- A **graph** has 
-  - zero or more inputs and 
-  - at least one output
-- An input of the graph is an input of one of the graph's nodes
-- An output of the graph is an output of one of the graph's nodes
-- A graph is acyclic. This allows nodes to be sorted topologically and be executed according to that order.
-   
-The following picture gives a simple example of a graph composed of 4 nodes.
+## Structure 
 
- In this example, the inputs of the graph are the inputs of more than one node and the output of the `sub` node is not used.
- - a node output may be unused.  
-- 
+### Graph
+- In ONNX, a **model** is represented by a **graph**. Evaluating a model means evaluating the graph. 
+- A **graph** is a set of  **nodes** and **edges**. 
+- A **node** represents a mathematical or a control operation. 
+  - A node refers to a fully qualified and configured ONNX **operator** (the version of the operator is defined, the attributes of the operators are set). 
+  - The inputs and outputs of the node corresponds to the inputs and outputs of the referenced operator.  
+- An **edge** represents a connection between the input and the output of two different nodes, or a connection between the input (resp. output) of the graph and the input (resp. output) of a node.
+  - At any time, the inputs and outputs connected by an edge have the same value. 
+  
+### Constraints
+- (C1) A graph has zero or more inputs and at least one output.
+- (C2) Each input of the graph is connected to one or more inputs of its nodes.
+- (C3) Each output of the graph is connected to the output of one of its nodes.
+- (C4) A graph is acyclic.
+- (C5) A node has zero or more inputs and at least one output.
+- (C6) A node's input is either connected to the output of another node or to an input of the graph.
+- (C7) A node's output is either connected to the input of another node, to an output of the graph, or remains unconnected.
+
+### Illustration
+The following picture gives a simple example of a graph composed of 4 nodes. In this  example, the inputs of the graph are connected to the inputs of two nodes (`add` and `sub`) and the output of the `sub` node is not used.
+
 <p align="center">
 <img src="./imgs/graph.png" width="200" />
 </p>
 
-*Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. Please note that the `sub` operator has been removed since it is bnot used by any other node or as an output of the graph. *
+Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. Please note that the `sub` operator has been removed since it is not used by any other node or as an output of the graph.
+
 ```
 graph Test (
   %I1[FLOAT, ?x?]
@@ -36,60 +47,48 @@ graph Test (
   return %O1, %O2
 }
 ```
-## Edges
-- An **edge** represents a connection between 
-  - the output of a node and the input of another node. 
-  - the input of the graph and the input of a node
-  - the output of a node and the output of the graph
-  
-## Node
-- A **node** refers to a fully qualified and configured operator ONNX **operator** (version of the operator is defined, attributes of the operators are set) )
-- A node has 
-  - zero or more inputs and 
-  - at least one output
-- The inputs and outputs of the node corresponds to the inputs and outputs of the referenced operator.  
-- The input of a node is either 
-  - connected to the output of another node or
-  - an input of the graph
-- The output of a node is either 
-  - connected to the input of another node or
-  - an output of the graph or
-  - not connected.
 
-## Execution of a graph
-- Executing a graph means evaluating the outputs of the graph
-- Evaluating an output of the graph means evaluating the output of the node to which it is connected
-- Evaluating an output of a node is achieved by executing the node
-- Executing a node means computing the output of the node according to the operator's specification
-- Executing a node can be done when all its inputs are defined
-- The value of an input is 
-  - the value the node output to which it is connected (internal connection) or 
-  - the value of the graph input to which it is connected (external connection). 
-- Initially, the values of all outputs are not defined. 
+*(Note that ONNX also defines another textual serialization scheme (only available in C++)*
 
-## Special nodes
+## Behaviour
+- Evaluating a graph's output requires evaluating the output of the node it is connected to.
+- Evaluating a node's output is done by executing the node.
+- Executing a node means computing its outputs based on the specification of the referenced operator.
+- A node can only be executed if all its input values are defined.
+- Initially, all output values are undefined
+
+## Additional remarks
+
+### Properties of a gragh
+- If all operators are purely functional (stateless), a graph is also purely functional, i.e., the values of its outputs only only depends on the values of its inputs and the values of the attributes of its nodes. 
+- If all operators are deterministic, a graph is also deterministic, i.e., for a  given set of input values, the execution of the graph always gives the same output values.
+- A graph has no side effect, i.e., the only visible effects of a graph are via its outputs.
+
+Note:
+- The values of the outputs do not depend on the execution order of its nodes are executed.
+- By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented by `(a+b)+c`or `(a+(b+c)`
+
+
+### Special nodes
 ONNX provides some "special operators" that deserve a specific description:  
 - nodes referring to ONNX **function operators**
 - nodes referring to control flow operators  (e.g., `if`, `scan`, `loop`,...). 
 
-### Functions nodes
+#### Functions nodes
 - A `function` operator encapsulates a graph. 
 - Executing a function operator means executing the embedded graph according to the graph execution semantics described before. 
 - An embedded graph may itself use `function` nodes, in a hierarchical manner. 
 - In ONNX, a `function` node is conceptually expanded ("inlined") at the place where it is used. This forbids any direct or indirect recursion (incl. infinite recursion). 
 
-
-## Control-flow operators 
+#### Control-flow operators 
 - ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
 - Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) has attributes and execute those graph according to their specific semantics. 
 - An `if` node, for instance, takes one boolean input and two attributes, one specifying the graph to be executed when the boolean input is true (the `then_branch`) and another graph when the boolean is false (the `else_branch`). 
   - Note that one of the graph is not executed. This seems to contradict the execution semantics of a graph bit ut is not since executing the `then_branch` or the `else_branch` concerns the semantics of the `if` node, not of the graph. From the grph's perspective, the only node that is visible is the `if`. 
   - The same applies for the other control flow nodes.  
 
-## Remarks
-According to the previous definitions, the following properties hold:
-- A graph is a pure functional construct, i.e., the values of its outputs only depend on the values of its inputs (incl. attributes). This is true as long as all operators are also purely functional, which is the case in the SONNX profile. 
-- A graph has no side effect, i.e., the only effects of a graph are via its outputs.
-- A graph is deterministic, i.e., the same values of inputs give the same values for outputs. This is true as long as all operators are deterministic, which is the case in the SONNX profile. In particular, 
-  - the values of the outputs do not depend on the order according to which the nodes are executed.
-  - By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented by `(a+b)+c`or `(a+(B+c)`.  
+ 
+## Restrictions
+The following restrictions apply to graphs in the SONNX profile:
+- A graph shall not contain nodes with no connected outputs. `[R1]`
+ 
