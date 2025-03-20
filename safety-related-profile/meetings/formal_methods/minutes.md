@@ -1,5 +1,16 @@
-# 2025/01/28
 
+# 2025/03/20
+## Agenda: 
+
+
+## Participants
+Mariem, Loïc, Edoardo, Nicolas, Jean, Christophe G., Henri, Eric 
+
+## Minutes
+
+
+
+# 2025/01/28
 ## Agenda
 The objectives of the meeting are the following :
 - Determine the approach for operators and graphs specification. On the basis of Loïc’s proposal:
