@@ -1,3 +1,42 @@
+# 2025/03/26
+## Participants
+## Agenda
+  - Review of ONNX IR
+  - Status of LSTM, graph semantics
+  - Feedback on workshop on formal specification and verification
+## Minutes
+## Actions
+## New actions
+## Past actions
+- [X] (1203-1, Eric) Propose a first specification of the graph execution semantics on the basis of Dumitru's slide and ONNX doc.
+- [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
+- [X] (1203-3, Jean-loup) Do a review of the LSTM operator
+  - Review is [here](../documents/profile_opset/lstm/reviews/jean-loup.md)
+- [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
+- [ ] (1202-3, All) Review new operators processed by Henri 
+  - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
+  - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
+- [X] (1202-5, All) Define appropriate rules to handle multiples types without multiplying the specifications. 
+  - See example of operator [`Div`](../documents/profile_opset/div/div.md))
+- [cancelled)] (2901-4, Dumitru) Contact Nicolas to lend a hand on LSTM. 
+- [X] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
+- [X] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
+- [ ] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops. 
+- [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+  - *Thinking...*
+- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [(cancelled)] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Discussion on-going with Loïc on the formal specification strategy...
+  - Meeting planned to reach a final consensus...
+  - Meeting done. See [minutes](../meetings/formal_methods/minutes.md).
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+
 # 2025/03/12
 ## Participants
   - Nicolas, Cong, Dumitru, Anne-Sophie, Eric, Jean-Baptiste, Henri, Jean-Loup, Andreas (partially) (at least).
