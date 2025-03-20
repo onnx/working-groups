@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module tensor.Shape</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>module Shape</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Shape</span><a href="tensor.proof.html#Shape" title="Valid (7 goals)" class="icon valid icofont-check"></a>
+
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> list.<a title="list.Mem" href="https://www.why3.org/stdlib/list.html#Mem_">Mem</a>
+  <span class="keyword">use</span> list.<a title="list.List" href="https://www.why3.org/stdlib/list.html#List_">List</a>
+  <span class="keyword">use</span> sequence.<a title="sequence.Seq" href="sequence.Seq.html">Seq</a>
+
+  <span class="keyword">type</span> <a id="shape">shape</a><a href="tensor.proof.html#Shape.shape" title="Valid (one goal)" class="icon valid icofont-check"></a> = { <a id="dims">dims</a> : <a title="sequence.Seq.seq" href="sequence.Seq.html#seq">seq</a> int }
+    <span class="keyword">invariant</span> { <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a> dims -&gt; 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> dims[i] }
+    <span class="keyword">meta</span> coercion <span class="keyword">function</span> <a title="tensor.Shape.dims" href="#dims">dims</a>
+
+  <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+  <span class="comment">(* Helper function for defining product *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> <a id="product">product</a><a href="tensor.proof.html#Shape.product" title="Valid (one goal)" class="icon valid icofont-check"></a> (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) : int =
+    <span class="keyword">variant</span> { ds }
+    <span class="keyword">match</span> ds <span class="keyword">with</span>
+    | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; 1
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d ds -&gt; d <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> product ds
+    <span class="keyword">end</span>
+
+  <span class="comment">(* Lemma: forall s, 1 &lt;= product s *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="product1">product1</a><a href="tensor.proof.html#Shape.product1" title="Valid (5 goals)" class="icon valid icofont-check"></a> (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a> ds -&gt; 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> ds[i] }
+    <span class="keyword">ensures</span> { 1 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="tensor.Shape.product" href="#product">product</a> ds }
+    <span class="section level2"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ds <span class="keyword">with</span>
+      | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; ()
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d rds -&gt;
+        <span class="keyword">assert</span> { d = ds[0] } ;
+        <span class="keyword">assert</span> { <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a> rds -&gt; rds[i] = ds[1 <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> i] } ;
+        product1 rds
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+  <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <a id="sizeof">sizeof</a> (s : <a title="tensor.Shape.shape" href="#shape">shape</a>) : int = <a title="tensor.Shape.product" href="#product">product</a> s.<a title="tensor.Shape.dims" href="#dims">dims</a>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

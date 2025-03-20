@@ -1,0 +1,32 @@
+(**
+    Specification of Where operation on tensors.
+ *)
+module FlatWhere
+  use int.Int
+  use tensor.FlatTensor
+
+  val opwhere (cond : tensor bool) (a b : tensor 'a) : tensor 'a
+    requires { same_shape cond a }
+    requires { same_shape cond b }
+    ensures  { same_shape cond result }
+    ensures {
+      forall idx. valid idx result.shape ->
+        result[idx] = if cond[idx] then a[idx] else b[idx]
+    }
+
+end
+
+module Where
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+
+  let function where (cond : tensor bool) (a b : tensor 'a) : tensor 'a =
+  {
+    shape = same cond.shape (same a.shape b.shape) ;
+    value = fun i -> if cond.value[i] then a.value[i] else b.value[i] ;
+  }
+
+end

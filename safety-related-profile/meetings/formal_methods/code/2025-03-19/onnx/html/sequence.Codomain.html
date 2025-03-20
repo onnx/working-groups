@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module sequence.Codomain</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="sequence.index.html">sequence</a></code> — <code>module Codomain</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Codomain</span><a href="sequence.proof.html#Codomain" title="Valid (6 goals)" class="icon valid icofont-check"></a>
+
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> set.<a title="set.Set" href="https://www.why3.org/stdlib/set.html#Set_">Set</a>
+  <span class="keyword">use</span> <a title="sequence.Seq" href="sequence.Seq.html">Seq</a>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="codomain">codomain</a><a href="sequence.proof.html#Codomain.codomain" title="Valid (6 goals)" class="icon valid icofont-check"></a> (s : <a title="sequence.Seq.seq" href="sequence.Seq.html#seq">seq</a> &#39;a) : <a title="set.Set.set" href="https://www.why3.org/stdlib/set.html#set_27">set</a> &#39;a
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> v. Set.<a title="set.Set.mem" href="https://www.why3.org/stdlib/set.html#mem_33">mem</a> v result &lt;-&gt; <span class="keyword">exists</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s /\ s[i] = v }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { s.<a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a> }
+    = <span class="keyword">if</span> s.<a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a> <a title="int.Int.(=)" href="https://www.why3.org/stdlib/int.html#infix%20=_16">=</a> 0 <span class="keyword">then</span> Set.<a title="set.Set.empty" href="https://www.why3.org/stdlib/set.html#empty_58">empty</a> <span class="keyword">else</span>
+        <span class="keyword">let</span> k = s.<a title="sequence.Seq.length" href="sequence.Seq.html#length">length</a><a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 <span class="keyword">in</span>
+        Set.<a title="set.Set.add" href="https://www.why3.org/stdlib/set.html#add_69">add</a> s[k] (codomain s[0..k])
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module sequence.Seq</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="sequence.index.html">sequence</a></code> — <code>module Seq</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Seq</span><a href="sequence.proof.html#Seq" title="Valid (24 goals)" class="icon valid icofont-check"></a>
+
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> int.<a title="int.MinMax" href="https://www.why3.org/stdlib/int.html#MinMax_">MinMax</a>
+  <span class="keyword">use</span> option.<a title="option.Option" href="https://www.why3.org/stdlib/option.html#Option_">Option</a>
+  <span class="keyword">use</span> list.<a title="list.ListRich" href="https://www.why3.org/stdlib/list.html#ListRich_">ListRich</a> <span class="keyword">as</span> L
+
+  <span class="comment">(*@ ## Definition
+
+      A sequence `s` is defined by its size `n = length s` and its elements
+      `s[i]` with `0 &lt;= i &lt; n`.
+
+      All other operations on sequences are defined
+      in terms of the length and elements of the returned sequences.
+  *)</span>
+
+  <span class="keyword">type</span> <a id="seq">seq</a> &#39;a = L.<a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> &#39;a
+
+  <span class="comment">(*@ Length of a sequence. *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="length">length</a> (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) = L.<a title="list.Length.length" href="https://www.why3.org/stdlib/list.html#length_24">length</a> u
+  <span class="keyword">meta</span> coercion <span class="keyword">function</span> <a title="sequence.Seq.length" href="#length">length</a>
+
+  <span class="comment">(*@ Elements of a sequence. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> (<a id="mixfix%20%5B%5D">[]</a><a href="sequence.proof.html#Seq.mixfix%20%5B%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (k : int) : &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u }
+    <span class="keyword">ensures</span> { L.<a title="list.Nth.nth" href="https://www.why3.org/stdlib/list.html#nth_104">nth</a> k u = <a title="option.Option.Some" href="https://www.why3.org/stdlib/option.html#Some_5">Some</a> result }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { u }
+    = <span class="keyword">match</span> u <span class="keyword">with</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x w -&gt; <span class="keyword">if</span> k <a title="int.Int.(=)" href="https://www.why3.org/stdlib/int.html#infix%20=_16">=</a> 0 <span class="keyword">then</span> x <span class="keyword">else</span> w[k<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1] <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">lemma</span> <a id="head">head</a><a href="sequence.proof.html#Seq.head" title="Valid (one goal)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> x:&#39;a, u. (L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x u)[0] = x
+  <span class="keyword">lemma</span> <a id="tail">tail</a><a href="sequence.proof.html#Seq.tail" title="Valid (one goal)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> x:&#39;a, u k. 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> k <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="sequence.Seq.length" href="#length">length</a> u -&gt; (L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x u)[k] = u[k<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1]
+
+  <span class="comment">(*@ Definitionnal equality: `u == v` states that sequences `u` and `v` have
+      the same length and same elements. *)</span>
+  <span class="keyword">predicate</span> (<a id="infix%20%3D%3D">==</a>) (u v : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) =
+    <a title="sequence.Seq.length" href="#length">length</a> u = <a title="sequence.Seq.length" href="#length">length</a> v /\ <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u -&gt; u[k] = v[k]
+
+  <span class="comment">(*@ Equal lists are definitionnaly equals. *)</span>
+  <span class="keyword">lemma</span> <a id="reflexivity">reflexivity</a><a href="sequence.proof.html#Seq.reflexivity" title="Valid (one goal)" class="icon valid icofont-check"></a> : <span class="keyword">forall</span> u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a. u <a title="sequence.Seq.(==)" href="#infix%20%3D%3D">==</a> u
+
+  <span class="comment">(*@ Definitionnaly equal lists _are_ equals. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="extensivity">extensivity</a><a href="sequence.proof.html#Seq.extensivity" title="Valid (one goal)" class="icon valid icofont-check"></a> (a b : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a)
+    <span class="keyword">requires</span> { a <a title="sequence.Seq.(==)" href="#infix%20%3D%3D">==</a> b }
+    <span class="keyword">ensures</span> { a = b }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { a, b }
+    = <span class="keyword">match</span> a, b <span class="keyword">with</span>
+      | L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x a&#39; , L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> y b&#39; -&gt;
+        <span class="keyword">assert</span> { x = y } ;
+        <span class="keyword">let</span> <span class="keyword">lemma</span> shift (k: int)
+          <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="sequence.Seq.length" href="#length">length</a> a&#39; }
+          <span class="keyword">ensures</span> { a&#39;[k] = b&#39;[k] }
+          = <span class="keyword">assert</span> { a&#39;[k] = a[k<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1] } ;
+            <span class="keyword">assert</span> { b&#39;[k] = b[k<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1] }
+        <span class="keyword">in</span> extensivity a&#39; b&#39;
+      | _ -&gt; ()
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ Functional equality. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <a id="equal">equal</a><a href="sequence.proof.html#Seq.equal" title="Valid (one goal)" class="icon valid icofont-check"></a> (eq : &#39;a -&gt; &#39;a -&gt; bool) (u v : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : bool
+    <span class="keyword">requires</span> { <span class="keyword">forall</span> x y. L.<a title="list.Mem.mem" href="https://www.why3.org/stdlib/list.html#mem_41">mem</a> x u -&gt; L.<a title="list.Mem.mem" href="https://www.why3.org/stdlib/list.html#mem_41">mem</a> y v -&gt; (eq x y &lt;-&gt; x = y) }
+    <span class="keyword">ensures</span> { result &lt;-&gt; u = v }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { u, v }
+    = <span class="keyword">match</span> u, v <span class="keyword">with</span>
+      | L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x u&#39;, L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> y v&#39; -&gt; eq x y &amp;&amp; equal eq u&#39; v&#39;
+      | L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>, L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; <span class="keyword">true</span>
+      | _ -&gt; <span class="keyword">false</span>
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ ## Constructors
+
+      Helper functions for constructing sequences.
+  *)</span>
+
+  <span class="comment">(*@ Empty sequence of length `0`. *)</span>
+  <span class="keyword">let</span> <span class="keyword">constant</span> <a id="empty">empty</a> : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a = L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+
+  <span class="comment">(*@ Singleton sequence with a unique element. *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="elt">elt</a> (e : &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a = L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> e L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+
+  <span class="comment">(*@ Head element *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="hd">hd</a><a href="sequence.proof.html#Seq.hd" title="Valid (one goal)" class="icon valid icofont-check"></a> (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s.<a title="sequence.Seq.length" href="#length">length</a> }
+    <span class="keyword">ensures</span> { result = s[0] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text"> = <span class="keyword">match</span> s <span class="keyword">with</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x _ -&gt; x <span class="keyword">end</span> <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ Tail element *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="tl">tl</a><a href="sequence.proof.html#Seq.tl" title="Valid (one goal)" class="icon valid icofont-check"></a> (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s.<a title="sequence.Seq.length" href="#length">length</a> }
+    <span class="keyword">ensures</span> { result = s[ s.<a title="sequence.Seq.length" href="#length">length</a> <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> 1 ] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text"> = s[ s.<a title="sequence.Seq.length" href="#length">length</a> <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> 1 ] <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `create e n` returns a sequence of length `n` filled with `e` elements. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> <a id="create">create</a><a href="sequence.proof.html#Seq.create" title="Valid (one goal)" class="icon valid icofont-check"></a> (e : &#39;a) (n : int) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> n }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = n }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = e }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { n }
+    = <span class="keyword">if</span> n <a title="int.Int.(>)" href="https://www.why3.org/stdlib/int.html#infix%20%3E_24">&gt;</a> 0 <span class="keyword">then</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> e (create e (n<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1)) <span class="keyword">else</span> L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `reset e s` returns a sequence of same length `s` filled with `e` elements. *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="reset">reset</a><a href="sequence.proof.html#Seq.reset" title="Valid (one goal)" class="icon valid icofont-check"></a> (e : &#39;a) (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;b) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a = <a title="sequence.Seq.create" href="#create">create</a> e s.<a title="sequence.Seq.length" href="#length">length</a>
+
+  <span class="comment">(*@ `init f a b` returns the sequence of elements `f i` for `a &lt;= i &lt; b`. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> <a id="init">init</a><a href="sequence.proof.html#Seq.init" title="Valid (one goal)" class="icon valid icofont-check"></a> (f : int -&gt; &#39;a) (a b : int) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { a <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> b }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = b<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>a }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = f (a<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>k) }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { b<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>a }
+    = <span class="keyword">if</span> a <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> b <span class="keyword">then</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> (f a) (init f (a<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) b) <span class="keyword">else</span> L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `map f s` applies `f` to all elements f `s` *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> <a id="map">map</a><a href="sequence.proof.html#Seq.map" title="Valid (one goal)" class="icon valid icofont-check"></a> (f : &#39;a -&gt; &#39;b) (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;b
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> s }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = f s[k] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { s }
+    = <span class="keyword">match</span> s <span class="keyword">with</span> L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> | L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x xs -&gt; L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> (f x) (map f xs) <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ ## Slices
+
+      Sequences are commonly operated by a slice of their elements.
+      By convention, a slice `i..j` of elements denotes the range of elements
+      from `i` (_included_) to `j` (_excluded_), hence the range of indices `k`
+      such that `i &lt;= k &lt; j`.
+
+      The slice of all elements of a sequence of size `n` is then `0..n`, and
+      we also denote slice `0..i` by `..i` and slice `i..n` by `i..`.
+      Slice operations are properly defined only for a valid range of indices.
+
+      The dual operation of slice is the concatenation, here denoted by `(++)`.
+   *)</span>
+
+  <span class="comment">(*@ `u ++ v` is the concatenation of `u` and `v`,
+      where `u` elements comes first, and `v` elements follows. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> (<a id="infix%20%2B%2B">++</a><a href="sequence.proof.html#Seq.infix%20%2B%2B" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u v : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> u <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> <a title="sequence.Seq.length" href="#length">length</a> v }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u -&gt; result[k] = u[k] }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. u <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = v[k <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> u] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { u }
+    = <span class="keyword">match</span> u <span class="keyword">with</span> L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; v | L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x w -&gt; L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x (w ++ v) <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `u[i..j]` is the slice of `u` elements
+      from index `i` (_included_) to index `j` (_excluded_). *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> (<a id="mixfix%20%5B..%5D">[..]</a><a href="sequence.proof.html#Seq.mixfix%20%5B..%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (i j : int) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> j <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = j<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>i }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = u[i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>k] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { u }
+    = <span class="keyword">match</span> u <span class="keyword">with</span>
+      | L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+      | L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x w -&gt;
+         <span class="keyword">if</span> 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i <span class="keyword">then</span> w[i<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1..j<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1] <span class="keyword">else</span>
+         <span class="keyword">if</span> 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> j <span class="keyword">then</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x w[0..j<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1]
+         <span class="keyword">else</span> L.<a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `u[..i]` is the slice of `u` elements up to index `i` (_excluded_). *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> (<a id="mixfix%20%5B.._%5D">[.._]</a><a href="sequence.proof.html#Seq.mixfix%20%5B.._%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (i : int) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = i }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = u[k] }
+    = u[0..i]
+
+  <span class="comment">(*@ `u[i..]` is the slice of `u` elements from index `i` (_included_). *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> (<a id="mixfix%20%5B_..%5D">[_..]</a><a href="sequence.proof.html#Seq.mixfix%20%5B_..%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (i : int) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u }
+    <span class="keyword">ensures</span> { result = u <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> i }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = u[i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>k] }
+    = u[i..<a title="sequence.Seq.length" href="#length">length</a> u]
+
+  <span class="comment">(*@ This property illustrates the duality of slice &amp; concat. *)</span>
+  <span class="keyword">goal</span> <a id="split">split</a><a href="sequence.proof.html#Seq.split" title="Valid (2 goals)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a, i.
+    0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u -&gt;
+       u[..i] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[i..] = u
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">by</span> u[..i] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[i..] <a title="sequence.Seq.(==)" href="#infix%20%3D%3D">==</a> u
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ This property illustrates the duality of slice &amp; concat. *)</span>
+  <span class="keyword">goal</span> <a id="fullsplit">fullsplit</a><a href="sequence.proof.html#Seq.fullsplit" title="Valid (2 goals)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a, i j.
+    0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> j <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u -&gt;
+       u[..i] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[i..j] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[j..] = u
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">by</span> u[..i] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[i..j] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[j..] <a title="sequence.Seq.(==)" href="#infix%20%3D%3D">==</a> u
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ Tail insertion *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> (<a id="infix%20%2B.">+.</a><a href="sequence.proof.html#Seq.infix%20%2B." title="Valid (one goal)" class="icon valid icofont-check"></a>) (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (e : &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> s <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> 1 }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s -&gt; result[k] = s[k] }
+    <span class="keyword">ensures</span> { result[ s ] = e }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text"> = s <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> <a title="sequence.Seq.elt" href="#elt">elt</a> e <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ Head insertion *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> (<a id="infix%20.%2B">.+</a><a href="sequence.proof.html#Seq.infix%20.%2B" title="Valid (one goal)" class="icon valid icofont-check"></a>) (e : &#39;a) (s : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> s <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> 1 }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s -&gt; result[1<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>k] = s[k] }
+    <span class="keyword">ensures</span> { result[ 0 ] = e }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text"> = <a title="sequence.Seq.elt" href="#elt">elt</a> e <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> s <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ ## Updates &amp; Copies *)</span>
+
+  <span class="comment">(*@ `u[i&lt;-x]` returns a copy of the sequence `u` where the element `u[i]`
+      has been replaced by `x`. *)</span>
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> (<a id="mixfix%20%5B%3C-%5D">[&lt;-]</a><a href="sequence.proof.html#Seq.mixfix%20%5B%3C-%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (i : int) (x : &#39;a) : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> u }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> result -&gt; result[k] = <span class="keyword">if</span> k=i <span class="keyword">then</span> x <span class="keyword">else</span> u[k] }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { u }
+    = <span class="keyword">match</span> u <span class="keyword">with</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x0 w -&gt;
+        <span class="keyword">if</span> i <a title="int.Int.(=)" href="https://www.why3.org/stdlib/int.html#infix%20=_16">=</a> 0 <span class="keyword">then</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x w <span class="keyword">else</span> L.<a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x0 w[ i<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 &lt;- x ]
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="comment">(*@ `memcpy u i v j n` returns a copy of `u` where the slice `u[i..i+n]` has been
+      replaced with the slice `v[j..j+n]` (last excluded). *)</span>
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="memcpy">memcpy</a><a href="sequence.proof.html#Seq.memcpy" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (i : int) (v : <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (j : int) (n : int)
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> u }
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> j <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> j<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> v }
+    <span class="keyword">ensures</span> { <a title="sequence.Seq.length" href="#length">length</a> result = <a title="sequence.Seq.length" href="#length">length</a> u }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i -&gt; result[k] = u[k] }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. i <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n -&gt; result[k] = v[j<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>k<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>i] }
+    <span class="keyword">ensures</span> { <span class="keyword">forall</span> k. i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u -&gt; result[k] = u[k] }
+    = u[..i] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> v[j..j<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n] <a title="sequence.Seq.(++)" href="#infix%20%2B%2B">++</a> u[i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n..]
+
+  <span class="comment">(*@ `havoc u v p n` asserts that sequences `u` and `v` have identical elements
+      but elements in range `p..p+n` (last excluded). *)</span>
+  <span class="keyword">predicate</span> <a id="havoc">havoc</a> (u v: <a title="sequence.Seq.seq" href="#seq">seq</a> &#39;a) (p n : int) =
+    u.<a title="sequence.Seq.length" href="#length">length</a> = v.<a title="sequence.Seq.length" href="#length">length</a> /\
+    (<span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> p -&gt; u[k] = v[k]) /\
+    (<span class="keyword">forall</span> k. p<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>n <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> u -&gt; u[k] = v[k])
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

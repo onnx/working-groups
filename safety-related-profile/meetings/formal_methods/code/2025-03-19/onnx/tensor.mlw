@@ -1,0 +1,143 @@
+(**
+    ONNX Tensor Definition.
+ *)
+
+ module FlatTensor
+   use int.Int
+   use map.Map
+   use array.Array
+   use array.Init
+   use utils.Product
+
+   type shape = { dims : array int }
+     invariant { forall i. 0 <= i < length dims -> 0 < dims[i] }
+     by { dims = make 0 0 }
+     meta coercion function dims
+
+   function sizeof (s : shape) : int = product 0 (length s) (fun i -> s[i])
+
+   val sizeof (s : shape) : int
+     ensures { result = sizeof s }
+
+   let function scalar () : shape
+     ensures { sizeof result = 1 }
+     = { dims = make 0 0 }
+
+   type tensor 'a = {
+     shape : shape ;
+     value : array 'a ;
+   }
+   (*proof*)
+   invariant { length value = sizeof shape }
+   by {
+     shape = scalar () ;
+     value = make 1 (any 'a) ;
+   }
+   (*qed*)
+
+   type index = array int
+
+   function dim (t : tensor 'a) : int = length t.shape
+
+   predicate valid (idx : index) (s : shape) =
+     length idx = length s /\
+     forall i. 0 <= i < length s -> 0 <= idx[i] < s[i]
+
+   predicate same_shape (a : tensor 'a) (b : tensor 'b) =
+    dim a = dim b /\
+    forall i. 0 <= i < dim a -> a.shape[i] = b.shape[i]
+
+   val function offset (idx : index) (s : shape) : int
+     requires { valid idx s }
+     ensures { 0 <= result < sizeof s }
+
+   val function indexOf (s : shape) (k : int) : index
+     requires { 0 <= k < sizeof s }
+     ensures { offset result s = k }
+
+   let function ([]) (a : tensor 'a) (idx : index) : 'a
+     requires { valid idx a.shape }
+     ensures { result = a.value[ offset idx a.shape ] }
+     (*proof*)
+     = a.value[ offset idx a.shape ]
+     (*qed*)
+
+   let ghost function ([<-]) (a : tensor 'a) (idx : index) (v : 'a) : tensor 'a =
+     requires { valid idx a.shape }
+     ensures { result.shape = a.shape }
+     ensures { result.value  = a.value[ offset idx a.shape <- v ] }
+     {
+        shape = a.shape ;
+        value = a.value[ offset idx a.shape <- v ] ;
+     }
+
+   let ([]<-) (a : tensor 'a) (idx : index) (v : 'a) : unit
+     writes { a.value }
+     requires { valid idx a.shape }
+     ensures { a.value = old Array.(a.value[ offset idx a.shape <- v ]) }
+     = a.value[ offset idx a.shape ] <- v
+
+end
+
+module Shape
+
+  use int.Int
+  use list.Mem
+  use list.List
+  use sequence.Seq
+
+  type shape = { dims : seq int }
+    invariant { forall i. 0 <= i < length dims -> 0 < dims[i] }
+    meta coercion function dims
+
+  (*proof*)
+  (* Helper function for defining product *)
+  let rec function product (ds : list int) : int =
+    variant { ds }
+    match ds with
+    | Nil -> 1
+    | Cons d ds -> d * product ds
+    end
+
+  (* Lemma: forall s, 1 <= product s *)
+  let rec lemma product1 (ds : list int)
+    requires { forall i. 0 <= i < length ds -> 0 < ds[i] }
+    ensures { 1 <= product ds }
+    (*proof*)
+    variant { ds }
+    = match ds with
+      | Nil -> ()
+      | Cons d rds ->
+        assert { d = ds[0] } ;
+        assert { forall i. 0 <= i < length rds -> rds[i] = ds[1 + i] } ;
+        product1 rds
+      end
+    (*qed*)
+  (*qed*)
+
+  let sizeof (s : shape) : int = product s.dims
+
+end
+
+module Tensor
+  use int.Int
+  use map.Map
+  use sequence.Seq
+  use Shape
+
+  type index = seq int
+
+  predicate valid (idx : index) (s : shape) =
+    length idx = length s /\
+    forall i. 0 <= i < length s -> 0 <= idx[i] < s[i]
+
+   type tensor 'a = {
+     shape : shape ;
+     value : map index 'a ;
+   }
+
+   meta coercion function value
+
+   let function dim (t : tensor 'a) : int = length t.shape.dims
+
+end

@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module opwhere.FlatWhere</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="opwhere.index.html">opwhere</a></code> — <code>module FlatWhere</code></header>
+<div class="doc">
+<div class="doc">
+<p>Specification of Where operation on tensors.</p>
+</div>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">FlatWhere</span><a href="opwhere.proof.html#FlatWhere" title="1 value parameter, 0 instance found" class="icon small warning icofont-warning-alt"></a><a href="opwhere.proof.html#FlatWhere" title="Valid (no goals)" class="icon remark icofont-check"></a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.FlatTensor" href="tensor.FlatTensor.html">FlatTensor</a>
+
+  <span class="keyword">val</span> <a id="opwhere">opwhere</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (cond : <a title="tensor.FlatTensor.tensor" href="tensor.FlatTensor.html#tensor">tensor</a> bool) (a b : <a title="tensor.FlatTensor.tensor" href="tensor.FlatTensor.html#tensor">tensor</a> &#39;a) : <a title="tensor.FlatTensor.tensor" href="tensor.FlatTensor.html#tensor">tensor</a> &#39;a
+    <span class="keyword">requires</span> { <a title="tensor.FlatTensor.same_shape" href="tensor.FlatTensor.html#same_shape">same_shape</a> cond a }
+    <span class="keyword">requires</span> { <a title="tensor.FlatTensor.same_shape" href="tensor.FlatTensor.html#same_shape">same_shape</a> cond b }
+    <span class="keyword">ensures</span>  { <a title="tensor.FlatTensor.same_shape" href="tensor.FlatTensor.html#same_shape">same_shape</a> cond result }
+    <span class="keyword">ensures</span> {
+      <span class="keyword">forall</span> idx. <a title="tensor.FlatTensor.valid" href="tensor.FlatTensor.html#valid">valid</a> idx result.<a title="tensor.FlatTensor.shape" href="tensor.FlatTensor.html#shape">shape</a> -&gt;
+        result[idx] = <span class="keyword">if</span> cond[idx] <span class="keyword">then</span> a[idx] <span class="keyword">else</span> b[idx]
+    }
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

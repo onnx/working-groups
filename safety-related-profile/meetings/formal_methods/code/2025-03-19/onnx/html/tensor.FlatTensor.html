@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module tensor.FlatTensor</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>module FlatTensor</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">FlatTensor</span><a href="tensor.proof.html#FlatTensor" title="3 value parameters, 0 instance found" class="icon small warning icofont-warning-alt"></a><a href="tensor.proof.html#FlatTensor" title="Valid (14 goals)" class="icon valid icofont-check"></a>
+   <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+   <span class="keyword">use</span> map.<a title="map.Map" href="https://www.why3.org/stdlib/map.html#Map_">Map</a>
+   <span class="keyword">use</span> array.<a title="array.Array" href="https://www.why3.org/stdlib/array.html#Array_">Array</a>
+   <span class="keyword">use</span> array.<a title="array.Init" href="https://www.why3.org/stdlib/array.html#Init_">Init</a>
+   <span class="keyword">use</span> utils.<a title="utils.Product" href="utils.Product.html">Product</a>
+
+   <span class="keyword">type</span> <a id="shape">shape</a><a href="tensor.proof.html#FlatTensor.shape" title="Valid (one goal)" class="icon valid icofont-check"></a> = { <a id="dims">dims</a> : <a title="array.Array.array" href="https://www.why3.org/stdlib/array.html#array_15">array</a> int }
+     <span class="keyword">invariant</span> { <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> dims -&gt; 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> dims[i] }
+     <span class="keyword">by</span> { dims = <a title="array.Array.make" href="https://www.why3.org/stdlib/array.html#make_59">make</a> 0 0 }
+     <span class="keyword">meta</span> coercion <span class="keyword">function</span> <a title="tensor.FlatTensor.dims" href="#dims">dims</a>
+
+   <span class="keyword">function</span> <a id="sizeof">sizeof</a> (s : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>) : int = <a title="utils.Product.product" href="utils.Product.html#product">product</a> 0 (<a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> s) (<span class="keyword">fun</span> i -&gt; s[i])
+
+   <span class="keyword">val</span> <a id="sizeof">sizeof</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (s : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>) : int
+     <span class="keyword">ensures</span> { result = <a title="tensor.FlatTensor.sizeof" href="#sizeof">sizeof</a> s }
+
+   <span class="keyword">let</span> <span class="keyword">function</span> <a id="scalar">scalar</a><a href="tensor.proof.html#FlatTensor.scalar" title="Valid (one goal)" class="icon valid icofont-check"></a> () : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>
+     <span class="keyword">ensures</span> { <a title="tensor.FlatTensor.sizeof" href="#sizeof">sizeof</a> result = 1 }
+     = { <a title="tensor.FlatTensor.dims" href="#dims">dims</a> = <a title="array.Array.make" href="https://www.why3.org/stdlib/array.html#make_59">make</a> 0 0 }
+
+   <span class="keyword">type</span> <a id="tensor">tensor</a><a href="tensor.proof.html#FlatTensor.tensor" title="Valid (one goal)" class="icon valid icofont-check"></a> &#39;a = {
+     <a id="shape">shape</a><a href="tensor.proof.html#FlatTensor.shape" title="Valid (one goal)" class="icon valid icofont-check"></a> : <a title="tensor.FlatTensor.shape" href="#shape">shape</a> ;
+     <a id="value">value</a> : <a title="array.Array.array" href="https://www.why3.org/stdlib/array.html#array_15">array</a> &#39;a ;
+   }
+   <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+   <span class="keyword">invariant</span> { <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> value = <a title="tensor.FlatTensor.sizeof" href="#sizeof">sizeof</a> shape }
+   <span class="keyword">by</span> {
+     shape = <a title="tensor.FlatTensor.scalar" href="#scalar">scalar</a> () ;
+     value = <a title="array.Array.make" href="https://www.why3.org/stdlib/array.html#make_59">make</a> 1 (<span class="keyword">any</span> &#39;a) ;
+   }
+   <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+   <span class="keyword">type</span> <a id="index">index</a> = <a title="array.Array.array" href="https://www.why3.org/stdlib/array.html#array_15">array</a> int
+
+   <span class="keyword">function</span> <a id="dim">dim</a> (t : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a) : int = <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> t.<a title="tensor.FlatTensor.shape" href="#shape">shape</a>
+
+   <span class="keyword">predicate</span> <a id="valid">valid</a> (idx : <a title="tensor.FlatTensor.index" href="#index">index</a>) (s : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>) =
+     <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> idx = <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> s /\
+     <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="array.Array.length" href="https://www.why3.org/stdlib/array.html#length_17">length</a> s -&gt; 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> idx[i] <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> s[i]
+
+   <span class="keyword">predicate</span> <a id="same_shape">same_shape</a> (a : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a) (b : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;b) =
+    <a title="tensor.FlatTensor.dim" href="#dim">dim</a> a = <a title="tensor.FlatTensor.dim" href="#dim">dim</a> b /\
+    <span class="keyword">forall</span> i. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.FlatTensor.dim" href="#dim">dim</a> a -&gt; a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a>[i] = b.<a title="tensor.FlatTensor.shape" href="#shape">shape</a>[i]
+
+   <span class="keyword">val</span> <span class="keyword">function</span> <a id="offset">offset</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (idx : <a title="tensor.FlatTensor.index" href="#index">index</a>) (s : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>) : int
+     <span class="keyword">requires</span> { <a title="tensor.FlatTensor.valid" href="#valid">valid</a> idx s }
+     <span class="keyword">ensures</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> result <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.FlatTensor.sizeof" href="#sizeof">sizeof</a> s }
+
+   <span class="keyword">val</span> <span class="keyword">function</span> <a id="indexOf">indexOf</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (s : <a title="tensor.FlatTensor.shape" href="#shape">shape</a>) (k : int) : <a title="tensor.FlatTensor.index" href="#index">index</a>
+     <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.FlatTensor.sizeof" href="#sizeof">sizeof</a> s }
+     <span class="keyword">ensures</span> { <a title="tensor.FlatTensor.offset" href="#offset">offset</a> result s = k }
+
+   <span class="keyword">let</span> <span class="keyword">function</span> (<a id="mixfix%20%5B%5D">[]</a><a href="tensor.proof.html#FlatTensor.mixfix%20%5B%5D" title="Valid (3 goals)" class="icon valid icofont-check"></a>) (a : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a) (idx : <a title="tensor.FlatTensor.index" href="#index">index</a>) : &#39;a
+     <span class="keyword">requires</span> { <a title="tensor.FlatTensor.valid" href="#valid">valid</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> }
+     <span class="keyword">ensures</span> { result = a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> ] }
+     <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+     = a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> ]
+     <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+   <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> (<a id="mixfix%20%5B%3C-%5D">[&lt;-]</a><a href="tensor.proof.html#FlatTensor.mixfix%20%5B%3C-%5D" title="Valid (4 goals)" class="icon valid icofont-check"></a>) (a : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a) (idx : <a title="tensor.FlatTensor.index" href="#index">index</a>) (v : &#39;a) : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a =
+     <span class="keyword">requires</span> { <a title="tensor.FlatTensor.valid" href="#valid">valid</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> }
+     <span class="keyword">ensures</span> { result.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> = a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> }
+     <span class="keyword">ensures</span> { result.<a title="tensor.FlatTensor.value" href="#value">value</a>  = a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> &lt;- v ] }
+     {
+        <a title="tensor.FlatTensor.shape" href="#shape">shape</a> = a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> ;
+        <a title="tensor.FlatTensor.value" href="#value">value</a> = a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> &lt;- v ] ;
+     }
+
+   <span class="keyword">let</span> (<a id="mixfix%20%5B%5D%3C-">[]&lt;-</a><a href="tensor.proof.html#FlatTensor.mixfix%20%5B%5D%3C-" title="Valid (4 goals)" class="icon valid icofont-check"></a>) (a : <a title="tensor.FlatTensor.tensor" href="#tensor">tensor</a> &#39;a) (idx : <a title="tensor.FlatTensor.index" href="#index">index</a>) (v : &#39;a) : unit
+     <span class="keyword">writes</span> { a.<a title="tensor.FlatTensor.value" href="#value">value</a> }
+     <span class="keyword">requires</span> { <a title="tensor.FlatTensor.valid" href="#valid">valid</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> }
+     <span class="keyword">ensures</span> { a.<a title="tensor.FlatTensor.value" href="#value">value</a> = <span class="keyword">old</span> Array.(a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> &lt;- v ]) }
+     = a.<a title="tensor.FlatTensor.value" href="#value">value</a>[ <a title="tensor.FlatTensor.offset" href="#offset">offset</a> idx a.<a title="tensor.FlatTensor.shape" href="#shape">shape</a> ] &lt;- v
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

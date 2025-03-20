@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module utils.Product</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="utils.index.html">utils</a></code> — <code>module Product</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Product</span><a href="utils.proof.html#Product" title="1 hypothesis, 0 instance found" class="icon small warning icofont-warning-alt"></a><a href="utils.proof.html#Product" title="Valid (2 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+</pre>
+<div class="doc">
+<p>Notation for product, for <code class="src">a &lt;= i &lt; b</code> of <code class="src">f i</code></p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">function</span> <a id="product">product</a><a href="utils.proof.html#Product.product" title="Valid (one goal)" class="icon valid icofont-check"></a> (a b : int) (f : int -&gt; int) : int
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { b<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>a }
+    = <span class="keyword">if</span> b <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> a <span class="keyword">then</span> 1 <span class="keyword">else</span> f a <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> product (a<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) b f
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">lemma</span> <a id="empty">empty</a><a href="utils.proof.html#Product.empty" title="Valid (one goal)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> a b f. b <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> a -&gt; <a title="utils.Product.product" href="#product">product</a> a b f = 1
+
+  <span class="keyword">axiom</span> <a id="equal">equal</a><span title="Hypothesis" class="icon small warning icofont-warning-alt"></span>: <span class="keyword">forall</span> a b f g.
+    (<span class="keyword">forall</span> i. a <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> i <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> b -&gt; f i = g i) -&gt; <a title="utils.Product.product" href="#product">product</a> a b f = <a title="utils.Product.product" href="#product">product</a> a b g
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Library tensor</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>proofs</code></header>
+<h1>Provers</h1>
+<pre class="src">
+  alt-ergo     @2.5.4  n=16  207ms
+</pre>
+<h1>Proofs</h1>
+<pre class="src"><span class="keyword">module</span> <a id="FlatTensor" href="tensor.FlatTensor.html">tensor.FlatTensor</a><span title="3 value parameters, 0 instance found" class="icon small warning icofont-warning-alt"></span><span title="Valid (14 goals)" class="icon valid icofont-check"></span></pre>
+<pre class="src">
+  <span class="keyword">axiom</span> <a id="Product.equal" href="utils.Product.html#equal">equal</a><span title="uncloned hypothesis" class="icon small warning icofont-warning-alt"></span>
+  <span class="keyword">value</span> <a id="FlatTensor.sizeof" href="tensor.FlatTensor.html#sizeof">sizeof</a><span title="uncloned hypothesis" class="icon small warning icofont-warning-alt"></span>
+  <span class="keyword">value</span> <a id="FlatTensor.offset" href="tensor.FlatTensor.html#offset">offset</a><span title="uncloned hypothesis" class="icon small warning icofont-warning-alt"></span>
+  <span class="keyword">value</span> <a id="FlatTensor.indexOf" href="tensor.FlatTensor.html#indexOf">indexOf</a><span title="uncloned hypothesis" class="icon small warning icofont-warning-alt"></span>
+</pre>
+<pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.shape" href="tensor.FlatTensor.html#shape">shape</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.scalar" href="tensor.FlatTensor.html#scalar">scalar</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 17ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.tensor" href="tensor.FlatTensor.html#tensor">tensor</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 13ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.shape" href="tensor.FlatTensor.html#shape">shape</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.mixfix%20%5B%5D" href="tensor.FlatTensor.html#mixfix%20%5B%5D">([])</a><span title="Valid (3 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (3 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 22ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.mixfix%20%5B%3C-%5D" href="tensor.FlatTensor.html#mixfix%20%5B%3C-%5D">([<-])</a><span title="Valid (4 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (4 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 19ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 22ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 22ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 21ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="FlatTensor.mixfix%20%5B%5D%3C-" href="tensor.FlatTensor.html#mixfix%20%5B%5D%3C-">([]<-)</a><span title="Valid (4 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (4 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 15ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 21ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 20ms</pre><pre class="src"><span class="keyword">module</span> <a id="Shape" href="tensor.Shape.html">tensor.Shape</a><span title="Valid (7 goals)" class="icon valid icofont-check"></span></pre>
+<pre class="src">
+  <span class="keyword">goal</span> <a id="Shape.shape" href="tensor.Shape.html#shape">shape</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 31ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="Shape.product" href="tensor.Shape.html#product">product</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 26ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="Shape.product1" href="tensor.Shape.html#product1">product1</a><span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 21ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 26ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 25ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 27ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 58ms</pre><pre class="src"><span class="keyword">module</span> <a id="Tensor" href="tensor.Tensor.html">tensor.Tensor</a><span title="Valid (no goals)" class="icon remark icofont-check"></span></pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

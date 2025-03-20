@@ -1,0 +1,6 @@
+(executable
+  (name test)
+  (package onnx)
+  (public_name test)
+  (flags ("-open" "Tensorlib"))
+  (libraries tensorlib))

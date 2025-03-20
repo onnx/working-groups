@@ -1,0 +1,28 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module opwhere.Where</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="opwhere.index.html">opwhere</a></code> — <code>module Where</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Where</span><a href="opwhere.proof.html#Where" title="Valid (one goal)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> map.<a title="map.Map" href="https://www.why3.org/stdlib/map.html#Map_">Map</a>
+  <span class="keyword">use</span> utils.<a title="utils.Same" href="utils.Same.html">Same</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Shape" href="tensor.Shape.html">Shape</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Tensor" href="tensor.Tensor.html">Tensor</a>
+
+  <span class="keyword">let</span> <span class="keyword">function</span> <a id="where">where</a><a href="opwhere.proof.html#Where.where" title="Valid (one goal)" class="icon valid icofont-check"></a> (cond : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> bool) (a b : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> &#39;a) : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> &#39;a =
+  {
+    <a title="tensor.Tensor.shape" href="tensor.Tensor.html#shape">shape</a> = <a title="utils.Same.same" href="utils.Same.html#same">same</a> cond.<a title="tensor.Tensor.shape" href="tensor.Tensor.html#shape">shape</a> (<a title="utils.Same.same" href="utils.Same.html#same">same</a> a.<a title="tensor.Tensor.shape" href="tensor.Tensor.html#shape">shape</a> b.<a title="tensor.Tensor.shape" href="tensor.Tensor.html#shape">shape</a>) ;
+    <a title="tensor.Tensor.value" href="tensor.Tensor.html#value">value</a> = <span class="keyword">fun</span> i -&gt; <span class="keyword">if</span> cond.<a title="tensor.Tensor.value" href="tensor.Tensor.html#value">value</a>[i] <span class="keyword">then</span> a.<a title="tensor.Tensor.value" href="tensor.Tensor.html#value">value</a>[i] <span class="keyword">else</span> b.<a title="tensor.Tensor.value" href="tensor.Tensor.html#value">value</a>[i] ;
+  }
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
