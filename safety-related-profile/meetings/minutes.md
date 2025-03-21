@@ -3,11 +3,15 @@
 ## Agenda
   - Review of ONNX IR
   - Status of LSTM, graph semantics
-  - Feedback on workshop on formal specification and verification
+  - Feedback on 2025/03/18 workshop on formal specification and verification (see [minutes](./formal_methods/minutes.md))
 ## Minutes
 ## Actions
-## New actions
-## Past actions
+### New actions
+### Past actions
+- [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (2003-2, Eric) Update SONNX landing page to point to interesting material... (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (2003-4, Eric) Give an example of the two categories of restrictions (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
 - [X] (1203-1, Eric) Propose a first specification of the graph execution semantics on the basis of Dumitru's slide and ONNX doc.
 - [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
 - [X] (1203-3, Jean-loup) Do a review of the LSTM operator
