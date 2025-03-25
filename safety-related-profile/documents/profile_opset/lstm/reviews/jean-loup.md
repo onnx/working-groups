@@ -14,6 +14,12 @@ I don't understand "for example (f, g, h) in LSTM" . I know that's in the ONNX d
 
 "clip" should be in bold characters.
 
+"input_forget" : -> 
+
+$$
+ c_t = (1 - act1(i_t)) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
+$$
+
 It is strange that for  "direction is reverse" there is no "revert", i.e. "Y = revert( LSTM_Forward  (revert(X),...))"
 
 If peepholes are authorized we should write:
