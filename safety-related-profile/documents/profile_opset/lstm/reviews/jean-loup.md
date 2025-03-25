@@ -10,6 +10,8 @@ I don't understand the presence of "batch_size" in an inference context. Add a c
 
 "hidden_size" also defines tensor shapes.
 
+It is strange that for  "direction is reverse" there is no "revert", i.e. "Y = revert( LSTM_Forward  (revert(X),...))"
+
 If peepholes are authorized we should write:
 
 $$
