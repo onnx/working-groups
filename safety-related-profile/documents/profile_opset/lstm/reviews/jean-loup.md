@@ -7,6 +7,7 @@
 I don't understand the presence of "batch_size" in an inference context. Add a constraint "batch_size =  1"?
 
 If peepholes are authorized we should write:
+
 $$
 \begin{bmatrix}
      i_t \\
