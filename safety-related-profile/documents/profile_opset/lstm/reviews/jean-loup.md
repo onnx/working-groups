@@ -6,4 +6,32 @@
 
 I don't understand the presence of "batch_size" in an inference context. Add a constraint "batch_size =  1"?
 
-
+If peepholes are authorized we should write:
+$$
+\begin{bmatrix}
+     i_t \\
+     o_t \\
+     f_t \\
+     g_t 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     W_{i} & R_{i} & P_{i} \\
+     W_{o} & R_{o} & P_{o} \\
+     W_{f} & R_{f} & P_{f} \\
+     W_{g} & R_{g} & 0
+     \end{bmatrix}
+     \times
+     \begin{bmatrix}
+     x_t \\
+     h_{t-1} \\
+     c_{t-1}
+     \end{bmatrix}
+     +
+     \begin{bmatrix}
+     B_{wi} + B_{ri} \\
+     B_{wo} + B_{ro} \\
+     B_{wf} + B_{rf} \\
+     B_{wg} + B_{rg}
+     \end{bmatrix}
+$$
