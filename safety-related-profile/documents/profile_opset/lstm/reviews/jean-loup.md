@@ -10,6 +10,8 @@ I don't understand the presence of "batch_size" in an inference context. Add a c
 
 "hidden_size" also defines tensor shapes.
 
+I don't understand "for example (f, g, h) in LSTM" . I know that's in the ONNX documentation but "for exemple in LSTM" makes no sense because we are specifying LSTM. I think f, g, h are respectively what is called latter act1, act2 and act3. I think we should write, "act1, act2 and act3 as defined in Section Mathematical definition of LSTM_Forward".
+
 "clip" should be in bold characters.
 
 It is strange that for  "direction is reverse" there is no "revert", i.e. "Y = revert( LSTM_Forward  (revert(X),...))"
