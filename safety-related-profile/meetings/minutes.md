@@ -9,10 +9,13 @@
 ### New actions
 ### Past actions
 - [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
-- [ ] (2003-2, Eric) Update SONNX landing page to point to interesting material... (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [X] (2003-2, Eric) Update SONNX landing page to point to interesting material... (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - Added a "contents" section in the [SONNX main page](../README.md). (Not yet pulled to the main branch)
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
-- [ ] (2003-4, Eric) Give an example of the two categories of restrictions (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [X] (2003-4, Eric) Give an example of the two categories of restrictions (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - See proposal for the [`conv` operator](../documents/profile_opset/conv/conv.md)
 - [X] (1203-1, Eric) Propose a first specification of the graph execution semantics on the basis of Dumitru's slide and ONNX doc.
+  - See [here](../documents/profile_graph/graph.md)
 - [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
 - [X] (1203-3, Jean-loup) Do a review of the LSTM operator
   - Review is [here](../documents/profile_opset/lstm/reviews/jean-loup.md)
@@ -40,6 +43,8 @@
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+    - [ ] Create a review form
 
 # 2025/03/12
 ## Participants

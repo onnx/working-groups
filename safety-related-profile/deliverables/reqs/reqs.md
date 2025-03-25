@@ -1,3 +1,7 @@
+# Warning
+
+**This is a draft.**
+
 # Introduction
 
 This document captures the requirements applicable to the SONNX profile. 
@@ -16,7 +20,7 @@ The specification is organized as follows:
 ### REQ `OP 000`: `Compliance with the ONNX standard`
 
 #### Description
-The SONNX standard shall not modify the structure (inputs, outputs, attributes) of the ONNX operators ). However, it is allowed to restrict the input and parameter domains if deemed necessary.
+The SONNX standard shall not modify the structure (inputs, outputs, attributes) of the ONNX operators). However, it is allowed to restrict the input and parameter domains if deemed necessary.
 
 #### Rationale 
 Compatibility with the ONNX standard. 
@@ -61,7 +65,7 @@ The specification shall provide
 - the maximal acceptable error (upper bound) on the outputs
 - or the inputs leading to the maximal error (the measurement of errors being left to the implementer).
 
-The error may be expressed for each scalar or, on the matrice, vector, or tensor. In any case, the error metric must be clearly defined. 
+The error may be expressed for each scalar or, on the matrix, vector, or tensor. In any case, the error metric must be clearly defined. 
 
 #### Rationale 
 If we say nothing about the accuracy of an operator, it basically mean that any output is correct.
@@ -166,15 +170,14 @@ Clarity.
 #### Related need
 [TBC]
 
-### REQ `OP 016`: `No default values`
+### REQ-OP-016 <a name="no_default_value">
 
+ No default values
 #### Description
-The SONNX profile shall forbid the use of defaut values.
+The SONNX profile shall forbid the use of default values.
 
 #### Rationale 
-The ONNX standard defines default value for attributes that are left without values. 
-
-The objective is to ensure that the model designer and model implementer has a clear knowledge of the values involved in computations. 
+The ONNX standard defines default value for attributes that are left without values. The objective is to ensure that the model designer and model implementer has a clear knowledge of the values involved in computations. 
 
 #### Related need
 [TBC]

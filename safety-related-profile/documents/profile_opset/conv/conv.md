@@ -2,11 +2,12 @@
 
 ### Restrictions
 The following restrictions apply to the `conv` operator for the SONNX profile:
-- The number of spatial axes of the tensors is restricted to 2 `[R1]`
-- Attribute `auto_pad` is restricted to `NOTSET` `[R2]`
-- Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution) `[R3]`
-- All attributes shall be be given explicit values (i.e., default values for attributes are not supported) `[R4]`
-- The number of elements in the `strides` list is equal to 2. `[R5]`
+
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `[R1]` | Input tensor `X` has 2 spatial axes | Simplification |
+| `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [OP16 - No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
+| `[R3]` | Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution) | Simplification | 
 
 ### Signature
 `Y = conv(X,W,[B])`
@@ -18,7 +19,7 @@ where
   
 #### Informal specification
 
-Operator `conv` computes the convolution of the input tensor `X` with the kernel `W` and adds bias `B` to the result. Two types of convolutions are supported: _standard convolution_ and _depthwise convolution_ `[R3]`. The SONNX profile limits the number of spatial axes to 2 `[R1]`.
+Operator `conv` computes the convolution of the input tensor `X` with the kernel `W` and adds bias `B` to the result. Two types of convolutions are supported: _standard convolution_ and _depthwise convolution_.
 
 ##### Standard convolution
 A _standard convolution_ applies a kernel (also called "filter") to the input tensor, aggregating information accross both spatial axes and channels. For a given output channel, the kernel operates accross all input channels and all contributions are summed to produce the output. This corresponds to the case where `group`= 1. 
@@ -158,13 +159,10 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 <img src="./imgs/conv_stride.png" width="300" />
 
 ###### Constraints
-- (C1) Size of `strides`
-    - Statement: the number of elements in the `strides` list is equal to 2. `[R5]`
-    - Rationale: The SONNX profile only supports 2 spatial axes. 
-- (C2) Value domain
+- (C1) Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values are used in the denominator of expression in [constraint (C3) of X](#shape_consist) 
-- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `auto_pad` : string
@@ -173,7 +171,7 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 
 ###### Constraints
 - (C1) Explicit padding
-    - Statement: `auto_pad` shall be set to `NOTSET` `[R3]`
+    - Statement: `auto_pad` shall be set to `NOTSET` `[R2]`
     - Rationale: The SONNX profile imposes explicit padding.
 
 ##### `pads`: list of int
@@ -233,8 +231,8 @@ In the example, with `group` set to 3 and an input `X` and an output `Y` with 3 
 
 ###### Constraints
 - (C1) Support for standard and depthwise convolutions
-    - Statement: `group`=1 (standard convolution) or `group`$=c(X)$ (depthwise convolution)
-    - Rationale: SONNX only supports standard and depthwise convolutions
+    - Statement: `group`=1 or `group`$=c(X)$ `[R3]`
+    - Rationale: SONNX only supports the most usual types of convolutions: standard (`group`=1) and depthwise convolutions `group`$=c(X)$ 
 
 ##### `kernel_shape`: list of int
 
