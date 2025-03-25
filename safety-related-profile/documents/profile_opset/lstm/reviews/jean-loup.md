@@ -4,7 +4,7 @@
 
 "LSTM Cell internal diagram" <- "LSTM Cell internal diagram for input, memory and output gates controlled by sigmoïds and flow activated by hyperbolic tangent"
 
-"seq_length" : Number of layers in the archirecture. The same LSTM cell, with the same parameters is repeated once, if monodirectional, or twice, if bi-directional, in the architecture. For forward architectures each layer corresponds to a time step of the simulation of the dynamic behavior of a single LSTM cell with delayed feedbacks of the state cell $c_{t-1} \gets c_t$ and the hidden layer $h_{t-1} \gets h_t$.
+"seq_length" : Number of layers in the archirecture. The same LSTM cell, with the same parameters is repeated once, if monodirectional, or twice, if bi-directional, at each layer of the architecture. For forward architectures each layer corresponds to a time step of the simulation of the dynamic behavior of a single LSTM cell with delayed feedbacks of the state cell $c_{t-1} \gets c_t$ and the hidden layer $h_{t-1} \gets h_t$.
 
 I don't understand the presence of "batch_size" in an inference context. Add a constraint "batch_size =  1"?
 
