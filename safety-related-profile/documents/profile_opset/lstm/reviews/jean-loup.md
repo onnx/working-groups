@@ -3,3 +3,7 @@
 "LSTM Bidirectional layer" <- "The following figure presents the use of a LSTM cell in a bidirectional architecture presenting three layers"
 
 "LSTM Cell internal diagram" <- "LSTM Cell internal diagram for input, memory and output gates controlled by sigmoïds and flow activated by hyperbolic tangent"
+
+I don't understand the presence of "batch_size" in an inference context. Add a constraint "batch_size =  1"?
+
+
