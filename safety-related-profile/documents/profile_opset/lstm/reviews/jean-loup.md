@@ -17,15 +17,16 @@ $$
      \end{bmatrix}
      =
      \begin{bmatrix}
-     W_{i} & R_{i} & P_{i} \\
-     W_{o} & R_{o} & P_{o} \\
-     W_{f} & R_{f} & P_{f} \\
-     W_{g} & R_{g} & 0
+     W_{i} & R_{i} & P_{i} & 0 \\
+     W_{o} & R_{o} & 0     & P_{o} \\
+     W_{f} & R_{f} & P_{f} & 0\\
+     W_{g} & R_{g} & 0     & 0
      \end{bmatrix}
      \times
      \begin{bmatrix}
      x_t \\
      h_{t-1} \\
+     c_t \\
      c_{t-1}
      \end{bmatrix}
      +
