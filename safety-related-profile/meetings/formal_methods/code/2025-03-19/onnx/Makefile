@@ -9,17 +9,18 @@ doc:
 	why3find doc -t ONNX *.mlw
 
 lib:
-	@rm -f lib/*__*.ml lib/*.bak
-	why3 extract -D ocaml64 -o lib --modular -L . -D tensor.drv sequence.Seq
-	why3 extract -D ocaml64 -o lib --modular -L . -D tensor.drv tensor.Shape
-	why3 extract -D ocaml64 -o lib --modular -L . -D tensor.drv tensor.Tensor
-	why3 extract -D ocaml64 -o lib --modular -L . -D tensor.drv opwhere.Where
-	@rm -f lib/*.bak
+	@mkdir -p lib/extract
+	@rm -fr lib/extract/*
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv sequence.Seq
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv tensor.Shape
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv tensor.Index
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv tensor.Tensor
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv opwhere.Where
+	why3 extract -D ocaml64 -o lib/extract --modular -L . -D tensor.drv opmatrix.Matrix
 	dune build
 
 test:
-	@dune build
-	@_build/default/test/test.exe
+	@dune runtest
 
 clean:
 	rm -fr lib/*.ml html

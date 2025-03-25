@@ -1,0 +1,21 @@
+{
+  "profile": [ { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.607 } ],
+  "proofs": {
+    "Matrix": {
+      "cols": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "rows": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "swap": { "prover": "alt-ergo@2.5.4", "time": 0.118 },
+      "transpose": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.066 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+        ]
+      }
+    }
+  }
+}
