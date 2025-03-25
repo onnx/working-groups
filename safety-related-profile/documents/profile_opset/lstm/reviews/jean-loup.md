@@ -6,7 +6,7 @@
 
 "seq_length" : Number of layers in the archirecture. The same LSTM cell, with the same parameters is repeated at each layer of the architecture for each direction. I.e. when there are two directions there are only two sets of parameters. For forward architectures each layer corresponds to a time step of the simulation of the dynamic behavior of a single LSTM cell with delayed feedbacks of the state cell $c_{t-1} \gets c_t$ and the hidden layer $h_{t-1} \gets h_t$.
 
-I don't understand the presence of "batch_size" in an inference context. Add a constraint "batch_size =  1"?
+I don't understand the presence of "batch_size" in an inference context. Make the constraint "batch_size =  1" unconditional in SONNX restrictions?
 
 "hidden_size" also defines tensor shapes.
 
