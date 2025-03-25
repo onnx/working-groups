@@ -41,3 +41,5 @@ $$
      B_{wg} + B_{rg}
      \end{bmatrix}
 $$
+
+Indicating that $P_i$, $P_o$ and $P_f$ are diagonal matrices.
