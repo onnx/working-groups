@@ -51,6 +51,7 @@ hand-written files:
  - `lib/dune` OCaml compilation directives
  - `lib/tensor.mli` Public API of the Tensor library
  - `lib/tensor.ml` Bindings of the public API to the extracted code
+ - `lib/extract/*.ml` Extracted code from Why3 specifications
 
 The unit tests are written in OCaml in `test` directory:
 

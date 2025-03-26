@@ -1,6 +1,4 @@
-(executable
-  (name test)
-  (package onnx)
-  (public_name test)
+(tests
+  (names matrix where)
   (flags ("-open" "Tensorlib"))
   (libraries tensorlib))

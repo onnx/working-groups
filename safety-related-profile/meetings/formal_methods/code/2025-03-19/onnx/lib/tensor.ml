@@ -1,6 +1,7 @@
 (* ONNX Tensor API *)
 
 module S = Tensor__Shape
+module I = Tensor__Index
 module T = Tensor__Tensor
 
 type 'a tensor = 'a T.tensor
@@ -13,20 +14,33 @@ let scalar v =
     value = fun _ -> v ;
   }
 
-exception Invalid_index
+exception Invalid_index = T.Invalid_index
+let mem = T.mem
+let get = T.get
+
+let (.%[]) t k = get [k] t
+let (.%[;..]) t ks = get (Array.to_list ks) t
 
 let vector vs =
-  let m = Array.of_list vs in
+  let d = Array.of_list vs in
+  let n = Array.length d in
+  if n = 0 then invalid_arg "Tensor.vector" ;
   T.{
-    shape = [ Array.length m ] ;
-    value = (function [ k ] -> m.(k) | _ -> raise Invalid_index) ;
+    shape = [ n ] ;
+    value = (function [ k ] -> d.(k) | _ -> raise Invalid_index) ;
   }
 
 let matrix vs =
-  let m = Array.map Array.of_list @@ Array.of_list vs in
+  let d = Array.map Array.of_list @@ Array.of_list vs in
+  let n = Array.length d in
+  if n = 0 then invalid_arg "Tensor.matrix" ;
+  let m = Array.length d.(0) in
+  if m = 0 then invalid_arg "Tensor.matrix" ;
+  if Array.exists (fun r -> Array.length r <> m) d then
+    invalid_arg "Tensor.matrix" ;
   T.{
-    shape = [ Array.length m ; Array.length m.(0) ] ;
-    value = (function [ i ; j ] -> m.(i).(j) | _ -> raise Invalid_index) ;
+    shape = [ n ; m ] ;
+    value = (function [ i ; j ] -> d.(i).(j) | _ -> raise Invalid_index) ;
   }
 
 let pretty pp fmt (t : 'a tensor) =
@@ -53,5 +67,9 @@ let pretty pp fmt (t : 'a tensor) =
         Format.fprintf fmt "@]" ;
       end
   | _ -> invalid_arg "Tensor.pretty"
+
+let transpose (t : 'a tensor) =
+  if dim t <> 2 then invalid_arg "Tensor.transpose" ;
+  Opmatrix__Matrix.transpose t
 
 let where = Opwhere__Where.where

@@ -1,0 +1,56 @@
+(**
+    Specification of Matrix operations on tensors.
+ *)
+
+module Matrix
+
+  use int.Int
+    use list.List
+    use sequence.Seq
+    use tensor.Tensor
+    let function swap (idx : seq int) : seq int
+      (*proof*)
+      requires { length idx = 2 }
+      ensures { length result = 2 }
+      ensures { Seq.(result[0] = idx[1]) }
+      ensures { Seq.(result[1] = idx[0]) }
+      = match idx with
+        | Cons i (Cons j Nil) -> Cons j (Cons i Nil)
+        end
+      (*qed*)
+
+    let function get (t : tensor 'a) (i j : int)
+      (*proof*)
+      = t.value (Cons i (Cons j Nil))
+      (*qed*)
+
+    let function cols (a : tensor 'a) : int
+      requires { dim a = 2 }
+      ensures { result = Seq.( a.shape[0] ) }
+      = Seq.(a.shape.dims[0])
+    let function rows (a : tensor 'a) : int
+      requires { dim a = 2 }
+      ensures { result = Seq.( a.shape[1] ) }
+      = Seq.(a.shape.dims[1])
+    let transpose (a : tensor 'a) : tensor 'a
+      requires { dim a = 2 }
+      ensures { result.shape = swap a.shape }
+      ensures {
+        forall i j.
+          0 <= i < cols result ->
+          0 <= j < rows result ->
+          get result i j = get a j i
+      }
+      = let value (idx : index) : 'a =
+          if length idx = 2 then a.value (swap idx) else a.value idx
+        in
+        assert {
+          forall i j.
+            swap (Cons i (Cons j Nil)) == (Cons j (Cons i Nil))
+        } ;
+        {
+          shape = { dims = swap a.shape.dims } ;
+          value = value
+        }
+
+end
