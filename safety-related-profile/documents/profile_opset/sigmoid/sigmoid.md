@@ -33,7 +33,7 @@ Operator `Sigmoid` computes the sigmoid function.
 The mathematical definition of the operator is given hereafter.
 
 $$     
-   Y = \frac{1}{1+\epsilon^{-x} = \frac{\epsilon^x}{1+\epsilon^x}  
+   Y = \frac{1}{1+\epsilon^{-x}} = \frac{\epsilon^x}{1+\epsilon^x}  
 $$
 
 
