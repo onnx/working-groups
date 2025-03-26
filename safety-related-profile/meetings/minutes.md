@@ -17,6 +17,7 @@
   - Work on formal spec. 
   - Traceability to certification constraints
     - *What do we do next?*
+  - Mail to the troop? [here](../documents/Attic/call.md)
   
 ## Minutes
 ## Actions
