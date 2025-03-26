@@ -33,7 +33,7 @@ Operator `Tanh` computes the Tanh function.
 The mathematical definition of the operator is given hereafter.
 
 $$     
-   Y = \frac{e^x-e{-x}}{e^x+e^{-x}} = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1 - e^{2x}}{1 + e^{2x}}
+   Y = \frac{e^x-e^{-x}}{e^x+e^{-x}} = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1 - e^{-2x}}{1 + e^{-2x}}
 $$
 
 
