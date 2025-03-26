@@ -8,19 +8,26 @@
 | hb | Henri |
 | nv | Nicolas |
 
-| Operator                     | Writers            | Reviewers         |
-|------------------------------|--------------------|-------------------|
-| Abs                          |hb,                 |                   |
-| Add                          |hb,                 |                   |
+|Status | Meaning|
+|-------|--------|
+| WR    | Written   |
+| RW    | Reviewed |
+| FI    | Finalized |
+
+
+| Operator                     | Writers            | Reviewers         | Status (WR, RW, FI)
+|------------------------------|--------------------|-------------------|-------------------
+| Abs                          |hb,                 |                   | WR
+| Add                          |hb,                 |                   | WR
 | Cast                         |                    |                   |
 | Clip                         |                    |                   |
 | Concat                       |                    |                   |
-| Constant                     |hb,                 |                   |
+| Constant                     |hb,                 |                   | WR
 | ConstantOfShape              |                    |                   |
-| Conv                         |ej,mt               |jlf,sb,tb,hb       |
+| Conv                         |ej,mt               |jlf,sb,tb,hb       | WR
 | ConvTranspose                |                    |                   |
 | Dense                        |                    |                   |
-| Div                          |hb,                 |                   |
+| Div                          |hb,                 |                   | WR
 | Equal                        |                    |                   |
 | Erf                          |                    |                   |
 | Exp                          |                    |                   |
@@ -28,26 +35,26 @@
 | Flatten                      |                    |                   |
 | FullyConnected               |                    |                   |
 | Gather                       |                    |                   |
-| Gemm                         |nv                  |                   |
+| Gemm                         |nv                  |                   | WR
 | GlobalAveragePool            |                    |                   |
 | GRU                          |                    |                   |
 | HardSwish                    |                    |                   |
 | Identity                     |                    |                   |
 | LeakyRelu                    |                    |                   |
-| Less                         |hb,                 |                   |
-| Log                          |hb,                 |                   |
-| LSTM                         |nv                  |                   |
-| MatMul                       |nv                  |                   |
+| Less                         |hb,                 |                   | WR
+| Log                          |hb,                 |                   | WR
+| LSTM                         |nv                  |                   | WR
+| MatMul                       |nv                  |                   | WR
 | Max                          |                    |                   |
 | MaxPool                      |                    |                   |
 | Min                          |                    |                   |
 | Mod                          |                    |                   |
-| Mul                          |hb,                 |                   |
-| Neg                          |hb,                 |                   |
+| Mul                          |hb,                 |                   | WR
+| Neg                          |hb,                 |                   | WR
 | Not                          |                    |                   |
 | Pad                          |                    |                   |
 | Padding                      |                    |                   |
-| Pow                          |hb,                 |                   |
+| Pow                          |hb,                 |                   | WR
 | Range                        |                    |                   |
 | ReduceMean                   |                    |                   |
 | ReduceSum                    |                    |                   |
@@ -56,18 +63,18 @@
 | Resize                       |                    |                   |
 | ScatterND                    |                    |                   |
 | Shape                        |                    |                   |
-| Sigmoid                      |                    |                   |
+| Sigmoid                      |                    |                   | WR
 | Slice                        |                    |                   |
 | Softmax                      |                    |                   |
 | SoftPlus                     |                    |                   |
 | Split                        |                    |                   |
-| Sqrt                         |hb,                 |                   |
+| Sqrt                         |hb,                 |                   | WR
 | Squeeze                      |                    |                   |
-| Sub                          |hb,                 |                   |
-| Tanh                         |                    |                   |
+| Sub                          |hb,                 |                   | WR
+| Tanh                         |                    |                   | WR
 | Transpose                    |                    |                   |
 | ConvTransposeDeconvolution   |                    |                   |
 | Unsqueeze                    |                    |                   |
-| Where                        |hb,                 |                   |
+| Where                        |hb,                 |                   | WR
 
 

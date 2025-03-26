@@ -170,7 +170,7 @@ Clarity.
 #### Related need
 [TBC]
 
-### REQ-OP-016 <a name="no_default_value">
+### <a name="no_default_value"></a> REQ-OP-016: No default value
 
  No default values
 #### Description
@@ -183,7 +183,7 @@ The ONNX standard defines default value for attributes that are left without val
 [TBC]
 
 
-### REQ `OP 017`: `Datatypes`
+### <a name="datatype_specific_spec"></a> REQ-OP-017: Datatype specific specification
 
 #### Description
 The SONNX standard shall 
@@ -198,23 +198,21 @@ The semantics of the operator may depend on the types (float, integers), accurra
 #### Related need
 [TBC]
 
-### REQ `OP 018`: `Input domain definition`
+### <a name="input_domain"></a> REQ-OP-018: Input domain definition
 
 #### Description
-The SONNX profile shall specify all conditions on inputs, outputs, and attributes that must be satisfied for the operator to be applicable. The behaviour of the operator for any value out of the valid input domain must be described.
+The SONNX profile shall specify all conditions on inputs and attributes that must be satisfied for the operator to be applicable. The behaviour of the operator for any value out of the valid input domain must be described.
 
 #### Rationale 
-The semantics of operators is only defined in the inputs, outputs, and attribute validity domain.
+The semantics of operators is only defined in the inputs and attribute validity domain.
 
 #### Related need
 [TBC]
 
-### REQ `OP 019`: `Behaviour in case of errors`
+### <a name="out_of_domain_errors"></a> REQ-OP-019: Out of domain errors
 
 #### Description
-The SONNX profile shall specify the expected behaviour of an operator should 
-- the input values be out of the valid input domain
-- over/under flow occur
+The SONNX profile shall specify the behaviour of an operator should the input values be out of the input domain.
 
 #### Rationale 
 [TBC]
@@ -222,7 +220,7 @@ The SONNX profile shall specify the expected behaviour of an operator should
 #### Related need
 [need-ai-008](needs.md#need-ai-008-behavioral-determinism-and-predictability)
 
-### REQ `OP 020`: `Overflow and underflow`
+### <a name="over_and_underflows"></a> REQ-OP-020: Overflow and underflow conditions
 
 #### Description
 The SONNX profile shall specify the conditions leading to overflows and underflows.
@@ -234,13 +232,13 @@ The SONNX profile shall specify the conditions leading to overflows and underflo
 [need-ai-008](needs.md#need-ai-008-behavioral-determinism-and-predictability)
 
 
-### REQ `OP 021`: `Unique conditions`
+### <a name="unique_conditions"> REQ-OP-021: Conditions stated once
 
 #### Description
 The SONNX profile shall ensure that, when a condition involves several inputs, outputs or attributes, 
-the condition is only expressed once in the section dedicate to one of the inputs, outputs or attributes. 
+it is only expressed once in the section dedicated to one of the inputs, outputs or attributes. 
 Should the condition involve multiple inputs, outputs or attributes, references to the unique condition 
-shall be ued in all other sections.
+shall be used in all other sections.
 
 #### Rationale
 Prevention of inconsistencies. 
@@ -248,10 +246,10 @@ Prevention of inconsistencies.
 #### Related need
 [TBC]
 
-### REQ `OP 022`: `Stability of operators`
+### <a name="operator_stability"></a> REQ-OP-022: Stability of operators
 
 #### Description
-The SONNX profile shall preclude the use of instable operators or document this phenomenon if it occurs. 
+The SONNX profile shall not include instable operators. If an unstable operator is absolutely required, the phenomenon must be described. 
 
 #### Rationale
 [TBC]
@@ -260,10 +258,10 @@ The SONNX profile shall preclude the use of instable operators or document this 
 [need-ai-008](needs.md#need-ai-008-behavioral-determinism-and-predictability)
 
 
-### REQ `OP 023`: `Determinism of resource usage`
+### <a name="determinism_memory_usage"></a> REQ-OP-023: Determinism of resource usage
 
 #### Description
-The SONNX profile shall preclude the use operators which memory usage varies dynamically (i.e, depends on the inputs).
+The SONNX profile shall not include operators which memory usage depend on input values.
 
 #### Rationale
 [TBC]
@@ -271,10 +269,10 @@ The SONNX profile shall preclude the use operators which memory usage varies dyn
 #### Related need
 [need-ai-009](needs.md#need-ai-009-resource-usage-determinism-and-predictability)
 
-### REQ `OP 024`: `Determinism of execution times`
+### <a name="determinism_execution_time"></a>  REQ-OP-024: Determinism of execution times
 
 #### Description
-The SONNX profile shall preclude the use operators which memory usage varies dynamically (i.e, depends on the inputs).
+The SONNX profile shall not include operators which execution time depend on input values.
 
 #### Rationale
 [TBC]
@@ -285,10 +283,10 @@ The SONNX profile shall preclude the use operators which memory usage varies dyn
 
 ## Formal specification
 
-### REQ `OP 030`: `Formal specification in ACSL`
+### <a name="formal_specification"></a> REQ-OP-030: Formal specification
 
 #### Description
-The SONNX profile shall provide an ACSL specification for each operator.
+The SONNX profile shall provide a formal specification of each operator.
 
 #### Rationale
 The formal specification will be used to verify the correctness of the reference implementation.
@@ -296,27 +294,11 @@ The formal specification will be used to verify the correctness of the reference
 #### Related need
 [TBC]
 
-### REQ `OP 031`: `Generic properties`
+
+### <a name="deterministic_operators"></a>  REQ-OP-032: Deterministic operators
 
 #### Description
-"As far as possible", the formal specification must also include high-level mathematical properties that the operator must satify (e.g., symmetry, reflexivity, existence of a neutral element, etc.). For instance, `sub(T,T)=0`, `sub(T,0)=T`,`transpose(tranpose(T))=T`...
-
- Whenever possible, the formal specification may rely on other operator, e.g., `sub(add(T1,T2), T2)=T1`, . This schema may be applied on more complex operators such as convolution. For instance: `ConvTranspose(Conv(X))=X and `Conv(Conv`Transpose(X))=X" for specific values of attributes.
-
-See example of the `conv` operator. 
-
-#### Rationale
-If an operator is described "algorithmically", it will be very close to the actual (e.g.) C implementation. Additional properties may be useful to detect errors in the formal specification.
-
-#### Related need
-[TBC]
-
-## Profile contents
-
-### REQ `OP 032`: `Deterministic operators`
-
-#### Description
-The profile shall only contain deterministic operators. The profile shall forbib any operator whose behaviour is intrinsically non-deterministic or for which some inputs determining the behaviour of the operators would not be identified (e.g., an operator that would use a random generator with no control on the random generator seed). 
+The profile shall not include non-deterministic operators. 
 
 #### Rationale 
 [TBC]
@@ -328,10 +310,10 @@ The profile shall only contain deterministic operators. The profile shall forbib
 
 # Requirements on graph interpretation
 
-### REQ `GR 000`: `Graph interpretation`
+### <a name="graph_specification"></a>  REQ-GR-000: Graph specification
 
 #### Description
-The profile shall specify how graphs are interpreted.
+The profile shall specify the graph execution semantics.
 
 #### Rationale 
 
@@ -342,21 +324,21 @@ The profile shall specify how graphs are interpreted.
 
 ## General requirements
 
-### REQ `FO 000`: `Operator versions``
+### <a name="operator_versions"></a> REQ-FO-000: Operator versions
 
 #### Description
-The model shall indicate precisely the version of each operator used in the model. There shal be no ambiguity about the version to be used.
+The model shall indicate precisely the version of each operator used in the model.
 
 #### Rationale 
-Operators may have several versions (opset)
+Operators may have several versions (opset) and, during graph execution, the shall be no ambiguity about the version to be used.
 
 #### Related need
 [need-thav-001](needs.md#need-thav-001-version-index-in-the-onnx-model)
 
-### REQ `FO 001`: `Representation of parameters`
+### <a name="parameter_representation"></a> REQ-FO-001: Representation of parameters
 
 #### Description
-The representation of parameters (weights, biases) in the serialized representation of the model shall not degrade the accuracy of parameters. For instance, the IEEE hexadecimal binary representation ([-]0x1.abcdefp[+-]n) may be used to represent floating point parameters.  
+The model shall not degrade the accuracy of the parameters (weights, biases, etc.). For instance, the IEEE hexadecimal binary representation may be used to represent floating point parameters ([-]0x1.abcdefp[+-]n) .  
 
 #### Rationale 
 The serialization of floating point number must not introduce degrade the accuracy of the source model parameters. 
@@ -366,10 +348,12 @@ The serialization of floating point number must not introduce degrade the accura
 
 ## User documentation
 
-### REQ `FO 010`: `Documentation of input and output tensors`
+### <a name="io_documentation"></a>  REQ-FO-010: Documentation of input and output tensors
 
 #### Description
-The SONNX profile must provide the capability to give the semantics of the input and ouptut tensors, including the semantics of the dimensions of the tensors.
+The SONNX profile shall have the capability to describe 
+- the semantics of the input and output tensors, 
+- the semantics of the dimensions of the tensors.
 
 #### Rationale 
 [TBC]
@@ -377,15 +361,13 @@ The SONNX profile must provide the capability to give the semantics of the input
 #### Related need
 [need-arcys-001](needs.md#need-arcys-001-final-prediction)
 
-### REQ `FO 011`: `Derived requirements - implementatiobn`
+### <a name="implementation"></a>  REQ-FO-011: Derived requirements - implementation
 
 #### Description
-The SONNX profile shall provide capability (metadata) to describe how the model must be deployed on a specific target, i.e.,
+The SONNX profile shall have the capability to describe how the model must be deployed on a specific target, i.e.,
 - the exact order in which the graph operators must be executed
 - the target hardware on which the model or part of the model must be deployed.
 
-> To be discussed. Shall it be part of the MLMD or be part of another document? 
-> What kind of derived requirements do we want to express?
 
 #### Rationale 
 [TBC]
@@ -393,7 +375,9 @@ The SONNX profile shall provide capability (metadata) to describe how the model 
 #### Related need
 [need-ai-003](needs.md#need-ai-003-expression-of-implementation-requirements)
 
-### REQ `FO 012`: `Traceability to training model`
+### <a name="traceability_to_training_model"></a>  REQ-FO-012: Traceability to training model
+
+[TBDis]
 
 #### Description
 The SONNX profile must provide the capability to trace the ONNX model to the training model from which it has been generated. 
@@ -405,7 +389,9 @@ The SONNX profile must provide the capability to trace the ONNX model to the tra
 [need-ai-004](needs.md#need-ai-004-support-for-traceability)
 
 
-### REQ `FO 013`: `Traceability to training environment`
+### <a name="traceability_to_training_env"></a> REQ-FO-013: Traceability to training environment
+
+[TBDis]
 
 #### Description
 The SONNX profile must provide the capability to trace the environment used for training.
@@ -418,7 +404,7 @@ The SONNX profile must provide the capability to trace the environment used for 
 
 # Model validity
 
-### REQ `VA 000`: `Valid operator set`
+### <a name="valid_operators"></a>  REQ-VA-000: Valid operator set
 
 #### Description
 A model shall only use operators in the SONNX set.
@@ -429,11 +415,11 @@ A model shall only use operators in the SONNX set.
 #### Related need
 [TBC]
 
-### REQ `VA 001`: `Explicit types and shapes`
+### <a name="explicit_types_shapes"></a>  REQ-VA-001: Explicit types and shapes
 
 #### Description
 All datatypes must be indicated explicity (no type inference).\
-All shape conversion must be peformed explicity (using the `reshape`) operator. (no [shape inference](https://onnx.ai/onnx/api/shape_inference.html))
+All shape conversion must be done explicity (using the `reshape`) operator. (no [shape inference](https://onnx.ai/onnx/api/shape_inference.html))
 
 #### Rationale 
 [TBC]
@@ -444,13 +430,13 @@ All shape conversion must be peformed explicity (using the `reshape`) operator. 
 
 # Reference implementation
 
-### REQ `RI 000`: `Reference implementation`
+### <a name="reference_imp"></a>  REQ-RI-000: Reference implementation
 
 #### Description
 The SONNX profile shall provide a reference implementation covering 
-- the SONNX operator set
+- the operator set
 - the graph execution
-- the graph import (deszerialization of a SONNX model)
+- the graph import (deserialization of a SONNX model)
 
 #### Rationale
 In order to verify the correctness of his/her implementation, the user will need to compare the results computed by this implementation with some reference. Since we nned to compare computation **results**, this means that the specification must be executable. One possible way could be to use an executable formal specification (e.g., `why3`). Another way consists to provide (i) a formal specification and (ii) a "reference" implementation demonstrated to comply with the formal specification. 
@@ -458,10 +444,10 @@ In order to verify the correctness of his/her implementation, the user will need
 #### Related need
 [need-ai-011](needs.md#need-ai-011-support-for-verification-activities)
 
-### REQ `RI 001`: `Relation with specification`
+### <a name="reference_imp"></a>  REQ-RI-001: Relation with specification
 
 #### Description
-The relation between the specification and the implementation must be as straightforward as possible. In particular, the reference implementation must reproduce the structure of the mathematical specification, without introducing implementation optimizations. See example of the `CONV2D`` operator.
+The reference implementation shall be traceable to the specification either by review or by generation. In particular, the reference implementation must reproduce the structure of the mathematical specification, without introducing implementation optimizations.
 
 #### Rationale
 Verifying the reference implementation must be as easy as possible. 
@@ -471,10 +457,10 @@ Verifying the reference implementation must be as easy as possible.
 
 # Tooling
 
-### REQ `TO 000`: `Verification tool`
+### <a name="verification_tool"></a>  REQ-TO-000: Verification tool
 
 #### Description
-The SONNX profile shall come with a model verification tool.\
+The SONNX profile shall provide a model verification tool.\
 This tool aims at verifying that all validity conditions are satisfied, including:
 - the graph structure is well-formed,
 - all required metadata are present

@@ -1,14 +1,30 @@
 # 2025/03/26
 ## Participants
 ## Agenda
-  - Review of ONNX IR
-  - Status of LSTM, graph semantics
-  - Feedback on 2025/03/18 workshop on formal specification and verification (see [minutes](./formal_methods/minutes.md))
+  - Operators
+    - [Current list](../documents/profile_opset/):  abs, add, constant, conv, div, gemm, less, log, lstm, matmul, mul, net, pow, sigmoid, sqrt, sub, tanh, where
+      - We have to have at least 1 reference example (considered consensually "perfect"). 
+      - Then we have to write / review the other operators against it. Which operator?
+    - [LSTM operator](../documents/profile_opset/lstm/lstm.md). [Review by Jean-Loup](../documents/profile_opset/lstm/reviews/jean-loup.md)
+  - [Graph semantics](../documents/profile_graph/graph.md)
+  - Feedback on [2025/03/18 workshop on formal specification and verification](./formal_methods/minutes.md)
+  - Review and finalization of the [specification](../deliverables/reqs/reqs.md). Who want's to join?
+  - Status on ARP
+    - Discussion on March 14th : 
+    > 1. The exact replication is the only option to preserve the properties demonstrated during the design phase. It means the “bit accurate” replication of the semantics of the designed model (expressed by the MLMD) in the target environment.
+    > 2. The approximative replication means that the properties (performance, generalization, stability and robustness) of the designed model (expressed by the MLMD) are re-assessed in the target environment and that the results are within an acceptable epsilon from the results obtained in the design environment. The epsilon should be specified by the applicant in the MLC requirements.
+  - Review of ONNX IR. Who?
+  - Work on formal spec. 
+  - Traceability to certification constraints
+    - *What do we do next?*
+  
 ## Minutes
 ## Actions
 ### New actions
 ### Past actions
 - [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [X] Tag created. 
+  - [ ] Who can apply this tag?
 - [X] (2003-2, Eric) Update SONNX landing page to point to interesting material... (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - Added a "contents" section in the [SONNX main page](../README.md). (Not yet pulled to the main branch)
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
@@ -22,7 +38,8 @@
 - [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
 - [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
 - [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
-- [ ] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
+- [X] (1202-2, Eric) Discussion to be initiated with ONNX about the integration of our work...
+  - Moved to action (2003-3)
 - [ ] (1202-3, All) Review new operators processed by Henri 
   - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
   - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
@@ -32,14 +49,11 @@
 - [X] (2901-5, Dumitru) Prepare a short presentation  on the graph's semantics. Planned for March 12th.
 - [X] (2901-8, Henri) Consider Eric's [remarks](../documents/profile_opset/where/reviews/eric.md) on operator `where`.
 - [ ] (1501-1, Sebastian) Specify some operators...
-  - Sebastian is working on `reshape`and other ops. 
+  - Sebastian is working on `reshape`and other ops... 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
-  - *Thinking...*
 - [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
-- [(cancelled)] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
-  - Discussion on-going with Loïc on the formal specification strategy...
-  - Meeting planned to reach a final consensus...
-  - Meeting done. See [minutes](../meetings/formal_methods/minutes.md).
+- [X] (1812-3, Mariem) Complete the formal specification of `conv` with the help of FM experts (Augustin, Christophe, Cong, Eduardo, Loïc, etc.)
+  - Moved to the general activity on formal spec. 
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 

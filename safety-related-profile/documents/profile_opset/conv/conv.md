@@ -6,7 +6,7 @@ The following restrictions apply to the `conv` operator for the SONNX profile:
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
 | `[R1]` | Input tensor `X` has 2 spatial axes | Simplification |
-| `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [OP16 - No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
+| `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
 | `[R3]` | Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution) | Simplification | 
 
 ### Signature
