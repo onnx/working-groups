@@ -1,5 +1,36 @@
+# Contents
+- `MatMul` [operator (real)](#real)
+- `MatMul` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
+- `MatMul` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64, )](#int)
 
+<a id="real"></a>
 # `MatMul` operator (real)
+
+#### Inputs and outputs
+
+##### `A`
+
+Tensor `A` is the first input tensor.
+
+The shape of tensor `A` is $(m \times n)$.
+
+###### Constraints
+
+- (C1) Number of spatial axes of tensor `A`
+    - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
+    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
+
+##### `B`
+
+Tensor `B` is the second input tensor.
+
+The shape of tensor `B` is $(n \times p)$.
+
+##### `Y`
+
+Tensor `Y` is the output tensor.
+
+The shape of tensor `Y` is $(m \times p)$.
 
 ### Restrictions
 The following restrictions apply to the `MatMul` operator for the SONNX profile:
@@ -74,30 +105,7 @@ The assumption for SONNX is that the following is managed by insterting Reshape 
 
 - If the second input is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed.
 ```
-#### Inputs and outputs
 
-##### `A`
+<a id="float"></a>
 
-Tensor `A` is the first input tensor.
-
-The shape of tensor `A` is $(m \times n)$.
-
-###### Constraints
-
-- (C1) Number of spatial axes of tensor `A`
-    - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
-    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
-
-##### `B`
-
-Tensor `B` is the second input tensor.
-
-The shape of tensor `B` is $(n \times p)$.
-
-##### `Y`
-
-Tensor `Y` is the output tensor.
-
-The shape of tensor `Y` is $(m \times p)$.
-
-
+<a id="int"></a>
