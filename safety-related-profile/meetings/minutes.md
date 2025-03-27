@@ -20,12 +20,26 @@
   - Mail to the troop? [here](../documents/Attic/call.md)
   
 ## Minutes
+  - Discussion about the need to have a few set of "informal specifications" to be used as references for the writing and the review of the operators. 
+    - As of today, none of the operators are completely satisfying. "conv", "where" and "lstm" are good candidate for they cover different aspects, issues. We may add "div" for it handles INF and NaNs and possible "sigmoid" since it raises problems wrt overflow / underflow (see below)
+  - Presentation of the latest version of the [LSTM operator](../documents/profile_opset/lstm/lstm.md) by Nicolas and discussion of [Jean-Loup's review](../documents/profile_opset/lstm/reviews/jean-loup.md). 
+    - Several comments fro Jean-Loup were discussed. A specific meeting with Nicolas, Jean-Loup and Eric has to be organized to complete the review process. 
+    - Dumitru proposes to build the informal specification of "lstm" on more primitive operators (e.g., "scan"). A first version was presented that defines "lstm" in a hierarchical way using more primitive operators. This first version will be completed by Dumitru (see action (1203-2, Dumitru)) and we will take a decision about the most appropriate way afterwards. 
+  - Presentation of the [sigmoid operator](../documents/profile_opset/sigmoid/sigmoid.md) by Nicolas.
+    - For the float version of the operator, the specification proposes an "algorithm" that discriminates two cases: $X \gt 0$ and $X \leq 0$. This discrimination is aimed at providing the best output (prevent over/under flow) for the largest input domain. 
+    - In some sense, it could be considered as a "guideline", a "recommendations". We need at least to give the very reason for discriminating the two cases (some hints are given in the spec).
+    - Note that this design may also be justified with respect to the symmetry of the function.
+    - Another possibility could be to define the `sigmoid` using `tanh` that is a standard IEEE 754 operator ($\sigma(x)=​{1+tanh(2x​)\over 2}$). 
+    - This discussion raises, again, our problem with the specification of numerical properties...
 ## Actions
 ### New actions
+- [ ] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of al remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
+- [ ] (2603-2, Eric, Edoardo) Review of the [requirements](../deliverables/reqs/reqs.md) in order to produce a clean version (possibly incomplete).
+- [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
 ### Past actions
 - [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - [X] Tag created. 
-  - [ ] Who can apply this tag?
+  - [ ] Determine who can apply this tag?
 - [X] (2003-2, Eric) Update SONNX landing page to point to interesting material... (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - Added a "contents" section in the [SONNX main page](../README.md). (Not yet pulled to the main branch)
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
@@ -34,6 +48,8 @@
 - [X] (1203-1, Eric) Propose a first specification of the graph execution semantics on the basis of Dumitru's slide and ONNX doc.
   - See [here](../documents/profile_graph/graph.md)
 - [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
+  - First version presented during the 26/03 meeting.
+  - To be completed for next meeting (Dumitru and Nicolas)
 - [X] (1203-3, Jean-loup) Do a review of the LSTM operator
   - Review is [here](../documents/profile_opset/lstm/reviews/jean-loup.md)
 - [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
