@@ -1,5 +1,6 @@
 # 2025/03/26
 ## Participants
+- E. Jenn, J. Souyris, H. Belfy, M. Turki, J.L. Farges, E. Manino, D. Potop Butucaru, M. Belcaid, N. Valot et Duy Khoi Vo.
 ## Agenda
   - Operators
     - [Current list](../documents/profile_opset/):  abs, add, constant, conv, div, gemm, less, log, lstm, matmul, mul, net, pow, sigmoid, sqrt, sub, tanh, where
