@@ -9,7 +9,7 @@ This document contains various elements concerning computation errors and their 
 - *Floating-point* numbers are encoded on a finite number of bits. Therefore, all real numbers can't be represented exactly. Non-representable numbers must "mapped" (rounded) to representable numbers according to a rounding strategy. 
 - Concerning operations, the principle (IEEE 754) is that the result of an operation on rounded values shall be the same as the result that would be obtained by rounding the result computed using exact values. The exact statement, from [IEEE754] is the following:
   > "[...] each of the computational operations specified by this standard that returns a numeric result shall be performed as if it first produced an intermediate result correct to infinite precision and with unbounded range, and then rounded that intermediate result, if necessary, to fit in the destination’s format"
--  In addition, due to the finitness of the nuber of bits, overflow and underflow conditions may occur.  Conditions may apply on input values to prevent runtime errors. At least, runtime errors shall be signaled. In principle, these preconditions should be be part of the specification of the network (otherwise, there may be conditions in which the model doesn't produce any sensible result).
+-  In addition, due to the finiteness of the number of bits, overflow and underflow conditions may occur.  Conditions may apply on input values to prevent runtime errors. At least, runtime errors shall be signaled. In principle, these preconditions should be be part of the specification of the network (otherwise, there may be conditions in which the model doesn't produce any sensible result).
 
 ## Non-reproductibility
 - Depending on some internal conditions, the same piece of code given the same inputs may lead to different sequences of operations, then different numerical results due to the non associativity of floating point operations. Those internal conditions may be difficult to determine in the absence of a full description of the execution platform. See for instance [Dem-15, Col-15]. In [Dem-15], this effect is studied for a simple parallel summation.  
@@ -18,10 +18,10 @@ This document contains various elements concerning computation errors and their 
 
 ## IEEE-754 and non IEEE-754 data types
 
-IEEE 754 provides a set of guarantees about floating point computations [IEEE-754], howwever :
+IEEE 754 provides a set of guarantees about floating point computations [IEEE-754], however :
 
 - Are all hardware (GPUs, accelerators) implementing the IEEE-754 standard?
-  - No: NVIDUA uses TF32.
+  - No: NVIDIA uses TF32.
 - Are all hardware devices IEEE-754 compliant (GPUs, FPGA and ASIC accelerators)?
 - Some of the data types used in machine learning to not belong to the IEEE 754 standards. For example: [BF16](https://en.wikipedia.org/wiki/Bfloat16_floating-point_format) (bfloat16), [TF32](https://en.wikipedia.org/wiki/TensorFloat-32) (TensorFlow 32 bits)
   - What are the properties of those representations (do they respect the same principle as IEEE 754 numbers?)
@@ -44,7 +44,7 @@ IEEE 754 provides a set of guarantees about floating point computations [IEEE-75
 
 # Relation between accuracy and ML properties...
 
-This section deals with the relation between computaton errors due to (e.g.,) rounding, and the actual expected properties of the ML model. The rationale is that it *may be the case* that bitwise reproducibility is "overkill" with respect to the actual performance of the ML model.
+This section deals with the relation between computation errors due to (e.g.,) rounding, and the actual expected properties of the ML model. The rationale is that it *may be the case* that bitwise reproducibility is "overkill" with respect to the actual performance of the ML model.
 
 ## About the effects of floating point errors on ML model performance...
 - To what extent is the question of computation errors pertinent with respect to the other sources of errors in Machine Learning algorithms (or "how do computation errors compare to other sources of errors")?
@@ -70,25 +70,25 @@ Complex operations are described using a small corpus of basic operators and fun
 
 ## Standards
 
-All programming languages come with a set of basic mathematical operators, either directly implemented by the hardware or implemented in a mathematical library (e.g., ``libm``). Libraries also exist for high-level function such as Basic Linear Agebra (e.g., [BLAS](https://www.netlib.org/blas/), [LINPACK](https://www.netlib.org/linpack/),etc.). Some libraries are provided by chip manufacturers in order to take the most out of their hardware ([cuBLAS](https://docs.nvidia.com/cuda/cublas/index.html), Intel math lib)
+All programming languages come with a set of basic mathematical operators, either directly implemented by the hardware or implemented in a mathematical library (e.g., ``libm``). Libraries also exist for high-level function such as Basic Linear Algebra (e.g., [BLAS](https://www.netlib.org/blas/), [LINPACK](https://www.netlib.org/linpack/),etc.). Some libraries are provided by chip manufacturers in order to take the most out of their hardware ([cuBLAS](https://docs.nvidia.com/cuda/cublas/index.html), Intel math lib)
 
 ### Mathematical libraries
   - ``libm``
     - The newlib mathematical library does not give the accuracy of operations. (Note that the way mathematical operations are described could be inspiring) In addition, as stated in [Dar-06] "current [as of 2006] libm implementation do not always return the floating point number that is closest to the exact mathematical result. As a consequence, different libm implementation will return different results for the same input, which prevents fill portability for floating-point applications". The same claim can be read in [Gla-24]:
-       > The IEEE 754 standard, even in its latest 2019 revision [17], does not require correctly rounded mathematical functions, it only recommends them. In turn, current athematical libraries do not provide correct rounding, which is the best possible result. Thus, users might get different results with different libraries, or different versions of the same library. This can have dramatic consequences: for example missed collisions in the Large Hadron Collider [5] or reproducibility issues in neuroimaging [13].
-  - BLAS and other linear algrebra libraries
+       > The IEEE 754 standard, even in its latest 2019 revision [17], does not require correctly rounded mathematical functions, it only recommends them. In turn, current mathematical libraries do not provide correct rounding, which is the best possible result. Thus, users might get different results with different libraries, or different versions of the same library. This can have dramatic consequences: for example missed collisions in the Large Hadron Collider [5] or reproducibility issues in neuroimaging [13].
+  - BLAS and other linear algebra libraries
     - BLAS is not accurately rounded. For an accurately rounded BLAS, see e.g., [Cho-16].
     - cuBLAS 
       - cuBLAS is designed so that  "all [...]] API routines from a given toolkit version, generate the same bit-wise results at every run when executed on GPUs with the same architecture and the same number of SMs. However, bit-wise reproducibility is not guaranteed across toolkit versions because the implementation might differ due to some implementation changes." ([cuBLAS documentation](https://docs.nvidia.com/cuda/cublas/index.html#using-the-cublas-api), section 2.1.4).
       - The precision of operators is not specified. See e.g, ``gemm`` in section [2.7.1 ](https://docs.nvidia.com/cuda/cublas/index.html#cublas-t-gemm).
     - [Intel MKL BLAS ](https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/overview.html)
-      - See e.g.., the [``gemm``](https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/cblas-gemm-001.html) function: no inidcations whatsoever about accuracy.
+      - See e.g.., the [``gemm``](https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/cblas-gemm-001.html) function: no indications whatsoever about accuracy.
   
 ## Programming languages
 How are floating point operations specified in programming languages?
 Here are a few examples:
 - C
-  - In the C99 standard [C99], nothing is said about the accuraty of operator. For instance, for the sin operator, the specification is the following:
+  - In the C99 standard [C99], nothing is said about the accuracy of operator. For instance, for the sin operator, the specification is the following:
   ``` 
       Description
       The sin functions compute the sine of x (measured in radians).
@@ -104,7 +104,7 @@ Note 1:  the result of a computation also depends on the compiler, on the hardwa
 
 Note 2: an interesting quotation from [Mul-10]: 
 > As pointed out by David Goldberg [...] ) all these uncertainties make it impossible, in many cases, to figure out the exact semantics of a floating-point C program just by reading its code.
-Several examples of strange behaviours are given in the book. One example considers the case where a symmetric function (e.g., a function $f(x,y)$ computing the distance between $x$ and $y$) may be compiled in an asymetrical way using, e.g., ``fma`` in such a way that $f(x,y) \neq f(y,x)$, potentially breaking algorithms relying on the symmetry of the fonction (such as sorting algorithms).
+Several examples of strange behaviours are given in the book. One example considers the case where a symmetric function (e.g., a function $f(x,y)$ computing the distance between $x$ and $y$) may be compiled in an asymmetrical way using, e.g., ``fma`` in such a way that $f(x,y) \neq f(y,x)$, potentially breaking algorithms relying on the symmetry of the function (such as sorting algorithms).
 
 ### Industrial standards
 
@@ -131,7 +131,7 @@ What do the industrial standards say about computation errors (in space, aeronau
 
 #### Aeronautical standards
 - The DO-178C [DO-178C] doesn't say much besides that the source code must be correct with respect to floating point arithmetic (§6.3.4.f) (the term "floating point" appears only once).
-- (May refer to the MOPS, but it is unlikely that we will find anything concerning the allocateion of errors to computations.)
+- (May refer to the MOPS, but it is unlikely that we will find anything concerning the allocation of errors to computations.)
 
 #### Automotive standards 
 - The ISO 26262-6 [ISO26262] ("Product development at the software level") doesn't say much about floating point computations. 
@@ -141,7 +141,7 @@ What are our needs concerning computation accuracy, and **for what purpose**?
 
 ## Industrial needs and requirement on SONNX
 - [**Needs**] The executions of a SONNX model shall be reproducible to support debugging activities. 
-  - Reproducibility means that given the same inputs, all computations shall give the same ouputs.\
+  - Reproducibility means that given the same inputs, all computations shall give the same outputs.\
     The level of reproducibility be defined by (i) a bound on the errors on the outputs, (ii) the supported variability on the target SW or HW.\
     For instance, one may require that "the model shall give bitwise identical results when executed on the same HW architecture" or "the model shall give  results $\pm \epsilon$ when executed on the same HW architecture", etc.\
     Note that this requirement is only about reproducibility, i.e., the results may be perfectly reproducible but completely wrong with respect to the model "semantics".
@@ -154,7 +154,7 @@ In particular, this means that the (meta-)model (i.e., the SONNX standard) must 
 For instance, using floating point can lead to unsound verification results in the sense that a model that is robust in $\mathbb{R}$ (i.e, verified formally to be robust considering  values in R) may not be robust when implemented using finite precision numbers [???]. In this example, the MLMD would have to be implemented in R (if it were possible) for the robustness property to be preserved. 
 
 *Note (a): "Reproduction" is different from "replication" because the former concerns the relation between different executions of the same model implementation, whereas the latter concerns the relation between the model and its implementation(s).*\
-*Note (b): Instead of specifiying requirements about accuracy and precision, couldn't we just specify implementation requirements, i.e, the way computations must be done.* 
+*Note (b): Instead of specifying requirements about accuracy and precision, couldn't we just specify implementation requirements, i.e, the way computations must be done.* 
 
 ## Certification "needs"
 
@@ -228,7 +228,7 @@ From the previous needs, what are the requirements applicable to SONNX? The foll
 
 # Means of analysis techniques and tools
 - What are the technical means available to estimate the impact of errors on results? (e.g., fluctuat, CADNA...)
- - See [Beu-24, Ch. 4] who proposes forward / backward error estiation for neural networks, taking into account nn linear activation functions.
+ - See [Beu-24, Ch. 4] who proposes forward / backward error estimation for neural networks, taking into account nn linear activation functions.
 - Do we need the intervention of some FP experts? Who?
  
 

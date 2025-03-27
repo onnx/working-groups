@@ -31,7 +31,7 @@
     - In some sense, it could be considered as a "guideline", a "recommendations". We need at least to give the very reason for discriminating the two cases (some hints are given in the spec).
     - Note that this design may also be justified with respect to the symmetry of the function.
     - Another possibility could be to define the `sigmoid` using `tanh` that is a standard IEEE 754 operator ($\sigma(x)=​{1+tanh(2x​)\over 2}$). 
-    - This discussion raises, again, our problem with the specification of numerical properties...
+    - This discussion raises, again, our problem with the specification of numerical properties... (For the record, see [this document](../meetings/numerical%20accuracy/01_what_is_the_issue.pdf) presented in a previous meeting)
 ## Actions
 ### New actions
 - [ ] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of al remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
