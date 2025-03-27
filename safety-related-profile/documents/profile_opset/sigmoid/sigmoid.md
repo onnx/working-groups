@@ -38,7 +38,7 @@ $$
 
 
 <a id="float"></a>
-# `Sigmoid` operator (real)
+# `Sigmoid` operator (float32, float64)
 
 #### Inputs and outputs
 
