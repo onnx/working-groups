@@ -46,8 +46,6 @@ $$
 
 Tensor `X` is the first input tensor.
 
-The shape of tensor `A` is $(m \times n)$.
-
 ##### `Y`
 
 Tensor `Y` is the output tensor.
@@ -61,7 +59,7 @@ where
 - `Y`: output tensor
 
 ### Algorithm
-Tanh is subject to exponent divergence for great negative values of `X`.
+Tanh is subject to exponent overflow for great negative values of `X`.
 To remain stable, the algorithm shall split the `X` domain to only compute negative exponent.
 
 ```

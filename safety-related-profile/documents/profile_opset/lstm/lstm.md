@@ -3,14 +3,13 @@
 - `LSTM` [operator (real)](#real)
 - `LSTM` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
 
-Operator `LSTM` computes forward, reverse, or bidirectional Long Term Short Term Memory Cell.
+Operator `LSTM` computes the output of an architecture including one or several Long Term Short Term Memory cells. Cells are organized in a number of layers equal to the length of the input sequences. The organization can be forward, reverse or bi-directional.
 
-The LSTM Cell is typically used in LSTM layers.
-LSTM Bidirectional layer:
+The following figure presents the use of a LSTM cell in a bidirectional architecture presenting three layers.
 
 ![](./figures/Bidirectional-LSTM.png)
 
-LSTM Cell internal diagram:
+LSTM Cell internal diagram for input, memory and output gates controlled by sigmoïds and flow activated by hyperbolic tangent.
 
 ![](./figures/LSTM_Cell.png)
 
@@ -18,7 +17,7 @@ LSTM Cell internal diagram:
 ### Notations
 
 These constants are used to define tensor shapes:
-- `seq_length`: number of time steps for the LSTM Cell.
+- `seq_length`: Number of layers in the archirecture. The same LSTM cell, with the same parameters is repeated at each layer of the architecture for each direction. I.e. when there are two directions there are only two sets of parameters. For forward architectures each layer corresponds to a time step of the simulation of the dynamic behavior of a single LSTM cell with delayed feedbacks of the state cell $c_{t-1} \gets c_t$ and the hidden layer $h_{t-1} \gets h_t$.
 - `batch_size`: size of the batch.
 - `input_size`: number of feature of the input tensor.
 - `num_directions` : 1 if forward or reverse LSTM, 2 if bidirectional LSTM.
@@ -146,7 +145,7 @@ Defaults to 'Sigmoid, Tanh, Tanh, Sigmoid, Tanh, Tanh'.
 
 #### `clip`
 
-Cell clip threshold. Clipping bounds the elements of a tensor in the range of [-threshold, +threshold] and is applied to the input of activations. No clip if not specified.
+Cell `clip` threshold. Clipping bounds the elements of a tensor in the range of [-threshold, +threshold] and is applied to the input of activations. No `clip` if not specified.
 
 ##### `direction`
 
@@ -159,6 +158,11 @@ Number of neurons in the hidden layer. Shall be set to the hyper-parameter `hidd
 ##### `input_forget`
 
 Couple the input and forget gates if 1.
+$$
+ c_t = (1 - act1(i_t)) \odot c_{t-1} + act1(i_t) \odot act2(g_t)
+$$
+
+and $W_f$, $R_f$, $B_{wf}$ and $B_{rf}$ not relevent.
 
 ##### `layout`
 
@@ -170,13 +174,13 @@ The algorithm of the LSTM Cell is the following:
 ```
 Y = LSTM(X,W,R,B,sequence_lens,initial_h,initial_c,P){
    if direction is bidirectional
-        Y_for = LSTM_Forward(X,...)
-        Y_rev = revert(  LSTM_Forward  (revert(X),...))
+        Y_for = LSTM_Forward(X, ...)
+        Y_rev = revert(LSTM_Forward(revert(X), ...))
         Y = concat(Y_for, Y_rev)
    else if direction is forward
-        Y =  LSTM_Forward  (X,...)
+        Y =  LSTM_Forward  (X, ...)
    else if direction is reverse
-        Y =  LSTM_Forward  (revert(X),...)
+        Y =  revert(LSTM_Forward(revert(X), ...))
 }
 
 revert(X) returns the reversed X tensor along `seq_length` axis.
@@ -233,6 +237,41 @@ $$
 $$
      Y[t-1] = h_t
 $$
+
+For peephole architecture the equations are the following:
+
+$$
+\begin{bmatrix}
+     i_t \\
+     o_t \\
+     f_t \\
+     g_t 
+     \end{bmatrix}
+     =
+     \begin{bmatrix}
+     W_{i} & R_{i} & 0     & P_{i} \\
+     W_{o} & R_{o} & P_{o} & 0     \\
+     W_{f} & R_{f} & 0     & P_{f}\\
+     W_{g} & R_{g} & 0     & 0
+     \end{bmatrix}
+     \times
+     \begin{bmatrix}
+     x_t \\
+     h_{t-1} \\
+     c_t \\
+     c_{t-1}
+     \end{bmatrix}
+     +
+     \begin{bmatrix}
+     B_{wi} + B_{ri} \\
+     B_{wo} + B_{ro} \\
+     B_{wf} + B_{rf} \\
+     B_{wg} + B_{rg}
+     \end{bmatrix}
+$$
+
+$P_i$, $P_o$ and $P_f$ are diagonal matrices.
+
 
 Where
 - $i$ is the input gate matrix,
