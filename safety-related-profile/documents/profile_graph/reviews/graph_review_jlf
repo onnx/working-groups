@@ -1,1 +1,16 @@
+I think that inputs and outputs shall be defined as elements of the graph.
 
+Edge: "the input" <-- "a specific input", idem for "output" and idem for the "graph". May be the concept of "port" could be used.
+
+The illustration highlights ports and a hierarchical graph structure (one node includes the four nodes).
+
+(C1): Why zero input? I would prefer at least one input.
+
+Add (C8): At least one ouput of each node is connected either to an output of the graph or to an input of another node. Rationale: Each component should have a function. May be redondant with [R1].
+
+"Please note that the sub operator has been removed since it is not used by any other node or as an output of the graph." is contradictory with "%op4_out = Sub(%I1, %I2)".
+
+Behaviour: Add "Initially, all input values of the graph are defined." and "When an ouput of a node is connected to the input of another node by an edge the definition of the
+value of the output of the first node implies the definition of the value of the input of the second node".
+
+May be the definition of the graph should be exended to include in its structure the special nodes.
