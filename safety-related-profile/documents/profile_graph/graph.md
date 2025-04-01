@@ -82,7 +82,7 @@ ONNX provides some "special operators" that deserve a specific description:
 
 #### Control-flow operators 
 - ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
-- Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) has attributes and execute those graph according to their specific semantics. 
+- Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute those graph according to their specific semantics. 
 - An `if` node, for instance, takes one boolean input and two attributes, one specifying the graph to be executed when the boolean input is true (the `then_branch`) and another graph when the boolean is false (the `else_branch`). 
   - Note that one of the graph is not executed. This seems to contradict the execution semantics of a graph bit but is not since executing the `then_branch` or the `else_branch` concerns the semantics of the `if` node, not of the graph. From the graph's perspective, the only node that is visible is the `if`. 
   - The same applies for the other control flow nodes.  
