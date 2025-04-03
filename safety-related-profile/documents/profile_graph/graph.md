@@ -10,21 +10,25 @@ In the context of SONNX, the specification of the semantics of an ONNX graph is 
 
 ### Graph
 - In ONNX, a **model** is represented by a **graph**. Evaluating a model means evaluating the graph. 
-- A **graph** is a set of  **nodes** and **edges**. 
-- A **node** represents a mathematical or a control operation. 
-  - A node refers to a fully qualified and configured ONNX **operator** (the version of the operator is defined, the attributes of the operators are set). 
-  - The inputs and outputs of the node corresponds to the inputs and outputs of the referenced operator.  
-- An **edge** represents a connection between the input and the output of two different nodes, or a connection between the input (resp. output) of the graph and the input (resp. output) of a node.
-  - At any time, the inputs and outputs connected by an edge have the same value. 
-  
+- A **graph**
+  - is composed of a set of  **nodes** and **edges**
+  - has zero or more inputs and at least one output.
+- An **input** or an **output** is either undefined or has a value.
+- A **node** 
+  - refers to a fully qualified and configured ONNX **operator** (the version of the operator is defined, the attributes of the operators are set). 
+  - has inputs and outputs corresponding to the inputs and outputs of the referenced operator.  
+- An **edge** 
+  - is a connection between the input and the output of two different nodes, or a connection between the input (resp. output) of the graph and the input (resp. output) of a node so that, 
+  - is such that, at any time, the connected input and output are either both undefined or have the same value. 
+
+   
 ### Constraints
-- (C1) A graph has zero or more inputs and at least one output.
-- (C2) Each input of the graph is connected to one or more inputs of its nodes.
-- (C3) Each output of the graph is connected to the output of one of its nodes.
-- (C4) A graph is acyclic.
-- (C5) A node has zero or more inputs and at least one output.
-- (C6) A node's input is either connected to the output of another node or to an input of the graph.
-- (C7) A node's output is either connected to the input of another node, to an output of the graph, or remains unconnected.
+- (C1) Each input of the graph is connected to one or more inputs of its nodes.
+- (C2) Each output of the graph is connected to the output of one of its nodes.
+- (C3) A graph is acyclic.
+- (C4) A node has zero or more inputs and at least one output.
+- (C5) A node's input is either connected to the output of another node or to an input of the graph.
+- (C6) A node's output is either connected to the input of another node, to an output of the graph, or remains unconnected.
 
 ### Illustration
 The following picture gives a simple example of a graph composed of 4 nodes. In this  example, the inputs of the graph are connected to the inputs of two nodes (`add` and `sub`) and the output of the `sub` node is not used.
@@ -33,7 +37,7 @@ The following picture gives a simple example of a graph composed of 4 nodes. In 
 <img src="./imgs/graph.png" width="200" />
 </p>
 
-Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. Please note that the `sub` operator has been removed since it is not used by any other node or as an output of the graph.
+Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. 
 
 ```
 graph Test (
@@ -55,11 +59,29 @@ graph Test (
 - Evaluating a node's output is done by executing the node.
 - Executing a node means computing its outputs based on the specification of the referenced operator.
 - A node can only be executed if all its input values are defined.
+- Initially, all input values are defined
 - Initially, all output values are undefined
+
+
+## Special nodes
+
+### Functions nodes
+- A `function` operator encapsulates a graph. 
+- Executing a function operator means executing the embedded graph according to the graph execution semantics described before. 
+- An embedded graph may itself use `function` nodes, in a hierarchical manner. 
+- In ONNX, a `function` node is conceptually expanded ("inlined") at the place where it is used. This forbids any direct or indirect recursion (incl. infinite recursion). 
+
+### Control-flow operators 
+- ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
+- Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute this graph or those graphs according to their specific semantics. 
+- An `if` node, for instance, takes one boolean input and two attributes, one specifying the graph to be executed when the boolean input is true (the `then_branch`) and another graph when the boolean is false (the `else_branch`). 
+  - Note that one of the graph is not executed. This seems to contradict the execution semantics of a graph bit but is not since executing the `then_branch` or the `else_branch` concerns the semantics of the `if` node, not of the graph. From the graph's perspective, the only node that is visible is the `if`. 
+  - The same applies for the other control flow nodes.  
+
 
 ## Additional remarks
 
-### Properties of a gragh
+### Properties of a graph
 - If all operators are purely functional (stateless), a graph is also purely functional, i.e., the values of its outputs only only depends on the values of its inputs and the values of the attributes of its nodes. 
 - If all operators are deterministic, a graph is also deterministic, i.e., for a  given set of input values, the execution of the graph always gives the same output values.
 - A graph has no side effect, i.e., the only visible effects of a graph are via its outputs.
@@ -68,24 +90,6 @@ Note:
 - The values of the outputs do not depend on the execution order of its nodes are executed.
 - By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented by `(a+b)+c`or `(a+(b+c)`
 
-
-### Special nodes
-ONNX provides some "special operators" that deserve a specific description:  
-- nodes referring to ONNX **function operators**
-- nodes referring to control flow operators  (e.g., `if`, `scan`, `loop`,...). 
-
-#### Functions nodes
-- A `function` operator encapsulates a graph. 
-- Executing a function operator means executing the embedded graph according to the graph execution semantics described before. 
-- An embedded graph may itself use `function` nodes, in a hierarchical manner. 
-- In ONNX, a `function` node is conceptually expanded ("inlined") at the place where it is used. This forbids any direct or indirect recursion (incl. infinite recursion). 
-
-#### Control-flow operators 
-- ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
-- Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute this graph or those graphs according to their specific semantics. 
-- An `if` node, for instance, takes one boolean input and two attributes, one specifying the graph to be executed when the boolean input is true (the `then_branch`) and another graph when the boolean is false (the `else_branch`). 
-  - Note that one of the graph is not executed. This seems to contradict the execution semantics of a graph bit but is not since executing the `then_branch` or the `else_branch` concerns the semantics of the `if` node, not of the graph. From the graph's perspective, the only node that is visible is the `if`. 
-  - The same applies for the other control flow nodes.  
 
  
 ## Restrictions
