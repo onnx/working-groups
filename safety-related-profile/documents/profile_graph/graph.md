@@ -18,8 +18,8 @@ In the context of SONNX, the specification of the semantics of an ONNX graph is 
   - refers to a fully qualified and configured ONNX **operator** (the version of the operator is defined, the attributes of the operators are set). 
   - has inputs and outputs corresponding to the inputs and outputs of the referenced operator.  
 - An **edge** 
-  - is a connection between the input and the output of two different nodes, or a connection between the input (resp. output) of the graph and the input (resp. output) of a node so that, 
-  - is such that, at any time, the connected input and output are either both undefined or have the same value. 
+  - is a connection between an input and an output of two different nodes, or a connection between an input (resp. output) of the graph and an input (resp. output) of a node so that, 
+
 
    
 ### Constraints
@@ -61,6 +61,7 @@ graph Test (
 - A node can only be executed if all its input values are defined.
 - Initially, all input values are defined
 - Initially, all output values are undefined
+- All inputs and outputs connected by an edge are either both undefined or have the same value.
 
 
 ## Special nodes
@@ -94,5 +95,6 @@ Note:
  
 ## Restrictions
 The following restrictions apply to graphs in the SONNX profile:
-- A graph shall not contain nodes with no connected outputs. `[R1]`
+- `[R1]` A graph shall not contain nodes with no connected outputs. 
+  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
  
