@@ -34,7 +34,7 @@
     - This discussion raises, again, our problem with the specification of numerical properties... (For the record, see [this document](../meetings/numerical%20accuracy/01_what_is_the_issue.pdf) presented in a previous meeting)
 ## Actions
 ### New actions
-- [ ] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of al remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
+- [ ] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of all remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
 - [ ] (2603-2, Eric, Edoardo) Review of the [requirements](../deliverables/reqs/reqs.md) in order to produce a clean version (possibly incomplete).
 - [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
 ### Past actions
