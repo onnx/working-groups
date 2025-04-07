@@ -7,6 +7,7 @@
 | tb | Thiziri |
 | hb | Henri |
 | nv | Nicolas |
+| sml| Salomé |
 
 |Status | Meaning|
 |-------|--------|
@@ -21,7 +22,7 @@
 | Add                          |hb,                 |                   | WR
 | Cast                         |                    |                   |
 | Clip                         |                    |                   |
-| Concat                       |                    |                   |
+| Concat                       |sml                 |                   |
 | Constant                     |hb,                 |                   | WR
 | ConstantOfShape              |                    |                   |
 | Conv                         |ej,mt               |jlf,sb,tb,hb       | WR
