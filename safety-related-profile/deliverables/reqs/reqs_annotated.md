@@ -9,7 +9,7 @@ The specification is organized as follows:
 - Requirements about the graph
 - Requirement about the serialization format
 
-> **_NOTE:_**  General requirements are missing. Perhaps create a list by collating operator, graph and serialization-specific requirements?
+> **_NOTE:_**  General requirements are presented later in the document. Move them here at the beginning. Perhaps create also a list by collating general operator, graph and serialization-specific requirements?
 
 # Operators
 
