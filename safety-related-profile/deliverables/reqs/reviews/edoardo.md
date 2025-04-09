@@ -10,6 +10,7 @@ The specification is organized as follows:
 - Requirement about the serialization format
 
 > **_NOTE:_**  General requirements are presented later in the document. Move them here at the beginning. Perhaps create also a list by collating general operator, graph and serialization-specific requirements?
+> OK: moved.
 
 ## General requirements
 
@@ -90,6 +91,7 @@ It shall be as close as possible to the standard mathematical description of the
 
 > **_NOTE:_** This is very important, yet very difficult to define. I can already see some future discussion about what "simplicity" means... Ideas to improve: add a reference style such as "understandable by anyone with a STEM undergraduate/anyone who can implement a neural network in PyTorch", "in a similar style of the MatLab/TensorFlow documentation", etc.\
 > ??: I fully agree with you. This is not really a "requirement", but we don need to say something about it. I don't really like the reference to "STEM undergraduate or someone who can implement...". Another way can be to define a set of basic constructs / math operations and require all specs to be build using these elements. This would not prevent specifications to be  written in a convoluted way (for instance, an optimized way)... Rather than a req, this could simply be a recommendation. It will be up to the reviewer of the operator spec to determine whether or not it must be rewritten or not...  
+> Final: Change this "req" a "reco" 
 
 #### Rationale 
 The documentation shall be easy to understand and shall facilitate validation and verification activities.
@@ -125,6 +127,7 @@ For instance, if the values of two scalar inputs `A` and `B` are such that `A` >
 
 > **_NOTE:_** I can guess what this mean (and I agree with it), but an example would help clarify.\
 > OK: Done
+> => change the example in a "negative" way.
 
 #### Rationale
 Prevention of inconsistencies. 
@@ -144,7 +147,8 @@ The SONNX profile shall provide a formal specification of each operator.
 The formal specification uses a formal language with a well-defined and sound semantics that shows none of the potential ambiguities of the informal specification operators used in the documentary part. In particular, the formal specification can be used to prove the correctness of an implementation or be used as a test oracle.
 
 > **_NOTE:_** Potential inconsistency with the requirement that we do not enforce a specific implementation. Maybe clarify that we only enforce a number of _properties_ of the implementation (invariants?), which are listed in the formal specification.\
-> ??: I have reworded the rationale. I see no reference to the implementation...
+> OK: I have reworded the rationale. I see no reference to the implementation...
+> => OK
 
 #### Related need
 [TBC]
@@ -157,6 +161,7 @@ The formal specification must be traceable to the documentation, i.e., the eleme
 
 > **_NOTE:_** Define exact meaning of "traceability"\
 > > OK: defined. 
+> => OK
 
 #### Rationale
 The formal specification of an operator perfectly defines it, but the semantics so expressed may not reflect the operator designer intent. Having an explicit link between the formal specification and its informal counterpart is one way (i) to prevent errors (both specifications are redundant to some extent) and (ii) to enforce the formal specification to remain "simple". 
@@ -180,10 +185,11 @@ Operators may have several versions (opset) and, during graph execution, the sha
 ### <a name="parameter_representation"></a> REQ-FO-030: Representation of parameters
 
 #### Description
-The model shall shall specify all parameters down to the least significant bit and in a non-ambiguous way For instance, the IEEE hexadecimal binary representation may be used to represent floating point parameters ([-]0x1.abcdefp[+-]n) .  
+The model shall shall specify all parameters down to the least significant bit and in a non-ambiguous way. For instance, the IEEE hexadecimal binary representation may be used to represent floating point parameters ([-]0x1.abcdefp[+-]n) .  
 
 > **_NOTE:_** Rephrase in positive: e.g. "the model shall specify all parameters down to the least significant bit and in a non-ambiguous way". I like the hexadecimal representation for IEEE754 floats.\
 > OK: done
+> => OK
 
 #### Rationale 
 The serialization of floating point number must not degrade the accuracy of the source model parameters. 
@@ -213,6 +219,7 @@ The SONNX profile shall have the capability to describe how the model must be de
 
 > **_NOTE:_** This is ambitious. I get how it may be useful to guarantee deterministic behaviour. But "target hardware" may be split into different levels of abstraction, e.g. "any GPU" vs "that specific model of GPU running that specific version of CUDA".\
 > ??: I am really wondering if this req has to be kept... Note that the req makes no assumption about the target, it only states that there shall be a way to specify the exact order in which operations (as defined in the model) are to be computed. The main question is: is it useful? is it necessary?
+> => Simply provide the capability to add meta-data in the model. Check whether they exist or not.
 
 #### Rationale 
 [TBC]
@@ -235,7 +242,8 @@ The profile shall only include functional operators, or restriction shall be exp
 A functional operator is an operator that maps one input value to one and only one output value. For instance, the ONNX ``dropout`` operator with ``training_mode`` set to ``true`` performs a random dropout that is not functional. A functional behaviour may be achieved by restricting the use of the operator, for instance, by enforcing input ``training_mode`` to be set to false. Operator ``RandomUniform`` is another example: if the seed input is set to some fixed value, the operator becomes functional. Checking that the input value may be done by a dedicated tool. 
 
 > **_NOTE:_** Add examples to clarify? E.g. drop-out layers. Clarify whether the requirement extends to the _implementation_ of the operator: parallel computing in floating-point is non deterministic.
-> ??: I have rewritten the req in a positive way. I have added examples. I have used the terme "functional" rather than "deterministic". To be discussed 
+> ??: I have rewritten the req in a positive way. I have added examples. I have used the term "functional" rather than "deterministic". 
+=> OK
 
 #### Rationale 
 A graph must be deterministic. 
@@ -316,8 +324,8 @@ The SONNX profile shall include at least the following operators:
 The SONNX profile does not cover the complete set of ONNX operators. It is limited to operators (i) used during inference, (ii) that do not undermine determinism and predictability, (iii) used in a first set of industrial [use cases](../../scope/scope.md). This set may be later extended depending on the needs. 
 
 > **_NOTE:_** "inference", "determinism", "predictability", "use cases" should be defined before being used as a justification.
-> OK:  Note that this text is not part of the specification. I have introduced the requirement  about determinism before. The concept of "inference" is well-known and I don't think that it deserves a definition (to be discussed). 
-
+> ??:  Note that this text is not part of the specification. I have introduced the requirement about determinism before. The concept of "inference" is well-known and I don't think that it deserves a definition (to be discussed). 
+> => Inference to be defined (lexicon to be added)
 
 > **_NOTE:_**  We should list the use cases (with references) if possible. That will give the reader a better idea of the scope.
 
@@ -331,13 +339,12 @@ The SONNX profile does not cover the complete set of ONNX operators. It is limit
 #### Description
 The profile shall only include operators used during inference.
 
-Inference is the phase during which the graph is executed will all numerical During the inference phase, all numerical parameters in the graph are constant.  
-
 #### Rationale 
 SONNX is only concerned with inference. 
 
 > **_NOTE:_** Is "inference" clear enough? Can we define it as "all numerical parameters in the graph are constant" or something like that?
 > OK/ modified as proposed.
+> => Modify the rationale ("dead code").
 
 #### Related need
 [TBC]
@@ -355,6 +362,7 @@ However, it is allowed to restrict the inputs and parameters value domains if de
 
 > **_NOTE:_** CHange "ranges" to "values"?\
 > ?? : "ranges" => "domains"
+> => OK
 
 #### Rationale 
 Compatibility with the ONNX standard. 
@@ -371,6 +379,7 @@ In that case, the condition must be marked with tag `[restrict]`.
 
 > **_NOTE:_** Move this requirement closer to requirement "compliance with the ONNX standard" as they are related?\
 > OK: moved
+> => OK
 
 #### Rationale 
 Clarity.
@@ -397,12 +406,13 @@ There shall be no room for interpretation or non determinism.
 #### Description
 For each operator in the SONNX operator set, the SONNX profile shall specify the expected output values for any input values and attributes in their validity domain.
 
-The SONNX standard shall specify operators for values in the domain of real numbers ($R$) and in all domain necessary to support the industrial use cases (e.g, `float32`and `int32`). 
+The SONNX standard shall specify operators for values in the domain of real numbers ($R$) and in all domains necessary to support the industrial use cases (e.g, `float32`and `int32`). 
 
 For instance, the `conv` operator shall be specified for values in $R$,  `float32` and `int32` datatypes.
 
 > **_NOTE:_** Again, I'm not against the use of qualifiers such as "systematically", but we should give a definition of their meaning at the beginning of the document.\
 > OK: I have simply removed "systematically that was not required here. I have also suppressed the dedicated req and merged it with the one concerning ht operator specification
+> => OK.
 
 #### Rationale 
 The semantics of the operator may depend on the types (float, integers), accuracy (float32, float64) and range (int16, int32) of numbers. 
@@ -412,6 +422,7 @@ The semantics of the operator may depend on the types (float, integers), accurac
 
 > **_NOTE:_** Very nice! Do we want to introduce some specific language at the beginning of the document, like in legal documents? E.g. by "completely and specific" we mean... Also, there are multiple requirements named REQ-OP-030. \
 > ??: (i) I think that we can remove "completely" and "precisely" that brings no useful information > - requirements will be renumbered in a second phase.
+> => OK
 
 #### Rationale 
 There shall be no room for interpretation or non determinism. 
@@ -467,6 +478,7 @@ The profile shall specify the graph execution semantics.
 A model is a graph of operators. The semantics of the graph defines how operators are applied to generate the graph outputs out of its inputs.
 
 > **_NOTE:_** Missing: what is a node, what is an edge, is it a DAG, etc.
+> => See if we put it before ops. 
 
 #### Related need
 [TBC]
@@ -474,10 +486,11 @@ A model is a graph of operators. The semantics of the graph defines how operator
 ### <a name="explicit_types_shapes"></a>  REQ-GR-000: Explicit types and shapes
 
 #### Description
-All datatypes must be indicated explicity (no type inference).\
-All shape conversion must be done explicity (using the `reshape`) operator. (no [shape inference](https://onnx.ai/onnx/api/shape_inference.html))
+All numerical types must be indicated explicitly (no type inference).\
+All shape conversion must be done explicitly (using the `reshape`) operator. (no [shape inference](https://onnx.ai/onnx/api/shape_inference.html))
 
 > **_NOTE:_** If we enforce consistent input/output shapes (types), then the latter requirement is redundant. We could keep it as an example?
+> OK: chenged "datatypes" to numerical types (because in formal "theory" a "type" also covers the structure...)
 
 #### Rationale 
 [TBC]
@@ -508,10 +521,10 @@ The SONNX file format specification shall ensure that a model expressed in this 
 A SONNX model must be completely determined, leaving no room to interpretation.
 
 > **_NOTE:_** Slight ambiguity here. We do not mandate a specific implementation, thus a single SONNX model accepts multiple implementations, i.e. there _is_ room for interpretation. Can we reformulate this in a better way? "sufficient number of properties"?
+> => To be rephrased... 
 
 #### Related need
 [TBC]
-
 
 
 # Reference implementation
@@ -533,9 +546,10 @@ In order to verify the correctness of his/her implementation, the user will need
 ### <a name="reference_imp"></a>  REQ-RI-010: Relation with specification
 
 #### Description
-The reference implementation shall be traceable to the specification either by review or by generation. In particular, the reference implementation must reproduce the structure of the mathematical specification, without introducing implementation optimizations.
+The reference implementation satisfies all the properties of the SONNX specification, i.e. it is compliant to SONNX, and it is written in the most plain and clear style possible (no optimisations).
 
 > **_NOTE:_** Again, I understand the spirit of the requirement -> make the implementation as "vanilla" as possible. However, I wonder whether we can say something as "the reference implementation satisfies all the properties of the SONNX specification, i.e. it is compliant to SONNX, and it is written in the most plain and clear style possible (no optimisations)". Just to stress that there are two separate requirements: (1) correctness/adherence to SONNX and (2) simple and easy-to-read style.
+> => change to recommandation and use Edoardo's sentence.
 
 #### Rationale
 Verifying the reference implementation must be as easy as possible. 
@@ -554,9 +568,10 @@ This tool aims at verifying that all validity conditions are satisfied, includin
 - the graph structure is well-formed,
 - all required metadata are present
 - operators are allowed
-- all conditions involving operators inputs, outputs and parameters are satisfied
+- all conditions involving attributes are satisfied
 
 > **_NOTE:_** Do we need to add "is executable" as one of the conditions (well-formedness)? Also, the latter condition needs to be split into (1) conditions related to input/output/parameter _types_ are satisfied and (2) conditions related to input/output/parameter _values_ are satisfied. The conditions on values may not be trivial to verify at all, especially if they depend on very specific execution traces (e.g. proving an operator input is always positive is an NP-Hard problem).
+> => Check if conditions that can be verified only cobncer attributes (and not values). Check also the case of dimensions... 
 
 #### Rationale
 [TBC]
@@ -568,6 +583,7 @@ This tool aims at verifying that all validity conditions are satisfied, includin
 # TO BE DISCUSSED
 
 > **_NOTE:_** These are not bad ideas, but they are very ambiguous.
+> => Ceck if we keep some of them as recos.
 
 ### <a name="operator_stability"></a> REQ-OP-022: Stability of operators
 
