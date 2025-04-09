@@ -1,3 +1,45 @@
+# 2025/04/09
+## Participants
+- E. Jenn, J. Souyris,...
+## Agenda
+  - Presentation of ONNX MLIR by Alexandre Eichenberger 
+  - Discussion about the "hierarchical" way to specify operator, use of `onnxscript` (with Nicolas and Dumitru)
+  - Status of reviews
+    - LSTM
+    - Graph
+    - Requirements
+## Minutes
+## Actions
+### New actions
+### Past actions
+- [X] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of all remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
+- [X] (2603-2, Eric, Edoardo) Review of the [requirements](../deliverables/reqs/reqs.md) in order to produce a clean version (possibly incomplete).
+  - Done on 2025/04/08
+- [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
+- [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [X] Tag created. 
+  - [ ] Determine who can apply this tag?
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
+  - First version presented during the 26/03 meeting.
+  - To be completed for next meeting (Dumitru and Nicolas)
+- [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (1202-3, All) Review new operators processed by Henri 
+  - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
+  - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
+- [ ] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops... 
+- [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+    - [ ] Create a review form
+
+
 # 2025/03/26
 ## Participants
 - E. Jenn, J. Souyris, H. Belfy, M. Turki, J.L. Farges, E. Manino, D. Potop Butucaru, M. Belcaid, N. Valot et Duy Khoi Vo.
