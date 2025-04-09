@@ -8,6 +8,7 @@
 | hb | Henri |
 | nv | Nicolas |
 | sml| Salomé |
+| js | Souyris |
 
 |Status | Meaning|
 |-------|--------|
