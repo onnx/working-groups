@@ -2,15 +2,48 @@
 ## Participants
 - E. Jenn, J. Souyris,...
 ## Agenda
-  - Presentation of ONNX MLIR by Alexandre Eichenberger 
-  - Discussion about the "hierarchical" way to specify operator, use of `onnxscript` (with Nicolas and Dumitru)
-  - Status of reviews
-    - LSTM
-    - Graph
-    - Requirements
+- Presentation of ONNX MLIR by Alexandre Eichenberger 
+- Discussion about the "hierarchical/modular" way to specify operator, use of `onnxscript` (with Nicolas and Dumitru)
+- Status of reviews
+  - LSTM
+  - Graph
+  - Requirements
+- Feedback on discussions with WG 114 and what to do next.
 ## Minutes
+- Alexandre was not able to do the presentation today. To be (re-)rescheduled...
+- Very long discussion on the specification of operators... 
+  - Our objective is (i) to keep the informal specification as simple and readable as possible and (ii) to avoid multiplying formalisms.
+  - To make a long story short, and since we have already decided to use Why3 as our formal language... we have concluded that 
+    - the informal specification will continue using a simple, informal, possibly mathematical representation (see e.g., [``lstm``](../documents/profile_opset/lstm/lstm.md)), 
+    - other representations may be provided as "examples"
+    - the formal specification (in Why3) must adopt some "modular" hierarchical approach where, when applicable, an operator shall be specified using some "primitive" operators (e.g., ``lstm`` is specified using ``scan``).   
+  - Review of the informal [graph spec](../documents/profile_graph/graph.md): done by Jean-Loup (thanks!). To be completed to cover e.g., ``loop`` operator. To be reviewed again by Edoardo and Sebastian (action 0904-1)
+  - [Requirements](../deliverables/reqs/reqs.md): reviewed by Edorardo (thanks). Comments have been taken into account and discussed with Edoardo.
+    - Discussions about requirements about 
+      - "determinism of resource usage and execution times" 
+        - Remove the req about memory 
+        - Concerning execution times, there is at least the ``loop`` operator that can (possibly) raise some problem: we have to ensure that the number of iterations is bounded. Dumitru will checks if there are other operators whose execution time or resource may not be bounded statically. (See action 0904-5)
+      - "traceability to training model and environment"
+        - To be removed because (i) it'll be too complicated if we were to specify the exact training environment, (ii) traceability can be ensured by conf mngt, etc. We simply have to give the capability to embed meta-data in the model (there is already a req about that).
+      - "numerical stability"
+        - We were not able to remember where this req comes from. The concept of [numerical stability](https://en.wikipedia.org/wiki/Numerical_stability) was discussed and various definitions/interpretations were given, none of them being really convincing. The main questions are: (i) what do we actually require? and (ii) why do we require it? (See action 0904-6 )
+- Feedback to WG 114
+  - The main point concerned the concepts "exact" and "approximate" replications. After many discussions, we agreed to remove these concepts from the core of the document and put it in an Annex. Those concepts where not at the "same level": "exact" replication expresses a relation between output or intermediate tensor values while "approximate" replication expresses a relation between performances. FurthermoreIn addition, the practical usage of these concepts was not that clear, especially for the "approximate replication" that basically state that the implemented model must comply with its spec...
+  - We have to complete the analysis of the ARP+concept paper in order to ensure that we are not missing reqs. See action 0904-2.
+- Shouldn't we do the same type of analysis for other domains (e.g., ISO 8800 in the automotive domain)... 
+- Formal specification
+  - We shall start from [Loïc's proposal](../meetings/formal_methods/code/) in which he specifies the ``where`` operator. Salomé will do the specification work on ``concat`` (action 0904-3). This will need some additional work due to the use of lists of tensors as inputs.
+- Other contributions
+  - Joao is investigating starting an internship to support SONNX activities by the end of Q2. 
 ## Actions
 ### New actions
+- [ ] (0904-1, Sebastian, Edoardo) Review the [graph spec](../documents/profile_graph/graph.md)
+- [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX (to be done for next meeting) 
+- [ ] (0904-3, Salomé) Specification (informal and formal) of the ``concat`` operator.
+- [ ] (0904-4, Joao) Investigate intership to support SONNX
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+- [ ] (0904-6, Eric) Clarify the concept and req of [numerical stability](https://en.wikipedia.org/wiki/Numerical_stability) in our context.
+  - > > (From Wikipedia: The usual definition of numerical stability uses a more general concept, called mixed stability, which combines the forward error and the backward error. An algorithm is stable in this sense if it solves a nearby problem approximately, i.e., if there exists a Δx such that both Δx is small and f (x + Δx) − y* is small. Hence, a backward stable algorithm is always stable.
 ### Past actions
 - [X] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of all remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
 - [X] (2603-2, Eric, Edoardo) Review of the [requirements](../deliverables/reqs/reqs.md) in order to produce a clean version (possibly incomplete).
@@ -23,7 +56,7 @@
 - [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
   - First version presented during the 26/03 meeting.
   - To be completed for next meeting (Dumitru and Nicolas)
-- [ ] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
+- [X] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
 - [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
 - [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
 - [ ] (1202-3, All) Review new operators processed by Henri 
