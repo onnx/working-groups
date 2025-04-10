@@ -1,6 +1,6 @@
 # 2025/04/09
 ## Participants
-- E. Jenn, J. Souyris,...
+- Eric, Jean, Salomé, Sergei, Dumitru, Cong, Andreas, Sebastian, Mohammed, Jean-Baptiste, Joao, Edoardo, Henri, Jean-Loup
 ## Agenda
 - Presentation of ONNX MLIR by Alexandre Eichenberger 
 - Discussion about the "hierarchical/modular" way to specify operator, use of `onnxscript` (with Nicolas and Dumitru)
@@ -10,6 +10,7 @@
   - Requirements
 - Feedback on discussions with WG 114 and what to do next.
 ## Minutes
+- Newcomers.
 - Alexandre was not able to do the presentation today. To be (re-)rescheduled...
 - Very long discussion on the specification of operators... 
   - Our objective is (i) to keep the informal specification as simple and readable as possible and (ii) to avoid multiplying formalisms.
