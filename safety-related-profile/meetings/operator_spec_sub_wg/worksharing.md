@@ -8,7 +8,7 @@
 | hb | Henri |
 | nv | Nicolas |
 | sml| Salomé |
-| js | Souyris |
+| js | Jean |
 
 |Status | Meaning|
 |-------|--------|
@@ -48,7 +48,7 @@
 | LSTM                         |nv                  |                   | WR
 | MatMul                       |nv                  |                   | WR
 | Max                          |                    |                   |
-| MaxPool                      |                    |                   |
+| MaxPool                      |sml, js             |                   |
 | Min                          |                    |                   |
 | Mod                          |                    |                   |
 | Mul                          |hb,                 |                   | WR
@@ -60,9 +60,9 @@
 | Range                        |                    |                   |
 | ReduceMean                   |                    |                   |
 | ReduceSum                    |                    |                   |
-| Relu                         |                    |                   |
+| Relu                         |sml, js             |                   |
 | Reshape                      |                    |                   |
-| Resize                       |                    |                   |
+| Resize                       |sml                 |                   |
 | ScatterND                    |                    |                   |
 | Shape                        |                    |                   |
 | Sigmoid                      |                    |                   | WR
