@@ -19,6 +19,6 @@
 - 2025/03/12
 - 2025/03/26
 - 2025/04/09 : Alexandre => to be rescheduled
-- 2025/04/23 : Alexandre Digonnet
+- 2025/04/23
 - 2025/05/07 : Jean-Baptiste
-  
+- 2025/05/21 : Alex DIGONNET
