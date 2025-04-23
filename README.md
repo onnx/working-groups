@@ -23,6 +23,7 @@ Contact e-mail addresses of WG leads can be found [here](https://wiki.lfaidata.f
 | [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization |
 | [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX               |
 | Safety-Related-Profile | |
+| Generative AI | Address evolving needs of ONNX to support Generative AI |
 
 ## Completed working groups
 
