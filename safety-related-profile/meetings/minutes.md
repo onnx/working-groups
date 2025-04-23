@@ -2,14 +2,18 @@
 ## Participants
 TBC
 ## Agenda
-- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
-- Feedback on meeting with Franck (CEA) about error estimation.
+-Review of actions
+- Feedback on meeting with Franck (CEA) about error estimation. See [minutes](./numerical%20accuracy/2025-04-11_Meeting_with_Franck.md).
 - ERTS 2026 paper (see [here](https://share-is.pf.irt-saintexupery.com/s/ipMLHmEZ8adgBDY), read access)
 ## Minutes
-TBC
+- Review of actions
+- Feedback on meeting with Franck.
+- Welcome to Christophe Ratajczak from [EM Microelectronics](https://www.emmicroelectronic.com/welcome)
+- Salomé has made some significant progress on the informal and formal specification of the [``concat``](https://onnx.ai/onnx/operators/onnx__Concat.html) operator. Work to be pushed to the repo by the end of the week. Presentation to be done in a future meeting. 
 ## Actions
 ### New actions
-TBC
+- [ ] (2304-1, Eric+Jean) Plan presentation of SONNX to Christophe R.
+- [ ] (2304-2, Mohamed) Review of the informal spec of the [graph semantics](../documents/profile_graph/graph.md). *Please place the review in the "review" directory.*
 ### Past actions
 - [ ] (0904-1, Sebastian, Edoardo) Review the [graph spec](../documents/profile_graph/graph.md)
 - [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX (to be done for next meeting) 
