@@ -21,5 +21,5 @@
 - 2025/03/26
 - 2025/04/09 : Alexandre => to be rescheduled
 - 2025/04/23
-- 2025/05/07 : Jean-Baptiste ; Alex DIGONNET
+- 2025/05/07 : Jean-Baptiste ; Alex
 - 2025/05/21 : Salomé
