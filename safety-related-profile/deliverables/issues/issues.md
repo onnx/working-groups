@@ -37,7 +37,7 @@ Different implementations may execute nodes in different orders, leading to diff
 The SONNX standard should provide a means to impose a total ordering on the nodes. 
 
 ### Remarks
-This constraint will prevent optimisations. 
+This constraint will prevent optimizations. 
 Note that nothing prevents a model to be ill-formed. Compliance with the syntax and semantics of the ONNX standard must be checked (it is certainly checked, but nothing is said about what is checked or not and whether these checkers are complete / correct or not). 
 
 Other constraints are given in the [onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3). E.g.: 

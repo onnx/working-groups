@@ -2,7 +2,9 @@
 ## Participants
 TBC
 ## Agenda
-- Presentation by Alexadnre: "About quantization and ONNX in Airbus' context"
+- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
+- Feedback on meeting with Franck (CEA) about error estimation.
+- ERTS 2026 paper (see [here](https://share-is.pf.irt-saintexupery.com/s/ipMLHmEZ8adgBDY), read access)
 ## Minutes
 TBC
 ## Actions
@@ -12,22 +14,18 @@ TBC
 - [ ] (0904-1, Sebastian, Edoardo) Review the [graph spec](../documents/profile_graph/graph.md)
 - [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX (to be done for next meeting) 
 - [ ] (0904-3, Salomé) Specification (informal and formal) of the ``concat`` operator.
-- [ ] (0904-4, Joao) Investigate intership to support SONNX
+- [ ] (0904-4, Joao) Investigate internship to support SONNX
 - [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
 - [ ] (0904-6, Eric) Clarify the concept and req of [numerical stability](https://en.wikipedia.org/wiki/Numerical_stability) in our context.
-  - > > (From Wikipedia: The usual definition of numerical stability uses a more general concept, called mixed stability, which combines the forward error and the backward error. An algorithm is stable in this sense if it solves a nearby problem approximately, i.e., if there exists a Δx such that both Δx is small and f (x + Δx) − y* is small. Hence, a backward stable algorithm is always stable.
-- [X] (2603-1, Eric, Nicolas,Jean-Loup) Analysis of all remarks about operator [lstm](../documents/profile_opset/lstm/lstm.md)
-- [X] (2603-2, Eric, Edoardo) Review of the [requirements](../deliverables/reqs/reqs.md) in order to produce a clean version (possibly incomplete).
-  - Done on 2025/04/08
+  > Numerical stability in numerical analysis refers to how errors are propagated by an algorithm during computation. These errors can come from several sources, like round-off errors due to finite precision (e.g., floating-point arithmetic), truncation errors from approximating infinite processes (like Taylor series), input errors (e.g., measurement uncertainty). A numerically stable algorithm is one in which small changes in input or small intermediate errors do not grow significantly and affect the final output too much. In contrast, an unstable algorithm may amplify these small errors, leading to wildly incorrect results. See [this page](./numerical%20accuracy/numerical_stability.md).\
+  **=> The algorithm given in the profile specifies the result. It does not specify how to *compute* the result. So the algorithm may be naïve and unstable. Thi sis true for the specification in $\mathbb{R}$.\
+  => What about specifications in other domains (floats,integers)?**  
 - [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
+  - See minutes of meeting with Franck: 
 - [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - [X] Tag created. 
   - [ ] Determine who can apply this tag?
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
-- [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
-  - First version presented during the 26/03 meeting.
-  - To be completed for next meeting (Dumitru and Nicolas)
-- [X] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
 - [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
 - [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
 - [ ] (1202-3, All) Review new operators processed by Henri 
@@ -36,7 +34,6 @@ TBC
 - [ ] (1501-1, Sebastian) Specify some operators...
   - Sebastian is working on `reshape`and other ops... 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
-- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
@@ -98,9 +95,10 @@ TBC
   - [X] Tag created. 
   - [ ] Determine who can apply this tag?
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
-- [ ] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
+- [X] (1203-2, Dumitru) Propose an draft spec of LSTM where the operator would be specified using SCAN.
   - First version presented during the 26/03 meeting.
   - To be completed for next meeting (Dumitru and Nicolas)
+  - Discussed during the 2025/04/09 meeting.
 - [X] (1203-4, Nicolas) The relation between the directions and the dimension of the tensors shall be expressed by a constraint, not the assignment of a variable. The attributes must be presented before the description of the operator. Check that any activation function can be used for atc1 to act3. For the backward LSTM, check if the output needs to be reverted. Create a jupyter note (in collab) to illustrate the use of the operator (in the same way as for the DIV operator).
 - [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
 - [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
@@ -110,7 +108,8 @@ TBC
 - [ ] (1501-1, Sebastian) Specify some operators...
   - Sebastian is working on `reshape`and other ops... 
 - [ ] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
-- [ ] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+- [X] (1501-5, Anne-Sophie) Move issues to the "graph" part when they concern the graph (and not a specific operator)
+  - Cancelled.
 - [ ] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
 - [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
