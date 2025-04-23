@@ -1,8 +1,8 @@
+- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
 # 2025/04/23
 ## Participants
 TBC
 ## Agenda
-- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
 - Feedback on meeting with Franck (CEA) about error estimation.
 - ERTS 2026 paper (see [here](https://share-is.pf.irt-saintexupery.com/s/ipMLHmEZ8adgBDY), read access)
 ## Minutes
