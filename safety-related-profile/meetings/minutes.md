@@ -1,9 +1,10 @@
+- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
 # 2025/04/23
 ## Participants
 TBC
 ## Agenda
--Review of actions
-- Feedback on meeting with Franck (CEA) about error estimation. See [minutes](./numerical%20accuracy/2025-04-11_Meeting_with_Franck.md).
+- Presentation by Alexandre: "About quantization and ONNX in Airbus' context"
+- Feedback on meeting with Franck (CEA) about error estimation.
 - ERTS 2026 paper (see [here](https://share-is.pf.irt-saintexupery.com/s/ipMLHmEZ8adgBDY), read access)
 ## Minutes
 - Review of actions
