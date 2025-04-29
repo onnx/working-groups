@@ -12,8 +12,9 @@ Five main tests are defined:
     - Concat with one input tensor (line 24)
     - Concat with scalar inputs (line 83)
     - Concat with input matrixes (line 152)
-    - Concat with 4D tensors inputs (line 223)
-    - Concat with 4D tensors in a reverse order (line 296)"""  
+    - Concat with 3D tensors inputs (line 223 )
+    - Concat with 4D tensors inputs (line 308 )
+    - Concat with 4D tensors in a reverse order (line 381)"""  
 
 
 # ---------------------------------------------------------------------------
@@ -215,6 +216,115 @@ print("Y:", y)
 print("Z shape:",
       z.shape)
 print("Z:", z)
+
+print("C shape:", c.shape)
+print("C:", c)
+
+# ---------------------------------------------------------------------------
+
+""" ONNX Concat operator: test with 3D inputs tensors """
+
+# ---------------------------------------------------------------------------
+
+
+# Create inputs
+x = onnx.helper.make_tensor_value_info('x', onnx.helper.TensorProto.FLOAT, [2, 3, 4])
+y = onnx.helper.make_tensor_value_info('y', onnx.helper.TensorProto.FLOAT, [2, 3, 4])
+
+"""
+# Create a node (Conv) with input/outputs
+node_def_4D = onnx.helper.make_node(
+    'Concat', # node name
+    ['x', 'y'], # inputs
+    ['c'], # output
+    axis=0, # Axis 0
+)
+"""
+
+"""
+# Create a node (Conv) with input/outputs
+node_def_4D = onnx.helper.make_node(
+    'Concat', # node name
+    ['x', 'y'], # inputs
+    ['c'], # output
+    axis=1, # Axis 1
+)
+"""
+
+# Create a node (Conv) with input/outputs
+node_def_4D = onnx.helper.make_node(
+    'Concat', # node name
+    ['x', 'y'], # inputs
+    ['c'], # output
+    axis=2, # Axis 2
+)
+
+
+# Create the graph
+graph_def_4D = onnx.helper.make_graph(
+    [node_def_4D],
+    'test-concat',
+    [x, y],
+    [onnx.helper.make_tensor_value_info('c', onnx.helper.TensorProto.FLOAT, [2, 3, 8])],
+)
+
+onnx_model = onnx.helper.make_model(graph_def_4D)
+
+# Let's freeze the opset.
+del onnx_model.opset_import[:]
+opset = onnx_model.opset_import.add()
+opset.domain = ''
+opset.version = 15
+onnx_model.ir_version = 8
+
+# Verify the model
+onnx.checker.check_model(onnx_model)
+
+print("\n Test with 3D input tensors: \n")
+# Print a human-readable representation of the graph
+print(onnx.helper.printable_graph(onnx_model.graph))
+
+# Do inference
+sess = onnxruntime.InferenceSession(onnx_model.SerializeToString(),
+                        providers=["CPUExecutionProvider"])
+
+# Initialize tensors
+x = numpy.array([
+    [ 
+        [ 1.00, 2.00, 3.00, 10.00 ],
+        [ 4.00, 5.00, 6.00, 11.00 ],
+        [ 7.00, 8.00, 9.00, 12.00 ]
+    ],
+    [ 
+        [ 11.00, 12.00, 13.00, 20.00 ],
+        [ 14.00, 15.00, 16.00, 21.00 ],
+        [ 17.00, 18.00, 19.00, 22.00 ]
+    ]
+], dtype=numpy.float32) 
+
+
+y = numpy.array([
+    [ 
+        [ 101.00, 102.00, 103.00, 110.00 ],
+        [ 104.00, 105.00, 106.00, 120.00 ],
+        [ 107.00, 108.00, 109.00, 130.00 ]
+    ],
+    [ 
+        [ 111.00, 112.00, 113.00, 120.00 ],
+        [ 114.00, 115.00, 116.00, 121.00 ],
+        [ 117.00, 118.00, 119.00, 122.00 ]
+    ]
+], dtype=numpy.float32)
+
+
+c = sess.run(None, {'x': x, 'y':y})[0]
+
+print("X shape:", x.shape)
+print("X:", x)
+
+print("Y shape:", y.shape)
+print("Y:", y)
+
 
 print("C shape:", c.shape)
 print("C:", c)
