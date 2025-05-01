@@ -4,7 +4,7 @@ https://zoom.us/rec/share/UmJO9yfv2ZzMt2lnG0VKP59SsHnLwR_yA-0ybOw3N4Tv5XYxvG-TSP
 
 # Meeting Minutes:
 
-- Continued from last week's overview of the working group's scope; this session focused on diving deeper, identifying actionable items, and considering breakout groups. The material shared in the meeting can be found here: https://docs.google.com/presentation/d/1PYAHauEVhhdTuKMYiOsOjOVz6u8OzWka/edit?slide=id.g34f6d699a61_0_0#slide=id.g34f6d699a61_0_0
+- Continued from last week's overview of the working group's scope; this session focused on diving deeper, identifying actionable items, and considering breakout groups. The material shared in the meeting can be found [here](https://docs.google.com/presentation/d/1PYAHauEVhhdTuKMYiOsOjOVz6u8OzWka/edit?slide=id.g34f6d699a61_0_0#slide=id.g34f6d699a61_0_0): 
 
 ## ONNX operators/functions:
 - Preference is to define operations as functions rather than operators when they can be composed from existing primitives
