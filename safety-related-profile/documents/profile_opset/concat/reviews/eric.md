@@ -62,7 +62,7 @@ $Y[i_0,...,i_{r-1}]= X_k[i_0,..., i_a-s_k,..., i_{r-1}]$ if $s_k\leq i_a \lt s_k
   - C2: "the shape of input tensors shall be the same except for dimension ``axis``. And see the more mathematical statement above. 
 - output
   - C1: concept of "type  to be clarified (seems to cover both "datatype" (float, int, etc.) and shape). BTW, the shape of input tensors must not be the same for all dimensions. And the shape of the output tensor shall satisfy the relation state previous (see above).
-  - As stated somewhere (?), we do not repeat constraints involving several inputs, outputs or attribyutes but provide a link to them. See operator ``conv``.  
+  - As stated somewhere (?), we do not repeat constraints involving several inputs, outputs or attributes but provide a link to them. See operator ``conv``.  
 
 - attributs "axis" : "Attribute axis determines how the concatenation should be operated (along which axis)." => "Attribute ``axis`` determines the axis along which concatenation should done."
 - the restriction on positive value of ``axis`` shall be reflected tagged and reflected at the beginning of the file.
