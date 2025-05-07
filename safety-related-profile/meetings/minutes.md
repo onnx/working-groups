@@ -2,6 +2,49 @@
 ## Participants
 TBC
 ## Agenda
+- Presentation "About quantization and ONNX in Airbus' context" by Alex
+- Certification referential (RMT) by Jean-Baptiste 
+- Presentation of SONNX to ALTERA and ANSYS
+## Actions
+### New actions
+TBC
+### Past actions
+- [ ] (2304-1, Eric+Jean) Plan presentation of SONNX to Christophe R.
+- [ ] (2304-2, Mohamed) Review of the informal spec of the [graph semantics](../documents/profile_graph/graph.md). *Please place the review in the "review" directory.*
+- [ ] (0904-1, Sebastian, Edoardo) Review the [graph spec](../documents/profile_graph/graph.md)
+  - [Review by Edoardo](../documents/profile_graph/reviews/edoardo.md)
+- [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX (to be done for next meeting) 
+- [ ] (0904-3, Salomé) Specification (informal and formal) of the ``concat`` operator.
+  - Work in progress. Fist review by Eric. 
+- [X] (0904-4, Joao) Investigate internship to support SONNX
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+- [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
+  - See minutes of meeting with Franck: 
+- [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [X] Tag created. 
+  - [ ] Determine who can apply this tag?
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+  - Will be done during next ONNX team up
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [X] (1202-3, All) Review new operators processed by Henri 
+  - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
+  - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
+- [X] (1501-1, Sebastian) Specify some operators...
+  - Sebastian is working on `reshape`and other ops... 
+  - Cancelled
+- [X] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+  - Cancelled
+- [X] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form
+
+# 2025/04/23
+## Participants
+TBC
+## Agenda
 - Feedback on meeting with Franck (CEA) about error estimation.
 - ERTS 2026 paper (see [here](https://share-is.pf.irt-saintexupery.com/s/ipMLHmEZ8adgBDY), read access)
 ## Minutes
@@ -19,11 +62,11 @@ TBC
 - [ ] (0904-3, Salomé) Specification (informal and formal) of the ``concat`` operator.
 - [ ] (0904-4, Joao) Investigate internship to support SONNX
 - [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
-- [ ] (0904-6, Eric) Clarify the concept and req of [numerical stability](https://en.wikipedia.org/wiki/Numerical_stability) in our context.
+- [X] (0904-6, Eric) Clarify the concept and req of [numerical stability](https://en.wikipedia.org/wiki/Numerical_stability) in our context.
   > Numerical stability in numerical analysis refers to how errors are propagated by an algorithm during computation. These errors can come from several sources, like round-off errors due to finite precision (e.g., floating-point arithmetic), truncation errors from approximating infinite processes (like Taylor series), input errors (e.g., measurement uncertainty). A numerically stable algorithm is one in which small changes in input or small intermediate errors do not grow significantly and affect the final output too much. In contrast, an unstable algorithm may amplify these small errors, leading to wildly incorrect results. See [this page](./numerical%20accuracy/numerical_stability.md).\
   **=> The algorithm given in the profile specifies the result. It does not specify how to *compute* the result. So the algorithm may be naïve and unstable. Thi sis true for the specification in $\mathbb{R}$.\
   => What about specifications in other domains (floats,integers)?**  
-- [ ] (2603-3, all) Think about our expectation concerning numerical precision (add req)
+- [ ] (2603-3, all) Think about our expectations concerning numerical precision (add req)
   - See minutes of meeting with Franck: 
 - [ ] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - [X] Tag created. 
