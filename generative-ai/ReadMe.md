@@ -30,7 +30,7 @@ As discussed in the ONNX steering committee meeting on 4/2/2025 ([meeting minute
 **ACTIVE**
 
 # Slack channel
-TBD
+https://lfaifoundation.slack.com/archives/C08MERYU84T
 
 # WG Lead(s)
 
@@ -40,7 +40,7 @@ TBD
 # Logistics
 
 * WG leads will drive the meeting.
-* Meeting annoucements will be posted in our Slack channel: TBD
+* Meeting annoucements will be posted in our Slack channel: https://lfaifoundation.slack.com/archives/C08MERYU84T
 * Feedbacks and topic requests are welcome from everyone.
 * Documents and artifacts: https://github.com/onnx/working-groups/tree/main/generative-ai 
 
