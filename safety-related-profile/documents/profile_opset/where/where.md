@@ -139,107 +139,27 @@ The `Where` operator has no attribute.
 The formal specification of the `Where` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
+(**
+    Specification of Where operation on tensors.
+ *)
+
 module Where
   use int.Int
-  use bool.Bool
-  use array.Array
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
 
-  type tensor = {
-    data: array real;
-    dims: array int; (* tensor dimension *)
+  let function where (cond : tensor bool) (a b : tensor 'a) : tensor 'a =
+  {
+    shape = same cond.shape (same a.shape b.shape) ;
+    value = fun i -> if cond.value[i] then a.value[i] else b.value[i] ;
   }
 
-  function size (t: tensor) : int =
-    let rec product (a: array int) (i: int) : int =
-      if i = length a then 1 else a[i] * product a (i + 1)
-    in product t.dims 0
-
-  predicate same_dimensions (dims1: array int) (dims2: array int) : bool =
-    length dims1 = length dims2 /\ 
-    (forall i: int. 0 <= i < length dims1 -> dims1[i] = dims2[i])
-
-  predicate where_result
-    (cond: tensor)
-    (X: tensor)
-    (Y: tensor)
-    (Z: tensor)
-    (i: int) =
-      (cond.data[i] <> 0 -> Z.data[i] = X.data[i]) /\
-      (cond.data[i] = 0 -> Z.data[i] = Y.data[i])
-
-  val where (cond: tensor) (X: tensor) (Y: tensor): tensor
-    requires { same_dimensions cond.dims X.dims }
-    requires { same_dimensions cond.dims Y.dims }
-    requires { same_dimensions X.dims Y.dims }
-    ensures { Z.dims = cond.dims }
-    ensures { length Z.data = size Z }
-    ensures { forall i: int. 0 <= i < length Z.data -> where_result cond X Y Z i }
+end
 ```
 
-### Specification en Frama-C
-Another formal specification of the conv operator using Frama-C language is presented below[^2].
 
-
-```c
-#include <stdbool.h>
-
-/* Tensor type definition */
-typedef struct {
-  double* data;
-  int* dims;
-  int num_elements;  // Total Number of element in data
-  int num_dims;      // Number of dimensions
-} tensor;
-
-/* Function in order to compute the size total Number of element in a tensor */
-int size(const tensor* t) {
-  int product = 1;
-  for (int i = 0; i < t->num_dims; i++) {
-    product *= t->dims[i];
-  }
-  return product;
-}
-
-/* Function to check if two sets of dimensions are the sames */
-bool same_dimensions(const int* dims1, int len1, const int* dims2, int len2) {
-  if (len1 != len2) return false;
-  for (int i = 0; i < len1; ++i) {
-    if (dims1[i] != dims2[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/*@ predicate where_result {
-    ensures (cond->data[i] != 0 ==> Z->data[i] == X->data[i]) &&
-            (cond->data[i] == 0 ==> Z->data[i] == Y->data[i]);
-  }
-*/
-
-/*@ requires same_dimensions(cond->dims, cond->num_dims, X->dims, X->num_dims);
-    requires same_dimensions(cond->dims, cond->num_dims, Y->dims, Y->num_dims);
-    requires same_dimensions(X->dims, X->num_dims, Y->dims, Y->num_dims);
-
-    ensures Z->num_dims == cond->num_dims;
-    ensures Z->num_elements == size(Z);
-    ensures \forall int i; 0 <= i < Z->num_elements ==> where_result(cond, X, Y, Z, i);
-
-  @*/
-tensor where(const tensor* cond, const tensor* X, const tensor* Y) {
-  tensor Z;
-
-  for (int i = 0; i < Z.num_elements; ++i) {
-    if (cond->data[i] != 0) {
-      Z.data[i] = X->data[i];
-    } else {
-      Z.data[i] = Y->data[i];
-    }
-  }
-
-  return Z;
-}
-```
 
 
 [^1]: See [Why3 documentation](https://www.why3.org/)
