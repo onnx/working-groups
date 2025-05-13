@@ -1,38 +1,22 @@
 (**
     Specification of Sqrt operation on tensors.
  *)
-
 module Sqrt
   use int.Int
   use map.Map
   use utils.Same
   use tensor.Shape
   use tensor.Tensor
-
-  let function sqrt (a : tensor 'a) : tensor 'a =
+  use real.Real
+  use real.Sqrt
+  let function sqrt (a : tensor real) : tensor real =
+    ensures { 
+      forall i. if a.value[i] >= 0.0 then result.value[i] = sqrt a.value[i]
+                else result.value[i] = nan 
+    }
   {
     shape = a.shape ;
-    value = fun i -> square_root a.value[i] ;
+    value = fun i -> if a.value[i] >= 0.0 then sqrt a.value[i]
+                     else nan ;
   }
-
-  let rec function square_root (x : 'a) : 'a =
-  {
-    match x with
-    | 0 -> 0
-    | 1 -> 1
-    | _ -> sqr_helper x 1 x
-    end;
-  }
-
-  let rec function sqr_helper (x low high : 'a) : 'a =
-  {
-    let mid = (low + high) / 2 in
-    if mid * mid <= x && (mid + 1) * (mid + 1) > x
-    then mid
-    else if mid * mid < x
-    then sqr_helper x (mid + 1) high
-    else sqr_helper x low mid
-    end;
-  }
-
 end
