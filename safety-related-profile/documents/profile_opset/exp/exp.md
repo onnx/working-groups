@@ -68,3 +68,32 @@ where
 Exp is subject to overflow for great X values.
 
 <a id="int"></a>
+
+
+
+### Formal specification
+
+The formal specification of the `exp` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of Exp operation on tensors.
+ *)
+module Exp
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  use real.Exp
+  let function exp (a : tensor real) : tensor real =
+    ensures { forall i. result.value[i] = exp a.value[i] }
+  {
+    shape = a.shape ;
+    value = fun i -> exp a.value[i] ;
+  }
+end
+```
+
+[^1]: See [Why3 documentation](https://www.why3.org/)
