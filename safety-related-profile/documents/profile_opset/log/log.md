@@ -205,10 +205,10 @@ module Sqrt
   use real.Sqrt
 
   let function sqrt (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = sqrt a.value[i] }
+    ensures { forall i. result.value[i] = log a.value[i] }
   { 
     shape = a.shape ;
-    value = fun i -> sqrt a.value[i] ;
+    value = fun i -> log a.value[i] ;
   }
 
 end
