@@ -183,7 +183,6 @@ The formal specification of the `Sqrt` operator using the Why3 language[^1] is p
 (**
     Specification of Sqrt operation on tensors.
  *)
-
 module Sqrt
   use int.Int
   use map.Map
@@ -192,14 +191,16 @@ module Sqrt
   use tensor.Tensor
   use real.Real
   use real.Sqrt
-
   let function sqrt (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = sqrt a.value[i] }
-  { 
+    ensures { 
+      forall i. if a.value[i] >= 0.0 then result.value[i] = sqrt a.value[i]
+                else result.value[i] = nan 
+    }
+  {
     shape = a.shape ;
-    value = fun i -> sqrt a.value[i] ;
+    value = fun i -> if a.value[i] >= 0.0 then sqrt a.value[i]
+                     else nan ;
   }
-
 end
 ```
 
