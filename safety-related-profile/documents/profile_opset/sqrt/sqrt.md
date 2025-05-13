@@ -180,33 +180,27 @@ The `Sqrt` operator does not require any attributes.
 The formal specification of the `Sqrt` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
-use int.Int
-use real.Real
-use array.Array
+(**
+    Specification of Sqrt operation on tensors.
+ *)
 
-type tensor = {
-  data: array real;
-  dims: array int;
-}
+module Sqrt
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  use real.Sqrt
 
-function size (t: tensor) : int =
-  product t.dims 0
-  where rec product (a: array int) (i: int) : int =
-    if i = length a then 1 else a[i] * product a (i + 1)
+  let function sqrt (a : tensor real) : tensor real =
+    ensures { forall i. result.value[i] = sqrt a.value[i] }
+  { 
+    shape = a.shape ;
+    value = fun i -> sqrt a.value[i] ;
+  }
 
-predicate same_dimensions (dims1: array int) (dims2: array int) : bool =
-  length dims1 = length dims2 /\ (forall i. dims1[i] = dims2[i])
-
-predicate sqrt_result (X: tensor) (Y: tensor) (i: int) =
-  (X.data[i] >= 0 -> Y.data[i] = sqrt X.data[i])
-  /\ (X.data[i] < 0 -> Y.data[i] = nan)
-
-val sqrt (X: tensor): tensor
-  requires { forall i. X.data[i] >= 0 }
-  requires { same_dimensions X.dims X.dims }
-  ensures { same_dimensions result.dims X.dims }
-  ensures { length result.data = size X }
-  ensures { forall i. sqrt_result X result i }
+end
 ```
 
 [^1]: See [Why3 documentation](https://www.why3.org/)
