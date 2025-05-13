@@ -118,29 +118,22 @@ The `Mul` operator does not require any attributes.
 The formal specification of the `Mul` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
-use int.Int
-use real.Real
-use array.Array
+(**
+    Specification of Mul operation on tensors.
+ *)
 
-type tensor = {
-  data: array real;
-  dims: array int;
-}
+module Mul
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
 
-function size (t: tensor) : int =
-  product t.dims 0
-  where rec product (a: array int) (i: int) : int =
-    if i = length a then 1 else a[i] * product a (i + 1)
+  let function mul (a b : tensor 'a) : tensor 'a =
+  {
+    shape = same a.shape b.shape ;
+    value = fun i -> a.value[i] * b.value[i] ;
+  }
 
-predicate same_dimensions (dims1: array int) (dims2: array int) : bool =
-  length dims1 = length dims2 /\ (forall i. dims1[i] = dims2[i])
-
-predicate mul_result (A: tensor, B: tensor, C: tensor, i: int) =
-  C.data[i] = A.data[i] * B.data[i]
-
-val mul (A: tensor, B: tensor): tensor
-  requires { same_dimensions A.dims B.dims }
-  ensures { C.dims = A.dims }
-  ensures { length C.data = size C }
-  ensures { forall i. mul_result A B C i }
+end
 ```
