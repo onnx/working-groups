@@ -191,26 +191,29 @@ The `Log` operator does not require any attributes.
 The formal specification of the `Log` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
-(**
-    Specification of Sqrt operation on tensors.
+(** 
+    Specification of Log operation on tensors.
  *)
-
-module Sqrt
+module Log
   use int.Int
   use map.Map
   use utils.Same
   use tensor.Shape
   use tensor.Tensor
   use real.Real
-  use real.Sqrt
-
-  let function sqrt (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = log a.value[i] }
-  { 
+  use real.Log
+  let function log (a : tensor real) : tensor real =
+    ensures { 
+      forall i. if a.value[i] > 0.0 then result.value[i] = log a.value[i]
+                else if a.value[i] = 0.0 then result.value[i] = -infinity
+                else result.value[i] = nan 
+    }
+  {
     shape = a.shape ;
-    value = fun i -> log a.value[i] ;
+    value = fun i -> if a.value[i] > 0.0 then log a.value[i]
+                     else if a.value[i] = 0.0 then -infinity
+                     else nan ;
   }
-
 end
 ```
 
