@@ -202,6 +202,48 @@ Tensor `C` is the output tensor formed by element-wise division of `A` by `B`.
 
 The `Div` operator does not require any attributes.
 
+
+### Formal specification
+
+The formal specification of the `div` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of Div operation on tensors with real numbers.
+ *)
+
+module DivReal
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  use real.Inf
+  use real.NaN
+  use real.Div
+
+  let function div (a : tensor real) (b : tensor real) : tensor real =
+    requires { a.shape = b.shape }
+    ensures {
+      forall i. if a.value[i] <> 0.0 && b.value[i] <> 0.0 then result.value[i] = a.value[i] / b.value[i]
+               else if a.value[i] <> 0.0 && b.value[i] = 0.0 then result.value[i] = infinity
+               else if a.value[i] = 0.0 && b.value[i] = 0.0 then result.value[i] = nan
+    }
+  {
+    shape = a.shape ;
+    value = fun i -> if a.value[i] <> 0.0 && b.value[i] <> 0.0 then a.value[i] / b.value[i]
+                     else if a.value[i] <> 0.0 && b.value[i] = 0.0 then infinity
+                     else nan ;
+  }
+  
+end
+```
+
+[^1]: See [Why3 documentation](https://www.why3.org/)
+
+
+
 ---
 <a id="int"></a>
 # `Div` operator (INT8, INT16, INT32)
@@ -305,3 +347,37 @@ Tensor `C` is the output tensor formed by the element-wise integer division of `
 #### Attributes
 
 The `Div` operator does not require any attributes.
+
+### Formal specification
+
+The formal specification of the `div` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of Div operation on tensors with int numbers.
+ *)
+
+module DivInt
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+  use int.Div
+
+  let function div (a : tensor int) (b : tensor int) : tensor int =
+    requires { a.shape = b.shape }
+    ensures {
+      forall i. if b.value[i] <> 0 then result.value[i] = a.value[i] / b.value[i]
+               else False (* Represents undefined behavior *)
+    }
+  {
+    shape = a.shape ;
+    value = fun i -> if b.value[i] <> 0 then a.value[i] / b.value[i]
+                     else assert False; (* Enforces undefined behavior *) ;
+  }
+  
+end
+```
+
+[^1]: See [Why3 documentation](https://www.why3.org/)
