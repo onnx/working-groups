@@ -108,4 +108,32 @@ The assumption for SONNX is that the following is managed by insterting Reshape 
 
 <a id="float"></a>
 
+### Formal specification
+
+The formal specification of the `matmul` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of MatMul operation on tensors with real numbers.
+ *)
+module MatMulReal
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  let function matmul (a : tensor real) (b : tensor real) : tensor real =
+    ensures { result.shape = [nth a.shape 0; nth b.shape 1] }
+  {
+    shape = [nth a.shape 0; nth b.shape 1] ;
+    value = fun i j -> sum (fun k -> a.value[i][k] * b.value[k][j]) (nth a.shape 1)
+  }
+end
+```
+
+
 <a id="int"></a>
+
+
+
