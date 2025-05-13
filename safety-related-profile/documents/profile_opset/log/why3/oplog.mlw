@@ -1,4 +1,4 @@
-(**
+(** 
     Specification of Log operation on tensors.
  *)
 module Log
@@ -10,9 +10,15 @@ module Log
   use real.Real
   use real.Log
   let function log (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = log a.value[i] }
+    ensures { 
+      forall i. if a.value[i] > 0.0 then result.value[i] = log a.value[i]
+                else if a.value[i] = 0.0 then result.value[i] = -infinity
+                else result.value[i] = nan 
+    }
   {
     shape = a.shape ;
-    value = fun i -> log a.value[i] ;
+    value = fun i -> if a.value[i] > 0.0 then log a.value[i]
+                     else if a.value[i] = 0.0 then -infinity
+                     else nan ;
   }
 end
