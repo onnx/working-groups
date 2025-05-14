@@ -71,7 +71,7 @@ else
 
 ### Formal specification
 
-The formal specification of the `Mul` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+The formal specification of the `Tanh` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
 (**
