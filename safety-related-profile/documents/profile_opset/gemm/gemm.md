@@ -101,3 +101,36 @@ Tensor `Y` is the output tensor.
 
 The shape of tensor `Y` is $(m \times p)$.
 
+
+
+### Formal specification
+
+The formal specification of the `gemm` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of Gemm operation on tensors with real numbers. ========TBC NOT SURE OF THE CORRECT IMPL IN WHY3 ======
+ *)
+module GemmReal
+  use int.Int
+  use map.Map
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  (** Define the matrix multiplication function *)
+  let function matmul (A : tensor real) (B : tensor real) (i : int) (j : int) : real =
+    requires { A.shape[1] = B.shape[0] } (** Ensure matrix multiplication dimensions are consistent *)
+    ensures { result = sum(k: 0 to A.shape[1]-1) (A.value[i,A.shape[1]-i+k] * B.value[B.shape[0]-k+j,j]) }
+  {
+    sum(k: 0 to A.shape[1]-1) (A.value[i,k] * B.value[k,j])
+  }
+  (** Define the gemm operation on tensors **)
+  let function gemm_tensor (A : tensor real) (B : tensor real) (C : tensor real) : tensor real =
+    requires { A.shape[1] = B.shape[0] /\ A.shape[0] = C.shape[0] /\ B.shape[1] = C.shape[1] }
+    ensures { forall i j. result.value[i,j] = matmul(A, B, i, j) + C.value[i,j] }
+  {
+    shape = [A.shape[0], B.shape[1]] ;
+    value = fun i j -> matmul(A, B, i, j) + C.value[i,j] ;
+  }
+end
+```
