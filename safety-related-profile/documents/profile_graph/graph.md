@@ -4,7 +4,33 @@ This document gives a high level description of the execution of an ONNX graph. 
 
 In the context of SONNX, the specification of the semantics of an ONNX graph is limited to the inference phase.  
 
-# Informal specification
+# Informal specification (V2) 
+
+
+- A graph is defined by
+  - a set of formal inputs and outputs parameters ; a formal parameter is a placeholder for an actual tensor
+  - a set of **tensors**, 
+  - a set of **operations**, 
+  - a **input mapping** from the set of inputs of the operations to the set of tensors union the set of the graph inputs
+  - a **output mapping** from the set of outputs of the operations to the set of tensors union the set of the graph outputs
+- A **tensor** has some value or no value.
+- An **operation** is defined by a reference to an **operator**
+- An **operator** 
+  - has zero or more formal inputs parameters and one or several formal outputs parameters
+  - describes the relation between its formal input parameters and its formal output parameters.
+- Execution 
+  - Before execution, all tensors have no value
+  - An operation is executable if all its inputs tensors have a value
+  - After executing an operation, some of its output tensors have a value
+  - A graph is executed when all executable operation have been executed.
+
+- Constraints
+  - A tensor can be the output of at most one operation, i.e., it must appear only once in the output mapping of the graph
+  - All inputs of the graph must appear at least once in the input mapping of the graph
+  - All outputs of the graph must appear at least once in the output mapping of the graph
+  - After execution, all outputs of the graph must have a value
+
+# Informal specification (V1)
 
 ## Structure 
 
