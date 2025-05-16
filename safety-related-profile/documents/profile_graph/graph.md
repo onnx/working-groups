@@ -85,7 +85,135 @@ The way graphs are described and executed is independent from the operators used
 ### Control-flow operators 
 - ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
 - Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute this graph or those graphs according to their specific semantics. 
-- An `if` node, for instance, takes one boolean input and two attributes, one attribute specifying the graph to be executed when the boolean input is true (the `then_branch`) and the other specifying the graph to be executed when the boolean is false (the `else_branch`). As for any other operator, the `if`node has a single list of outputs (e.g., [Y1, Y2, ..., Yn]). Both the `then_branch` and the `else_branch` subgraphs must produce the same number and types of outputs, and those are mapped to the outputs of the `if` node.
+
+#### The `if` operator 
+
+- An `if` operator, takes one boolean input and two attributes, one attribute specifying the graph to be executed when the boolean input is true (the `then_branch` subgraph) and the other specifying the graph to be executed when the boolean is false (the `else_branch` subgraph). 
+- As for any other operator, the `if`node has a single list of outputs (e.g., [Y1, Y2, ..., Yn]). Both the `then_branch` and the `else_branch` subgraphs must produce the same number and types of outputs, and those are mapped to the outputs of the `if` node.
+- The then and else subgraphs do not need to use all of the `if` inputs. In the following example, the then and else subgraph use no inputs (they use constant tensors). 
+  
+```
+import onnx
+from onnx import helper, TensorProto, numpy_helper
+
+cond_input = helper.make_tensor_value_info("cond", TensorProto.BOOL, [])
+
+if_output = helper.make_tensor_value_info("if_out", TensorProto.FLOAT, [])
+
+# Create a constant node for the then branch
+then_const = helper.make_node("Constant", [], ["then_out"],
+    value=helper.make_tensor(name="const_tensor_1", data_type=TensorProto.FLOAT, dims=[], vals=[1.0])
+)
+then_output = helper.make_tensor_value_info("then_out", TensorProto.FLOAT, [])
+
+# The "then" subgraph contains a unique "constant" node.
+then_branch = helper.make_graph([then_const], "then_branch", [], [then_output])
+
+# Create a constant node for the else branch
+else_const = helper.make_node("Constant", [], ["else_out"],
+    value=helper.make_tensor(name="const_tensor_0", data_type=TensorProto.FLOAT, dims=[], vals=[0.0])
+)
+else_output = helper.make_tensor_value_info("else_out", TensorProto.FLOAT, [])
+
+# The "else" subgraph contains a unique "constant" node.
+else_branch = helper.make_graph([else_const], "else_branch", [], [else_output])
+
+# Create the "if" node that contains the "then" and "else" subgraphs.
+if_node = helper.make_node(
+    "If",
+    inputs=["cond"],
+    outputs=["if_out"],
+    then_branch=then_branch,
+    else_branch=else_branch
+)
+
+# Ceate the toplevel graph.
+graph = helper.make_graph(
+    nodes=[if_node],
+    name="if_example",
+    inputs=[cond_input],
+    outputs=[if_output]
+)
+
+model = helper.make_model(graph, producer_name="onnx-if-minimal")
+onnx.checker.check_model(model)
+onnx.save(model, "if_example.onnx")
+
+```
+  
+- In addition, they may use tensors directly available in the scope of the `if`operator. In the following example, the `then_branch` subgraPh and the `else_branch`subgraph "capture" tensor `X` that is declared in the top-level graph. 
+
+```
+import onnx
+from onnx import helper, TensorProto
+
+ 
+cond_input = helper.make_tensor_value_info("cond", TensorProto.BOOL, [])
+
+# X is an input tensor of the graph
+x_input = helper.make_tensor_value_info("X", TensorProto.FLOAT, [1])
+
+if_output = helper.make_tensor_value_info("if_out", TensorProto.FLOAT, [1])
+
+# Create constant node with value 2
+two_const = helper.make_node(
+    "Constant",
+    inputs=[],
+    outputs=["two"],
+    value=helper.make_tensor("two_val", TensorProto.FLOAT, [1], [2.0])
+)
+
+# Create node X*2
+mul_node = helper.make_node("Mul", ["X", "two"], ["then_out"])
+then_output = helper.make_tensor_value_info("then_out", TensorProto.FLOAT, [1])
+then_branch = helper.make_graph(
+    [two_const, mul_node],
+    "then_branch",
+    inputs=[],
+    outputs=[then_output]
+)
+
+# Create constant node with value 3
+three_const = helper.make_node(
+    "Constant",
+    inputs=[],
+    outputs=["three"],
+    value=helper.make_tensor("three_val", TensorProto.FLOAT, [1], [3.0])
+)
+
+# Create node X+3
+add_node = helper.make_node("Add", ["X", "three"], ["else_out"])
+else_output = helper.make_tensor_value_info("else_out", TensorProto.FLOAT, [1])
+else_branch = helper.make_graph(
+    [three_const, add_node],
+    "else_branch",
+    inputs=[],
+    outputs=[else_output]
+)
+
+# Create IF node with no input (but the condition)
+if_node = helper.make_node(
+    "If",
+    inputs=["cond"],
+    outputs=["if_out"],
+    then_branch=then_branch,
+    else_branch=else_branch
+)
+
+# Create the main graph
+main_graph = helper.make_graph(
+    [if_node],
+    "if_capture_outer_scope",
+    inputs=[cond_input, x_input],
+    outputs=[if_output]
+)
+
+# Model
+model = helper.make_model(main_graph, producer_name="onnx-if-outer-scope")
+onnx.checker.check_model(model)
+onnx.save(model, "if_capture_outer_scope.onnx")
+```
+
 
 ## Additional remarks
 
