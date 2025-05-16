@@ -1,65 +1,53 @@
-# Preamble
+## Restrictions
+The following restrictions apply to graphs in the SONNX profile:
 
-This document gives a high level description of the execution of an ONNX graph. The source of information is ONNX'  [Intermediate Representation (IR)](https://onnx.ai/onnx/repo-docs/IR.html) .
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `[R1]` | Each operation outputs must be used in the input mapping of at least one operation or be mapped to some graph output. | To be completed |
 
-In the context of SONNX, the specification of the semantics of an ONNX graph is limited to the inference phase.  
 
 # Informal specification (V2) 
 
 
-- A graph is defined by
-  - a set of formal inputs and outputs parameters ; a formal parameter is a placeholder for an actual tensor
-  - a set of **tensors**, 
-  - a set of **operations**, 
-  - a **input mapping** from the set of inputs of the operations to the set of tensors union the set of the graph inputs
-  - a **output mapping** from the set of outputs of the operations to the set of tensors union the set of the graph outputs
-- A **tensor** has some value or no value.
-- An **operation** is defined by a reference to an **operator**
-- An **operator** 
-  - has zero or more formal inputs parameters and one or several formal outputs parameters
-  - describes the relation between its formal input parameters and its formal output parameters.
-- Execution 
-  - Before execution, all tensors have no value
-  - An operation is executable if all its inputs tensors have a value
-  - After executing an operation, some of its output tensors have a value
-  - A graph is executed when all executable operation have been executed.
 
-- Constraints
-  - A tensor can be the output of at most one operation, i.e., it must appear only once in the output mapping of the graph
-  - All inputs of the graph must appear at least once in the input mapping of the graph
-  - All outputs of the graph must appear at least once in the output mapping of the graph
-  - After execution, all outputs of the graph must have a value
-
-# Informal specification (V1)
-
-## Structure 
-
+## Description
 ### Graph
-- In ONNX, a **model** is represented by a **graph**. Evaluating a model means evaluating the graph. 
-- A **graph**
-  - is composed of a set of  **nodes** and **edges**
-  - has zero or more inputs and at least one output.
-- An **input** or an **output** is either defined (i.e. it has a value) or undefined (it has has no value)
-- A **node** 
-  - refers to a fully qualified and configured ONNX **operator** (the version of the operator is defined, the attributes of the operators are set). 
-  - has inputs and outputs corresponding to the inputs and outputs of the referenced operator.  
-- An **edge** 
-  - is a connection between an input and an output of two different nodes, or a connection between an input (resp. output) of the graph and an input (resp. output) of a node so that the constraints hold." 
+A graph is defined by:
+- A set of inputs and outputs, which are designated tensors.
+- A set of tensors, each of which may initially be uninitialized (no value) or contain a value.
+- A set of operations, each of which is an instance of an operator applied to tensors.
 
-> ** NOTE (Eric) ** I am not convinced that the use of nodes and edges is actually a good idea. A better model would be that nodes have inputs and output consuming and producing tensors. Connections between nodes would be done by referring to the same tensor. This is how I have started modeling formally a graph.
+### Tensors
+- A tensor is a variable that may hold a value or be uninitialized.
+- Tensors are uniquely identified within a graph.
+- Some tensors may be graph inputs (externally provided) or graph outputs (final results of the computation).
 
-   
+### Operators and Operations
+- An operator is a template that defines a computation, including:
+  - A fixed number of named inputs and outputs
+  - A function that maps input values to output values
+- An operation applies an operator to a specific set of input and output tensors:
+  - It includes a mapping from operator inputs to graph inputs or other tensors
+  - It includes a mapping from operator outputs to graph outputs or other tensors
+
+### Execution Semantics
+- Initially, only graph inputs have values.
+- An operation is executable if all tensors mapped to its inputs have values.
+- Executing an operation computes its outputs and assigns values to its output tensors.
+- Execution proceeds by executing all executable operations until no further progress is possible.
+
 ### Constraints
-- (C1) Each input of the graph is connected to one or more inputs of its nodes.
-- (C2) Each output of the graph is connected to the output of one of its nodes.
-- (C3) A graph is acyclic.
-- (C4) A node has zero or more inputs and at least one output.
-- (C5) The input of a node is either connected to the output of another node or to an input of the graph.
-- (C6) The output of a node is either connected to the input of another node, to an output of the graph, or is unconnected.
+- (C1) Single Assignment: A tensor must appear in the output mapping of exactly one operation except for the graph inputs
+- (C2) Input Usage: Every graph input must be used in the input mapping of at least one operation.
+- (C3) Completeness: At the end of execution, all tensors designated as graph outputs must have values. 
 
+## Restrictions
+The following restrictions apply to graphs in the SONNX profile:
+- `[R1]` Each operation outputs must be used in the input mapping of at least one operation or be mapped to some graph output. 
+  - Rationale: each operation of the graph shall contribute to the function of the graph (no "dead node").
+ 
+## Examples
 
-
-### Illustration
 The following picture gives a simple example of a graph composed of 4 nodes. In this  example, the inputs of the graph are connected to the inputs of two nodes (`add` and `sub`) and the output of the `sub` node is not used.
 
 <p align="center">
@@ -83,32 +71,21 @@ graph Test (
 
 *(Note that ONNX also defines another textual serialization scheme (only available in C++)*
 
-## Behaviour
-- Evaluating an output of a graph requires evaluating the output of the node it is connected to.
-- Evaluating an output of a node is done by executing the node.
-- Executing a node means computing its outputs based on the specification of the referenced operator.
-- A node can only be executed if all its inputs are defined.
-- Before execution, all inputs are undefined
-- After execution, all outputs of the graph are defined
-- After execution, some outputs of some nodes may be undefined
-- At any time, all inputs and outputs connected by an edge are either undefined or have the same value.
-
-
-## Constraints
-- (C1) After execution, all outputs of the graph must be defined. In particular, it is not possible to connect an output of the graph to the output of a node that is not executed in some execution path. This may be accepted by some backend thanks to optimizations (that removes dead branch), but thi sis not a valid model.
 
 ## Special nodes
+
+The way graphs are described and executed is independent from the operators used in the graph. In other terms, the semantics of the graph (how the operators are called) and the semantics of the operators (what the operators do) are defined separately. This modularity applies to the standard operators (convolution, relu, etc.) and to the special function and control flow nodes.  
 
 ### Functions nodes
 - A `function` operator encapsulates a graph. 
 - Executing a function operator means executing the encapsulated graph according to the graph execution semantics described before. 
 - An encapsulated graph may itself use `function` nodes, in a hierarchical manner. 
-- A valid ONNX graph with function nodes must be always convertible to an equivalent ONNX graph without any function nodes. This forbids any direct or indirect recursion. 
+- A valid ONNX graph with function nodes must be always actually converted to an equivalent ONNX graph without any function nodes. This forbids any direct or indirect recursion. 
 
 ### Control-flow operators 
 - ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
 - Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute this graph or those graphs according to their specific semantics. 
-- An `if` node, for instance, takes one boolean input and two attributes, one specifying the graph to be executed when the boolean input is true (the `then_branch`) and another graph when the boolean is false (the `else_branch`). 
+- An `if` node, for instance, takes one boolean input and two attributes, one attribute specifying the graph to be executed when the boolean input is true (the `then_branch`) and the other specifying the graph to be executed when the boolean is false (the `else_branch`). As for any other operator, the `if`node has a single list of outputs (e.g., [Y1, Y2, ..., Yn]). Both the `then_branch` and the `else_branch` subgraphs must produce the same number and types of outputs, and those are mapped to the outputs of the `if` node.
 
 ## Additional remarks
 
@@ -122,13 +99,11 @@ Note:
 - By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented **explicitly** by `(a+b)+c`or `(a+(b+c)`
 
 
- 
 ## Restrictions
 The following restrictions apply to graphs in the SONNX profile:
 - `[R1]` A graph shall not contain nodes with no connected outputs. 
   - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
- 
-
+- `[R2]` A graph shall only contain deterministic operators.
 
 # Formal specification
 
