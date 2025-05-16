@@ -120,31 +120,30 @@ The `Pow` operator does not require any attributes.
 The formal specification of the `Pow` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
 
 ```ocaml
-use int.Int
-use real.Real
-use array.Array
-
-type tensor = {
-  data: array real;
-  dims: array int;
-}
-
-function size (t: tensor) : int =
-  product t.dims 0
-  where rec product (a: array int) (i: int) : int =
-    if i = length a then 1 else a[i] * product a (i + 1)
-
-predicate same_dimensions (dims1: array int) (dims2: array int) : bool =
-  length dims1 = length dims2 /\ (forall i. dims1[i] = dims2[i])
-
-predicate pow_result (A: tensor) (B: tensor) (C: tensor) (i: int) =
-  C.data[i] = A.data[i] ^ B.data[i]
-
-val pow (A: tensor) (B: tensor): tensor
-  requires { same_dimensions A.dims B.dims }
-  ensures { C.dims = A.dims }
-  ensures { length C.data = size C }
-  ensures { forall i. pow_result A B C i }
+(**
+    Specification of Pow operation on tensors with real numbers.
+ *)
+module Pow
+  use int.Int
+  use map.Map
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  (** Define the pow function *)
+  let function pow (base : real) (exponent : real) : real =
+    ensures { result = base ** exponent }
+  {
+    base ** exponent
+  }
+  (** Define the pow operation on a tensor **)
+  let function pow_tensor (base_tensor : tensor real) (exponent_tensor : tensor real) : tensor real =
+    requires { same_shape base_tensor exponent_tensor }
+    ensures { forall i. result.value[i] = pow (base_tensor.value[i]) (exponent_tensor.value[i]) }
+  {
+    shape = base_tensor.shape ;
+    value = fun i -> pow (base_tensor.value[i]) (exponent_tensor.value[i]) ;
+  }
+end
 ```
 
 [^1]: See [Why3 documentation](https://www.why3.org/)

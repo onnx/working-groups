@@ -69,4 +69,41 @@ else
     Y = 1/(1+exp(-x))
 ```
 
+
+### Formal specification
+
+The formal specification of the `sigmoid` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+
+```ocaml
+(**
+    Specification of Sigmoid operation on tensors with real numbers.
+ *)
+module SigmoidReal
+  use int.Int
+  use map.Map
+  use tensor.Shape
+  use tensor.Tensor
+  use real.Real
+  use real.Exp
+  (** Define the sigmoid function with piecewise conditions *)
+  let function sigmoid (x : real) : real =
+    ensures {
+      if x < 0.0 then result = exp(x) / (1.0 + exp(x)) 
+      else result = 1.0 / (1.0 + exp(-x))
+    }
+  {
+    if x < 0.0 then exp(x) / (1.0 + exp(x))
+    else 1.0 / (1.0 + exp(-x))
+  }
+  (** Define the sigmoid operation on a tensor **)
+  let function sigmoid_tensor (a : tensor real) : tensor real =
+    ensures { forall i. result.value[i] = sigmoid (a.value[i]) }
+  {
+    shape = a.shape ;
+    value = fun i -> sigmoid (a.value[i]) ;
+  }
+end
+```
+
+
 <a id="int"></a>
