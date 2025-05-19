@@ -3,48 +3,52 @@ The following restrictions apply to graphs in the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| `[R1]` | Each operation outputs must be used in the input mapping of at least one operation or be mapped to some graph output. | To be completed |
+| - `[R1]` Each node output must be bound to at least one node input or one graph output.  | To be completed |
 
 
 # Informal specification (V2) 
 
-
-
 ## Description
 ### Graph
-A graph is defined by:
-- A set of inputs and outputs, which are designated tensors.
-- A set of tensors, each of which may initially be uninitialized (no value) or contain a value.
-- A set of operations, each of which is an instance of an operator applied to tensors.
+`[T01]` A **graph** is defined by:
+- A set of inputs and outputs parameters
+  - An input (resp. output) parameter is a free variable that can be bound to some tensor. 
+- A set of local (or "internal") tensors. 
+- A set of nodes
 
 ### Tensors
-- A tensor is a variable that may hold a value or be uninitialized.
-- Tensors are uniquely identified within a graph.
-- Some tensors may be graph inputs (externally provided) or graph outputs (final results of the computation).
+- `[T02a]` A tensor is uniquely identified within a graph.
+- `[T02b]` A tensor is a variable that may hold a value or be uninitialized.
 
-### Operators and Operations
-- An operator is a template that defines a computation, including:
-  - A fixed number of named inputs and outputs
-  - A function that maps input values to output values
-- An operation applies an operator to a specific set of input and output tensors:
-  - It includes a mapping from operator inputs to graph inputs or other tensors
-  - It includes a mapping from operator outputs to graph outputs or other tensors
+### Operators and Nodes
+- `[T03a]` An **operator** specifies a relation (a function) between a set of input parameters to a set of outputs parameters. 
+  - An input (resp. output) parameter is a free variable that can be bound to a tensor or to a graph input (resp. output) 
+  - An operator has at least one output
+  - An operator can be used in several nodes. 
+- `[T03b]` A **node** specifies an operator and describes the binding of its inputs and outputs to tensors and graph input and outputs 
+  - A noed can only bind an operator input (resp. output) parameter to a tensor or to a graph input (resp. output).  
 
 ### Execution Semantics
-- Initially, only graph inputs have values.
-- An operation is executable if all tensors mapped to its inputs have values.
-- Executing an operation computes its outputs and assigns values to its output tensors.
-- Execution proceeds by executing all executable operations until no further progress is possible.
+- `[T04a]` Initially, 
+  - all internal tensors are uninitialized.
+  - external tensors bound to the graph inputs are initialized
+- `[T04b]` A node is executable if the tensors bound to the node's operator inputs are initialized 
+- `[T04c]` After execution, the relation specified by the operator hold between the tensors bound to the node's operator inputs and outputs.
+- `[T04d]` A graph is executed once no more node is executable.
 
 ### Constraints
-- (C1) Single Assignment: A tensor must appear in the output mapping of exactly one operation except for the graph inputs
-- (C2) Input Usage: Every graph input must be used in the input mapping of at least one operation.
-- (C3) Completeness: At the end of execution, all tensors designated as graph outputs must have values. 
+- (C1) Single Assignment: 
+  - `[T05a]`  Each internal tensor must be bound to exactly one node output 
+  - `[T05b]` Each graph output must be bound to exactly one node output
+-  (C2) Input Usage
+  - `[T05c]` Each graph input must be bound to at least one node input
+- `[T05d]` (C3) Completeness
+  - At the end of the graph execution, all external tensor bound to the graph outputs must be initialized. 
 
 ## Restrictions
 The following restrictions apply to graphs in the SONNX profile:
-- `[R1]` Each operation outputs must be used in the input mapping of at least one operation or be mapped to some graph output. 
-  - Rationale: each operation of the graph shall contribute to the function of the graph (no "dead node").
+- `[R1]` Each node output must be bound to at least one node input or one graph output. 
+  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
  
 ## Examples
 
@@ -141,7 +145,7 @@ onnx.save(model, "if_example.onnx")
 
 ```
   
-- In addition, they may use tensors directly available in the scope of the `if`operator. In the following example, the `then_branch` subgraPh and the `else_branch`subgraph "capture" tensor `X` that is declared in the top-level graph. 
+- In addition, they may use tensors directly available in the scope of the `if` operator. In the following example, the `then_branch` and the `else_branch` subgraphs "capture" tensor `X` that is declared in the top-level graph. **DO WE ACCEPT SUCH CAPTURE OR DO WE IMPOSE ALL FLOWS TO BE DECLARED IN THE IF NODE**?
 
 ```
 import onnx
