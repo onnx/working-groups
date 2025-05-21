@@ -1,9 +1,9 @@
-# 2025/07/07
+# 2025/05/21
 ## Participants
 TBC
 ## Agenda
 - Status of actions.
-- Presentation of the `concat` operator by Salomé and Jean
+- Presentation of the `concat` operator by Salomé
 - Brief presentation of the informal and formal specification of a `graph` by Eric
 - Review of the `graph` informal specification by Mohammed.
 - Overview of the [Specification guidelines](../documents/profile_opset/guidelines.md)
@@ -40,12 +40,11 @@ No new action.
   - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
   - [ ] Create a review form
 
-
-# 2025/07/07
+# 2025/05/07
 ## Participants
 TBC
 ## Agenda
-- Presentation "About quantization and ONNX in Airbus' context" by Alex
+- Presentation Alex: "[About quantization and ONNX in Airbus' context"](./slides/2025-05-07-Alex-DIGONNET-SONNX%20quantization%20representation%20formats.pdf)"
 - Certification referential (RMT) by Jean-Baptiste 
 - Presentation of SONNX to ALTERA and ANSYS
 ## Actions
