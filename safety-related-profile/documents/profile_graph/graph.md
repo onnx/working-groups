@@ -239,4 +239,4 @@ The following restrictions apply to graphs in the SONNX profile:
 
 # Formal specification
 
-*Work in progress*
+See draft [here](../profile_formal/onnxgraph.mlw).

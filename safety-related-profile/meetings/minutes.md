@@ -1,4 +1,47 @@
-# 2025/04/23
+# 2025/07/07
+## Participants
+TBC
+## Agenda
+- Status of actions.
+- Presentation of the `concat` operator by Salomé and Jean
+- Brief presentation of the informal and formal specification of a `graph` by Eric
+- Review of the `graph` informal specification by Mohammed.
+- Overview of the [Specification guidelines](../documents/profile_opset/guidelines.md)
+- Status of specification
+- New on activities about formal specification...
+## Actions
+### New actions
+No new action.
+### Past actions
+- [X] (2304-1, Eric+Jean) Plan presentation of SONNX to Christophe R.
+  - Done on May 13th.
+- [X] (2304-2, Mohamed) Review of the informal spec of the [graph semantics](../documents/profile_graph/graph.md). *Please place the review in the "review" directory.*
+  - Done and to be presented during the meeting.
+- [X] (0904-1, Sebastian, Edoardo) Review the [graph spec](../documents/profile_graph/graph.md)
+  - [Review by Edoardo](../documents/profile_graph/reviews/edoardo.md)
+- [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX 
+- [X] (0904-3, Salomé) Specification (informal and formal) of the ``concat`` operator.
+  - Work in progress. Fist review by Eric. 
+  - Done, to be presented during the meeting
+- [X] (0904-4, Joao) Investigate internship to support SONNX
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+- [X] (2603-3, all) Think about our expectation concerning numerical precision (add req)
+  - See minutes of [meeting with Franck ](../meetings/numerical%20accuracy/2025-04-11_Meeting_with_Franck.md)
+- [C] (2003-1, Andreas) Create a "sonnx" label and a group with the appropriate rights to tag issues. (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [X] Tag created. 
+  - [C] Determine who can apply this tag? 
+  - Cancelled. 
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+  - Will be done during next ONNX team up
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form
+
+
+# 2025/07/07
 ## Participants
 TBC
 ## Agenda
@@ -7,7 +50,7 @@ TBC
 - Presentation of SONNX to ALTERA and ANSYS
 ## Actions
 ### New actions
-TBC
+No new action.
 ### Past actions
 - [ ] (2304-1, Eric+Jean) Plan presentation of SONNX to Christophe R.
 - [ ] (2304-2, Mohamed) Review of the informal spec of the [graph semantics](../documents/profile_graph/graph.md). *Please place the review in the "review" directory.*
@@ -30,12 +73,13 @@ TBC
 - [X] (1202-3, All) Review new operators processed by Henri 
   - Reminder : place your comment in a dedicated file `<name>.md` in the "review" directory of the relevant operator
   - [X] Eric: review and modification of operator [`Div`](../documents/profile_opset/div/div.md)
-- [X] (1501-1, Sebastian) Specify some operators...
+- [C] (1501-1, Sebastian) Specify some operators...
   - Sebastian is working on `reshape`and other ops... 
   - Cancelled
-- [X] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
+- [C] (1501-2, Eric & Jean) Find a way to involve more people in the specification work...
   - Cancelled
-- [X] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+- [C] (1812-6, All) Check legal aspects of contributing to the SONNX effort ("clearance")
+  - Cancelled
 - [] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
   - Contribution of Anne-Sophie. But WG to be set. 
   - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
