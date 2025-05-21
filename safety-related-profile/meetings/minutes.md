@@ -1,17 +1,19 @@
 # 2025/05/21
 ## Participants
-TBC
+- At least: Salomé, Sabastian, Dumitru, Sergei, Jean, Eric, Mariem, Mohammed, Nicolas, ...
 ## Agenda
 - Status of actions.
+- Misc news: 
+  - next workshop on formal specification + proof...
+  - discussion with WG114 and presentation to WG114 
 - Presentation of the `concat` operator by Salomé
 - Brief presentation of the informal and formal specification of a `graph` by Eric
-- Review of the `graph` informal specification by Mohammed.
+  - Review of the `graph` informal specification by Mohammed.
 - Overview of the [Specification guidelines](../documents/profile_opset/guidelines.md)
-- Status of specification
-- New on activities about formal specification...
+- Status of operator specification
 ## Actions
 ### New actions
-No new action.
+- [ ] (2105-1, Salomé) Provide answers (OK,KO, TBdiscussed) to [Eric's comments](../documents/profile_opset/concat/reviews/eric.md) for the `concat` operator. 
 ### Past actions
 - [X] (2304-1, Eric+Jean) Plan presentation of SONNX to Christophe R.
   - Done on May 13th.
