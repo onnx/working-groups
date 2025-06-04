@@ -143,7 +143,7 @@ end
 
 If tensor $A_{\textit{err}}$ is the numerical error of `A`,
 tensor $B_{\textit{err}}$ is the numerical error of `B`, let us consider
-$Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `Add` and `C`
+$C_{\textit{err}}^{\textit{propag}}$ the propagated error of `Add`
 and $C_{\textit{err}}^{\textit{intro}}$ the introduced error of `Add`.
 Hence the numerical error of `C`, $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
 
