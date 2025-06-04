@@ -122,22 +122,26 @@ end
 
 ### Numerical Accuracy
 
-If tensor $X_{\textit{\scriptsize err}}$ is the numerical error of `X`, let us consider
-$Y_{\textit{\scriptsize err}}^{\textit{\scriptsize propag}}$ the
-propagated error of `Abs` and `Y` and $Y_{err}^{intro}$ the introduced error of `Abs`.
-Hence the numerical error of `Y`, $Y_{err} = Y_{err}^{propag} + Y_{err}^{intro}$.
+If tensor $X_{\textit{err}}$ is the numerical error of `X`, let us consider
+$Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `Abs` and `Y`
+and $Y_{\textit{err}}^{\textit{intro}}$ the introduced error of `Abs`.
+Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}}
++ Y_{\textit{err}}^{\textit{intro}}$.
 
 #### Error propagation
 
 For every index $i$, 
 
-- $Y_{err}^{propag}[i] = X_{err}[i]$ if $X[i] \geq 0$ and $X[i]+X_{err}[i] \geq 0$  
-- $Y_{err}^{propag}[i] = -X_{err}[i]$ if $X[i] \leq 0$ and $X[i]+X_{err}[i] \leq 0$ 
-- $Y_{err}^{propag}[i] \leq |X_{err}[i]|$ if $X[i]$ and $X[i]+X_{err}[i]$ may not have the same sign
+- $Y_{\textit{err}}^{\textit{propag}}[i] = X_{\textit{err}}[i]$ if $X[i] \geq 0$
+  and $X[i]+X_{\textit{err}}[i] \geq 0$  
+- $Y_{\textit{err}}^{\textit{propag}}[i] = -X_{\textit{err}}[i]$ if $X[i] \leq 0$
+  and $X[i]+X_{\textit{err}}[i] \leq 0$ 
+- $Y_{\textit{err}}^{\textit{propag}}[i] \leq |X_{\textit{err}}[i]|$ if $X[i]$
+  and $X[i]+X_{\textit{err}}[i]$ may not have the same sign
 
 #### Error introduction
 
-The `Abs` operation should not introduce any error: $Y_{err}^{intro} = [0]$.
+The `Abs` operation should not introduce any error: $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 #### Unit verification
 
