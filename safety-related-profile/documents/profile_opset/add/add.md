@@ -159,7 +159,7 @@ The `Add` operation introduces an error bound by the semi-ulp of the addition re
 tensor component. For a hardware providing $m$ bits for floating-point mantissa, the semi-ulp
 of `1.0` is $2^{-(m+1)}$. Hence, for every index $i$,
 
-- $\left|C_{\textit{err}}^{\textit{intro}}[i]\right| \leq \left|A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i]|\right|\times2^{-(m+1)}$
+- $\left|C_{\textit{err}}^{\textit{intro}}[i]\right| \leq \left|A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i]\right|\times2^{-(m+1)}$
 
 #### Unit verification - floating-point implementation
 
