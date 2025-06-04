@@ -122,7 +122,8 @@ end
 
 ### Numerical Accuracy
 
-If tensor $X_{err}$ is the numerical error of `X`, let us consider $Y_{err}^{propag}$ the
+If tensor $X_{\textit{\scriptsize err}}$ is the numerical error of `X`, let us consider
+$Y_{\textit{\scriptsize err}}^{\textit{\scriptsize propag}}$ the
 propagated error of `Abs` and `Y` and $Y_{err}^{intro}$ the introduced error of `Abs`.
 Hence the numerical error of `Y`, $Y_{err} = Y_{err}^{propag} + Y_{err}^{intro}$.
 
