@@ -125,8 +125,7 @@ end
 If tensor $X_{\textit{err}}$ is the numerical error of `X`, let us consider
 $Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `Abs` and `Y`
 and $Y_{\textit{err}}^{\textit{intro}}$ the introduced error of `Abs`.
-Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}}
-+ Y_{\textit{err}}^{\textit{intro}}$.
+Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 #### Error propagation
 
