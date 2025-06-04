@@ -154,19 +154,19 @@ Tensor<SymbolicDomainError> X;
 
 template <typename TypeFloat>
 std::function<TypeFloat (int64_t)> result = [&X](int64_t index) {
-  return (a.value()[index] < 0) ? -a.value()[index] : a.value()[index];
+  return (X.value()[index] < 0) ? -X.value()[index] : X.value()[index];
 }
 
 for (int i = 0; i < x.NumElements(); ++i) {
    SymbolicDomainError x = X.value(i);
    SymbolicDomainError y = result(i);
-   if (x.value >= 0 && x.value+x.err >= 0)
+   if (x.real >= 0 && x.real+x.err >= 0)
       assert(y.err == x.err);
-   if (x.value <= 0 && x.value+x.err <= 0)
+   if (x.real <= 0 && x.real+x.err <= 0)
       assert(y.err == -x.err);
-   if (x.value >= 0 && x.value+x.err <= 0)
+   if (x.real >= 0 && x.real+x.err <= 0)
       assert(std::abs(y.err) <= std::abs(x.err));
-   if (x.value <= 0 && x.value+x.err >= 0)
+   if (x.real <= 0 && x.real+x.err >= 0)
       assert(std::abs(y.err) <= std::abs(x.err));
 }
 ```
