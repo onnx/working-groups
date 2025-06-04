@@ -119,3 +119,50 @@ end
 ```
 
 [^1]: See [Why3 documentation](https://www.why3.org/)
+
+### Numerical Accuracy
+
+If tensor $X_{err}$ is the numerical error of `X`, let us consider $Y_{err}^{propag}$ the
+propagated error of `Abs` and `Y` and $Y_{err}^{intro}$ the introduced error of `Abs`.
+Hence the numerical error of `Y`, $Y_{err} = Y_{err}^{propag} + Y_{err}^{intro}$.
+
+#### Error propagation
+
+For every index $i$, 
+
+- $Y_{err}^{propag}[i] = X_{err}[i]$ if $X[i] \geq 0$ and $X[i]+X_{err}[i] \geq 0$  
+- $Y_{err}^{propag}[i] = -X_{err}[i]$ if $X[i] \leq 0$ and $X[i]+X_{err}[i] \leq 0$ 
+- $Y_{err}^{propag}[i] \leq |X_{err}[i]|$ if $X[i]$ and $X[i]+X_{err}[i]$ may not have the same sign
+
+#### Error introduction
+
+The `Abs` operation should not introduce any error: $Y_{err}^{intro} = [0]$.
+
+#### Unit verification
+
+A symbolic inference of the error over the tensor components should ensure the
+above properties.
+
+```c++
+Tensor<SymbolicDomainError> X;
+
+/* X symbolic initialization */
+
+template <typename TypeFloat>
+std::function<TypeFloat (int64_t)> result = [&X](int64_t index) {
+  return (a.value()[index] < 0) ? -a.value()[index] : a.value()[index];
+}
+
+for (int i = 0; i < x.NumElements(); ++i) {
+   SymbolicDomainError x = X.value(i);
+   SymbolicDomainError y = result(i);
+   if (x.value >= 0 && x.value+x.err >= 0)
+      assert(y.err == x.err);
+   if (x.value <= 0 && x.value+x.err <= 0)
+      assert(y.err == -x.err);
+   if (x.value >= 0 && x.value+x.err <= 0)
+      assert(std::abs(y.err) <= std::abs(x.err));
+   if (x.value <= 0 && x.value+x.err >= 0)
+      assert(std::abs(y.err) <= std::abs(x.err));
+}
+```
