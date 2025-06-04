@@ -1,3 +1,26 @@
+# 2025/06/04
+## Participants
+- *To be completed*
+## Agenda
+- Status of actions.
+- Misc news: 
+  - ONNX meetup on June 9th. A ["video"](./general/2025-06-09%20-%20MEET-UP/SONNX%20-%20Meetup%202025.7z) has been prepared.
+  - Abstract of [paper on SONNX](../documents/publications/ERTS2026/2025-06-02%20SONNX%20-%20ERTS%202026%20abstract%20-%20final.pdf) submitted to [ERTS 2026](https://conference-erts.org/).
+## Actions
+### New actions
+### Past actions
+- [ ] (2105-1, Salomé) Provide answers (OK,KO, TBdiscussed) to [Eric's comments](../documents/profile_opset/concat/reviews/eric.md) for the `concat` operator. 
+- [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX 
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
+  - Will be done during next ONNX team up
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form
+
 # 2025/05/21
 ## Participants
 - At least: Salomé, Sabastian, Dumitru, Sergei, Jean, Eric, Mariem, Mohammed, Nicolas, ...
