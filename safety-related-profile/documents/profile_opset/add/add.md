@@ -153,15 +153,15 @@ For every index $i$,
 
 - $C_{\textit{err}}^{\textit{propag}}[i] = A_{\textit{err}}[i] + B_{\textit{err}}[i]$
 
-#### Error introduction
+#### Error introduction - floating-point implementation
 
 The `Add` operation introduces an error bound by the semi-ulp of the addition result for every
 tensor component. For a hardware providing $m$ bits for floating-point mantissa, the semi-ulp
 of `1.0` is $2^{-(m+1)}$. Hence, for every index $i$,
 
-- $C_{\textit{err}}^{\textit{intro}}[i] \leq (A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i])\times(1.0 + 2^{-(m+1)})$
+- $\left|C_{\textit{err}}^{\textit{intro}}[i]\right| \leq \left|A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i]|\right|\times2^{-(m+1)}$
 
-#### Unit verification
+#### Unit verification - floating-point implementation
 
 A symbolic inference of the error over the tensor components should ensure the
 above properties.
@@ -169,7 +169,7 @@ above properties.
 ```c++
 Tensor<SymbolicDomainError> A, B;
 
-/* X symbolic initialization */
+/* A and B symbolic initialization */
 
 template <typename TypeFloat>
 std::function<TypeFloat (int64_t)> result = [&A, &B](int64_t index) {
@@ -180,7 +180,11 @@ for (int i = 0; i < x.NumElements(); ++i) {
    SymbolicDomainError a = A.value(i);
    SymbolicDomainError b = B.value(i);
    SymbolicDomainError c = result(i);
-   assert(std::abs(c.err - a.err - b.err) <= std::abs(a.real + b.real + a.err + b.err)*(1.0LD + pow(2.0LD, -(m+1))));
+   assert(std::abs(c.err - a.err - b.err) <= std::abs(a.real + b.real + a.err + b.err)*(pow(2.0LD, -(m+1))));
 }
 ```
+
+#### Error introduction - fixed-point implementation
+
+The `Abs` operation should not introduce any error: $C_{\textit{err}}^{\textit{intro}} = [0]$.
 
