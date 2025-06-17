@@ -14,6 +14,7 @@ module Ops4D
     Outputs:
       True if all d1, d2, d3, d4 are positive, indicating the list forms a positive shape.
   *)
+  
   lemma positive_4_list_lemma:
     forall d1 d2 d3 d4: int.
       d1 > 0 -> d2 > 0 -> d3 > 0 -> d4 > 0 ->
@@ -70,35 +71,42 @@ module Ops4D
 (** Goal: Accesses the beginning height (H_begin) component of a pad sequence. **)
 (*   Inputs: pads_seq: seq int - A sequence of integers representing pads, typically [H_begin, W_begin, H_end, W_end].
      Outputs: int - The padding value for the beginning of the height dimension. *)
+
   let function pad_h_begin (pads_seq: seq int) : int
     requires { Seq.length pads_seq = 4 } = (pads_seq)[0]
+
 (** Goal: Accesses the beginning width (W_begin) component of a pad sequence. **)
 (*  Inputs: pads_seq: seq int - A sequence of integers representing pads, typically [H_begin, W_begin, H_end, W_end].
     Outputs: int - The padding value for the beginning of the width dimension. *)
+
   let function pad_w_begin (pads_seq: seq int) : int
     requires { Seq.length pads_seq = 4 } = (pads_seq)[1]
 
 (** Goal: Accesses the ending height (H_end) component of a pad sequence. **)
 (*  Inputs: pads_seq: seq int - A sequence of integers representing pads, typically [H_begin, W_begin, H_end, W_end].
     Outputs: int - The padding value for the end of the height dimension. *)
+
   let function pad_h_end (pads_seq: seq int) : int
     requires { Seq.length pads_seq = 4 } = (pads_seq)[2]
 
 (** Goal: Accesses the ending width (W_end) component of a pad sequence. **)
 (*  Inputs: pads_seq: seq int - A sequence of integers representing pads, typically [H_begin, W_begin, H_end, W_end].
     Outputs: int - The padding value for the end of the width dimension. *)
+
   let function pad_w_end (pads_seq: seq int) : int
     requires { Seq.length pads_seq = 4 } = (pads_seq)[3]
 
 (** Goal: Accesses the height (H) component of a dilation sequence. **)
 (*  Inputs: dilations_seq: seq int - A sequence of integers representing dilations, typically [H, W].
     Outputs: int - The dilation value for the height dimension. *)
+
   let function dilation_h (dilations_seq: seq int) : int
     requires { Seq.length dilations_seq = 2 } = (dilations_seq)[0]
 
 (** Goal: Accesses the width (W) component of a dilation sequence. **)
 (*  Inputs: dilations_seq: seq int - A sequence of integers representing dilations, typically [H, W].
     Outputs: int - The dilation value for the width dimension.*)
+
   let function dilation_w (dilations_seq: seq int) : int
     requires { Seq.length dilations_seq = 2 } = (dilations_seq)[1]
 
@@ -115,6 +123,7 @@ module Ops4D
     Outputs:
       'a - The value stored at the given 4D index.
   *)
+
   let function get4d (t: tensor 'a) (n c h w: int) : 'a
     requires { dim t = 4 }
     requires { 0 <= n < n_dim t } 
