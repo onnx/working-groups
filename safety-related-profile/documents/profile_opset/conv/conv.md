@@ -96,7 +96,7 @@ The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
 
 - (C1) Number of spatial axes of tensor `X`
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
-    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
+    - Rationale: This restriction is introduced to simplify the implementation considering the actual industrial use cases.
 - (C2) <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W` 
     - Statement:  $c(X)=fm(W)$
 - (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`

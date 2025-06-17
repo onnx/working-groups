@@ -3,80 +3,185 @@ The following restrictions apply to graphs in the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| - `[R1]` Each node output must be bound to at least one node input or one graph output.  | To be completed |
+| - `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
+| - `[R2]` | Each output of a node must be the input of another node or be a graph output.  | TBC |
+| - `[R3]` | A graph shall only contain deterministic operators. | TBC |
 
+# Informal specification
 
-# Informal specification (V2) 
-
-## Description
+## Definitions
 ### Graph
-`[T01]` A **graph** is defined by:
-- A set of inputs and outputs parameters
-  - An input (resp. output) parameter is a free variable that can be bound to some tensor. 
-- A set of local (or "internal") tensors. 
-- A set of nodes
+- `[T01a]` A graph contains a set of nodes
+- `[T01b]` A graph contains a set of tensors that are inputs and outputs of the nodes
+  - Some of those tensors are inputs (resp. outputs) of the graph, i.e, their values are set (resp. returned) before (resp. after) executing the graph
+
+For instance, using `onnxruntime`, a graph can be created using the `onnx.helper.make_graph` function:
+
+```python
+# Create the ONNX graph
+graph = onnx.helper.make_graph(
+    nodes=[add_node, cons_node, mul_node1, mul_node2],
+    name="Test",
+    inputs=[g_i1, g_i2],
+    outputs=[op1_o, op3_o]
+)
+[...]
+
+# Do inference
+i1 = np.array([[1.0, 2.0],[3.0, 4.0]], dtype=np.float32)
+i2 = np.array([[3.0, 4.0],[5.0, 6.0]], dtype=np.float32)
+output = session.run(None, {g_i1_id: i1, g_i2_id: i2})
+```
+
+In this example,  the graph has 2 inputs (`g_i1` and `g_i2`) and 2 outputs (`op1_o` and `op3_o`) and is composed of four nodes (`add_node`, `cons_node`, `mul_node1`, `mul_node2`). Note that using this API, the binding of the graph inputs and outputs is done by referring to the actual tensor objects (e.g., `g_i1`) rather than by their identifiers (e.g., "G_I1").
+
+The values of the input tensors are set by the `session.run(None, {g_i1_id: i1, g_i2_id: i2})` call. 
+
+The execution semantics of a graph can be defined only using the concepts of nodes and tensors.
 
 ### Tensors
-- `[T02a]` A tensor is uniquely identified within a graph.
-- `[T02b]` A tensor is a variable that may hold a value or be uninitialized.
+- `[T02b]` A tensor is an object that can hold a value or be uninitialized
+- `[T02a]` A tensor is identified by a unique identifier within a graph
 
-### Operators and Nodes
-- `[T03a]` An **operator** specifies a relation (a function) between a set of input parameters to a set of outputs parameters. 
-  - An input (resp. output) parameter is a free variable that can be bound to a tensor or to a graph input (resp. output) 
+For instance, using `onnxruntime`, a tensor can be created using the `onnx.helper.make_tensor_value_info` function:
+
+```python
+op1_o_id = "OP1_O"
+op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
+```
+In this example, `op1_o` is a tensor object representing a tensor of rank 2 with no given dimensions. The identifier of `op1_o` is `"OP1_O"`.
+
+### Nodes
+
+- `[T03a]` A node refers to an operator
+  - Multiple nodes may refer to the same operator
+- `[T03b]` There is a 1-to-1 mapping between the set of inputs and outputs of a node and the set of inputs and outputs of its associated operator `[R1]`. 
+  - Note that is is a restriction with respect to the ONNX standard that allows fewer inputs or outputs when the omitted input or output is optional. 
+
+For instance, using `onnxruntime`, a node can be created using the `onnx.helper.make_tensor_value_info` function:
+
+```python
+# Define input and output tensor names
+g_i1_id = "G_I1"
+g_i2_id = "G_I2"
+op1_o_id = "OP1_O"
+op2_o_id = "OP2_O"
+op3_o_id = "OP3_O"
+op4_o_id = "OP4_O"
+
+# Create 2-rank input tensors (two inputs for division)
+g_i1 = onnx.helper.make_tensor_value_info(g_i1_id, onnx.TensorProto.FLOAT, [None, None])
+g_i2 = onnx.helper.make_tensor_value_info(g_i2_id, onnx.TensorProto.FLOAT, [None, None])
+
+# Create output tensor (final result after div operation)
+op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
+op2_o = onnx.helper.make_tensor_value_info(op2_o_id, onnx.TensorProto.FLOAT, [None, None])
+op3_o = onnx.helper.make_tensor_value_info(op3_o_id, onnx.TensorProto.FLOAT, [None, None])
+op4_o = onnx.helper.make_tensor_value_info(op4_o_id, onnx.TensorProto.FLOAT, [None, None])
+
+mul_node1 = onnx.helper.make_node("Mul", [op1_o_id, op2_o_id], [op3_o_id])
+mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
+```
+
+In this example, nodes `mul_node1` and `mul_node2` refer to the same operator `Mul` that has 2 inputs and 1 output. In the case of node `mul_node1` inputs and outputs are bound to tensors whose identifiers are respectively `"G_I1"`, `"G_I2"`, and `"OP4_O"`.
+
+### Operators
+
+- `[T04a]` An operator specifies a relation (a function) between a set of input parameters and a set of outputs parameters. 
+  - Input and output parameters (resp. output) are free variables that can be bound to tensors using nodes
   - An operator has at least one output
-  - An operator can be used in several nodes. 
-- `[T03b]` A **node** specifies an operator and describes the binding of its inputs and outputs to tensors and graph input and outputs 
-  - A noed can only bind an operator input (resp. output) parameter to a tensor or to a graph input (resp. output).  
+  
+### Illustration
+The following figure gives a graphical view of the 4 node graph created using the python script below. The graph has 2 inputs and 2 outputs. The output of one of the nodes, `mul_node2`, is not used. 
 
-### Execution Semantics
-- `[T04a]` Initially, 
-  - all internal tensors are uninitialized.
-  - external tensors bound to the graph inputs are initialized
-- `[T04b]` A node is executable if the tensors bound to the node's operator inputs are initialized 
-- `[T04c]` After execution, the relation specified by the operator hold between the tensors bound to the node's operator inputs and outputs.
-- `[T04d]` A graph is executed once no more node is executable.
+![alt text](imgs/ex1_netron.png) 
 
-### Constraints
-- (C1) Single Assignment: 
-  - `[T05a]`  Each internal tensor must be bound to exactly one node output 
-  - `[T05b]` Each graph output must be bound to exactly one node output
--  (C2) Input Usage
-  - `[T05c]` Each graph input must be bound to at least one node input
-- `[T05d]` (C3) Completeness
-  - At the end of the graph execution, all external tensor bound to the graph outputs must be initialized. 
+```python
+import onnx
+import onnxruntime as ort
+import numpy as np
+
+# Define tensor identifiers
+g_i1_id = "G_I1"
+g_i2_id = "G_I2"
+op1_o_id = "OP1_O"
+op2_o_id = "OP2_O"
+op3_o_id = "OP3_O"
+op4_o_id = "OP4_O"
+
+# Create 2-rank input tensors (two inputs for division)
+g_i1 = onnx.helper.make_tensor_value_info(g_i1_id, onnx.TensorProto.FLOAT, [None, None])
+g_i2 = onnx.helper.make_tensor_value_info(g_i2_id, onnx.TensorProto.FLOAT, [None, None])
+
+# Create output tensors
+op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
+op2_o = onnx.helper.make_tensor_value_info(op2_o_id, onnx.TensorProto.FLOAT, [None, None])
+op3_o = onnx.helper.make_tensor_value_info(op3_o_id, onnx.TensorProto.FLOAT, [None, None])
+op4_o = onnx.helper.make_tensor_value_info(op4_o_id, onnx.TensorProto.FLOAT, [None, None])
+
+# Create a constant value
+const_value = onnx.helper.make_tensor(
+    name='const_tensor',
+    data_type=onnx.TensorProto.FLOAT,
+    dims=[2, 2],
+    vals=np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32).flatten() # Example values, adjust as needed
+)
+
+# Create nodes
+add_node = onnx.helper.make_node("Add", [g_i1_id, g_i2_id], [op1_o_id])
+cons_node = onnx.helper.make_node("Constant", [], [op2_o_id], value=const_value)
+mul_node1 = onnx.helper.make_node("Mul", [op1_o_id, op2_o_id], [op3_o_id])
+mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
+
+# Create the ONNX graph
+graph = onnx.helper.make_graph(
+    nodes=[add_node, cons_node, mul_node1, mul_node2],
+    name="Test",
+    inputs=[g_i1, g_i2],
+    outputs=[op1_o, op3_o]
+)
+
+# Create the ONNX model
+model = onnx.helper.make_model(graph, opset_imports=[onnx.helper.make_opsetid("", 13)], ir_version=10) # Explicitly set opset to 13 and ir_version to 10
+onnx.checker.check_model(model)
+print(onnx.helper.printable_graph(model.graph))
+
+# Save the model
+onnx.save(model, "graph.onnx")
+
+# Load and run the model using ONNX Runtime
+session = ort.InferenceSession("graph.onnx")
+
+# Do inference
+i1 = np.array([[1.0, 2.0],[3.0, 4.0]], dtype=np.float32)
+i2 = np.array([[3.0, 4.0],[5.0, 6.0]], dtype=np.float32)
+output = session.run(None, {g_i1_id: i1, g_i2_id: i2})
+
+# Display results
+i1_f=(np.array2string(i1, separator=',', max_line_width=np.inf).replace('\n', ''))
+i2_f=(np.array2string(i2, separator=',', max_line_width=np.inf).replace('\n', ''))
+o1_f=(np.array2string(output[0], separator=',', max_line_width=np.inf).replace('\n', ''))
+o2_f=(np.array2string(output[1], separator=',', max_line_width=np.inf).replace('\n', ''))
+
+# Display results
+np.set_printoptions(precision=None, floatmode='fixed')
+print(f"I1={i1_f}, I2={i2_f}")
+print(f"Result={o1_f}{o2_f}")
+```
+
+## Execution Semantics
+- `[T05a]` A node is executable if all its input tensors are initialized 
+- `[T05b]` Executing a node means assigning output tensors to a value such that input-output relation specified by the operator holds
+- `[T05c]` All executable nodes are executed once and only once
+- `[T05d]` Single Assignment: each tensor is assigned once and only once 
 
 ## Restrictions
 The following restrictions apply to graphs in the SONNX profile:
-- `[R1]` Each node output must be bound to at least one node input or one graph output. 
+- `[R2]`  Each output of a node must be the input of another node or be a graph output.  
   - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
  
-## Examples
-
-The following picture gives a simple example of a graph composed of 4 nodes. In this  example, the inputs of the graph are connected to the inputs of two nodes (`add` and `sub`) and the output of the `sub` node is not used.
-
-<p align="center">
-<img src="./imgs/graph.png" width="200" />
-</p>
-
-Here is a textual export of same model using `onnx.helper.printable_graph(model.graph)`. 
-
-```
-graph Test (
-  %I1[FLOAT, ?x?]
-  %I2[FLOAT, ?x?]
-) {
-  %O1 = Add(%I1, %I2)
-  %op2_out = Constant[value = <Tensor>]()
-  %O2 = Mul(%O1, %op2_out)
-  %op4_out = Sub(%I1, %I2)
-  return %O1, %O2
-}
-```
-
-*(Note that ONNX also defines another textual serialization scheme (only available in C++)*
-
-
 ## Special nodes
+*This section is very preliminary*
 
 The way graphs are described and executed is independent from the operators used in the graph. In other terms, the semantics of the graph (how the operators are called) and the semantics of the operators (what the operators do) are defined separately. This modularity applies to the standard operators (convolution, relu, etc.) and to the special function and control flow nodes.  
 
@@ -231,11 +336,7 @@ Note:
 - By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented **explicitly** by `(a+b)+c`or `(a+(b+c)`
 
 
-## Restrictions
-The following restrictions apply to graphs in the SONNX profile:
-- `[R1]` A graph shall not contain nodes with no connected outputs. 
-  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
-- `[R2]` A graph shall only contain deterministic operators.
+
 
 # Formal specification
 
