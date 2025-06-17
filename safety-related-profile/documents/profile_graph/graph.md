@@ -3,9 +3,9 @@ The following restrictions apply to graphs in the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| - `[R1]` There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | To be completed |
-| - `[R2]` Each output of a node must be the input of another node or be a graph output.  | To be completed |
-| - `[R3]` A graph shall only contain deterministic operators. | To be completed |
+| - `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
+| - `[R2]` | Each output of a node must be the input of another node or be a graph output.  | TBC |
+| - `[R3]` | A graph shall only contain deterministic operators. | TBC |
 
 # Informal specification
 
