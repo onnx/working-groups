@@ -10,7 +10,7 @@ module Concat
  
 
   (* =================== Concat shape ================================*)
-  (** E4: defining s_k which is the sum of the different tensors dimension along the axis considered **)
+  (** E2: defining s_k which is the sum of the different tensors dimension along the axis considered **)
   (*
 	x_k: list (sequence) of input tensors
 	axis: axis along which the concatenation is performed
@@ -22,7 +22,7 @@ module Concat
     | L.Cons hd tl -> (hd.shape.dims)[axis] + compute_s_k_at_axis tl axis 
     end
   
-  (** E7: computing the shape (dimensions) of the output concatenated tensor **)
+  (** E8: computing the shape (dimensions) of the output concatenated tensor **)
   (*
 	  x_k: list (sequence) of input tensors
 	  axis: axis along which the concatenation is performed
@@ -46,13 +46,13 @@ module Concat
     (L.Cons value_for_idx (output_dims x_k axis (idx + 1) nb_dims) : seq int)
    
 
- (** E7: computing the shape (dimensions) of the output concatenated tensor **)
+ (** E8: computing the shape (dimensions) of the output concatenated tensor **)
  (*
 	  x_k: list (sequence) of input tensors
 	  axis: axis along which the concatenation is performed
  *)
    let function output_shape (x_k: seq (tensor 'a)) (axis : int): shape =
-                      (* The dimension of a_k[0] was selected because according to (E8) the input tensors have the same shape => same length *)
+                      (* The dimension of a_k[0] was selected because according to (E7) the input tensors have the same shape => same length *)
        ensures {length result.dims = Tensor.dim x_k[0]}
        { dims = (output_dims x_k axis 0 (Tensor.dim x_k[0]))} 
        
@@ -60,7 +60,7 @@ module Concat
    (*======================= Concat value ================================*) 
    
    
-  (** (E3): defining the local index i' for a i (global index) given **)
+  (** E3: defining the local index i' for a i (global index) given **)
   (*
 	  seq_D_axis: seq_D_axis is the sequence of all the d_k,axis for each k tensor
 	  i_axis: value on the axis along which the concatenation is performed 
@@ -76,7 +76,7 @@ module Concat
       (* The global index i is superior to s_k + seq_D_axis[k] so the k tensor to define the local index i' is not the current one but next one k+1. Update the offset (s_k) by adding the length of the tensor we just checked (current tensor). *)
       rec_find_k_and_i_prime seq_D_axis i_axis (k + 1) (s_k + seq_D_axis[k])
       
-  (** (E3) and (E2): defining the local index i' for a i (global index) given and computing the k associated to i'**)
+  (** E3 and E5: defining the local index i' for a i (global index) given and computing the k associated to i'**)
   (*
     seq_D_axis: seq_D_axis is the sequence of all the D_k^axis for each k tensor
     i_axis: value on the axis along which the concatenation is performed
@@ -101,7 +101,7 @@ module Concat
                            L.Cons x (list_update xs (idx - 1) value)
       end
 
-  (** (E2): defining the mathematical formula that defines the concat operator**)
+  (** E5: defining the mathematical formula that defines the concat operator**)
   (*
 	  x_k: list (sequence) of input tensors
 	  axis: axis along which the concatenation is performed
@@ -132,16 +132,16 @@ module Concat
 	  axis: axis along which the concatenation is performed
   *)
    let function concat (x_k: seq (tensor 'a)) (axis: int) : tensor 'a 
-   requires{1 <= length x_k <= 2147483647}  (** (E1): bounded number of inputs **)
-   requires { forall k: int. (0<= k < length x_k) -> 0 <= axis < Tensor.dim x_k[k] } (** (E9): bounded axis value **)
-   requires { forall k: int. (0<= k < (Seq.length x_k)- 1) -> Tensor.dim x_k[k] = Tensor.dim x_k[k+1] } (** (E8): inputs having the same shape => same length **)
+   requires{1 <= length x_k <= 2147483647}  (** E1: bounded number of inputs **)
+   requires { forall k: int. (0<= k < length x_k) -> 0 <= axis < Tensor.dim x_k[k] } (** E9: bounded axis value **)
+   requires { forall k: int. (0<= k < (Seq.length x_k)- 1) -> Tensor.dim x_k[k] = Tensor.dim x_k[k+1] } (** E7: inputs having the same shape => same length **)
    requires { forall k i: int. 
-                (0 <= k /\ k < (Seq.length x_k)- 1 )/\((0<= i < Tensor.dim x_k[k]) /\ (i <> axis)) -> x_k[k].shape.dims[i]=x_k[k+1].shape.dims[i] } (** (E6): inputs dimensions values match except along the axis **)
+                (0 <= k /\ k < (Seq.length x_k)- 1 )/\((0<= i < Tensor.dim x_k[k]) /\ (i <> axis)) -> x_k[k].shape.dims[i]=x_k[k+1].shape.dims[i] } (** E6: inputs dimensions values match except along the axis **)
    
    = 
   {
-    shape = (output_shape x_k axis);  (*(E7): definition of the output shape for the concatenated tensor *)
-    value = (output_value x_k axis); (*(E2): mathematical defintion of the operator concat*)
+    shape = (output_shape x_k axis);  (*E8: definition of the output shape for the concatenated tensor *)
+    value = (output_value x_k axis); (*E5: mathematical defintion of the operator concat*)
   }
 
 

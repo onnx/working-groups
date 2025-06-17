@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------
 # Created By  : Salome Marty Laurent  
 # Created Date: 08/04/2025
-# version ='1.0'
+# version ='3.0'
 # ---------------------------------------------------------------------------
 
 """ This file was designed to caracterize and test the ONNX operator: Concat
@@ -13,13 +13,14 @@ Five main tests are defined:
     - Concat with one input tensor (line 100)
     - Concat with vector inputs (line 166)
     - Concat with input matrixes (line 236)
-    - Concat with 3D tensors inputs (line 306 )
-    - Concat with 4D tensors inputs (line 416 )
-    - Concat with 4D tensors in a reverse order (line 489)
-    - Concat with string matrixes (line 545 )
-    - Concat with boolean matrixes (line 630 )
-    - Concat with complex64 matrixes (line 709 )
-    - Concat with complex128 matrixes (line 808 )"""  
+    - Concat with input matrixes of different types (line 324)
+    - Concat with 3D tensors inputs (line 423)
+    - Concat with 4D tensors inputs (line 514)
+    - Concat with 4D tensors in a reverse order (line 587)
+    - Concat with string matrixes (line 660 )
+    - Concat with boolean matrixes (line 744 )
+    - Concat with complex64 matrixes (line 823 )
+    - Concat with complex128 matrixes (line 920 )"""  
 
 
 # ---------------------------------------------------------------------------
@@ -316,6 +317,106 @@ print("Z:", z)
 
 print("C shape:", c.shape)
 print("C:", c)
+
+
+# ---------------------------------------------------------------------------
+
+""" ONNX Concat operator: test with different types input matrixes """
+
+# ---------------------------------------------------------------------------
+
+
+# Create inputs
+x_type = onnx.helper.make_tensor_value_info('x', onnx.helper.TensorProto.INT8, [2, 3])
+y_type = onnx.helper.make_tensor_value_info('y', onnx.helper.TensorProto.FLOAT, [4, 3])
+z_type = onnx.helper.make_tensor_value_info('z', onnx.helper.TensorProto.INT8, [3, 3])
+
+
+# Create a node (Concat) with input/outputs
+node_def = onnx.helper.make_node(
+    'Concat', # node name
+    ['x', 'y', 'z'], # inputs
+    ['c'], # output
+    axis=0, # Axis 0
+)
+
+# Create the graph
+graph_def = onnx.helper.make_graph(
+    [node_def],
+    'test-concat',
+    [x_type, y_type, z_type],
+    [onnx.helper.make_tensor_value_info('c', onnx.helper.TensorProto.FLOAT, [9, 3])],
+)
+
+onnx_model = onnx.helper.make_model(graph_def)
+
+# Let's freeze the opset.
+del onnx_model.opset_import[:]
+opset = onnx_model.opset_import.add()
+opset.domain = ''
+opset.version = 15
+onnx_model.ir_version = 8
+
+# Verify the model
+onnx.checker.check_model(onnx_model)
+
+print("\n Test with input matrixes: \n")
+# Print a human-readable representation of the graph
+print(onnx.helper.printable_graph(onnx_model.graph))
+
+
+
+x_type = numpy.array([[1, 2, 3],
+                 [4, 5, 6]], dtype=numpy.int8)
+
+
+y_type = numpy.array([[7,  8,  9],
+                 [10, 11, 12],
+                 [13, 14, 15],
+                 [16, 17, 18]], dtype=numpy.float32)
+
+
+z_type = numpy.array([[20, 21, 22],
+                 [23, 24, 25],
+                 [26, 27, 28]], dtype=numpy.int8)
+
+
+# Do Inference with try-except block
+try:
+    print("X shape:", x_type.shape)
+    print("X:", x_type)
+
+    print("Y shape:", y_type.shape)
+    print("Y:", y_type)
+
+    print("Z shape:", z_type.shape)
+    print("Z:", z_type)
+    print("\nAttempting to create InferenceSession and run...")
+    sess = onnxruntime.InferenceSession(onnx_model.SerializeToString(),
+                                        providers=["CPUExecutionProvider"])
+    
+    c_result = sess.run(None, {'x': x_type, 'y': y_type, 'z': z_type})[0]
+
+    print("\nInference successful.")
+    print("Output C shape:", c_result.shape)
+    print("Output C value:\n", c_result)
+    
+except onnxruntime.capi.onnxruntime_pybind11_state.Fail as e:
+    print("\n--- ONNX Runtime Execution Error Caught ---")
+    print(f"Error Type: {type(e)}")
+    print(f"Error Message: {e}")
+   
+except Exception as e:
+    print("\n--- An Unexpected Error Occurred During Inference ---")
+    print(f"Error Type: {type(e)}")
+    print(f"Error Message: {e}")
+    import traceback
+    traceback.print_exc()
+
+
+
+
+
 
 # ---------------------------------------------------------------------------
 
@@ -917,3 +1018,4 @@ except Exception as e:
 
 
 print("\nScript execution finished.")
+

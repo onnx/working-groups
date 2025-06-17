@@ -138,3 +138,53 @@ end
 ```
 
 [^1]: See [Why3 documentation](https://www.why3.org/)
+
+### Numerical Accuracy
+
+If tensor $A_{\textit{err}}$ is the numerical error of `A`,
+tensor $B_{\textit{err}}$ is the numerical error of `B`, let us consider
+$C_{\textit{err}}^{\textit{propag}}$ the propagated error of `Add`
+and $C_{\textit{err}}^{\textit{intro}}$ the introduced error of `Add`.
+Hence the numerical error of `C`, $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
+
+#### Error propagation
+
+For every index $i$, 
+
+- $C_{\textit{err}}^{\textit{propag}}[i] = A_{\textit{err}}[i] + B_{\textit{err}}[i]$
+
+#### Error introduction - floating-point implementation
+
+The `Add` operation introduces an error bound by the semi-ulp of the addition result for every
+tensor component. For a hardware providing $m$ bits for floating-point mantissa, the semi-ulp
+of `1.0` is $2^{-(m+1)}$. Hence, for every index $i$,
+
+- $\left|C_{\textit{err}}^{\textit{intro}}[i]\right| \leq \left|A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i]\right|\times2^{-(m+1)}$
+
+#### Unit verification - floating-point implementation
+
+A symbolic inference of the error over the tensor components should ensure the
+above properties.
+
+```c++
+Tensor<SymbolicDomainError> A, B;
+
+/* A and B symbolic initialization */
+
+template <typename TypeFloat>
+std::function<TypeFloat (int64_t)> result = [&A, &B](int64_t index) {
+  return A.value()[index] + B.value()[index];
+}
+
+for (int i = 0; i < x.NumElements(); ++i) {
+   SymbolicDomainError a = A.value(i);
+   SymbolicDomainError b = B.value(i);
+   SymbolicDomainError c = result(i);
+   assert(std::abs(c.err - a.err - b.err) <= std::abs(a.real + b.real + a.err + b.err)*(pow(2.0LD, -(m+1))));
+}
+```
+
+#### Error introduction - fixed-point implementation
+
+The `Abs` operation should not introduce any error: $C_{\textit{err}}^{\textit{intro}} = [0]$.
+
