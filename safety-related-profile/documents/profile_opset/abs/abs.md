@@ -1,59 +1,55 @@
-# Preliminary remarks
 
-## Types
+# `Abs` operator (all numerical types)
 
-- Operators are first described for values in the domain of real numbers. Because the `Abs` operator outputs a tensor representing the element-wise absolute value of values in an input tensor, the output is of the same type as the input tensor `X`. The input `X` can be of various types including `tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`, `tensor(int16)`, `tensor(int32)`, `tensor(int64)`, `tensor(int8)`, `tensor(uint16)`, `tensor(uint32)`, `tensor(uint64)`, and `tensor(uint8)`. The dimension size of a tensor is defined by $N(tensor)$.
+## Restrictions
 
-# `Abs` operator
+## Restrictions
+The following restrictions apply to the `conv` operator for the SONNX profile:
 
-### Restrictions
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `[R1]` | Input and output tensors shall have the same shape | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
 
-The following restrictions apply to the `Abs` operator for the ONNX profile:
-- The tensor `X` must have a valid numeric type `[R1]`
-- The operator does not support sparse tensors `[R2]`
-- All input elements `X` shall have explicit numerical types `[R3]`
-- No broadcasting allowed for the tensors `X` and `Y` even if they are broadcastable to a common shape, the broadcasting is forbidden because dynamic computation time according to the shape is not deterministic `[R4]`
 
-### Signature
+## Signature
 
 `Y = Abs(X)`
 
 where
-- `X`: input tensor whose element-wise absolute values are to be computed
-- `Y`: output tensor based on element-wise absolute values of `X`
+- `X`: input tensor 
+- `Y`: output tensor
 
-#### Informal specification
+## Documentation
 
-The `Abs` operator performs element-wise absolute value computation of the input tensor `X`. For each element, the corresponding entry in `Y` contains the absolute value of the corresponding entry in `X`.
+The `Abs` operator computes the element-wise absolute value of the input tensor `X`.
 
 The mathematical definition of the operator is given hereafter.
 
 $$
-Y[i] = |X[i]|
+Y[i_0,i_1,...,i_n] = |X[i_0,i_1,...,i_n]|
 $$
 
 Where
-- $i$ is an index covering all dimensions of the tensor.
+- $i_j$ is the index for dimension $j$.
 
 The effect of the operator is illustrated on the following examples:
 - `X` is a tensor holding numerical data
 
 Example 1:
 ```math
-`X` = \begin{bmatrix} -2 & 3 & -7 \end{bmatrix}
+X = \begin{bmatrix} -2.1 & 3.4 & -7 \end{bmatrix}
 ```
-Result `Y` will be:
+
 ```math
-`Y` = \begin{bmatrix} 2 & 3 & 7 \end{bmatrix}
+Y = \begin{bmatrix} 2.1 & 3.4 & 7 \end{bmatrix}
 ```
 
 Example 2:
 ```math
-`X` = \begin{bmatrix} -1 & 0 \\ 4 & -5 \\ 2 & -3 \end{bmatrix}
+X = \begin{bmatrix} -1.123 & 0 \\ 4 & -5 \\ 2 & -3 \end{bmatrix}
 ```
-Result `Y` will be:
 ```math
-`Y` = \begin{bmatrix} 1 & 0 \\ 4 & 5 \\ 2 & 3 \end{bmatrix}
+Y = \begin{bmatrix} 1.123 & 0 \\ 4 & 5 \\ 2 & 3 \end{bmatrix}
 ```
 
 Note in Python it is equivalent to do:
@@ -65,33 +61,27 @@ array([[1, 2],
        [8, 3]])
 ```
 
-#### Inputs and outputs
+## Inputs
 
-##### `X`
+### `X`
 
-The shape of tensor `X` should be the same as `Y`. `[R2]`
+#### Constraints
 
-###### Constraints
+- (C1)  <a name="shape_consist"></a> Shape consistency
+    - Statement: `X` and `Y` shall have the same shape. $ `[R1]`.
 
-- (C1) Shape consistency
-    - Statement: The shape of `X` shall be the same than `Y`. $N(X)=N(Y)$ `[R2]` & `[R4]`.
+## Outputs
 
-#### Outputs
+### `Y`
 
-##### `Y`
-
-Tensor `Y` is the output tensor formed by element-wise computation of the absolute values of `X`.
-
-`Y` will have the same shape as `X`. `[R2]`
-
-###### Constraints
+#### Constraints
 
 - (C1) Shape consistency
-    - Statement: The shape of `Y` shall be the same than `X`. $N(Y)=N(X)$ `[R2]` & `[R4]`.
+    - Statement: See [constraint (C1) on X](#shape_consist) .
 
-#### Attributes
+## Attributes
 
-The `Abs` operator does not require any attributes.
+The `Abs` operator has no attribute.
 
 ### Formal specification
 
@@ -119,3 +109,54 @@ end
 ```
 
 [^1]: See [Why3 documentation](https://www.why3.org/)
+
+### Numerical Accuracy
+
+If tensor $X_{\textit{err}}$ is the numerical error of `X`, let us consider
+$Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `Abs` and `Y`
+and $Y_{\textit{err}}^{\textit{intro}}$ the introduced error of `Abs`.
+Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+
+#### Error propagation
+
+For every index $i$, 
+
+- $Y_{\textit{err}}^{\textit{propag}}[i] = X_{\textit{err}}[i]$ if $X[i] \geq 0$
+  and $X[i]+X_{\textit{err}}[i] \geq 0$  
+- $Y_{\textit{err}}^{\textit{propag}}[i] = -X_{\textit{err}}[i]$ if $X[i] \leq 0$
+  and $X[i]+X_{\textit{err}}[i] \leq 0$ 
+- $Y_{\textit{err}}^{\textit{propag}}[i] \leq |X_{\textit{err}}[i]|$ if $X[i]$
+  and $X[i]+X_{\textit{err}}[i]$ may not have the same sign
+
+#### Error introduction
+
+The `Abs` operation should not introduce any error: $Y_{\textit{err}}^{\textit{intro}} = [0]$.
+
+#### Unit verification
+
+A symbolic inference of the error over the tensor components should ensure the
+above properties.
+
+```c++
+Tensor<SymbolicDomainError> X;
+
+/* X symbolic initialization */
+
+template <typename TypeFloat>
+std::function<TypeFloat (int64_t)> result = [&X](int64_t index) {
+  return (X.value()[index] < 0) ? -X.value()[index] : X.value()[index];
+}
+
+for (int i = 0; i < x.NumElements(); ++i) {
+   SymbolicDomainError x = X.value(i);
+   SymbolicDomainError y = result(i);
+   if (x.real >= 0 && x.real+x.err >= 0)
+      assert(y.err == x.err);
+   if (x.real <= 0 && x.real+x.err <= 0)
+      assert(y.err == -x.err);
+   if (x.real >= 0 && x.real+x.err <= 0)
+      assert(std::abs(y.err) <= std::abs(x.err));
+   if (x.real <= 0 && x.real+x.err >= 0)
+      assert(std::abs(y.err) <= std::abs(x.err));
+}
+```
