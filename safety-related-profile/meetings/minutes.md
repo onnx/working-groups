@@ -1,3 +1,23 @@
+# 2025/06/18
+## Participants
+- To be completed
+## Agenda
+- Status of actions.
+- Misc news:  
+  - Review and update of ops...
+## Actions
+### New actions
+### Past actions
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+### Long term actions
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form
+  
 # 2025/06/04
 ## Participants
 - Nicolas, Salomé, Sebastian, Henri, Jean-Loup, Jean, Eric, Jean-Baptiste, Frédéric, Eduardo,...
@@ -16,9 +36,10 @@
     - The next step would be to address the ``conv`` operator. 
 ## Actions
 ### New actions
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
 ### Past actions
-- [ ] (2105-1, Salomé) Provide answers (OK,KO, TBdiscussed) to [Eric's comments](../documents/profile_opset/concat/reviews/eric.md) for the `concat` operator. 
-- [ ] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX 
+- [X] (2105-1, Salomé) Provide answers (OK,KO, TBdiscussed) to [Eric's comments](../documents/profile_opset/concat/reviews/eric.md) for the `concat` operator. 
+- [X] (0904-2, Jean-Baptiste) Complete the analysis of the ARP+Concept papers to collect potential reqs for SONNX 
 - [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
 - [X] (1203-5, Eric, Jean and Andreas) Organize a meeting with ONNX to present our first results (in order for them to have an idea of the expected end-result) and discuss what could be the integration modalities.
