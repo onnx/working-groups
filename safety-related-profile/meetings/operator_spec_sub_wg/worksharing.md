@@ -20,7 +20,7 @@
 | Operator                     | Writers            | Reviewers         | Status (WR, RW, FI)
 |------------------------------|--------------------|-------------------|-------------------
 | Abs                          |hb,                 |                   | WR
-| Add                          |hb,sml              |                   | WR
+| Add                          |hb                  | sml               | WR
 | Cast                         |                    |                   |
 | Clip                         |                    |                   |
 | Concat                       |sml                 |                   |
