@@ -1,14 +1,41 @@
 # 2025/06/18
 ## Participants
-- To be completed
+-  Eric, Mariem, Salomé, Alex, Henri, Dumitru, Jean-Baptiste, Mohammed, Franck, Jean-Loup, Jean
 ## Agenda
 - Status of actions.
 - Misc news:  
+  - Presentation to ONNX meetup (["video"](./general/2025-06-09%20-%20MEET-UP/SONNX%20-%20Meetup%202025.7z))
   - Review and update of ops...
+    - The existing specifications must be updated to comply with the [specification guidelines](../documents/profile_opset/guidelines.md). A first pass has been done on [`abs`](../documents/profile_opset/abs/abs.md).
+  - Request for participation to work on the graph execution
+    - Jean and Jean-Loup are OK to help. Eric to organize a working session.  (See action 1806-4)
+  - Eric to present SONNX to the WG114. One slide about the ARP/SONNX mapping could be useful. (see action 1806-7)
+- Numerical accuracy
+  - Franck is preparing some elements to be put in the guidelines.
+  - Franck is also working on the analysis of the matrix multiplication. It could be wise to specify this operator in order to have a complete example including numerical accuracy analysis (see action 1806-6). 
+  - He needs some C code for the conv2D. (see action 1806-2) 
+  - Numerical analysis verification will be computed by executing the C++ code. The C code of the operators (generated using Why3) will be integrated as is. The tool leverage's C++ operator overloading capability. 
+- The number of participants to the bi-weekly meetings is decreasing steadily... 
+  - Give a "good" example of spec and invite people in the mailing list to contribute...
+  - Organize new presentations (see action 1806-3) 
+- Discussion about June 20th second workshop on formal methods (off-main meeting).
+  - This workshop concerns those that have been involved in the first workshop (other may join, please contact me). It will take place at IRT. A link will be provided. 
+  - On the basis of what has been done on conv2D, concat, and graph, clarify/complete the method, obtain guidelines to carry out proofs, obtain material to support self-training, obtain guidelines to generate C code, etc. 
+
 ## Actions
 ### New actions
+- [ ] (1806-1, Eric) Provide a complete (simple) spec example for 1 op that can be reproduced on the other ops...
+- [X] (1806-2, Mariem) Provide Franck with the C code of the conv2d operator.
+  - Done. The code is [here](./attachments/conv2d.c).
+- [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
+- [ ] (1806-4, Eric) Organize a "physical" working session on the graph specification 
+- [ ] (1806-5, Eric, Jean) Resend a "call for participation" to the mailing list (at least once we have a good template spec) 
+- [ ] (1806-6, Eric) Initiate the specification of matrix multiplication 
+- [ ] (1806-7, Jean-Baptiste) Provide Eric with ARP/SONNX analysis material 
+
 ### Past actions
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
 - [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
 ### Long term actions
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
@@ -29,7 +56,7 @@
   - Salomé has updated the informal and formal specification of the ``concat`` operator. Will be pushed soon.
   - Frédéric has presented his first attempt to specify errors for operators using floating point values. 
     - As a proof of concept, it has been applied to the [``abs``](https://github.com/ericjenn/working-groups/blob/spec-with-numerical-accuracy-info/safety-related-profile/documents/profile_opset/add/abs.md) and [``add``](https://github.com/ericjenn/working-groups/blob/spec-with-numerical-accuracy-info/safety-related-profile/documents/profile_opset/add/add.md) operators.
-    - The specification specificies the properties that an implementation shall satisfy considering the errors due to the floating point arithmetic. Methods errors are not considered. The properties are "conservative" in the sense that they consider any floating point values. Tighter bounds could be obtained for smaller domains.
+    - The specification gives the properties that an implementation shall satisfy considering the errors due to the floating point arithmetic. Methods errors are not considered. The properties are "conservative" in the sense that they consider any floating point values. Tighter bounds could be obtained for smaller domains.
     - A C++ implementation to compute the errors is provided (not fully implemented for the moment...). 
     - This implementation evaluates (will eventually evaluate) the error **symbolically**.
     - Verification of the assertion will also be done symbolically.

@@ -7,7 +7,7 @@
 | About quantization and ONNX in Airbus' context | Alex Digonnet | 2025/05/07 | 2025/05/07 |
 | RMT | Jean-Baptiste | 2025/05/07 | |
 |Specification of concat| Salomé Marty Laurent | 2025/05/21 | 2025/05/21 |
-
+| TITLE| Dumitru Potop | 2025/06/18 | TBC |
 
 # Meetings
 - 2024/11/20
@@ -23,3 +23,7 @@
 - 2025/04/23
 - 2025/05/07 : Jean-Baptiste ; Alex
 - 2025/05/21 : Salomé
+- 2025/09/10 : 
+- 2025/10/08 : 
+- 2025/10/22 : 
+- 2025/11/05 : 
