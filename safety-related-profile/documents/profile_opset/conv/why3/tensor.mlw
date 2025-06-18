@@ -1,0 +1,102 @@
+(**
+    ONNX Tensor Definition.
+ *)
+
+ module FlatTensor
+   use int.Int
+   use map.Map
+   use array.Array
+   use array.Init
+   use utils.Product
+
+   type shape = { dims : array int }
+     invariant { forall i. 0 <= i < length dims -> 0 < dims[i] }
+     meta coercion function dims
+
+   function sizeof (s : shape) : int = product 0 (length s) (fun i -> s[i])
+
+   val sizeof (s : shape) : int
+     ensures { result = sizeof s }
+
+   let function scalar () : shape
+     ensures { sizeof result = 1 }
+     = { dims = make 0 0 }
+
+   type tensor 'a = {
+     shape : shape ;
+     value : array 'a ;
+   }
+   (*proof*)
+   invariant { length value = sizeof shape }
+   by {
+     shape = scalar () ;
+     value = make 1 (any 'a) ;
+   }
+   (*qed*)
+
+   type index = array int
+
+   function dim (t : tensor 'a) : int = length t.shape
+
+   predicate valid (idx : index) (s : shape) =
+     length idx = length s /\
+     forall i. 0 <= i < length s -> 0 <= idx[i] < s[i]
+
+   predicate same_shape (a : tensor 'a) (b : tensor 'b) =
+    dim a = dim b /\
+    forall i. 0 <= i < dim a -> a.shape[i] = b.shape[i]
+
+   val function offset (idx : index) (s : shape) : int
+     requires { valid idx s }
+     ensures { 0 <= result < sizeof s }
+
+   val function indexOf (s : shape) (k : int) : index
+     requires { 0 <= k < sizeof s }
+     ensures { offset result s = k }
+
+   let function ([]) (a : tensor 'a) (idx : index) : 'a
+     = a.value[ offset idx a.shape ]
+
+   let ghost function ([<-]) (a : tensor 'a) (idx : index) (v : 'a) : tensor 'a =
+     {
+        shape = a.shape ;
+        value = a.value[ offset idx a.shape <- v ] ;
+     }
+
+   let ([]<-) (a : tensor 'a) (idx : index) (v : 'a) : unit
+     writes { a.value }
+     = a.value[ offset idx a.shape ] <- v
+
+end
+
+module Tensor
+  use int.Int
+  use map.Map
+  use utils.Product
+  use sequence.Seq
+
+  type shape = { dims : seq int }
+    invariant { forall i. 0 <= i < length dims -> 0 < dims[i] }
+    meta coercion function dims
+
+  function sizeof (s : shape) : int = product 0 (length s) (fun i -> s[i])
+
+  val sizeof (s : shape) : int
+    ensures { result = sizeof s }
+
+  type index = seq int
+
+  predicate valid (idx : index) (s : shape) =
+    length idx = length s /\
+    forall i. 0 <= i < length s -> 0 <= idx[i] < s[i]
+
+   type tensor 'a = {
+     shape : shape ;
+     value : map index 'a ;
+   }
+
+   meta coercion function value
+
+   function dim (t : tensor 'a) : int = length t.shape
+
+end
