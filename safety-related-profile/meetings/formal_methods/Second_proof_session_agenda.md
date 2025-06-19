@@ -13,6 +13,9 @@
       - Exploitation efficace (?) des modules préexistants, comme Sequences et Tensors
   - conv 2D standard : repo (repo)
     - Problèmes rencontrés
+      - Est ce qu'il y a des améliorations et/ou simplifications à proposer.
+      - Comment gérer les erreurs de preuve (cas: la fonction conv2d_output_value)?
+      - Est ce possible de généraliser le type des tenseurs pour éviter de réecrire la spécification pour le type real.
   - graphe ONNX : graph (repo)
     - Problèmes rencontrés :
 - (Loïc) Preuves de l'existant
