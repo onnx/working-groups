@@ -2,8 +2,6 @@
 # `Abs` operator (all numerical types)
 
 ## Restrictions
-
-## Restrictions
 The following restrictions apply to the `conv` operator for the SONNX profile:
 
 | Restriction    | Statement | Origin |
@@ -119,14 +117,14 @@ Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{
 
 ### Error propagation
 
-For every index $i$, 
+For every indexes $I = (i_0,i_1,...,i_n)$ over the axes, 
 
-- $Y_{\textit{err}}^{\textit{propag}}[i] = X_{\textit{err}}[i]$ if $X[i] \geq 0$
-  and $X[i]+X_{\textit{err}}[i] \geq 0$  
-- $Y_{\textit{err}}^{\textit{propag}}[i] = -X_{\textit{err}}[i]$ if $X[i] \leq 0$
-  and $X[i]+X_{\textit{err}}[i] \leq 0$ 
-- $Y_{\textit{err}}^{\textit{propag}}[i] \leq |X_{\textit{err}}[i]|$ if $X[i]$
-  and $X[i]+X_{\textit{err}}[i]$ may not have the same sign
+- $Y_{\textit{err}}^{\textit{propag}}[I] = X_{\textit{err}}[i]$ if $X[I] \geq 0$
+  and $X[I]+X_{\textit{err}}[I] \geq 0$  
+- $Y_{\textit{err}}^{\textit{propag}}[I] = -X_{\textit{err}}[i]$ if $X[I] \leq 0$
+  and $X[I]+X_{\textit{err}}[I] \leq 0$ 
+- $Y_{\textit{err}}^{\textit{propag}}[I] \leq |X_{\textit{err}}[i]|$ if $X[I]$
+  and $X[I]+X_{\textit{err}}[I]$ do not have the same sign
 
 ### Error introduction
 
@@ -143,12 +141,12 @@ Tensor<SymbolicDomainError> X;
 /* X symbolic initialization */
 
 template <typename TypeFloat>
-std::function<TypeFloat (int64_t)> result = [&X](int64_t index) {
-  return (X.value()[index] < 0) ? -X.value()[index] : X.value()[index];
-}
+std::function<TypeFloat (decltype(X.indexes()))>
+  result = [&X](decltype(X.indexes()) list_of_indexes)
+    { return (X[list_of_indexes] < 0) ? -X[list_of_indexes] : X[list_of_indexes]; }
 
-for (int i = 0; i < x.NumElements(); ++i) {
-   SymbolicDomainError x = X.value(i);
+for (auto i : X.indexes()) {
+   SymbolicDomainError x = X[i];
    SymbolicDomainError y = result(i);
    if (x.real >= 0 && x.real+x.err >= 0)
       assert(y.err == x.err);

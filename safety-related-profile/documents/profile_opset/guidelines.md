@@ -24,6 +24,10 @@ This document gives guidelines to be followed when writing an operator's
   - A tensor is always represented in uppercase name (e.g., X, Y, W, ...).
   - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $X_0$, $X_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
   - The dimensions of a tensor $X$ are denoted by a vector $(dX_0, ..., dX_i, ..., dX_n)$ where $dX_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
+  - The numerical errors of a tensor $X$ are always represented by a tensor $X_{\textit{err}}$.
+    It is the difference between the tensor $X_{\textit{impl}}$ computed by an implementation
+    and the infinitly accurate tensor $X_{\textit{real}}$ expressed by the formal specification.
+    In the section on numerical accuracy, the notation $X_{\textit{real}}$ is replaced by $X$ unless it introduces ambiguity.
   - For a tensor used as a variadic parameter (denoted $X_i$), the dimensions become $(dX_{i,0}, dX_{i,1}, ...)$. This notation is consistent with the way tensor dimensions are encoded in Why3.
   - In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
 
@@ -121,6 +125,56 @@ where `<name>` is the output's name and `<type>` is the output's type.
  
  ##### Formal specification
  
-This section contains a link to the ormal specification expressed in Why3.
+This section contains a link to the formal specification expressed in Why3.
  
+##### Numerical Accuracy
  
+This section provides a tight and verifiable specification of the numerical error
+on the operator's results. It decomposes the error into two parts:
+the first, the propagated error, depends on the numerical error and the
+numerical values of the inputs ; the second part, the introduced error,
+depends only on the numerical value of the inputs.
+
+The provided specification results from an over-approximated semantics (ex: IEEE-754) of the
+numerical error of native computer operations approximating real number
+operations. In order to preserve the readability of the formulas, the general specification
+introduces additional (conservative) simplifications compared to the original spectifiations.
+However, this general specification may be too over-approximated for some specific inputs
+(ex tensor representing diagonal matrices). In this case, more precise specific specifications
+are provided alongside the general specification.
+
+The error specification comes with unit verification scenarios to verify the implementation's
+conformity. In the absence of value ranges for the inputs, the unit verification scenarios
+operate on symbolic values and errors to propagate correct formulas throughout the scenario
+and thus provide a proof for the assertions. In particular, the C implementation generated
+from the Why3 formal specification must be verified using these scenarios, for example
+by using symbolic instrumentation libraries.
+
+###### Error Propagation
+
+This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the
+propagated error, where $Y$ is the tensor result of an operator.
+
+###### Error Introduction
+
+This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$, the
+introduced error, where $Y$ is the tensor result of an operator.
+
+Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+
+###### Unit Verification
+
+This section contains a verification scenario to verify the above specification
+for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each
+real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+
+* The `real` field is a symbolic abstract domain for ideal (infinitly precise) C/C++ floating-point
+  (or fixed-point) computations.  
+* The `float` field is a symbolic abstract domain for the computed value.  
+* The `err` field is a symbolic abstract domain for the absolute error, that is the difference
+  between the possible values of `float` and `real`.  
+* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference
+  between the possible values of `float` and `real` divided by `real`.
+
+
+

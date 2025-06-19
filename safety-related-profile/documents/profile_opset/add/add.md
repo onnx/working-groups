@@ -149,19 +149,21 @@ Hence the numerical error of `C`, $C_{\textit{err}} = C_{\textit{err}}^{\textit{
 
 #### Error propagation
 
-For every index $i$, 
+For every indexes $I = (i_0,i_1,...,i_n)$ over the axes, 
 
-- $C_{\textit{err}}^{\textit{propag}}[i] = A_{\textit{err}}[i] + B_{\textit{err}}[i]$
+- $C_{\textit{err}}^{\textit{propag}}[I] = A_{\textit{err}}[I] + B_{\textit{err}}[I]$
 
-#### Error introduction - floating-point implementation
+#### Error introduction - floating-point IEEE-754 implementation
 
-The `Add` operation introduces an error bound by the semi-ulp of the addition result for every
-tensor component. For a hardware providing $m$ bits for floating-point mantissa, the semi-ulp
-of `1.0` is $2^{-(m+1)}$. Hence, for every index $i$,
+The error introduced by the `Add` operator shall be bound by the semi-ulp of the addition result for every
+tensor component for a normalized result. For a hardware providing $m$ bits for floating-point mantissa, the semi-ulp
+of `1.0` is $2^{-(m+1)}$. Hence, for every indexes $I = (i_0,i_1,...,i_n)$ over the axes,
 
-- $\left|C_{\textit{err}}^{\textit{intro}}[i]\right| \leq \left|A[i] + B[i] + A_{\textit{err}}[i] + B_{\textit{err}}[i]\right|\times2^{-(m+1)}$
+- $\left|C_{\textit{err}}^{\textit{intro}}[I]\right| \leq \max\left(\left|A[I] + B[I] + A_{\textit{err}}[I] + B_{\textit{err}}[I]\right|\times 2^{-(m+1)}, \frac{\texttt{denorm-min}}{2}\right)$  
+- $\left|C_{\textit{err}}^{\textit{intro}}[I]\right| \leq \max\left(\left|A_{\textit{float}}[I] + B_{\textit{float}}[I]\right|\times 2^{-(m+1)}, \frac{\texttt{denorm-min}}{2}\right)$  
+- $\left|C_{\textit{err}}^{\textit{intro}}[I]\right| \leq \max\left(\left|A[I] + B[I]\right|\times \frac{2^{-(m+1)}}{1 - 2^{-(m+1)}}, \frac{\texttt{denorm-min}}{2}\right)$
 
-#### Unit verification - floating-point implementation
+#### Unit verification - floating-point IEEE-754 implementation
 
 A symbolic inference of the error over the tensor components should ensure the
 above properties.
@@ -172,19 +174,20 @@ Tensor<SymbolicDomainError> A, B;
 /* A and B symbolic initialization */
 
 template <typename TypeFloat>
-std::function<TypeFloat (int64_t)> result = [&A, &B](int64_t index) {
-  return A.value()[index] + B.value()[index];
-}
+std::function<TypeFloat (decltype(A.indexes()))>
+  result = [&A, &B](decltype(A.indexes()) list_of_indexes)
+    { return A[list_of_indexes] + B[list_of_indexes]; }
 
-for (int i = 0; i < x.NumElements(); ++i) {
-   SymbolicDomainError a = A.value(i);
-   SymbolicDomainError b = B.value(i);
+for (auto i : A.indexes()) {
+   SymbolicDomainError a = A[i];
+   SymbolicDomainError b = B[i];
    SymbolicDomainError c = result(i);
-   assert(std::abs(c.err - a.err - b.err) <= std::abs(a.real + b.real + a.err + b.err)*(pow(2.0LD, -(m+1))));
+   assert(std::abs(c.err - a.err - b.err) <= std::max(std::abs(a.float + b.float)*(pow(2.0LD, -(m+1)))),
+        (real) std::numeric_limits<decltype(a.float)>::denorm_min() / 2.0);
 }
 ```
 
 #### Error introduction - fixed-point implementation
 
-The `Abs` operation should not introduce any error: $C_{\textit{err}}^{\textit{intro}} = [0]$.
+The `Add` operation should not introduce any error: $C_{\textit{err}}^{\textit{intro}} = [0]$.
 
