@@ -2,8 +2,7 @@
 
 ## Agenda
 
-! [Schéma global](path/to/image.png)
-image.png
+! [Schéma global](image.png)
 
 - (Mariem, Salomé, Eric et Jean) Présentation pour retour critique, de trois formalisations ainsi que des problèmes rencontrés
   - concat : concat (repo)
