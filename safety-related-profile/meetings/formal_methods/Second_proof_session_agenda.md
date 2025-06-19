@@ -42,7 +42,7 @@ Pour implémenter la fonction qui associe une valeur à un tenseur, j'utilise un
 
 #### Q2 : Bibliothèques d'implémentation
 
-Existe-t-il un "catalogue" d'implémentation des types de la bibliothèque standard?  Par exemple, une implémentation de Map sur la base des listes?
+Existe-t-il un "catalogue" d'implémentations des types de la bibliothèque standard?  Par exemple, une implémentation de `Map` sur la base des listes?
 
 #### Q3 : Documentation et apprentissage
 
