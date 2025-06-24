@@ -5,7 +5,8 @@
 - CAT: _category in {__OPERATOR__ , __GRAPH__ , __FORMAT__}_
 - CRIT: _criticality in { __LOW__  , __HIGH__ }_
 - REQ:	_Identification of the SONNX requirement that can't be satisfied due to this issue_
-- LOC: 	_Location in the standard, possibly using an hyperlink__
+- LOC: 	_Location in the standard, possibly using an hyperlink_
+- AUT: _author_ (optional)
 
 ### Issue
 _Description of the issue (in a synthetic way)_
@@ -19,38 +20,14 @@ _Proposal to solve the issue or mitigate its consequences_
 ### Remarks (opt)
 _Additional remarks_
 
-# Issues - Non operators
 
-## Issue #1.1: Execution order of graph nodes
-- CAT: GRAPH
-- CRI: LOW
-- REQ: (TBC)
-- LOC: [Open Neural Network Exchange Intermediate Representation (ONNX IR) Specification](https://github.com/onnx/onnx/blob/main/docs/IR.md)
-
-### Issue
-The ONNX specification states that "Each computation dataflow graph is structured as a topologically sorted list of nodes that form a graph, which MUST be free of cycles. [...] ". The topological order is a partial order.
-
-### Consequence
-Different implementations may execute nodes in different orders, leading to different results when computations are done using floating poit numbers. 
-
-### Proposal
-The SONNX standard should provide a means to impose a total ordering on the nodes. 
-
-### Remarks
-This constraint will prevent optimizations. 
-Note that nothing prevents a model to be ill-formed. Compliance with the syntax and semantics of the ONNX standard must be checked (it is certainly checked, but nothing is said about what is checked or not and whether these checkers are complete / correct or not). 
-
-Other constraints are given in the [onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3). E.g.: 
-
-    // One FunctionProto can reference other FunctionProto in the model, however, recursive reference
-    // is not allowed.
-
-## Issue #1.2: Overloading
+## Issue #1.1: Overloading
 
 - CAT: (to be completed)
 - CRIT: (to be completed)
-- REQ:	(to be completed)
-- LOC: 	ONNX file format definition ([onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3)) 
+- REQ: (to be completed)
+- LOC: 	ONNX file format definition ([onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3))
+- AUT: (to be completed)
 
 ### Issue
 A [function in ONNX](https://onnx.ai/onnx/intro/concepts.html) is a way to reuse the same combination of operators at different locations in a model. A function may refer to operators that are in a different opset than the model itself. In that case, the standard leaves the runtimes the freedom to chose whether the local  
@@ -164,7 +141,6 @@ IR version 10 introduces overloading, i.e. the capability to have several defini
 
 ### Issue
 Variadic operators can accept any number of inputs.
-
 
 ### Consequence
 (TBC)
@@ -284,7 +260,6 @@ This issue is linked to the previous issue (1.11). Some operators take as input 
 - For RESHAPE operator : Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
 - For SHAPE operator : Specify in the documentation the correspondance between the dimension of the input tensor and the position of the value on the 'shape' output tensor.
 
-
 # Issues - Operators
 
 ## Issue #2.1: Incomplete specification of SPLIT operator
@@ -303,7 +278,6 @@ The next layers of the neural network could receive the wrong feature maps and n
 ### Proposal
 The onnx description should specify exactly how the axis of the input tensor is splited by giving a correspondence between the input tensor data and the output tensors of the operator.
 
-
 ## Issue #2.2: Incomplete specification of CONCAT operator 
 
 - CAT: Operator
@@ -319,7 +293,6 @@ If the concatenation was done in the wrong order depending on the different inpu
 
 ### Proposal
 The onnx description should specify the order in which the input tensors are concatenated (by giving a number to each input tensor ?).
-
 
 ## Issue #2.3: Incomplete specification of RESIZE operator 
 
@@ -338,7 +311,6 @@ The ouput tensor could be the incorrect shape with incorrect elements in the fea
 ### Proposal
 Specify exactly the transformation applied to the input tensor depending on the assigned upsampling mode. Give an example of what the output tensor looks like from an input tensor for each of the modes
 
-
 ## Issue #2.4: Incomplete specification of RESHAPE operator 
 
 - CAT: Operator
@@ -356,7 +328,6 @@ The output tensor may be incorrect if the reordering data in one dimension was d
 1. Specify exactly how the dimension '-1' transform the tensor to be reshaped.
 2. Specify exactly how the data from the input tensor is reorganized.
 
-
 ## Issue #2.5: incomplete specification of CONV operator
 - CAT: Operator
 - CRI: HIGH
@@ -364,14 +335,12 @@ The output tensor may be incorrect if the reordering data in one dimension was d
 - LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__Conv.html), but this issue appear in other operators
 
 ### Issue
-The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
-
-The value of the padding is not defined (it is actually 0).
-
-Presentation of attributes makes it difficult to check if all dependencies are expressed. 
+- The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
+- The value of the padding is not defined (it is actually 0).
+- Presentation of attributes makes it difficult to check if all dependencies are expressed. 
 
 ### Consequence
-Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementation may lead to different results.
+- Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementations may lead to different results.
 
 ### Proposal
 See [example](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example)
