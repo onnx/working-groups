@@ -375,3 +375,32 @@ Implementer needs to check the referece implementation (or other doc.) to unders
 
 ### Proposal
 See [example](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example)
+
+## Issue #2.6: Batches 
+- CAT: Operator
+- CRI: HIGH
+- REQ: (TBC)
+- LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__MatMul.html),
+- AUT: Nicolas
+  
+In the ONNX tensor semantics, there is no notion of a batch dimension.
+
+In principle, inconsistencies are detected at runtime through shape inference when convolutions are involved, because it is convolutions that introduce batch semantics, which then propagate to the preceding/following operators.
+
+However, if we consider a network without convolutions, there is no longer any batch semantics.
+
+So, if we take a MatMul that receives an input tensor with T.shape = [2,3], it's unclear whether this is a 1D batch of size 2, or a 2D tensor with no batch dimension.
+
+The ONNX specification for MatMul refers to NumPy:
+> If both arguments are 2-D they are multiplied like conventional matrices.
+> If either argument is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
+
+Some frameworks (such as https://github.com/Verified-Intelligence/auto_LiRPA) assume that the first dimension is always the batch, but without stating it explicitly — which can lead to hours of debugging to figure out. In this case, in my opinion, it is a misinterpretation (bug) in the framework.
+
+Since we more or less agreed to be as explicit as possible in SONNX,
+I suggest that for MatMul and Gemm we explain the following:
+- [3] is a 1D tensor of dimension 3
+- [1,3] is a 2D tensor of dimensions 1 and 3
+- [1,1,3] is a batch of 1 tensor, each of shape [1,3]
+=> There is no way to specify a 1D tensor with batch size > 1
+Workaround: [2,1,3] is a batch of 2 tensors, each of shape [1,3]
