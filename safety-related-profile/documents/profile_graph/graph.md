@@ -3,9 +3,9 @@ The following restrictions apply to graphs in the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| - `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
-| - `[R2]` | Each output of a node must be the input of another node or be a graph output.  | TBC |
-| - `[R3]` | A graph shall only contain deterministic operators. | TBC |
+| `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
+| `[R2]` | Each output of a node must be the input of another node or be a graph output.  | TBC |
+| `[R3]` | A graph shall only contain deterministic operators. | TBC |
 
 # Informal specification
 
@@ -54,7 +54,7 @@ In this example, `op1_o` is a tensor object representing a tensor of rank 2 with
 ### Nodes
 
 - `[T03a]` A node refers to an operator
-  - Multiple nodes may refer to the same operator
+  - An operator may be referred to by multiple nodes
 - `[T03b]` There is a 1-to-1 mapping between the set of inputs and outputs of a node and the set of inputs and outputs of its associated operator `[R1]`. 
   - Note that is is a restriction with respect to the ONNX standard that allows fewer inputs or outputs when the omitted input or output is optional. 
 
