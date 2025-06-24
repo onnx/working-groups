@@ -171,9 +171,10 @@ print(f"Result={o1_f}{o2_f}")
 
 ## Execution Semantics
 - `[T05a]` A node is executable if all its input tensors are initialized 
-- `[T05b]` Executing a node means assigning output tensors to a value such that input-output relation specified by the operator holds
-- `[T05c]` All executable nodes are executed once and only once
-- `[T05d]` Single Assignment: each tensor is assigned once and only once 
+- `[T05b]` Executing a node means assigning values to output tensors such that the inputs-outputs relation specified by the operator holds
+- `[T05c]` All executable nodes are executed
+- `[T05d]` An executable node is executed only once
+- `[T05e]` A tensor is assigned at most once (Single Assignment) 
 
 ## Restrictions
 The following restrictions apply to graphs in the SONNX profile:
