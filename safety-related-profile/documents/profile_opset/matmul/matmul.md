@@ -3,51 +3,28 @@
 - `MatMul` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
 - `MatMul` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64, )](#int)
 
-<a id="real"></a>
-# `MatMul` operator (real)
 
-#### Inputs and outputs
-
-##### `A`
-
-Tensor `A` is the first input tensor.
-
-The shape of tensor `A` is $(m \times n)$.
-
-###### Constraints
-
-- (C1) Number of spatial axes of tensor `A`
-    - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
-    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
-
-##### `B`
-
-Tensor `B` is the second input tensor.
-
-The shape of tensor `B` is $(n \times p)$.
-
-##### `Y`
-
-Tensor `Y` is the output tensor.
-
-The shape of tensor `Y` is $(m \times p)$.
-
-### Restrictions
-The following restrictions apply to the `MatMul` operator for the SONNX profile:
-- The number of spatial axes of the tensors is restricted to 2 ========TBC======`[R1]`
-
-### Signature
+# Signature
 `Y = MatMul(A,B)`
 where
 - `A`: first input tensor
 - `B`: second input tensor
 - `Y`: output tensor
-  
-#### Informal specification
 
-Operator `MatMul` computes the matrix multiplication of the input tensors `A` and `B` into the output matrix `Y`.
+<a id="real"></a>
+# `MatMul` operator (real)
 
-The mathematical definition of the operator is given hereafter.
+## Restrictions
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `[R1]` | Input tensor `A` and `B` are rank-2 tensors | Simplification |
+
+
+## Informal specification
+
+Operator `MatMul` computes the multiplication of tensor $A$ by tensor $B$.
+
+The mathematical definition of the operator is given hereafter for a 2D tensor.
 
 $$     
    Y = A \times B  
@@ -56,87 +33,122 @@ $$
 
 $$
      \begin{bmatrix}
-         y_{11} & y_{12} & \cdots & y_{1p}\\
-         y_{21} & y_{22} & \cdots & y_{2p}\\ 
+         Y_{11} & Y_{12} & \cdots & Y_{1p}\\
+         Y_{21} & Y_{22} & \cdots & Y_{2p}\\ 
          \vdots & \vdots & \ddots & \vdots\\ 
-         y_{m1} & y_{m2} & \cdots & y_{mp} 
+         Y_{m1} & Y_{m2} & \cdots & Y_{mp} 
      \end{bmatrix}
       =
      \begin{bmatrix}
-         a_{11} & a_{12} & \cdots & a_{1n}\\
-         a_{21} & a_{22} & \cdots & a_{2n}\\ 
+         A_{11} & A_{12} & \cdots & A_{1n}\\
+         A_{21} & A_{22} & \cdots & A_{2n}\\ 
          \vdots & \vdots & \ddots & \vdots\\ 
-         a_{m1} & a_{m2} & \cdots & a_{mn} 
+         A_{m1} & A_{m2} & \cdots & A_{mn} 
      \end{bmatrix}
      \times
      \begin{bmatrix}
-         b_{11} & b_{12} & \cdots & b_{1p}\\
-         b_{21} & b_{22} & \cdots & b_{2p}\\ 
+         B_{11} & B_{12} & \cdots & B_{1p}\\
+         B_{21} & B_{22} & \cdots & B_{2p}\\ 
          \vdots & \vdots & \ddots & \vdots\\ 
-         b_{n1} & b_{n2} & \cdots & b_{np} 
+         B_{n1} & B_{n2} & \cdots & B_{np} 
      \end{bmatrix}
 $$
 $$     
-   y_{ij}= a_{i1} b_{1j} + a_{i2} b_{2j} +\cdots+ a_{in} b_{nj} = \sum_{k=1}^n a_{ik}b_{kj}  
+   Y_{ij}= A_{i1} B_{1j} + A_{i2} B_{2j} +\cdots+ A_{in} B_{nj} = \sum_{k=1}^n A_{ik}B_{kj}  
 $$
 
 Where
-- $y$ is the output matrix,
-- $a$ is the first input matrix,
-- $b$ is the second input matrix,
-- $m$ the first input matrix number of rows,
-- $n$ the first input matrix number of columns and second input matrix number of rows,
-- $p$ the second input matrix number of columns
+- $m$ is the number of rows of matrix $A$ (= $dA_0$)
+- $n$ the number of columns of matrix $A$ (= $dA_1$) and the number of rows of matrix B (=$dA_0$),
+- $p$ is the number of columns of matrix $B$ (=$dB_1$)
 
 ##### Note
-The behavior depends on the arguments in the following way.
+The semantics of the ONNX `MatMul` operator reflects the semantics of the NumPy `matmul`operator. In particular (except of the [NumPy documentation]())   
 
-- If both input are 2-D they are multiplied like conventional matrices.
-```
-These particularities are linked to numpy specification referenced by ONNX MatMul.
+> If both arguments are 2-D they are multiplied like conventional matrices.
 
-The assumption for SONNX is that the following is managed by splitting matrices and duplicating call to MatMul.
+> If either argument is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
 
-- If either input is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
+> If the first argument is 1-D, it is promoted to a matrix by prepending a 1 to its dimensions. After matrix multiplication the prepended 1 is removed. (For stacks of vectors, use vecmat.)
 
-The assumption for SONNX is that the following is managed by insterting Reshape before and after MatMul.
+> If the second argument is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed. (For stacks of vectors, use matvec.)
 
-- If the first input is 1-D, it is promoted to a matrix by prepending a 1 to its dimensions. After matrix multiplication the prepended 1 is removed.
+In the SONNX profile, such implicit promotions are forbidden and shall be managed by inserting apporpriate `Reshape` operator before and after `MatMul`.
 
-- If the second input is 1-D, it is promoted to a matrix by appending a 1 to its dimensions. After matrix multiplication the appended 1 is removed.
-```
+
+## Inputs 
+
+### `A`: tensor(real)
+
+Tensor `A` is the first input tensor.
+
+The shape of tensor `A` is $(dA_0,dA_1)$.
+
+#### Constraints
+
+- (C1) Number of spatial axes of tensor `A`
+    - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
+    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
+- (C2) <a name="a_b_shape_consist"></a> Consistency of `A` and `B`shapes  
+  - Statement:  $dA_A=dB_0$
+  - Rationale: Application of the mathematical definition of ``MatMul`.
+- (C3) <a name="a_y_shape_consist"></a> Consistency of `A` and `Y` shapes
+  - Statement: $dY_0=dA_0$
+  - Rationale: Application of the mathematical definition of ``MatMul`.
+
+### `B`: tensor(real) 
+
+Tensor `B` is the second input tensor.
+
+The shape of tensor `B` is $(dB_0,dB_1)$.
+
+#### Constraints
+
+- (C1) Number of spatial axes of tensor `B`
+    - Statement: The number of spatial axes of tensor `B` is 2. `[R1]`
+    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
+- (C2) Consistency of `A` and `B`shapes  
+  - [See constraint (C2) of A](#a_b_shape_consist)
+- (C3) <a name="b_y_shape_consist"></a> Consistency of `B` and `Y` shapes
+  - Statement: $dY_1=dB_1$
+  - Rationale: Application of the mathematical definition of ``MatMul`.
+
+## Outputs 
+
+### `Y`: tensor(real)
+
+Tensor `Y` is the output tensor.
+
+The shape of tensor `Y` is $(dY_0,dY_1)$.
+
+#### Constraints
+
+- (C1) Number of spatial axes of tensor `Y`
+    - Statement: The number of spatial axes of tensor `B` is 2. `[R1]`
+    - Rationale: This restriction is intoduced to simplify the implementation considering the actual industrial use cases.
+- (C3) <a name="b_y_shape_consist"></a> Consistency of `A`, `B` and `Y` shapes
+  - [See constraint (C3) of `A`](#a_y_shape_consist) and [constraint (C3) of `B`](#b_y_shape_consist)
+
+
+---
 
 <a id="float"></a>
+# `MatMul` operator (FP16, FP32, FP64, BFLOAT16)
 
-### Formal specification
+*To be completed.*
 
-The formal specification of the `matmul` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
-
-```ocaml
-(**
-    Specification of MatMul operation on tensors with real numbers.
- *)
-module MatMulReal
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  let function matmul (a : tensor real) (b : tensor real) : tensor real =
-    ensures { result.shape = [nth a.shape 0; nth b.shape 1] }
-  {
-    shape = [nth a.shape 0; nth b.shape 1] ;
-    value = fun i j -> sum (fun k -> a.value[i][k] * b.value[k][j]) (nth a.shape 1)
-  }
-end
-```
-
+---
 
 <a id="int"></a>
+# `MatMul` operator  (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32), UINT64)
 
+*To be completed.*
 
-### Numerical Accuracy
+## Formal specification
+
+See [here](./why3/opmatmul.mlw).
+
+## Numerical Accuracy
 
 If tensor $A_{\textit{err}}$ is the numerical error of `A`,
 tensor $B_{\textit{err}}$ is the numerical error of `B`, let us consider
@@ -144,13 +156,13 @@ $Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `MatMul`
 and $Y_{\textit{err}}^{\textit{intro}}$ the introduced error of `MatMul`.
 Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
-#### Error propagation
+### Error propagation
 
 For every indexes $I = (i,j)$ over the two axes, 
 
 - $\displaystyle Y_{\textit{err}}^{\textit{propag}}[I] = \left(\sum_{1\leq k \leq n} A_{\textit{err}}[(i, k)] \times B[(k, j)]\right) + \left(\sum_{1\leq k \leq n} A[(i, k)] \times B_{\textit{err}}[(k, j)]\right) + \left(\sum_{1\leq k \leq n} A_{\textit{err}}[(i, k)] \times B_{\textit{err}}[(k, j)]\right)$
 
-#### Error introduction - floating-point IEEE-754 implementation
+### Error introduction - floating-point IEEE-754 implementation
 
 The error introduced by the `MatMul` operator comes from the $n$ multiplications and $n-1$
 additions for each component of the tensor result. For a hardware providing $m$ bits for
@@ -178,7 +190,7 @@ on both axes,
      \times \left|B_{\textit{float}}[(j, j)]\right|, \frac{\texttt{denorm-min}}{2}\right)$
   if $B$ is diagonal
 
-#### Unit verification - floating-point IEEE-754 implementation
+### Unit verification - floating-point IEEE-754 implementation
 
 A symbolic inference of the error over the tensor components should ensure the
 above properties.
@@ -220,7 +232,7 @@ for (auto indexes : Indexes(A.indexes()[0], B.indexes()[1])) {
 }
 ```
 
-#### Error introduction - fixed-point implementation
+### Error introduction - fixed-point implementation
 
 The error introduced by the `MatMul` operator comes from the $n$ multiplications.
 

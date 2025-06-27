@@ -21,7 +21,9 @@ This document gives guidelines to be followed when writing an operator's
 
 ### Notations
 - Tensors: 
-  - A tensor is always represented in uppercase name (e.g., X, Y, W, ...).
+  - A tensor is always represented in uppercase name (e.g., A, B,...,X, Y, Z).
+  - Input tensors are usually $A$, $B$,...
+  - Output tensor is $Y$
   - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $X_0$, $X_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
   - The dimensions of a tensor $X$ are denoted by a vector $(dX_0, ..., dX_i, ..., dX_n)$ where $dX_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
   - The numerical errors of a tensor $X$ are always represented by a tensor $X_{\textit{err}}$.
@@ -42,19 +44,24 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
 - Specific description may be given for the other types (``float``, ``double``, etc.).
 - A description can be applicable to as et of types as long as its **semantics description** remains the same for all types in the set. A counter example is, for instance, the case of operators applied on ``float`` or ``double`` that may create ``NaNs`` or ``+Inf`` or ``-Inf``. For this reason, they cannot be covered by the specification in $R$.
+- Only the scetions that need to be modified are repeated.
 
 ## Structure
 
 The specification on an operator is structured as follows. 
 
 
-### `<operator name>` 
+### Signature
+*Definition of the operator's signature:*
 
-#### Applicable types
+ `<O> = <op>(<I1>,<I2>,...<In>)`
 
-List of types for which this description is applicable. 
+ where
+ - `<In>`: &lt;Brief description of the nth input &gt;
+ - `<O>`: &lt;Brief description of output &gt; 
 
-*where `<op>`is the name of the operator.*
+### `<operator name>`  `(<list of types for which this description is applicable>)`
+
  
 #### Restrictions
 *This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. restriction may concern the dimension of tensors, values of attributes, etc. They are introduced to simplify the implementation of operators, ensure resource usage predictability, enforce explicitness, etc.*  
@@ -70,14 +77,6 @@ List of types for which this description is applicable.
 - Simplifications are introduced to reduce the amount of work for the workgroup and is aimed at being eventually removed. They are not traceable to a requirement.
 - Restrictions are introduced to comply with some requirement. The requirement is identified using an hyperlink.
 
-#### Signature
-*Definition of the operator's signature:*
-
- `<O> = <op>(<I1>,<I2>,...<In>)`
-
- where
- - `<In>`: &lt;Brief description of the nth input &gt;
- - `<O>`: &lt;Brief description of output &gt;
    
  ##### Informal specification
  
