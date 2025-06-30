@@ -1,6 +1,6 @@
 # `profile_opset` Directory Structure
 
-This repository contains both formal and informal specifications, unit tests, and verification tools for various operators. The project is organized as follows:
+This repository contains both formal and informal specifications, documentation, tests, and verification tools for various operators. The project is organized as follows:
 
 ## General Structure
 
