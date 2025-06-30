@@ -1,4 +1,4 @@
-# `profile_opset` Directory Structure
+# Directory Structure
 
 This repository contains both formal and informal specifications, documentation, tests, and verification tools for various operators. The project is organized as follows:
 
