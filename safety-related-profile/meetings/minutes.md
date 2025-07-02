@@ -12,14 +12,14 @@
   - Two questions
     - What shall we "say" about inner overflows, division par zeros, etc.?
     - *Do we need the model to be human-readable?*
-  - SIONNX (see [here](https://github.com/alibaba/sionnx))
+  - For information: SIONNX (see [here](https://github.com/alibaba/sionnx))
       - Description of the algorithm (python). Example for [conv](https://github.com/alibaba/sionnx/blob/master/include/conv.algorithm)
       - Description of the signature. Example for [cov](https://github.com/alibaba/sionnx/blob/master/include/onnx_conv.td)
-  
 ## Minutes
-*To be completed.*
+- Long discussion about overflows etc. See action (0207-1).
 ## Actions
 ### New actions
+- [ ] (0207-1, Eric) Do a "synthesis" of the discussion about overflows, etc., discuss with the WG, find a consensus, add to the guidelines... 
 ### Past actions
 - [X] (1806-1, Eric) Provide a complete (simple) spec example for 1 op that can be reproduced on the other ops...
   - See [matmul](../documents/profile_opset/matmul/matmul.md)
