@@ -1,3 +1,48 @@
+# 2025/07/02
+## Participants
+-  TBC
+## Agenda
+- Status of actions
+- Misc news:  
+  - Feedback on June 20th workshop on formal specification and verification (Eric, Mariem, Jean)
+  - Structure of repo for Why3 formal specifications (Mariem)  - A question about model readability (Eric)
+  - Slides for WG114 (see [here](./Other_meetings/SONNX%20-%20WG114.pdf) (draft), Eric)
+  - Issues [see [here](https://github.com/onnx/onnx/issues/3651)]
+    - Back to action 0412-6...
+  - Two questions
+    - What shall we "say" about inner overflows, division par zeros, etc.?
+    - *Do we need the model to be human-readable?*
+  - SIONNX (see [here](https://github.com/alibaba/sionnx))
+      - Description of the algorithm (python). Example for [conv](https://github.com/alibaba/sionnx/blob/master/include/conv.algorithm)
+      - Description of the signature. Example for [cov](https://github.com/alibaba/sionnx/blob/master/include/onnx_conv.td)
+  
+## Minutes
+*To be completed.*
+## Actions
+### New actions
+### Past actions
+- [X] (1806-1, Eric) Provide a complete (simple) spec example for 1 op that can be reproduced on the other ops...
+  - See [matmul](../documents/profile_opset/matmul/matmul.md)
+- [X] (1806-2, Mariem) Provide Franck with the C code of the conv2d operator.
+  - Done. The code is [here](./attachments/conv2d.c).
+- [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
+- [ ] (1806-4, Eric) Organize a "physical" working session on the graph specification 
+- [ ] (1806-5, Eric, Jean) Resend a "call for participation" to the mailing list (at least once we have a good template spec) 
+- [ ] (1806-6, Eric) Initiate the specification of matrix multiplication 
+- [X] (1806-7, Jean-Baptiste) Provide Eric with ARP/SONNX analysis material 
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+### Long term actions
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form to support the analysis
+  
+
 # 2025/06/18
 ## Participants
 -  Eric, Mariem, Salomé, Alex, Henri, Dumitru, Jean-Baptiste, Mohammed, Franck, Jean-Loup, Jean
