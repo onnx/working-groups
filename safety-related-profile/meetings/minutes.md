@@ -1,6 +1,6 @@
 # 2025/07/02
 ## Participants
--  TBC
+-  Salomé, Alexandre, Jean, Sebastian, Cong, Mariem, Jean-Baptiste, Eric,...
 ## Agenda
 - Status of actions
 - Misc news:  
