@@ -48,7 +48,7 @@ This solution makes sense but it is not really practical since to check the cond
 
 In practice, we would be happier with some condition - possibly more conservative - easier to check.
 
-For instance, for a simple addition, this could be : $-2^{31}+1\leq a \leq 2^{31}$  and $-2^{31}+1 \leq b \leq 2^{31}$ .
+For instance, for a simple addition, this could be : $-2^{31}+1\leq a \leq 2^{31}-1$  and $-2^{31}+1 \leq b \leq 2^{31}-1$ .
 
 However, this approach is not easy to implement for more complex operators. It **may** work for instance if we know that the input values are in a certain range (e.g., because they have been normalized) so that not overflow can occur. 
 
