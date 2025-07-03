@@ -8,7 +8,7 @@
 
 ## 1. Points discutés
 
-### Test de l'opérateur `add` (float32)
+### Test de l'opérateur `add` (int32 et float32)
 
 - Salomé a implémenté un test de l'opérateur `add` en utilisant la librairie `ieee_int32` de Why3.
 - La création du **driver `type.drv`** a été complexe et a demandé un temps significatif.
@@ -27,7 +27,7 @@
 
 ### Limitation des types numériques en OCaml
 
-- OCaml ne propose que le type `int`, lié à l'architecture (ex. 31/63 bits).
+- OCaml ne propose que le type `int`, lié à l'architecture.
 - Il n'existe pas de prise en charge native pour des types comme `int32` ou `float32`, nécessaires à nos tests.
 
 ### Comportement de l’arrondi dans Why3 vs ONNX
@@ -46,5 +46,5 @@
 - Déterminer quelles opérations seront :
   - redéfinies dans le type `scalar`,
   - ou importées depuis les bibliothèques Why3.
-- Formaliser les éléments **spécifiés informellement par Frank** dans la **spécification du type `scalar`**.
+- Formaliser les éléments **spécifiés informellement par Franck** dans la **spécification du type `scalar`**.
 
