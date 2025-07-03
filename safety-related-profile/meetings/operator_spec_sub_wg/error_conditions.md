@@ -89,6 +89,7 @@ If we were to be more explicit, we could (for instance) require that, in the cas
 - $c+d$ is in the domain of `INT32`
 - $a+c$ is in the domain of `INT32`
 - etc. 
+  
 because we simply don't know in which order the operations will be carried out.
 
 ### Option 4
