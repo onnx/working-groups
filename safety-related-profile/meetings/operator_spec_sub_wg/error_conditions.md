@@ -103,3 +103,37 @@ This is strange to write such a thing in a specification... because (i) it is un
 
 In the example of an operator that can lead to a division by zero, we would either say that "some division by zero could occur" (option 4) or "division by zero will occur for such or such input value" (option 1).
 
+# An illustration
+
+Let's consider the `MatMulInteger` operator.
+This operator computes a matric multiplication with input tensor in `int8`and output tensor in `int32`.
+
+This operator does not overflow "most of the time" thanks to the size of the accumulator. However, it **can** overflow if the **size** of the  input tensors are sufficiently large.
+
+Consider the multiplication of two tensors `A` and `B` of shape `[1,N]` and `[N,1]`. Overflow should occur for $N$ such that 
+$$
+127 \times 127 \times N > 2^{31} - 1
+$$
+
+with values in `int8` in [-128,127].
+
+this gives 
+$$
+\Rightarrow N > \frac{2^{32}-1}{127^2} \approx 133,141.5
+$$
+
+The minimal value for an error to trigger is 
+$$
+N = 133142
+$$
+
+Strangely (?), overflow occurs for $N=133145$. 
+
+As shown below, both  python reference implementation and ORT give the same (incorrect) result: 
+
+```
+ONNX python reference Output:  [-2147471591]
+ONNX Runtime Output (int32): -2147471591
+Expected value:              2147495705
+```
+
