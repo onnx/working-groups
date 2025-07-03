@@ -1,13 +1,15 @@
 # Introduction
 
-This document is a followup to our discussion during July 2nd meeting about the way to specify operators in the presence of error conditions.
+This document is a followup to our July 2nd discussion about the way to specify the behaviour of operators in the presence of errors conditions.
 
 # Ths issue 
-Some operator are not defined for some input values, because of division by zero, overflows, etc.
+Some operator are not defined for some input values. Typical examples are division by zero, overflows, etc.
 
-For complex operators, the correct domain (where the function is defined) can't be defined easily.  
+For simple operators, those conditions can be specified in the definition of the input domain. For instance `y = Div (a , b)` is not defined for $b=0$, and the domain of the inputs in $\mathbb R$ or $\mathbb Z$ is $\mathbb R\times \mathbb R^*$  or $\mathbb Z\times \mathbb Z^*$, respectively.
 
-How can we address this in our informal specification?
+For complex operators, the correct domain (where the function is defined) can't be defined easily due to the complexity of the relation between the error condition (e.g., some denominator equal to 0 or some overflow) and the inputs. 
+
+**How can we address this in our informal specification?**
 
 For instance, let's take the `Add` operator: 
 
