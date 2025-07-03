@@ -106,23 +106,21 @@ In the example of an operator that can lead to a division by zero, we would eith
 # An illustration
 
 Let's consider the `MatMulInteger` operator.
-This operator computes a matric multiplication with input tensor in `int8`and output tensor in `int32`.
+This operator computes a matrix multiplication with input tensors in `int8` and output tensor in `int32`.
 
-This operator does not overflow "most of the time" thanks to the size of the accumulator. However, it **can** overflow if the **size** of the  input tensors are sufficiently large.
+This operator does not overflow "most of the time" thanks to the width  of the accumulator. However, it **can** overflow if the **sizes** of the  input tensors are sufficiently large.
 
-Consider the multiplication of two tensors `A` and `B` of shape `[1,N]` and `[N,1]`. Overflow should occur for $N$ such that 
+Consider the multiplication of two tensors `A` and `B` of shape `[1,N]` and `[N,1]`. The smallest $N$ for which overflow can occur is such that  
 $$
 127 \times 127 \times N > 2^{31} - 1
 $$
 
-with values in `int8` in [-128,127].
-
 this gives 
 $$
-\Rightarrow N > \frac{2^{32}-1}{127^2} \approx 133,141.5
+N > \frac{2^{32}-1}{127^2} \approx 133,141.5
 $$
 
-The minimal value for an error to trigger is 
+Since N is integer, the minimal value for an error to trigger is 
 $$
 N = 133142
 $$
