@@ -117,7 +117,7 @@ $$
 
 this gives 
 $$
-N > \frac{2^{32}-1}{127^2} \approx 133,141.5
+N > \frac{2^{32}-1}{127^2} \approx 133141.5
 $$
 
 Since N is integer, the minimal value for an error to trigger is 
@@ -135,3 +135,6 @@ ONNX Runtime Output (int32): -2147471591
 Expected value:              2147495705
 ```
 
+The specification of `MatMulInteger` could state a condition on the shapes of `A` and `B` to prevent overflows. The condition only concerns the dimension of accumulation: if the dimension is smaller than 133145, no overflow can occur. 
+
+As stated above, we may also specify the multiplication using 2's complement arithmetic. This specification would give the exact (but unexpected) result. 
