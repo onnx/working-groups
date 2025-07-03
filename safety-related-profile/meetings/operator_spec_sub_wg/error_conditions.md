@@ -2,7 +2,7 @@
 
 This document is a followup to our July 2nd discussion about the way to specify the behaviour of operators in the presence of errors conditions.
 
-# Ths issue 
+# The issue 
 Some operator are not defined for some input values. Typical examples are division by zero, overflows, etc.
 
 For simple operators, those conditions can be specified in the definition of the input domain. For instance `y = Div (a , b)` is not defined for $b=0$, and the domain of the inputs in $\mathbb R$ or $\mathbb Z$ is $\mathbb R\times \mathbb R^*$  or $\mathbb Z\times \mathbb Z^*$, respectively.
