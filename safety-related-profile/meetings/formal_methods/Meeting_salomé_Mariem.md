@@ -17,9 +17,14 @@
 ### Modifications des fichiers OCaml
 
 - Les fichiers `tensor.ml` et `tensor.mli` ont été modifiés pour :
-  - créer un cas de test,
   - appeler la fonction à tester (`add`),
   - afficher le résultat pour validation.
+
+### Création du fichier de test OCaml
+
+- Les fichiers `test_add.ml` et `test_add.expected` ont été générés pour :
+  - réaliser des cas simples de test des types `int32` ou `float32`,
+  - en exploitant les fonctions des fichiers `tensor.ml` et `tensor.mli`.
 
 ---
 
@@ -27,8 +32,8 @@
 
 ### Limitation des types numériques en OCaml
 
-- OCaml ne propose que le type `int`, lié à l'architecture.
-- Il n'existe pas de prise en charge native pour des types comme `int32` ou `float32`, nécessaires à nos tests.
+- OCaml ne propose que les types `int`, lié à l'architecture, et `int32`.
+- Il n'existe pas de prise en charge native pour des types comme `int8` ou `float32`, nécessaires à nos tests.
 
 ### Comportement de l’arrondi dans Why3 vs ONNX
 
