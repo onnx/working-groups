@@ -1,19 +1,55 @@
 # 2025/07/16
 ## Participants
+  Salomé, Jean, Tomé, Cong, Jean-Baptiste, Franck, Eric, Dumitru, ...
 ## Agenda
   - Actions
   - A few words about shape inference and broadcasting
   - A few words about the "minimal corpus of operators"
   - A few words about runtime errors
   - Feedback on presentation to WG114 (see [slides](./Other_meetings/SONNX%20-%20WG114.pdf))
+    - ED324 = ARP 6983
   - Feedback on meeting with DeepGreen
   - Meeting with ONNX infra about testing
   - Opportunities for presentation of our work:
     - Mobilit'AI.
   - Stragegy for next period
 ## Minutes
+  - A few words about shape inference and broadcasting
+    - Forbiddinhg broadcasting may reveal extremely penalizing because making it "explicit" boils down to creating actual tensors whereas broadcsting is essentially a manipulation of indexes done at operation level.
+    - We have to check if this restriction is necessary, sensible, and applicable.
+    - See actions (1607-2) and (1607-3)
+  - A few words about the "minimal corpus of operators"
+    - Some operators can be described using other, simpler, operators. For instance, a `softmax` can be described as the composition of `Exp` and `ReduceSum`. It may also be described as an atomic operation $s(z_i) = {e^{z_i} \over \sum_{j=1}^K e^{z_j}}$. A `Relu` can also be described as a combination of operators, etc.  
+      - Do we want to apply this modular approach? And what would be the "minimal corpus"?
+  - A few words about runtime errors
+    - See this [document](./errror%20conditions/error_conditions_2.md)
+    - Franck proposes an approach in which the implmeter would provide the description of error behaviour (see 1607-4)
+    - For integer operations, we will provide the exact spec of the operation (in 2's complement, see [here](./errror%20conditions/error_conditions_2.md))
+  - Feedback on presentation to WG114 (see [slides](./Other_meetings/SONNX%20-%20WG114.pdf))
+    - Presentation was appreciated.
+    - One slide or two on ED 324 <=> SONNX traceability must be done (see 1607-1)
+  - Feedback on meeting with DeepGreen
+    - SONNX will be used to specify (and partically provide code) for a C-code backend 
+  - Meeting with ONNX infra about testing
+    - Meeting planned on July 29th with people from the infra WG (Andreas, Justin, Christian).
+  - Opportunities for presentation of our work:
+    - Mobilit'AI.
+      - We will probably present a poster à that occasion.
+  - Stragegy for next period
+    - For the informal specification 
+      - Phase 1: Clean-up and ensure consistency between the guidelines and the 3 cononical examples (CONV2D, CONCAT, and aanother simple operator)
+      - Phase 2: mailing to the potential contributor to ask for condibution on the basis of the guidelines and existing examples
+      <off-meeting> - Phase 3: meeting to present the approach and share work </off-meeting>
+    - The same approach shall be followed for the formal specification.  
+  - Presentation of the `Add` operator by Salomé. 
 ## Actions
 ### New actions
+- [ ] (1607-1) Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 tracaibility 
+- [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability)
+- [ ] (1607-3, Dumitru) Write a few lines to explain the "mixed approach" to handle broadcasting.
+- [ ] (1607-4, Franck) Write a few lines to explain the approach to handle errors: ask implementers to provide error conditions 
+- [X] (1607-6, Tomé) Provide the description of the 2 interships.
+  - Description sent on 2025/07/16
 ### Past actions
 - [ ] (0207-1, Eric) Do a "synthesis" of the discussion about overflows, etc., discuss with the WG, find a consensus, add to the guidelines... 
 - [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
@@ -23,8 +59,7 @@
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
   - First trial on something simpler than the conv (matrix multiplication).
   - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
-- [-] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
-    - cancelled
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
 ### Long term actions
 - [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
 - [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
