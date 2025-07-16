@@ -1,3 +1,38 @@
+# 2025/07/16
+## Participants
+## Agenda
+  - Actions
+  - A few words about shape inference and broadcasting
+  - A few words about the "minimal corpus of operators"
+  - A few words about runtime errors
+  - Feedback on presentation to WG114 (see [slides](./Other_meetings/SONNX%20-%20WG114.pdf))
+  - Feedback on meeting with DeepGreen
+  - Meeting with ONNX infra about testing
+  - Opportunities for presentation of our work:
+    - Mobilit'AI.
+  - Stragegy for next period
+## Minutes
+## Actions
+### New actions
+### Past actions
+- [ ] (0207-1, Eric) Do a "synthesis" of the discussion about overflows, etc., discuss with the WG, find a consensus, add to the guidelines... 
+- [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
+- [ ] (1806-4, Eric) Organize a "physical" working session on the graph specification 
+- [ ] (1806-5, Eric, Jean) Resend a "call for participation" to the mailing list (at least once we have a good template spec) 
+- [X] (1806-6, Eric) Initiate the specification of matrix multiplication 
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+- [-] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+    - cancelled
+### Long term actions
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form to support the analysis
+  
 # 2025/07/02
 ## Participants
 -  Salomé, Alexandre, Jean, Sebastian, Cong, Mariem, Jean-Baptiste, Eric,...
