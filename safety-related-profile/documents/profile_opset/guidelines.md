@@ -1,8 +1,8 @@
 # Introduction
 
-This document gives guidelines to be followed when writing an operator's 
-- informal specification
-- formal specifications. 
+This document gives the guidelines to be followed when writing an operator's **informal** and **formal** specification.
+
+Nota: the current verson of this document is limited to the informal specification.
 
 # Informal specification
 
@@ -11,7 +11,7 @@ This document gives guidelines to be followed when writing an operator's
 ### Keep it simple!
 
 - Basically, the informal specification is a documentation, an "operator user's manual". 
-- It is aimed at showing clearly what a given operator is supposed to do. 
+- It is aimed at showing clearly what a given operator is supposed to do, but without calling on a strict formal, mathemtical language. 
 - The exact and complete specification is given in the "formal" part.
 - The informal specification shall use greek with extreme parsimony ;-)
 - The informal specification can provide diagrams and examples to make things clear.
@@ -21,15 +21,14 @@ This document gives guidelines to be followed when writing an operator's
 
 ### Notations
 - Tensors: 
-  - A tensor is always represented in uppercase name (e.g., A, B,...,X, Y, Z).
+  - A tensor is always represented in uppercase (e.g., A, B,...,X, Y, Z).
   - Input tensors are usually $A$, $B$,...
-  - Output tensor is $Y$
+  - Output tensor is usually $Y$
   - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $X_0$, $X_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
   - The dimensions of a tensor $X$ are denoted by a vector $(dX_0, ..., dX_i, ..., dX_n)$ where $dX_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
   - The numerical errors of a tensor $X$ are always represented by a tensor $X_{\textit{err}}$.
-    It is the difference between the tensor $X_{\textit{impl}}$ computed by an implementation
-    and the infinitly accurate tensor $X_{\textit{real}}$ expressed by the formal specification.
-    In the section on numerical accuracy, the notation $X_{\textit{real}}$ is replaced by $X$ unless it introduces ambiguity.
+    It is the difference between the tensor $X_{\textit{impl}}$ computed by an implementation and the infinitly accurate tensor $X_{\textit{real}}$ expressed by the formal specification for real numbers.
+  - In the section on numerical accuracy, the notation $X_{\textit{real}}$ is replaced by $X$ unless it introduces ambiguity.
   - For a tensor used as a variadic parameter (denoted $X_i$), the dimensions become $(dX_{i,0}, dX_{i,1}, ...)$. This notation is consistent with the way tensor dimensions are encoded in Why3.
   - In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
 
@@ -37,21 +36,22 @@ This document gives guidelines to be followed when writing an operator's
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated in the text with the tag `[R<i>]` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
-- A **constraints tag** expresses a constraint on one or several inputs, ouptu or attrinute. They are indicated using `C<i>` where `<i>` is a number.
+- A **constraints tag** expresses a constraint on one or several inputs, outputs, or attrinutes. They are indicated using `C<i>` where `<i>` is a number.
 - A **traceability tag** identifies a specific location in the informal specificarespecification. These tags are used to establish a traceability between the informal and formal specification. They are indicated using `T<i>` where `<i>` is a number.
 
 ### Types
+
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
 - Specific description may be given for the other types (``float``, ``double``, etc.).
-- A description can be applicable to as et of types as long as its **semantics description** remains the same for all types in the set. A counter example is, for instance, the case of operators applied on ``float`` or ``double`` that may create ``NaNs`` or ``+Inf`` or ``-Inf``. For this reason, they cannot be covered by the specification in $R$.
-- Only the scetions that need to be modified are repeated.
+- A description can be applicable to a set of types as long as its **semantics description** remains the same for all types in the set. A counter example is, for instance, the case of operators applied on ``float`` or ``double`` that may create ``NaNs`` or ``+Inf`` or ``-Inf``. For this reason, they cannot be covered by the specification in $\mathbb R$.
+- Only the sections that need to be modified are repeated.
 
 ## Structure
 
 The specification on an operator is structured as follows. 
 
-
 ### Signature
+
 *Definition of the operator's signature:*
 
  `<O> = <op>(<I1>,<I2>,...<In>)`
@@ -126,6 +126,28 @@ where `<name>` is the output's name and `<type>` is the output's type.
  
 This section contains a link to the formal specification expressed in Why3.
  
+##### Error conditions
+
+This section identifies the errors that may occur during the execution of the operator (or *runtime errors*).
+
+When writing a specification, the writer must identify the conditions where the following conditions may occur:
+- for floating point computations 
+  - an invalid operation as defined in IEEE 754 section 7.2, i.e.
+    - multiplication $(0, \infty)$ or multiplication $(\infty, 0)$ 
+    - addition or subtraction or fusedMultiplyAdd: magnitude subtraction of infinities, such as addition $(+\infty, -\infty)$ 
+    - division $(0, 0)$ or division ($\infty, \infty)$
+    - remainder(x, y), when y is zero or x is infinite and neither is a NaN
+    - square root if the operand is less than zero
+    - etc. Refer to the standard for a complete list of error conditions.
+- for integer computations 
+  - division by zero,
+  - operations leading to a value out of the range (e.g., addition of two large `int32` values non representable in `int32`)
+
+This section shall indicate if an operator can potentially return a `NaN` or `Inf`. It is is the case, the condition that can lead to this situation must be described.
+
+If the section is left empty, it means that **not error condition can occur**.
+
+
 ##### Numerical Accuracy
  
 This section provides a tight and verifiable specification of the numerical error
