@@ -15,16 +15,21 @@
   - Stragegy for next period
 ## Minutes
   - A few words about shape inference and broadcasting
-    - Forbiddinhg broadcasting may reveal extremely penalizing because making it "explicit" boils down to creating actual tensors whereas broadcsting is essentially a manipulation of indexes done at operation level.
+    - Forbidding broadcasting may reveal extremely penalizing because making it "explicit" boils down to creating actual tensors whereas broadcasting is essentially a manipulation of indexes done at operation level.
     - We have to check if this restriction is necessary, sensible, and applicable.
     - See actions (1607-2) and (1607-3)
   - A few words about the "minimal corpus of operators"
-    - Some operators can be described using other, simpler, operators. For instance, a `softmax` can be described as the composition of `Exp` and `ReduceSum`. It may also be described as an atomic operation $s(z_i) = {e^{z_i} \over \sum_{j=1}^K e^{z_j}}$. A `Relu` can also be described as a combination of operators, etc.  
-      - Do we want to apply this modular approach? And what would be the "minimal corpus"?
+    - Some operators can be described on the basis of simpler, "atomic" operators. For instance, a `softmax` can be described as the composition of `Exp` and `ReduceSum`. It may also be described as $s(z_i) = {e^{z_i} \over \sum_{j=1}^K e^{z_j}}$. A `Relu` can also be described as a combination of operators, etc.  
+      - Do we want to apply this modular approach? 
+      - What would be the "minimal corpus of operators"? 
+      - Could we have a "non-modular" informal specification (that describes the operation using a mathematical formula) and a modular formal specification? 
   - A few words about runtime errors
     - See this [document](./errror%20conditions/error_conditions_2.md)
+    - The question is to define a strategy to specify the error condition that may occur during the execution of an operator.
+    - In the FP domain, we agree that no exception is considered but that we use the IEEE special values Inf, NaN to propagate the errors up to the operator's output. <off-meeting : note that this implicitly means that the implementation complies with IEEE. It shall be noticed that not all processors fully comply with IEEE (some do not support Nan, Inf) and software implementations may also behave slightly differently from IEEE /> 
+    - We have to do a systematic analysis of the error conditions and indicate what are the possible error conditions (e.g., in the case of the SoftMax : overflow). The specification may still indicate that no error shall occur (i.e., no NaNs) because we know (as it is the case for SoftMax) that there is a means to avoid it (e.g., in the case of SoftMax : substract the max value). This means that all implementations will have to apply this means (or something equivalent). Otherwise, the specificaton of the operator shall indicate in the "Error conditions" section what errors can happen (e.g., an overflow) with a NaN as a result. 
     - Franck proposes an approach in which the implmeter would provide the description of error behaviour (see 1607-4)
-    - For integer operations, we will provide the exact spec of the operation (in 2's complement, see [here](./errror%20conditions/error_conditions_2.md))
+    - For integer operations, we will provide the **exact spec** of the operations. For signed ops, the specification will show the 2's complement description of the operation, see [here](./errror%20conditions/error_conditions_2.md))
   - Feedback on presentation to WG114 (see [slides](./Other_meetings/SONNX%20-%20WG114.pdf))
     - Presentation was appreciated.
     - One slide or two on ED 324 <=> SONNX traceability must be done (see 1607-1)
@@ -45,7 +50,7 @@
 ## Actions
 ### New actions
 - [ ] (1607-1) Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 tracaibility 
-- [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability)
+- [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability). What would be the effort to integrate broadcasting in the specification of our operators?
 - [ ] (1607-3, Dumitru) Write a few lines to explain the "mixed approach" to handle broadcasting.
 - [ ] (1607-4, Franck) Write a few lines to explain the approach to handle errors: ask implementers to provide error conditions 
 - [X] (1607-6, Tomé) Provide the description of the 2 interships.
