@@ -26,32 +26,33 @@ This document gives guidelines to be followed when writing an operator's
 > 
 > Proposal for the whole contents of this section:
 > 
-> The informal specification is intended for readers who want know how to use an operator, as well as for the ones who need to implement and verify a neural network from an ONNX model. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
+> The informal specification is intended for readers who want to know how to use an operator, as well as for the ones who need to implement and verify a neural network from an ONNX model. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
 > 
 > More precisely, the informal specification:
 
 > - Is aimed at showing clearly what a given operator is supposed to do,
 >   - Without calling on a strict formal, mathematical language,
 >   - Knowing that the exact and complete specification is given in the "formal" part.
-> - may provide diagrams and examples to make things clear.
+> - May provide diagrams and examples to make things clear.
 
-The writer of the informal specification of an operator shall have constantly in mind the following recommendation: "Keep it simple!", obviously while applying the rules expressed in the guidelines.
+> The writer of the informal specification of an operator shall have constantly in mind the following recommendation: "Keep it simple!", obviously while applying the rules expressed in the guidelines.
 
-> End of proposal.
-
+> Remove the following five bullets.
+> 
 - Basically, the informal specification is a documentation, an "operator user's manual". 
 - It is aimed at showing clearly what a given operator is supposed to do, but without calling on a strict formal, mathematical language. 
 - The exact and complete specification is given in the "formal" part.
 - The informal specification shall use greek with extreme parsimony ;-)
 - The informal specification can provide diagrams and examples to make things clear.
   
-
+> End of proposal.
+> 
 ### Fonts
 - Inputs, outputs, and attributes are represented using a non-serif font. For instance, the "pads" attribute is represented by `pads`.
 
 ### Notations
 
-> Remark: the term "shape" should be used instead of dimensions.
+> Remark 1: the term "shape" should be used instead of dimensions.
 
 - Tensors: 
   - A tensor is always represented in uppercase name (e.g., A, B,...,X, Y, Z).
@@ -81,7 +82,7 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
 - A description can be applicable to a set of types as long as its **semantics description** remains the same for all types in the set. A counter example is, for instance, the case of operators applied on ``float`` or ``double`` that may create ``NaNs`` or ``+Inf`` or ``-Inf``. For this reason, they cannot be covered by the specification in $R$.
 - Only the sections that need to be modified are repeated.
   
-> Remark: explicit the above sentence. See MatMul.
+> Remark 1: explicit the above sentence. See MatMul.
 
 ## Structure
 
@@ -93,20 +94,21 @@ The specification on an operator is structured as follows.
 > 
 > Proposal:
  
-### Contents
+> ### Contents
 
-*This section lists the various per input set of types informal specifications of the operator at stake. Only the first line below is mandatory, i.e., the one for real inputs. Any subsequent line comes from the necessity to specialize the informal specification for the real to machine types*
+> *This section lists the various per input set of types informal specifications of the operator at stake. Only the first line below is mandatory, i.e., the one for real inputs. Any subsequent line comes from the necessity to specialize the informal specification for the real to machine types*
 
 > - `<Name of the operator>` [operator (real)](#real)
-> - `<Name of the operator>` [operator (<comma-separated list of types>)](#float)
-> - `<Name of the operator>` [operator ()](#int)
+> - `<Name of the operator>` [operator (comma-separated list of types)]
+> - `<Name of the operator>` [operator (other comma-separated list of types)]
+> - etc
 
 > Example (MatMul):
 >
 > Contents
 - `MatMul` [operator (real)](#real)
 - `MatMul` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
-- `MatMul` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64, )](#int)
+- `MatMul` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64)](#int)
 
 > End of proposal.
 
@@ -121,12 +123,12 @@ The specification on an operator is structured as follows.
 
 ### `<operator name>`  `(<list of types for which this description is applicable>)`
 
-> Remark:  `<operator name>`  `(<list of types for which this description is applicable>)` : see MatMul.
+> Remark 1: an introductory text should describe the contents of this kind of section by relating it to the Contents section above.
 
 #### Restrictions
 *This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. They are introduced to simplify the implementation of operators, ensure resource usage predictability, enforce explicitness, etc.*
 
-> Remark 1: the verb "simplify" and, later in this section, the notion of "simplification" appear either inside the notion of "restriction" or aside this notion. Furthermore, the term "simplification" might be misinterpreted by the readers. Therefore I propose not to talk about "simplification" as a category but to split the notion of restriction into two categories:\
+> Remark 1: the verb "simplify" and, later in this section, the notion of "simplification" appear either inside the notion of "restriction" or aside this notion. Furthermore, the term "simplification" might be misinterpreted by the readers. Therefore I propose not to talk about "simplification" as a category but to split the notion of restriction into two categories:
 > - "Dependability restrictions": the restrictions for dependability reasons.
 > - "Other restrictions": the restrictions that aim at limiting the operator specification effort for the first delivery of SONNX. The restrictions of this second category are acceptable only if they do not prevent the operator at stake from being used in a sufficiently large domain.   
 
