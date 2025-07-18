@@ -8,20 +8,15 @@ This document gives guidelines to be followed when writing an operator's
 
 # Informal specification
 
-> Remark 1: The title "informal specification" should be "Guidelines for the informal specification" or "Informal specification guidelines"
+> Remark 1: I propose to change the title "informal specification" to "Guidelines for the informal specification" or "Informal specification guidelines"
 
-> Remark 2: The contents of this level 2 section should be presented here
-> Proposal : \
-> This section is composed of two sub-sections "General guidelines" and  
+> Remark 2: I propose to rename the two level-2 sub-sections "General recommendations" and "Structure" into "General guidelines" and "Structure of the informal specification" and to present them here as follows:
+> 
+> This section is composed of two sub-sections:
+> - "General guidelines", which expresses general recommendations, defines the use of specific fonts, some notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
+> - "Structure of the informal specification", which defines the structure and contents of the informal specification of an operator. This section makes use of the guidelines expressed in sub-section "General guidelines".
 
 ## General recommendations
-
-> Remark: I propose to use title "General recommendation" to substitute the one of the next sub-section, i.e., "Keep it simple".
-> Proposal for the current sub-section: \
-> This section is composed of two sub-sections: \
-> - "General guidelines", which expresses general recommendations, defines the use of specific fonts, some notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.\
-> - "Structure of the informal specification", which defines the structure and contents of the informal specification of an operator. This section makes use of the general guidelines expressed in sub-section "Guidelines".
-
 
 ### Keep it simple!
 
@@ -88,11 +83,13 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
   
 > Remark: explicit the above sentence. See MatMul.
 
-## Structure of the informal specification
+## Structure
+
+> Remark 1: I propose to change the title of this section to "Structure of the informal specification"
 
 The specification on an operator is structured as follows. 
 
-> Remark: introduce the "Contents" section as in MatMul.
+> Remark 2: introduce the "Contents" section as in MatMul.
 > 
 > Proposal:
  
