@@ -35,7 +35,7 @@ This document gives guidelines to be followed when writing an operator's
 >   - Knowing that the exact and complete specification is given in the "formal" part.
 > - May provide diagrams and examples to make things clear.
 
-> The writer of the informal specification of an operator shall have constantly in mind the following recommendation: "Keep it simple!", obviously while applying the rules expressed in the guidelines.
+> The writer of the informal specification of an operator shall have constantly in mind the following recommendation: "Keep it simple!", while applying the rules expressed in the guidelines.
 
 > Remove the following five bullets.
 > 
@@ -71,10 +71,11 @@ This document gives guidelines to be followed when writing an operator's
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated in the text with the tag `[R<i>]` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
-- A **constraints tag** expresses a constraint on one or several inputs, ouptu or attribute. They are indicated using [`C<i>`] where `<i>` is a number.
+- A **constraints tag** expresses a constraint on one or several inputs, output or attribute. They are indicated using `[C<i>]` where `<i>` is a number.
 - A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish a traceability between the informal and formal specification. They are indicated using `T<i>` where `<i>` is a number.
 
-> Remark: remove back quotes and < > and add [] where missing 
+> Remark 1: add [] around `T<i>`.
+> Remark 2: give an example of the declaration and use of a tag.
 
 ### Types
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
@@ -171,9 +172,10 @@ The specification on an operator is structured as follows.
         
 > Example of mathematical description (convolution):
 
-> $$\begin{gathered}
+$$\begin{gathered}
     Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} (X[b,i,m \cdot strides[0]+ j \cdot dilations[0], n \cdot strides[1]+ z \cdot dilations[1]] \cdot W[c, i, j, z]) + B[c]
 \end{gathered}$$
+
 > Where
 - >$b$ is the batch index, $b \in [0,b(Y)-1]$, $b(Y)$ is the batch size of output `Y`
 - > $c$ is the data channel, $c \in [0,c(Y)-1]$, $c(Y)$ is the number of data channels of output `Y`
