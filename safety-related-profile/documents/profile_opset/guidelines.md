@@ -36,8 +36,8 @@ Nota: the current verson of this document is limited to the informal specificati
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated in the text with the tag `[R<i>]` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
-- A **constraints tag** expresses a constraint on one or several inputs, outputs, or attrinutes. They are indicated using `C<i>` where `<i>` is a number.
-- A **traceability tag** identifies a specific location in the informal specificarespecification. These tags are used to establish a traceability between the informal and formal specification. They are indicated using `T<i>` where `<i>` is a number.
+- A **constraints tag** expresses a constraint on one or several inputs, outputs, or attributes. They are indicated using `C<i>` where `<i>` is a number.
+- A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish a traceability between the informal and formal specification. They are indicated using `T<i>` where `<i>` is a number.
 
 ### Types
 
@@ -60,11 +60,11 @@ The specification on an operator is structured as follows.
  - `<In>`: &lt;Brief description of the nth input &gt;
  - `<O>`: &lt;Brief description of output &gt; 
 
-### `<operator name>`  `(<list of types for which this description is applicable>)`
+### `<operator name>`  `(<list of types to which this description is applicable>)`
 
  
 #### Restrictions
-*This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. restriction may concern the dimension of tensors, values of attributes, etc. They are introduced to simplify the implementation of operators, ensure resource usage predictability, enforce explicitness, etc.*  
+*This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. They are introduced to simplify the implementation of operators, ensure resource usage predictability, enforce explicitness, etc.*  
 
 *An example is given hereafter*
 
@@ -88,13 +88,13 @@ This section describes the operator's inputs.
  
 ###### `<name>`: `<type>`
 
-where `<name>` is the attribute's name and `<type>` is the type of the attribute.
+where `<name>` is the name of the input and `<type>` is the type of the input.
 
 ##### Attributes
 
 - This section describes the operator's attributes.
 - It also gives all constraints applicable to the input/output/attribute (if any). 
-- When a constraint involves several inputs/outputs/attributes, it is only be described for the first one and will be cross-referenced in the "constraint" section of the other ones..\
+- When a constraint involves several inputs/outputs/attributes, it is only described for the first one and will be cross-referenced in the "constraint" section of the other ones..\
 The description is structured as follows:*
 
  - (C&lt;i&gt;) &lt;Title of constraint&gt;
@@ -143,7 +143,7 @@ When writing a specification, the writer must identify the conditions where the 
   - division by zero,
   - operations leading to a value out of the range (e.g., addition of two large `int32` values non representable in `int32`)
 
-This section shall indicate if an operator can potentially return a `NaN` or `Inf`. It is is the case, the condition that can lead to this situation must be described.
+This section shall indicate if an operator can potentially return a `NaN` or `Inf`. It is is the case, the condition that might lead to this situation must be described.
 
 If the section is left empty, it means that **not error condition can occur**.
 
