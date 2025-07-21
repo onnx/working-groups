@@ -1,3 +1,8 @@
+TO BE DISCUSSED :
+- For each input / output tensor, distinghuish (i) value, (ii) shape?
+- Do we only support homogeneous types (when question is applicable)
+
+
 # Introduction
 
 This document gives the guidelines to be followed when writing an operator's **informal** and **formal** specification.
@@ -18,7 +23,7 @@ More precisely, the informal specification:
 - Knowing that the exact and complete specification is given in the "formal" part.
 - May provide diagrams and examples to make things clear.
 
-The writer of the informal specification must take care to keep it readable and understandable by a regular ML developer. The recommendations given in the following guidelines target this objective.
+The writer of the informal specification must take care to keep it readable and understandable by a ML developer. The recommendations given in the following guidelines target this objective.
 
 ### Fonts
 - Inputs, outputs, and attributes are represented using a non-serif font. For instance, the "pads" attribute is represented by `pads`.
