@@ -6,10 +6,10 @@ Nota: as of July 2025, guidelines are limited to the *informal* specification.
 
 # Informal specification guidelines
 This section is composed of two sub-sections:
-- *General recommendations*, which defines the use of fonts, notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
-- *Structure of the informal specification*, which defines the structure and contents of the informal specification of an operator. This section applies the general recommendations.
+- *General guidelines*, which defines the use of fonts, notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
+- *Structure of the informal specification*, which defines the structure and contents of the informal specification of an operator. This section applies the general guidelines.
 
-## General recommendations  
+## General guidelines  
 The informal specification is intended for both users *and* implementers  of operators who both need to understand what an operator does and how to use it. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
 
 More precisely, the informal specification:
@@ -39,16 +39,14 @@ The writer of the informal specification must take care to keep it readable and 
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated by tag `R<i>` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
-- A **constraints tag** expresses a constraint on one or several inputs, outputs, or attributes. They are indicated using `[C<i>` where `<i>` is a number.
+- A **constraints tag** expresses a constraint on one or several inputs, outputs, or attributes. They are indicated using `C<i>` where `<i>` is a number.
 - A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish traceability between the informal and formal specifications. They are indicated by tag `T<i>` where `<i>` is a number.
 
 For instance, here is a tag introducing a constraint relating the input and output tensors for the `Abs` operator:
-
 >`C1` Shape consistency \
 > Statement: Tensor $A$ and $Y$ shall have the same shape.
 
 ### Types
-
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
 - Specific description may be given for the other types (`float`, `double`, etc.).
 - A description can be applicable to multiple types as long as its **semantics description** remains the same for all types. A counter example is, for instance, the case of operators applied on `float` or `double` that may create `NaNs` or `Inf`s. For this reason, they cannot be covered by the specification in $\mathbb R$.
@@ -67,15 +65,15 @@ This section gives the list of all informal specifications of the operator, for 
 - `<Name of the operator>` operator for types `<type T'1, type T'2,...>`
 - etc
 
->/!\  Ne faudrait-il pas préciser que nous n'acceptons par défaut que des types homogènes? /!\
-
 Here is an example for operator `MatMul`:
 > Contents
 >- `MatMul` operator for type real
 >- `MatMul` operator for types `FP16`, `FP32`, `FP64`, `BFLOAT16`
 >- `MatMul` operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`
 
-### `<operator name>`  `(<list of types to which this description is applicable>)`
+The following section must be repeated for each set of types for which the semantics is the same. One section corresponds to one entry in the "Contents" list. 
+
+## `<operator name>`  `(<list of types to which this description is applicable>)`
 
 ### Signature
 
@@ -90,7 +88,7 @@ Definition of the operator's signature:
 #### Restrictions
 This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. 
 
-Restrictions marked as "Transient" are introduced by the working group in order to simplify the specification effort. Such restrictions, which are not traceable to a need, are normally aimed at being eventually relaxed. However, in the meantime, both transient and non-transient restrictions are applicable by the operator user or implementer.  
+Restrictions marked as "Transient" are introduced by the working group in order to reduce the specification effort. Such restrictions, which are not traceable to a need, are normally aimed at being eventually relaxed. However, in the meantime, both transient and non-transient restrictions are applicable by the operator user or implementer. 
 
 Restrictions not marked as "transient" are traceable to some requirement. The requirement is identified using an hyperlink.
  
@@ -98,8 +96,8 @@ An example is given hereafter
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| `[R1]` | Input tensor `X` has 2 spatial axes | Transient |
-| `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
+| `R1` | Input tensor `X` has 2 spatial axes | Transient |
+| `R2` | Attribute `auto_pad` is restricted to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
 
  #### Informal specification
  
@@ -113,7 +111,7 @@ The informal specification shall be composed of the following parts:
 - A detailed description that:
   - Uses the notations proposed in section "Notations" of these guidelines
   - Implements the traceability tags proposed in Section "Tags" of these guidelines
-  - Presents the mathematical formulae according to the following pattern: the complete formula is first given and its atomic elements and sub-expressions are defined afterward, by introducing them with "Where" or "In which"
+  - Presents the mathematical formulae, if necessary, according to the following pattern: the complete formula is first given and its atomic elements and sub-expressions are defined afterward, by introducing them with "Where" or "In which"
         
 For instance, for the `Conv`operator:
 
@@ -124,7 +122,7 @@ For instance, for the `Conv`operator:
 >- $b$ is the batch index, $b \in [0,b(Y)-1]$, 
 >- $b(Y)$ is the batch size of output `Y`
 >- $c$ is the data channel, $c \in [0,c(Y)-1]$, 
-> - $c(Y)$ is the number of data channels of output `Y`
+>- $c(Y)$ is the number of data channels of output `Y`
 >- etc
 
 #### Error conditions
@@ -147,7 +145,6 @@ When writing a specification, the writer must identify the conditions where the 
 This section shall indicate if an operator can potentially return a `NaN` or `Inf`. It is is the case, the condition that might lead to this situation must be described.
 
 If the section is left empty, it means that **not error condition can occur**.
-
 
 #### Inputs
 
@@ -200,46 +197,29 @@ depends only on the numerical value of the inputs.
 
 The provided specification results from an over-approximated semantics (ex: IEEE-754) of the
 numerical error of native computer operations approximating real number
-operations. In order to preserve the readability of the formulas, the general specification
-introduces additional (conservative) simplifications compared to the original spectifiations.
-However, this general specification may be too over-approximated for some specific inputs
-(ex tensor representing diagonal matrices). In this case, more precise specific specifications
-are provided alongside the general specification.
+operations. In order to preserve the readability of the formulas, the general specification introduces additional (conservative) simplifications compared to the original specifications.
+However, this general specification may be too over-approximated for some specific inputs (ex tensor representing diagonal matrices). In this case, more precise specific specifications are provided alongside the general specification.
 
-The error specification comes with unit verification scenarios to verify the implementation's
-conformity. In the absence of value ranges for the inputs, the unit verification scenarios
-operate on symbolic values and errors to propagate correct formulas throughout the scenario
-and thus provide a proof for the assertions. In particular, the C implementation generated
-from the Why3 formal specification must be verified using these scenarios, for example
-by using symbolic instrumentation libraries.
+The error specification comes with unit verification scenarios to verify the implementation's conformity. In the absence of value ranges for the inputs, the unit verification scenarios operate on symbolic values and errors to propagate correct formulas throughout the scenario and thus provide a proof for the assertions. In particular, the C implementation generated from the Why3 formal specification must be verified using these scenarios, for example by using symbolic instrumentation libraries.
 
 ###### Error Propagation
 
-This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the
-propagated error, where $Y$ is the tensor result of an operator.
+This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of an operator.
 
 ###### Error Introduction
 
-This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$, the
-introduced error, where $Y$ is the tensor result of an operator.
+This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$, the introduced error, where $Y$ is the tensor result of an operator.
 
 Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 ###### Unit Verification
 
-This section contains a verification scenario to verify the above specification
-for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each
-real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+This section contains a verification scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
 
-* The `real` field is a symbolic abstract domain for ideal (infinitly precise) C/C++ floating-point
-  (or fixed-point) computations.  
+* The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
 * The `float` field is a symbolic abstract domain for the computed value.  
-* The `err` field is a symbolic abstract domain for the absolute error, that is the difference
-  between the possible values of `float` and `real`.  
-* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference
-  between the possible values of `float` and `real` divided by `real`.
-
-
+* The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
+* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
 
 # Formal specification guidelines
 

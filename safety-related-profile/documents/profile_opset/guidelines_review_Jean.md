@@ -207,7 +207,6 @@ $$\begin{gathered}
 - > $c$ is the data channel, $c \in [0,c(Y)-1]$, $c(Y)$ is the number of data channels of output `Y`
 - > etc
 
- 
 ##### Error conditions
 
 *This section identifies the errors that may occur during the execution of the operator (or *runtime errors*).*
