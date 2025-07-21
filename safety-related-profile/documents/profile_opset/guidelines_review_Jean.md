@@ -8,7 +8,7 @@ This document gives guidelines to be followed when writing an operator's
 
 # Informal specification
 
-> Remark 1: I propose to change the title "informal specification" to "Guidelines for the informal specification" or "Informal specification guidelines"
+> Remark 1: I propose to change the title "informal specification" to "Guidelines for the informal specification" or "Informal specification guidelines". Same remark for the future guidelines for the formal specification.
 
 > Remark 2: I propose to rename the two level-2 sub-sections "General recommendations" and "Structure" into "General guidelines" and "Structure of the informal specification" and to present them here as follows:
 > 
