@@ -10,17 +10,22 @@ This document gives guidelines to be followed when writing an operator's
 
 > Remark 1: I propose to change the title "informal specification" to "Guidelines for the informal specification" or "Informal specification guidelines". Same remark for the future guidelines for the formal specification.
 
+>> OK: done
+
 > Remark 2: I propose to rename the two level-2 sub-sections "General recommendations" and "Structure" into "General guidelines" and "Structure of the informal specification" and to present them here as follows:
 > 
 > This section is composed of two sub-sections:
 > - "General guidelines", which expresses general recommendations, defines the use of specific fonts, some notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
 > - "Structure of the informal specification", which defines the structure and contents of the informal specification of an operator. This section makes use of the guidelines expressed in sub-section "General guidelines".
 
+>> OK: done.
+
 ## General recommendations
 
 ### Keep it simple!
 
 > Remark 1: I propose to change the title "Keep it simple" to "General recommendations"
+>> OK: done
 
 > Remark 2: since we now have precise and detailed guidelines, this section should be adapted. Indeed, the simplicity should come from the strict application of the guidelines. The risk in keeping this section as it is, is to minimize the importance of the informal specification, e.g., part of the verification of the formal one will be performed against it.
 > 
@@ -46,13 +51,19 @@ This document gives guidelines to be followed when writing an operator's
 - The informal specification can provide diagrams and examples to make things clear.
   
 > End of proposal.
-> 
+
+
+>> OK: done
+
+
 ### Fonts
 - Inputs, outputs, and attributes are represented using a non-serif font. For instance, the "pads" attribute is represented by `pads`.
 
 ### Notations
 
 > Remark 1: the term "shape" should be used instead of dimensions.
+
+>> OK: done
 
 - Tensors: 
   - A tensor is always represented in uppercase name (e.g., A, B,...,X, Y, Z).
@@ -75,7 +86,12 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
 - A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish a traceability between the informal and formal specification. They are indicated using `T<i>` where `<i>` is a number.
 
 > Remark 1: add [] around `T<i>`.
+
+>> OK: I propose to remove the brackets and keep the non-serif font.
+
 > Remark 2: give an example of the declaration and use of a tag.
+
+>> OK: done 
 
 ### Types
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
@@ -85,9 +101,13 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
   
 > Remark 1: explicit the above sentence. See MatMul.
 
+>> OK: done 
+
 ## Structure
 
 > Remark 1: I propose to change the title of this section to "Structure of the informal specification"
+
+>> OK: done
 
 The specification on an operator is structured as follows. 
 
@@ -113,6 +133,8 @@ The specification on an operator is structured as follows.
 
 > End of proposal.
 
+>> OK: done 
+
 ### Signature
 *Definition of the operator's signature:*
 
@@ -133,6 +155,8 @@ The specification on an operator is structured as follows.
 > - "Dependability restrictions": the restrictions for dependability reasons.
 > - "Other restrictions": the restrictions that aim at limiting the operator specification effort for the first delivery of SONNX. The restrictions of this second category are acceptable only if they do not prevent the operator at stake from being used in a sufficiently large domain.   
 
+>> OK. See the proposed text.
+
 
 *An example is given hereafter*
 
@@ -147,6 +171,8 @@ The specification on an operator is structured as follows.
 > Remark 2: see remark 1 in this section. I propose to "merge" the text into the Remark 1 proposal.
 >
 > Remark 3: give an example of "Other restrictions".
+
+>> OK: See new text.
 
 - Restrictions are introduced to comply with some requirement. The requirement is identified using an hyperlink.
 
