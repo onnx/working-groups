@@ -1,8 +1,3 @@
-TO BE DISCUSSED :
-- For each input / output tensor, distinghuish (i) value, (ii) shape?
-- Do we only support homogeneous types (when question is applicable)
-
-
 # Introduction
 
 This document gives the guidelines to be followed when writing an operator's **informal** and **formal** specification.
