@@ -315,7 +315,7 @@ Values `dim0` and `dim1` correspond to the previous products:
 - ${dim_1} = d_{axis} \times d_{{axis}+1}  \times ... \times d_n$ 
 
 
-<img src="flatten_netron.png" alt="drawing" width="60%"/>
+<img src="flatten_netron.png" alt="drawing" width="40%"/>
 
 Operator `Slice` uses the starts, ends, axes and steps inputs to select a sub-tensor of its input data tensor. (see the ONNX and numpy documenration: it is a pretty complicated operator...)
 
