@@ -140,7 +140,7 @@ The kernel is reshaped (`reshape`) into a 1x4 vector.
 The flattened kernel is then multiplied with the 4x4 matrix. The (1x4) vector result is finally reshaped into a 2x2 matrix. The Python code can be found in [Google Collab](https://colab.research.google.com/drive/1CpJv2-zwHV_ZmC7FH9VD0UffFDahHI3s#scrollTo=vWPbx5Br7RJZ).
 
 The resulting graph is given below: 
-<img src="concat_netron.png" alt="drawing" width="100%"/>
+<img src="conv_netron.png" alt="drawing" width="60%"/>
 
 
 *WARNING: describing convolution this way makes the actual operation done by the operator much more difficult to understand... In fact, this scheme will necessarily be explained with a reference to the classical way to compute convolutions...* 
