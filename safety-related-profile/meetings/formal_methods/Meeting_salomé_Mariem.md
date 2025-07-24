@@ -1,4 +1,49 @@
-# Compte rendu de réunion — Avancement sur le type `scalar`
+# Compte rendu de réunion — Avancement sur le type `scalar` et génération du code C
+
+**Date :** 24/07/2025  
+**Participants :** Salomé, Mariem  
+**Sujet :** Avancement sur le type `scalar` et génération du code C
+
+---
+
+## 1. Points discutés
+
+Salomé a résumé ce qu'elle a fait pendant les deux dernières semaines. Elle a :
+
+1. Vérifié que l’opération d’arrondi utilisée dans ONNXRuntime est la même que celle utilisée dans Why3, à savoir **RNE**.  
+2. Cloné le type `scalar` générique pour définir les types `ScalarInt32` et `ScalarFloat32`, en utilisant les bibliothèques `mach.int.Int32` et `ieee_float.Float32`.  
+3. Implémenté l’opérateur générique `add` prenant un type `t` en paramètre.  
+4. Cloné l’opérateur générique `add` pour définir les modules `OpAdd_Float32` et `OpAdd_Int32`.  
+5. Généré le code OCaml.  
+6. Créé les fichiers de tests et testé le comportement de l’opérateur `add` avec `int32` et `float32`, dans les cas d’addition avec et sans débordement.  
+7. Réussi à générer un code C à partir de l’implémentation naïve du type `scalar`, mais la génération est incomplète : seule la structure de données `scalar` est traduite en C. Des problèmes sont rencontrés lors de la traduction de l’opérateur `add`.
+
+---
+
+## 2. Problématiques identifiées
+
+- Le test de l’opérateur `add` avec des `float32` en cas de débordement ne donne pas le même résultat que ONNX, car le type `Float32` n’existe pas dans OCaml (seul le type `float64` y est disponible).  
+  **Solutions possibles :**
+  - Définir `float32` en OCaml.
+  - Générer du code C pour les tests.
+
+- Certaines expressions en WhyML ne sont pas traduisibles en C, comme : `int32.of_int`.  
+- La structure utilisée pour définir `scalar` est un peu complexe ; elle pourrait être simplifiée afin de faciliter la génération du code C.  
+  Une autre solution possible : ne générer en C que les types problématiques en OCaml (notamment `float32`), pour éviter de devoir traduire le type générique complet.
+
+---
+
+## 3. Actions à venir
+
+- Enrichir le type `scalar` avec des opérations logiques et des preuves, car l’implémentation actuelle ne contient que des opérations fonctionnelles.  
+- Optimiser la structure du type `scalar` générique traduite en C (à discuter avec l’équipe et Loïc).  
+- Tenter de générer du code C à partir de l’implémentation **non naïve** du type `scalar`.  
+
+
+---
+
+
+# Compte rendu de réunion — Avancement sur le type `scalar` 
 
 **Date :** 03/07/2025 
 **Participants :** Salomé, Mariem  
