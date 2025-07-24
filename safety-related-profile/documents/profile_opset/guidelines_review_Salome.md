@@ -1,3 +1,5 @@
+Reviewer: Salome Marty Laurent
+
 # Introduction
 
 This document gives the guidelines to be followed when writing an operator's **informal** and **formal** specification.
@@ -39,7 +41,9 @@ The writer of the informal specification must take care to keep it readable and 
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated by tag `R<i>` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
+> Remark: The constraints tag should be used for references, similar to the traceability tag. When referencing constraints, I suggest using absolute numbering.
 - A **constraints tag** expresses a constraint on one or several inputs, outputs, or attributes. They are indicated using `C<i>` where `<i>` is a number.
+> Remark: I propose to differentiate the reference and definition of such traceability tag. The definition expressed as "`T<i>`**:**" and the reference as "`T<i>`".
 - A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish traceability between the informal and formal specifications. They are indicated by tag `T<i>` where `<i>` is a number.
 
 For instance, here is a tag introducing a constraint relating the input and output tensors for the `Abs` operator:
@@ -162,6 +166,7 @@ The description is structured as follows:*
 
  - `C<i>` &lt;Title of constraint&gt;
    - Statement: &lt;Expression of the constraint&gt; or cross-reference to the previous location where this constraint was first introduced.
+> Remark: Considering its absence in some informal specifications, is the "Rationale" section necessary ?
    - Rationale: &lt;Justification for the constraint&gt;
 
 #### Attributes

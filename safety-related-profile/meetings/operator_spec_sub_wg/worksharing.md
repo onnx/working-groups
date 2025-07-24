@@ -55,7 +55,6 @@
 | Neg                          |hb,                 |                   | WR
 | Not                          |                    |                   |
 | Pad                          |                    |                   |
-| Padding                      |                    |                   |
 | Pow                          |hb,                 |                   | WR
 | Range                        |                    |                   |
 | ReduceMean                   |                    |                   |
