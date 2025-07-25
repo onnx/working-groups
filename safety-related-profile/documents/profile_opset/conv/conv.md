@@ -1,6 +1,18 @@
-# `conv` operator (real)
+# `conv` operator
+### Contents
+- `Convolution` operator for type real.
 
-## Restrictions
+## `<Conv>`  `(<real>)`
+
+### Signature
+`Y = conv(X,W,[B])`
+where
+- `X`: input tensor
+- `W`: convolution kernel
+- `B`: optional bias
+- `Y`: output tensor
+
+#### Restrictions
 The following restrictions apply to the `conv` operator for the SONNX profile:
 
 | Restriction    | Statement | Origin |
@@ -9,26 +21,27 @@ The following restrictions apply to the `conv` operator for the SONNX profile:
 | `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
 | `[R3]` | Attribute `group` is restricted to 1 (standard convolution) or to the number of channels of the input tensor (depthwise convolution) | Simplification | 
 
-## Signature
-`Y = conv(X,W,[B])`
-where
-- `X`: input tensor
-- `W`: convolution kernel
-- `B`: optional bias
-- `Y`: output tensor
+ #### Informal specification
   
-## Documentation
-
 Operator `conv` computes the convolution of the input tensor `X` with the kernel `W` and adds bias `B` to the result. Two types of convolutions are supported: _standard convolution_ and _depthwise convolution_.
 
-### Standard convolution
+##### Standard convolution
 A _standard convolution_ applies a kernel (also called "filter") to the input tensor, aggregating information accross both spatial axes and channels. For a given output channel, the kernel operates accross all input channels and all contributions are summed to produce the output. This corresponds to the case where `group`= 1. 
 
-The mathematical definition of the operator without padding is given hereafter.
-The formal specification is given in Section <a href="#sec:conv_formal" data-reference-type="ref" data-reference="sec:conv_formal">Formal specification</a>. When considering padding, the same formula applies, in which `X` represents the padded version of the actual input `X`.
+The mathematical definition of the operator is given hereafter.
+For the sake of simplification, we assume that padding and dilation are handled by separate operators, `Pad` (ONNX operator) and a conceptual `Dilation`.
+Concretely, we consider the convolution to be applied to a transformed version of the input tensor:
+
+$X_{eff} = Dilation(Pad(X))$
+
+where
+- $X_{eff}$ is the padded and dilated version of the input tensor.
+- The `Pad` operator applies zero-padding as specified by the pads attribute (see ONNX Pad operator).
+- The `Dilation` operator simulates the effect of spacing between kernel elements, based on the dilations attribute. Its implementation will be defined later.
+
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} \\ (X[b,i,m \cdot strides[0]+ j \cdot dilations[0], n \cdot strides[1]+ z \cdot dilations[1]] \cdot W[c, i, j, z]) \\ + B[c]
+    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} \\ (X_{\text{eff}}[b,i,m \cdot strides[0]+ j , n \cdot strides[1]+ z ] \cdot W[c, i, j, z]) \\ + B[c]
 \end{gathered}$$
 
 Where
@@ -40,13 +53,15 @@ Where
 - $h(W)$ is the size of the first spatial axis of kernel `W`
 - $w(W)$ is the sizes of the second spatial axis of kernel `W`
 
-`strides` and `dilations` are attributes of the operator. They are described later in this section.
+The bias `B` is added using the `Broadcast` operator to match the shape of the output tensor `Y`. The `Broadcast` operator replicates the bias value `B[c]` across the spatial dimensions and batch dimension of the output `Y`. (`Broadcast` operator will be defined later)
+
+`strides` is an attribute of the operator. It will be described later in this section.
 
 The effect of the operator is illustrated on the following figure. In this example
-- shape of `Y` is $1\times 1 \times 4 \times 4$ (batch size is 1, number of data channels is 1)
-- shape of `X` is $1 \times 1 \times 8 \times 8$ (batch size is 1, number of data channels is 1)
-- shape of `W` is $1 \times 1 \times 3 \times 2$  (number of data channels is 1)
-- shape of `B` is $1$
+- shape of `Y` is ($1, 1, 4, 4$) (batch size is 1, number of data channels is 1)
+- shape of `X` is ($1, 1, 8, 8$) (batch size is 1, number of data channels is 1)
+- shape of `W` is ($1, 1, 3, 2$)  (number of data channels is 1)
+- shape of `B` is ($1$)
 - `pads` is  set to (1,2,2,2) (1 column on the left, 2 columns on the right, 2 rows on the top, 2 rows on the bottom)
 - `dilations` is set to (2,2)
 - `strides` is set to (2,3)
@@ -64,7 +79,7 @@ The following figure shows the case where the number of channels of `X` is 3. In
 ![](./imgs/conv-std-3-channels.png) 
 
 
-### Depthwise convolution
+##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $c(X)$. 
 
 The mathematical definition is given hereafter:
@@ -84,15 +99,17 @@ The effect of the operator is illustrated on the following figure. In this examp
 
 ![](./imgs/conv-dep-3-channels.png)
 
-## Inputs
+#### Error conditions
 
-### `X`
+#### Inputs
+
+##### `X`
 
 Tensor `X` is the input tensor on which convolution with kernel `W` is computed.
 
 The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
 
-#### Constraints
+###### Constraints
 
 - (C1) Number of spatial axes of tensor `X`
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
@@ -112,7 +129,7 @@ The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
     - Statement: If axis denotation is in effect, the operation expects input data tensor to have axis denotation \[`DATA_BATCH`, `DATA_CHANNEL`, `DATA_FEATURE`, `DATA_FEATURE`\].
     - Rationale: Denotation convention
 
-### `W`
+##### `W`
 
 Tensor `W` is the convolution kernel.
 
@@ -121,7 +138,7 @@ The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
 - $fm(W)$ is the number of input channels
 - $h(W)$ and $w(W)$ are the sizes of the kernel for the two spatial axes.
 
-#### Constraints
+###### Constraints
 - (C1) Consistency between the number of channels of `X` and `W`
    - Statement: [See constraint (C2) of X](#channel_consist).
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
@@ -134,47 +151,45 @@ The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to have axis denotation \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`, `FILTER_SPATIAL`\].
     - Rationale: Denotation convention
 
-### `B`
+##### `B`
 
 Tensor `B` is the bias. 
 
 The shape of tensor `B`is $c(B)$.
 
-#### Constraints
+###### Constraints
 - (C1) Consistency between the number of channels of `B` and `W`
     - Statement:  $c(B) = fm(W)$.
 
-## Attributes
+#### Attributes
 
-### `strides`: list of int
+##### `strides`: list of int
 
 Attribute `strides` determines how the kernel is applied on tensor `X` during the convolution.
 
 For instance, with $\mbox{\texttt{stride}}[0]=2$ and $\mbox{\texttt{stride}}[1]=3$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
 
-> The previous sentence is not clear...
-
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(2,3).
 
 <img src="./imgs/conv_stride.png" width="300" />
 
-#### Constraints
+###### Constraints
 - (C1) Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values are used in the denominator of expression in [constraint (C3) of X](#shape_consist) 
 - (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (C3) of X](#shape_consist)
 
-### `auto_pad` : string
+##### `auto_pad` : string
 
 The `auto_pad` attribute determines if and how automatic padding is done for the input tensor X.
 
-#### Constraints
+###### Constraints
 - (C1) Explicit padding
     - Statement: `auto_pad` shall be set to `NOTSET` `[R2]`
     - Rationale: The SONNX profile imposes explicit padding.
 
-### `pads`: list of int
+##### `pads`: list of int
 
 Attribute `pads` determines the padding at the beginning and end along each spatial axis of the input tensor `X`.
 
@@ -186,7 +201,7 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 
 <img src="./imgs/conv_pad.png" width="300" />
 
-#### Constraints
+###### Constraints
 - (C1) Value domain
     - Statement: `pads` is a list of positive or null integers.
     - Rationale: A padding value gives a number of elements to be added to some spatial axis. This is positive[^2].
@@ -196,7 +211,7 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (C3) of X](#shape_consist)
 
-### `dilations`: list of int
+##### `dilations`: list of int
 
 Attribute `dilations` specifies the spacing between the kernel elements for each spatial axis of the filter `W`. It is a list of non-null integer values where each value gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel points are spaced out by the dilation factor for that axis. 
 
@@ -207,7 +222,7 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 <img src="./imgs/dilation.png" width="300" />
 
 
-#### Constraints
+###### Constraints
 - (C1) Value domain
     - Statement: `dilations` is a list of strictly positive integers
 - (C2) Relation between `dilations` and `W`
@@ -216,7 +231,7 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 - (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`.
     - Statement: [See constraint (C3) of X](#shape_consist)
 
-### `group`: int 
+##### `group`: int 
 
 This attribute specifies the number of groups the input channels and output channels are divided into. When `group`=1, a standard convolution is performed.
 When group is greater than 1, convolution is computed for each group separately with a specific set of filters.
@@ -229,16 +244,16 @@ The effect of the `group` attribute for a tensor with two spatial axes is depict
 
 In the example, with `group` set to 3 and an input `X` and an output `Y` with 3 channels, the input and output channels will be divided into 3 groups of 1 channel.
 
-#### Constraints
+###### Constraints
 - (C1) Support for standard and depthwise convolutions
     - Statement: `group`=1 or `group`$=c(X)$ `[R3]`
     - Rationale: SONNX only supports the most usual types of convolutions: standard (`group`=1) and depthwise convolutions `group`$=c(X)$ 
 
-### `kernel_shape`: list of int
+##### `kernel_shape`: list of int
 
 This parameter specifies the shape of the convolution kernel `W`.
 
-#### Constraints.
+###### Constraints.
 
 - (C1) Value domain
     - Statement: `kernel_shape` is a list of strictly positive integers
@@ -246,20 +261,20 @@ This parameter specifies the shape of the convolution kernel `W`.
 - (C2) Consistency between `W` and `kernel_shape`
     - Statement: [See constraint (C3) of W](#kernel_shape_w)
 
-## Outputs
+#### Outputs
 
-### `Y`
+##### `Y`
 
 The size of the output `Y` will be $(b(Y) \times c(Y) \times h(Y) \times w(Y))$ where
 - $b(Y)$ is the number of batches
 - $c(Y)$ is the number of channels
 - $h(Y)$ and $w(Y)$ are the sizes of the output for the two spatial axes
 
-#### Constraints.
+###### Constraints.
 - (C1) Consistency between the shape of tensors `X`, `W`, `Y`, attributes `pads` and `strides`,
     - Statement: [see constraint (C3) of X](#shape_consist)
 
-## Formal specification
+#### Formal specification
 
 *(to be completed)*
 
