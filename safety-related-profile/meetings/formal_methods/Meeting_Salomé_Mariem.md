@@ -27,7 +27,7 @@ Salomé a résumé ce qu'elle a fait pendant les deux dernières semaines. Elle 
   - Définir `float32` en OCaml.
   - Générer du code C pour les tests.
 
-- Certaines expressions en WhyML ne sont pas traduisibles en C, comme : `int32.of_int`.  
+- Certaines expressions en WhyML ne peuvent pas se traduire en C, comme : `match ... with`.  
 - La structure utilisée pour définir `scalar` est un peu complexe ; elle pourrait être simplifiée afin de faciliter la génération du code C.  
   Une autre solution possible : ne générer en C que les types problématiques en OCaml (notamment `float32`), pour éviter de devoir traduire le type générique complet.
 
