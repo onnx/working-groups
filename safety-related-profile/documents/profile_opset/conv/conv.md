@@ -100,6 +100,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 ![](./imgs/conv-dep-3-channels.png)
 
 #### Error conditions
+No error conditions can occur.
 
 #### Inputs
 
@@ -107,7 +108,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 
 Tensor `X` is the input tensor on which convolution with kernel `W` is computed.
 
-The shape of tensor `X` is ($b$($X$), $c$($X$), $h$($X$), $w$($X$)).
+The shape of tensor `X` is $(b(X) , c(X) , h(X) , w(X))$.
 
 ###### Constraints
 
@@ -138,7 +139,7 @@ The shape of tensor `X` is ($b$($X$), $c$($X$), $h$($X$), $w$($X$)).
 
 Tensor `W` is the convolution kernel.
 
-The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
+The shape of tensor `W`is $(c(W) , fm(W) , h(W) , w(W))$, where
 - $c(W)$ is the number of output channels or number of feature maps
 - $fm(W)$ is the number of input channels
 - $h(W)$ and $w(W)$ are the sizes of the kernel for the two spatial axes.
@@ -228,7 +229,7 @@ This parameter specifies the shape of the convolution kernel `W`.
 
 ##### `Y` : tensor of real
 
-The size of the output `Y` will be $(b(Y) \times c(Y) \times h(Y) \times w(Y))$ where
+The size of the output `Y` will be $(b(Y) , c(Y) , h(Y) , w(Y))$ where
 - $b(Y)$ is the number of batches
 - $c(Y)$ is the number of channels
 - $h(Y)$ and $w(Y)$ are the sizes of the output for the two spatial axes
