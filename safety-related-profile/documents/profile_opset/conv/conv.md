@@ -69,9 +69,9 @@ The effect of the operator is illustrated on the following figure. In this examp
 ![](./imgs/conv-std.png)
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
-- shape of `Y` is $1 \times 1 \times 4 \times 4$ 
-- shape of `X` is $1 \times 3 \times 8 \times 8$ 
-- shape of `W` is $1 \times 3 \times 3 \times 2$
+- shape of `Y` is ($1, 1, 4, 4$) 
+- shape of `X` is ($1, 1, 8, 8$)
+- shape of `W` is ($1, 1, 3, 2$) 
 - shape of `B` is $1$
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
@@ -85,14 +85,14 @@ A _depthwise convolution_ applies a specific kernel (or "filter") to each input 
 The mathematical definition is given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1}\\ (X[b, c, m \cdot strides[0] + j \cdot dilations[0], n \cdot strides[1] + z \cdot dilations[1]] \cdot W[c, 0, j , z] ) + B[c]
+    Y[b, c, m, n] = \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1}\\ (X_{\text{eff}}[b, c, m \cdot strides[0] + j , n \cdot strides[1] + z \cdot ] \cdot W[c, 0, j , z] ) + B[c]
 \end{gathered}$$
 
 Variables are defined as for the standard convolution.
 The effect of the operator is illustrated on the following figure. In this example,
-- shape of `Y` is $1\times 3 \times 4 \times 4$ 
-- shape of `X` is $1 \times 3 \times 8 \times 8$
-- shape of `W` is $3 \times 1 \times 3 \times 2$
+- shape of `Y` is ($1, 3, 4, 4$) 
+- shape of `X` is ($1, 3, 8, 8$)
+- shape of `W` is ($3, 1, 3, 2$)
 - shape of `B` is $3$
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
@@ -103,11 +103,11 @@ The effect of the operator is illustrated on the following figure. In this examp
 
 #### Inputs
 
-##### `X`
+##### `X`: tensor of real
 
 Tensor `X` is the input tensor on which convolution with kernel `W` is computed.
 
-The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
+The shape of tensor `X` is ($b$($X$), $c$($X$), $h$($X$), $w$($X$)).
 
 ###### Constraints
 
@@ -116,20 +116,25 @@ The shape of tensor `X` is $b(X) \times c(X) \times h(X) \times w(X)$.
     - Rationale: This restriction is introduced to simplify the implementation considering the actual industrial use cases.
 - (C2) <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W` 
     - Statement:  $c(X)=fm(W)$
-- (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
+- (C3) <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y`, attributes `strides` and the operators Padding and Dilation.
     <span id="it:shape_consist" label="it:shape_consist"></span>
     - Statement: 
-       *  $$\left\lfloor{\frac{alpha-(dilations[0] \cdot h(W)-1)}{strides[0]}} \right\rfloor +1 = h(Y) \mbox{ with }  alpha=h(X)+pads[0]+pads[2]$$
+       *  $$\left\lfloor{\frac{h(X_{\text{eff}}) - h(W))}{strides[0]}} \right\rfloor +1 = h(Y) $$
          
       and
       
-       * $$\left\lfloor{\frac{beta-(dilations[1] \cdot w(W)-1)}{strides[1]}} \right\rfloor +1 = w(Y)  \mbox{ with } beta=w(X)+pads[1]+pads[3]$$
+       * $$\left\lfloor{\frac{w(X_{\text{eff}}) - w(W))}{strides[1]}} \right\rfloor +1 = w(Y) $$
+         
+      with:
+       * $X_{\text{eff}}$= Dilation(Pad($X$))
+       * $h(X_{\text{eff}})$ , $w(X_{\text{eff}})$: the height and width of the effective input `X`.
+         
     - Rationale: The size of the output is determined by the number of times the kernel can be applied on a given spatial axis.
 - (C4) Axis denotations
     - Statement: If axis denotation is in effect, the operation expects input data tensor to have axis denotation \[`DATA_BATCH`, `DATA_CHANNEL`, `DATA_FEATURE`, `DATA_FEATURE`\].
     - Rationale: Denotation convention
 
-##### `W`
+##### `W`: tensor of real
 
 Tensor `W` is the convolution kernel.
 
@@ -141,7 +146,7 @@ The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
 ###### Constraints
 - (C1) Consistency between the number of channels of `X` and `W`
    - Statement: [See constraint (C2) of X](#channel_consist).
-- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C2) Consistency between the shape of tensors `X`, `W`, `Y`, attribute `strides` and operators Pad and Dilation.
    - Statement: [See constraint (C3) of X](#shape_consist).
 - (C3) <a name="kernel_shape_w"></a> Consistency between `W` and `kernel_shape`
     <span id="it:kernel_shape_w" label="it:kernel_shape_w"></span> 
@@ -151,7 +156,7 @@ The shape of tensor `W`is $(c(W) \times fm(W) \times h(W) \times w(W))$, where
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to have axis denotation \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`, `FILTER_SPATIAL`\].
     - Rationale: Denotation convention
 
-##### `B`
+##### `B` : tensor of real
 
 Tensor `B` is the bias. 
 
@@ -177,7 +182,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 - (C1) Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values are used in the denominator of expression in [constraint (C3) of X](#shape_consist) 
-- (C2) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
+- (C2) Consistency between the shape of tensors `X`, `W`, `Y`, attribute `strides` and operators Pad and Dilation.
     - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `auto_pad` : string
@@ -188,48 +193,6 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 - (C1) Explicit padding
     - Statement: `auto_pad` shall be set to `NOTSET` `[R2]`
     - Rationale: The SONNX profile imposes explicit padding.
-
-##### `pads`: list of int
-
-Attribute `pads` determines the padding at the beginning and end along each spatial axis of the input tensor `X`.
-
-`pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements (possibly zero) added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
-
-The padding value is 0.
-
-The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(1,3,2,2).
-
-<img src="./imgs/conv_pad.png" width="300" />
-
-###### Constraints
-- (C1) Value domain
-    - Statement: `pads` is a list of positive or null integers.
-    - Rationale: A padding value gives a number of elements to be added to some spatial axis. This is positive[^2].
-- (C2) Consistency between the shape of `X` and the length of `pads`
-    - Statement: The length of the `pads` list is two times the number of spatial axes of `X`
-    - Rationale: Padding shall be given for all spatial axes, and a beggining value and an end value must be given for each axis.
-- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`.
-    - Statement: [See constraint (C3) of X](#shape_consist)
-
-##### `dilations`: list of int
-
-Attribute `dilations` specifies the spacing between the kernel elements for each spatial axis of the filter `W`. It is a list of non-null integer values where each value gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel points are spaced out by the dilation factor for that axis. 
-
-The spacing value is 0.
-
-The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure. In this example, `dilations`=(2,2). 
-
-<img src="./imgs/dilation.png" width="300" />
-
-
-###### Constraints
-- (C1) Value domain
-    - Statement: `dilations` is a list of strictly positive integers
-- (C2) Relation between `dilations` and `W`
-    - Statement: The length of the `dilations` list is equal to number of spatial axes of `W`.
-    - Rationale: Dilation is defined for all spatial axes of `W`.
-- (C3) Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`.
-    - Statement: [See constraint (C3) of X](#shape_consist)
 
 ##### `group`: int 
 
@@ -263,7 +226,7 @@ This parameter specifies the shape of the convolution kernel `W`.
 
 #### Outputs
 
-##### `Y`
+##### `Y` : tensor of real
 
 The size of the output `Y` will be $(b(Y) \times c(Y) \times h(Y) \times w(Y))$ where
 - $b(Y)$ is the number of batches
@@ -271,7 +234,7 @@ The size of the output `Y` will be $(b(Y) \times c(Y) \times h(Y) \times w(Y))$ 
 - $h(Y)$ and $w(Y)$ are the sizes of the output for the two spatial axes
 
 ###### Constraints.
-- (C1) Consistency between the shape of tensors `X`, `W`, `Y`, attributes `pads` and `strides`,
+- (C1) Consistency between the shape of tensors `X`, `W`, `Y`, attribute `strides` and operators Pad and Dilation,
     - Statement: [see constraint (C3) of X](#shape_consist)
 
 #### Formal specification
