@@ -34,7 +34,7 @@ Concretely, we consider the convolution to be applied to a transformed version o
 
 - $X_{eff} = Pad(X)$
 - $W_{eff} = Dilation(W)$
-- $B_{eff} = Broadcast(W)$
+- $B_{eff} = Broadcast(B)$
 
 where
 - $X_{eff}$ is the padded version of the input tensor `X`.
