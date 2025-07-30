@@ -87,7 +87,7 @@ A _depthwise convolution_ applies a specific kernel (or "filter") to each input 
 The mathematical definition is given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1}\\ (X_{\text{eff}}[b, c, m \cdot strides[0] + j , n \cdot strides[1] + z \cdot ] \cdot W[c, 0, j , z] ) + B[c]
+    Y[b, c, m, n] = \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1}\\ (X_{\text{eff}}[b, c, m \cdot strides[0] + j , n \cdot strides[1] + z \cdot ] \cdot W_{\text{eff}}[c, 0, j , z] ) + B_{\text{eff}}[c]
 \end{gathered}$$
 
 Variables are defined as for the standard convolution.
