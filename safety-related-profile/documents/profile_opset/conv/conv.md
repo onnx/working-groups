@@ -32,16 +32,21 @@ The mathematical definition of the operator is given hereafter.
 For the sake of simplification, we assume that padding and dilation are handled by separate operators, `Pad` (ONNX operator) and a conceptual `Dilation`.
 Concretely, we consider the convolution to be applied to a transformed version of the input tensor:
 
-$X_{eff} = Dilation(Pad(X))$
+$X_{eff} = Pad(X)$
+$W_{eff} = Dilation(W)$
+$B_{eff} = Broadcast(W)$
 
 where
-- $X_{eff}$ is the padded and dilated version of the input tensor.
+- $X_{eff}$ is the padded version of the input tensor `X`.
+- $W_{eff}$ is the dilated version of the input tensor `W`.
+- $B_{eff}$ is the Bias `B` added using the `Broadcast` operator.
 - The `Pad` operator applies zero-padding as specified by the pads attribute (see ONNX Pad operator).
 - The `Dilation` operator simulates the effect of spacing between kernel elements, based on the dilations attribute. Its implementation will be defined later.
+- The `Broadcast` operator replicates the bias value across the spatial dimensions and batch dimension of the output `Y`. (`Broadcast` operator will be defined later).
 
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} \\ (X_{\text{eff}}[b,i,m \cdot strides[0]+ j , n \cdot strides[1]+ z ] \cdot W[c, i, j, z]) \\ + B[c]
+    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} \\ (X_{\text{eff}}[b,i,m \cdot strides[0]+ j , n \cdot strides[1]+ z ] \cdot W_{\text{eff}}[c, i, j, z]) \\ + B_{\text{eff}}[c]
 \end{gathered}$$
 
 Where
@@ -52,9 +57,6 @@ Where
 - $fm(W)$ is the number of feature maps of kernel `W`
 - $h(W)$ is the size of the first spatial axis of kernel `W`
 - $w(W)$ is the sizes of the second spatial axis of kernel `W`
-
-The bias `B` is added using the `Broadcast` operator to match the shape of the output tensor `Y`. The `Broadcast` operator replicates the bias value `B[c]` across the spatial dimensions and batch dimension of the output `Y`. (`Broadcast` operator will be defined later)
-
 `strides` is an attribute of the operator. It will be described later in this section.
 
 The effect of the operator is illustrated on the following figure. In this example
