@@ -32,9 +32,9 @@ The mathematical definition of the operator is given hereafter.
 For the sake of simplification, we assume that padding and dilation are handled by separate operators, `Pad` (ONNX operator) and a conceptual `Dilation`.
 Concretely, we consider the convolution to be applied to a transformed version of the input tensor:
 
-$X_{eff} = Pad(X)$
-$W_{eff} = Dilation(W)$
-$B_{eff} = Broadcast(W)$
+- $X_{eff} = Pad(X)$
+- $W_{eff} = Dilation(W)$
+- $B_{eff} = Broadcast(W)$
 
 where
 - $X_{eff}$ is the padded version of the input tensor `X`.
