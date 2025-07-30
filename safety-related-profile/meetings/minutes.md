@@ -2,6 +2,48 @@
 ## Participants
   Salomé, Jean, Tomé, Cong, Jean-Baptiste, Franck, Eric, Dumitru, ...
 ## Agenda
+  - Actions [eric]
+  - A few words about the idea of a core set of operators (see note [here](./core_ops/core_ops.md)) [eric]
+  - Stataus of MLIR presentation by Alexandre. [eric]
+  - Status of work on formal spec [Mariem and Salomé]
+  - Ideas on error condition spec [franck]
+  - Status of discussions about tests (Andreas, Justin, Christian, Eric, Jean) [eric+jean]
+## Minutes
+  - To be completed 
+## Actions
+### New actions
+- To be completed
+### Past actions
+- [ ] (1607-1) Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
+- [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability). What would be the effort to integrate broadcasting in the specification of our operators?
+  - Introduce a specific "broadcast" operator to make the operation explicit in the spec. See 1607-3.
+- [X] (1607-3, Dumitru) Write a few lines to explain the "mixed approach" to handle broadcasting.
+  - Mail exchange collected in [here](./broadcasting/dumitru-2025-07-21.md) 
+- [X] (1607-4, Franck) Write a few lines to explain the approach to handle errors: ask implementers to provide error conditions 
+  - Description sent on 2025/07/16
+- [X] (0207-1, Eric) Do a "synthesis" of the discussion about overflows, etc., discuss with the WG, find a consensus, add to the guidelines... 
+    - First proposal in the [guidelines](../documents/profile_opset/guidelines.md). To be discussed (see Franck's pres.)
+- [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
+- [ ] (1806-4, Eric) Organize a "physical" working session on the graph specification 
+- [ ] (1806-5, Eric, Jean) Resend a "call for participation" to the mailing list (at least once we have a good template spec) 
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+- [ ] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
+### Long term actions
+- [ ] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+- [ ] (1205-6, Eric, Jean) See how to proceed with tool implementation
+- [ ] (0412-6, Eric) Create a sub working group to analyze the existing standard in a systematic way...
+  - Contribution of Anne-Sophie. But WG to be set. 
+  - Take into account the new modality to manage and report issues to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  - [ ] Create a review form to support the analysis
+  
+
+
+# 2025/07/16
+## Participants
+  Salomé, Jean, Tomé, Cong, Jean-Baptiste, Franck, Eric, Dumitru, ...
+## Agenda
   - Actions
   - A few words about shape inference and broadcasting
   - A few words about the "minimal corpus of operators"
