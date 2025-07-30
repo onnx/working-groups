@@ -29,7 +29,7 @@ Operator `conv` computes the convolution of the input tensor `X` with the kernel
 A _standard convolution_ applies a kernel (also called "filter") to the input tensor, aggregating information accross both spatial axes and channels. For a given output channel, the kernel operates accross all input channels and all contributions are summed to produce the output. This corresponds to the case where `group`= 1. 
 
 The mathematical definition of the operator is given hereafter.
-For the sake of simplification, we assume that padding and dilation are handled by separate operators, `Pad` (ONNX operator) and a conceptual `Dilation`.
+For the sake of simplification, we assume that padding and dilation are handled by separate operators, `Pad` (ONNX operator) , `Dilation` and `Broadcast`.
 Concretely, we consider the convolution to be applied to a transformed version of the input tensor:
 
 - $X_{eff} = Pad(X)$
