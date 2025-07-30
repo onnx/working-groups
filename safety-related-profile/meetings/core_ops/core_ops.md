@@ -115,7 +115,7 @@ $$\texttt{Abs}(x) = \texttt{Max}(x,-x)$$
 
 or 
 
-$$\texttt{Abs}(x) = x \times \texttt{Sign}(x,-x)$$
+$$\texttt{Abs}(x) = x \times \texttt{Sign}(x)$$
 
 
 ## Neg

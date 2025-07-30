@@ -1,20 +1,27 @@
 # 2025/07/16
 ## Participants
-  Salomé, Jean, Tomé, Cong, Jean-Baptiste, Franck, Eric, Dumitru, ...
+  *To be completed*
 ## Agenda
   - Actions [eric]
-  - A few words about the idea of a core set of operators (see note [here](./core_ops/core_ops.md)) [eric]
-  - Stataus of MLIR presentation by Alexandre. [eric]
+  - A few words about the idea of a core set of operators
+    - See note [here](./core_ops/core_ops.md) [eric]
+  - Guidelines 
+    - See [here](../documents/profile_opset/guidelines.md).
+  - Status of MLIR presentation by Alexandre. (2025/10/08) [eric]
   - Status of work on formal spec [Mariem and Salomé]
-  - Ideas on error condition spec [franck]
+    - Presentation of work on the formalization of Scalar and the first results about C code generation. 
+  - Ideas on error condition spec [Franck]
   - Status of discussions about tests (Andreas, Justin, Christian, Eric, Jean) [eric+jean]
+    - See [minutes](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/testing/2025-07-29-tests.md)
 ## Minutes
-  - To be completed 
+  - See above.
+  - See Franck slides [here](./errror%20conditions/2025-07-30-SONNX_error.pdf)
+  - See elements discussed about the errors conditions [here](./errror%20conditions/2025-07-30%20-%20Discussions.md)
 ## Actions
 ### New actions
-- To be completed
+- [ ] (3007-1, Eric, All) Collect ideas exchanged on Error Conditions during the meeting. To be discussed during next meeting. 
 ### Past actions
-- [ ] (1607-1) Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
+- [ ] (1607-1, Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
 - [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability). What would be the effort to integrate broadcasting in the specification of our operators?
   - Introduce a specific "broadcast" operator to make the operation explicit in the spec. See 1607-3.
 - [X] (1607-3, Dumitru) Write a few lines to explain the "mixed approach" to handle broadcasting.
