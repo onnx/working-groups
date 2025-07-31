@@ -120,7 +120,7 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
 - `C<1>` &lt;Number of spatial axes of tensor `X`&gt;
     - Statement: The number of spatial axes of tensor `X` is 2. `[R1]`
     - Rationale: This restriction is introduced to simplify the implementation considering the actual industrial use cases.
-- `C<2>` &lt;<a name="channel_consist"></a> Consistency between the number of channels of `X` and `W` 
+- `C<2>` &lt;<a name="channel_consist"></a> Consistency between the number of channels of `X` and `W`&gt;
     - Statement:  $dX_1=dW_1$
 - `C<3>` &lt;<a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>&gt;  
@@ -150,7 +150,7 @@ The shape of tensor `W`is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
 - `C<2>` &lt;Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`&gt;
    - Statement: [See constraint (C3) of X](#shape_consist).
 - `C<3>` &lt;<a name="kernel_shape_w"></a> Consistency between `W` and `kernel_shape`
-    <span id="it:kernel_shape_w" label="it:kernel_shape_w"></span> &gt;(C3) 
+    <span id="it:kernel_shape_w" label="it:kernel_shape_w"></span> &gt;
    - Statement:  The size of `W` for an axis must bve equal to the value of `kernel_shape` for that axis
    - Rationale: `kernel_shape` represents the shape of `W`, where `kernel_shape[0]` = $dW_3$ and `kernel_shape[1]` = $dW_2$.
 - `C<4>` &lt;Axis denotations&gt; 
