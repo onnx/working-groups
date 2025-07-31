@@ -68,7 +68,14 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `dilations` is set to (2,2)
 - `strides` is set to (2,3)
 
-![](./imgs/onnx_convstd.png)
+The following figure illustrates `Pad` operator applied to the input tensor `X`:
+![](./imgs/pad_operator.png)
+
+The following figure illustrates `Dilation` operator applied to the kernel `W`:
+![](./imgs/dilation_op.png)
+
+The following figure illustrates the standard `Conv` operator:
+![](./imgs/onnx_conv_std.png)
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
