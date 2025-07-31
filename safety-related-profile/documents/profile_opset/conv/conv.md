@@ -68,7 +68,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `dilations` is set to (2,2)
 - `strides` is set to (2,3)
 
-![](./imgs/conv-std.png)
+![](./imgs/onnx_convstd.png)
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
