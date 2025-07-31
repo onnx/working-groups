@@ -171,7 +171,7 @@ Tensor `B` is the bias.
 The shape of tensor `B`is $dB_0$.
 
 ###### Constraints
-- `C<1>` &lt;Consistency between the number of channels of `B` and `W`&gt;
+- `C1`: Consistency between the number of channels of `B` and `W`
     - Statement:  $dB_0 = dW_1$.
 
 #### Attributes
