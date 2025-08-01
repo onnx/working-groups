@@ -57,16 +57,16 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `strides` is set to (2,3)
 
 The following figure illustrates $\text{pad}$ function applied to the input tensor `X`:
-<img src="./imgs/pad_operator.png" alt="drawing" width="100%"/>
+<img src="./imgs/onnx_conv_padop.png" alt="drawing" width="100%"/>
 
 
 The following figure illustrates $\text{dilation}$ function applied to the kernel `W`:
 
-<img src="./imgs/dilation_op.png" alt="drawing" width="50%"/>
+<img src="./imgs/onnx_conv_dilationop.png" alt="drawing" width="50%"/>
 
 
 Finally, the following figure illustrates operator `Conv` applied on input `X` with kernel `W` and bias `B`:
-<img src="./imgs/onnx_conv_std.png" alt="drawing" width="100%"/>
+<img src="./imgs/convwithoperators.png" alt="drawing" width="100%"/>
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
