@@ -76,7 +76,7 @@ The following figure shows the case where the number of channels of `X` is 3. In
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
 
-<img src="./imgs/conv-std-3-channels.png" alt="drawing" width="100%"/>
+<img src="./imgs/3channels_std_conv_modified.png" alt="drawing" width="100%"/>
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $dX_1$. 
@@ -97,7 +97,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
 
-<img src="./imgs/conv-dep-3-channels.png" alt="drawing" width="100%"/>
+<img src="./imgs/conv_dep_3ch_mod.png" alt="drawing" width="100%"/>
 
 #### Error conditions
 In the domain of real numbers, the operator has no error condition.
