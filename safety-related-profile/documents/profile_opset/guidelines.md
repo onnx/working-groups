@@ -26,7 +26,7 @@ The writer of the informal specification must take care to keep it readable and 
 ### Notations
 #### Tensors
 - A tensor is always represented in uppercase letters (e.g., A, B,...,X, Y, Z).
-- Input tensors are usually named $A$, $B$,... In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
+- In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
 - Output tensor is usually name $Y$
 - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $A_0$, $A_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
 - The shape of a tensor $A$ is denoted by a vector $(dA_0, ..., dA_i, ..., dA_n)$ where $dA_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
@@ -162,7 +162,7 @@ The description is structured as follows:*
 
  - `C<i>` &lt;Title of constraint&gt;
    - Statement: &lt;Expression of the constraint&gt; or cross-reference to the previous location where this constraint was first introduced.
-   - Rationale: &lt;Justification for the constraint&gt;
+   - Rationale: &lt;Justification for the constraint&gt;. When the title of the constraint is sufficiently explicit, the rationale may be omitted. 
 
 #### Attributes
 This section describes the operator's attributes. 
