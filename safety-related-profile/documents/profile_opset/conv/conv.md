@@ -43,9 +43,9 @@ Where
 - $dW_2$ is the size of the first spatial axis of kernel `W`
 - $dW_3$ is the size of the second spatial axis of kernel `W`
 - `strides` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies zero-padding as specified by the pads attribute (see ONNX `Pad` operator).
-- $W_{d} = \text{dilation}(W)$ is the dilated version of the kernel `W`. Function $\text{dilation}$ expands the kernel by inserting spaces between its elements. Its definition is given later.
-- $B_{b} = \text{broadcast}(B)$ is the broadcasted version of bias `B`.  Function $\text{broadcast}$ replicates the bias value across the spatial dimensions and batch dimension of the output `Y`.  Its definition is given later.
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies zero-padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $W_{d} = \text{dilation}(W,dilations)$ is the dilated version of the kernel `W`. Function $\text{dilation}$ expands the kernel by inserting spaces between its elements as specified by the dilations attribute. Its definition is given later.
+- $B_{b} = \text{broadcast}(B,(dY_0 , dY_1 , dY_2 , dY_3))$ is the broadcasted version of bias `B`.  Function $\text{broadcast}$ replicates the bias value across the spatial dimensions and batch dimension of the output `Y`. It takes as argument the bias `B` and the shape of output `Y`. Its definition is given later.
 
 The effect of the operator is illustrated on the following figure. In this example
 - shape of `Y` is ($1, 1, 4, 4$) (batch size is 1, number of data channels is 1)
