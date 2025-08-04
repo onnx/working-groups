@@ -30,6 +30,8 @@ See also the previous note [here](./error_conditions_2.md).
 		- So, the specification must indicate that an operator may return an "undefined value" when a wrap-around condition may occur. 
 		- Another solution woul dbe to specifiy the exact behaviour of the interger operators, *** including the wrap-around ***. In that case, there would be no "undefined value", but the specification would be slightly more complicated ("+" on signed ints would be specified in 2's complement arithmetic. See "Option 2" in my note.
 
+*[Edoardo]* I strongly favour the "undefined value" option. Specifying the behaviour of integer overflow would require specifying details about the implementation of operators (e.g. the order of every step of a matrix multiplication).
+
 - So, 
 	- For IEEE data types
 		- operators *** must *** be total functions, which means that we have to cover all cases, including those where inputs are Infs and NaNs and where operator may return Infs and NaNs. The specification shall indicate what is the value returned by the operator when the inputs contains Infs or NaNs. 
@@ -52,11 +54,11 @@ See also the previous note [here](./error_conditions_2.md).
 	- In that case, SONNX would require the implementer to provide an updated version of the specification of Op corresponding to its own implemenaton. 
 	- However, the operator will at least comply with the SONNX specification. 
 
+*[Edoardo]* I am not against SONNX being a "minimum level of service" specification, but it would be good to agree on a reference level. Do we analyse existing implementations and decide what the minimum threshold is? E.g. I expect the convolution operator to fail (Inf/NaN) for different input domains depending on whether the implementation is naive (nested loops) or optimised (FFT, Winograd, etc). One option is to base our specification of valid input domain D on the naive implementation produced by Why3, however bad it is (e.g. it will probably not contain the "-max(zi)" trick for SoftMax).
+
 - The semantics of a SONNX model will be the one derived from the SONNX specification of operators, not the one considering the "improvements" done in some specific implementation. So, even if this approach makes sense, it cannot really be part of SONNX...  
 
 *[Edoardo]* Regarding the integer overflow issue, just bear in mind that not all hardware platforms deal with overflow by wrap-around. Instead, some Digital Signal Processors (DSP) may favour saturation, i.e. INT_MAX + 1 == INT_MAX and INT_MIN - 1 == INT_MIN. Specifying overflow as undefined behaviour in SONNX will cover both cases.
-
-*[Edoardo - correction]* Regarding the point above, there are two failure mode behaviours. Overflows may fail silently: the function returns some integer, depending on wrap-around or saturation behaviour. In contrast, division by zero may cause the function to never returns (the system crashes, an exception is raised).
 
 *[Edoardo - correction]* The two comments below are about approximation error, i.e. the expected return value of operators for inputs in the valid domain. Regarding failure modes instead, I only noticed a little discrepancy in the division-by-zero example. In 2025-07-30 - Discussions.md we say that Div(x,y) returns Inf when y=0.0. That is true in IEEE754 floating point only if x!=0.0. In error_specification.md we say that "x/y returns "NaN" when y = 0" (see IEEE floating point values (FP16, FP32, FP64) section).
 
