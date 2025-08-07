@@ -49,7 +49,7 @@ For instance, here is a tag introducing a constraint relating the input and outp
 ### Types
 - All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
 - Specific description may be given for the other types (`float`, `double`, etc.).
-- A description can be applicable to multiple types as long as its **semantics description** remains the same for all types. A counter example is, for instance, the case of operators applied on `float` or `double` that may create `NaNs` or `Inf`s. For this reason, they cannot be covered by the specification in $\mathbb R$.
+- A description can be applicable to multiple types as long as its **semantics description** remains the same for all types. A counter example is, for instance, the case of operators applied on `float` or `double` that may create `NaNs` or `Infs`. For this reason, they cannot be covered by the specification in $\mathbb R$.
 - In order to reduce the size and complexity of the specifications, the description of the semantics of an operator for type T may refer explicitly to the semantics of the same operator for another type T' (typically: the semantics in $\mathbb R$).  
 
 ## Structure of the informal specification
