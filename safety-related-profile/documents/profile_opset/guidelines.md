@@ -27,7 +27,7 @@ The writer of the informal specification must take care to keep it readable and 
 #### Tensors
 - A tensor is always represented in uppercase letters (e.g., A, B,...,X, Y, Z).
 - In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
-- Output tensor is usually name $Y$
+- Output tensor is usually named $Y$
 - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $A_0$, $A_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
 - The shape of a tensor $A$ is denoted by a vector $(dA_0, ..., dA_i, ..., dA_n)$ where $dA_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
 - For a tensor used as a variadic parameter (denoted $A_i$), the shape is denoted by $(dA_{i,0}, dA_{i,1}, ...)$.
