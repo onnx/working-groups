@@ -21,7 +21,14 @@ int main(int argc, char* argv[]) try {
 
   // Create the pipeline using the backend name provided as an argument
   auto devices = DeviceFactory::GetInstance().Enumerate(backend_name);
-  auto text2text_pipeline = PipelineFactory::GetInstance().Create(backend_name, models_path, devices);
+
+  std::vector<Device> chosen_devices;
+  for (auto d: devices) {
+    if (device == d.identifier) {
+      chosen_devices.push_back(d);
+    }
+  }
+  auto text2text_pipeline = PipelineFactory::GetInstance().Create(backend_name, models_path, chosen_devices);
 
   std::cout << "Successfully created '" << backend_name << "' backend." << std::endl;
 
