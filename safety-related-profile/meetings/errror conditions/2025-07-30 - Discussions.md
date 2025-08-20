@@ -28,10 +28,11 @@ See also the previous note [here](./error_conditions_2.md).
 		- In the case of wrap-arounds, the error may simply be undetected and propagate. Back in the days, there used to be traps for wrap-around conditions, but it is no more the case today: to detect a wrap-around, there shall be some code to test the condition (there might be some exceptions, but I think that this is the most general case). 
 			- SONNX could require wrap-around conditions to be detected and processed. If detected, this error would be handled in the same way as division by zero (the operator simply does not return). But this is practically unfeasible since it would require testing the condition bits after every operator that may lead to a wraparound. 
 		- So, the specification must indicate that an operator may return an "undefined value" when a wrap-around condition may occur. 
-		- Another solution woul dbe to specifiy the exact behaviour of the interger operators, *** including the wrap-around ***. In that case, there would be no "undefined value", but the specification would be slightly more complicated ("+" on signed ints would be specified in 2's complement arithmetic. See "Option 2" in my note.
+		- Another solution would be to specifiy the exact behaviour of the integer operators, *** including the wrap-around ***. In that case, there would be no "undefined value", but the specification would be slightly more complicated ("+" on signed ints would be specified in 2's complement arithmetic. See "Option 2" in my note.
 
 *[Edoardo]* I strongly favour the "undefined value" option. Specifying the behaviour of integer overflow would require specifying details about the implementation of operators (e.g. the order of every step of a matrix multiplication).
-
+> [Eric] I agree. To be discussed during meeting.
+> 
 - So, 
 	- For IEEE data types
 		- operators *** must *** be total functions, which means that we have to cover all cases, including those where inputs are Infs and NaNs and where operator may return Infs and NaNs. The specification shall indicate what is the value returned by the operator when the inputs contains Infs or NaNs. 
@@ -51,17 +52,24 @@ See also the previous note [here](./error_conditions_2.md).
  
 - The SONXX specification may specify a "minimum" level of service". For instance, operator Op return f(x) for x in D and f(x) or NaN for x out of D. 
 	- A specific implementation may provide a better "service" such as "operator Op returns f(x) for any x". See the example of Softmax given by Franck.
-	- In that case, SONNX would require the implementer to provide an updated version of the specification of Op corresponding to its own implemenaton. 
-	- However, the operator will at least comply with the SONNX specification. 
+	- In that case, SONNX would require the implementer to provide an updated version of the specification of Op corresponding to its own implementation. However, the operator will at least comply with the SONNX specification. 
 
 *[Edoardo]* I am not against SONNX being a "minimum level of service" specification, but it would be good to agree on a reference level. Do we analyse existing implementations and decide what the minimum threshold is? E.g. I expect the convolution operator to fail (Inf/NaN) for different input domains depending on whether the implementation is naive (nested loops) or optimised (FFT, Winograd, etc). One option is to base our specification of valid input domain D on the naive implementation produced by Why3, however bad it is (e.g. it will probably not contain the "-max(zi)" trick for SoftMax).
+
+>[Eric] To be discussed.  Note, howver, that the Why3-generated implementation will have to comply with its formal sepcification, which means that the "valid input domain" will have to be specified as a predcondition on the arguments. 
 
 - The semantics of a SONNX model will be the one derived from the SONNX specification of operators, not the one considering the "improvements" done in some specific implementation. So, even if this approach makes sense, it cannot really be part of SONNX...  
 
 *[Edoardo]* Regarding the integer overflow issue, just bear in mind that not all hardware platforms deal with overflow by wrap-around. Instead, some Digital Signal Processors (DSP) may favour saturation, i.e. INT_MAX + 1 == INT_MAX and INT_MIN - 1 == INT_MIN. Specifying overflow as undefined behaviour in SONNX will cover both cases.
 
+>[Eric] You are absolutely right and this is a good point because we have already deployed IA on TI's Jacinto target which hosts C6X and C7X DSPs... It also raises the question of fixed point computations (but thi s is yet another story).
+
 *[Edoardo - correction]* The two comments below are about approximation error, i.e. the expected return value of operators for inputs in the valid domain. Regarding failure modes instead, I only noticed a little discrepancy in the division-by-zero example. In 2025-07-30 - Discussions.md we say that Div(x,y) returns Inf when y=0.0. That is true in IEEE754 floating point only if x!=0.0. In error_specification.md we say that "x/y returns "NaN" when y = 0" (see IEEE floating point values (FP16, FP32, FP64) section).
+
+>[Eric] You are right, 0.0/0.0 returns Nan.
 
 *[Edoardo]* Regarding the floating-point behaviour, there are two opposite philosophies. The IEEE754 standard recommends implementing correctly-rounded operators. That is, the operator behaves as if it was computing the result in infinite precision and then rounding to the nearest flaoting-point value. In contrast, the C standard leaves room to implementation-dependent behaviour which, in the extreme case, could mean that log(x) == 42 for any x is a valid C operator. Interestingly, the upcoming C standard plans to introduce "correctly rounded" version of mathematical operators with a prefix "cr_". That is, log(x) is implementation dependent, but cr_log(x) must be correctly rounded.
 
 *[Edoardo]* Implementing a correctly-rounded operator is quite hard. Even more so if the operator is a function of many variables. Restricting the domain would not mitigate this issue. Hence, the biggest problem I see does not lie in specifying a restricted domain (e.g. Sigmoid(x) should be correctly-rounded for -4 <= x <= +4), but specifying a "softer" requirement than correct roundedness (e.g. the relative error produced by Sigmoid(x) should not exceed 2%). In this respect, I suggest considering bounds on the maximum relative and absolute error allowed. A thorough empirical analysis of existing float32 and float64 libraries might give an indication on how to fix reasonable bounds on the numerical error.
+
+> [Eric] As you noticed, we are dealing here with "error conditions" (or "failure modes"), not approximations. For approximations, Francks has already proposed an approach (see the [Guidelines](../../documents/profile_opset/guidelines.md)). 
