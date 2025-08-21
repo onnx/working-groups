@@ -61,8 +61,9 @@ IF %BUILD_ORT_GENAI%=="True" (
 )
 
 echo "------------ Building common sample  ------------"
-cd %WG_REPO_PATH%\generative-ai\genai-interfaces\samples
-del /s /q ort_genai\include\pipelines ort_genai\include ort_genai\lib
+del /s /q %BUILD_FOLDER_PATH%\samples-build\text2text-pipeline
+mkdir %BUILD_FOLDER_PATH%\samples-build\text2text-pipeline
+cd %BUILD_FOLDER_PATH%\samples-build\text2text-pipeline
 mkdir ort_genai\include ort_genai\include\pipelines ort_genai\lib
 copy /y %ORT_BUILD_PATH%\include\* .\ort_genai\include\
 copy /y %ORT_GENAI_PATH%\src\ort_genai.h .\ort_genai\include\ort_genai.h
@@ -72,7 +73,5 @@ copy /y %WG_REPO_PATH%\generative-ai\genai-interfaces\include\pipelines\* .\ort_
 copy /y %ORT_BUILD_PATH%\lib\* .\ort_genai\lib\
 copy /y %ORT_GENAI_PATH%\build\Windows\RelWithDebInfo\RelWithDebInfo\onnxruntime-genai.lib .\ort_genai\lib\.
 copy /y %ORT_GENAI_PATH%\build\Windows\RelWithDebInfo\RelWithDebInfo\onnxruntime-genai.dll .\ort_genai\lib\.
-mkdir ort_sample_build
-cd ort_sample_build
-cmake ..
+cmake %WG_REPO_PATH%\generative-ai\genai-interfaces\samples\text2text-pipeline
 cmake --build . --config Release

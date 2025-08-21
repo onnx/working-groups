@@ -38,9 +38,9 @@ IF %BUILD_OV_GENAI%=="True" (
 )
 
 echo "------------ Building openvino.genai Sample ------------"
-cd %WG_REPO_PATH%\generative-ai\genai-interfaces\samples
-mkdir ov_sample_build
-cd ov_sample_build
-cmake -DOVGENAI=ON ..
+del /s /q %BUILD_FOLDER_PATH%\samples-build\text2image-pipeline
+mkdir %BUILD_FOLDER_PATH%\samples-build\text2image-pipeline
+cd %BUILD_FOLDER_PATH%\samples-build\text2image-pipeline
+cmake %WG_REPO_PATH%\generative-ai\genai-interfaces\samples\text2image-pipeline\
 cmake --build . --config Release
 copy %BUILD_FOLDER_PATH%\openvino.genai-build\installed\runtime\bin\intel64\Release\* .\Release\
