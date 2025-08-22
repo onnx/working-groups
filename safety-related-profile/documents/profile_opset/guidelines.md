@@ -25,7 +25,7 @@ The writer of the informal specification must take care to keep it readable and 
 
 ### Notations
 #### Tensors
-- A tensor is always represented in uppercase letters (e.g., $A$, $B$,...,$X$, $Y$, $Z$).
+- A tensor is always represented in uppercase letters (e.g., $A, B,...,X, Y, Z$).
 - In cases where this naming convention does not match the one used by ONNX, a correspondence table may be established (e.g., $dX_2$ corresponds to the "width" of tensor $X$).
 - Output tensor is usually named $Y$
 - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $A_0$, $A_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
@@ -93,11 +93,13 @@ The following section must be repeated for each set of types for which the seman
 
 Definition of the operator's signature:
 
- $O = <op>(<I1>,<I2>,...,<In>)$
+ $O = op(X,Y,...,Z)$
 
  where
- - $<In>$: &lt;Brief description of the nth argument&gt;
- - $O$: &lt;Brief description of output&gt; 
+ - $X$: Brief description of argument $X$
+ - $Y$: Brief description of argument $Y$
+ - ...
+ - $O$: Brief description of output 
  
 Arguments have different names. For instance 
 
@@ -107,7 +109,7 @@ When the same name is used for different arguments such as in
 
  $Y = concat(X1,X2,...,Xn)$
 
- this means that the operator is **variadic**, i.e., it accepts a variable number of arguments. In this example, there are n arguments that are discriminated by their index ($X1$, $X2$,..., $Xn$).  
+ this means that the operator is **variadic**, i.e., it accepts a variable number of arguments. In this example, there are n arguments that are discriminated by their index.  
 
 #### Restrictions
 This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. 
