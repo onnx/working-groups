@@ -146,10 +146,10 @@ For instance, for the $\text{conv}$ operator:
 \end{gathered}$$
 
 > Where
->- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
->- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
->- $m \in [0,dY_2-1]$ is the index of the first spatial axis of output `Y`
->- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output `Y`
+>- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output $Y$
+>- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output $Y$
+>- $m \in [0,dY_2-1]$ is the index of the first spatial axis of output $Y$
+>- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output $Y$
 >- etc.
 
 #### Error conditions
