@@ -1,7 +1,7 @@
 echo "------------ Script initiatialization ------------"
-set BUILD_FOLDER_PATH=<path_to_central_build_folder>
-set WG_REPO_PATH=<path_to_workging_group_repo>
-set OPENVINO_PATH=<path_to_downloaded_openvino_folder>
+set "BUILD_FOLDER_PATH=<path_to_central_build_folder>"
+set "WG_REPO_PATH=<path_to_workging_group_repo>"
+set "OPENVINO_PATH=<path_to_downloaded_openvino_folder>"
 set OVGENAI_PATH=%BUILD_FOLDER_PATH%\openvino.genai
 set ONE_TIME_SETUPS=""
 set BUILD_GENAI_INTERFACES=""
@@ -23,7 +23,7 @@ IF %BUILD_GENAI_INTERFACES%=="True" (
     cmake -B build -S .
     cmake --build build
     cmake --install build --prefix %BUILD_FOLDER_PATH%/genai_interfaces_install
-    set genai_interfaces_DIR=%BUILD_FOLDER_PATH%\genai_interfaces_install\lib\cmake
+    set genai_interfaces_DIR=%BUILD_FOLDER_PATH%\genai_interfaces_install\lib\cmake\genai_interfaces
 )
 
 IF %BUILD_OV_GENAI%=="True" (

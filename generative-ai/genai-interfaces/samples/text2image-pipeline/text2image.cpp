@@ -8,6 +8,8 @@
 #include "openvino/onnx_genai/ovgenai_text2image_pipeline.hpp"
 #endif
 
+using namespace ov;
+
 int main(int argc, char* argv[]) try {
   if (argc < 3 || argc > 4) {
     throw std::runtime_error(std::string{"Usage: "} + argv[0] + " <BACKEND> <MODEL_DIR> [DEVICE]");
@@ -45,7 +47,9 @@ int main(int argc, char* argv[]) try {
     if (prompt == "quit()") break;
     GenerationInput input(prompt);
     GenerationResult result = (*text2image_pipeline)(input);
-    ov::Tensor img_tensor(ov::element::u8, ov::Shape{1, 512, 512, 3}, result.tensor.data);
+#if defined(USE_OPENVINO_GENAI)
+    ov::Tensor img_tensor(static_cast<ov::element::Type_t>(result.tensor.type_id), result.tensor.shape, result.tensor.data);
+#endif
     imwrite("image_%d.bmp", img_tensor, true);
     std::cout << "Created image and saved in current folder." << std::endl;
     std::cout << "\n----------\n"

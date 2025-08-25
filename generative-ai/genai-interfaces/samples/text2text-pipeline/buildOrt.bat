@@ -1,13 +1,13 @@
 @REM echo "------------ Script initiatialization ------------"
-set BUILD_FOLDER_PATH=<path_to_central_build_folder>
-set OPENVINO_PATH=<path_to_downloaded_openvino_folder>
+set "BUILD_FOLDER_PATH=<path_to_central_build_folder>"
+set "OPENVINO_PATH=<path_to_downloaded_openvino_folder>"
 set ONE_TIME_SETUPS=""
 set BUILD_ORT=""
 set ORT_PATH=%BUILD_FOLDER_PATH%\onnxruntime
 set ORT_BUILD_PATH=%BUILD_FOLDER_PATH%\onnxruntime-install
 set BUILD_ORT_GENAI=""
 set ORT_GENAI_PATH=%BUILD_FOLDER_PATH%\onnxruntime-genai
-set WG_REPO_PATH=<path_to_workging_group_repo>
+set "WG_REPO_PATH=<path_to_workging_group_repo>"
 
 IF %ONE_TIME_SETUPS%=="True" (
     echo "------------ One-time setups ------------"

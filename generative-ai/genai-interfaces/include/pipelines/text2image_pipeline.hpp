@@ -6,16 +6,9 @@
 #include <map>
 #include <any>
 #include <array>
-#include "pipelines/device_factory.hpp"
+#include "pipelines/data_types.hpp"
 
 namespace onnx::genai::Text2Image {
-
-struct Tensor {
-    void* data;
-    size_t byte_size;
-    std::vector<size_t> shape;
-};
-
 
 struct GenerationInput {
     std::string text;
