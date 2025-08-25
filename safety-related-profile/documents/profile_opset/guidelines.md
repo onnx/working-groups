@@ -46,11 +46,11 @@ A synthesis of all restrictions is given in section "Restrictions" (see below).
   
 When part of the documentation refers to a tag, an hyperlink is used. This is achieved using the following elements: 
 ```
-  `[T1]`<a name="`[my_tag_name]`"></a>
+  `[T1]`<a name="my_tag_name"></a>
 ```
    to declare the location of the tagged element and 
   ```
-  [[T1]](#my_tag_name).
+  [`[T1]`](#my_tag_name).
 ```
 to refer to the tagged element. 
 
@@ -87,11 +87,11 @@ Here is an example for operator $\text{MatMul}$:
 
 The following section must be repeated for each set of types for which the semantics is the same. One section corresponds to one entry in the "Contents" list. 
 
-## $\text{op}$  (&lt;list of types&gt;)
+## $\text{op}$  (`<type 1>`, `<type 2>`,...)
 
 ### Signature
 
-Definition of the operator's signature:
+Definition of operator $\text{op}$ signature:
 
  $O = \text{op}(X,Y,...,Z)$
 
@@ -137,19 +137,20 @@ The informal specification shall be composed of the following parts:
 - A detailed description that:
   - Uses the notations proposed in section "Notations" of these guidelines
   - Implements the traceability tags proposed in Section "Tags" of these guidelines
-  - Presents the mathematical formulae, if necessary, according to the following pattern: the complete formula is first given and its atomic elements and sub-expressions are defined afterward, by introducing them with "Where" or "In which"
+  - Presents the mathematical formulae, if necessary, according to the following pattern: the complete formula is first given and its atomic elements and sub-expressions are defined afterward, by introducing them with "Where" or "In which".
         
 For instance, for the $\text{conv}$ operator:
 
 > $$\begin{gathered}
-    Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} (X[b,i,m \cdot strides[0]+ j \cdot dilations[0], n \cdot strides[1]+ z \cdot dilations[1]] \cdot W[c, i, j, z]) + B[c]
+    Y[b, c, m, n] = \sum_{i=0}^{dW_1-1} \sum_{j=0}^{dW_2-1} \sum_{z=0}^{dW_3-1} \\ (X_p[b,i,m \cdot \text{strides}[0]+ j , n \cdot \text{strides}[1]+ z ] \cdot W_d[c, i, j, z]) \\ + B_b[c]
 \end{gathered}$$
+
 > Where
->- $b$ is the batch index, $b \in [0,b(Y)-1]$, 
->- $b(Y)$ is the batch size of output $Y$
->- $c$ is the data channel, $c \in [0,c(Y)-1]$, 
->- $c(Y)$ is the number of data channels of output $Y$
->- etc
+>- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
+>- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
+>- $m \in [0,dY_2-1]$ is the index of the first spatial axis of output `Y`
+>- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output `Y`
+>- etc.
 
 #### Error conditions
 
@@ -176,9 +177,9 @@ If the section is left empty, it means that **not error condition can occur**.
 
 This section describes the operator's inputs.
  
-##### $<name>$: `<type>`
+##### $\text{name}$: `<type>`
 
-where $<name>$ is the name of the input and `<type>` is the type of the input.
+where $\text{name}$ is the name of the input and `<type>` is the type of the input.
 
 ###### Constraints
 This section gives all constraints applicable to the input.
@@ -193,8 +194,8 @@ The description is structured as follows:*
 #### Attributes
 This section describes the operator's attributes. 
 
-##### $<name>$: `<type>`
-where $<name>$ is the attribute's name and `<type>` is the attribute's type.
+##### $\text{name}$: `<type>`
+where $\text{name}$ is the attribute's name and `<type>` is the attribute's type.
 
  ##### Constraints
 Same as for the inputs.
@@ -202,9 +203,8 @@ Same as for the inputs.
  #### Output
  This section describes the operator output.
 
-##### $<name>$: `<type>`
-
-where $<name>$ is the output's name and `<type>` is the output's type.
+##### $\text{name}$: `<type>`
+where $\text{name}$ is the output's name and `<type>` is the output's type.
 
  ##### Constraints
 Same as for the inputs.
