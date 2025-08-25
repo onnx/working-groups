@@ -55,7 +55,7 @@ When part of the documentation refers to a tag, an hyperlink is used. This is ac
 to refer to the tagged element. 
 
 Here is an example: <br>
-`[T1]` <a name="`[my_tag_name]`"></a> This is a tagged paragraph.
+`[T1]` <a name="my_tag_name"></a> This is a tagged paragraph.
 
 This is a reference to the tagged paragraph  [`[T1]`](#my_tag_name).
 
@@ -75,25 +75,25 @@ The specification on an operator is structured as follows.
 This section gives the list of all informal specifications of the operator, for each of the applicable types. 
 
 - $op$ operator for type real
-- $op$ operator for types `<type T1>`, `<type T2>`,...
-- $op$ operator for types `<type T1>`, `<type T2>`,...
+- $op$ operator for types &lt;T1&gt;, &lt;T2&gt;,...
+- $op$ operator for types &lt;T1&gt;, &lt;T2&gt;,...
 - etc
 
-Here is an example for operator $MatMul$:
+Here is an example for operator $\text{MatMul}$:
 > Contents
->- $MatMul$ operator for type real
->- $MatMul$ operator for types `FP16`, `FP32`, `FP64`, `BFLOAT16`
->- $MatMul$ operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`
+>- $\text{MatMul}$ operator for type real
+>- $\text{MatMul}$ operator for types `FP16`, `FP32`, `FP64`, `BFLOAT16`
+>- $\text{MatMul}$ operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`
 
 The following section must be repeated for each set of types for which the semantics is the same. One section corresponds to one entry in the "Contents" list. 
 
-## $op$  `(<list of types to which this description is applicable>)`
+## $\text{op}$  (&lt;list of types&gt;)
 
 ### Signature
 
 Definition of the operator's signature:
 
- $O = op(X,Y,...,Z)$
+ $O = \text{op}(X,Y,...,Z)$
 
  where
  - $X$: Brief description of argument $X$
@@ -103,11 +103,11 @@ Definition of the operator's signature:
  
 Arguments have different names. For instance 
 
-$Y = add(X, Y)$
+$Y = \text{add}(X, Y)$
 
 When the same name is used for different arguments such as in 
 
- $Y = concat(X1,X2,...,Xn)$
+ $Y = \text{concat}(X_1,X_2,...,X_n)$
 
  this means that the operator is **variadic**, i.e., it accepts a variable number of arguments. In this example, there are n arguments that are discriminated by their index.  
 
@@ -132,14 +132,14 @@ An example is given hereafter
 The informal specification shall be composed of the following parts:
 - A short description of the operator. For instance, for the $conv$ operator: 
 
-> Operator $conv$ computes the convolution of the input tensor $A$ with the kernel $W$ and adds bias $B$ to the result. Two types of convolutions are supported: standard convolution and depthwise convolution.
+> Operator $\text{conv}$ computes the convolution of the input tensor $A$ with the kernel $W$ and adds bias $B$ to the result. Two types of convolutions are supported: standard convolution and depthwise convolution.
 
 - A detailed description that:
   - Uses the notations proposed in section "Notations" of these guidelines
   - Implements the traceability tags proposed in Section "Tags" of these guidelines
   - Presents the mathematical formulae, if necessary, according to the following pattern: the complete formula is first given and its atomic elements and sub-expressions are defined afterward, by introducing them with "Where" or "In which"
         
-For instance, for the $conv$ operator:
+For instance, for the $\text{conv}$ operator:
 
 > $$\begin{gathered}
     Y[b, c, m, n] = \sum_{i=0}^{fm(W)-1} \sum_{j=0}^{h(W)-1} \sum_{z=0}^{w(W)-1} (X[b,i,m \cdot strides[0]+ j \cdot dilations[0], n \cdot strides[1]+ z \cdot dilations[1]] \cdot W[c, i, j, z]) + B[c]
