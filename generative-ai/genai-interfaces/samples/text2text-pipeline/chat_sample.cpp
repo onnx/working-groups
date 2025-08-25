@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) try {
       chosen_devices.push_back(d);
     }
   }
-  auto text2text_pipeline = PipelineFactory::GetInstance().Create(backend_name, models_path, chosen_devices);
+  auto text2text_pipeline = Text2TextPipelineFactory::GetInstance().Create(backend_name, models_path, chosen_devices);
 
   std::cout << "Successfully created '" << backend_name << "' backend." << std::endl;
 
