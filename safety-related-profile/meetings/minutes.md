@@ -6,6 +6,7 @@
   - Status of [guidelines](../documents/profile_opset/guidelines.md) and application to [`conv`](../documents/profile_opset/conv/conv.md) and [`concat`](../documents/profile_opset/concat/concat.md)
   - Code generation
   - Link with the DeepGreen project (see [slide](./slides/AIDGE.pptx))
+  - Events (Moblit'AI)
 ## Minutes
 *To be completed.*
 ## Actions
