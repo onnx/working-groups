@@ -10,10 +10,23 @@
   - Events (Mobilit'AI)
   - Presentation Alexandre Eichenberger on ONNX-MLIR on 08/10/2025
 ## Minutes
-*To be completed.*
+- Continuation of the discussion about [Failure modes / error conditions](../meetings/errror%20conditions/2025-07-30%20-%20Discussions.md) with Eduardo's comments.  on the basis of Edoardo's comments:
+  - It seems that we converge on a baseline where we would simply indicate whether or not the operator may fail (due to a division by zero, wrap-around, etc.) and, if possible, in which conditions such situation may occur. 
+    - If the conditions can be expressed on the inputs, this means that we could possibly add the condition in the specification (a conditions on the input domain)
+    - If the condition cannot be expressed on (or "propagated to") the inputs, we express the condition at the appropriate level (for instance:
+      > "When computing a matrix multiplication, the result of the accumulation may overflow and the result may "wraparound", leading to an incorrect result."
+    - We may give a link to the location in the formula where this accumulation is done. 
+    - Note that some smart implementation may avoid the problem. For instance, when accumulating 2 bits values on a 2 bits accumulator, "3+3-3-3" overflows while "3-3+3-3" does not.
+    - So, the relevance of the warning (i.e., "When computing [...]") actually depends on the implementation, but we know that -- in principle -- there might be some cases where an overflow can occur. And this is due to the the very fact that the operation accumulates values. 
+  - If no indication is given about occurrence of a "failure", this means that the specification is complete and defines what is the expected value for any input. 
+  - In addition, we will also provide "recommendations" about the implementation. A typical example is the one of `SoftMax` where we could recommend the use of the `-max(Xi)` trick.  
+- Concerning code generation from the Why3 spec.: Loïc has provided us with an example. We are currently analyzing it and will try to apply it on `conv` and `concat`.
 ## Actions
 ### New actions
-*To be completed*
+- [X] (2708-1, Eric) Give short guidelines about error / failure conditions.
+  - See minutes of 2025/08/27 meeting.
+- [ ] (2708-2, Mariem) Put Loïc's contribution in the repo.
+- [ ] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat`
 ### Past actions
 - [ ] (3007-1, Eric, All) Collect ideas exchanged on Error Conditions during the meeting. To be discussed during next meeting. 
   - Document is [here](../meetings/errror%20conditions/2025-07-30%20-%20Discussions.md) with Eduardo's comments. 
@@ -26,6 +39,7 @@
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
   - First trial on something simpler than the conv (matrix multiplication).
   - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+  - A prototype tool is currently being developed. Possibly available in October (this is **not** a commitment).   
 - [-] (0904-5, Dumitru) Scrutinize the set of ONNX ops to see if there are other operator causing similar concerns as ``loop``.
   - Cancelled
 ### Long term actions
