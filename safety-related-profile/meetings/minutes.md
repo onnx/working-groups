@@ -4,6 +4,7 @@
 ## Agenda
   - Actions [eric]
   - Status of [guidelines](../documents/profile_opset/guidelines.md) and application to [`conv`](../documents/profile_opset/conv/conv.md) and [`concat`](../documents/profile_opset/concat/concat.md)
+  - Error / failure conditions; Eduardo's remarks on [discussion elements](../meetings/errror%20conditions/2025-07-30%20-%20Discussions.md) with Eduardo's comments. 
   - Code generation
   - Link with the DeepGreen project (see [slide](./slides/AIDGE.pptx))
   - Events (Mobilit'AI)
