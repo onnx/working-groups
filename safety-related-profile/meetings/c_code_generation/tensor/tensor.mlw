@@ -1,0 +1,134 @@
+(** Formalization of coordinates and dimensions *)
+
+module Range
+  use int.Int
+  use std.List
+
+  function size (ds : list int) : int =
+    match ds with
+    | Nil -> 1
+    | Cons d ds -> d * size ds
+    end
+
+  predicate positive (ds : list int) =
+    match ds with
+    | Nil -> true
+    | Cons d ds -> 0 < d /\ positive ds
+    end
+
+  predicate valid (ks ds : list int) =
+    match ks , ds with
+    | Nil , Nil -> true
+    | Cons k ks , Cons d ds -> 0 <= k < d /\ valid ks ds
+    | _ -> false
+    end
+
+  let rec lemma valid_push (ks ds : list int) (k d : int)
+    requires { 0 <= k < d }
+    requires { valid ks ds }
+    ensures { valid (push ks k) (push ds d) }
+    (*proof*)
+    variant { ks }
+    = match ks , ds with
+      | Nil , Nil -> ()
+      | Cons _ ks , Cons _ ds -> valid_push ks ds k d
+      | _ -> absurd
+      end
+    (*qed*)
+
+  let rec lemma size_append (xs ys : list int)
+    ensures { size (xs ++ ys) = size xs * size ys }
+    (*proof*)
+    variant { xs }
+    = match xs with Cons _ rxs -> size_append rxs ys | Nil -> () end
+    (*qed*)
+
+  lemma size_push: forall xs x. size (push xs x) = size xs * x
+
+  let rec lemma positive_size (ds : list int)
+    requires { positive ds }
+    ensures { 0 < size ds }
+    (*proof*)
+    variant { ds }
+    = match ds with Nil -> () | Cons _ ds -> positive_size ds end
+    (*qed*)
+
+  let rec lemma positive_valid (ks ds : list int)
+    requires { valid ks ds }
+    ensures { positive ds }
+    ensures { 0 < size ds }
+    (*proof*)
+    variant { ds }
+    = match ks , ds with
+      | Cons _ ks , Cons _ ds -> positive_valid ks ds
+      | _ -> ()
+      end
+    (*qed*)
+
+end
+
+(** Formalization of Tensor *)
+module Tensor
+  use int.Int
+  use map.Map
+  use list.List
+  use Range
+
+  type data 'a = map (list int) 'a
+
+  type tensor 'a = {
+    dims : list int ;
+    data : data 'a ;
+    background : 'a ; (* default value, or value for 0-dimensions tensor *)
+  }
+  invariant { positive dims }
+  invariant { forall k. valid k dims \/ data k = background }
+  (*proof*)
+  by let d = any 'a in { dims = Nil ; data = (fun _ -> d) ; background = d }
+  (*qed*)
+
+  meta coercion function data
+
+  (** Tensor with the same dimensions *)
+  predicate (~) (a : tensor 'a) (b : tensor 'b) = a.dims = b.dims
+
+  (** Tensor with the same dimensions and background value *)
+  predicate (~=) (a : tensor 'a) (b : tensor 'a) =
+    a ~ b /\ a.background = b.background
+
+  (** Equal tensors *)
+  predicate (==) (a b : tensor 'a) =
+    a ~= b /\ forall k. valid k a.dims -> a.data k = b.data k
+
+  (** Extensionality *)
+  lemma exteq: forall a b : tensor 'a. a == b <-> a = b
+  (*proof*) by tensor'eq a b (*qed*)
+
+  (** Scalar Tensor *)
+  let function scalar (v : 'a) : tensor 'a
+    ensures { result.dims = Nil }
+    ensures { result.background = v }
+    ensures { forall k. result k = v }
+    (*proof*)
+    = { dims = Nil ; data = (fun _ -> v) ; background = v }
+    (*qed*)
+
+end
+
+(** OP-Where Tensor Operation *)
+module OPWhere
+  use Tensor
+
+  let function dwhere (c : data bool) (a b : data 'a) : data 'a
+    = fun ks -> if c ks then a ks else b ks
+
+  let opwhere (c : tensor bool) (a b : tensor 'a) : tensor 'a
+    requires { a ~= b }
+    requires { c ~ a ~ b }
+    ensures { result ~= a ~= b }
+    ensures { result = dwhere c a b }
+    (*proof*)
+    = { dims = c.dims ; data = dwhere c.data a.data b.data ; background = a.background }
+    (*qed*)
+
+end
