@@ -56,13 +56,22 @@ module Clib
   use export mach.c.C
 
   type int32 = Int32.int32
+  type uint32 = UInt32.uint32
+
+  val function to_uint32 (v : int32) : uint32
+    requires { 0 <= v }
+    ensures { Int32.to_int v = UInt32.to_int result }
+
+  (** Null-Pointer *)
+  val predicate is_null (vp : ptr 'a) : bool
+    ensures { result <-> vp.zone = null_zone }
 
   (** Array-range validity *)
   predicate valid_range (vp : ptr 'a) (p q : int) =
     q <= p \/
     ( 0 <= vp.min <= vp.offset /\
       0 <= p <= q <= max_int32 /\
-      0 <= vp.min <= vp.offset /\
+      0 <= vp.min <= vp.offset + p /\
       vp.offset + q <= vp.max <= vp.plength )
 
   let lemma valid_in_range (vp : ptr 'a) (p k q : int)
@@ -120,5 +129,51 @@ module Clib
     (*proof*)
     = slice_append u 0 n (n+1)
     (*qed*)
+
+end
+
+module Cfloat
+  use int.Int
+  use real.Real
+
+  type float = abstract { to_real : real }
+  meta coercion function to_real
+
+  type f32 = < float 8 24 >  (* single precision literals *)
+  type f64 = < float 11 53 > (* double precision literals *)
+
+  val function f32 (k : f32) : float
+    ensures { result = f32'real k }
+
+  val function f64 (k : f64) : float
+    ensures { result = f64'real k }
+
+  let constant zero = f64 0.0
+  let constant one  = f64 1.0
+
+  val function (.+) (a b : float) : float
+    ensures { Real.( result = a + b ) }
+
+  val function (.-) (a b : float) : float
+    ensures { Real.( result = a - b ) }
+
+  val function (.-_) (a : float) : float
+    ensures { Real.( result = (- a) ) }
+
+  val function ( .* ) (a b : float) : float
+    ensures { Real.( result = a * b ) }
+
+  val function ( ./ ) (a b : float) : float
+    requires { b <> 0.0 }
+    ensures { Real.( result = a / b ) }
+
+  val predicate ( .= ) (a b : float) : bool
+    ensures { result <-> Real.( a = b ) }
+
+  val predicate ( .< ) (a b : float) : bool
+    ensures { result <-> Real.( a < b ) }
+
+  val predicate ( .<= ) (a b : float) : bool
+    ensures { result <-> Real.( a <= b ) }
 
 end

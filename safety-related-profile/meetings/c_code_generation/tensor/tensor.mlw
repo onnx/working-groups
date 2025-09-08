@@ -87,6 +87,7 @@ module Tensor
   by let d = any 'a in { dims = Nil ; data = (fun _ -> d) ; background = d }
   (*qed*)
 
+  meta coercion function dims
   meta coercion function data
 
   (** Tensor with the same dimensions *)
@@ -105,7 +106,7 @@ module Tensor
   (*proof*) by tensor'eq a b (*qed*)
 
   (** Scalar Tensor *)
-  let function scalar (v : 'a) : tensor 'a
+  let ghost function scalar (v : 'a) : tensor 'a
     ensures { result.dims = Nil }
     ensures { result.background = v }
     ensures { forall k. result k = v }
@@ -113,16 +114,40 @@ module Tensor
     = { dims = Nil ; data = (fun _ -> v) ; background = v }
     (*qed*)
 
+  (** Null Tensor *)
+  let ghost function zero (e : 'a) (ds : list int) : tensor 'a
+    requires { positive ds }
+    ensures { result.dims = ds }
+    ensures { result.background = e }
+    ensures { forall k. result k = e }
+    (*proof*)
+    = { dims = ds ; data = (fun _ -> e) ; background = e }
+    (*qed*)
+
+
+  (** Constant Tensor *)
+  let ghost function const (v : 'a) (bg : 'a) (ds : list int): tensor 'a
+    ensures { result.dims = ds }
+    requires { positive ds }
+    ensures { result.background = bg }
+    ensures { forall k. valid k ds -> result k = v }
+    (*proof*)
+    = { dims = ds ; data = pure { fun k -> if valid k ds then v else bg } ; background = bg }
+    (*qed*)
+
+  (** Constant & Null *)
+  goal zero_is_const: forall e : 'a, ds. positive ds -> zero e ds == const e e ds
+
 end
 
 (** OP-Where Tensor Operation *)
 module OPWhere
   use Tensor
 
-  let function dwhere (c : data bool) (a b : data 'a) : data 'a
+  let ghost function dwhere (c : data bool) (a b : data 'a) : data 'a
     = fun ks -> if c ks then a ks else b ks
 
-  let opwhere (c : tensor bool) (a b : tensor 'a) : tensor 'a
+  let ghost function opwhere (c : tensor bool) (a b : tensor 'a) : tensor 'a
     requires { a ~= b }
     requires { c ~ a ~ b }
     ensures { result ~= a ~= b }

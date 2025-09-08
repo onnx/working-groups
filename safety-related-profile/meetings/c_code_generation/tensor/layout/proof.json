@@ -13,7 +13,7 @@
         "tactic": "split_vc",
         "children": [
           { "prover": "alt-ergo@2.5.4", "time": 0.075 },
-          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.01 },
           {
             "tactic": "split_vc",
             "children": [
@@ -29,8 +29,8 @@
         "children": [
           { "prover": "alt-ergo@2.5.4", "time": 0.027 },
           { "prover": "alt-ergo@2.5.4", "time": 0.017 },
-          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
-          { "prover": "z3@4.13.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.01 },
+          { "prover": "z3@4.13.4", "time": 0.01 },
           { "prover": "cvc5@1.2.1", "time": 0.137 }
         ]
       }

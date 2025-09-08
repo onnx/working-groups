@@ -112,8 +112,20 @@ module CIndex
         let k = ks[i] in
         if 0 <= k && k < d then
           begin
-            assume { Int32.in_bounds (p * d) } ;
-            assume { Int32.in_bounds (p * d + k) } ;
+            (*proof*)
+            assert { p * d + k = offset (ivector ks (i+1)) (ivector ds (i+1)) } ;
+            ghost
+              begin
+                ensures { Int32.in_bounds (p * d) }
+                ensures { Int32.in_bounds (p * d + k) }
+                let ghost dl = pure { sdim ds 0 i } in
+                let ghost di = Int32.to_int ds[i] in
+                let ghost dr = pure { sdim ds (i+1) n } in
+                let ghost dn = pure { sdim ds 0 n } in
+                sdim_split ds 0 (Int32.to_int i) (Int32.to_int n) ;
+                mult_bound (dl * di) dr dn ;
+              end ;
+            (*qed*)
             p <- p * d + k ;
           end
         else return (-1)

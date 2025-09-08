@@ -17,6 +17,7 @@
       "valid_push": { "prover": "alt-ergo@2.5.4", "time": 0.033 }
     },
     "Tensor": {
+      "const": { "prover": "alt-ergo@2.5.4", "time": 0.014 },
       "exteq": {
         "tactic": "split_vc",
         "children": [
@@ -26,7 +27,9 @@
         ]
       },
       "scalar": { "prover": "alt-ergo@2.5.4", "time": 0.015 },
-      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.013 }
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+      "zero": { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+      "zero_is_const": { "prover": "alt-ergo@2.5.4", "time": 0.014 }
     }
   }
 }
