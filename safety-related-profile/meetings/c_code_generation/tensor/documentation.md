@@ -1,22 +1,7 @@
 # Formally Verified C Tensor Library
 
-This project is a small, provably correct tensor library written in C, with its correctness formally verified using **Why3** and its **WhyML language**.  
+This project is a provably correct tensor library written in C, with its correctness formally verified using **Why3** and its **WhyML language**.  
 The primary goal is to demonstrate how formal verification can be applied to ensure that low-level C code for numerical operations behaves exactly as intended by a high-level mathematical model.
-
----
-
-## Getting Started
-
-To get started with this project, follow these steps:
-
-1. **Install Prerequisites**  
-   Ensure you have **Why3**, its standard library, and a **C compiler** (like `gcc`) installed.
-
-2. **Project Files**  
-   This repository contains:
-   - Formal specification files (`.mlw`)
-   - The C driver file (`.drv`)
-   - A `Makefile` to automate the process
 
 ---
 
@@ -24,6 +9,10 @@ To get started with this project, follow these steps:
 
 These files provide a **formal verification system** for a tensor library, primarily using the **WhyML language** with **Why3**.  
 The goal is to **prove the correctness of C-like tensor operations**.
+This repository contains:
+   - Formal specification files (`.mlw`)
+   - The C driver file (`.drv`)
+   - A `Makefile` to automate the process
 
 ### File Breakdown
 
@@ -110,15 +99,6 @@ Automates the **build and verification process**.
 
 ---
 
-## How It Works
-
-The project uses Why3’s capability to **extract verified code**:  
-- The `.mlw` files contain both **logic** and **formal proofs**.  
-- The `Makefile` translates this verified WhyML code into a C source library.  
-- This guarantees that the generated **C code is mathematically correct and bug-free**.
-
----
-
 ## Building and Verification
 
 The `Makefile` simplifies the entire process with a few commands:
@@ -127,7 +107,6 @@ The `Makefile` simplifies the entire process with a few commands:
 ```bash
 make prove
 ```
-
 This command runs the Why3 proof engine on all the .mlw files to check that all logical properties and correctness conditions hold. 
 ### Generate the C library:
 ```bash
@@ -139,12 +118,10 @@ This command first extracts the verified WhyML code into C source files and then
 ```bash
 make doc
 ```
-
 This command creates an HTML documentation from the formal specifications in the WhyML files.
 
 ### Clean the project
 ```bash
 make clean
 ```
-
 Removes all generated files, including the C library and documentation. and insert the figure in the right plac
