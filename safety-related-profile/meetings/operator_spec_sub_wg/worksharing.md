@@ -23,9 +23,9 @@
 | RER-i    | Ready for external review #i  |
 | FI    | Finalized |
 
-(*) A "local" review involves a limited set of people.
-(**) A "general review" involves the complete working group.
-(***) An  "external" review involves people outside of the working group. 
+- (*) A "local" review involves a limited set of people.
+- (**) A "general review" involves the complete working group.
+- (***) An  "external" review involves people outside of the working group. 
 
 ### Status of operators 
 
