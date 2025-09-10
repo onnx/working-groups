@@ -124,4 +124,5 @@ This command creates an HTML documentation from the formal specifications in the
 ```bash
 make clean
 ```
-Removes all generated files, including the C library and documentation. and insert the figure in the right plac
+Removes all generated files, including the C library and documentation. and insert the figure in the right place
+
