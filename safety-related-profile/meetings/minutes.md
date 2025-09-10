@@ -7,31 +7,43 @@
   - Code generation from Why3 spec. [Mariem + Salomé]
   - Actions about testing? 
   - Actions to reactivate the WG
+  - Workshop with Loïc
 
 ## Minutes
-  *To be completed*
+- About "failures" (see action 2708-1 below)
+  - Add in the specification that the implementer have to specify if they have actually done some kind of failure analysis or not. For instance "The conditions of occurrence of failure conditions (overflows, underflows, wraparound, etc.) have not been analyzed." 
+- Mariem: Presentation of the archive provided by Loïc's that covers the complete process, from formal specification to C code generation for the "where" operator. 
+  - See the [document](../meetings/c_code_generation/sources.md) explaining the content of the archive.
+  - The "interface" of the Tensor formal specification has slightly changed (use of `List`s instead of `Sequence`s. ). This will require some (slight) modifications of the existing formal specifications. *To be checked*. 
+  - Next step is to use this as an example to implement `concat` and other operators.
 
 ## Actions
+- [ ] (1009-1, Eric+Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
+    - Among the quesrtions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
+- [ ] (1009-2, Eric) Mail to be send on SONNX mailing list for contributions
 ### New actions
 ### Past actions
 - [ ] (2708-1, Eric) Give short guidelines about error / failure conditions.
-  - See minutes of 2025/08/27 meeting 
+  - See minutes of 2025/08/27 meeting. The "rules" could be: 
   > - If the conditions can be expressed on the inputs (e.g., $x \ge 0$ for `sqrt(x)`) , add a condition on the input domain in the specification
   >  - If the condition cannot be expressed on (or "propagated to") the inputs, express the failure condition at the appropriate level (for instance:
        "When computing a matrix multiplication, the result of the accumulation may overflow and the result may "wraparound", leading to an incorrect result."
   >  - If possible, give a link to the location in the specification where this accumulation is done. 
   >     - Note that some smart implementation may avoid the problem. For instance, when accumulating 2 bits values on a 2 bits accumulator, "3+3-3-3" overflows while "3-3+3-3" does not.
-    - So, the relevance of the warning (i.e., "When computing [...]") actually depends on the implementation, but we know that -- in principle -- there might be some cases where an overflow can occur. And this is due to the the very fact that the operation accumulates values. 
+  >  - So, the relevance of the warning (i.e., "When computing [...]") actually depends on the implementation, but we know that -- in principle -- there might be some cases where an overflow can occur. And this is due to the the very fact that the operation accumulates values. 
   > - If no indication is given about occurrence of a "failure", this means that the specification is complete and defines what is the expected value for **any** input. 
   > - In addition, provide "recommendations" about the implementation. A typical example is the one of `SoftMax` where we could recommend the use of the `-max(Xi)` trick.  
 - [X] (2708-2, Mariem) Put Loïc's contribution in the repo.
 - [ ] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat` 
 - [ ] (1607-1, Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
-- [ ] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability). What would be the effort to integrate broadcasting in the specification of our operators?
+    - In progress. To be reviewed during next meeting.
+- [X] (1607-2, Eric, Jean) Check what is the actual need in terms of broadcasting (ask users, checks models, check operators providing this capability). What would be the effort to integrate broadcasting in the specification of our operators?
   - Introduce a specific "broadcast" operator to make the operation explicit in the spec. See 1607-3.
+  - Conclusion meetings at AI => do a dedicated meeting in SONNX to share the position (see followup 1009-1)) 
 - [ ] (1806-3, Eric, Dumitru) Organize a presentation of Dumitru's approach to handle RNNs. (please complete [this document](./presentation_proposals.md))
 - [ ] (1806-4, Eric) Organize a "physical" working session on the graph specification 
-  - Poll sent (October)
+  - Poll link sent during meeting. Possibility to organize a "physical" meeting at IRT.
+  - Date fixed end of next week.
 - [ ] (1806-5, Eric, Jean) Resend a "call for participation" to the mailing list (at least once we have a good template spec) 
   - Modalities to be discussed
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
