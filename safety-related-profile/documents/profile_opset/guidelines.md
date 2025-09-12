@@ -171,7 +171,7 @@ When writing a specification, the writer must identify the following failure con
 
 The following rules must be applied.
   - If possible, restrict the input domain to prevent the occurrence failures (e.g., $x \ge 0$ for `sqrt(x)`). In
-  - Give the most detailed description of the conditions in which a failur can occur, and the possible expected result. For instance for a matrix multiplication in `int32`, explain that the accumulator may overflow and may wrap around, leading to an incorrect and inconsistent result. If possible, point out the location in the specification where the error may occur. 
+  - Give the most detailed description of the conditions in which a failure can occur, and the possible expected result. For instance for a matrix multiplication in `int32`, explain that the accumulator may overflow and may wrap around, leading to an incorrect and inconsistent result. If possible, point out the location in the specification where the error may occur. 
 - If no indication is given about occurrence of a "failure", this means that the operator returns a correct value (as per specification) for **any** input value in the domain defined by the type.  
 - If applicable and possible, provide "recommendations" about the implementation to prevent failure. For instance, propose to substract `max(Xi)` to the argument to make the `SoftMax` operator more robust.
 
