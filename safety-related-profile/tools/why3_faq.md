@@ -98,21 +98,6 @@ wget https://git.frama-c.com/pub/why3find/-/jobs/1177337/artifacts/raw/vscode/wh
 code --install-extension why3-platform-1.1.1.vsix
 ```
  
-# WhyML
-
-
-# Proof
-
-
-
-# Execution
-
-## Execution using why3
-
-## Execution using ocaml
-
-## Execution using C
-
 
 
 
