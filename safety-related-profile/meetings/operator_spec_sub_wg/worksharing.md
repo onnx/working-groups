@@ -1,7 +1,18 @@
+This document gives 
+- the list of operators to be covered by the SONNX working group
+- the list of people involved in the **writing** and **review** processes
+- the status of each operator 
+
+If you want to contribute, please:
+- add your name + initials in the "list of contributors" 
+- add your initial in the list of "writers" and/or "local reviewers".
+
+*Thanks!*
+
 
 ### List of contributors
 
-|Initial | Actual name |
+|Initials | Actual name |
 |------|-------------|
 | ej | Eric |
 | mt | Mariem |
