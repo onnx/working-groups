@@ -10,7 +10,7 @@ This section is composed of two sub-sections:
 - *Structure of the informal specification*, which defines the structure and contents of the informal specification of an operator. This section applies the general guidelines.
 
 ## General guidelines  
-The informal specification is intended for both users *and* implementers  of operators who both need to understand what an operator does and how to use it. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
+The informal specification is intended for both users *and* implementers of operators who both need to understand what an operator does and how to use it. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
 
 More precisely, the informal specification:
 - Is aimed at showing clearly what a given operator is supposed to do,
@@ -31,7 +31,7 @@ The writer of the informal specification must take care to keep it readable and 
 - In the case of a variadic operator (e.g., "concat"), the tensor parameters are designated by an index: $A_0$, $A_1$, etc. Indexes start at 0 to be consistent with the other use of indexes. 
 - The shape of a tensor $A$ is denoted by a vector $(dA_0, ..., dA_i, ..., dA_n)$ where $dA_i$ refers to the dimension along axis $i$. The index of the first axis is 0.
 - For a tensor used as a variadic parameter (denoted $A_i$), the shape is denoted by $(dA_{i,0}, dA_{i,1}, ...)$.
-#### Errors
+#### Numerical errors
 - The numerical errors of a tensor $A$ are always represented by a tensor $A_{\textit{err}}$ that is the difference between the tensor $A_{\textit{impl}}$ computed by some implementation and the infinitely accurate tensor $A_{\textit{real}}$ expressed by the formal specification for real numbers.
   - In the section on numerical accuracy, the notation $A_{\textit{real}}$ is replaced by $A$ unless it introduces ambiguity.
 
@@ -156,9 +156,9 @@ For instance, for the $\text{conv}$ operator:
 
 This section identifies the errors that may occur during the execution of the operator (or *runtime errors*).
 
-When writing a specification, the writer must identify the conditions where the following conditions may occur:
+When writing a specification, the writer must identify the following failure conditions:
 - for floating point computations 
-  - an invalid operation as defined in IEEE 754 section 7.2, i.e.
+  - invalid operation as defined in IEEE 754 section 7.2, i.e.
     - multiplication $(0, \infty)$ or multiplication $(\infty, 0)$ 
     - addition or subtraction or fusedMultiplyAdd: magnitude subtraction of infinities, such as addition $(+\infty, -\infty)$ 
     - division $(0, 0)$ or division ($\infty, \infty)$
@@ -169,9 +169,14 @@ When writing a specification, the writer must identify the conditions where the 
   - division by zero,
   - operations leading to a value out of the range (e.g., addition of two large `int32` values non representable in `int32`)
 
-This section shall indicate if an operator can potentially return a `NaN` or `Inf`. It is is the case, the condition that might lead to this situation must be described.
+The following rules must be applied.
+  - If possible, restrict the input domain to prevent the occurrence failures (e.g., $x \ge 0$ for `sqrt(x)`). In
+  - Give the most detailed description of the conditions in which a failur can occur, and the possible expected result. For instance for a matrix multiplication in `int32`, explain that the accumulator may overflow and may wrap around, leading to an incorrect and inconsistent result. If possible, point out the location in the specification where the error may occur. 
+- If no indication is given about occurrence of a "failure", this means that the operator returns a correct value (as per specification) for **any** input value in the domain defined by the type.  
+- If applicable and possible, provide "recommendations" about the implementation to prevent failure. For instance, propose to substract `max(Xi)` to the argument to make the `SoftMax` operator more robust.
 
-If the section is left empty, it means that **not error condition can occur**.
+Note that these rules concern the *specification* of the operation. Therefore,  they must be independent from implementation choices. For instance, *generally speaking* it* is always possible for the operation to overflow if the domain is output domain limited (e.g., `int32`), so there must be a warning about this failure condition. Nevertheless, a specific implementation may be failure-free if, for example, the size for the matrices is limited and the accumulator is sufficiently large. In that case, the implementation must give these conditions. Otherwise, the implementation is deemed compliant with the specification. 
+
 
 #### Inputs
 
@@ -213,6 +218,7 @@ Same as for the inputs.
  
 This section contains a link to the formal specification expressed in Why3.
  
+
 #### Numerical Accuracy
  
 This section provides a tight and verifiable specification of the numerical error
