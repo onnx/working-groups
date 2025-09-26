@@ -70,7 +70,7 @@ If you want to contribute, please:
 | Log                          |hb,                 |                   | DR
 | LSTM                         |nv                  |                   | DR
 | MatMul                       |nv                  |                   | DR
-| Max                          |                    |                   |
+| Max                          |jlf                 |                   |
 | MaxPool                      |sml, js             |                   |
 | Min                          |                    |                   |
 | Mod                          |                    |                   |
