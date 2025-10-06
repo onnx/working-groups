@@ -174,7 +174,7 @@ For instance, with $\mbox{\texttt{stride}}[0]=3$ and $\mbox{\texttt{stride}}[1]=
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
-<img src="./imgs/conv_stride2.png" width="300" />
+<img src="./imgs/conv_stride3.png" width="300" />
 
 ###### Constraints
 - `C1`: Value domain
