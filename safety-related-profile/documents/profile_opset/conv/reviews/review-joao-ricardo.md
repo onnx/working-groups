@@ -4,14 +4,26 @@
 - According to our calculations, the [image](../imgs/convwithoperators.png) does not reflect the correct convolution for the output tensor. The error occurs for the entries: $Y[3, 1]$ and $Y[3, 2]$. Instead of $5$ we believe the value should be $4$.
 - We validated it afterwards with the ONNX.
 
+> (eric) Exact (the result tensor should be symmetric...). To be corrected.
+
 ### Pads
 - When referred for the first time, `pads` is said to be: $\text{pads} = [\text{left}, \text{right}, \text{top}, \text{bottom}]$, although, the image suggests otherwise, namely $\text{pads} = [\text{left}, \text{top}, \text{right}, \text{bottom}]$. 
+
+> (eric) Exact. To be corrected.
+
 - Additionally, on the first [image](../imgs/onnx_conv_padop.png), under the arrow it states $\text{pads} = (1, 3, 2, 2)$. According to this definition, shouldn't it be $\text{pads} = [1, 2, 2, 2]
 $?
+
+> (eric) Exact. To be corrected.
+
 - See our suggestion bellow for the pads structure. 
+
+
 
 ### Strides
 - For the strides definition, we intend that it represents the magnitude of the shift of the kernel during the convolution. According to the [image](../imgs/convwithoperators.png), strides is defined: $\text{strides} = [\text{shift between columns}, \text{shift between lines}]$. Shouldn't it be $[\text{shift between lines}, \text{shift between columns}]$?
+
+> (eric) Exact. The order is rows (lines) *then* columns. To be corrected.
 
 ### Convolution Formula
 - **Assuming this definition of strides:** $\text{strides} = [\text{shift between columns}, \text{shift between lines}]$,  **presented in the [image](../imgs/onnx_conv_padop.png)**:
@@ -23,6 +35,9 @@ $$
    + B_b[c]
 \end{gathered}
 $$
+
+> (eric) Exact. The order is rows (lines) *then* columns. See previous remark.
+
 
 - According to this definition, we are stating the iterations over the lines should take into account the stride of the columns (and the same for the other axis). Either the strides arrangement  or the formula is wrong. If we switch the strides arrangement , then the formula is correct. 
 Actually, when we ran our tests, we couldn't even run the code as it said "index out of bound". 
@@ -131,6 +146,8 @@ According to the proposed formula:
 
 For instance this formula was verified for multiple inputs.
 
+> (eric) You are perfectly right. The formula needs to be corrected. The error comes from the what that I considered (erronoeously) that dilation=0 means no dilation where as this is the case for dil=1...
+
 You can check [hypothesis-conv](../extras/hypothesis-conv.py).
 
 
@@ -167,5 +184,7 @@ Furthermore, the ONNX documentation says:
 
 Therefore our suggestion would be to formalize this as follows:
 $$dB0 = dW0$$
+
+> (eric) Exact (again) to be corrected.
 
 To check this you can test the [bias-testing](../extras/bias-testing.py) changing the bias dimension and evaluating its effects on the output.
