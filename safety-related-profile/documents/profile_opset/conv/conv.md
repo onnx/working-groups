@@ -123,11 +123,11 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
 - `C3`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>  
     - Statement: 
-       *  $$\left\lfloor{\frac{alpha-(dilations[0] \cdot dW_2-1)}{strides[0]}} \right\rfloor +1 = dY_2 \mbox{ with }  alpha=dX_2+pads[0]+pads[2]$$
+       *  $$\left\lfloor{\frac{alpha-((dilations[0] \cdot dW_2-1)+1)}{strides[0]}} \right\rfloor +1 = dY_2 \mbox{ with }  alpha=dX_2+pads[0]+pads[2]$$
          
       and
       
-       * $$\left\lfloor{\frac{beta-(dilations[1] \cdot dW_3-1)}{strides[1]}} \right\rfloor +1 = dY_3  \mbox{ with } beta=dX_3+pads[1]+pads[3]$$
+       * $$\left\lfloor{\frac{beta-((dilations[1] \cdot dW_3-1)+1)}{strides[1]}} \right\rfloor +1 = dY_3  \mbox{ with } beta=dX_3+pads[1]+pads[3]$$
     - Rationale: The size of the output is determined by the number of times the kernel can be applied on a given spatial axis.   
 - `C4`: Axis denotations 
     - Statement: If axis denotation is in effect, the operation expects input data tensor to have axis denotation \[`DATA_BATCH`, `DATA_CHANNEL`, `DATA_FEATURE`, `DATA_FEATURE`\].
