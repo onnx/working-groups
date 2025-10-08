@@ -2,16 +2,18 @@
 ## Participants
   *To be completed*
 ## Agenda
-  - Presentation on MLIR/ONNX-MLIR by [Alexandre EICHENBERGER](https://research.ibm.com/people/alexandre-eichenberger)
+  - Presentation on MLIR/ONNX-MLIR by [Alexandre EICHENBERGER](https://research.ibm.com/people/alexandre-eichenberger). Alexandre's presentation is available on [LFX](https://openprofile.dev/my-meetings). 
   - New organization of repo [Mariem]
-  - Feedback on testing activities [Ricardo,João]
+  - Feedback on testing activities [Ricardo,João], see their [reviews](../documents/profile_opset/conv/reviews/review-joao-ricardo.md)
   - Review of actions [Eric]
-  - Feedback on SONNX <=> ED 324 traceability [Jean-Baptiste]
+  - Feedback on SONNX <=> ED 324 traceability [Jean-Baptiste], see [his document](../analyses/certification/SONNX_ED324_interest.docx)
 ## Minutes
-*To be completed.*
+See agenda and new actions
 ## Actions
 ### New actions
-*To be completed.*
+- [ ] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
+- [ ] (0810-2, all) Review  [henri's spec of DIV](../documents/profile_opset/div/div.md)
+- [ ] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
 ### Past actions
 - [ ] (1009-1, Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
     - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
