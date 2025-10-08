@@ -19,7 +19,7 @@ See agenda and new actions
     - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
     - Waiting for Eric
 - [ ] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat` 
-- [ ] (1607-1, Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
+- [X] (1607-1, Jean-Baptiste, Sergei (?)) Produce a synthesis of SONNX <=> ED 324 traceability 
     - In progress. To be reviewed during next meeting.
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
   - First trial on something simpler than the conv (matrix multiplication).
