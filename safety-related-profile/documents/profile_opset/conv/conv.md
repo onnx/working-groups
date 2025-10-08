@@ -52,12 +52,12 @@ The effect of the operator is illustrated on the following figure. In this examp
 - shape of `X` is ($1, 1, 8, 8$) (batch size is 1, number of data channels is 1)
 - shape of `W` is ($1, 1, 3, 2$)  (number of data channels is 1)
 - shape of `B` is ($1$)
-- `pads` is  set to (1,2,2,2) (1 column on the left, 2 columns on the right, 2 rows on the top, 2 rows on the bottom)
+- `pads` is  set to (2,1,2,2) (2 rows on the top, 1 column on the left, 2 rows on the bottom , 2 columns on the right)
 - `dilations` is set to (2,2)
-- `strides` is set to (2,3)
+- `strides` is set to (3,2)
 
 The following figure illustrates $\text{pad}$ function applied to the input tensor `X`:
-<img src="./imgs/onnx_conv_padop.png" alt="drawing" width="100%"/>
+<img src="./imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
 
 
 The following figure illustrates $\text{dilation}$ function applied to the kernel `W`:
@@ -66,7 +66,7 @@ The following figure illustrates $\text{dilation}$ function applied to the kerne
 
 
 Finally, the following figure illustrates operator `Conv` applied on input `X` with kernel `W` and bias `B`:
-<img src="./imgs/convwithoperators.png" alt="drawing" width="100%"/>
+<img src="./imgs/convwithoperators2.png" alt="drawing" width="100%"/>
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
@@ -97,7 +97,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
 
-<img src="./imgs/conv_dep_3ch_mod.png" alt="drawing" width="100%"/>
+<img src="./imgs/conv_dep_3ch_mod2.png" alt="drawing" width="100%"/>
 
 #### Error conditions
 In the domain of real numbers, the operator has no error condition.
@@ -162,7 +162,7 @@ The shape of tensor `B` is $dB_0$.
 
 ###### Constraints
 - `C1`: Consistency between the number of channels of `B` and `W`
-    - Statement:  $dB_0 = dW_1$.
+    - Statement:  $dB_0 = dW_0$.
 
 #### Attributes
 
@@ -170,11 +170,11 @@ The shape of tensor `B` is $dB_0$.
 
 Attribute `strides` determines how the kernel is applied on tensor `X` during the convolution.
 
-For instance, with $\mbox{\texttt{stride}}[0]=2$ and $\mbox{\texttt{stride}}[1]=3$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
+For instance, with $\mbox{\texttt{stride}}[0]=3$ and $\mbox{\texttt{stride}}[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
 
-The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(2,3).
+The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
-<img src="./imgs/conv_stride.png" width="300" />
+<img src="./imgs/conv_stride3.png" width="300" />
 
 ###### Constraints
 - `C1`: Value domain
@@ -202,9 +202,9 @@ Attribute `pads` determines the padding at the beginning and end along each spat
 
 The padding value is 0.
 
-The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(1,3,2,2).
+The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
-<img src="./imgs/conv_pad.png" width="300" />
+<img src="./imgs/conv_pad2.png" width="300" />
 
 ###### Constraints
 - `C1`: Value domain

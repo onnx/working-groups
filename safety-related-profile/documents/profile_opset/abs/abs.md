@@ -1,8 +1,7 @@
-
 # `Abs` operator (all numerical types)
 
 ## Restrictions
-The following restrictions apply to the `conv` operator for the SONNX profile:
+The following restrictions apply to the `abs` operator for the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
