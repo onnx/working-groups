@@ -1,6 +1,6 @@
 # Contents
 > - $\text{Div}$ [operator for type real](#real)
-> - $\text{Div}$ [operator for types `FP16`, `FP32`, `FP64`, `BFLOAT16`](#float)
+> - $\text{Div}$ [operator for types `FP16`, `FP32`, `FP64`](#float)
 > - $\text{Div}$ [operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`](#int)
 
 ---
@@ -19,8 +19,6 @@ where:
 - $B$: denominator of the division  
 - $Y$: result of the element-wise division of `A` by `B`
  
-Arguments have different names. For instance 
-
 
 ### Restrictions
 
@@ -28,16 +26,17 @@ The following restrictions apply to the `Div` operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`      | Input and output tensors shall have the same shape          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
 | `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
-
 
 
 #### Informal specification
 
-> Operator $\text{div}$ divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator $\text{div}$ divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
-The mathematical definition of the operator is given hereafter for a unidimensional tensor, with $i$ covering all valid indexes:
+The definition of the operator is given hereafter.
+
+For any index i:
 
 $$
 Y[i] = 
@@ -48,26 +47,21 @@ Y[i] =
 $$
 
 The effect of the operator is illustrated on the following examples:
-- $A$ and $B$ are tensors holding numerical data
-
-
-
-
 
 ---
 
-### Example 1 (1D tensors, real values with decimals)
+### Example 1 (1D tensors)
 
 ```math
-A = \begin{bmatrix} 6.1 & 9.5 & 35.7 \end{bmatrix} \in \mathbb{R}^{1 \times 3}
+A = \begin{bmatrix} 6.1 & 9.5 & 35.7 \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} 3.0 & 3.3 & 5.1 \end{bmatrix} \in \mathbb{R}^{1 \times 3}
+B = \begin{bmatrix} 3 & 3.3 & 5.1 \end{bmatrix}
 ```
 
 ```math
-Y = \frac{A}{B} = \begin{bmatrix} 2.0333 & 2.8788 & 7.0 \end{bmatrix} \in \mathbb{R}^{1 \times 3}
+Y = \frac{A}{B} = \begin{bmatrix} 6.1/3 & 9.5/3.3 & 35.7/5.1 \end{bmatrix}
 ```
 
 ---
@@ -79,32 +73,29 @@ A = \begin{bmatrix}
   3.7 & 4.4 \\
   16.2 & 0.5 \\
   25.3 & 24.8
-\end{bmatrix} \in \mathbb{R}^{3 \times 2}
+\end{bmatrix}
 ```
 
 ```math
 B = \begin{bmatrix}
-  3.0 & 2.2 \\
-  4.1 & 1.0 \\
-  5.2 & 4.0
-\end{bmatrix} \in \mathbb{R}^{3 \times 2}
+  3 & 2.2 \\
+  4.1 & 1 \\
+  5.2 & 4
+\end{bmatrix}
 ```
 
 ```math
 Y = \frac{A}{B} = \begin{bmatrix}
-  1.2333 & 2.0 \\
-  3.9512 & 0.5 \\
-  4.8654 & 6.2
-\end{bmatrix} \in \mathbb{R}^{3 \times 2}
+  3.7/3 & 2 \\
+  16.2/4.1 & 0.5 \\
+  25.3/5.2 & 6.2
+\end{bmatrix}
 ```
 
 ---
 
-
-
 #### Error conditions
-- for real computations 
-  - division by zero  is undefined
+No error condition
 
 #### Inputs
 
@@ -112,22 +103,20 @@ Y = \frac{A}{B} = \begin{bmatrix}
 Tensor $A$ is the numerator of the division.
 
 ###### Constraints
-This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`&gt;.
-
+ - `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
+   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
 
  
 ##### $\text{B}$: `real tensor`
 Tensor $B$ is the denominator of the division.
 
 ###### Constraints
-This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Range&gt;
-   - Statement: &lt;The operator is only defined for a denominator tensor containing non null values.&gt;.
+ - `[C1]` Shape consistency
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+ - `[C2]` Definition domain
+   - Statement: all elements must be non null.
 
 ### Outputs
 
@@ -137,52 +126,22 @@ Tensor $Y$ is the element-wise result of $A$ divided by $B$.
 
 ##### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
 
 #### Attributes
 
-The $\text{div}$ operator does not require any attributes.
+The $\text{div}$ operator has no attribute.
 
  #### Formal specification
  
-The formal specification of the `div` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
-
-```ocaml
-(**
-    Specification of Div operation on tensors with real numbers.
- *)
-
-module DivReal
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  use real.Inf
-  use real.NaN
-  use real.Div
-
-  let function div (a : tensor real) (b : tensor real) : tensor real =
-    requires { a.shape = b.shape }
-    ensures {
-      forall i. if a.value[i] <> 0.0 && b.value[i] <> 0.0 then result.value[i] = a.value[i] / b.value[i]
-               else if a.value[i] <> 0.0 && b.value[i] = 0.0 then result.value[i] = infinity
-               else if a.value[i] = 0.0 && b.value[i] = 0.0 then result.value[i] = nan
-    }
-  {
-    shape = a.shape ;
-    value = fun i -> if a.value[i] <> 0.0 && b.value[i] <> 0.0 then a.value[i] / b.value[i]
-                     else if a.value[i] <> 0.0 && b.value[i] = 0.0 then infinity
-                     else nan ;
-  }
-  
-end
-```
+See Why3 specification.
 
 #### Numerical Accuracy
+
+> Section to be verified...
+
 Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 ###### Error Propagation
@@ -197,18 +156,17 @@ Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\t
 
 ###### Error Introduction
 Error introduction for real (ideal) arithmetic is null:
-- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
-
+- $Y_{\textit{err}}^{\textit{intro}} = [0]$.*
 
 
 ###### Unit Verification
 
-This section contains a verification scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+This section contains a test scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
 
-* The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
-* The `float` field is a symbolic abstract domain for the computed value.  
-* The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
-* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
+- The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
+- The `float` field is a symbolic abstract domain for the computed value.  
+- The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
+- The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
 
 ```c++
 Tensor<SymbolicDomainError> A, B;
@@ -230,12 +188,11 @@ for (auto I : A.indexes()) {
 }
 ```
 
-
 ---
 
 <a id="float"></a>
 # $\text{div}$ (float, float)
-where float could be (`FP16`, `FP32`, `FP64`, `BFLOAT16`)
+where float could be (`FP16`, `FP32`, `FP64`)
 
 ### Signature
 
@@ -245,24 +202,25 @@ $Y = \text{div}(A, B)$
 
 where
 
- - $A$: float numerator tensor
- - $B$: float denominator tensor
- - $Y$: output float tensor, result of element-wise division of `A` by `B`
+ - $A$: numerator tensor
+ - $B$: denominator tensor
+ - $Y$: output tensor, result of element-wise division of `A` by `B`
  
-Arguments have different names. For instance 
-
 ### Restrictions
 The following restrictions apply to the `Div` operator for the SONNX profile:
 
-| Restriction | Statement                                                         | Origin                                                                                                          |
-| ----------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `[R1]`      | Input and output tensors shall have the same shape                | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]`      | Inputs `A`, `B` and output `Y` shall have the same numerical type | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                                  | General restrictions ([gen.restrict](../general_restrictions.md))                                                       |
+| Restriction | Statement                                                   | Origin                                                                                      |
+|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+
+ 
 
 #### Informal specification
 
-> Operator $\text{div}$ divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+Operator $\text{div}$ divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+
 
 $$
 Y[i] = 
@@ -273,9 +231,9 @@ Y[i] =
 \end{cases}
 $$
 
+The sign of inf is determined according to the IEEE754 rules.
 
 Examples:
-
 
 ---
 
@@ -308,20 +266,8 @@ Y = \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatr
 ---
 
 
-
-
-
-Note in Python it is equivalent to do:
-```python
->>> import numpy as np
-A = np.array([[3.0, 4.5], [16.0, 1.0], [25.5, 24.25]], dtype=np.float32)
-B = np.array([[3.0, 2.0], [4.0, 0.0], [5.0, 4.0]], dtype=np.float32)
-np.divide(A, B) # inf/nan appear according to IEEE 754
-```
-
 #### Error conditions
-- for float computations 
-  - Division by zero is defined as IEEE 754 infinity or NaN depending on numerator.
+- Division by zero is defined as IEEE 754 infinity or NaN depending on numerator.
 
 #### Inputs
 
@@ -329,23 +275,16 @@ np.divide(A, B) # inf/nan appear according to IEEE 754
 Tensor $A$ is the numerator of the division.
 
 ###### Constraints
-This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ shall have the same shape.`[R1]`&gt;.
- - `[C2]` &lt;Type consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$, and $C$ share the same floating-point type. `[R2]`&gt;.   
-   
+- `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
+ - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
 
- 
 ##### $\text{B}$: `floating-point tensor`
 Tensor $B$ is the denominator of the division.
 
 ##### Constraints
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
- - `[C3]` &lt;Floating-point range and special values&gt;
-   - Statement: &lt;Division by zero results in $\infty$ or NaN as defined above.&gt;.
+ - `[C1]` Shape consistency
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
 ### Outputs
 
@@ -355,54 +294,16 @@ Tensor $Y$ is the element-wise result of $A$ divided by $B$.
 
 ##### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
 #### Attributes
 
-The $\text{div}$ operator does not require any attributes.
+The $\text{div}$ operator has no attribute.
 
  #### Formal specification
- 
-The formal specification of the `div` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+ See Why3 specification.
 
-```ocaml
-(**
-    Specification of Div operation on tensors with floating-point semantics.
- *)
-
-module DivFloat
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  use real.Inf
-  use real.NaN
-  use real.Div
-
-  let function div (a : tensor real) (b : tensor real) : tensor real
-    requires { a.shape = b.shape }
-    ensures  { result.shape = a.shape }
-    ensures  {
-      forall i.
-        if a.value[i] <> 0.0 && b.value[i] <> 0.0 then result.value[i] = a.value[i] / b.value[i]
-        else if a.value[i] <> 0.0 && b.value[i] = 0.0 then result.value[i] = infinity
-        else if a.value[i] = 0.0 && b.value[i] = 0.0 then result.value[i] = nan
-        else result.value[i] = 0.0
-    }
-  {
-    shape = a.shape ;
-    value = fun i ->
-      if a.value[i] <> 0.0 && b.value[i] <> 0.0 then a.value[i] / b.value[i]
-      else if a.value[i] <> 0.0 && b.value[i] = 0.0 then infinity
-      else if a.value[i] = 0.0 && b.value[i] = 0.0 then nan
-      else 0.0 ;
-  }
-  
-end
-```
 
 #### Numerical Accuracy
 
@@ -463,50 +364,32 @@ Definition of operator $\text{div}$ signature:
  - $A$: numerator of the division
  - $B$: denominator of the division
  - $Y$: result of the element-wise division of `A` by `B`
- 
-Arguments have different names. For instance 
-
 
 ### Restrictions
 The following restrictions apply to the `Div` operator for the SONNX profile:
 
-| Restriction | Statement                                                         | Origin                                                                                                          |
-| ----------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `[R1]`      | Input and output tensors shall have the same shape                | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]`      | Inputs `A`, `B` and output `C` shall have the same numerical type | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R3]`      | Division by zero is undefined                                     | Integer semantics (implementation-dependent handling)                                                           |
-| `[GR1]`     | Sparse tensors are not supported                                  | General restrictions ([gen.restrict](../general_restrictions.md))                                                       |
+| Restriction | Statement                                                   | Origin                                                                                      |
+|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
-Overflow behavior is implementation-defined.
 
 #### Informal specification
 
-> Operator $\text{div}$ computes element-wise integer division with floor semantics where defined.
+Operator $\text{div}$ divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
-For every index $i$:
-
-$$
-Y[i] = 
-\begin{cases} 
-\left\lfloor \frac{A[i]}{B[i]} \right\rfloor & \text{if } B[i] \text{ is different from 0} \\
-\text{undefined} & \text{otherwise}
-\end{cases}
-$$
-
-Note:
-- $\left\lfloor X \right\rfloor$ means the floor of $X$.
-- "undefined" is implementation-dependent.
+The result of the division is the algebraic quotient with any fractional part discarded. If   the   quotient $A[i]/B[i]$ is representable, the expression $(A[i]/A[i])\times B[i] + A[i] \mod B[i]$ shall equal $A[i]$.
 
 
-Examples:
-
-Example 1:
+### Example 1 (1D tensors)
 
 ```math
 A = \begin{bmatrix} 6 & 9 & 35 \end{bmatrix}
 \quad
 B = \begin{bmatrix} 3 & 3 & 5 \end{bmatrix}
 ```
+
+### Example 2 (2D tensors)
 
 ```math
 Y = \begin{bmatrix} 2 & 3 & 7 \end{bmatrix}
@@ -542,18 +425,16 @@ This section gives all constraints applicable to the input.
  - `[C2]` &lt;Type consistency&gt;
    - Statement: &lt;Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`&gt;. 
 
-
 ##### $\text{B}$: `integer tensor`
 
 Tensor $B$ is the denominator of the division.
 
 ###### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
- - `[C3]` &lt;integer range and special values&gt;
-   - Statement: &lt; $B$ must not contain zero elements.`[R3]`&gt;.
-
+ - `[C1]` Type consistency&gt; : See constraint on $A$.
+ - `[C2]` Type consistency&gt; : See constraint on $A$.
+ - `[C3]` Integer range and special values
+   - Statement: $B$ must not contain zero elements.`
 
 #### Outputs
 
@@ -571,33 +452,7 @@ Tensor $Y$ is the element-wise integer division result.
 The $\text{div}$ operator does not require any attributes.
 
  #### Formal specification
-The formal specification of the `div` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
-
-```ocaml
-(**
-    Specification of Div operation on tensors with integer semantics.
- *)
-
-module DivInt
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-
-  let function div (a : tensor int) (b : tensor int) : tensor int
-    requires { a.shape = b.shape }
-    requires { forall i. b.value[i] <> 0 }
-    ensures  { result.shape = a.shape }
-    ensures  { forall i. result.value[i] = a.value[i] / b.value[i] }
-
-  {
-    shape = a.shape ;
-    value = fun i -> if b.value[i] <> 0 then a.value[i] / b.value[i]
-                     else assert False; (* Enforces undefined behavior *) ;
-  }
-end
-```
+ See Why3 specification.
 
 #### Numerical Accuracy
 Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
