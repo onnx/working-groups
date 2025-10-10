@@ -200,12 +200,12 @@ The following restrictions apply to the **div** operator for the SONNX profile:
 ## Informal specification
 
 Operator **div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$
-
 For any index $i$,
+
 $$
 Y[i] = 
 \begin{cases} 
-A[i] / B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
+A[i]/B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
 \text{inf} & \text{if } A[i] \neq 0 \text{ and } B[i]=0  \\
 \text{nan} & \text{if } A[i]=0 \text{ and } B[i]=0 
 \end{cases}
@@ -250,7 +250,7 @@ Numerator of the division.
 - `[C1]` <a id="C1fa"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 - `[C2]` <a id="C2fa"></a> Type consistency
-  - Statement: Tensors $A$, $B$, and $C$ must have the type. 
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
 ### $B$: FP16, FP32, FP64
 Denominator of the division.
@@ -390,7 +390,7 @@ Numerator of the division.
 - `[C1]` <a id="C1ia"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 - `[C2]` <a id="C2ia"></a> Type consistency
-  - Statement: Tensors $A$, $B$, and $C$ must have the type. 
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
   
 ### $B$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
 
@@ -461,4 +461,5 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
