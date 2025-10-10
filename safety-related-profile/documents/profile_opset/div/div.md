@@ -4,7 +4,7 @@
 - **div** operator for types [FP16, FP32, FP64](#float)
 - **div** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64](#int)
 
-Based on ONNX documentation version 13.
+Based on ONNX documentation version 14.
 
 <a id="real"></a>
 # **div** (real)
