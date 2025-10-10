@@ -6,7 +6,7 @@
 Based on ONNX documentation version 13. 
 <a id="types"></a>
 
-## `concat` `(INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)`
+## `concat` (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)
 
 ### Signature
 
