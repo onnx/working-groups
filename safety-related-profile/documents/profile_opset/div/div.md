@@ -2,7 +2,7 @@
 
 - **div** operator for type [real](#real)
 - **div** operator for types [FP16, FP32, FP64](#float)
-- **div** operator for types [INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64](#int)
+- **div** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64](#int)
 
 Based on ONNX documentation version 13.
 
@@ -327,7 +327,7 @@ for (auto i : A.indexes()) {
 <a id="int"></a>
 
 # **div** (int, int)
-where int is in {INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64}
+where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}
 
 ## Signature
 
