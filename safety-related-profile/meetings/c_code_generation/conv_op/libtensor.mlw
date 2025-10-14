@@ -1,0 +1,313 @@
+module CTensor
+  use int.Int
+  use std.List
+  use std.Clib
+  use std.Cfloat
+  use mach.int.Int32
+  use tensor.Range
+  use tensor.Tensor
+  use tensor.OPWhere
+  use layout.CFlat
+  use libvector.CIndex
+  use ref.Ref
+  use tensor.OPAdd
+  use tensor.OPConv2d
+  
+  
+  
+
+  type farray = ptr float
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : farray ;
+  }
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : real =
+    if valid_index k t then
+      value_at t.t_data (tensor_offset k t)
+    else 0.0
+
+  function tensor_value (t : ctensor) : list int -> real =
+    fun k -> tensor_value_at k t
+
+  function tensor_valueb (t : ctensor) : list int -> bool =
+    fun k -> Real.(tensor_value_at k t > 0.0)
+
+  let ghost function tensor (t : ctensor) : tensor real
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0.0 }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0.0 ;
+    }
+
+  let ghost function tensorb (t : ctensor) : tensor bool
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_valueb t }
+    ensures { result.background = false }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_valueb t } ;
+      background = false ;
+    }
+
+  let ctensor_create (ds : iarray) (n : int32) : ctensor =
+    (*proof*)
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    (*qed*)
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear (r : ctensor) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = 0.0 }
+      (*qed*)
+      r.t_data[i] <- f32 0.0
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.zero 0.0 (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_reset (r : ctensor) (v : float) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = v }
+      (*qed*)
+      r.t_data[i] <- v
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_where (cond a b r : ctensor) =
+    (*proof*)
+    requires { valid_tensor cond }
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    (*qed*)
+    requires { tensorb cond ~ tensor a ~ tensor b }
+    ensures { tensor r = opwhere (tensorb cond) (tensor a) (tensor b) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant {
+        forall k. 0 <= k < i ->
+          value_at r.t_data k =
+            if Real.(0.0 < value_at cond.t_data k)
+            then a.t_data[k] else b.t_data[k]
+      }
+      (*qed*)
+      r.t_data[i] <-
+        if (f32 0.0) .< cond.t_data[i] then a.t_data[i] else b.t_data[i]
+    done
+    (*proof*)
+    ; assert { tensor r == opwhere (tensorb cond) (tensor a) (tensor b) }
+    (*qed*)
+
+let ctensor_add (a b r : ctensor) =
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    ensures { tensor r = opadd (tensor a) (tensor b) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k.
+        0 <= k < i ->
+          value_at r.t_data k =
+            value_at a.t_data k .+ value_at b.t_data k
+      }
+      r.t_data[i] <- a.t_data[i] .+ b.t_data[i]
+    done
+    ;
+    assert { tensor r == opadd (tensor a) (tensor b) }
+
+(* ===== SECTION 1: Function Definition and Pre/Postconditions ===== *)
+
+ (* Goal: Implements the imperative 2D convolution operation (Conv2D) by iterating over all output pixels,
+     * calculating the weighted sum, and storing the result in the 'output' tensor.
+     * Inputs:
+     * x, w, b: ctensor - Input, Kernel (weights), and Bias tensors.
+     * pad_top...str_w: int32 - Convolution attributes (Padding, Dilation, Stride).
+     * output: ctensor - The tensor where the result will be stored (modified in-place).
+     * Outputs: unit (returns nothing, modifies 'output' in-place). *)
+let ctensor_conv2d (x : ctensor) (w : ctensor) (b : ctensor) 
+                   (pad_top pad_bottom pad_left pad_right : int32)
+                   (dil_h dil_w : int32) (str_h str_w : int32)
+                   (output : ctensor): unit  =
+    requires { valid_tensor x }
+    requires { valid_tensor w }
+    requires { valid_tensor b }
+    requires { valid_tensor output }
+    requires { x.t_rank = 4 }  (* Input tensor [N, C, H, W] *)
+    requires { w.t_rank = 4 }  (* Kernel tensor [M, C, kH, kW] *)
+    requires { b.t_rank = 1 }  (* Bias tensor [M] *)
+    requires { output.t_rank = 4 }  (* Output tensor [N, M, oH, oW] *)
+   
+
+    (* Attribute constraints: Stride and Dilation must be positive, Padding must be non-negative. *)
+    requires { str_h > 0 /\ str_w > 0 }
+    requires { dil_h > 0 /\ dil_w > 0 }
+    requires { pad_top >= 0 /\ pad_bottom >= 0 /\ pad_left >= 0 /\ pad_right >= 0 }
+    (* Postcondition: The concrete tensor 'output' must be equal to the ghost specification of Conv2D. *)
+    ensures { tensor output = OPConv2d.opconv2d (tensor x) (tensor w) (tensor b) 
+                                                (Int32.to_int pad_top) (Int32.to_int pad_bottom) 
+                                                (Int32.to_int pad_left) (Int32.to_int pad_right)
+                                                (Int32.to_int dil_h) (Int32.to_int dil_w) 
+                                                (Int32.to_int str_h) (Int32.to_int str_w) }
+    
+    
+    (* ===== SECTION 2: Dimension Extraction and Variable Initialization ===== *)
+
+    (* Extraction des dimensions de chaque tenseur pour les limites des boucles *)
+    let n_batches = x.t_dims[0] in (* Batch size (N) *)
+    let c_in = x.t_dims[1] in (* Input Channels (C_in) *)
+    let h_in = x.t_dims[2] in (* Input Height (H_in) *)
+    let w_in = x.t_dims[3] in (* Input Width (W_in) *)
+    let m_out = w.t_dims[0] in (* Output Channels / Kernel count (M) *)
+    let kh = w.t_dims[2] in (* Kernel Height (kH) *)
+    let kw = w.t_dims[3] in (* Kernel Width (kW) *)
+    
+    let h_out = output.t_dims[2] in (* Output Height (oH) *)
+    let w_out = output.t_dims[3] in (* Output Width (oW) *)
+    
+   
+    (* Conversion des paramètres de convolution en variables locales (int32 -> int32) *)
+    let pad_top_i = pad_top in
+    let pad_left_i =  pad_left in
+    let dil_h_i =  dil_h in
+    let dil_w_i =  dil_w in
+    let str_h_i =  str_h in
+    let str_w_i =  str_w in
+    
+
+    (* Allocation de tableaux temporaires pour stocker les coordonnées 4D (X, W, Output) ou 1D (B)
+     * Ces tableaux sont utilisés par la fonction 'coffset' pour calculer l'indice 1D dans t_data. *)
+    let x_coords = malloc_int32 (to_uint32 4) in
+    let w_coords = malloc_int32 (to_uint32 4) in   
+    let b_coords = malloc_int32 (to_uint32 1) in
+    let output_coords = malloc_int32 (to_uint32 4) in
+    
+    if is_not_null x_coords && is_not_null w_coords && is_not_null b_coords && is_not_null output_coords then begin
+        (* Boucles imbriquées pour calculer la convolution *)
+        (* ===== SECTION 3: Core Iteration Loops (Output Tensor) ===== *)
+        for n = 0 to n_batches - 1 do (* Loop over Batch dimension (N) *)
+            invariant { true }
+            for m = 0 to m_out - 1 do (* Loop over Output Channels (M) *)
+                invariant { true }
+                for oh = 0 to h_out - 1 do (* Loop over Output Height (oH) *)
+                    invariant { true }
+                    for ow = 0 to w_out - 1 do (* Loop over Output Width (oW) *)
+                        invariant { true }
+                        
+                        (* Initialisation de l'accumulateur pour le produit scalaire (dot product) *)
+                        let conv_sum = ref (f64 0.0) in
+
+                        (* ===== SECTION 4: Convolution and Summation Loops (Kernel) ===== *)
+                      
+                        for c = 0 to c_in - 1 do (* Loop over Input Channels (C) *)
+                            invariant { true }
+                            for k_h = 0 to kh - 1 do (* Loop over Kernel Height (kH) *)
+                                invariant { true }
+                                for k_w = 0 to kw - 1 do (* Loop over Kernel Width (kW) *)
+                                    invariant { true }
+                                    
+                                    (* 1. Calculate the indices in the input space *with padding* (ih, iw) *)
+                                    let ih = oh * str_h_i + k_h * dil_h_i in
+                                    let iw = ow * str_w_i + k_w * dil_w_i in
+                                    
+                                    (* 2. Convert to *original* input indices (after subtracting padding) *)
+                                    let padded_ih = ih - pad_top_i in
+                                    let padded_iw = iw - pad_left_i in
+                                    (* 3. Retrieve the input value (X) with zero-padding handling *)
+                                    let x_val = 
+                                        if 0 <= padded_ih && padded_ih < h_in && 0 <= padded_iw && padded_iw < w_in then begin
+                                            (* Calculate the X offset if the index is within the original bounds *)
+                                            set_ofs x_coords 0 n;
+                                            set_ofs x_coords 1 c; 
+                                            set_ofs x_coords 2 padded_ih;
+                                            set_ofs x_coords 3 padded_iw;
+                                            let x_offset = coffset x_coords x.t_dims 4 in
+                                            if x_offset >= 0 then x.t_data[x_offset] else f64 0.0 (* Value of X *)
+                                        end else f64 0.0 (* Value 0.0 for padding *)
+                                    in
+                                    
+                                    (* 4. Retrieve the kernel value (W) and calculate its offset *)
+                                    set_ofs w_coords 0 m;
+                                    set_ofs w_coords 1 c;
+                                    set_ofs w_coords 2 k_h;
+                                    set_ofs w_coords 3 k_w;
+                                    let w_offset = coffset w_coords w.t_dims 4 in
+                                    let w_val = if w_offset >= 0 then w.t_data[w_offset] else f64 0.0 in
+
+                                    (* 5. Accumulate the product X_val * W_val into the convolution sum *)
+                                    conv_sum := !conv_sum .+ (x_val .* w_val)
+                                done
+                            done
+                        done;
+                        
+                       (* ===== SECTION 5: Final Result Calculation and Assignment ===== *)
+
+                       (* 6. Add the bias (B) (corresponding to the output channel m) *)
+                        set_ofs b_coords 0 m;
+                        let b_offset = coffset b_coords b.t_dims 1 in
+                        let bias_val = if b_offset >= 0 then b.t_data[b_offset] else f64 0.0 in
+                        let final_val = !conv_sum .+ bias_val in
+                        
+                      (* 7. Calculate the final offset and store the result in the 'output' data array *)
+                        set_ofs output_coords 0 n;
+                        set_ofs output_coords 1 m;
+                        set_ofs output_coords 2 oh;
+                        set_ofs output_coords 3 ow;
+                        let output_offset = coffset output_coords output.t_dims 4 in
+                        if output_offset >= 0 then output.t_data[output_offset] <- final_val
+                    done
+                done
+            done
+        done
+    end
+
+
+
+
+end
+
