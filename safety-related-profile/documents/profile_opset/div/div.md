@@ -448,7 +448,8 @@ Tensor<SymbolicDomainError> A, B;
 /* A, B symbolic initialization */
 
 auto result = [&A,&B](auto I) {
-  return (B[I].int != 0) ? A[I] / B[I] : /* undefined */ SymbolicDomainError::undef();
+  return (B[I].int != 0) ? A[I] / B[I] :
+         /* undefined */ SymbolicDomainError::undef();
 };
 
 for (auto I : A.indexes()) {
@@ -456,10 +457,12 @@ for (auto I : A.indexes()) {
    auto b = B[I];
    if (b.int != 0 && b.int + b.err != 0) {
       auto c = result(I);
-      double bound = std::abs(a.err / b.int) + std::abs(a.int * b.err / (b.int * b.int));
+      double bound = std::abs(a.err / b.int) +
+          std::abs(a.int * b.err / (b.int * b.int));
       assert(std::abs(c.err) <= bound + 0);
    }
 }
 ```
+
 
 
