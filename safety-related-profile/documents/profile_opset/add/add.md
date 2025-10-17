@@ -229,7 +229,7 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 
 #### Informal specification
 
-Operator $\text{Add}$ Addtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Addtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
