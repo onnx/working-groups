@@ -119,7 +119,7 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
     - Statement: The number of spatial axes of tensor `X` is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profule.
 - `C2`: <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W`
-    - Statement:  $dX_1=dW_1$
+    - Statement:  $dW_1=\frac{dX_1}{group}$
 - `C3`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>  
     - Statement: 
@@ -153,6 +153,8 @@ The shape of tensor `W` is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
    - Rationale: `kernel_shape` represents the shape of `W`, where `kernel_shape[0]` = $dW_3$ and `kernel_shape[1]` = $dW_2$.
 - `C4`: Compliance with axis denotations
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to have axis denotation \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`, `FILTER_SPATIAL`\].
+- `C5`: Consistency between output channels and group
+     - Statement: $dW_0 \mod group == 0$
 
 ##### `B` : tensor of real
 
