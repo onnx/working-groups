@@ -2,21 +2,35 @@
 ## Participants
   *To be completed*
 ## Agenda
+  - Events
+    - Technical presentation to WG114 on Oct. 16th ([see slides](./Other_meetings/SONNX%20-%20WG114-%20oct-2025.pdf))
+    - Poster at Mobilit'AI (Toulouse)
   - Review of actions [Eric]
-  - Technical presentation to WG114 on Oct. 16th ([see slides](./Other_meetings/SONNX%20-%20WG114-%20oct-2025.pdf))
   - Status on repo organization [Mariem]
   - Status of testing activities [Jõao, Ricardo]
     - How to extend this work?
+  - Other activities
+    - Local activities on operators [Eric, Jean, Mariem]
+    - Meeting on graph [Eric]
 ## Minutes
-To be completed
+  - See agenda.
+  - Jean-Baptiste attended the Mobilit'AI conference. He met people interestied by our work. They were wondering how we will ensure compliance between the design model (e.g., Pytorch) and the exported SONNX model and between the SONNX model and its implementation for a given target... These are very good question that we do not really address in SONNX. This may be something to be done collectively on the basis of some existing, open source training and implementation framework (such as CEA's [AIDGE](https://projects.eclipse.org/projects/technology.aidge) platform.).     
+  - Eric presented the SONNX work to the WG114. There was a great interest on the numerical aspect. Providing a working example of the approach developed by Franck would be very appreciated... 
+  - Ricardo and Jõao have completely covered operator **clip** (from informal spe to formal with proof)... That's really GREAT!!! Kudos to those extremely efficient and proactive students (and their advisers)!!! 
+  - Jean propose that Ricardo and Jõao next operator be one common to Thales and Airbus' use cases  (e.g., **maxpool**, **relu**, etc.).
+  - Jean-Loup's working on operator **max**. He is addressing  the question of broadcasting. For the moment, the broadcasting operating may be specified for **max**. if it can be "factorized" (i.e., be expressed in such as way it can apply to other operators), we will do it later.
 ## Actions
 ### New actions
+- [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
+- [ ] (2210-2, Mariem) Move all operators to the new location 
+- [ ] (2210-1, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from Jõao and Ricardo (on **conv**)
+- [ ] (2210-2, Eric, Jean-Mariem) Review Jõao and Ricardo's work on the operator **clip**
+### Past actions
 - [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
   - Eric comments (in the doc)
-- [X] (0810-2, all) Review  [henri's spec of DIV](../documents/profile_opset/div/div.md)
+- [X] (0810-2, all) Review  [Henri's spec of DIV](../documents/profile_opset/div/div.md)
   - See work done with Mariem and Jean on div, mul, add...
-- [ ] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
-### Past actions
+- [X] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
 - [ ] (1009-1, Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
     - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
     - Waiting for Eric
