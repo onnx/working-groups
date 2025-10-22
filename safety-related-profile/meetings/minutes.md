@@ -24,8 +24,8 @@
 ### New actions
 - [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
 - [ ] (2210-2, Mariem) Move all operators to the new location 
-- [ ] (2210-1, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from Jõao and Ricardo (on **conv**)
-- [ ] (2210-2, Eric, Jean-Mariem) Review Jõao and Ricardo's work on the operator **clip**
+- [ ] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from Jõao and Ricardo (on **conv**)
+- [ ] (2210-4, Eric, Jean-Mariem) Review Jõao and Ricardo's work on the operator **clip**
 ### Past actions
 - [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
   - Eric comments (in the doc)
