@@ -24,3 +24,7 @@ The following restrictions apply to the `max` operator for the SONNX profile:
  #### Informal specification
 
 The result tensor $Y$ is based on the boardcasted values of the input tensors $X_1^B$, ... , $X_N^B$.
+
+Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
+
+$\forall i \in \{1,...I\}, \forall j \in \{1,...J\}, forall k in \{1,...K\}, forall l in \{1,...L\}... y_{i,j,k,l...} = \max_{n \in \{1,...N\}} x_^B{i,j,k,l...}$
