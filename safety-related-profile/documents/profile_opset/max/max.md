@@ -4,7 +4,7 @@
 ## `Max`  `(type on which an order is defined)`
 
 ### Signature
-$Y = max(X_1, ... , X_N)$
+'Y = max(X_1, ... , X_N)'
 where
 
 - `N`: 
@@ -23,4 +23,4 @@ The following restrictions apply to the `max` operator for the SONNX profile:
 
  #### Informal specification
 
-The result tensor `Y` is based on the boardcasted values of the input tensors `X_1^B`, ... , `X_N^B`.
+The result tensor $Y$ is based on the boardcasted values of the input tensors $X_1^B$, ... , $X_N^B$.
