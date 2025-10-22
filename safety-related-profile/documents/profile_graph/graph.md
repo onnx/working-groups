@@ -4,21 +4,29 @@ The following restrictions apply to graphs in the SONNX profile:
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
 | `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
-| `[R2]` | Each output of a node must be the input of another node or be a graph output.  | TBC |
-| `[R3]` | A graph shall only contain deterministic operators. | TBC |
+| `[R2]` | Each output of a node must be the input of another node or be a graph output.  | No unused output |
+| `[R3]` | A graph shall only contain deterministic operators. | Deterministic behavior |
+
+> (eric) Constrainsts to be checked
+
 
 # Informal specification
 
 ## Definitions
 ### Graph
-- `[T01a]` A graph contains a set of nodes
-- `[T01b]` A graph contains a set of tensors that are inputs and outputs of the nodes
-  - Some of those tensors are inputs (resp. outputs) of the graph, i.e, their values are set (resp. returned) before (resp. after) executing the graph
-
-For instance, using `onnxruntime`, a graph can be created using the `onnx.helper.make_graph` function:
+- `[T01a]` A graph is a set of *nodes* and *edges* 
+- `[T01b]` A node is either a *tensor node* or a *computation node*
+  
+In the following example[^1], written using the `onnxruntime` API, the graph is composed of four computation nodes (`add_node`, `cons_node`, `mul_node1`, `mul_node2`) and 4 tensors nodes (`g_i1` and `g_i2`, `op1_o`, `op3_o`). The complete example in given in Section [example](#example) below).
 
 ```python
-# Create the ONNX graph
+# Create nodes
+add_node = onnx.helper.make_node(op_type="Add", inputs=[g_i1_id, g_i2_id], outputs=[op1_o_id])
+cons_node = onnx.helper.make_node("Constant", inputs=[], outputs=[op2_o_id], value=const_value)
+mul_node1 = onnx.helper.make_node("Mul", inputs=[op1_o_id, op2_o_id], outputs=[op3_o_id])
+mul_node2 = onnx.helper.make_node("Mul", inputs=[g_i1_id, g_i2_id], outputs=[op4_o_id])
+[...]
+# Create graph
 graph = onnx.helper.make_graph(
     nodes=[add_node, cons_node, mul_node1, mul_node2],
     name="Test",
@@ -26,75 +34,85 @@ graph = onnx.helper.make_graph(
     outputs=[op1_o, op3_o]
 )
 [...]
-
-# Do inference
-i1 = np.array([[1.0, 2.0],[3.0, 4.0]], dtype=np.float32)
-i2 = np.array([[3.0, 4.0],[5.0, 6.0]], dtype=np.float32)
-output = session.run(None, {g_i1_id: i1, g_i2_id: i2})
 ```
+[^1]: The complete example in given in Section [example](#example) below.
 
-In this example,  the graph has 2 inputs (`g_i1` and `g_i2`) and 2 outputs (`op1_o` and `op3_o`) and is composed of four nodes (`add_node`, `cons_node`, `mul_node1`, `mul_node2`). Note that using this API, the binding of the graph inputs and outputs is done by referring to the actual tensor objects (e.g., `g_i1`) rather than by their identifiers (e.g., "G_I1").
 
-The values of the input tensors are set by the `session.run(None, {g_i1_id: i1, g_i2_id: i2})` call. 
+### Tensor nodes
+- `[T02a]` A tensor node is an object that can have a value or no value
+- `[T02b]` A tensor node is identified by a unique identifier within a graph
 
-The execution semantics of a graph can be defined only using the concepts of nodes and tensors.
+`[RX]`  A tensor node that is not the input of a computation node (i.e., it does not belong to any edges to a computation node input) must be an output node of the graph.
 
-### Tensors
-- `[T02b]` A tensor is an object that can hold a value or be uninitialized
-- `[T02a]` A tensor is identified by a unique identifier within a graph
-
-For instance, using `onnxruntime`, a tensor can be created using the `onnx.helper.make_tensor_value_info` function:
+In the following example[^1], written using the `onnxruntime` API, a tensor node is created using the `onnx.helper.make_tensor_value_info` function. In this example, `op1_o` is a tensor of rank 2 with no given dimensions. Its identifier is `op1_o` is `OP1_O`. 
 
 ```python
 op1_o_id = "OP1_O"
 op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
 ```
-In this example, `op1_o` is a tensor object representing a tensor of rank 2 with no given dimensions. The identifier of `op1_o` is `"OP1_O"`.
 
-### Nodes
+### Computation nodes
 
-- `[T03a]` A node refers to an operator
-  - An operator may be referred to by multiple nodes
-- `[T03b]` There is a 1-to-1 mapping between the set of inputs and outputs of a node and the set of inputs and outputs of its associated operator `[R1]`. 
-  - Note that is is a restriction with respect to the ONNX standard that allows fewer inputs or outputs when the omitted input or output is optional. 
+- `[T03a]`  A computation node specifies some relation between its inputs and its outputs.
+- `[T03b]`  The relation is defined by the *operator* that is associated with the node. The semantics of operators is defined in the SONNX profile opset (see, e.g., [add](../profile_opset/add/add.md)).
+  - Note that multiple computation nodes can refer to the same operator. 
+- `[T03c]` There is a 1-to-1 mapping between the computation node's inputs and outputs and those of its associated operator . 
 
-For instance, using `onnxruntime`, a node can be created using the `onnx.helper.make_tensor_value_info` function:
+- `[RX]`  A computation node must belong to at least one path from an input tensor to an output tensor of the graph (i.e., there shall be no "dead" node)
+- `[Rx]` A computation node must refer to an operator in the SONNX profile. 
+  
+In the following example[^1], nodes `mul_node1` and `mul_node2` refer to the same operator [`Mul`](../profile_opset/mul/mul.md) that has 2 inputs and 1 output.
 
 ```python
-# Define input and output tensor names
-g_i1_id = "G_I1"
-g_i2_id = "G_I2"
-op1_o_id = "OP1_O"
-op2_o_id = "OP2_O"
-op3_o_id = "OP3_O"
-op4_o_id = "OP4_O"
-
-# Create 2-rank input tensors (two inputs for division)
-g_i1 = onnx.helper.make_tensor_value_info(g_i1_id, onnx.TensorProto.FLOAT, [None, None])
-g_i2 = onnx.helper.make_tensor_value_info(g_i2_id, onnx.TensorProto.FLOAT, [None, None])
-
-# Create output tensor (final result after div operation)
-op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
-op2_o = onnx.helper.make_tensor_value_info(op2_o_id, onnx.TensorProto.FLOAT, [None, None])
-op3_o = onnx.helper.make_tensor_value_info(op3_o_id, onnx.TensorProto.FLOAT, [None, None])
-op4_o = onnx.helper.make_tensor_value_info(op4_o_id, onnx.TensorProto.FLOAT, [None, None])
-
 mul_node1 = onnx.helper.make_node("Mul", [op1_o_id, op2_o_id], [op3_o_id])
 mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
 ```
 
-In this example, nodes `mul_node1` and `mul_node2` refer to the same operator `Mul` that has 2 inputs and 1 output. In the case of node `mul_node1` inputs and outputs are bound to tensors whose identifiers are respectively `"G_I1"`, `"G_I2"`, and `"OP4_O"`.
+### Edges
+- `[T04a]` An edge is a relation between a computation node, one input or output of this computation node, and a tensor node. A tensor that is related to some computation node input (resp. output) is said to be an input (resp. output) of the computation node. 
+
+- `[Rx]` All inputs and outputs of all computation nodes must belong to an edge.
+  - Note that is is a restriction with respect to the ONNX standard that allows fewer inputs or outputs when the omitted input or output is optional
+  
+The following restrictions apply to graphs in the SONNX profile:
+-  is not part of an  
+  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
+
+In the following example[^1], edges are defined by the `inputs` and `outputs` arguments of the `make_node` and `make_graph` functions. For instance, the `add_node` computation node has 2 inputs (one for each element of the `inputs` list, noted $i_1$, $i_2$ hereafter) and 1 output (one for each element of the `outputs` list, noted $o$). The corresponding graph edges are:
+- e1: (add_node, $i_1$, g_i1_id)
+- e2: (add_node, $i_2$, g_i2_id)
+
+```python
+# Create nodes
+add_node = onnx.helper.make_node(op_type="Add", inputs=[g_i1_id, g_i2_id], outputs=[op1_o_id])
+cons_node = onnx.helper.make_node("Constant", inputs=[], outputs=[op2_o_id], value=const_value)
+mul_node1 = onnx.helper.make_node("Mul", inputs=[op1_o_id, op2_o_id], outputs=[op3_o_id])
+mul_node2 = onnx.helper.make_node("Mul", inputs=[g_i1_id, g_i2_id], outputs=[op4_o_id])
+[...]
+# Create graph
+graph = onnx.helper.make_graph(
+    nodes=[add_node, cons_node, mul_node1, mul_node2],
+    name="Test",
+    inputs=[g_i1, g_i2],
+    outputs=[op1_o, op3_o]
+)
+[...]
+```
 
 ### Operators
+- `[T05a]` An operator specifies a function, i.e., a relation between the values of some input variables (the arguments of the function) and some output variables. For instance operation $z=\text{\bf add}(x,y)$ specifies a relation between variables  $x$, $y$, and $z$ such that $z=x+y$.
+  - The set of input variables may be empty (case of a constant function). 
 
-- `[T04a]` An operator specifies a relation (a function) between a set of input parameters and a set of outputs parameters. 
-  - Input and output parameters (resp. output) are free variables that can be bound to tensors using nodes
-  - An operator has at least one output
+
   
-### Illustration
-The following figure gives a graphical view of the 4 node graph created using the python script below. The graph has 2 inputs and 2 outputs. The output of one of the nodes, `mul_node2`, is not used. 
+> (eric) Can a node have an internal state? In that case, it is not functional. 
+
+### Example
+The following figure gives an example of a simple graph composed of 4 nodes. The graph has 2 input and 2 output tensors. Note that output of one of the nodes, `mul_node2`, is not used: this is actually forbidden in SONNX.
 
 ![alt text](imgs/ex1_netron.png) 
+
+The `onnxruntime`used to create the graph is given hereafter:
 
 ```python
 import onnx
@@ -170,16 +188,13 @@ print(f"Result={o1_f}{o2_f}")
 ```
 
 ## Execution Semantics
-- `[T05a]` A node is executable if all its input tensors are initialized 
-- `[T05b]` Executing a node means assigning values to output tensors such that the inputs-outputs relation specified by the operator holds
-- `[T05c]` All executable nodes are executed
-- `[T05d]` An executable node is executed only once
-- `[T05e]` A tensor is assigned at most once (Single Assignment) 
+Executing a graph means evaluating the output tensors of the graph according to the following rules: 
+- `[T06a]` A computation node is executable if all the tensors connected to its inputs (i.e., belonging to an edge) are initialized 
+- `[T06b]` Executing a computation node means assigning values to the tensors connected to its outputs (i.e., belonging to an edge) so that the relation specified by the operator between its inputs and outputs holds 
+- `[T06c]` All executable computation nodes shall be executed
+- `[T06e]` A tensor shall be assigned a value at most once (Single Assignment) 
 
-## Restrictions
-The following restrictions apply to graphs in the SONNX profile:
-- `[R2]`  Each output of a node must be the input of another node or be a graph output.  
-  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
+
  
 ## Special nodes
 *This section is very preliminary*

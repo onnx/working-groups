@@ -1,3 +1,34 @@
+# 2025/10/22
+## Participants
+  *To be completed*
+## Agenda
+  - Review of actions [Eric]
+  - Technical presentation to WG114 on Oct. 16th ([see slides](./Other_meetings/SONNX%20-%20WG114-%20oct-2025.pdf))
+  - Status on repo organization [Mariem]
+  - Status of testing activities [Jõao, Ricardo]
+    - How to extend this work?
+## Minutes
+To be completed
+## Actions
+### New actions
+- [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
+  - Eric comments (in the doc)
+- [X] (0810-2, all) Review  [henri's spec of DIV](../documents/profile_opset/div/div.md)
+  - See work done with Mariem and Jean on div, mul, add...
+- [ ] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
+### Past actions
+- [ ] (1009-1, Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
+    - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
+    - Waiting for Eric
+- [X] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat` 
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+  - A prototype tool is currently being developed. Possibly available in October (this is **not** a commitment).   
+### Long term actions
+- [-] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  
+
 # 2025/10/08
 ## Participants
   *To be completed*
