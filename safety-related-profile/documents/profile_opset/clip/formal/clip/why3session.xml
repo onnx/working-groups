@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="clip.mlw"/>
+<theory name="OPClip" proved="true">
+ <goal name="dclip&#39;vc" expl="VC for dclip" proved="true">
+ <proof prover="2"><result status="valid" time="0.013589" steps="1791"/></proof>
+ </goal>
+ <goal name="opclip&#39;vc" expl="VC for opclip" proved="true">
+ <proof prover="2"><result status="valid" time="0.016577" steps="42126"/></proof>
+ </goal>
+ <goal name="clip_correct" proved="true">
+ <proof prover="2"><result status="valid" time="0.029358" steps="51173"/></proof>
+ </goal>
+</theory>
+<theory name="TensorClip" proved="true">
+ <goal name="ctensor_clip&#39;vc" expl="VC for ctensor_clip" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="8691"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="1226531"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_clip&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.376507" steps="710318"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.109134" steps="16348"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.109566" steps="16348"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.3" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.032174" steps="127905"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.4" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.003750" steps="6612"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.115604" steps="19484"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.023949" steps="141849"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.110746" steps="20271"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.8" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.139016" steps="24307"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.9" expl="assertion" proved="true">
+  <proof prover="0" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="156138"/></proof>
+  <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000"/></proof>
+  <proof prover="2" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="3746455"/></proof>
+  <transf name="inline_goal" proved="true" >
+   <goal name="ctensor_clip&#39;vc.9.0" expl="assertion" proved="true">
+   <transf name="split_all_full" >
+    <goal name="ctensor_clip&#39;vc.9.0.0" expl="VC for ctensor_clip" proved="true">
+    <proof prover="1"><result status="valid" time="0.143384" steps="21290"/></proof>
+    </goal>
+    <goal name="ctensor_clip&#39;vc.9.0.1" expl="VC for ctensor_clip">
+    <proof prover="0"><result status="timeout" time="1.000000" steps="5998"/></proof>
+    <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+    <proof prover="2"><result status="timeout" time="1.000000" steps="1813772"/></proof>
+    <transf name="split_vc" >
+     <goal name="ctensor_clip&#39;vc.9.0.1.0" expl="VC for ctensor_clip">
+     <proof prover="0" timelimit="30" memlimit="4000"><result status="timeout" time="30.000000" steps="820406"/></proof>
+     <proof prover="1" timelimit="30" memlimit="4000"><result status="timeout" time="30.000000"/></proof>
+     <proof prover="2" timelimit="30" memlimit="4000"><result status="timeout" time="30.000000" steps="38574636"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   <transf name="split_vc" proved="true" >
+    <goal name="ctensor_clip&#39;vc.9.0.0" expl="assertion" proved="true">
+    <proof prover="1"><result status="valid" time="0.140566" steps="21298"/></proof>
+    </goal>
+    <goal name="ctensor_clip&#39;vc.9.0.1" expl="assertion" proved="true">
+    <proof prover="1" timelimit="5" memlimit="2000"><result status="valid" time="14.622584" steps="1068785"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.042920" steps="170527"/></proof>
+  </goal>
+  <goal name="ctensor_clip&#39;vc.11" expl="out of loop bounds" proved="true">
+  <proof prover="2"><result status="valid" time="0.038694" steps="136182"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>
