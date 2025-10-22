@@ -1,6 +1,6 @@
 # 2025/10/22
 ## Participants
-  *To be completed*
+  Jean, Eric, Franck Védrine, Ricardo Silva, Edoardo Manino, João Machado, Hugo, Jean-Baptiste Rouffet, Mariem, Henri Belfy, Jean-Loup Farges et Nicolas Valot
 ## Agenda
   - Events
     - Technical presentation to WG114 on Oct. 16th ([see slides](./Other_meetings/SONNX%20-%20WG114-%20oct-2025.pdf))
@@ -19,6 +19,7 @@
   - Ricardo and Jõao have completely covered operator **clip** (from informal spe to formal with proof)... That's really GREAT!!! Kudos to those extremely efficient and proactive students (and their advisers)!!! 
   - Jean propose that Ricardo and Jõao next operator be one common to Thales and Airbus' use cases  (e.g., **maxpool**, **relu**, etc.).
   - Jean-Loup's working on operator **max**. He is addressing  the question of broadcasting. For the moment, the broadcasting operating may be specified for **max**. if it can be "factorized" (i.e., be expressed in such as way it can apply to other operators), we will do it later.
+  - A meeting on the graph semantics is planned on Friday. It was initially planned to address the formal specification of an ONNX graph. I (eric) propose that we shorten the meeting and address, first, the informal specification of a graph, including control flow operators (such as **loop** and **if**...). 
 ## Actions
 ### New actions
 - [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
