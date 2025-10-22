@@ -4,7 +4,7 @@
 ## `Max`  `(type on which an order is defined)`
 
 ### Signature
-`Y = max(X_1, ... , X_N)`
+`$Y = max(X_1, ... , X_N)$`
 where
 
 - `N`: 
