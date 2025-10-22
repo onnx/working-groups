@@ -22,3 +22,5 @@ The following restrictions apply to the `max` operator for the SONNX profile:
 | `R2` | Numpy boardcasting rules shall be applicable to `Y`, `X_1`, ... , `X_N` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
 
  #### Informal specification
+
+The result tensor `Y` is based on the boardcasted values of the input tensors `X_1^B`, ... , `X_N^B`.
