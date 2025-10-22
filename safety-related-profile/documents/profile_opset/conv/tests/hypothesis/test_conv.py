@@ -13,8 +13,7 @@ import onnx.checker
 from onnxruntime import InferenceSession
 
 
-#TODO: Auto_pad "VALID" need more documentation to do the properly constraints
-AUTO_PAD_OPTIONS = ["NOTSET", "SAME_UPPER", "SAME_LOWER"] #auto_pad  [C1], MISSING VALID
+AUTO_PAD_OPTIONS = ["NOTSET", "SAME_UPPER", "SAME_LOWER", "VALID"] #auto_pad  [C1]
 
 """
 Tensor value details
@@ -39,20 +38,14 @@ inputs_atributes = {
     'x_spatial_axis_max': 10, # Adjust as needed
     'min_dw0': 1, # Dimension should always be positive (output channels > 0)
     'max_dw0': 10, # Adjust as needed
-    'min_dw1': [], # W [C1] -> X [C2]
-    'max_dw1': [], # W [C1] -> X [C2]
     'w_spatial_axis_min': 1, # Dimension should always be positive (spatial axes > 0)
-    'w_spatial_axis_max': [], # W [C2] -> X [C3]
-    'w_spatial_axis_max_unlimited': 10, # Used when auto_pad is not NOTSET
+    'w_spatial_axis_max': 10, # Adjust as needed
     'pads_min': 0, # Pads [C1]
     'pads_max': 10, # Adjust as needed
     'strides_min': 1, # Strides [C1]
     'strides_max': 10, # Adjust as needed
-    'db0_min': [], # B [C1]
-    'db0_max': [], # B [C1]
     'dilation_min': 1, # Dilations [C1]
-    'dilation_max': [], # Dilations [C3] -> X [C3]
-    'dilation_unlimited_max': 10, # Used when auto_pad is not NOTSET
+    'dilation_max': 10, # Used when auto_pad is not NOTSET
     'groups': []
 }
 
@@ -89,6 +82,7 @@ generated_data = {
 """
 Function to generate valid convolution arguments
 """
+@settings(backend='crosshair')
 @st.composite
 def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor_range):
     float_strategy = st.floats(min_value=tensor_range['min_value'], max_value=tensor_range['max_value'], 
@@ -115,7 +109,7 @@ def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor
     
     # Strides [C1]
     stride_value = st.integers(min_value=inputs_atributes['strides_min'], max_value=inputs_atributes['strides_max'])
-    # Strides [C2] -> X [C3] - No value constraint just size
+    # Strides [C2] 
     stride_axis_number = 2
     strides = draw(st.lists(stride_value, min_size=stride_axis_number, max_size=stride_axis_number))
 
@@ -126,75 +120,59 @@ def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor
     groups = draw(st.sampled_from(VALID_GROUPS))
     inputs_atributes['groups'].append(groups)
     
-    # Groups [C2]
+    # W [C5]
     VALID_VALUES_DW0 = [i for i in range(inputs_atributes['min_dw0'], inputs_atributes['max_dw0'] + 1) if i % groups == 0]
     dw0 = draw(st.sampled_from(VALID_VALUES_DW0))
 
-    #dw0 = draw(st.integers(min_value=inputs_atributes['min_dw0'], max_value=inputs_atributes['max_dw0']))
     # W [C1] -> X [C2] #This value does not need to be generated, by X [C2] constraint
-    dw1 = dx1
-    # Groups Documentation Additional Constraint
-    dw1 = dw1 // groups
-    inputs_atributes['min_dw1'].append(dx1//groups)
-    inputs_atributes['max_dw1'].append(dx1//groups)
+    dw1 = dx1 // groups
 
     num_spatial_axes_w = 2
 
-    
     # Auto Pad [C1]
     auto_pad = draw(st.sampled_from(AUTO_PAD_OPTIONS))
     # Auto Pad [C2]
-    if auto_pad == "NOTSET":
-        # Pads [C1]
-        pads_value = st.integers(min_value=inputs_atributes['pads_min'], max_value=inputs_atributes['pads_max'])
-        # Pads [C2]
-        pads = draw(st.lists(
-                        pads_value,
-                        min_size=2*num_spatial_axes_x,
-                        max_size=2*num_spatial_axes_x
-                        ))
-        #Pads [C3] -> X [C3]
-        #No Constraint, variable not restricted
+    if auto_pad == "NOTSET" or auto_pad == "VALID":
+        if auto_pad == "NOTSET":
+            # Pads [C1]
+            pads_value = st.integers(min_value=inputs_atributes['pads_min'], max_value=inputs_atributes['pads_max'])
+            # Pads [C2]
+            pads = draw(st.lists(
+                            pads_value,
+                            min_size=2*num_spatial_axes_x,
+                            max_size=2*num_spatial_axes_x
+                            ))
+        if auto_pad == "VALID":
+            pads = [0 for _ in range(2 * num_spatial_axes_x)]
 
-        # W [C2] -> X [C3] - FIXME - REVIEW THIS, Needed because of explicit padding
+    
         alpha =  pads[0] + pads[2] + x_spatial_axis[0]
         beta =  pads[1] + pads[3] + x_spatial_axis[1]
-        spatial_dimension_values_w_max = [alpha, beta]
-        inputs_atributes['w_spatial_axis_max'].append(spatial_dimension_values_w_max)
         w_spatial_axis = [draw(st.integers(min_value=inputs_atributes['w_spatial_axis_min'], 
-                                           max_value=spatial_dimension_values_w_max[i])) for i in range(num_spatial_axes_w)]
+                                           max_value=inputs_atributes['w_spatial_axis_max'])) for i in range(num_spatial_axes_w)]
         
         # Dilations [C1] 
-        # Dilations [C3] -> X [C3]
-        dilation_max = []
-        for i in range(num_spatial_axes_w):
-            if w_spatial_axis[i] > 1:
-                dilation_max.append(math.floor((spatial_dimension_values_w_max[i] - 1) / (w_spatial_axis[i] - 1)))
-            else:
-                dilation_max.append(inputs_atributes['dilation_unlimited_max'])
-
-        inputs_atributes['dilation_max'].append(dilation_max)
         # Dilations [C2]
         dilations = [draw(st.integers
                             (min_value=inputs_atributes['dilation_min'],
-                            max_value=dilation_max[i])) for i in range(num_spatial_axes_w)]
+                             max_value=inputs_atributes['dilation_max'])) for _ in range(num_spatial_axes_w)]
 
         theta = (dilations[0] * (w_spatial_axis[0] - 1)) + 1
         gamma = (dilations[1] * (w_spatial_axis[1] - 1)) + 1
 
         # y spatial dimension calculations
         # When auto_pad is NOTSET, pads are explicit
-        # X [C3]
+        # W [C2] -> X [C3], Strides [C2] -> X [C3], Pads [C3] -> X [C3], Dilations [C3] -> X [C3], Y [C1] -> X [C3]
         dy2 = math.floor(((alpha - (theta)) / strides[0])) + 1
         dy3 = math.floor(((beta - (gamma)) / strides[1])) + 1
+        assume (dy2 > 0)
+        assume (dy3 > 0)
 
     else:
         pads = []
         dilations = []
         spatial_w_dimension_values = st.integers(min_value=inputs_atributes['w_spatial_axis_min'],
-                                            max_value=inputs_atributes['w_spatial_axis_max_unlimited'])
-        
-        inputs_atributes['w_spatial_axis_max'].append([inputs_atributes['w_spatial_axis_max_unlimited']] * num_spatial_axes_w)
+                                            max_value=inputs_atributes['w_spatial_axis_max'])
         w_spatial_axis = draw(st.lists
                                 (spatial_w_dimension_values,
                                 min_size=num_spatial_axes_w,
@@ -202,9 +180,11 @@ def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor
 
         # y spatial dimension calculations
         # When auto_pad is different from NOTSET
-        # X [C3]
+        # W [C2] -> X [C3], Strides [C2] -> X [C3], Pads [C3] -> X [C3], Dilations [C3] -> X [C3], Y [C1] -> X [C3]
         dy2 = math.ceil(x_spatial_axis[0] / strides[0])
         dy3 = math.ceil(x_spatial_axis[1] / strides[1])
+        assume (dy2 > 0)
+        assume (dy3 > 0)
 
     # W [C4]    
     w = draw(hnp.arrays(dtype=np.float32, shape=(dw0, dw1, *w_spatial_axis),
@@ -212,8 +192,6 @@ def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor
 
     # B [C1] # This value does not need to be generated, once it is always equal to dw0
     db0 = dw0
-    inputs_atributes['db0_min'].append(dw0)
-    inputs_atributes['db0_max'].append(dw0)
     bias = draw(hnp.arrays(dtype=np.float32, shape=(db0,),
                         elements=float_strategy))
 
@@ -229,7 +207,7 @@ def valid_conv_args(draw, inputs_atributes=inputs_atributes, tensor_range=tensor
 """
 Function that runs the test
 """
-@settings(max_examples=1000, deadline=None)
+@settings(max_examples=1000, backend='crosshair')
 @given(valid_conv_args())
 def test_conv(args):
     dx0, dx1, x_spatial_axis, x, dw0, dw1, w_spatial_axis, w, db0, bias, strides, auto_pad, pads, dilations, kernel_shape, dy2, dy3, groups = args
@@ -266,8 +244,8 @@ def test_conv(args):
 Function to write generated data to a json file
 """
 def teardown_module():
-    dados = {
-        "titulo": "Dados gerados pelo Hypothesis",
+    data = {
+        "titulo": "Data generated by Hypothesis for ONNX Conv Operation",
         "min_dx0": inputs_atributes['min_dx0'],
         "max_dx0": inputs_atributes['max_dx0'],
         "dx0": generated_data["dx0"],
@@ -281,15 +259,10 @@ def teardown_module():
         "min_dw0": inputs_atributes['min_dw0'],
         "max_dw0": inputs_atributes['max_dw0'],
         "dw0": generated_data["dw0"],
-        "min_dw1": inputs_atributes['min_dw1'],
-        "max_dw1": inputs_atributes['max_dw1'],
-        "dw1": generated_data["dw1"],
         "w_spatial_axis_min": inputs_atributes['w_spatial_axis_min'],
         "w_spatial_axis_max": inputs_atributes['w_spatial_axis_max'],
         "w_spatial_axis": generated_data["w_spatial_axis"],
         "w": generated_data["w"],
-        "db0_min": inputs_atributes['db0_min'],
-        "db0_max": inputs_atributes['db0_max'],
         "db0": generated_data["db0"],
         "bias": generated_data["bias"],
         "strides_min": inputs_atributes['strides_min'],
@@ -308,7 +281,7 @@ def teardown_module():
     }
 
     with open("generated_data.json", "w") as f:
-        json.dump(dados, f, indent=4)
+        json.dump(data, f, indent=4)
 
 
 """
@@ -335,7 +308,7 @@ def run_onnx_conv(dx0, dx1, x_spatial_axis, x,
             auto_pad='NOTSET',
             group=groups,
         )
-    else:
+    elif auto_pad == "SAME_UPPER" or auto_pad == "SAME_LOWER":
         node_def = helper.make_node(
             'Conv',
             ['x_onnx', 'w_onnx', 'b_onnx'],
@@ -343,6 +316,17 @@ def run_onnx_conv(dx0, dx1, x_spatial_axis, x,
             kernel_shape=kernel_shape,
             strides=strides,
             auto_pad=auto_pad,
+            group=groups,
+        )
+    else: #auto_pad == "VALID"
+        node_def = helper.make_node(
+            'Conv',
+            ['x_onnx', 'w_onnx', 'b_onnx'],
+            ['y_Onnx'],
+            dilations=dilations,
+            kernel_shape=kernel_shape,
+            strides=strides,
+            auto_pad='VALID',
             group=groups,
         )
 
@@ -391,7 +375,7 @@ def check_constraints(x, w, auto_pad, y, dy2,
     # X Constraints
     # X [C1]
     assert x.ndim == 4 and x.shape[0] > 0 and x.shape[1] > 0 and x.shape[2] > 0 and x.shape[3] > 0
-    # X [C2] -> FIXME probably need review on informal spec
+    # X [C2] 
     assert x.shape[1] == w.shape[1] * groups
     # X [C3]
     assert y.shape[2] == dy2 and y.shape[3] == dy3
@@ -404,6 +388,8 @@ def check_constraints(x, w, auto_pad, y, dy2,
     # W [C4]
     assert w.ndim == 4
     assert all(dim > 0 for dim in w.shape)
+    # W [C5]
+    assert w.shape[0] % groups == 0
 
 
     # B Constraints
