@@ -58,3 +58,8 @@ Note that other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specifie
 From the definition of the maximum we have:
 
 $\forall n \in \{ 1,...N \}, \forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} \geq z^n_{i,j,k,l...}$
+
+The same property written in function of unboardcasted inputs is:
+
+$\forall n \in \{ 1,...N \}, \forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} \geq x^n_{f(i,I_n,\max_{m \in \{ 1,...N \} } I_m),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
+
