@@ -37,8 +37,8 @@ The following restriction apply to the Numpy boardcasting:
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
 | `RI` | $\forall n \in \{ 1,...N \}$ either $I_n = I$  or $I_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RJ` | $\forall n \in \{ 1,...N \}$ either $J_n = I$  or $J_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RK` | $\forall n \in \{ 1,...N \}$ either $K_n = I$  or $K_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RL` | $\forall n \in \{ 1,...N \}$ either $L_n = I$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RJ` | $\forall n \in \{ 1,...N \}$ either $J_n = J$  or $J_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RK` | $\forall n \in \{ 1,...N \}$ either $K_n = K$  or $K_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RL` | $\forall n \in \{ 1,...N \}$ either $L_n = L$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
 | ...  | ... | ... |
 
