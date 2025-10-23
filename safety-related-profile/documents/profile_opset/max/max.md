@@ -30,4 +30,15 @@ Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, 
 $\forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} = \max_{n \in \{ 1,...N \} } x^B_{i,j,k,l...}$
 
 ##### Numpy boardcasting
-$I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in \{ 1,...N \} } I_n$, $J = \max_{n \in \{ 1,...N \} } J_n$, $K = \max_{n \in \{ 1,...N \} } K_n$, $L = \max_{n \in \{ 1,...N \} } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$th input tensor.
+$I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in \{ 1,...N \} } I_n$, $J = \max_{n \in \{ 1,...N \} } J_n$, $K = \max_{n \in \{ 1,...N \} } K_n$, $L = \max_{n \in \{ 1,...N \} } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
+
+The following restriction apply to the Numpy boardcasting:
+
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `RI` | $\forall n \in \{ 1,...N \}$ either $I_n = I$  or $I_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RJ` | $\forall n \in \{ 1,...N \}$ either $J_n = I$  or $J_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RK` | $\forall n \in \{ 1,...N \}$ either $K_n = I$  or $K_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `RL` | $\forall n \in \{ 1,...N \}$ either $L_n = I$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| ...  | ... | ... |
+
