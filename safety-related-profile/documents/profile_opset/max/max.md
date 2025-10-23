@@ -4,7 +4,7 @@
 ## `Max`  `(type on which an order is defined)`
 
 ### Signature
-`Y = max(X<sup>1<\sup>, ... , X^N)`
+`Y = max(X^1, ... , X^N)`
 where
 
 - `N`: 
@@ -19,17 +19,17 @@ The following restrictions apply to the `max` operator for the SONNX profile:
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
 | `R1` | `N` is an integer between 1 and 2147483647 | Transient |
-| `R2` | Numpy boardcasting rules shall be applicable to `Y`, `X_1`, ... , `X_N` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `R2` | Numpy boardcasting rules shall be applicable to `Y`, `X^1`, ... , `X^N` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
 
  #### Informal specification
 
-The result tensor $Y$ is based on the boardcasted values of the input tensors $Z^1$, ... , $Z^N$.
+The result tensor $Y$ is based on the boardcasted values $Z^1$, ... , $Z^N$ of the input tensors $X^1$, ... , $X^N$.
 
 Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
 
 $\forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} = \max_{n \in \{ 1,...N \} } z^n_{i,j,k,l...}$
 
-where $z^n_{i,j,k,l...}$ is the boardcasted value of 
+where $z^n_{i,j,k,l...}$ is an element of $Z^n$.
 
 ##### Numpy boardcasting
 $I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in \{ 1,...N \} } I_n$, $J = \max_{n \in \{ 1,...N \} } J_n$, $K = \max_{n \in \{ 1,...N \} } K_n$, $L = \max_{n \in \{ 1,...N \} } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
