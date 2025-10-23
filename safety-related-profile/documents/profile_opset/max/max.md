@@ -4,7 +4,7 @@
 ## `Max`  `(type on which an order is defined)`
 
 ### Signature
-`Y = max(X^1, ... , X^N)`
+`Y = max(X<sup>1<\sup>, ... , X^N)`
 where
 
 - `N`: 
