@@ -27,7 +27,7 @@ The result tensor $Y$ is based on the boardcasted values $Z^1$, ... , $Z^N$ of t
 
 Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
 
-$\forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} = \max_{n \in \{ 1,...N \} } z^n_{i,j,k,l...}$
+$\forall i \in [1, I], \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... ~~~~ y_{i,j,k,l...} = \max_{n \in \{ 1,...N \} } z^n_{i,j,k,l...}$
 
 where $z^n_{i,j,k,l...}$ is an element of $Z^n$.
 
