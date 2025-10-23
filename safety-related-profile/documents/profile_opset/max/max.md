@@ -44,6 +44,12 @@ The following restrictions apply to the Numpy boardcasting:
 | `RL` | $\forall n \in \{ 1,...N \}$ either $L_n = L$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
 | ...  | ... | ... |
 
-Assuming those restrictions hold, the relation between elements of the boardcasted tensor and the input tensor are:
+Assuming those restrictions hold, the relation between elements of boardcasted tensors and input tensors are:
 
 $\forall n \in \{ 1,...N \}, \forall i \in \{ 1,...I \}, \forall j \in \{ 1,...J \}, \forall k \in \{ 1,...K \}, \forall l \in \{ 1,...L \}... z^n_{i,j,k,l...} = x^n_{f(i,I_n,I),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
+
+Where $f(.,.,.)$ is a function such that:
+$$ f(a,B,C) = \begin{cases}
+1 &\text{se $\omega\in A$}\\
+1250 &\text{se $\omega \in A^c$}
+\end{cases} $$
