@@ -84,7 +84,7 @@ Y = \frac{A}{B} = \begin{bmatrix}
 ```
 
 ## Error conditions
-No error condition
+No error condition.
 
 ## Inputs
 
@@ -188,7 +188,7 @@ where
 
  - $A$: numerator
  - $B$: denominator
- - $Y$: result of element-wise division of $A by $B$
+ - $Y$: result of element-wise division of $A$ by $B$
  
 ## Restrictions
 The following restrictions apply to the **div** operator for the SONNX profile:
@@ -329,7 +329,7 @@ for (auto i : A.indexes()) {
 <a id="int"></a>
 
 # **div** (int, int)
-where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}
+where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
 
 ## Signature
 
@@ -338,7 +338,7 @@ where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}
  where
  - $A$: numerator
  - $B$: denominator
- - $Y$: result of the element-wise division of `A` by `B`
+ - $Y$: result of the element-wise division of $A$ by $B$
 
 ### Restrictions
 The following restrictions apply to the **div** operator for the SONNX profile:
@@ -405,7 +405,7 @@ Denominator of the division.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
 - `[C3]` Definition domain
-  - Statement: $\forall i, B|i]\neq 0$ 
+  - Statement: $\forall i, B|i]\neq 0$.
 
 ## Outputs
 
@@ -465,6 +465,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
