@@ -14,8 +14,8 @@ $Y = \text{clip}(X,L,M)$
 
 where:
 - `X`: input tensor
-- `L`: minimum tensor (empty shape tensor - scalar)
-- `M`: maximum tensor (empty shape tensor - scalar)
+- `L`: min value (scalar tensor)
+- `M`: max value (scalar tensor)
 
 ## Restrictions
 The following restrictions apply to the **clip** operator for the SONNX profile:
@@ -29,7 +29,7 @@ The following restrictions apply to the **clip** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **clip** limit the given input within an interval. For each element in the input tensor `X`: 
+Operator **clip** limits the input within an interval. For each element in the input tensor `X`: 
 - If `L` $\leq$ `M`:
   - if its value is less than `L` then it is replaced by `L`.
   - If its value is greater than `M` then it is replaced by `M`.
@@ -37,14 +37,20 @@ Operator **clip** limit the given input within an interval. For each element in 
 - If `L` $\gt$ `M`:
   - all values are set to `M`.
 
+> Rather than "its", please us $X[i]$ with $i$ the index (see the DIV operator).
+
 The result is stored in output tensor `Y`.
 
 If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of clipping $X[i]$ by the interval $[L, M]$.
+
+> To not define the "clip" operator using "clipping". Instead, simply ref to the following formula.
 
 For any index $i$,
 $$
 Y[i] = \min(M, \max(X[i], L))
 $$
+
+> To be checked. It does not display correctly on github...
 
 Wich is equivalent to:
 
@@ -60,6 +66,8 @@ X[i] & \text{otherwise}
 \end{cases}& otherwise
 \end{cases}
 $$
+
+> This last representation is not necessary (min(max...) is sufficient.)
 
 ### Example 1
 
@@ -113,7 +121,7 @@ Tensor `X` is the input tensor to be clipped within the specified bounds.
 ### $L$: real
 Tensor `L` is the minimum bound for clipping.
 
-The shape of tensor `L` must be empty (scalar).
+Tensor `L` must be a scalar (empty shape).
 
 ### Constraints
 Tensor `L` has no constraints.
@@ -121,7 +129,7 @@ Tensor `L` has no constraints.
 ### $M$: real
 Tensor `M` is the maximum bound for clipping.
 
-The shape of tensor `M` must be empty (scalar).
+Tensor `M` must be a scalar (empty shape).
 
 ### Constraints
 Tensor `M` has no constraints.
@@ -129,7 +137,7 @@ Tensor `M` has no constraints.
 ## Outputs
 
 ### $Y$: real
-Tensor `Y` is the element-wise result of clipping `X` by the interval $[L, M]$.
+Tensor `Y` is the element-wise result of clipping `X`.
 
 ### Constraints
 
@@ -138,6 +146,7 @@ Tensor `Y` is the element-wise result of clipping `X` by the interval $[L, M]$.
  - `[C2]` Interval consistency
    - Statement: Output tensor entries should either lie in the interval $[L, M]$ or all be equal to `M`.
 
+> C2 is not a constraint (a pre-condition for the appropriate usage of the operator), its a post condition. To be suppressed.
 
 ## Attributes
 
@@ -149,7 +158,7 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **clip** does not introduce any numerical error. Hence, for all valid indexes $i$,
+Operator **clip** does not introduce any numerical error. 
 
 <a id="int"></a>
 # **clip** (int, int, int)
@@ -162,6 +171,8 @@ where:
 - `X`: input tensor
 - `L`: minimum tensor (empty shape tensor - scalar)
 - `M`: maximum tensor (empty shape tensor - scalar)
+
+> **Please report all modifications done on the "real" type to the other data types...**
 
 ## Restrictions
 The following restrictions apply to the **clip** operator for the SONNX profile:
@@ -302,7 +313,7 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **clip** does not introduce any numerical error. 
+Operator **clip** does not introduce any numerical error. Hence, for all valid indexes $i$,
 
 
 <a id="float"></a>
@@ -398,7 +409,12 @@ Y = \begin{bmatrix} 10.0 & 10.0 & 10.0 \end{bmatrix}
 ```
 
 ## Error conditions
-- Values of the output tensor may be IEEE 754 infinity or NaN
+
+> The following may be discussed since the oeprator does not generate per se special values. It simply propagate them. So it is not a an error condition...
+- Values of the output tensor may be IEEE 754 infinity or NaN.
+
+> Move the following in the definition of the operator. (cf DIV). It could be useful to the user to explain what happens with NaN and Inf... or give appropriate examples.  
+
 - Comparisons with NaN follow IEEE 754 semantics
 
 ## Inputs
@@ -412,7 +428,8 @@ Tensor `X` is the input tensor to be clipped within the specified bounds.
    - Statement: Tensors `X` and `Y` must have the same shape.
  - `[C2]` <a id="C2ia"></a> Type consistency
    - Statement: Tensors `X`, `L`, `M` and `Y` must have the same type.
- 
+
+
 ### $L$: FP16, FP32, FP64, BFLOAT16
 Tensor `L` is the minimum bound for clipping.
 
