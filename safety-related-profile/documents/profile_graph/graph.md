@@ -3,20 +3,21 @@ The following restrictions apply to graphs in the SONNX profile:
 
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
-| `[R1]`|  There is a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
-| `[R2]` | Each output of a node must be the input of another node or be a graph output.  | No unused output |
-| `[R3]` | A graph shall only contain deterministic operators. | Deterministic behavior |
+| `[R1]`|  There shall be a 1-to-1 mapping between the inputs and outputs of a node and the inputs and outputs of its associated operator.  | TBC |
+| `[R2]` | All computation nodes of a graph must contribute to the computation of the graph outputs  | No dead computation nodes |
+| `[R3]` | A graph must only contain computation nodes referring to operators in the SONNX subset  | TBC |
 
-> (eric) Constrainsts to be checked
-
+> (eric) Add a reference to ONNX documentation, e.g., [ONNX concepts](https://onnx.ai/onnx/intro/concepts.html).
 
 # Informal specification
 
 ## Definitions
 ### Graph
-- `[T01a]` A graph is a set of *nodes* and *edges* 
+- `[T01a]` A graph is an acyclic graph composed of *nodes* and *edges* 
 - `[T01b]` A node is either a *tensor node* or a *computation node*
   
+> The fact that the graph is acyclic may not be necessary since there is also the SSA constraint...
+
 In the following example[^1], written using the `onnxruntime` API, the graph is composed of four computation nodes (`add_node`, `cons_node`, `mul_node1`, `mul_node2`) and 4 tensors nodes (`g_i1` and `g_i2`, `op1_o`, `op3_o`). The complete example in given in Section [example](#example) below).
 
 ```python
@@ -29,7 +30,7 @@ mul_node2 = onnx.helper.make_node("Mul", inputs=[g_i1_id, g_i2_id], outputs=[op4
 # Create graph
 graph = onnx.helper.make_graph(
     nodes=[add_node, cons_node, mul_node1, mul_node2],
-    name="Test",
+    name="Example",
     inputs=[g_i1, g_i2],
     outputs=[op1_o, op3_o]
 )
@@ -51,7 +52,7 @@ op1_o_id = "OP1_O"
 op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
 ```
 
-### Computation nodes
+#### Data flow computation nodes
 
 - `[T03a]`  A computation node specifies some relation between its inputs and its outputs.
 - `[T03b]`  The relation is defined by the *operator* that is associated with the node. The semantics of operators is defined in the SONNX profile opset (see, e.g., [add](../profile_opset/add/add.md)).
@@ -67,6 +68,11 @@ In the following example[^1], nodes `mul_node1` and `mul_node2` refer to the sam
 mul_node1 = onnx.helper.make_node("Mul", [op1_o_id, op2_o_id], [op3_o_id])
 mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
 ```
+
+#### Control flow computation nodes
+
+> To be completed.
+
 
 ### Edges
 - `[T04a]` An edge is a relation between a computation node, one input or output of this computation node, and a tensor node. A tensor that is related to some computation node input (resp. output) is said to be an input (resp. output) of the computation node. 
@@ -92,7 +98,7 @@ mul_node2 = onnx.helper.make_node("Mul", inputs=[g_i1_id, g_i2_id], outputs=[op4
 # Create graph
 graph = onnx.helper.make_graph(
     nodes=[add_node, cons_node, mul_node1, mul_node2],
-    name="Test",
+    name="Example",
     inputs=[g_i1, g_i2],
     outputs=[op1_o, op3_o]
 )
@@ -154,7 +160,7 @@ mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
 # Create the ONNX graph
 graph = onnx.helper.make_graph(
     nodes=[add_node, cons_node, mul_node1, mul_node2],
-    name="Test",
+    name="Example",
     inputs=[g_i1, g_i2],
     outputs=[op1_o, op3_o]
 )
@@ -194,28 +200,221 @@ Executing a graph means evaluating the output tensors of the graph according to 
 - `[T06c]` All executable computation nodes shall be executed
 - `[T06e]` A tensor shall be assigned a value at most once (Single Assignment) 
 
-
  
 ## Special nodes
+
+ONNX provides two other categories of special nodes:
+- function nodes
+- control flow nodes.
+
 *This section is very preliminary*
 
 The way graphs are described and executed is independent from the operators used in the graph. In other terms, the semantics of the graph (how the operators are called) and the semantics of the operators (what the operators do) are defined separately. This modularity applies to the standard operators (convolution, relu, etc.) and to the special function and control flow nodes.  
 
 ### Functions nodes
+
+A "function" node is defined using primitive ONNX operators or other function operators. Function nodes are introduced [here](https://onnx.ai/onnx/intro/concepts.html), Section "Functions". 
+
+Some ONNX operators are defined as functions, e.g.: 
+- Softplus
+- Softsign
+- - Celu
+- HardSwish
+- Gelu
+- Selu
+
+
+For instance, the `SoftwaPlus`operator is defined as follows:
+```
+<
+  domain: "",
+  opset_import: ["" : 18]
+>
+Softplus (X) => (Y)
+{
+   exp_x = Exp (X)
+   one = Constant <value: tensor = float {1}> ()
+   one_cast = CastLike (one, X)
+   exp_x_add_one = Add (exp_x, one_cast)
+   Y = Log (exp_x_add_one)
+}
+```
+
+which is a readable description directly generated from the implementation model which is located in file [onnx/defs/math/defs.cc](https://github.com/onnx/onnx/blob/main/onnx/defs/math/defs.cc)
+
+A function operator has a `.FunctionBody()` call that describes the subgraph:
+
+```
+ONNX_OPERATOR_SET_SCHEMA(
+    Softplus,
+    22,
+    OpSchema()
+        .SetDoc(Softplus_ver22_doc)
+        .Input(0, "X", "Input tensor", "T", OpSchema::Single, true, 1, OpSchema::Differentiable)
+        .Output(0, "Y", "Output tensor", "T", OpSchema::Single, true, 1, OpSchema::Differentiable)
+        .TypeConstraint("T", OpSchema::all_float_types_ir4(), "Constrain input and output types to float tensors.")
+        .TypeAndShapeInferenceFunction(propagateShapeAndTypeFromFirstInput)
+        .FunctionBody(
+            R"ONNX(
+            {
+              exp_x = Exp (X)
+              one = Constant <value = float {1.0}>()
+              one_cast = CastLike (one, X)
+              exp_x_add_one = Add (exp_x, one_cast)
+              Y = Log (exp_x_add_one)
+            }
+            )ONNX",
+            18));
+```
+
+The function body can be obtained using the Python API:
+```Python
+schema = defs.get_schema("Softplus", domain="", max_inclusive_version=21)
+fproto = schema.function_body
+print(str(fproto))
+```
+
+that returns:
+```
+name: "Softplus"
+input: "X"
+output: "Y"
+node {
+  input: "X"
+  output: "exp_x"
+  op_type: "Exp"
+  domain: ""
+}
+node {
+  output: "one"
+  op_type: "Constant"
+  attribute {
+    name: "value"
+    t {
+      data_type: 1
+      float_data: 1
+      name: ""
+    }
+    type: TENSOR
+  }
+  domain: ""
+}
+node {
+  input: "one"
+  input: "X"
+  output: "one_cast"
+  op_type: "CastLike"
+  domain: ""
+}
+node {
+  input: "exp_x"
+  input: "one_cast"
+  output: "exp_x_add_one"
+  op_type: "Add"
+  domain: ""
+}
+node {
+  input: "exp_x_add_one"
+  output: "Y"
+  op_type: "Log"
+  domain: ""
+}
+doc_string: "\nSoftplus takes one input data (Tensor<T>) and produces one output data\n(Tensor<T>) where the softplus function, y = ln(exp(x) + 1), is applied to\nthe tensor elementwise.\n"
+opset_import {
+  domain: ""
+  version: 18
+}
+domain: ""
+```
+
+Only function operators have the `.FunctionBody` description. For instance, for the `Abs` operator, we find, in the source tree:
+
+```
+ONNX_OPERATOR_SET_SCHEMA(
+    Abs,
+    13,
+    OpSchema()
+        .SetDoc(Abs_ver13_doc)
+        .Input(0, "X", "Input tensor", "T", OpSchema::Single, true, 1, OpSchema::Differentiable)
+        .Output(0, "Y", "Output tensor", "T", OpSchema::Single, true, 1, OpSchema::Differentiable)
+        .TypeConstraint(
+            "T",
+            OpSchema::all_numeric_types_ir4(),
+            "Constrain input and output types to all numeric tensors.")
+        .TypeAndShapeInferenceFunction(propagateShapeAndTypeFromFirstInput));
+```
+
+To check whether an operator is primitive or not, one can use the ONNX `get_schema()`function:
+```
+from onnx import defs
+schema = defs.get_schema("Softmax", domain="", max_inclusive_version=21)
+print(schema.has_function)
+schema = defs.get_schema("Softplus", domain="", max_inclusive_version=21)
+print(schema.has_function)
+False
+True
+``
+
+The complete list of function operators can be optained using:
+```Python
+from onnx import defs
+function_ops = [
+    s.name for s in defs.get_all_schemas_with_history() if s.has_function
+]
+print(function_ops)
+```
+
+
+
+The representation of functions is models defined in[onnx.proto](https://github.com/onnx/onnx/blob/main/onnx/onnx.proto), item `message Functionproto`.  
+
+
 - A `function` operator encapsulates a graph. 
 - Executing a function operator means executing the encapsulated graph according to the graph execution semantics described before. 
 - An encapsulated graph may itself use `function` nodes, in a hierarchical manner. 
 - A valid ONNX graph with function nodes must be always actually converted to an equivalent ONNX graph without any function nodes. This forbids any direct or indirect recursion. 
 
 ### Control-flow operators 
-- ONNX provides a series of control flow operators such as `if`, `scan`, `loop`,...). 
-- Those nodes take one (e.g, operators `for`, `loop`, `scan`,...) or two graphs (`if`) as attributes and execute this graph or those graphs according to their specific semantics. 
+- ONNX provides three control flow operators:
+  - [If](https://onnx.ai/onnx/operators/onnx__If.html)
+  - [Loop](https://onnx.ai/onnx/operators/onnx__Loop.html)
+  - [Scan](https://onnx.ai/onnx/operators/onnx__Scan.html)
+   
+As stated in the [documentation]() The structures are slow and complex. It is better to avoid them if possible".  We define their semantics for completeness, but the SONNX profile does not contain any control flow operator.
+
+Those nodes take either one (e.g, operators `loop`, `scan`,...) or two graphs (`if`) as attributes and execute them graphs according to their specific semantics. 
+
+The `if` operator is functional: each tensor is at most assigned once (SSA).
+
+The `loop`or `scan` operators are functional: each tensor is assigned at most once, each iteration producing a different tensor. Semantically, a `loop` or `scan` operator can be replaced by its unrolled version (looping $N$ times over graph $g$ on input $x$ is conceptually equivalent to computing $g \circ g \circ ... \circ (x)$.
+```
+f_body : (iter, cond, state) → (cond', state')
+Loop(N, True, state0)
+  = let (cond1, state1) = f_body(0, True, state0)
+        (cond2, state2) = f_body(1, cond1, state1)
+        ...
+        (condN, stateN) = f_body(N-1, condN-1, stateN-1)
+    in stateN
+```
+
+#### The `loop` operator 
+
+- A `loop` operator executes some graph (`body`) according to some condition whihc can be a number of iterations or a certain condition.  
+> The graph run each iteration. It has 2+N inputs: (iteration_num, condition, loop carried dependencies…). It has 1+N+K outputs: (condition, loop carried dependencies…, scan_outputs…). Each scan_output is created by concatenating the value of the specified output value at the end of each iteration of the loop. It is an error if the dimensions or data type of these scan_outputs change across loop iterations.
+
+
 
 #### The `if` operator 
 
-- An `if` operator, takes one boolean input and two attributes, one attribute specifying the graph to be executed when the boolean input is true (the `then_branch` subgraph) and the other specifying the graph to be executed when the boolean is false (the `else_branch` subgraph). 
-- As for any other operator, the `if`node has a single list of outputs (e.g., [Y1, Y2, ..., Yn]). Both the `then_branch` and the `else_branch` subgraphs must produce the same number and types of outputs, and those are mapped to the outputs of the `if` node.
-- The then and else subgraphs do not need to use all of the `if` inputs. In the following example, the then and else subgraph use no inputs (they use constant tensors). 
+- An `if` operator, takes one boolean input and two attributes (`then_branch` and `else_branch`). When the input is true, the graph designated by the `then_branch` is executed, otherwise, the graph designed by the `else_branch`is executed.
+- The `if` operator has one variadic output that is composed of the outputs of the two sub-graphs. 
+- As for any other operator, the `if` node has a single list of outputs (e.g., `[Y1, Y2, ..., Yn]`). 
+  - The `then_branch` and the `else_branch` subgraphs must produce the same number and types of outputs, and those are mapped to the outputs of the `if` node.
+  - For a given output, the shape of the corresponding output tensor of the then and else branches can be different, but the shape of the `if` outputs must be compatible with both of them.  
+- The then and else subgraphs have their own input tensors. Only the subgraph that is selected by the boolean input is executed. This means that if the tensors of the 
+
+
+> This means that in the definition of the graph semantics, some execution nodes may ot be executed. 
   
 ```
 import onnx
@@ -266,7 +465,10 @@ onnx.save(model, "if_example.onnx")
 
 ```
   
-- In addition, they may use tensors directly available in the scope of the `if` operator. In the following example, the `then_branch` and the `else_branch` subgraphs "capture" tensor `X` that is declared in the top-level graph. **DO WE ACCEPT SUCH CAPTURE OR DO WE IMPOSE ALL FLOWS TO BE DECLARED IN THE IF NODE**?
+- In addition, they may use tensors directly available in the scope of the `if` operator. In the following example, the `then_branch` and the `else_branch` subgraphs "capture" tensor `X` that is declared in the top-level graph.
+  
+  
+> **DO WE ACCEPT SUCH CAPTURE OR DO WE IMPOSE ALL FLOWS TO BE DECLARED IN THE IF NODE**?
 
 ```
 import onnx
@@ -347,9 +549,6 @@ onnx.save(model, "if_capture_outer_scope.onnx")
 - If all operators are deterministic, a graph is also deterministic, i.e., for a  given set of input values, the execution of the graph always gives the same output values.
 - A graph has no side effect, i.e., the only visible effects of a graph are via its outputs.
 
-Note:
-- The values of the outputs do not depend on the execution order of its nodes.
-- By construction, a graph makes it explicit the order according to which terms of expressions are computed. For instance, expression `a+b+c` is either represented **explicitly** by `(a+b)+c`or `(a+(b+c)`
 
 
 
