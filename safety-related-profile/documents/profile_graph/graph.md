@@ -52,7 +52,7 @@ op1_o_id = "OP1_O"
 op1_o = onnx.helper.make_tensor_value_info(op1_o_id, onnx.TensorProto.FLOAT, [None, None])
 ```
 
-#### Data flow computation nodes
+### Data flow computation nodes
 
 - `[T03a]`  A computation node specifies some relation between its inputs and its outputs.
 - `[T03b]`  The relation is defined by the *operator* that is associated with the node. The semantics of operators is defined in the SONNX profile opset (see, e.g., [add](../profile_opset/add/add.md)).
@@ -69,9 +69,9 @@ mul_node1 = onnx.helper.make_node("Mul", [op1_o_id, op2_o_id], [op3_o_id])
 mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
 ```
 
-#### Control flow computation nodes
+### Control flow computation nodes
 
-> To be completed.
+> See later.
 
 
 ### Edges
@@ -80,10 +80,6 @@ mul_node2 = onnx.helper.make_node("Mul", [g_i1_id, g_i2_id], [op4_o_id])
 - `[Rx]` All inputs and outputs of all computation nodes must belong to an edge.
   - Note that is is a restriction with respect to the ONNX standard that allows fewer inputs or outputs when the omitted input or output is optional
   
-The following restrictions apply to graphs in the SONNX profile:
--  is not part of an  
-  - Rationale: each node of the graph shall contribute to the function of the graph (no "dead node").
-
 In the following example[^1], edges are defined by the `inputs` and `outputs` arguments of the `make_node` and `make_graph` functions. For instance, the `add_node` computation node has 2 inputs (one for each element of the `inputs` list, noted $i_1$, $i_2$ hereafter) and 1 output (one for each element of the `outputs` list, noted $o$). The corresponding graph edges are:
 - e1: (add_node, $i_1$, g_i1_id)
 - e2: (add_node, $i_2$, g_i2_id)
@@ -110,7 +106,6 @@ graph = onnx.helper.make_graph(
   - The set of input variables may be empty (case of a constant function). 
 
 
-  
 > (eric) Can a node have an internal state? In that case, it is not functional. 
 
 ### Example
@@ -196,6 +191,9 @@ print(f"Result={o1_f}{o2_f}")
 ## Execution Semantics
 Executing a graph means evaluating the output tensors of the graph according to the following rules: 
 - `[T06a]` A computation node is executable if all the tensors connected to its inputs (i.e., belonging to an edge) are initialized 
+
+> Only valid for data flow graphs. To be completed to account for control flow nodes.
+
 - `[T06b]` Executing a computation node means assigning values to the tensors connected to its outputs (i.e., belonging to an edge) so that the relation specified by the operator between its inputs and outputs holds 
 - `[T06c]` All executable computation nodes shall be executed
 - `[T06e]` A tensor shall be assigned a value at most once (Single Assignment) 
