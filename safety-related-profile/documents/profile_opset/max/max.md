@@ -55,9 +55,11 @@ $f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$.
 Note that other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified because of restrictions `RI`, `RJ`, `RK`, `RL`... 
 
 #### Properties
-From the definition of the maximum we have:
+From the definition of the maximum we have two properties:
 
 $\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... ~~~~ y_{i,j,k,l...} \geq z^n_{i,j,k,l...}$
+
+$\forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... \exists n \in [1, N] | ~~~~ y_{i,j,k,l...} = z^n_{i,j,k,l...}$
 
 The same property written in function of unboardcasted inputs is:
 
