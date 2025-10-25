@@ -1,7 +1,7 @@
 # `max` operator
 ### Contents
-- `Maximum` operator for any type on which an order is defined.
-## `Max`  `(type on which an order is defined)`
+- `Maximum` operator for a type on which an order is defined.
+## `Max`  `(type on which an order is defined, i.e. bfloat16, double, float, float16, int16, int32, int64, int8, uint16, uint32, uint64, uint8)`
 
 ### Signature
 `Y = max(X^1, ... , X^N)`
