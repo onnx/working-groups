@@ -22,7 +22,7 @@ where:
 
 ### Restrictions
 
-The following restrictions apply to the `Div` operator for the SONNX profile:
+The following restrictions apply to the **Mul** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -328,5 +328,6 @@ See Why3 specification.
 
 #### Numerical Accuracy
 *(To be completed.)*
+
 
 
