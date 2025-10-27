@@ -10,6 +10,7 @@ Based on ONNX documentation version 14.
 # **div** (real)
 
 ## Signature
+Definition of operator $\text{div}$ signature:
 $Y = \text{div}(A, B)$
 
 where:
@@ -181,7 +182,7 @@ for (auto I : A.indexes()) {
 where float is in {FP16, FP32, FP64}
 
 # Signature
-
+Definition of operator $\text{div}$ signature:
 $Y = \text{div}(A, B)$
 
 where
@@ -332,7 +333,7 @@ for (auto i : A.indexes()) {
 where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
 
 ## Signature
-
+Definition of operator $\text{div}$ signature:
  $Y = \text{div}(A,B)$
 
  where
@@ -465,6 +466,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
