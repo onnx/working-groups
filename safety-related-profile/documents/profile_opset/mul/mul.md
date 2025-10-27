@@ -17,7 +17,7 @@ $Y = \text{mul}(A, B)$
 where:
 - $A$: first operand of the multiplication  
 - $B$: second operand of the multiplication  
-- $Y$: result of the element-wise multiplication of `A` by `B`
+- $Y$: result of the element-wise multiplication of $A$ by $B$
  
 
 ### Restrictions
@@ -328,4 +328,5 @@ See Why3 specification.
 
 #### Numerical Accuracy
 *(To be completed.)*
+
 
