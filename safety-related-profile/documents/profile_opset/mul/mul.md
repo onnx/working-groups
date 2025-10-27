@@ -72,8 +72,8 @@ Tensor $A$ is the first operand of the multiplication.
 
 #### Constraints
 
- - `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
+ - `[C1]` <a id="C1r"></a> Shape consistency
+   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
  
 ### $\text{B}$: `real tensor`
@@ -82,7 +82,7 @@ Tensor $B$ is the second operand of the multiplication.
 #### Constraints
 
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1r) on tensor $A$.
  - `[C2]` Definition domain
    - Statement: all elements must be non null.
 
@@ -95,12 +95,12 @@ Tensor $Y$ is the element-wise result of $A$ multiplied by $B$.
 #### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1r) on tensor $A$.
 
 
 ## Attributes
 
-The $\text{mul}$ operator has no attribute.
+The **mul** operator has no attribute.
 
 ## Formal specification
  
@@ -113,7 +113,7 @@ See Why3 specification.
 
 <a id="float"></a>
 # **mul** (float, float)
-where float could be (`FP16`, `FP32`, `FP64`)
+where float is in {`FP16`, `FP32`, `FP64`}
 
 ## Signature
 
@@ -134,7 +134,7 @@ The following restrictions apply to the **mul** operator for the SONNX profile:
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
 | `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R3]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
  
 
@@ -169,7 +169,7 @@ Tensor $A$ is the first opearand of the multiplication.
 
 #### Constraints
 
-- `[C1]` <a id="R1"></a> Shape consistency
+- `[C1]` <a id="C1f"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
 ### $\text{B}$: `floating-point tensor`
@@ -177,7 +177,7 @@ Tensor $B$ is the second operand of the multiplication.
 
 #### Constraints
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1f) on tensor $A$.
 
 ## Outputs
 
@@ -188,7 +188,7 @@ Tensor $Y$ is the element-wise result of $A$ multiplied by $B$.
 #### Constraints
 
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1f) on tensor $A$.
 
 ## Attributes
 
@@ -206,7 +206,7 @@ The **mul** operator has no attribute.
 <a id="int"></a>
 
 # **mul** (int, int)
-where int is in (`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`)
+where int is in {`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`}
 
 ## Signature
 Definition of operator $\text{mul}$ signature:
@@ -293,10 +293,10 @@ Tensor $A$ is the first operand of the multiplication.
 #### Constraints
 This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`&gt;.
- - `[C2]` &lt;Type consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`&gt;. 
+ - `[C1]` <a id="C1i"></a> Shape consistency
+   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`.
+ - `[C2]` <a id="C2i"></a> Type consistency
+   - Statement: Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`. 
 
 
 ### $\text{B}$: `integer tensor`
@@ -305,8 +305,8 @@ Tensor $B$ is the second operand of the multiplication.
 
 #### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1i) on $A$.
+ - `[C2]` Type consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2i) on $A$.
 
 ## Outputs
 
@@ -316,8 +316,8 @@ Tensor $Y$ is the element-wise integer multiplication result.
 
 #### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1i) on $A$.
+ - `[C2]` Type consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2i) on $A$.
 
 ## Attributes
 
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
