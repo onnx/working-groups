@@ -236,17 +236,17 @@ The integer substraction is performed as follows (considering that all tensors h
 For unsigned values (type `UINTn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
-    A[i] - B[i]- k.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n}-1 \\
+    A[i] - B[i] - k.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n}-1 \\
    A[i] - B[i] & \quad \textrm{otherwise}
   \end{array}
-\right.$$
+\right\}.$$
 
 with $k \in N$ such that $0 \le A[i] - B[i]- k.2^{n} < 2^n$
 
 For signed values (type `INTn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
-    A[i] - B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n-1}-1 \\
+    A[i] - B[i] - k_1.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n-1}-1 \\
    A[i] - B[i] + k_2.2^{n} & \quad \textrm{if } A[i] - B[i] < -2^{n-1} \\
    A[i] - B[i] & \quad \textrm{otherwise}
   \end{array}
@@ -328,5 +328,6 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
