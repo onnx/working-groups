@@ -1,12 +1,12 @@
 # Contents
- - **Sub** operator for type [real](#real)
- - **Sub** operator for types [`FP16`, `FP32`, `FP64`](#float)
- - **Sub** operator for types [`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`](#int)
+ - **sub** operator for type [real](#real)
+ - **sub** operator for types [FP16, FP32, FP64](#float)
+ - **sub** operator for types [INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64](#int)
 
 ---
 
 <a id="real"></a>
-# **Sub** (real, real)
+# **sub** (real, real)
 
 ## Signature
 
@@ -17,12 +17,12 @@ $Y = \text{Sub}(A, B)$
 where:
 - $A$: first operand of the substraction  
 - $B$: second operand of the substraction  
-- $Y$: result of the element-wise substraction of *A$ by $B$
+- $Y$: result of the element-wise substraction of $A$ by $B$
  
 
 ## Restrictions
 
-The following restrictions apply to the **Sub** operator for the SONNX profile:
+The following restrictions apply to the **sub** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -32,7 +32,7 @@ The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -76,10 +76,10 @@ Tensor $A$ is the first operand of the substraction.
    - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
  
-##### $\text{B}$: `real tensor`
+### $\text{B}$: `real tensor`
 Tensor $B$ is the second operand of the substraction.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1r) on tensor $A$.
@@ -100,7 +100,7 @@ Tensor $Y$ is the element-wise result of $A$ Subtiplied by $B$.
 
 ## Attributes
 
-The **Sub** operator has no attribute.
+The **sub** operator has no attribute.
 
  ## Formal specification
  
@@ -112,8 +112,8 @@ See Why3 specification.
 ---
 
 <a id="float"></a>
-# **Sub** (float, float)
-where float is in {`FP16`, `FP32`, `FP64`}
+# **sub** (float, float)
+where float is in {FP16, FP32, FP64}
 
 ## Signature
 
@@ -140,7 +140,7 @@ The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Sub** Subtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
 
 $$
 Y[i] = A[i] - B[i]
@@ -192,7 +192,7 @@ Tensor $Y$ is the element-wise result of $A$ Subtiplied by $B$.
 
 ## Attributes
 
-The **Sub** operator has no attribute.
+The **sub** operator has no attribute.
 
  ## Formal specification
  See Why3 specification.
@@ -205,8 +205,8 @@ The **Sub** operator has no attribute.
 
 <a id="int"></a>
 
-# **Sub** (int, int)
-where int could be {`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`}
+# **sub** (int, int)
+where int is in {INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64}
 
 ## Signature
 Definition of operator $\text{Sub}$ signature:
@@ -219,7 +219,7 @@ Definition of operator $\text{Sub}$ signature:
  - $Y$: result of the element-wise substraction of $A$ by $B$
  
 ## Restrictions
-The following restrictions apply to the **Sub** operator for the SONNX profile:
+The following restrictions apply to the **sub** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -229,7 +229,7 @@ The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The integer substraction is performed as follows (considering that all tensors have the same type):
 
@@ -321,13 +321,14 @@ Tensor $Y$ is the element-wise integer substraction result.
 
 ## Attributes
 
-The **Sub** operator has no attribute.
+The **sub** operator has no attribute.
 
 ## Formal specification
 See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
