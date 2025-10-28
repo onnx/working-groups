@@ -12,7 +12,7 @@
 
 Definition of operator $\text{Sub}$ signature:
 
-$Y = \text{Sub}(A, B)$
+$Y = \text{sub}(A, B)$
 
 where:
 - $A$: first operand of the substraction  
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
