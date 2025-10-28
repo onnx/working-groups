@@ -234,26 +234,24 @@ Operator **mul** multiplies input tensors $A$ and $B$ element-wise and stores th
 The integer multiplication is performed as follows (considering that all tensors have the same type):
 
 For unsigned values (type `UINTn`):
-$$
-Y[i]=
-\begin{cases}
+$$Y[i]=\left\{ 
+  \begin{array}{ c l }
     A[i] \times B[i]- k.2^{n} & \quad \textrm{if }  A[i] \times B[i] > 2^{n}-1 
     \\
    A[i] \times B[i] & \quad \textrm{otherwise}
-  \end{cases}
-$$
+  \end{array}
+\right\}.$$
 
 with $k \in N$ such that $0 \le A[i] \times B[i]- k.2^{n} < 2^n$
 
 For signed values (type `INTn`):
-$$
-Y[i]=
-  \begin{cases}
+$$Y[i]=\left\{ 
+  \begin{array}{ c l }
     A[i] \times B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] \times B[i] > 2^{n-1}-1 \\
    A[i] \times B[i] + k_2.2^{n} & \quad \textrm{if } A[i] \times B[i] < -2^{n-1} \\
    A[i] \times B[i] & \quad \textrm{otherwise}
-  \end{cases}
-  $$
+  \end{array}
+\right\}.$$
 
 with 
 
@@ -330,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
