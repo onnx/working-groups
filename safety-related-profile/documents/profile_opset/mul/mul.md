@@ -1,7 +1,7 @@
 # Contents
  - **mul** operator for type [real](#real)
- - **mul** operator for types [`FP16`, `FP32`, `FP64`](#float)
- - **mul** operator for types [`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`](#int)
+ - **mul** operator for types [FP16, FP32, FP64](#float)
+ - **mul** operator for types [INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64](#int)
 
 ---
 
@@ -113,7 +113,7 @@ See Why3 specification.
 
 <a id="float"></a>
 # **mul** (float, float)
-where float is in {`FP16`, `FP32`, `FP64`}
+where float is in {FP16, FP32, FP64}
 
 ## Signature
 
@@ -206,7 +206,7 @@ The **mul** operator has no attribute.
 <a id="int"></a>
 
 # **mul** (int, int)
-where int is in {`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`}
+where int is in {INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64}
 
 ## Signature
 Definition of operator $\text{mul}$ signature:
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
