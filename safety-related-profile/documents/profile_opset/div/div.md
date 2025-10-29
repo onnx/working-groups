@@ -10,6 +10,7 @@ Based on ONNX documentation version 14.
 # **div** (real)
 
 ## Signature
+Definition of operator $\text{div}$ signature:
 $Y = \text{div}(A, B)$
 
 where:
@@ -88,7 +89,7 @@ No error condition.
 
 ## Inputs
 
-### $A$: real
+### $\text{A}$: `real tensor`
 Numerator of the division.
 
 #### Constraints
@@ -96,7 +97,7 @@ Numerator of the division.
  - `[C1]` <a id="C1ra"></a> Shape consistency
    - Statement: Tensors $A$, $B$, and $Y$ must have the same shape. 
  
-### $B$: real
+### $\text{B}$: `real tensor`
 Denominator of the division.
 
 #### Constraints
@@ -108,7 +109,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $Y$: real
+### $\text{Y}$: `real tensor`
 
 Tensor $Y$ is the element-wise result of the division of $A$ by $B$.
 
@@ -119,7 +120,7 @@ Tensor $Y$ is the element-wise result of the division of $A$ by $B$.
 
 ## Attributes
 
-Operator **div** has no attribute.
+Operator $\text{div}$ has no attribute.
 
 ## Formal specification
  
@@ -181,7 +182,7 @@ for (auto I : A.indexes()) {
 where float is in {FP16, FP32, FP64}
 
 # Signature
-
+Definition of operator $\text{div}$ signature:
 $Y = \text{div}(A, B)$
 
 where
@@ -244,7 +245,7 @@ Y = \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatr
   
 ## Inputs
 
-### $A$: FP16, FP32, FP64
+### $\text{A}$: `floating-point tensor`
 Numerator of the division.
 
 #### Constraints
@@ -254,7 +255,7 @@ Numerator of the division.
 - `[C2]` <a id="C2fa"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
-### $B$: FP16, FP32, FP64
+### $\text{B}$: `floating-point tensor`
 Denominator of the division.
 
 #### Constraints
@@ -265,7 +266,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $Y$: FP16, FP32, FP64
+### $\text{Y}$: `floating-point tensor`
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -332,7 +333,7 @@ for (auto i : A.indexes()) {
 where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
 
 ## Signature
-
+Definition of operator $\text{div}$ signature:
  $Y = \text{div}(A,B)$
 
  where
@@ -383,7 +384,7 @@ Y = \begin{bmatrix} 3 & 5 \\ 5 & 1 \\ 6 & 2 \end{bmatrix}
 
 ## Inputs
 
-### $A$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
+### $\text{A}$: `integer tensor`
 
 Numerator of the division.
 
@@ -394,7 +395,7 @@ Numerator of the division.
 - `[C2]` <a id="C2ia"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
   
-### $B$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
+### $\text{B}$: `integer tensor`
 
 Denominator of the division.
 
@@ -409,7 +410,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $Y$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
+### $\text{Y}$: `integer tensor`
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -420,26 +421,26 @@ Result of the element-wise division of $A$ by $B$.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
 
-#### Attributes
+## Attributes
 
 Operator **div** has no attribute.
 
- #### Formal specification
+## Formal specification
  See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 Integer division is exact under the defined semantics; error is not introduced by the operator itself:
 
-###### Error Propagation
+### Error Propagation
  For integer inputs modeled without error symbols, $C_{\textit{err}}^{\textit{propag}} = [0]$.
-###### Error Introduction
+### Error Introduction
 Error introduction for int arithmetic is null:
  $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 Division by zero remains undefined and shall be prevented by input constraints.
-###### Unit Verification
+### Unit Verification
 
 This section contains a verification scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
 
@@ -465,6 +466,8 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
+
 
 
 

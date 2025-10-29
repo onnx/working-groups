@@ -1,38 +1,38 @@
 # Contents
-> - $\text{Sub}$ [operator for type real](#real)
-> - $\text{Sub}$ [operator for types `FP16`, `FP32`, `FP64`](#float)
-> - $\text{Sub}$ [operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`](#int)
+ - **sub** operator for type [real](#real)
+ - **sub** operator for types [FP16, FP32, FP64](#float)
+ - **sub** operator for types [INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64](#int)
 
 ---
 
 <a id="real"></a>
-# $\text{Sub}$ (real, real)
+# **sub** (real, real)
 
-### Signature
+## Signature
 
 Definition of operator $\text{Sub}$ signature:
 
-$Y = \text{Sub}(A, B)$
+$Y = \text{sub}(A, B)$
 
 where:
 - $A$: first operand of the substraction  
 - $B$: second operand of the substraction  
-- $Y$: result of the element-wise substraction of `A` by `B`
+- $Y$: result of the element-wise substraction of $A$ by $B$
  
 
-### Restrictions
+## Restrictions
 
-The following restrictions apply to the `Sub` operator for the SONNX profile:
+The following restrictions apply to the **sub** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
 
-#### Informal specification
+## Informal specification
 
-Operator $\text{Sub}$ Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -62,60 +62,60 @@ Y = A + B = \begin{bmatrix} 4.1 & 6.5 & 31.7 \end{bmatrix}
 
 ---
 
-#### Error conditions
+## Error conditions
 No error condition
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `real tensor`
+### $\text{A}$: `real tensor`
 Tensor $A$ is the first operand of the substraction.
 
-###### Constraints
+#### Constraints
 
- - `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
+ - `[C1]` <a id="C1r"></a> Shape consistency
+   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
  
-##### $\text{B}$: `real tensor`
+### $\text{B}$: `real tensor`
 Tensor $B$ is the second operand of the substraction.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1r) on tensor $A$.
  - `[C2]` Definition domain
    - Statement: all elements must be non null.
 
-### Outputs
+## Outputs
 
-##### $\text{Y}$: `real tensor`
+### $\text{Y}$: `real tensor`
 
 Tensor $Y$ is the element-wise result of $A$ Subtiplied by $B$.
 
-##### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1r) on tensor $A$.
 
 
-#### Attributes
+## Attributes
 
-The $\text{Sub}$ operator has no attribute.
+The **sub** operator has no attribute.
 
- #### Formal specification
+ ## Formal specification
  
 See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 *(To be completed)*
 
 ---
 
 <a id="float"></a>
-# $\text{Sub}$ (float, float)
-where float could be (`FP16`, `FP32`, `FP64`)
+# **sub** (float, float)
+where float is in {FP16, FP32, FP64}
 
-### Signature
+## Signature
 
 Definition of operator $\text{Sub}$ signature:
 
@@ -125,22 +125,22 @@ where
 
  - $A$: first operand tensor
  - $B$: second operand  tensor
- - $Y$: output tensor, result of element-wise substraction of `A` by `B`
+ - $Y$: output tensor, result of element-wise substraction of $A$ by $B$
  
-### Restrictions
-The following restrictions apply to the `Sub` operator for the SONNX profile:
+## Restrictions
+The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
 | `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R3]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
  
 
-#### Informal specification
+## Informal specification
 
-Operator $\text{Sub}$ Subtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
 
 $$
 Y[i] = A[i] - B[i]
@@ -159,45 +159,45 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```math
 Y = A + B = \begin{bmatrix} 0.0 & 2.5 \\ 12.0 & 1.0 \\ 20.5 & 20.25 \end{bmatrix}
 ```
-#### Error conditions
+## Error conditions
 No error condition.
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `floating-point tensor`
+### $\text{A}$: `floating-point tensor`
 Tensor $A$ is the first opearand of the substraction.
 
-###### Constraints
+#### Constraints
 
-- `[C1]` <a id="R1"></a> Shape consistency
+- `[C1]` <a id="C1f"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
-##### $\text{B}$: `floating-point tensor`
+### $\text{B}$: `floating-point tensor`
 Tensor $B$ is the second operand of the substraction.
 
-##### Constraints
+#### Constraints
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1f) on tensor $A$.
 
-### Outputs
+## Outputs
 
-##### $\text{Y}$: `floating-point tensor`
+### $\text{Y}$: `floating-point tensor`
 
 Tensor $Y$ is the element-wise result of $A$ Subtiplied by $B$.
 
-##### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1f) on tensor $A$.
 
-#### Attributes
+## Attributes
 
-The $\text{Sub}$ operator has no attribute.
+The **sub** operator has no attribute.
 
- #### Formal specification
+ ## Formal specification
  See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 
 *(To be completed)*
 
@@ -205,10 +205,10 @@ The $\text{Sub}$ operator has no attribute.
 
 <a id="int"></a>
 
-# $\text{Sub}$ (int, int)
-where int could be (`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`)
+# **sub** (int, int)
+where int is in {INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64}
 
-### Signature
+## Signature
 Definition of operator $\text{Sub}$ signature:
 
  $Y = \text{Sub}(A,B)$
@@ -216,37 +216,37 @@ Definition of operator $\text{Sub}$ signature:
  where
  - $A$: first operand of the substraction
  - $B$: second operand of the substraction
- - $Y$: result of the element-wise substraction of `A` by `B`
+ - $Y$: result of the element-wise substraction of $A$ by $B$
  
-### Restrictions
-The following restrictions apply to the `Sub` operator for the SONNX profile:
+## Restrictions
+The following restrictions apply to the **sub** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
 
-#### Informal specification
+## Informal specification
 
-Operator $\text{Sub}$ Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **sub** Subtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The integer substraction is performed as follows (considering that all tensors have the same type):
 
 For unsigned values (type `UINTn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
-    A[i] - B[i]- k.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n}-1 \\
+    A[i] - B[i] - k.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n}-1 \\
    A[i] - B[i] & \quad \textrm{otherwise}
   \end{array}
-\right.$$
+\right\}.$$
 
 with $k \in N$ such that $0 \le A[i] - B[i]- k.2^{n} < 2^n$
 
 For signed values (type `INTn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
-    A[i] - B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n-1}-1 \\
+    A[i] - B[i] - k_1.2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n-1}-1 \\
    A[i] - B[i] + k_2.2^{n} & \quad \textrm{if } A[i] - B[i] < -2^{n-1} \\
    A[i] - B[i] & \quad \textrm{otherwise}
   \end{array}
@@ -281,51 +281,55 @@ B = \begin{bmatrix} -3 & 100 & -120  \end{bmatrix}
 Y = \begin{bmatrix} -9 & -90 & -126  \end{bmatrix}
 ```
 
-#### Error conditions
+## Error conditions
 - According to the definition, the result of the substraction differs from the value that would be expected in $N$ (for unsigned) or $Z$ (for signed) when under- or overflow occur.
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `integer tensor`
+### $\text{A}$: `integer tensor`
 
 Tensor $A$ is the first operand of the substraction.
 
-###### Constraints
+#### Constraints
 This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`&gt;.
- - `[C2]` &lt;Type consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`&gt;. 
+ - `[C1]` <a id="C1ia"></a> Shape consistency
+   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`.
+ - `[C2]` <a id="C2ia"></a> Type consistency
+   - Statement: Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`. 
 
 
-##### $\text{B}$: `integer tensor`
+### $\text{B}$: `integer tensor`
 
 Tensor $B$ is the second operand of the substraction.
 
-###### Constraints
+#### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ia) on $A$.
+ - `[C2]` Type consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on $A$.
 
-#### Outputs
+## Outputs
 
-##### $\text{Y}$: `integer tensor`
+### $\text{Y}$: `integer tensor`
 
 Tensor $Y$ is the element-wise integer substraction result.
 
-###### Constraints
+#### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[C1]` Shape consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ia) on $A$.
+ - `[C2]` Type consistency : See constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on $A$.
 
-#### Attributes
+## Attributes
 
-The $\text{Sub}$ operator has no attribute.
+The **sub** operator has no attribute.
 
-#### Formal specification
+## Formal specification
 See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 *(To be completed.)*
+
+
+
+
 

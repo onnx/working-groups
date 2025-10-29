@@ -7,7 +7,7 @@
     - Poster at Mobilit'AI (Toulouse)
   - Review of actions [Eric]
   - Status on repo organization [Mariem]
-  - Status of testing activities [Jõao, Ricardo]
+  - Status of testing activities [João, Ricardo]
     - How to extend this work?
   - Other activities
     - Local activities on operators [Eric, Jean, Mariem]
@@ -16,16 +16,16 @@
   - See agenda.
   - Jean-Baptiste attended the Mobilit'AI conference. He met people interestied by our work. They were wondering how we will ensure compliance between the design model (e.g., Pytorch) and the exported SONNX model and between the SONNX model and its implementation for a given target... These are very good question that we do not really address in SONNX. This may be something to be done collectively on the basis of some existing, open source training and implementation framework (such as CEA's [AIDGE](https://projects.eclipse.org/projects/technology.aidge) platform.).     
   - Eric presented the SONNX work to the WG114. There was a great interest on the numerical aspect. Providing a working example of the approach developed by Franck would be very appreciated... 
-  - Ricardo and Jõao have completely covered operator **clip** (from informal spe to formal with proof)... That's really GREAT!!! Kudos to those extremely efficient and proactive students (and their advisers)!!! 
-  - Jean propose that Ricardo and Jõao next operator be one common to Thales and Airbus' use cases  (e.g., **maxpool**, **relu**, etc.).
+  - Ricardo and João have completely covered operator **clip** (from informal spe to formal with proof)... That's really GREAT!!! Kudos to those extremely efficient and proactive students (and their advisers)!!! 
+  - Jean propose that Ricardo and João next operator be one common to Thales and Airbus' use cases  (e.g., **maxpool**, **relu**, etc.).
   - Jean-Loup's working on operator **max**. He is addressing  the question of broadcasting. For the moment, the broadcasting operating may be specified for **max**. if it can be "factorized" (i.e., be expressed in such as way it can apply to other operators), we will do it later.
   - A meeting on the graph semantics is planned on Friday. It was initially planned to address the formal specification of an ONNX graph. I (eric) propose that we shorten the meeting and address, first, the informal specification of a graph, including control flow operators (such as **loop** and **if**...). 
 ## Actions
 ### New actions
 - [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
 - [ ] (2210-2, Mariem) Move all operators to the new location 
-- [ ] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from Jõao and Ricardo (on **conv**)
-- [ ] (2210-4, Eric, Jean-Mariem) Review Jõao and Ricardo's work on the operator **clip**
+- [ ] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from João and Ricardo (on **conv**)
+- [ ] (2210-4, Eric, Jean-Mariem) Review João and Ricardo's work on the operator **clip**
 ### Past actions
 - [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
   - Eric comments (in the doc)
