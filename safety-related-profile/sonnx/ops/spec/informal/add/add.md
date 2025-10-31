@@ -17,7 +17,7 @@ $Y = \text{Add}(A, B)$
 where:
 - $A$: first operand of the addition  
 - $B$: second operand of the addition  
-- $Y$: result of the element-wise addition of $A$ by $B$
+- $Y$: result of the element-wise addition of $A$ to $B$
  
 
 ## Restrictions
@@ -125,7 +125,7 @@ where
 
  - $A$: first operand tensor
  - $B$: second operand  tensor
- - $Y$: output tensor, result of element-wise addition of $A$ by $B$
+ - $Y$: output tensor, result of element-wise addition of $A$ to $B$
  
 ## Restrictions
 The following restrictions apply to the `Add` operator for the SONNX profile:
@@ -183,7 +183,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{Y}$: `floating-point tensor`
 
-Tensor $Y$ is the element-wise result of $A$ Added by $B$.
+Tensor $Y$ is the element-wise result of $A$ Added to $B$.
 
 #### Constraints
 
@@ -211,12 +211,12 @@ where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
 ## Signature
 Definition of operator $\text{Add}$ signature:
 
- $Y = \text{div}(A,B)$
+ $Y = \text{add}(A,B)$
 
  where
  - $A$: first operand of the addition
  - $B$: second operand of the addition
- - $Y$: result of the element-wise addition of `A` by `B`
+ - $Y$: result of the element-wise addition of $A$ to $B$
  
 ## Restrictions
 The following restrictions apply to the `Add` operator for the SONNX profile:
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
