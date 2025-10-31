@@ -1,0 +1,61 @@
+(** OP-Where Tensor Operation *)
+module OPWhere
+  use tensor.tensor.Tensor
+
+  let ghost function dwhere (c : data bool) (a b : data 'a) : data 'a
+    = fun ks -> if c ks then a ks else b ks
+
+  let ghost function opwhere (c : tensor bool) (a b : tensor 'a) : tensor 'a
+    requires { a ~= b }
+    requires { c ~ a ~ b }
+    ensures { result ~= a ~= b }
+    ensures { result = dwhere c a b }
+    (*proof*)
+    = { dims = c.dims ; data = dwhere c.data a.data b.data ; background = a.background }
+    (*qed*)
+
+end
+
+
+module CTensorWhere
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use OPWhere
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.libtensor.CTensor
+
+let ctensor_where (cond a b r : ctensor) =
+    (*proof*)
+    requires { valid_tensor cond }
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    (*qed*)
+    requires { tensorb cond ~ tensor a ~ tensor b }
+    ensures { tensor r = opwhere (tensorb cond) (tensor a) (tensor b) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant {
+        forall k. 0 <= k < i ->
+          value_at r.t_data k =
+            if Real.(0.0 < value_at cond.t_data k)
+            then a.t_data[k] else b.t_data[k]
+      }
+      (*qed*)
+      r.t_data[i] <-
+        if (f32 0.0) .< cond.t_data[i] then a.t_data[i] else b.t_data[i]
+    done
+    (*proof*)
+    ; assert { tensor r == opwhere (tensorb cond) (tensor a) (tensor b) }
+    (*qed*)
+
+
+end

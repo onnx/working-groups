@@ -1,0 +1,18 @@
+(**
+    Specification of Mul operation on tensors.
+ *)
+
+module Mul
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+
+  let function mul (a b : tensor 'a) : tensor 'a =
+  {
+    shape = same a.shape b.shape ;
+    value = fun i -> a.value[i] * b.value[i] ;
+  }
+
+end

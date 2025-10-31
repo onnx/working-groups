@@ -1,0 +1,18 @@
+(**
+    Specification of Less operation on tensors.
+ *)
+
+module Less
+  use int.Int
+  use map.Map
+  use utils.Same
+  use tensor.Shape
+  use tensor.Tensor
+
+  let function less (a b : tensor 'a) : tensor 'a =
+  {
+    shape = same a.shape b.shape ;
+    value = fun i -> a.value[i] < b.value[i] ;
+  }
+
+end
