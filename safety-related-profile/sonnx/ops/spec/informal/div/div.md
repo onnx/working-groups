@@ -7,7 +7,7 @@
 Based on ONNX documentation version 14.
 
 <a id="real"></a>
-# **div** (real)
+# **div** (real, real)
 
 ## Signature
 Definition of operator $\text{div}$ signature:
@@ -466,6 +466,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
