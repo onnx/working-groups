@@ -90,7 +90,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{Y}$: `real tensor`
 
-Tensor $Y$ is the element-wise result of $A$ Addtiplied by $B$.
+Tensor $Y$ is the element-wise result of $A$ Added by $B$.
 
 #### Constraints
 
@@ -113,7 +113,7 @@ See Why3 specification.
 
 <a id="float"></a>
 # $\text{Add}$ (float, float)
-where float could be (`FP16`, `FP32`, `FP64`)
+where float is in {FP16, FP32, FP64}
 
 ## Signature
 
@@ -140,7 +140,7 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 
 ## Informal specification
 
-Operator $\text{Add}$ Addtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
 
 $$
 Y[i] = A[i] + B[i]
@@ -183,7 +183,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{Y}$: `floating-point tensor`
 
-Tensor $Y$ is the element-wise result of $A$ Addtiplied by $B$.
+Tensor $Y$ is the element-wise result of $A$ Added by $B$.
 
 #### Constraints
 
@@ -206,7 +206,7 @@ The $\text{Add}$ operator has no attribute.
 <a id="int"></a>
 
 # $\text{Add}$ (int, int)
-where int could be (`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`)
+where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
 
 ## Signature
 Definition of operator $\text{Add}$ signature:
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
