@@ -1,1 +1,0 @@
-Sebastian's comment can be found in his [modified document](https://github.com/SebastianBoblest/working-groups/tree/lookAtConvSpec/safety-related-profile/documents/conv_specification_example) or in this [pull request ](https://github.com/ericjenn/working-groups/pull/19).
