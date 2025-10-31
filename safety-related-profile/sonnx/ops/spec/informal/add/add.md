@@ -8,7 +8,7 @@
 <a id="real"></a>
 # $\text{Add}$ (real, real)
 
-### Signature
+## Signature
 
 Definition of operator $\text{Add}$ signature:
 
@@ -17,12 +17,12 @@ $Y = \text{Add}(A, B)$
 where:
 - $A$: first operand of the addition  
 - $B$: second operand of the addition  
-- $Y$: result of the element-wise addition of `A` by `B`
+- $Y$: result of the element-wise addition of $A$ by $B$
  
 
-### Restrictions
+## Restrictions
 
-The following restrictions apply to the `Div` operator for the SONNX profile:
+The following restrictions apply to the **Add** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -30,9 +30,9 @@ The following restrictions apply to the `Div` operator for the SONNX profile:
 | `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
 
-#### Informal specification
+## Informal specification
 
-Operator $\text{Add}$ Addtiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Addtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -62,51 +62,51 @@ Y = A + B = \begin{bmatrix} 8.1 & 12.5 & 39.7 \end{bmatrix}
 
 ---
 
-#### Error conditions
-No error condition
+## Error conditions
+No error condition.
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `real tensor`
+### $\text{A}$: `real tensor`
 Tensor $A$ is the first operand of the addition.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
    - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
 
  
-##### $\text{B}$: `real tensor`
+### $\text{B}$: `real tensor`
 Tensor $B$ is the second operand of the addition.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
  - `[C2]` Definition domain
    - Statement: all elements must be non null.
 
-### Outputs
+## Outputs
 
-##### $\text{Y}$: `real tensor`
+### $\text{Y}$: `real tensor`
 
 Tensor $Y$ is the element-wise result of $A$ Addtiplied by $B$.
 
-##### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
 
-#### Attributes
+## Attributes
 
 The $\text{Add}$ operator has no attribute.
 
- #### Formal specification
+## Formal specification
  
 See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 *(To be completed)*
 
 ---
@@ -115,7 +115,7 @@ See Why3 specification.
 # $\text{Add}$ (float, float)
 where float could be (`FP16`, `FP32`, `FP64`)
 
-### Signature
+## Signature
 
 Definition of operator $\text{Add}$ signature:
 
@@ -125,9 +125,9 @@ where
 
  - $A$: first operand tensor
  - $B$: second operand  tensor
- - $Y$: output tensor, result of element-wise addition of `A` by `B`
+ - $Y$: output tensor, result of element-wise addition of $A$ by $B$
  
-### Restrictions
+## Restrictions
 The following restrictions apply to the `Add` operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
@@ -138,7 +138,7 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 
  
 
-#### Informal specification
+## Informal specification
 
 Operator $\text{Add}$ Addtiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
 
@@ -159,45 +159,45 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```math
 Y = A + B = \begin{bmatrix} 6.0 & 6.5 \\ 20.0 & 1.0 \\ 30.5 & 28.25 \end{bmatrix}
 ```
-#### Error conditions
+### Error conditions
 No error condition.
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `floating-point tensor`
+### $\text{A}$: `floating-point tensor`
 Tensor $A$ is the first opearand of the addition.
 
-###### Constraints
+#### Constraints
 
 - `[C1]` <a id="R1"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
 
-##### $\text{B}$: `floating-point tensor`
+### $\text{B}$: `floating-point tensor`
 Tensor $B$ is the second operand of the addition.
 
-##### Constraints
+#### Constraints
  - `[C1]` Shape consistency
    -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
-### Outputs
+## Outputs
 
-##### $\text{Y}$: `floating-point tensor`
+### $\text{Y}$: `floating-point tensor`
 
 Tensor $Y$ is the element-wise result of $A$ Addtiplied by $B$.
 
-##### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
 
-#### Attributes
+## Attributes
 
 The $\text{Add}$ operator has no attribute.
 
- #### Formal specification
+ ## Formal specification
  See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 
 *(To be completed)*
 
@@ -208,7 +208,7 @@ The $\text{Add}$ operator has no attribute.
 # $\text{Add}$ (int, int)
 where int could be (`INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`)
 
-### Signature
+## Signature
 Definition of operator $\text{Add}$ signature:
 
  $Y = \text{div}(A,B)$
@@ -218,7 +218,7 @@ Definition of operator $\text{Add}$ signature:
  - $B$: second operand of the addition
  - $Y$: result of the element-wise addition of `A` by `B`
  
-### Restrictions
+## Restrictions
 The following restrictions apply to the `Add` operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
@@ -227,7 +227,7 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 | `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
 
 
-#### Informal specification
+## Informal specification
 
 Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
 
@@ -281,16 +281,16 @@ B = \begin{bmatrix} -3 & 100 & -100  \end{bmatrix}
 Y = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
 ```
 
-#### Error conditions
+## Error conditions
 - According to the definition, the result of the addition differs from the value that would be expected in $N$ (for unsigned) or $Z$ (for signed) when under- or overflow occur.
 
-#### Inputs
+## Inputs
 
-##### $\text{A}$: `integer tensor`
+### $\text{A}$: `integer tensor`
 
 Tensor $A$ is the first operand of the addition.
 
-###### Constraints
+#### Constraints
 This section gives all constraints applicable to the input.
 
  - `[C1]` &lt;Shape consistency&gt;
@@ -299,34 +299,35 @@ This section gives all constraints applicable to the input.
    - Statement: &lt;Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`&gt;. 
 
 
-##### $\text{B}$: `integer tensor`
+### $\text{B}$: `integer tensor`
 
 Tensor $B$ is the second operand of the addition.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
  - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
 
-#### Outputs
+## Outputs
 
-##### $\text{Y}$: `integer tensor`
+### $\text{Y}$: `integer tensor`
 
 Tensor $Y$ is the element-wise integer addition result.
 
-###### Constraints
+#### Constraints
 
  - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
  - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
 
-#### Attributes
+## Attributes
 
 The $\text{Add}$ operator has no attribute.
 
-#### Formal specification
+## Formal specification
 See Why3 specification.
 
-#### Numerical Accuracy
+## Numerical Accuracy
 *(To be completed.)*
+
 
 
