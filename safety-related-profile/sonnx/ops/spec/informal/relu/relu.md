@@ -45,7 +45,7 @@ No error condition.
 
 ## Inputs
 
-### $X$: real
+### $\text{X}$: `real tensor`
 Argument of the **relu**.
 
 #### Constraints
@@ -55,7 +55,7 @@ Argument of the **relu**.
   
 ## Outputs
 
-### $Y$: real
+### $\text{Y}$: `real tensor`
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
@@ -117,7 +117,7 @@ No error condition.
 
 ## Inputs
 
-### $X$: FP16, FP32, FP64
+### $\text{X}$: `floating-point tensor`
 Argument of the **relu**.
 
 #### Constraints
@@ -127,7 +127,7 @@ Argument of the **relu**.
   
 ## Outputs
 
-### $Y$: FP16, FP32, FP64
+### $\text{Y}$: `floating-point tensor`
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
@@ -153,7 +153,7 @@ Operator **relu** does not introduce any numerical error.
 
 <a id="int"></a>
 # **relu** (int)
-where int is INT8, INT16, INT32, INT64
+where int is {INT8, INT16, INT32, INT64}
 
 ## Signature
 $Y = \text{relu}(X)$
@@ -191,7 +191,7 @@ No error condition.
 
 ## Inputs
 
-### $X$:  (INT8, INT16, INT32, INT64)
+### $\text{X}$: `integer tensor`
 Argument of the **relu**.
 
 #### Constraints
@@ -201,7 +201,7 @@ Argument of the **relu**.
   
 ## Outputs
 
-### $Y$:  (INT8, INT16, INT32, INT64)
+### $\text{Y}$: `integer tensor`
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
