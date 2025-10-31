@@ -61,7 +61,7 @@ Where
 
 The following example illustrates the concept explained above:
 
-![Concat example 1](assets/imgs/Concat_example.png)
+![Concat example 1](imgs/Concat_example.png)
 
 Let's compute the concatenation illustrated by the example above:
 ```math

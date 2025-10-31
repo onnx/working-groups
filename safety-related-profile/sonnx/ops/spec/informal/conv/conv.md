@@ -57,16 +57,16 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `strides` is set to (3,2)
 
 The following figure illustrates $\text{pad}$ function applied to the input tensor `X`:
-<img src=".assets/imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
+<img src="./imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
 
 
 The following figure illustrates $\text{dilation}$ function applied to the kernel `W`:
 
-<img src=".assets/imgs/onnx_conv_dilationop.png" alt="drawing" width="50%"/>
+<img src="./imgs/onnx_conv_dilationop.png" alt="drawing" width="50%"/>
 
 
 Finally, the following figure illustrates operator `Conv` applied on input `X` with kernel `W` and bias `B`:
-<img src=".assets/imgs/convwithoperators2.png" alt="drawing" width="100%"/>
+<img src="./imgs/convwithoperators2.png" alt="drawing" width="100%"/>
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
@@ -76,7 +76,7 @@ The following figure shows the case where the number of channels of `X` is 3. In
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
 
-<img src=".assets/imgs/3channels_std_conv_modified.png" alt="drawing" width="100%"/>
+<img src="./imgs/3channels_std_conv_modified.png" alt="drawing" width="100%"/>
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $dX_1$. 
@@ -97,7 +97,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
 
-<img src=".assets/imgs/conv_dep_3ch_mod2.png" alt="drawing" width="100%"/>
+<img src="./imgs/conv_dep_3ch_mod2.png" alt="drawing" width="100%"/>
 
 #### Error conditions
 In the domain of real numbers, the operator has no error condition.
@@ -119,7 +119,7 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
     - Statement: The number of spatial axes of tensor `X` is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profule.
 - `C2`: <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W`
-    - Statement:  $dX_1=dW_1$
+    - Statement:  $dW_1=\frac{dX_1}{group}$
 - `C3`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>  
     - Statement: 
@@ -153,6 +153,8 @@ The shape of tensor `W` is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
    - Rationale: `kernel_shape` represents the shape of `W`, where `kernel_shape[0]` = $dW_3$ and `kernel_shape[1]` = $dW_2$.
 - `C4`: Compliance with axis denotations
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to have axis denotation \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`, `FILTER_SPATIAL`\].
+- `C5`: Consistency between output channels and group
+     - Statement: $dW_0 \mod group == 0$
 
 ##### `B` : tensor of real
 
@@ -174,7 +176,7 @@ For instance, with $\mbox{\texttt{stride}}[0]=3$ and $\mbox{\texttt{stride}}[1]=
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
-<img src=".assets/imgs/conv_stride3.png" width="300" />
+<img src="./imgs/conv_stride3.png" width="300" />
 
 ###### Constraints
 - `C1`: Value domain
@@ -204,7 +206,7 @@ The padding value is 0.
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
-<img src=".assets/imgs/conv_pad2.png" width="300" />
+<img src="./imgs/conv_pad2.png" width="300" />
 
 ###### Constraints
 - `C1`: Value domain
@@ -224,7 +226,7 @@ The value of the elements introduced by the dilation is 0.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure. In this example, `dilations`=(2,2). 
 
-<img src=".assets/imgs/dilation.png" width="300" />
+<img src="./imgs/dilation.png" width="300" />
 
 
 ###### Constraints
@@ -243,7 +245,7 @@ This attribute specifies the number of groups the input channels and output chan
 
 The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure. In this example `group`=3.
 
-<img src=".assets/imgs/grouped_convolution.png" width="300" />
+<img src="./imgs/grouped_convolution.png" width="300" />
 
 (Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
