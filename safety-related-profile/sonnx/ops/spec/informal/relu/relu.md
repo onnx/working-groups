@@ -59,7 +59,7 @@ Argument of the **relu**.
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
-### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
@@ -131,7 +131,7 @@ Argument of the **relu**.
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
-### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
@@ -205,7 +205,7 @@ Argument of the **relu**.
 
 Tensor $Y$ is the output of the **relu** applied to $X$.
 
-### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ia) on tensor $X$.
