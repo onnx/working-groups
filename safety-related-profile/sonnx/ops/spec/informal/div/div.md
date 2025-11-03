@@ -113,7 +113,7 @@ Denominator of the division.
 
 Tensor $Y$ is the element-wise result of the division of $A$ by $B$.
 
-### Constraints
+#### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
@@ -466,6 +466,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
