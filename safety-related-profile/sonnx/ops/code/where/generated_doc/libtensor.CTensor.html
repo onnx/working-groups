@@ -1,0 +1,154 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module libtensor.CTensor</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="libtensor.index.html">libtensor</a></code> — <code>module CTensor</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">CTensor</span><a href="libtensor.proof.html#CTensor" title="Valid (25 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> std.<a title="std.Int" href="std.Int.html">Int</a>
+  <span class="keyword">use</span> std.<a title="std.List" href="std.List.html">List</a>
+  <span class="keyword">use</span> std.<a title="std.Clib" href="std.Clib.html">Clib</a>
+  <span class="keyword">use</span> std.<a title="std.Cfloat" href="std.Cfloat.html">Cfloat</a>
+  <span class="keyword">use</span> mach.int.<a title="mach.int.Int32" href="https://www.why3.org/stdlib/mach.int.html#Int32_">Int32</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Range" href="tensor.Range.html">Range</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Tensor" href="tensor.Tensor.html">Tensor</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.OPWhere" href="tensor.OPWhere.html">OPWhere</a>
+  <span class="keyword">use</span> layout.<a title="layout.CFlat" href="layout.CFlat.html">CFlat</a>
+  <span class="keyword">use</span> libvector.<a title="libvector.CIndex" href="libvector.CIndex.html">CIndex</a>
+
+  <span class="keyword">type</span> <a id="farray">farray</a> = <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> <a title="std.Cfloat.float" href="std.Cfloat.html#float">float</a>
+
+  <span class="keyword">type</span> <a id="ctensor">ctensor</a> = {
+    <a id="t_rank">t_rank</a> : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a> ;
+    <a id="t_dims">t_dims</a> : <a title="libvector.CIndex.iarray" href="libvector.CIndex.html#iarray">iarray</a> ;
+    <a id="t_data">t_data</a> : <a title="libtensor.CTensor.farray" href="#farray">farray</a> ;
+  }
+
+  <span class="keyword">function</span> <a id="tensor_dim">tensor_dim</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int = <a title="libvector.CIndex.ivector" href="libvector.CIndex.html#ivector">ivector</a> t.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> t.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a>
+  <span class="keyword">function</span> <a id="tensor_size">tensor_size</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : int = <a title="libvector.CIndex.vdim" href="libvector.CIndex.html#vdim">vdim</a> t.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> t.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a>
+  <span class="keyword">predicate</span> <a id="valid_index">valid_index</a> (k : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) = <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> k (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t)
+  <span class="keyword">predicate</span> <a id="empty_tensor">empty_tensor</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) = t.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> = 0
+
+  <span class="keyword">predicate</span> <a id="valid_tensor">valid_tensor</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) =
+    <a title="libvector.CIndex.dimension" href="libvector.CIndex.html#dimension">dimension</a> t.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> t.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> /\
+    <a title="std.Clib.valid_range" href="std.Clib.html#valid_range">valid_range</a> t.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> 0 (<a title="libtensor.CTensor.tensor_size" href="#tensor_size">tensor_size</a> t) /\
+    <a title="mach.c.C.writable" href="https://www.why3.org/stdlib/mach.c.html#writable_26">writable</a> t.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>
+
+  <span class="keyword">function</span> <a id="tensor_offset">tensor_offset</a> (k : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : int = <a title="layout.CFlat.offset" href="layout.CFlat.html#offset">offset</a> k (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t)
+
+  <span class="keyword">function</span> <a id="tensor_value_at">tensor_value_at</a> (k : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : real =
+    <span class="keyword">if</span> <a title="libtensor.CTensor.valid_index" href="#valid_index">valid_index</a> k t <span class="keyword">then</span>
+      <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> t.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> (<a title="libtensor.CTensor.tensor_offset" href="#tensor_offset">tensor_offset</a> k t)
+    <span class="keyword">else</span> 0.0
+
+  <span class="keyword">function</span> <a id="tensor_value">tensor_value</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int -&gt; real =
+    <span class="keyword">fun</span> k -&gt; <a title="libtensor.CTensor.tensor_value_at" href="#tensor_value_at">tensor_value_at</a> k t
+
+  <span class="keyword">function</span> <a id="tensor_valueb">tensor_valueb</a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int -&gt; bool =
+    <span class="keyword">fun</span> k -&gt; Real.(<a title="libtensor.CTensor.tensor_value_at" href="#tensor_value_at">tensor_value_at</a> k t <a title="real.Real.(>)" href="https://www.why3.org/stdlib/real.html#infix%20%3E_23">&gt;</a> 0.0)
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="tensor">tensor</a><a href="libtensor.proof.html#CTensor.tensor" title="Valid (one goal)" class="icon valid icofont-check"></a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> real
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = <a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <a title="libtensor.CTensor.tensor_value" href="#tensor_value">tensor_value</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = 0.0 }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    = {
+      <a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = <span class="keyword">pure</span> { <a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t } ;
+      <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <span class="keyword">pure</span> { <a title="libtensor.CTensor.tensor_value" href="#tensor_value">tensor_value</a> t } ;
+      <a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = 0.0 ;
+    }
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="tensorb">tensorb</a><a href="libtensor.proof.html#CTensor.tensorb" title="Valid (one goal)" class="icon valid icofont-check"></a> (t : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> bool
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = <a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <a title="libtensor.CTensor.tensor_valueb" href="#tensor_valueb">tensor_valueb</a> t }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = <span class="keyword">false</span> }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    = {
+      <a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = <span class="keyword">pure</span> { <a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> t } ;
+      <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <span class="keyword">pure</span> { <a title="libtensor.CTensor.tensor_valueb" href="#tensor_valueb">tensor_valueb</a> t } ;
+      <a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = <span class="keyword">false</span> ;
+    }
+
+  <span class="keyword">let</span> <a id="ctensor_create">ctensor_create</a><a href="libtensor.proof.html#CTensor.ctensor_create" title="Valid (one goal)" class="icon valid icofont-check"></a> (ds : <a title="libvector.CIndex.iarray" href="libvector.CIndex.html#iarray">iarray</a>) (n : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>) : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a> =
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="libvector.CIndex.dimension" href="libvector.CIndex.html#dimension">dimension</a> ds n }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.empty_tensor" href="#empty_tensor">empty_tensor</a> result \/ <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> result }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.empty_tensor" href="#empty_tensor">empty_tensor</a> result \/ result.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> = n }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.empty_tensor" href="#empty_tensor">empty_tensor</a> result \/ result.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> = ds }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">let</span> m = <a title="libvector.CIndex.cdim_size" href="libvector.CIndex.html#cdim_size">cdim_size</a> ds n <span class="keyword">in</span>
+    <span class="keyword">let</span> vs = <a title="mach.c.C.malloc" href="https://www.why3.org/stdlib/mach.c.html#malloc_100">malloc</a> (<a title="std.Clib.to_uint32" href="std.Clib.html#to_uint32">to_uint32</a> m) <span class="keyword">in</span>
+    {
+      <a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> = <span class="keyword">if</span> <a title="std.Clib.is_null" href="std.Clib.html#is_null">is_null</a> vs <span class="keyword">then</span> 0 <span class="keyword">else</span> n ;
+      <a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> = ds ;
+      <a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> = vs ;
+    }
+
+  <span class="keyword">let</span> <a id="ctensor_clear">ctensor_clear</a><a href="libtensor.proof.html#CTensor.ctensor_clear" title="Valid (one goal)" class="icon valid icofont-check"></a> (r : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) =
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> r }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r = Tensor.<a title="tensor.Tensor.zero" href="tensor.Tensor.html#zero">zero</a> 0.0 (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> r) }
+    <span class="keyword">let</span> m = <a title="libvector.CIndex.cdim_size" href="libvector.CIndex.html#cdim_size">cdim_size</a> r.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> r.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> <span class="keyword">in</span>
+    <span class="keyword">for</span> i = 0 <span class="keyword">to</span> m<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 <span class="keyword">do</span>
+      <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+      <span class="keyword">invariant</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i -&gt; <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> k = 0.0 }
+      <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+      r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i] &lt;- <a title="std.Cfloat.f32" href="std.Cfloat.html#f32">f32</a> 0.0
+    <span class="keyword">done</span>
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    ; <span class="keyword">assert</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r <a title="tensor.Tensor.(==)" href="tensor.Tensor.html#infix%20%3D%3D">==</a> Tensor.<a title="tensor.Tensor.zero" href="tensor.Tensor.html#zero">zero</a> 0.0 (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> r) }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <a id="ctensor_reset">ctensor_reset</a><a href="libtensor.proof.html#CTensor.ctensor_reset" title="Valid (9 goals)" class="icon valid icofont-check"></a> (r : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) (v : <a title="std.Cfloat.float" href="std.Cfloat.html#float">float</a>) =
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> r }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r = Tensor.<a title="tensor.Tensor.const" href="tensor.Tensor.html#const">const</a> (<a title="std.Cfloat.to_real" href="std.Cfloat.html#to_real">to_real</a> v) 0.0 (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> r) }
+    <span class="keyword">let</span> m = <a title="libvector.CIndex.cdim_size" href="libvector.CIndex.html#cdim_size">cdim_size</a> r.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> r.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> <span class="keyword">in</span>
+    <span class="keyword">for</span> i = 0 <span class="keyword">to</span> m<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 <span class="keyword">do</span>
+      <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+      <span class="keyword">invariant</span> { <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i -&gt; <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> k = v }
+      <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+      r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i] &lt;- v
+    <span class="keyword">done</span>
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    ; <span class="keyword">assert</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r <a title="tensor.Tensor.(==)" href="tensor.Tensor.html#infix%20%3D%3D">==</a> Tensor.<a title="tensor.Tensor.const" href="tensor.Tensor.html#const">const</a> (<a title="std.Cfloat.to_real" href="std.Cfloat.html#to_real">to_real</a> v) 0.0 (<a title="libtensor.CTensor.tensor_dim" href="#tensor_dim">tensor_dim</a> r) }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <a id="ctensor_where">ctensor_where</a><a href="libtensor.proof.html#CTensor.ctensor_where" title="Valid (12 goals)" class="icon valid icofont-check"></a> (cond a b r : <a title="libtensor.CTensor.ctensor" href="#ctensor">ctensor</a>) =
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> cond }
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> a }
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> b }
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.valid_tensor" href="#valid_tensor">valid_tensor</a> r }
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> a <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> b <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">requires</span> { <a title="libtensor.CTensor.tensorb" href="#tensorb">tensorb</a> cond <a title="tensor.Tensor.(~)" href="tensor.Tensor.html#infix%20~">~</a> <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> a <a title="tensor.Tensor.(~)" href="tensor.Tensor.html#infix%20~">~</a> <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> b }
+    <span class="keyword">ensures</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r = <a title="tensor.OPWhere.opwhere" href="tensor.OPWhere.html#opwhere">opwhere</a> (<a title="libtensor.CTensor.tensorb" href="#tensorb">tensorb</a> cond) (<a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> a) (<a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> b) }
+    <span class="keyword">let</span> m = <a title="libvector.CIndex.cdim_size" href="libvector.CIndex.html#cdim_size">cdim_size</a> r.<a title="libtensor.CTensor.t_dims" href="#t_dims">t_dims</a> r.<a title="libtensor.CTensor.t_rank" href="#t_rank">t_rank</a> <span class="keyword">in</span>
+    <span class="keyword">for</span> i = 0 <span class="keyword">to</span> m<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 <span class="keyword">do</span>
+      <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+      <span class="keyword">invariant</span> {
+        <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i -&gt;
+          <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> k =
+            <span class="keyword">if</span> Real.(0.0 <a title="real.Real.(<)" href="https://www.why3.org/stdlib/real.html#infix%20%3C_21">&lt;</a> <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> cond.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a> k)
+            <span class="keyword">then</span> a.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[k] <span class="keyword">else</span> b.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[k]
+      }
+      <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+      r.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i] &lt;-
+        <span class="keyword">if</span> (<a title="std.Cfloat.f32" href="std.Cfloat.html#f32">f32</a> 0.0) <a title="std.Cfloat.(.<)" href="std.Cfloat.html#infix%20.%3C">.&lt;</a> cond.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i] <span class="keyword">then</span> a.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i] <span class="keyword">else</span> b.<a title="libtensor.CTensor.t_data" href="#t_data">t_data</a>[i]
+    <span class="keyword">done</span>
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    ; <span class="keyword">assert</span> { <a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> r <a title="tensor.Tensor.(==)" href="tensor.Tensor.html#infix%20%3D%3D">==</a> <a title="tensor.OPWhere.opwhere" href="tensor.OPWhere.html#opwhere">opwhere</a> (<a title="libtensor.CTensor.tensorb" href="#tensorb">tensorb</a> cond) (<a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> a) (<a title="libtensor.CTensor.tensor" href="#tensor">tensor</a> b) }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
