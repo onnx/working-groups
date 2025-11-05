@@ -4,9 +4,10 @@
 ## Agenda
   - Review of actions [Eric]
   - Status on repo organization [Mariem]
-  - Discussion of the overall V&V strategy [Jean]) 
-  - Status on operator informal and formal spec [All]
-  - Setup a clear management of item status (update the existing [table](../meetings/operator_spec_sub_wg/worksharing.md), use Github features?) 
+  - Discussion of the overall V&V strategy [Jean] 
+  - Status on operator informal and formal specs [All]
+  - Discussion about settting up a real and clear management of item status (update the existing [table](../meetings/operator_spec_sub_wg/worksharing.md), use Github features?) [All]
+  - A few words about the integration in AIDGE? [Mariem]
   - Meeting on graph specification [Eric]
   - Next work session...
 ## Minutes
