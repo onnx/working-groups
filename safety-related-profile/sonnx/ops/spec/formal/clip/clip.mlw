@@ -52,6 +52,17 @@ module OPClip
 
 end
 
+module ClipAux
+  use std.Cfloat
+  use real.MinMax
+  
+  val function (.>>) (a b : float) : float
+    ensures { Real.( result = max a b ) }
+
+  val function (.<<) (a b : float) : float
+    ensures { Real.( result = min a b ) }
+end
+
 module TensorClip
   use std.Int
   use std.List
@@ -65,6 +76,7 @@ module TensorClip
   use libvector.CIndex
   use libtensor.CTensor
   use OPClip
+  use ClipAux
 
   let ctensor_clip (x l m r : ctensor) =
     (*proof*)
