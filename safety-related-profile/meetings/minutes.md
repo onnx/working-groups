@@ -1,3 +1,45 @@
+# 2025/11/05
+## Participants
+  *To be completed*
+## Agenda
+  - Review of actions [Eric]
+  - Status on repo organization [Mariem]
+  - Discussion of the overall V&V strategy [Jean]) 
+  - Status on operator informal and formal spec [All]
+  - Setup a clear management of item status (update the existing [table](../meetings/operator_spec_sub_wg/worksharing.md), use Github features?) 
+  - Meeting on graph specification [Eric]
+  - Next work session...
+## Minutes
+  *To be completed*
+## Actions
+### New actions
+  *To be completed*
+### Past actions
+- [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
+- [ ] (2210-2, Mariem) Move all operators to the new location 
+- [ ] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from João and Ricardo (on **conv**)
+  - Eric: [Done](../documents/onnx/ops/spec/informal/conv/reviews/eric_tests.py)
+- [ ] (2210-4, Eric, Jean, Mariem) Review João and Ricardo's work on the operator **clip**
+  - [Done](../documents/profile_opset/clip/reviews/jean-eric.md)
+
+- [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
+  - Eric comments (in the doc)
+- [X] (0810-2, all) Review  [Henri's spec of DIV](../documents/profile_opset/div/div.md)
+  - See work done with Mariem and Jean on div, mul, add...
+- [X] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
+- [ ] (1009-1, Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
+    - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
+    - Waiting for Eric
+- [X] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat` 
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+  - A prototype tool is currently being developed. Possibly available in October (this is **not** a commitment).   
+### Long term actions
+- [-] (2003-3, Eric) Initiate discussion in WG about ONNX integration and propose possible solutions to ONNX (from [2023/03/19 meeting](./Other_meetings/2025-03-20-An-Er-Se-Je.md))
+  
+
+
 # 2025/10/22
 ## Participants
   Jean, Eric, Franck Védrine, Ricardo Silva, Edoardo Manino, João Machado, Hugo, Jean-Baptiste Rouffet, Mariem, Henri Belfy, Jean-Loup Farges et Nicolas Valot
