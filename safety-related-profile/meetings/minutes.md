@@ -1,37 +1,47 @@
 # 2025/11/05
 ## Participants
-  *To be completed*
+Jean, Eric, Mariem, Ricardo, João, Jean-Loup, Franck, Dumitru, Henri, Jean-Baptiste, Mohammed.
+
 ## Agenda
   - Review of actions [Eric]
   - Status on repo organization [Mariem]
-  - Discussion of the overall V&V strategy [Jean] 
   - Status on operator informal and formal specs [All]
-  - Discussion about settting up a real and clear management of item status (update the existing [table](../meetings/operator_spec_sub_wg/worksharing.md), use Github features?) [All]
+  - Discussion about setting up a real and clear management of item status (update the existing [table](../meetings/operator_spec_sub_wg/worksharing.md), use Github features?) [All]
   - A few words about the integration in AIDGE? [Mariem]
   - Meeting on graph specification [Eric]
   - Next work session...
+  - Discussion of the overall V&V strategy [Jean] 
 ## Minutes
-  *To be completed*
+  - Status on repo organization: operators have been moved. Problem to generate the C code fo the where op (Loïc will have a look at this)
+  - Jean, Eric, Marie: DIV, ADD, MUL, SUB / SOFTMAX, PAD, RELU
+  - João, Ricardo: CLIP (update + hypothesis + formal: pb with NaNs),  SLICE (informal, hypothesis, formal at high level, working on the proof)
 ## Actions
 ### New actions
-  *To be completed*
-### Past actions
-- [ ] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
-- [ ] (2210-2, Mariem) Move all operators to the new location 
-- [ ] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from João and Ricardo (on **conv**)
-  - Eric: [Done](../documents/onnx/ops/spec/informal/conv/reviews/eric_tests.py)
-- [ ] (2210-4, Eric, Jean, Mariem) Review João and Ricardo's work on the operator **clip**
-  - [Done](../documents/profile_opset/clip/reviews/jean-eric.md)
+  - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+  - [ ] (0511-2, Jean) Provide a first draft of the document about verification. 
+  - [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
+  - [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
+    - Eric :
+      > See ORT issue #15304 that was asking for the support of int32, uint32 for Clip. Solved by #15306, so ORT supports at least `uint32` and `int32`. 
+      
+      > Seems to work on Google Collab:
+      - ![alt text](./attachments/image.png)
+    - Ricardo & João: 
+      > We found this, onnxruntime/docs/OperatorKernels.md at main · microsoft/onnxruntime. 
+      > And for CPUProvider the following types are not supported: INT16, UINT16,BFLOAT16. 
+      > We were following ONNX documentation Clip - ONNX 1.21.0 documentation and 
+      > we didn’t expect that some types are only supported by specific providers. 
+      > For example, int16 and uint16 are not supported by CPUProvider but are supported by DmlExecutionProvider.
+      > BFloat16 is said to be supported by ONNX, although we didn’t find any provider that does so.
+      > Apparently, this is no longer a doubt but we will have to check both these documentation to ensure that our provider(CPUProvider) supports the respective types. In this context the test generation will also depend on the provider being used
 
-- [X] (0810-1, all) Review  [Jean-Baptiste's document on ED324](../analyses/certification/SONNX_ED324_interest.docx)
-  - Eric comments (in the doc)
-- [X] (0810-2, all) Review  [Henri's spec of DIV](../documents/profile_opset/div/div.md)
-  - See work done with Mariem and Jean on div, mul, add...
-- [X] (0810-3, all) Review [Mariem's proposal](tbc) for a new repo 
-- [ ] (1009-1, Jean) Organize a technical discussion with DNN experts to conclude on the need of broadcasting.
-    - Among the questions to be discussed: Is broadcasting useful?  necessary? is it only a choice of model designers or does it come "naturally" during the export done by frameworks?   
-    - Waiting for Eric
-- [X] (2708-3, Mariem, Salomé) Try to apply Loïc's approach to `conv` and `concat` 
+### Past actions
+- [X] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 
+- [X] (2210-2, Mariem) Move all operators to the new location 
+- [X] (2210-3, Eric, Jean-Baptiste, Jean) Review Hypothesis-based test cases description from João and Ricardo (on **conv**)
+  - Eric: [Done](../documents/onnx/ops/spec/informal/conv/reviews/eric_tests.py)
+- [X] (2210-4, Eric, Jean, Mariem) Review João and Ricardo's work on the operator **clip**
+  - [Done](../documents/profile_opset/clip/reviews/jean-eric.md)
 - [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
   - First trial on something simpler than the conv (matrix multiplication).
   - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
