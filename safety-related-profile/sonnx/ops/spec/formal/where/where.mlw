@@ -30,6 +30,8 @@ module CTensorWhere
   use tensor.libvector.CIndex
   use tensor.libtensor.CTensor
 
+  
+
 let ctensor_where (cond a b r : ctensor) =
     (*proof*)
     requires { valid_tensor cond }

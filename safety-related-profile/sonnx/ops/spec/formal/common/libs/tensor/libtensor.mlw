@@ -8,6 +8,7 @@ module CTensor
   use tensor.tensor.Tensor
   use tensor.layout.CFlat
   use tensor.libvector.CIndex
+  
 
   type farray = ptr float
 
@@ -108,5 +109,8 @@ module CTensor
     (*proof*)
     ; assert { tensor r == Tensor.const (to_real v) 0.0 (tensor_dim r) }
     (*qed*)
+
+
+
 
 end

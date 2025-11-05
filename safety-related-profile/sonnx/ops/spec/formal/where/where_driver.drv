@@ -23,20 +23,10 @@ module tensor.std.Cfloat
   syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
 end
 
-module tensor.libvector.CIndex
-  interface "#include <stdlib.h>"
-  interface "#include <stdint.h>"
-end
-
-module tensor.libtensor.CTensor
-  interface "#include <stdlib.h>"
-  interface "#include <stdint.h>"
-  interface "#include \"cindex.h\""
-end
-
 module where.CTensorWhere
   interface "#include <stdlib.h>"
   interface "#include <stdint.h>"
   interface "#include \"cindex.h\""
   interface "#include \"ctensor.h\""
+  
 end
