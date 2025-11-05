@@ -4,7 +4,7 @@
 #Directories 
 DOC_DIR = ../../../../../code/common/libs/tensor/generated_doc
 CODE_DIR = ../../../../../code/common/libs/tensor/generated_code/c_code
-CDRIVER_DIR = ../../../../../code/common/drivers
+CDRIVER_DIR = ../../drivers
 
 all: prove doc lib
 	@echo "------------------------------------------"

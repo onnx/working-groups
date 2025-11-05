@@ -7,7 +7,7 @@
 #Directories 
 DOC_DIR = ../../../code/where/generated_doc
 CODE_DIR = ../../../code/where/generated_code/c_code
-CDRIVER_DIR = ../../../code/common/drivers
+CDRIVER_DIR = ../common/drivers
 SRC_TENSOR = ../common/libs/tensor
 
 
