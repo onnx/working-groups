@@ -31,35 +31,21 @@ The following restrictions apply to the **clip** operator for the SONNX profile:
 
 Operator **clip** limit the given input within an interval. For each element in the input tensor `X`: 
 - If `L` $\leq$ `M`:
-  - if its value is less than `L` then it is replaced by `L`.
-  - If its value is greater than `M` then it is replaced by `M`.
-  - Otherwise, the value is unchanged.
+  - if $X[i]$ < `L` then $Y[i]$ = `L`.
+  - If $X[i]$ > `M` then $Y[i]$ = `M`.
+  - Otherwise, $Y[i]$ = $X[i]$.
 - If `L` $\gt$ `M`:
-  - all values are set to `M`.
+  - $\forall i,\ Y[i] = M$
+
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The result is stored in output tensor `Y`.
 
-If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of clipping $X[i]$ by the interval $[L, M]$.
+Clip operation can be expressed as:
 
-For any index $i$,
-$$
-Y[i] = \min(M, \max(X[i], L))
-$$
+$$\forall i,\ Y[i] = \min(M, \max(X[i], L))$$
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
-Wich is equivalent to:
-
-$$
-Y[i] = 
-\begin{cases} 
-M & \text{if } L \gt M \\
-\\
-\begin{cases}
-L & \text{if } X[i] \leq L \\
-M & \text{if } X[i] \geq M \\ 
-X[i] & \text{otherwise} 
-\end{cases}& otherwise
-\end{cases}
-$$
 
 ### Example 1
 
@@ -135,8 +121,6 @@ Tensor `Y` is the element-wise result of clipping `X` by the interval $[L, M]$.
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor `X`.
- - `[C2]` Interval consistency
-   - Statement: Output tensor entries should either lie in the interval $[L, M]$ or all be equal to `M`.
 
 
 ## Attributes
@@ -177,35 +161,20 @@ The following restrictions apply to the **clip** operator for the SONNX profile:
 
 Operator **clip** limit the given input within an interval. For each element in the input tensor `X`: 
 - If `L` $\leq$ `M`:
-  - if its value is less than `L` then it is replaced by `L`.
-  - If its value is greater than `M` then it is replaced by `M`.
-  - Otherwise, the value is unchanged.
+  - if $X[i]$ < `L` then $Y[i]$ = `L`.
+  - If $X[i]$ > `M` then $Y[i]$ = `M`.
+  - Otherwise, $Y[i]$ = $X[i]$.
 - If `L` $\gt$ `M`:
-  - all values are set to `M`.
+  - $\forall i,\ Y[i] = M$
+
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The result is stored in output tensor `Y`.
 
-If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of clipping $X[i]$ by the interval $[L, M]$.
+Clip operation can be expressed as:
 
-For any index $i$,
-$$
-Y[i] = \min(M, \max(X[i], L))
-$$
-
-Wich is equivalent to:
-
-$$
-Y[i] = 
-\begin{cases} 
-M & \text{if } L \gt M \\
-\\
-\begin{cases}
-L & \text{if } X[i] \leq L \\
-M & \text{if } X[i] \geq M \\ 
-X[i] & \text{otherwise} 
-\end{cases}& otherwise
-\end{cases}
-$$
+$$\forall i,\ Y[i] = \min(M, \max(X[i], L))$$
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 ### Example 1
 
@@ -285,11 +254,7 @@ Tensor `Y` is the element-wise result of clipping `X` by the interval $[L, M]$.
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor `X`.
- - `[C2]` Interval consistency
-   - Statement: Output tensor entries should either lie in the interval $[L, M]$ or   all be equal to `M`.
-
-
- - `[C3]` Type consistency
+ - `[C2]` Type consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">  [C2]</span></b>](#C2ia) on tensor `X`.
 
 ## Attributes
@@ -302,7 +267,7 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **clip** does not introduce any numerical error. 
+Operator **clip** does not introduce any numerical error. Hence, for all valid indexes $i$,
 
 
 <a id="float"></a>
@@ -329,37 +294,30 @@ The following restrictions apply to the **clip** operator for the SONNX profile:
 | `[R5]` <a id="R5"></a>     | All tensors shall have the same datatype  | General restriction [GR3](../general_restrictions.md#GR3) |
 ## Informal specification
 
-Operator **clip** limit the given input within an interval. For each element in the input tensor `X`: 
+Operator **clip** limit the given input within an interval. For each element in the input tensor `X` (discarding `nan` values in `L` or `M`, for more details see the definition below):
 - If `L` $\leq$ `M`:
-  - if its value is less than `L` then it is replaced by `L`.
-  - If its value is greater than `M` then it is replaced by `M`.
-  - Otherwise, the value is unchanged.
+  - if $X[i]$ < `L` then $Y[i]$ = `L`.
+  - If $X[i]$ > `M` then $Y[i]$ = `M`.
+  - Otherwise, $Y[i]$ = $X[i]$.
 - If `L` $\gt$ `M`:
-  - all values are set to `M`.
+  - $\forall i,\ Y[i] = M$
+
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The result is stored in output tensor `Y`.
 
-If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of clipping $X[i]$ by the interval $[L, M]$.
+Clip operation can be expressed as:
 
-For any index $i$,
-$$
-Y[i] = \min(M, \max(X[i], L))
-$$
-
-Wich is equivalent to:
-
-$$
-Y[i] = 
+$$\forall i,\ Y[i] = 
 \begin{cases} 
-M & \text{if } L \gt M \\
-\\
-\begin{cases}
-L & \text{if } X[i] \leq L \\
-M & \text{if } X[i] \geq M \\ 
-X[i] & \text{otherwise} 
-\end{cases}& otherwise
-\end{cases}
-$$
+\min(X[i], M) & \text{ if } L = \text{nan} \\
+\max(X[i], L) & \text{ if } M = \text{nan} \\
+X[i] & \text{ if } L = \text{nan} \text{ and } M = \text{nan} \\
+\min(M, \max(X[i], L)) & \text{ otherwise }  \\
+\end{cases}$$
+
+where $i$ is a [tensor index](../common/definitions.md#tensor_index).
+
 
 ### Example 1
 
@@ -397,9 +355,42 @@ Y = \begin{bmatrix} \min(10.0, \max(6.5, 20.2)) & \min(10.0, \max(9.2, 20.2)) & 
 Y = \begin{bmatrix} 10.0 & 10.0 & 10.0 \end{bmatrix}
 ```
 
+### Example 3
+
+```math
+A = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+```
+```math
+L = -1.0
+\quad
+M = NaN
+```
+
+```math
+Y = \begin{bmatrix} \max(-\infty, -1.0) & \max(0.0, -1.0) & \max(\infty, -1.0) & \max(NaN, -1.0) \end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix} -1.0 & 0.0 & \infty & NaN \end{bmatrix}
+```
+
+### Example 4
+
+```math
+A = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+```
+```math
+L = NaN
+\quad
+M = NaN
+```
+
+```math
+Y = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+```
+
 ## Error conditions
 - Values of the output tensor may be IEEE 754 infinity or NaN
-- Comparisons with NaN follow IEEE 754 semantics
 
 ## Inputs
 
@@ -440,10 +431,7 @@ Tensor `Y` is the element-wise result of clipping `X` by the interval $[L, M]$.
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor `X`.
- - `[C2]` Interval consistency
-   - Statement: Output tensor entries should either lie in the interval $[L, M]$ or   all be equal to `M`.
-
- - `[C3]` Type consistency
+ - `[C2]` Type consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">  [C2]</span></b>](#C2ia) on tensor `X`.
 
 ## Attributes
