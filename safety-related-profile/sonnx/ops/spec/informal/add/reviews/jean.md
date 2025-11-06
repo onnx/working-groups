@@ -1,1 +1,1 @@
-Typos and reformatting, already comitted in add.md
+Typos and reformatting, already taken into account in add.md
