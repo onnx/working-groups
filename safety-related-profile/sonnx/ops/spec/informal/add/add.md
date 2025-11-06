@@ -32,7 +32,7 @@ The following restrictions apply to the **Add** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -133,8 +133,8 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
  
 
@@ -223,13 +223,13 @@ The following restrictions apply to the `Add` operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
 
 ## Informal specification
 
-Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
