@@ -26,7 +26,7 @@ The following restrictions apply to the **Add** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
 | `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
 
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
