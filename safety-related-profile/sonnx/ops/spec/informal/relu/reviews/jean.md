@@ -1,1 +1,1 @@
-Typos and reformatting, already comitted in relu.md
+Typos and reformatting, already taken into account in relu.md
