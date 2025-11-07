@@ -1,8 +1,8 @@
 # Contents
 
 - **Div** operator for type [real](#real)
-- **Div** operator for types [FP16, FP32, FP64](#float)
-- **Div** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64](#int)
+- **Div** operator for types [float16, float, double](#float)
+- **Div** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
 Based on ONNX documentation version 14.
 
@@ -179,7 +179,7 @@ for (auto I : A.indexes()) {
 
 <a id="float"></a>
 # **Div** (float, float)
-where float is in {FP16, FP32, FP64}
+where float is in {float16, float, double}
 
 # Signature
 Definition of operator $\text{Div}$ signature:
@@ -330,7 +330,7 @@ for (auto i : A.indexes()) {
 <a id="int"></a>
 
 # **Div** (int, int)
-where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
 Definition of operator $\text{Div}$ signature:
