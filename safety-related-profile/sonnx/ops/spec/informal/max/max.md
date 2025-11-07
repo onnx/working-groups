@@ -4,13 +4,13 @@
 ## `Max`  `(type on which an order is defined, i.e. bfloat16, double, float, float16, int16, int32, int64, int8, uint16, uint32, uint64, uint8)`
 
 ### Signature
-`Y = max(X^1, ... , X^N)`
+`Y = Max(X1, ... , XN)`
 where
 
 - `N`: 
-- `X^1`: first input tensor
+- `X1`: first input tensor
 - ...
-- `X^N`: last input tensor
+- `XN`: last input tensor
 - `Y`: output tensor
 
 #### Restrictions
