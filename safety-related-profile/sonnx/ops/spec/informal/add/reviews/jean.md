@@ -7,3 +7,5 @@ Rmk2: Contents section.
 * INT4 and UINT4 are in SONNX add.md but not in the ONNX description of add.
 
 Rmk3: broken links. Already fixed.
+
+Rmk4: Replace the type names by their counterpart in ONNX. Example: replace "FP64" by "double".
