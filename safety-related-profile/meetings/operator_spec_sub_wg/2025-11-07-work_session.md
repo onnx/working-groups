@@ -32,7 +32,7 @@
 
 ### Other topics
 - [ ] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
-- [ ] Check the display problem with LaTeX formulae in Markdown (see $\textt{Add$})
+- [ ] Check the display problem with LaTeX formulae in Markdown (see $\textt{Add}$)
 - [ ] (Eric) During next meeting ask participants if they know other issues similar to those raised by empty tensors.
 
 
