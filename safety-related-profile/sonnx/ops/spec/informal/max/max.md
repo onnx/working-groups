@@ -29,8 +29,6 @@ The maximum is taken element wize among the elements of the different input tens
 
 $$\forall i_1 \in [1, dZ_1], ... \forall i_{nZ} \in [1, dZ_{nZ}] ~~~~ Y[i_1,...,i_{nZ}] = \max_{m \in [1, N] } Zm[i_1,...,i_{nZ}]$$
 
-where $z^n_{i,j,k,l...}$ is an element of $Z^n$.
-
 ##### Numpy boardcasting
 $I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in [1, N] } I_n$, $J = \max_{n \in [1, N] } J_n$, $K = \max_{n \in [1, N] } K_n$, $L = \max_{n \in [1, N] } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
 
