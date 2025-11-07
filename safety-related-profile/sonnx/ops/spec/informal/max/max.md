@@ -13,13 +13,13 @@ where
 - `XN`: last input tensor
 - `Y`: output tensor
 
-#### Restrictions
-The following restrictions apply to the `max` operator for the SONNX profile:
+#### Constraints
+The following constraints apply to the `Max` operator for the SONNX profile:
 
-| Restriction    | Statement | Origin |
+| Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
-| `R1` | `N` is an integer between 1 and 2147483647 | Transient |
-| `R2` | Numpy boardcasting rules shall be applicable to `Y`, `X^1`, ... , `X^N` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation |
+| `C2` | Numpy boardcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
 
  #### Informal specification
 
