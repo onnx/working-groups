@@ -19,11 +19,11 @@ The following constraints apply to the `Max` operator for the SONNX profile:
 | Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
 | `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max |
-| `C2` | Numpy boardcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
+| `C2` | Numpy boardcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
 
  #### Informal specification
 
-The result tensor $Y$ is based on the boardcasted values $Z^1$, ... , $Z^N$ of the input tensors $X^1$, ... , $X^N$.
+The result tensor $Y$ depends on the boardcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dT_j$.
 
 Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
 
