@@ -19,13 +19,13 @@ The following constraints apply to the `Max` operator for the SONNX profile:
 | Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
 | `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max |
-| `C2` | Numpy boardcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
+| `C2` | Numpy broadcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
 
  #### Informal specification
 
-The result tensor $Y$ depends on the boardcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dT_j$.
+The result tensor $Y$ depends on the broadcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dZ_j$.
 
-Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
+The maximum is taken element wize among the elements of the different input tensors presenting identical indexes. The maximum shall comply with the mathematical definition of the function denoted $\max$. In consequence, denoting $Zm[i_1,...,i_{nZ}]$ and $Y[i_1,...,i_{nZ}]$ the elements of reciprocally the $m$th broadcasted input tensor $Zm$ and the output tensor $Y$, the following relation shall hold:
 
 $\forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... ~~~~ y_{i,j,k,l...} = \max_{n \in [1, N] } z^n_{i,j,k,l...}$
 
