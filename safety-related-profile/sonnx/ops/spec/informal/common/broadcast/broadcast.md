@@ -1,4 +1,22 @@
-##### Numpy boardcasting
+# `broadcast` operator or functionality embeeded in another operator
+### Contents
+- `Broadcast` operator or functionality for any type.
+## `Broadcast`  `(anytype)`
+
+### Signature
+`Z1, ..., ZN = Broadcast(X1, ... , XN)`
+where
+
+- `N`: The number of input tensors
+- `X1`: first input tensor
+- ...
+- `XN`: last input tensor
+- `Z1`: first output tensor
+- ...
+- `ZN`: last ouput tensor
+
+#### Constraints
+
 $I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in [1, N] } I_n$, $J = \max_{n \in [1, N] } J_n$, $K = \max_{n \in [1, N] } K_n$, $L = \max_{n \in [1, N] } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
 
 The following restrictions apply to the Numpy boardcasting:
