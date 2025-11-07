@@ -27,8 +27,8 @@
 - [ ] (Jean-loup) Separate the spec broadcasting and the max operator 
 	- Broadcasting is specified as $(Z1,Z2,ZL)=\text{bc}(X1,X2,...,XL)$  
 	- The spec is to be placed in "common"
-	- "Properties" will be useful to support the verification (formal, test) activities
-	- They should be specified in the most simple way so has to be traceable to some simple implementation using primitive operations (loops, simple mathematical operations). In particular, the two step process : (i) construction of the broadcasted tensors and (ii) computation of the maxes on those tensors must be explicit. 
+	- "Properties" will be useful to support the verification (formal, test) activities but they have to be removed from the informal spec.
+    	- They should be specified in the most simple way so has to be traceable to some simple implementation using primitive operations (loops, simple mathematical operations). In particular, we should stick to two-step process : (i) construction of the broadcasted tensors and (ii) computation of the maxes on those tensors must be explicit.
 
 ### Other topics
 - [ ] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
