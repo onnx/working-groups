@@ -27,24 +27,20 @@ When the dimension size is increased for a tensor:
 - the additional elements are equal to the elements with index 1 for this dimension.
 
 ### Notations
-Let's note the tensors with already a common number of dimensions but with still different dimension sizes $Y1$, ... $YN$.
-
-### Functionality
-
+Let's note the tensors with already a common number of dimensions, $nY$, but with still different dimension sizes $Y1$, ... $YN$.
 
 #### Constraints
 
-$I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in [1, N] } I_n$, $J = \max_{n \in [1, N] } J_n$, $K = \max_{n \in [1, N] } K_n$, $L = \max_{n \in [1, N] } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
+$dY_1$, ...$dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
 
-The following restrictions apply to the Numpy boardcasting:
+The following constraint applies to the Numpy boardcasting:
 
-| Restriction    | Statement | Origin |
+| Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
-| `RI` | $\forall n \in [1, N]$ either $I_n = I$  or $I_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RJ` | $\forall n \in [1, N]$ either $J_n = J$  or $J_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RK` | $\forall n \in [1, N]$ either $K_n = K$  or $K_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RL` | $\forall n \in [1, N]$ either $L_n = L$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `C1` | $\forall m \in [1, N]$ \forall i \in [1, nY] either $dYm_i = dY_i$  or $dYm_i = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
 | ...  | ... | ... |
+
+### Functionality
 
 Assuming those restrictions hold, the relation between elements of boardcasted tensors and input tensors are:
 
