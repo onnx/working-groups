@@ -31,7 +31,7 @@ Let's note the tensors with already a common number of dimensions, $nY$, but wit
 
 ### Constraints
 
-$dY_1$, ...$dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dY_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
+$dY_1$, ...$dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dYm_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
 
 The following constraint applies to the Numpy boardcasting:
 
@@ -54,18 +54,15 @@ TODO
 
 This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target size. This fonction is defined as:
 
-$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where
+$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where:
 - $a$ is the current element,
 - $B$ is the dimension size, and
-- $C$ is the target size.
+- $C$ is the target dimension size.
 
-Assuming constraint `C1` holds, the relation between elements of boardcasted tensors and input tensors are:
+Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified.
 
-$\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... z^n_{i,j,k,l...} = x^n_{f(i,I_n,I),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
+Then the relation between elements of boardcasted tensors and input tensors are:
 
-Where $f(.,.,.)$ is a function such that:
+$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(dYm_{nY},L_n,L)}$
 
-$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$.
-
-Note that other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified because of restrictions `RI`, `RJ`, `RK`, `RL`... 
 
