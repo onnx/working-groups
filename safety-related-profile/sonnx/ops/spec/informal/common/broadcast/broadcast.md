@@ -31,13 +31,13 @@ Let's note the tensors with already a common number of dimensions, $nY$, but wit
 
 #### Constraints
 
-$dY_1$, ...$dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
+$dY_1$, ...$dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dY_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
 
 The following constraint applies to the Numpy boardcasting:
 
 | Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
-| `C1` | $\forall m \in [1, N]$ \forall i \in [1, nY] either $dYm_i = dY_i$  or $dYm_i = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `C1` | $\forall m \in [1, N]$ \forall i \in [1, nY] either $dYm_i = dY_i$  or $dYm_i = 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
 | ...  | ... | ... |
 
 ### Functionality
