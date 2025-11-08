@@ -52,7 +52,7 @@ TODO
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
-This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target size. This fonction is defined as:
+This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target dimension size. This fonction is defined as:
 
 $f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where:
 - $a$ is the current element,
