@@ -42,6 +42,16 @@ The following constraint applies to the Numpy boardcasting:
 
 ### Functionality
 
+The description of the functionality relies on two relations:
+- the relation between the input tensors and tensors with a common number of dimensions, and
+- the relation between the tensors with a common number of dimensions and the output tensors.
+
+#### Relation between input tensors and tensors with a common number of dimensions
+
+TODO
+
+#### Relation between tensors with a common number of dimensions and output tensors
+
 Assuming those restrictions hold, the relation between elements of boardcasted tensors and input tensors are:
 
 $\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... z^n_{i,j,k,l...} = x^n_{f(i,I_n,I),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
