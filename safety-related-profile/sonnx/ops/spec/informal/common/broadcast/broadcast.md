@@ -56,7 +56,7 @@ where $nXm$ is the number of dimensions of $Xm$ the $m$ th input tensor.
 
 The tensors with $nY > nXm$ have their dimensions completed adding dimensions of value 1 for the $nY - nXm$ first dimensions and shifting the other dimensions. That is:
 
-$\forall m \in [1,N] \forall i in [1,nY] dYm_i = 1$ if $i < nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
+$\forall m \in [1,N] \forall i \in [1,nY] ~~~~~ dYm_i = 1$ if $i < nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
 
 TODO
 
