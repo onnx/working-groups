@@ -58,7 +58,11 @@ The tensors with $nY > nXm$ have their dimensions completed adding dimensions of
 
 $\forall m \in [1,N] \forall i \in [1,nY] ~~~~~ dYm_i = 1$ if $i < nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
 
-TODO
+Adressing of elements has to be shifted in consequence:
+
+$$\forall m \in [1,N] \forall i_1 \in [1,dXm_1]... \forall i_{nXm} \in [1,dXm_{nXm}] ~~~~~~~~ Ym[s,i_1,...i_{nXm}] = Xm[i_1,...i_{nXm}]$$
+
+where $s$ is a sequence of $nY - nXm$ ones, i.e. 1,...1.
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
