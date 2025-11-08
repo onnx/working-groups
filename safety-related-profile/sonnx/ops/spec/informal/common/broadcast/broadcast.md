@@ -16,7 +16,18 @@ where
 - `ZN`: last ouput tensor
 
 ### Purpose
-The purpose of the Broadcast is to produce a set of output tensors presenting a common shape, that is a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$.
+The purpose of the Broadcast is to produce a set of output tensors presenting a common shape, that is a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$. The objectives of the operation are:
+- to provide to all tensors a number of dimensions equal to the largest number of dimensions among the input tensors and
+- for each dimension to provide to all tensors a dimension size equal to the maximum of the dimension sizes of all the input tensors.
+When the number of dimensions is increased for a tensor:
+- the dimensions to be completed are those of lower indexes,
+- those dimensions are set to a dimension size equal to 1 and,
+- the indexes allowing access to the elements of the tensor are shifted consequently.
+When the dimension size is increased for a tensor:
+- the additional elements are equal to the elements with index 1 for this dimension.
+
+### Notations
+Let's note the tensors with already a common number of dimensions but with still different dimension sizes $Y1$, ... $YN$.
 
 ### Functionality
 
