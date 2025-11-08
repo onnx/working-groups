@@ -37,7 +37,7 @@ The following constraint applies to the Numpy boardcasting:
 
 | Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
-| `C1` | $\forall m \in [1, N]$ \forall i \in [1, nY] either $dYm_i = dY_i$  or $dYm_i = 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
+| `C1` | $\forall m \in [1, N], \forall i \in [1, nY]$ either $dYm_i = dY_i$  or $dYm_i = 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
 | ...  | ... | ... |
 
 ### Functionality
