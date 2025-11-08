@@ -48,6 +48,10 @@ The description of the functionality relies on two relations:
 
 #### Relation between input tensors and tensors with a common number of dimensions
 
+The common number of dimensions is the largest number of dimensions among the input tensors:
+
+$$nY = \max_{m \in [1, N]} nYm$$
+
 TODO
 
 #### Relation between tensors with a common number of dimensions and output tensors
@@ -63,6 +67,6 @@ Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \n
 
 Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors with common number of dimensions $Y1,...YN$ are:
 
-$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$
+$$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
 
 
