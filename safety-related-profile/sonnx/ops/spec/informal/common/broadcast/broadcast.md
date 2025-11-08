@@ -51,6 +51,7 @@ The description of the functionality relies on two relations:
 The common number of dimensions is the largest number of dimensions among the input tensors:
 
 $$nY = \max_{m \in [1, N]} nXm$$
+
 where $nXm$ is the number of dimensions of $Xm$ the $m$ th input tensor.
 TODO
 
