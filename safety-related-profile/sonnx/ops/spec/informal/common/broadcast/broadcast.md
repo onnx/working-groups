@@ -61,7 +61,7 @@ $f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where:
 
 Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified.
 
-Then the relation between elements of boardcasted tensors and input tensors are:
+Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors with common number of dimensions $Y1,...YN$ are:
 
 $\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$
 
