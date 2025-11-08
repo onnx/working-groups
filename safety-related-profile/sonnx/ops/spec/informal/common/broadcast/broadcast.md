@@ -52,7 +52,14 @@ TODO
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
-Assuming those restrictions hold, the relation between elements of boardcasted tensors and input tensors are:
+This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target size. This fonction is defined as:
+
+$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where
+- $a$ is the current element,
+- $B$ is the dimension size, and
+- $C$ is the target size.
+
+Assuming constraint `C1` holds, the relation between elements of boardcasted tensors and input tensors are:
 
 $\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... z^n_{i,j,k,l...} = x^n_{f(i,I_n,I),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
 
