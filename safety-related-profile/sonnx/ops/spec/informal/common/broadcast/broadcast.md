@@ -63,6 +63,6 @@ Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \n
 
 Then the relation between elements of boardcasted tensors and input tensors are:
 
-$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(dYm_{nY},L_n,L)}$
+$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$
 
 
