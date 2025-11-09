@@ -62,7 +62,9 @@ Adressing of elements has to be shifted in consequence:
 
 $$\forall m \in [1,N] \forall i_1 \in [1,dXm_1]... \forall i_{nXm} \in [1,dXm_{nXm}] ~~~~~~~~ Ym[s,i_1,...i_{nXm}] = Xm[i_1,...i_{nXm}]$$
 
-where $s$ is a sequence of $nY - nXm$ ones, i.e. 1,...1.
+where $s$ is a sequence of $nY - nXm$ ones, i.e. 1,...1. The relation can also be written without relying on the sequence $s$:
+
+$$\forall m \in [1,N] \forall i_1 \in [1,dYm_1]... \forall i_{nY} \in [1,dYm_{nY}] ~~~~~~~~ Ym[i_1,..., i_{nY-nXm+1}, ...i_{nY}] = Xm[i_{nY-nXm+1}, ...i_{nY}]$$
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
