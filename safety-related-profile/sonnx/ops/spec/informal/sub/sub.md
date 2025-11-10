@@ -34,7 +34,7 @@ The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Sub** subtracts input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **Sub** subtracts input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -231,7 +231,7 @@ The following restrictions apply to the **Sub** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Sub** subtracts input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **Sub** subtracts input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Subtiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer subtraction is performed as follows (considering that all tensors have the same type):
 
