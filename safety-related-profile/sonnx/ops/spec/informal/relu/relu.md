@@ -27,7 +27,7 @@ The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
@@ -99,7 +99,7 @@ The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
@@ -173,7 +173,7 @@ The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
