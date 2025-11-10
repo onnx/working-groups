@@ -8,4 +8,4 @@ Rmk2: Contents section.
 
 Rmk3: broken links. Already fixed.
 
-Rmk4: Replace the type names by their counterpart in ONNX. Example: replace "FP64" by "double".
+Rmk4: Replace the type names by their counterpart in ONNX. Example: replace "FP64" by "double". Taken into account in add.md.
