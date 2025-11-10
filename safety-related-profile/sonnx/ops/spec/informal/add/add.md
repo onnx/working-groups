@@ -3,6 +3,8 @@
 > - $\text{Add}$ [operator for types `float16`, `float32`, `double`](#float)
 > - $\text{Add}$ [operator for types `int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32`, `uint64`](#int)
 
+Based on ONNX documentation version 14.
+
 ---
 
 <a id="real"></a>
