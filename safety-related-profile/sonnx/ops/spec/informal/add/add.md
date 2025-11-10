@@ -1,7 +1,7 @@
 # Contents
 > - $\text{Add}$ [operator for type real](#real)
-> - $\text{Add}$ [operator for types `FP16`, `FP32`, `FP64`](#float)
-> - $\text{Add}$ [operator for types `INT4`, `INT8`, `INT16`, `INT32`, `INT64`, `UINT4`, `UINT8`, `UINT16`, `UINT32`, `UINT64`](#int)
+> - $\text{Add}$ [operator for types `float16`, `float32`, `double`](#float)
+> - $\text{Add}$ [operator for types `int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32`, `uint64`](#int)
 
 ---
 
@@ -113,7 +113,7 @@ See Why3 specification.
 
 <a id="float"></a>
 # $\text{Add}$ (float, float)
-where float is in {FP16, FP32, FP64}
+where float is in {float16, float, double}
 
 ## Signature
 
@@ -206,7 +206,7 @@ The $\text{Add}$ operator has no attribute.
 <a id="int"></a>
 
 # $\text{Add}$ (int, int)
-where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
 Definition of operator $\text{Add}$ signature:
@@ -233,7 +233,7 @@ Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
-For unsigned values (type `UINTn`):
+For unsigned values (type `uintn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- k.2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n}-1 \\
@@ -243,7 +243,7 @@ $$Y[i]=\left\{
 
 with $k \in N$ such that $0 \le A[i] + B[i]- k.2^{n} < 2^n$
 
-For signed values (type `INTn`):
+For signed values (type `intn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n-1}-1 \\
@@ -259,7 +259,7 @@ $k_1 \in N$ such that $xxx \le A[i] + B[i]-k_1.2^{n} < 2^n$
 $k_2 \in N$ such that $xxx \le A[i] + B[i]+k.2^{n} > -2^{n-1}$
 
 
-### Example 1 (1D UINT8 tensors)
+### Example 1 (1D uint8 tensors)
 
 ```math
 A = \begin{bmatrix} 6 & 200 & 35 \end{bmatrix}
@@ -270,7 +270,7 @@ B = \begin{bmatrix} 3 & 100 & 5 \end{bmatrix}
 Y = \begin{bmatrix} 9 & 44 & 40 \end{bmatrix}
 ```
 
-### Example 1 (1D INT8 tensors)
+### Example 1 (1D int8 tensors)
 
 ```math
 A = \begin{bmatrix} -6 & 100 & -100  \end{bmatrix}
@@ -328,6 +328,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
