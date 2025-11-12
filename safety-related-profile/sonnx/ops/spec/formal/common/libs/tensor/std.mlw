@@ -4,6 +4,8 @@ module Int
   use export int.Int
   use export int.Abs
   use export int.ComputerDivision
+  use list.List
+  use list.Length
 
   (** Unicity of euclidian division decomposition *)
   let ghost euclide (a b q r : int)
@@ -28,6 +30,15 @@ module Int
     ensures { abs a <= c }
     ensures { abs b <= c }
     = ()
+
+  (** Helper function to extract element from list at given position *)
+  let rec function get_dim (dims : list int) (idx : int) : int
+    requires { 0 <= idx < length dims }
+    variant { dims }
+    = match dims with
+      | Nil -> 0  (* should not happen due to precondition *)
+      | Cons h t -> if idx = 0 then h else get_dim t (idx - 1)
+      end
 
 end
 
@@ -130,6 +141,48 @@ module Clib
     = slice_append u 0 n (n+1)
     (*qed*)
 
+val function malloc_int32 (s: uint32) : ptr int32
+  ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+
+end
+
+
+module Cint
+  use int.Int
+  use mach.int.Int32
+  use mach.int.Int32 as Int32
+  use mach.int.UInt32
+  use mach.int.UInt32 as UInt32
+  use int.ComputerDivision
+  use Clib
+  
+  val function ( .+ ) (a b : int) : int
+    ensures { result = a + b }
+
+  val function ( .- ) (a b : int) : int
+    ensures { result = a - b }
+
+  val function ( .* ) (a b : int) : int
+    ensures { result = a * b }
+
+  val function ( ./ ) (a b : int) : int
+    requires { b <> 0 }
+    ensures { result = ComputerDivision.div (a) ( b) }
+  
+  val function of_int (v : int) : Int32.int32
+    ensures { Int32.to_int result = v }
+
+  val function malloc_int (s: uint32) : ptr int
+    ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+    
+  val function get (p: ptr int) (k: Int32.int32) : int
+    ensures { result = p[k] }
+    
+  val function malloc_int32 (s: uint32) : ptr int32
+  ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+  
+  let ([]) (p : ptr int) (k :Int32.int32) : int = get p k
+    
 end
 
 module Cfloat
