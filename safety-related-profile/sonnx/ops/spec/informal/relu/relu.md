@@ -1,33 +1,33 @@
 # Contents
 
-- **relu** operator for type [real](#real)
-- **relu** operator for types [FP16, FP32, FP64](#float)
-- **relu** operator for types [INT8, INT16, INT32, INT64](#int)
+- **Relu** operator for type [real](#real)
+- **Relu** operator for types [float16, float, double](#float)
+- **Relu** operator for types [int8, int16, int32, int64](#int)
 
 Based on ONNX documentation version 14.
 
 <a id="real"></a>
-# **relu** (real)
+# **Relu** (real)
 
 ## Signature
-$Y = \text{relu}(X)$
+$Y = \text{Relu}(X)$
 
 where:
 - $X$: input tensor
-- $Y$: result of the element-wise application of **relu** on $X$
+- $Y$: result of the element-wise application of **Relu** on $X$
 
 ## Restrictions
 
-The following restrictions apply to the **relu** operator for the SONNX profile:
+The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
+| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
 
 ## Informal specification
 
-Operator **relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
@@ -37,7 +37,7 @@ X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
 
 
 ```math
-Y = \text{relu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
+Y = \text{Relu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
 ```
 
 ## Error conditions
@@ -46,7 +46,7 @@ No error condition.
 ## Inputs
 
 ### $\text{X}$: `real tensor`
-Argument of the **relu**.
+Argument of the **Relu**.
 
 #### Constraints
 
@@ -57,7 +57,7 @@ Argument of the **relu**.
 
 ### $\text{Y}$: `real tensor`
 
-Tensor $Y$ is the output of the **relu** applied to $X$.
+Tensor $Y$ is the output of the **Relu** applied to $X$.
 
 #### Constraints
 
@@ -66,7 +66,7 @@ Tensor $Y$ is the output of the **relu** applied to $X$.
 
 ## Attributes
 
-Operator **relu** has no attribute.
+Operator **Relu** has no attribute.
 
 ## Formal specification
  
@@ -74,32 +74,32 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **relu** does not introduce any numerical error. 
+Operator **Relu** does not introduce any numerical error. 
 
 
 <a id="float"></a>
-# **relu** (float)
-where float is in {FP16, FP32, FP64}
+# **Relu** (float)
+where float is in {float16, float, double}
 
 ## Signature
-$Y = \text{relu}(X)$
+$Y = \text{Relu}(X)$
 
 where:
 - $X$: input tensor
-- $Y$: result of the element-wise application of **relu** on $X$
+- $Y$: result of the element-wise application of **Relu** on $X$
 
 ## Restrictions
 
-The following restrictions apply to the **relu** operator for the SONNX profile:
+The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
+| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
 
 ## Informal specification
 
-Operator **relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
@@ -109,7 +109,7 @@ X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
 
 
 ```math
-Y = \text{relu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
+Y = \text{Relu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
 ```
 
 ## Error conditions
@@ -118,7 +118,7 @@ No error condition.
 ## Inputs
 
 ### $\text{X}$: `floating-point tensor`
-Argument of the **relu**.
+Argument of the **Relu**.
 
 #### Constraints
 
@@ -129,7 +129,7 @@ Argument of the **relu**.
 
 ### $\text{Y}$: `floating-point tensor`
 
-Tensor $Y$ is the output of the **relu** applied to $X$.
+Tensor $Y$ is the output of the **Relu** applied to $X$.
 
 #### Constraints
 
@@ -138,7 +138,7 @@ Tensor $Y$ is the output of the **relu** applied to $X$.
 
 ## Attributes
 
-Operator **relu** has no attribute.
+Operator **Relu** has no attribute.
 
 ## Formal specification
  
@@ -146,34 +146,34 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **relu** does not introduce any numerical error. 
+Operator **Relu** does not introduce any numerical error. 
 
 
 
 
 <a id="int"></a>
-# **relu** (int)
-where int is {INT8, INT16, INT32, INT64}
+# **Relu** (int)
+where int is {int8, int16, int32, int64}
 
 ## Signature
-$Y = \text{relu}(X)$
+$Y = \text{Relu}(X)$
 
 where:
 - $X$: input tensor
-- $Y$: result of the element-wise application of **relu** on $X$
+- $Y$: result of the element-wise application of **Relu** on $X$
 
 ## Restrictions
 
-The following restrictions apply to the **relu** operator for the SONNX profile:
+The following restrictions apply to the **Relu** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
+| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
 
 ## Informal specification
 
-Operator **relu** computes: $Y = \text{max}(0, X)$ where $\text{max}$ is ONNX **max** operator.
+Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
 
 ### Example 1
 
@@ -183,7 +183,7 @@ X = \begin{bmatrix} 6 & -9 & 35 \end{bmatrix}
 
 
 ```math
-Y = \text{relu}(X) = \begin{bmatrix} 6 & 0 & 35 \end{bmatrix}
+Y = \text{Relu}(X) = \begin{bmatrix} 6 & 0 & 35 \end{bmatrix}
 ```
 
 ## Error conditions
@@ -192,7 +192,7 @@ No error condition.
 ## Inputs
 
 ### $\text{X}$: `integer tensor`
-Argument of the **relu**.
+Argument of the **Relu**.
 
 #### Constraints
 
@@ -203,7 +203,7 @@ Argument of the **relu**.
 
 ### $\text{Y}$: `integer tensor`
 
-Tensor $Y$ is the output of the **relu** applied to $X$.
+Tensor $Y$ is the output of the **Relu** applied to $X$.
 
 #### Constraints
 
@@ -212,7 +212,7 @@ Tensor $Y$ is the output of the **relu** applied to $X$.
 
 ## Attributes
 
-Operator **relu** has no attribute.
+Operator **Relu** has no attribute.
 
 ## Formal specification
  
@@ -220,5 +220,5 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-Operator **relu** does not introduce any numerical error. 
+Operator **Relu** does not introduce any numerical error. 
 

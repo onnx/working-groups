@@ -27,10 +27,10 @@ if os.path.exists("generated_data.json"):
 Inputs/attributes details
 """
 inputs_attributes = {
-    "min_shape_size_input_x": 1,
-    "max_shape_size_input_x": 4,
-    "min_size_input_axis": 1,
-    "max_size_input_axis": 10
+    "min_shape_size_input_x": 0, # Adjust as needed
+    "max_shape_size_input_x": 4, # Adjust as needed
+    "min_size_input_axis": 1, # Dimension should always be positive (no zero dimensions)
+    "max_size_input_axis": 10 # Adjust as needed
 }
 
 """
@@ -70,57 +70,86 @@ Function to generate valid clip arguments
 @st.composite
 def valid_clip_args(draw):
 
-    # Generate input tensor shape
-    shape_size_input_tensor_x = draw(st.integers(
-        min_value=inputs_attributes["min_shape_size_input_x"],
-        max_value=inputs_attributes["max_shape_size_input_x"]))
+    #---------------------------------------------------
+    # Restrictions
+    #---------------------------------------------------
+    # X [C2] - Type Consistency
 
-    x_shape = []
-    # Generate each dimension of the input tensor shape
-    for _ in range(shape_size_input_tensor_x):
-        dim = draw(st.integers(
-            min_value=inputs_attributes["min_size_input_axis"],
-            max_value=inputs_attributes["max_size_input_axis"]))
-        x_shape.append(dim)
-
-    # Generate type of inputs tensors
-    dtype_name = draw(st.sampled_from(list(clip_types.keys())))
+    all_valid_types = list(clip_types.keys())
+    dtype_name = draw(st.sampled_from(all_valid_types))
     dtype = clip_types[dtype_name]
 
     if np.issubdtype(dtype, np.integer):
         min_value = np.iinfo(dtype).min
         max_value = np.iinfo(dtype).max
-        elements_strategy = st.integers(min_value=min_value, max_value=max_value)
+        a_numeric = st.integers(min_value=min_value, max_value=max_value)
     elif np.issubdtype(dtype, np.floating):
         min_value = np.finfo(dtype).min
         max_value = np.finfo(dtype).max
-        elements_strategy = st.floats(min_value=min_value, max_value=max_value)
+        a_numeric = st.floats(min_value=min_value, max_value=max_value)
     elif dtype == ml_dtypes.bfloat16:
         min_value = float(ml_dtypes.finfo(clip_types["BFLOAT16"]).min)
         max_value = float(ml_dtypes.finfo(clip_types["BFLOAT16"]).max)
-        elements_strategy = st.floats(min_value=min_value, max_value=max_value)
+        a_numeric = st.floats(min_value=min_value, max_value=max_value)
 
-    # Create inputs tensors
+    #---------------------------------------------------
+    # Input X
+    #---------------------------------------------------
+    
+    # shape_size_input_x is the number of dimensions of input tensor X
+    shape_size_input_x = draw(st.integers(
+        min_value=inputs_attributes["min_shape_size_input_x"],
+        max_value=inputs_attributes["max_shape_size_input_x"]))
+
+    # x_shape is the shape of input tensor X
+    x_shape = []
+    for _ in range(shape_size_input_x):
+        dim = draw(st.integers(
+            min_value=inputs_attributes["min_size_input_axis"],
+            max_value=inputs_attributes["max_size_input_axis"]))
+        x_shape.append(dim)
+
+    # Create input tensor X
     if dtype_name == "BFLOAT16":
         # X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=x_shape, elements=elements_strategy))
+        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=x_shape, elements=a_numeric))
         tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
         x = tf_tensor.numpy()
+    else:        
+        # X [C2]
+        x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=a_numeric))
+
+    #---------------------------------------------------
+    # Input L
+    #---------------------------------------------------
+
+    # Create input tensor L
+    if dtype_name == "BFLOAT16":
         # L [C1] -> X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=elements_strategy))
+        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=a_numeric))
         tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
         l = tf_tensor.numpy()
+    else:
+        # L [C1] -> X [C2]
+        l = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
+
+    #---------------------------------------------------
+    # Input M
+    #---------------------------------------------------
+
+    # Create input tensor M
+    if dtype_name == "BFLOAT16":
         # M [C1] -> X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=elements_strategy))
+        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=a_numeric))
         tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
         m = tf_tensor.numpy()
     else:
-        # X [C2]
-        x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=elements_strategy))
-        # L [C1] -> X [C2]
-        l = draw(hnp.arrays(dtype=dtype, shape=[], elements=elements_strategy))
         # M [C1] -> X [C2]
-        m = draw(hnp.arrays(dtype=dtype, shape=[], elements=elements_strategy))
+        m = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
+
+    #---------------------------------------------------
+    # Output Y
+    #---------------------------------------------------
 
     # Y [C1] -> X [C1]
     y_shape = x_shape
@@ -169,7 +198,7 @@ def teardown_module():
 
 def run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape):
     """
-    Function that runs the ONNX Concat operation
+    Function that runs the ONNX Clip operation
     """
 
     # Create inputs

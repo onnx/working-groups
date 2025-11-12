@@ -1,18 +1,20 @@
 # Contents
- - **mul** operator for type [real](#real)
- - **mul** operator for types [FP16, FP32, FP64](#float)
- - **mul** operator for types [INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64](#int)
+ - **Mul** operator for type [real](#real)
+ - **Mul** operator for types [float16, float, double](#float)
+ - **Mul** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
+
+Based on ONNX documentation version 14.
 
 ---
 
 <a id="real"></a>
-# **mul** (real, real)
+# **Mul** (real, real)
 
 ## Signature
 
 Definition of operator $\text{mul}$ signature:
 
-$Y = \text{mul}(A, B)$
+$Y = \text{Mul}(A, B)$
 
 where:
 - $A$: first operand of the multiplication  
@@ -22,17 +24,17 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **mul** operator for the SONNX profile:
+The following restrictions apply to the **Mul** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
 
 ## Informal specification
 
-Operator **mul** multiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of multiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **Mul** multiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of multiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -63,7 +65,7 @@ Y = A \times B = \begin{bmatrix} 12.2 & 28.5 & 142.8 \end{bmatrix}
 ---
 
 ## Error conditions
-No error condition
+No error condition.
 
 ## Inputs
 
@@ -100,7 +102,7 @@ Tensor $Y$ is the element-wise result of $A$ multiplied by $B$.
 
 ## Attributes
 
-The **mul** operator has no attribute.
+The **Mul** operator has no attribute.
 
 ## Formal specification
  
@@ -112,8 +114,8 @@ See Why3 specification.
 ---
 
 <a id="float"></a>
-# **mul** (float, float)
-where float is in {FP16, FP32, FP64}
+# **Mul** (float, float)
+where float is in {float16, float, double}
 
 ## Signature
 
@@ -128,19 +130,19 @@ where
  - $Y$: output tensor, result of element-wise multiplication of $A$ by $B$
  
 ## Restrictions
-The following restrictions apply to the **mul** operator for the SONNX profile:
+The following restrictions apply to the **Mul** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R3]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R3]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
  
 
 ## Informal specification
 
-Operator **mul** multiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+Operator **Mul** multiplies input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
 
 $$
 Y[i] = A[i] \times B[i]
@@ -192,7 +194,7 @@ Tensor $Y$ is the element-wise result of $A$ multiplied by $B$.
 
 ## Attributes
 
-The **mul** operator has no attribute.
+The **Mul** operator has no attribute.
 
  ## Formal specification
  See Why3 specification.
@@ -205,8 +207,8 @@ The **mul** operator has no attribute.
 
 <a id="int"></a>
 
-# **mul** (int, int)
-where int is in {INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64}
+# **Mul** (int, int)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}
 
 ## Signature
 Definition of operator $\text{mul}$ signature:
@@ -223,17 +225,17 @@ The following restrictions apply to the **Mul** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../general_restrictions.md))                                  |
+| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+| `[R2]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
 
 
 ## Informal specification
 
-Operator **mul** multiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of multiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/lexicon.md#tensor_index).
+Operator **Mul** multiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of multiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer multiplication is performed as follows (considering that all tensors have the same type):
 
-For unsigned values (type `UINTn`):
+For unsigned values (type `uintn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] \times B[i]- k.2^{n} & \quad \textrm{if }  A[i] \times B[i] > 2^{n}-1 
@@ -244,7 +246,7 @@ $$Y[i]=\left\{
 
 with $k \in N$ such that $0 \le A[i] \times B[i]- k.2^{n} < 2^n$
 
-For signed values (type `INTn`):
+For signed values (type `intn`):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] \times B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] \times B[i] > 2^{n-1}-1 \\
@@ -259,7 +261,7 @@ $k_1 \in N$ such that $xxx \le A[i] \times B[i]-k_1.2^{n} < 2^n$
 
 $k_2 \in N$ such that $xxx \le A[i] \times B[i]+k.2^{n} > -2^{n-1}$
 
-### Example 1 (1D UINT8 tensors)
+### Example 1 (1D uint8 tensors)
 
 ```math
 A = \begin{bmatrix} 6 & 9 & 35 \end{bmatrix}
@@ -270,7 +272,7 @@ B = \begin{bmatrix} 3 & 100 & 5 \end{bmatrix}
 Y = \begin{bmatrix} 18 & 132 & 175 \end{bmatrix}
 ```
 
-### Example 1 (1D INT8 tensors)
+### Example 1 (1D int8 tensors)
 
 ```math
 A = \begin{bmatrix} -6 & -9 & -9 & 9 \end{bmatrix}
@@ -321,7 +323,7 @@ Tensor $Y$ is the element-wise integer multiplication result.
 
 ## Attributes
 
-The **mul** operator has no attribute.
+The **Mul** operator has no attribute.
 
 ## Formal specification
 See Why3 specification.
