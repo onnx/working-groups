@@ -41,6 +41,8 @@ The following constraint applies to boardcasting:
 | -------- | ------- | ------- |
 | `C1` | $\forall m \in [1, N], \forall i \in [1, nY]$ either $dYm_i = dY_i$  or $dYm_i = 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
 
+Constraint `C1` indicates that, for each tensor and each dimension, considering a common number of dimensions, the value of a dimension is either equal to the maximum dimension among all tensors or equal to one.
+
 ### Functionality
 
 The description of the functionality relies on two relations:
