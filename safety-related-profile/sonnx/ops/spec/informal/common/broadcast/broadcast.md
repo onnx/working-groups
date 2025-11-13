@@ -24,6 +24,7 @@ When the number of dimensions is increased for a tensor:
 - the dimensions to be completed are those of lower indexes,
 - those dimensions are set to a dimension size equal to 1 and,
 - the indexes allowing access to the elements of the tensor are shifted consequently.
+
 When the dimension size is increased for a tensor:
 - the additional elements are equal to the elements with index 1 for this dimension.
 
