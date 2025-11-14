@@ -19,6 +19,9 @@ where
 https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
 
 ### Purpose
+
+Boroadcasting is the operation consisting in expanding the dimensions of a tensor to make its shape compatible the shape of the other arguments in an element-wise operation (e.g., Add , Mul , etc.).
+
 The purpose of the Broadcast is to produce a set of output tensors presenting a common shape, that is a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$. The objectives of the operation are:
 - to provide to all tensors a number of dimensions equal to the largest number of dimensions among the input tensors and
 - for each dimension to provide to all tensors a dimension size equal to the maximum of the dimension sizes of all the input tensors.
