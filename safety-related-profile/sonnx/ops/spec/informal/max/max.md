@@ -22,7 +22,7 @@ The following constraints apply to the `Max` operator for the SONNX profile:
 | Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
 | `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max |
-| `C2` | Numpy broadcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
+| `C2` | Broadcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
 
  ### Informal specification
 
