@@ -26,7 +26,7 @@ The following constraints apply to the `Max` operator for the SONNX profile:
 
  ### Informal specification
 
-The result tensor $Y$ depends on the broadcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, i.e. ($Z1$, ... , $ZN$) = Broadcast($X1$, ... , $XN$) cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dZ_j$.
+The result tensor $Y$ depends on the broadcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, i.e. ($Z1$, ... , $ZN$) = Broadcast($X1$, ... , $XN$) cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting, all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dZ_j$.
 
 The maximum is taken element wize among the elements of the different input tensors presenting identical indexes. The maximum shall comply with the mathematical definition of the function denoted $\max$. In consequence, denoting $Zm[i_1,...,i_{nZ}]$ and $Y[i_1,...,i_{nZ}]$ the elements, identified by indexes $i_1,...,i_{nZ}$, of respectively the $m$ th broadcasted input tensor $Zm$ and the output tensor $Y$, the following relation shall hold:
 
