@@ -32,7 +32,7 @@ The maximum is taken element wize among the elements of the different input tens
 
 $$\forall i_1 \in [1, dZ_1], ... \forall i_{nZ} \in [1, dZ_{nZ}] ~~~~ Y[i_1,...,i_{nZ}] = \max_{m \in [1, N] } Zm[i_1,...,i_{nZ}]$$
 
-Note that some types such as `bfloat16`, `double`, `float`, `float16` have special values that do not inherit naturaly the order defined on the real numbers (>) underlying the maximum function, i.e. Inf, 0+, 0-, NaN. For those values the following order shall be assumed when considering the maximum function:
+Note that some types such as `bfloat16`, `double`, `float`, `float16` have special values that do not inherit naturally the order defined on the real numbers (>) underlying the maximum function, i.e. Inf, 0+, 0-, NaN. For those values the following order shall be assumed when considering the maximum function:
 
 Inf > NaN > any positive number > 0+ > 0 > 0- > any negative number > -Inf. 
 
