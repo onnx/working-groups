@@ -12,8 +12,11 @@ where
 - ...
 - `XN`: last input tensor
 - `Y`: output tensor
+### Link to ONNX description
 
-#### Constraints
+https://onnx.ai/onnx/operators/onnx__Max.html
+
+### Constraints
 The following constraints apply to the `Max` operator for the SONNX profile:
 
 | Constraint    | Statement | Origin |
@@ -21,7 +24,7 @@ The following constraints apply to the `Max` operator for the SONNX profile:
 | `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max |
 | `C2` | Numpy broadcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
 
- #### Informal specification
+ ### Informal specification
 
 The result tensor $Y$ depends on the broadcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dZ_j$.
 
