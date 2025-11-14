@@ -128,8 +128,6 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-> Section to be verified...
-
 $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 ### Error Propagation
@@ -466,6 +464,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
