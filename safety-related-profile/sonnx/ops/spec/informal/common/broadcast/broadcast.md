@@ -90,7 +90,7 @@ Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors
 
 $$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
 
-That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ reated always the first element of $Ym$ in the $k$ th dimension.
+That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ related always to the first element of $Ym$ in the $k$ th dimension.
 
 ### Alternate functionality description
 
@@ -145,11 +145,11 @@ We define $dY_1$,... $dY_{nY}$ reciprocaly as $dY_1 = \max(dY1_1, dY2_1)$, ...  
 
 Then the relation between elements of boardcasted tensors $Z1,Z2$ and tensors with common number of dimensions $Y1,Y2$ are:
 
-$$\forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Z1[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
+$$\forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Z1[i_1,...i_{nY}] = Y1[f(i_1,dY1_1,dY_1),...f(i_{nY},dY1_{nY},dY_{nY})]$$
 
-$$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
+$$\forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Z2[i_1,...i_{nY}] = Y2[f(i_1,dY2_1,dY_1),...f(i_{nY},dY2_{nY},dY_{nY})]$$
 
-That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ reated always the first element of $Ym$ in the $k$ th dimension.
+That is when, for a given dimension of $dYm_k$ of a tensor $Ym$, with $m$ = 1 or 2, $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ related always to the first element of $Ym$ in the $k$ th dimension.
 
 
 
