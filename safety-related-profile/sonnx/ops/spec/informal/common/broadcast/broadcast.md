@@ -99,7 +99,7 @@ The Broadcast operator is commutative, i.e. given any permutation of tensors $\s
 $\sigma$(Z1, ..., ZN) = Broadcast($\sigma$(X1, ... , XN))
 
 In consequence the relations above can be described without loss of generality assuming that the input tensors are ordered by increasing number of dimensions.
-Moreover, it can be described recursivelly using only the binary broadcast operator Z1,Z2 = Broadcast(X1, X2):
+Moreover, they can be described recursivelly using only the binary broadcast operator Z1,Z2 = Broadcast(X1, X2):
 
 Z1, ..., ZN = Broadcast(Broadcast(X1, ... , XN-1),XN)
 
