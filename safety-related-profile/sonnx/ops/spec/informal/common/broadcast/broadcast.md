@@ -139,16 +139,13 @@ $$\forall i_1 \in [1,dY1_1]... \forall i_{nY} \in [1,dY1_{nY}] ~~~~~~~~ Y1[i_1,.
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
-This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target dimension size. This fonction is defined as:
+This relation relies on the function $f(.,.,.)$ described above assuming constraint `C1` holds.
 
-$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where:
-- $a$ is the current element,
-- $B$ is the dimension size, and
-- $C$ is the target dimension size.
+We define $dY_1$,... $dY_{nY}$ reciprocaly as $dY_1 = \max(dY1_1, dY2_1)$, ...  $dY_{nY} = \max(dY1_{nY}, dY1_{nY})$
 
-Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified.
+Then the relation between elements of boardcasted tensors $Z1,Z2$ and tensors with common number of dimensions $Y1,Y2$ are:
 
-Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors with common number of dimensions $Y1,...YN$ are:
+$$\forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Z1[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
 
 $$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
 
