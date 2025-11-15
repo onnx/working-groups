@@ -98,6 +98,19 @@ The Broadcast operator is commutative, i.e. given any permutation of tensors $\s
 
 $\sigma$(Z1, ..., ZN) = Broadcast($\sigma$(X1, ... , XN))
 
+Moreover, it can be described recursivelly:
+
+Z1, ..., ZN = Broadcast(Broadcast(X1, ... , XN-1),XN)
+
+Broadcast(X1, ... , XN-1) = Broadcast(Broadcast(X1, ... , XN-2),XN)
+
+...
+
+Broadcast(X1, X2, X3) = Broadcast(Broadcast(X1, X2), X3)
+
+
+
+
 
 
 
