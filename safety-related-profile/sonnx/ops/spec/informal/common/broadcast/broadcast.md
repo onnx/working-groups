@@ -94,9 +94,9 @@ That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_
 
 ### Alternate functionality description
 
-The Broadcast operator is commutative, i.e. given any permutation of tensors $\sigma(.)$:
+The Broadcast operator is commutative, i.e. given any permutation of tensors $\sigma$(.):
 
-$$ \sigma(Z1, ..., ZN) = Broadcast(\sigma(X1, ... , XN))$$
+$\sigma$(Z1, ..., ZN) = Broadcast($\sigma$(X1, ... , XN))
 
 
 
