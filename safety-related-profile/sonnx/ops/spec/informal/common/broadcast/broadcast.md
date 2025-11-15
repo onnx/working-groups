@@ -98,7 +98,7 @@ The Broadcast operator is commutative, i.e. given any permutation of tensors $\s
 
 $\sigma$(Z1, ..., ZN) = Broadcast($\sigma$(X1, ... , XN))
 
-Moreover, it can be described recursivelly:
+Moreover, it can be described recursivelly using only the binary broadcast operator Z1,Z2 = Broadcast(X1, X2):
 
 Z1, ..., ZN = Broadcast(Broadcast(X1, ... , XN-1),XN)
 
@@ -107,6 +107,46 @@ Broadcast(X1, ... , XN-1) = Broadcast(Broadcast(X1, ... , XN-2),XN)
 ...
 
 Broadcast(X1, X2, X3) = Broadcast(Broadcast(X1, X2), X3)
+
+In consequence the relations above can be described in a simpler way.
+
+#### Relation between input tensors and tensors with a common number of dimensions
+
+The common number of dimensions is the largest number of dimensions among the two input tensors:
+
+$$nY = \max (nX1, nX2)$$
+
+where $nXm$ is the number of dimensions of $Xm$ the $m$ th input tensor.
+
+The tensors with $nY > nXm$ have their dimensions completed adding dimensions of value 1 for the $nY - nXm$ first dimensions and shifting the other dimensions. That is:
+
+$\forall m \in [1,N] \forall i \in [1,nY] ~~~~~ dYm_i = 1$ if $i \leq nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
+
+Adressing of elements has to be shifted in consequence:
+
+$$\forall m \in [1,N] \forall i_1 \in [1,dXm_1]... \forall i_{nXm} \in [1,dXm_{nXm}] ~~~~~~~~ Ym[s,i_1,...i_{nXm}] = Xm[i_1,...i_{nXm}]$$
+
+where $s$ is a sequence of $nY - nXm$ ones, i.e. 1,...1. The relation can also be written without relying on the sequence $s$:
+
+$$\forall m \in [1,N] \forall i_1 \in [1,dYm_1]... \forall i_{nY} \in [1,dYm_{nY}] ~~~~~~~~ Ym[i_1,..., i_{nY-nXm+1}, ...i_{nY}] = Xm[i_{nY-nXm+1}, ...i_{nY}]$$
+
+#### Relation between tensors with a common number of dimensions and output tensors
+
+This relation relies on a function $f(.,.,.)$ providing the first element of a dimension when the dimension size is 1 and the current element of this dimension when the dimension size is equal to the target dimension size. This fonction is defined as:
+
+$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$ where:
+- $a$ is the current element,
+- $B$ is the dimension size, and
+- $C$ is the target dimension size.
+
+Note that assuming constraint `C1` holds, other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified.
+
+Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors with common number of dimensions $Y1,...YN$ are:
+
+$$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
+
+That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ reated always the first element of $Ym$ in the $k$ th dimension.
+
 
 
 
