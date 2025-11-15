@@ -49,7 +49,7 @@ The following constraint applies to boardcasting:
 
 Constraint `C1` indicates that, for each tensor and each dimension, considering a common number of dimensions, the value of a dimension is either equal to the maximum dimension among all tensors or equal to one.
 
-### Functionality
+### Functionality description
 
 The description of the functionality relies on two relations:
 - the relation between the input tensors and tensors with a common number of dimensions, and
@@ -90,6 +90,15 @@ Then the relation between elements of boardcasted tensors $Z1,...ZN$ and tensors
 
 $$\forall m \in [1, N], \forall i_1 \in [1, dY_1], ... \forall i_{nY} \in [1, dY_{nY}] ~~~~~~~ Zm[i_1,...i_{nY}] = Ym[f(i_1,dYm_1,dY_1),...f(i_{nY},dYm_{nY},dY_{nY})]$$
 
-That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ reated always the first element of $Ym$ in the $k$ th dimension. 
+That is when, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k = 1$,  $f(i_k,1,.)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ reated always the first element of $Ym$ in the $k$ th dimension.
+
+### Alternate functionality description
+
+The Broadcast operator is commutative, i.e. given any permutation of tensors $\sigma(.)$:
+
+$$ \sigma(Z1, ..., ZN) = Broadcast(\sigma(X1, ... , XN))$$
+
+
+
 
 
