@@ -141,7 +141,7 @@ $$\forall i_1 \in [1,dY1_1]... \forall i_{nY} \in [1,dY1_{nY}] ~~~~~~~~ Y1[i_1,.
 
 This relation relies on the function $f(.,.,.)$ described above assuming constraint `C1` holds.
 
-We define $dY_1$,... $dY_{nY}$ reciprocaly as $dY_1 = \max(dY1_1, dY2_1)$, ...  $dY_{nY} = \max(dY1_{nY}, dY1_{nY})$
+We define $dY_1$,... $dY_{nY}$ reciprocaly as $dY_1 = \max(dY1_1, dY2_1)$, ...  $dY_{nY} = \max(dY1_{nY}, dY2_{nY})$
 
 Then the relation between elements of boardcasted tensors $Z1,Z2$ and tensors with common number of dimensions $Y1,Y2$ are:
 
