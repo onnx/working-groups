@@ -121,15 +121,21 @@ where $nX1$ and $nX2$ are reciprocally the number of dimensions of $X1$ and $X2$
 
 If $nX1 < nY$, $X1$ has its dimensions completed adding dimensions of value 1 for the $nY - nX1$ first dimensions and shifting the other dimensions. That is:
 
-$\forall m \in [1,N] \forall i \in [1,nY] ~~~~~ dYm_i = 1$ if $i \leq nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
+$\forall i \in [1,nY] ~~~~~ dY1_i = 1$ if $i \leq nY - nX1$ and $dX1_{i-nY+nXm}$ otherwise.
 
-Adressing of elements has to be shifted in consequence:
+Adressing of elements of $X1$ has to be shifted in consequence:
 
-$$\forall m \in [1,N] \forall i_1 \in [1,dXm_1]... \forall i_{nXm} \in [1,dXm_{nXm}] ~~~~~~~~ Ym[s,i_1,...i_{nXm}] = Xm[i_1,...i_{nXm}]$$
+$$\forall i_1 \in [1,dX1_1]... \forall i_{nX1} \in [1,dX1_{nX1}] ~~~~~~~~ Y1[s,i_1,...i_{nX1}] = X1[i_1,...i_{nX1}]$$
 
-where $s$ is a sequence of $nY - nXm$ ones, i.e. 1,...1. The relation can also be written without relying on the sequence $s$:
+where $s$ is a sequence of $nY - nX1$ ones, i.e. 1,...1. The relation can also be written without relying on the sequence $s$:
 
-$$\forall m \in [1,N] \forall i_1 \in [1,dYm_1]... \forall i_{nY} \in [1,dYm_{nY}] ~~~~~~~~ Ym[i_1,..., i_{nY-nXm+1}, ...i_{nY}] = Xm[i_{nY-nXm+1}, ...i_{nY}]$$
+$$\forall i_1 \in [1,dY1_1]... \forall i_{nY} \in [1,dY1_{nY}] ~~~~~~~~ Y1[i_1,..., i_{nY-nX1+1}, ...i_{nY}] = X1[i_{nY-nX1+1}, ...i_{nY}]$$
+
+The dimensions and addressing of elements of $Y2$ are indentical to the ones of $X2$. That is:
+
+$\forall i \in [1,nY] ~~~~~ dY1_i = dX1_i$
+
+$$\forall i_1 \in [1,dY1_1]... \forall i_{nY} \in [1,dY1_{nY}] ~~~~~~~~ Y1[i_1,...i_{nY}] = X1[i_{1}, ...i_{nY}]$$
 
 #### Relation between tensors with a common number of dimensions and output tensors
 
