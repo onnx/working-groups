@@ -98,6 +98,7 @@ The Broadcast operator is commutative, i.e. given any permutation of tensors $\s
 
 $\sigma$(Z1, ..., ZN) = Broadcast($\sigma$(X1, ... , XN))
 
+In consequence the relations above can be described without loss of generality assuming that the input tensors are ordered by increasing number of dimensions.
 Moreover, it can be described recursivelly using only the binary broadcast operator Z1,Z2 = Broadcast(X1, X2):
 
 Z1, ..., ZN = Broadcast(Broadcast(X1, ... , XN-1),XN)
@@ -116,9 +117,9 @@ The common number of dimensions is the largest number of dimensions among the tw
 
 $$nY = \max (nX1, nX2)$$
 
-where $nX1$ and $nX2$ are reciprocally the number of dimensions of $X1$ and $X2$ input tensors. Because of commutativity, we can assume that the tensor with the lowest number of dimensions is $X1$, i.e. $nX1 \leq nX2$.
+where $nX1$ and $nX2$ are reciprocally the number of dimensions of $X1$ and $X2$ input tensors. Because of commutativity, we can assume that the tensor with the lowest number of dimensions is $X1$, i.e. $nX1 \leq nX2 = nY$.
 
-If $nY > nX1$, $X1$ has its dimensions completed adding dimensions of value 1 for the $nY - nXm$ first dimensions and shifting the other dimensions. That is:
+If $nX1 < nY$, $X1$ has its dimensions completed adding dimensions of value 1 for the $nY - nX1$ first dimensions and shifting the other dimensions. That is:
 
 $\forall m \in [1,N] \forall i \in [1,nY] ~~~~~ dYm_i = 1$ if $i \leq nY - nXm$ and $dXm_{i-nY+nXm}$ otherwise.
 
