@@ -1,3 +1,55 @@
+
+# 2025/11/19
+## Participants
+  - To be completed.
+## Agenda
+- Review of actions [Eric]
+- Presentation of Franck's approach on numerical accuracy [Franck]
+  - Guidelines for numerical accuracy specification
+- Status on broadcasting [Jean-Loup]
+- Back to the factorization of operators...
+- Fun facts
+  - The case of NaNs in Clip [Ricardo and Joao] 
+  - The case of empty tensors... [Ricardo and Joao] 
+- Management of work using github's "project management" [Eric] (see [here]())
+## Minutes
+  - To be completed.
+## Actions
+### New actions
+- From work session 
+  - [ ] Modify existing operator specifications to comply with new conventions.
+    - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
+  - [ ] (Eric) Create a side note about "empty tensors" (To be placed in "doc"). [project::[[SONNX]]] 
+  - [X] (Mariem) Give R&J a pointer to Why3 where NaN are handled.
+  - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
+  - [ ] (Jean-loup) Separate the spec of the pseudo op broadcasting and the max operator 
+  - [ ] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
+  - [ ] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
+  - [ ] (Eric) During next meeting ask participants if they know other issues similar to those raised by empty tensors.
+- [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+- [ ] (0511-2, Jean) Provide a first draft of the document about verification. 
+- [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
+- [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
+  - Eric :
+    > See ORT issue #15304 that was asking for the support of int32, uint32 for Clip. Solved by #15306, so ORT supports at least `uint32` and `int32`.       
+      > Seems to work on Google Collab:
+      - ![alt text](./attachments/image.png)
+  - Ricardo & João: 
+    > We found this, onnxruntime/docs/OperatorKernels.md at main · microsoft/onnxruntime. 
+    > And for CPUProvider the following types are not supported: INT16, UINT16,BFLOAT16. 
+    > We were following ONNX documentation Clip - ONNX 1.21.0 documentation and 
+    > we didn’t expect that some types are only supported by specific providers. 
+    > For example, int16 and uint16 are not supported by CPUProvider but are supported by DmlExecutionProvider.
+    > BFloat16 is said to be supported by ONNX, although we didn’t find any provider that does so.
+    > Apparently, this is no longer a doubt but we will have to check both these documentation to ensure that our provider(CPUProvider) supports the respective types. In this context the test generation will also depend on the provider being used
+
+### Past actions
+- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+  - First trial on something simpler than the conv (matrix multiplication).
+  - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
+  - A prototype tool is currently being developed. Possibly available in October (this is **not** a commitment).   
+  
+
 # 2025/11/05
 ## Participants
 Jean, Eric, Mariem, Ricardo, João, Jean-Loup, Franck, Dumitru, Henri, Jean-Baptiste, Mohammed.
@@ -21,19 +73,6 @@ Jean, Eric, Mariem, Ricardo, João, Jean-Loup, Franck, Dumitru, Henri, Jean-Bapt
   - [ ] (0511-2, Jean) Provide a first draft of the document about verification. 
   - [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
   - [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
-    - Eric :
-      > See ORT issue #15304 that was asking for the support of int32, uint32 for Clip. Solved by #15306, so ORT supports at least `uint32` and `int32`. 
-      
-      > Seems to work on Google Collab:
-      - ![alt text](./attachments/image.png)
-    - Ricardo & João: 
-      > We found this, onnxruntime/docs/OperatorKernels.md at main · microsoft/onnxruntime. 
-      > And for CPUProvider the following types are not supported: INT16, UINT16,BFLOAT16. 
-      > We were following ONNX documentation Clip - ONNX 1.21.0 documentation and 
-      > we didn’t expect that some types are only supported by specific providers. 
-      > For example, int16 and uint16 are not supported by CPUProvider but are supported by DmlExecutionProvider.
-      > BFloat16 is said to be supported by ONNX, although we didn’t find any provider that does so.
-      > Apparently, this is no longer a doubt but we will have to check both these documentation to ensure that our provider(CPUProvider) supports the respective types. In this context the test generation will also depend on the provider being used
 
 ### Past actions
 - [X] (2210-1, Mariem) Write a "readme.md" to explain the (new) organization of the repo (for the SONXX products) 

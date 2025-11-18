@@ -44,11 +44,15 @@ sonnx/
 └── graph
 ```
 ## Main content 
-- **Informal specification** [Link](ops/spec/informal/) 
-- **Formal specification** [Link](ops/spec/formal/) 
-- **Guidelines to informal and formal specification** [Link](ops/docs/guidelines/)
-- **Code and documentation generated from Why3** [Link](ops/code/)
-- **Why3 installation guide** [Link](ops/docs/installation/)
-- **Informal specification template** [Link](ops/spec/informal/common/template.md)
-- **Tensor library formal specification** [Link](ops/spec/formal/common/libs/tensor/)
-- **Tensor library documentation** [Link](ops/docs/tensor_lib/)
+- [Informal specification](ops/spec/informal/) 
+- [Formal specification](ops/spec/formal/) 
+- [Guidelines](ops/docs/guidelines/) 
+  - to [write informal specifications](./ops/docs/guidelines/informal.md)
+  - to write formal specifications (TBC)
+  - to write tests (TBC)
+  - [to manage the items's lifecycle](./ops/docs/guidelines/lifecycle.md)
+- [Code and documentation generated from Why3](ops/code/)
+- [Why3 installation guide](ops/docs/installation/)
+- [Informal specification template](ops/spec/informal/common/template.md)
+- [Tensor library formal specification](ops/spec/formal/common/libs/tensor/)
+- [Tensor library documentation](ops/docs/tensor_lib/)
