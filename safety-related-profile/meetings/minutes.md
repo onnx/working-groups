@@ -10,7 +10,7 @@
 - Back to the factorization of operators...
 - Fun facts
   - The case of NaNs in Clip [Ricardo and Joao] 
-  - The case of empty tensors... [Ricardo and Joao] 
+  - The case of empty tensors... [Ricardo and Joao] (see [here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
 - Management of work using github's "project management" [Eric] (see [here]())
 ## Minutes
   - To be completed.
@@ -19,7 +19,8 @@
 - From work session 
   - [ ] Modify existing operator specifications to comply with new conventions.
     - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
-  - [ ] (Eric) Create a side note about "empty tensors" (To be placed in "doc"). [project::[[SONNX]]] 
+  - [X] (Eric) Create a side note about "empty tensors" (To be placed in "doc"). [project::[[SONNX]]] 
+    - Not necessary: tensors are well-defind in the ONNX IR documentation ([here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
   - [X] (Mariem) Give R&J a pointer to Why3 where NaN are handled.
   - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
   - [ ] (Jean-loup) Separate the spec of the pseudo op broadcasting and the max operator 
