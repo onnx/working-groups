@@ -4,67 +4,36 @@
 ## `Max`  `(type on which an order is defined, i.e. bfloat16, double, float, float16, int16, int32, int64, int8, uint16, uint32, uint64, uint8)`
 
 ### Signature
-`Y = max(X^1, ... , X^N)`
+`Y = Max(X1, ... , XN)`
 where
 
 - `N`: 
-- `X^1`: first input tensor
+- `X1`: first input tensor
 - ...
-- `X^N`: last input tensor
+- `XN`: last input tensor
 - `Y`: output tensor
+### Link to ONNX description
 
-#### Restrictions
-The following restrictions apply to the `max` operator for the SONNX profile:
+https://onnx.ai/onnx/operators/onnx__Max.html
 
-| Restriction    | Statement | Origin |
+### Constraints
+The following constraints apply to the `Max` operator for the SONNX profile:
+
+| Constraint    | Statement | Origin |
 | -------- | ------- | ------- |
-| `R1` | `N` is an integer between 1 and 2147483647 | Transient |
-| `R2` | Numpy boardcasting rules shall be applicable to `Y`, `X^1`, ... , `X^N` | https://numpy.org/doc/stable/user/basics.broadcasting.html |
+| `C1` | `N` is an integer between 1 and 2147483647 | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max |
+| `C2` | Broadcasting rules shall be applicable to `Y`, `X1`, ... , `XN` | ONNX documentation: https://onnx.ai/onnx/operators/onnx__Max.html#l-onnx-doc-max and https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md |
 
- #### Informal specification
+ ### Informal specification
 
-The result tensor $Y$ is based on the boardcasted values $Z^1$, ... , $Z^N$ of the input tensors $X^1$, ... , $X^N$.
+The result tensor $Y$ depends on the broadcasted values $Z1$, ... , $ZN$ of the input tensors $X1$, ... , $XN$, i.e. ($Z1$, ... , $ZN$) = Broadcast($X1$, ... , $XN$) cf. https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md . Because of broadcasting, all $Zi$ for $i \in [1, N]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [1, nZ]$ the same number of elements $dZ_j$.
 
-Let, $I$, $J$, $K$, $L$... be the common boardcasted dimensions of all tensors, elements $y_{i,j,k,l...}$ of $Y$ shall comply with:
+The maximum is taken element wize among the elements of the different input tensors presenting identical indexes. The maximum shall comply with the mathematical definition of the function denoted $\max$. In consequence, denoting $Zm[i_1,...,i_{nZ}]$ and $Y[i_1,...,i_{nZ}]$ the elements, identified by indexes $i_1,...,i_{nZ}$, of respectively the $m$ th broadcasted input tensor $Zm$ and the output tensor $Y$, the following relation shall hold:
 
-$\forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... ~~~~ y_{i,j,k,l...} = \max_{n \in [1, N] } z^n_{i,j,k,l...}$
+$$\forall i_1 \in [1, dZ_1], ... \forall i_{nZ} \in [1, dZ_{nZ}] ~~~~ Y[i_1,...,i_{nZ}] = \max_{m \in [1, N] } Zm[i_1,...,i_{nZ}]$$
 
-where $z^n_{i,j,k,l...}$ is an element of $Z^n$.
+Note that some types such as `bfloat16`, `double`, `float`, `float16` have special values that do not inherit naturally the order defined on the real numbers (>) underlying the maximum function, i.e. Inf, 0+, 0-, NaN. For those values the following order shall be assumed when considering the maximum function:
 
-##### Numpy boardcasting
-$I$, $J$, $K$, $L$... are reciprocaly defined as $I = \max_{n \in [1, N] } I_n$, $J = \max_{n \in [1, N] } J_n$, $K = \max_{n \in [1, N] } K_n$, $L = \max_{n \in [1, N] } L_n$... where $I_n$, $J_n$, $K_n$, $L_n$... are the dimensions of the $n$ th input tensor.
-
-The following restrictions apply to the Numpy boardcasting:
-
-| Restriction    | Statement | Origin |
-| -------- | ------- | ------- |
-| `RI` | $\forall n \in [1, N]$ either $I_n = I$  or $I_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RJ` | $\forall n \in [1, N]$ either $J_n = J$  or $J_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RK` | $\forall n \in [1, N]$ either $K_n = K$  or $K_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| `RL` | $\forall n \in [1, N]$ either $L_n = L$  or $L_n = 1$| https://numpy.org/doc/stable/user/basics.broadcasting.html |
-| ...  | ... | ... |
-
-Assuming those restrictions hold, the relation between elements of boardcasted tensors and input tensors are:
-
-$\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... z^n_{i,j,k,l...} = x^n_{f(i,I_n,I),f(j,J_n,J),f(k,K_n,K),f(l,L_n,L)...}$
-
-Where $f(.,.,.)$ is a function such that:
-
-$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 1$ if $B=1$.
-
-Note that other cases, i.e. $B \neq C$ and $B \neq 1$, don't need to be specified because of restrictions `RI`, `RJ`, `RK`, `RL`... 
-
-#### Properties
-From the definition of the maximum we have two properties:
-
-$\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... ~~~~ y_{i,j,k,l...} \geq z^n_{i,j,k,l...}$
-
-$\forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... \exists n \in [1, N] ~~| ~~~~ y_{i,j,k,l...} = z^n_{i,j,k,l...}$
-
-The same properties written in function of unboardcasted inputs are:
-
-$\forall n \in [1, N], \forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... ~~~~ y_{i,j,k,l...} \geq x^n_{f(i,I_n,\max_{m \in [1, N] } I_m),f(j,J_n,\max_{m \in [1, N] } J_m),f(k,K_n,\max_{m \in [1, N] } K_m),f(l,L_n,\max_{m \in [1, N] } L_m)...}$
-
-$\forall i \in [1, I], \forall j \in [1, J], \forall k \in [1, K], \forall l \in [1, L]... \exists n \in [1, N] ~~| ~~~~ y_{i,j,k,l...} = x^n_{f(i,I_n,\max_{m \in [1, N] } I_m),f(j,J_n,\max_{m \in [1, N] } J_m),f(k,K_n,\max_{m \in [1, N] } K_m),f(l,L_n,\max_{m \in [1, N] } L_m)...}$
+NaN > Inf > any positive number > 0+ > 0 > 0- > any negative number > -Inf. 
 
 

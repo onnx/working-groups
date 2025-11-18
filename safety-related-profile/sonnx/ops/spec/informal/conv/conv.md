@@ -108,7 +108,7 @@ In the domain of real numbers, the operator has no error condition.
 
 Tensor `X` is the input tensor on which convolution with kernel `W` is computed.
 
-The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
+<a id="T1"></a> <b><span style="font-family: 'Courier New', monospace">[T1]</span></b> The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
 - $dX_0$ is the batch size of input `X`.
 - $dX_1$ is the number of data channels of input `X`.
 - $dX_2$ and $dX_3$ are the sizes of the input for the two spatial axes (height and width).
@@ -118,9 +118,9 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
 - `C1`: Number of spatial axes of tensor `X`
     - Statement: The number of spatial axes of tensor `X` is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profule.
-- `C2`: <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W`
+- <a id="T13"></a> <b><span style="font-family: 'Courier New', monospace">[T13]</span></b> `C2`: <a name="channel_consist"></a> Consistency between the number of channels of `X` and `W`
     - Statement:  $dW_1=\frac{dX_1}{group}$
-- `C3`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
+- <a id="T2"></a> <b><span style="font-family: 'Courier New', monospace">[T2]</span></b> `C3`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `W`, `Y` and attributes `pads`, `dilations` and `strides`
     <span id="it:shape_consist" label="it:shape_consist"></span>  
     - Statement: 
        *  $$\left\lfloor{\frac{alpha-((dilations[0] \cdot dW_2-1)+1)}{strides[0]}} \right\rfloor +1 = dY_2 \mbox{ with }  alpha=dX_2+pads[0]+pads[2]$$
@@ -137,7 +137,7 @@ The shape of tensor `X` is $(dX_0 , dX_1 , dX_2 , dX_3)$, where
 
 Tensor `W` is the convolution kernel.
 
-The shape of tensor `W` is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
+<a id="T3"></a> <b><span style="font-family: 'Courier New', monospace">[T3]</span></b> The shape of tensor `W` is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
 - $dW_0$ is the number of output channels or number of feature maps
 - $dW_1$ is the number of input channels
 - $dW_2$ and $dW_3$ are the sizes of the kernel for the two spatial axes.
@@ -160,10 +160,10 @@ The shape of tensor `W` is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
 
 Tensor `B` is the bias. 
 
-The shape of tensor `B` is $dB_0$.
+<a id="T4"></a> <b><span style="font-family: 'Courier New', monospace">[T4]</span></b> The shape of tensor `B` is $dB_0$.
 
 ###### Constraints
-- `C1`: Consistency between the number of channels of `B` and `W`
+- <a id="T5"></a> <b><span style="font-family: 'Courier New', monospace">[T5]</span></b> `C1`: Consistency between the number of channels of `B` and `W`
     - Statement:  $dB_0 = dW_0$.
 
 #### Attributes
@@ -179,7 +179,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 <img src="./imgs/conv_stride3.png" width="300" />
 
 ###### Constraints
-- `C1`: Value domain
+- <a id="T6"></a> <b><span style="font-family: 'Courier New', monospace">[T6]</span></b> `C1`: Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
 - `C2`: Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`
@@ -202,17 +202,17 @@ Attribute `pads` determines the padding at the beginning and end along each spat
 
 `pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements (possibly zero) added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
 
-The padding value is 0.
+<a id="T7"></a> <b><span style="font-family: 'Courier New', monospace">[T7]</span></b> The padding value is 0.
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
 <img src="./imgs/conv_pad2.png" width="300" />
 
 ###### Constraints
-- `C1`: Value domain
+- <a id="T8"></a> <b><span style="font-family: 'Courier New', monospace">[T8]</span></b> `C1`: Value domain
     - Statement: `pads` is a list of positive or null integers.
     - Rationale: A padding value gives a *number of elements* to be added to some spatial axis.
-- `C2`: Consistency between the shape of `X` and the length of `pads`
+- <a id="T9"></a> <b><span style="font-family: 'Courier New', monospace">[T9]</span></b> `C2`: Consistency between the shape of `X` and the length of `pads`
     - Statement: The length of the `pads` list is two times the number of spatial axes of `X`
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
 - `C3`: Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`  
@@ -222,7 +222,7 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 
 Attribute `dilations` specifies the spacing between the kernel elements for each spatial axis of the filter `W`. The ith value in the list gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel elements are spaced out by the dilation factor for that axis. 
 
-The value of the elements introduced by the dilation is 0.
+<a id="T10"></a> <b><span style="font-family: 'Courier New', monospace">[T10]</span></b> The value of the elements introduced by the dilation is 0.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure. In this example, `dilations`=(2,2). 
 
@@ -230,7 +230,7 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 
 
 ###### Constraints
-- `C1`: Value domain
+- <a id="T11"></a> <b><span style="font-family: 'Courier New', monospace">[T11]</span></b>`C1`: Value domain
     - Statement: `dilations` is a list of strictly positive integers
     - Rationale: The dilation is a *factor of expansion* along a certain axis. 
 - `C2`: Relation between `dilations` and `W` 
@@ -280,7 +280,7 @@ This parameter specifies the shape of the convolution kernel `W`.
 
 ##### `Y` : tensor of real
 
-The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
+<a id="T12"></a> <b><span style="font-family: 'Courier New', monospace">[T12]</span></b> The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - $dY_0$ is the number of batches
 - $dY_1$ is the number of channels
 - $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes

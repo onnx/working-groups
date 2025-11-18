@@ -1,17 +1,17 @@
 # Contents
 
-- **div** operator for type [real](#real)
-- **div** operator for types [FP16, FP32, FP64](#float)
-- **div** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64](#int)
+- **Div** operator for type [real](#real)
+- **Div** operator for types [float16, float, double](#float)
+- **Div** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
 Based on ONNX documentation version 14.
 
 <a id="real"></a>
-# **div** (real, real)
+# **Div** (real, real)
 
 ## Signature
-Definition of operator $\text{div}$ signature:
-$Y = \text{div}(A, B)$
+Definition of operator $\text{Div}$ signature:
+$Y = \text{Div}(A, B)$
 
 where:
 - $A$: numerator
@@ -21,7 +21,7 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **div** operator for the SONNX profile:
+The following restrictions apply to the **Div** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -30,7 +30,7 @@ The following restrictions apply to the **div** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 For any index $i$,
 
@@ -120,15 +120,13 @@ Tensor $Y$ is the element-wise result of the division of $A$ by $B$.
 
 ## Attributes
 
-Operator $\text{div}$ has no attribute.
+Operator $\text{Div}$ has no attribute.
 
 ## Formal specification
  
 See the Why3 specification.
 
 ## Numerical Accuracy
-
-> Section to be verified...
 
 $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
@@ -178,12 +176,12 @@ for (auto I : A.indexes()) {
 ```
 
 <a id="float"></a>
-# **div** (float, float)
-where float is in {FP16, FP32, FP64}
+# **Div** (float, float)
+where float is in {float16, float, double}
 
 # Signature
-Definition of operator $\text{div}$ signature:
-$Y = \text{div}(A, B)$
+Definition of operator $\text{Div}$ signature:
+$Y = \text{Div}(A, B)$
 
 where
 
@@ -192,7 +190,7 @@ where
  - $Y$: result of element-wise division of $A$ by $B$
  
 ## Restrictions
-The following restrictions apply to the **div** operator for the SONNX profile:
+The following restrictions apply to the **Div** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -202,7 +200,7 @@ The following restrictions apply to the **div** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$
+Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$
 For any index $i$,
 
 $$
@@ -279,7 +277,7 @@ Result of the element-wise division of $A$ by $B$.
 
 #### Attributes
 
-Operator **div** has no attribute.
+Operator **Div** has no attribute.
 
 ## Formal specification
  See Why3 specification.
@@ -329,12 +327,12 @@ for (auto i : A.indexes()) {
 
 <a id="int"></a>
 
-# **div** (int, int)
-where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}.
+# **Div** (int, int)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
-Definition of operator $\text{div}$ signature:
- $Y = \text{div}(A,B)$
+Definition of operator $\text{Div}$ signature:
+ $Y = \text{Div}(A,B)$
 
  where
  - $A$: numerator
@@ -342,7 +340,7 @@ Definition of operator $\text{div}$ signature:
  - $Y$: result of the element-wise division of $A$ by $B$
 
 ### Restrictions
-The following restrictions apply to the **div** operator for the SONNX profile:
+The following restrictions apply to the **Div** operator for the SONNX profile:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -352,7 +350,7 @@ The following restrictions apply to the **div** operator for the SONNX profile:
 
 #### Informal specification
 
-Operator **div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. 
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. 
 
 The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded. If the quotient $A[i]/B[i]$ is representable, the expression $(A[i]/B[i])\times B[i] + A[i] \mod B[i]$ shall equal $A[i]$.
 
@@ -423,7 +421,7 @@ Result of the element-wise division of $A$ by $B$.
 
 ## Attributes
 
-Operator **div** has no attribute.
+Operator **Div** has no attribute.
 
 ## Formal specification
  See Why3 specification.
@@ -466,6 +464,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
