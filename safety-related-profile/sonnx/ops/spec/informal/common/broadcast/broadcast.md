@@ -1,38 +1,43 @@
-# `broadcast` operator or functionality embeeded in another operator
+# `broadcast` pseudo-operator
+
 ### Contents
 - `Broadcast` operator or functionality for any type.
 ## `Broadcast`  `(anytype)`
 
-### Signature
-`Z1, ..., ZN = Broadcast(X1, ... , XN)`
-where
+> Expliciter la liste des types.
 
-- `N`: The number of input tensors
-- `X1`: first input tensor
-- ...
-- `XN`: last input tensor
-- `Z1`: first output tensor
-- ...
-- `ZN`: last ouput tensor
+### Signature
+$Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
+
+where
+- L $\in [0, 2^{31}-1[$
+- $X0$, ... ,$XL$ input tensors  
+- $Z0$, ... ,$ZL$ output tensors 
+
 ### Link to ONNX description
 
 https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
 
 ### Purpose
 
-Boroadcasting is the operation consisting in expanding the dimensions of a tensor to make its shape compatible the shape of the other arguments in an element-wise operation (e.g., Add , Mul , etc.).
+Broadcasting is the operation consisting in expanding the dimensions of a tensor to make its shape compatible the shape of the other arguments in an element-wise operation (e.g., **Add** , **Mul** , etc.).
 
-The purpose of the Broadcast is to produce a set of output tensors presenting a common shape, that is a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$. The objectives of the operation are:
-- to provide to all tensors a number of dimensions equal to the largest number of dimensions among the input tensors and
-- for each dimension to provide to all tensors a dimension size equal to the maximum of the dimension sizes of all the input tensors.
+Two shapes are compatible iff they have a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$. 
+
+The common number of dimension is the largest number of dimensions among the input tensors.
+
+The common size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension.
 
 When the number of dimensions is increased for a tensor:
 - the dimensions to be completed are those of lower indexes,
-- those dimensions are set to a dimension size equal to 1 and,
+- those dimensions are set to a size equal to 1 and,
 - the indexes allowing access to the elements of the tensor are shifted consequently.
 
 When the dimension size is increased for a tensor:
 - the additional elements are equal to the elements with index 1 for this dimension.
+
+
+> Faire un schema.
 
 ### Notations
 Let's note the tensors with already a common number of dimensions, $nY$, but with still different dimension sizes $Y1$, ... $YN$.
