@@ -34,7 +34,7 @@ The following restrictions apply to the **Add** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The definition of the operator is given hereafter.
 
@@ -330,6 +330,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
