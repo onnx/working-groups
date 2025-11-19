@@ -4,14 +4,15 @@
   - To be completed.
 ## Agenda
 - Review of actions [Eric]
-- Presentation of Franck's approach on numerical accuracy [Franck]
-  - Guidelines for numerical accuracy specification
+- Review process [Jean]
 - Status on broadcasting [Jean-Loup]
 - Back to the factorization of operators...
 - Fun facts
   - The case of NaNs in Clip [Ricardo and Joao] 
   - The case of empty tensors... [Ricardo and Joao] (see [here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
 - Management of work using github's "project management" [Eric] (see [here]())
+- Presentation of Franck's approach on numerical accuracy [Franck] (>16:30)
+  - Guidelines for numerical accuracy specification
 ## Minutes
   - To be completed.
 ## Actions
