@@ -3,7 +3,7 @@
 
 Based on ONNX documentation version 14.
 <a id="any"></a>
-# **Broadcast**  (anytype, anytype, anytype)
+# **Broadcast**  (anytype, anytype, anytype...)
 
 > Expliciter la liste des types.
 
