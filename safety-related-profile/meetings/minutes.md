@@ -1,7 +1,7 @@
 
 # 2025/11/19
 ## Participants
-  - To be completed.
+  - Eric, Edoardo, Franck, Ricardo Silva, João Machado, Henri, Mariem, Jean-Loup, Mohammed, Jean, Andreas
 ## Agenda
 - Review of actions [Eric]
 - Presentation of Franck's approach on numerical accuracy [Franck]
@@ -11,22 +11,33 @@
 - Fun facts
   - The case of NaNs in Clip [Ricardo and Joao] 
   - The case of empty tensors... [Ricardo and Joao] (see [here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
-- Management of work using github's "project management" [Eric] (see [here]())
+- Management of work using github's "project management" [Eric] (see [here](../sonnx/ops/docs/guidelines/lifecycle.md))
 ## Minutes
-  - To be completed.
+  - All the above items minus "broadcasting" and "fun facts" and (to be addressed during next meeting).
+  - Jean's slides can be found [here](./slides/2025-11-20-Jean-verification-plan.pdf)
+  - Franck's slides can be found [there](./slides/2025-11-20-Franck-numerical-accuracy.pdf)
+  - In order to involve more people, we also have to provide more guidelines. This includes (procedure + example)
+    - Guidelines on test using 
+    - Guidelines on formal specification and proof
+    - Guidelines on specifying numerical errors 
+      - Franck's slides already provide a good example 
 ## Actions
 ### New actions
+- [ ](1911-1, Jean) Put the contents of the [presented slides]() into some nice markdown file to be put in [guidelines area](../sonnx/ops/docs/guidelines/)
+- [ ](1911-2, All) Review Jean's proposal (see above)
+### Previous actions
 - From work session 
   - [ ] Modify existing operator specifications to comply with new conventions.
     - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
-  - [X] (Eric) Create a side note about "empty tensors" (To be placed in "doc"). [project::[[SONNX]]] 
-    - Not necessary: tensors are well-defind in the ONNX IR documentation ([here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
+  - [X] (Eric) Create a side note about "empty tensors" (To be placed in "doc"). 
+    - Not necessary: tensors (including scalar and empty tensors) are well-defined in the ONNX IR documentation ([here](https://onnx.ai/onnx/repo-docs/IR.html#tensor-definition))
   - [X] (Mariem) Give R&J a pointer to Why3 where NaN are handled.
   - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
-  - [ ] (Jean-loup) Separate the spec of the pseudo op broadcasting and the max operator 
-  - [ ] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
+  - [X] (Jean-loup) Separate the spec of the pseudo op broadcasting and the max operator 
+  - [X] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
+    - See this [note](../sonnx/ops/docs/guidelines/lifecycle.md)
   - [ ] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
-  - [ ] (Eric) During next meeting ask participants if they know other issues similar to those raised by empty tensors.
+  - [ ] (Eric) During next meeting ask participants if they know other issues similar to those raised by empty tensors...
 - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
 - [ ] (0511-2, Jean) Provide a first draft of the document about verification. 
 - [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
