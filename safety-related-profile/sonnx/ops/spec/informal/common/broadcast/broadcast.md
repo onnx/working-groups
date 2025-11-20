@@ -33,30 +33,18 @@ The shape of a $Zi$ satisfies two conditions.
 
 *Condition 1*: the number of dimensions is the largest number of dimensions among all the input tensors. When the number of dimensions is increased for a tensor:
 - the dimensions to be completed are those of lower indexes,
-- those dimensions are set to a size equal to 1.
+- those dimensions are set to a size equal to 1, and
+- the access to the tensor data remains possible.
 
-*Condition 2*: the size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion.
+*Condition 2*: the size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. When a dimension size of an output tensor is larger than the corresponding dimension size of the corresponding input tensor the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor.
 
 > Schema à rajouter
 
+The operation can be described in two steps:
+- Step 1: make tensors with the same number of dimensions to ensure condition 1
+- Step 2: make the tensor dimension sizes equal to ensure condition 2
 
-The common number of dimension is the largest number of dimensions among the input tensors.
-
-The common size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension.
-
-When the number of dimensions is increased for a tensor:
-- the dimensions to be completed are those of lower indexes,
-- those dimensions are set to a size equal to 1 and,
-- the indexes allowing access to the elements of the tensor are shifted consequently.
-
-When the dimension size is increased for a tensor:
-- the additional elements are equal to the elements with index 1 for this dimension.
-
-
-> Faire un schema.
-
-### Notations
-Let's note the tensors with already a common number of dimensions, $nY$, but with still different dimension sizes $Y1$, ... $YN$.
+Let us note $Y0$, ... $YL$ the tensors obtained after step 1, with a common number of dimensions $nY$ but with still different dimension sizes.
 
 ### Constraints
 
