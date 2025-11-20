@@ -3,9 +3,9 @@
 
 Based on ONNX documentation version 14.
 <a id="any"></a>
-# **Broadcast**  (anytype, anytype, anytype...)
+# **Broadcast**  (type, type, type...)
 
-> Expliciter la liste des types.
+where type is in {real, float16, float, double, int8, int16, int32, int64, uint8, uint16, uint32, uint64, string, boolean}.
 
 ### Signature
 $Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
