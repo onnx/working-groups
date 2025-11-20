@@ -11,7 +11,7 @@ where type is in {real, float16, float, double, int8, int16, int32, int64, uint8
 Definition of functionality $\text{Broadcast}$ signature: $Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
 
 where
-- $L \in [0, 2^{31}-1[$: number of tensors to be broadcasted
+- $L \in [0, 2^{31}-1[$: number of tensors to be broadcasted minus one
 - $X0$, ... , $XL$: tensors to be broadcasted
 - $Z0$, ... , $ZL$: broadcasted tensors 
 
