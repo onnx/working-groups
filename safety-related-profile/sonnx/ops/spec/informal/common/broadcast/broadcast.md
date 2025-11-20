@@ -56,6 +56,10 @@ where $nXm$ is the number of dimensions of $Xm$ the $m^{\text{th}}$ input tensor
 
 The tensors with $nY > nXm$ have their dimensions prepended  with $nY - nXm$ times 1. That is:
 
+$$\forall m \in [0,L] \forall i \in [0,nY-1] ~~~~~ dYm_i = 1 \text{if} i \leq nY - nXm, dXm_{i-nY+nXm} \text{otherwise}$$
+
+https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md
+
 ### Constraints
 
 $dY_1$, ... $dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dYm_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
