@@ -30,7 +30,7 @@ The following restrictions apply to the **Div** operator for the SONNX profile:
 
 ## Informal specification
 
-Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index]([../common/definitions.md](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md)#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md)#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 For any index $i$,
 
@@ -464,6 +464,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
