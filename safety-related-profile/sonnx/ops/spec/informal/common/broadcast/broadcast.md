@@ -46,6 +46,16 @@ The operation can be described in two steps:
 
 Let us note $Y0$, ... $YL$ the tensors obtained after step 1, with a common number of dimensions $nY$ but with still different dimension sizes.
 
+### Description of step 1
+
+The common number of dimensions is the largest number of dimensions among the input tensors:
+
+$$nY = \max_{m \in [0, L]} nXm$$
+
+where $nXm$ is the number of dimensions of $Xm$ the $m^{\text{th}}$ input tensor.
+
+The tensors with $nY > nXm$ have their dimensions prepended  with $nY - nXm$ times 1. That is:
+
 ### Constraints
 
 $dY_1$, ... $dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dYm_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
