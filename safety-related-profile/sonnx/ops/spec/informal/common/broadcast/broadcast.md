@@ -12,8 +12,8 @@ Definition of functionality $\text{Broadcast}$ signature: $Z0, ..., ZL = \text{B
 
 where
 - $L \in [0, 2^{31}-1[$: number of tensors to be broadcasted
-- $X0$, ... ,$XL$: tensors to be broadcasted
-- $Z0$, ... ,$ZL$: broadcasted tensors 
+- $X0$, ... , $XL$: tensors to be broadcasted
+- $Z0$, ... , $ZL$: broadcasted tensors 
 
 ## Link to ONNX description
 
