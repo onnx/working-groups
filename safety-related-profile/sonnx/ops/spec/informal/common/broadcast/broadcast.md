@@ -7,7 +7,7 @@ Based on ONNX documentation version 14.
 
 where type is in {real, float16, float, double, int8, int16, int32, int64, uint8, uint16, uint32, uint64, string, boolean}.
 
-### Signature
+# Signature
 $Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
 
 where
