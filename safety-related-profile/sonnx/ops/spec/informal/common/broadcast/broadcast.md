@@ -27,7 +27,13 @@ No restriction.
 
 The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes.
 
-Broadcasting is the operation consisting in expanding the dimensions of a tensor to make its shape compatible the shape of the other arguments in an element-wise operation (e.g., **Add** , **Mul** , etc.).
+Broadcasting consists in producing a set of tensors with the same shape. Each produced tensor $Zi$ contains elements from $Xi$ repeated as necessary.
+
+The shape of a $Zi$ satisfies two conditions.
+
+*Condition 1*: the number of dimensions is the largest number of dimensions among all the $Xj$. When the number of dimensions is increased for a tensor:
+- the dimensions to be completed are those of lower indexes,
+- those dimensions are set to a size equal to 1
 
 Two shapes are compatible iff they have a common number of dimensions $nZ$ and for each dimension $i$ a common size $dZ_i$. 
 
