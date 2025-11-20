@@ -7,7 +7,7 @@ Based on ONNX documentation version 14.
 
 where type is in {real, float16, float, double, int8, int16, int32, int64, uint8, uint16, uint32, uint64, string, boolean}.
 
-# Signature
+## Signature
 Definition of functionality $\text{Broadcast}$ signature: $Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
 
 where
@@ -15,9 +15,13 @@ where
 - $X0$, ... ,$XL$: tensors to be broadcasted
 - $Z0$, ... ,$ZL$: broadcasted tensors 
 
-### Link to ONNX description
+## Link to ONNX description
 
 https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
+
+## Restrictions
+
+No restriction.
 
 ### Purpose
 
