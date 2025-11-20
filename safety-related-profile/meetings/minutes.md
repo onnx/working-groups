@@ -4,8 +4,7 @@
   - Eric, Edoardo, Franck, Ricardo Silva, João Machado, Henri, Mariem, Jean-Loup, Mohammed, Jean, Andreas
 ## Agenda
 - Review of actions [Eric]
-- Presentation of Franck's approach on numerical accuracy [Franck]
-  - Guidelines for numerical accuracy specification
+- Review process [Jean]
 - Status on broadcasting [Jean-Loup]
 - Back to the factorization of operators...
 - Fun facts
