@@ -23,7 +23,9 @@ https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
 
 No restriction.
 
-### Purpose
+## Informal specification
+
+The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes.
 
 Broadcasting is the operation consisting in expanding the dimensions of a tensor to make its shape compatible the shape of the other arguments in an element-wise operation (e.g., **Add** , **Mul** , etc.).
 
