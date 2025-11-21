@@ -115,16 +115,14 @@ For each tensor and each dimension, considering a common number of dimensions, t
 
 ## Inputs
 
-### $\text{Xi}$: XXXX
-XXXX
+### Xm m \in [0,L]$: 'type tensor'
+$L-1$ input tensors with possibly different shapes
 
 #### Constraints
 
  - `[C1]` <a id="C1ra"></a> XXXXX
    - Statement: XXXX
  
-
-
 ## Outputs
 
 ### $\text{Z}$: XXXX
