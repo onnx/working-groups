@@ -99,6 +99,10 @@ $$Zm[i]=Ym[i']$$
 
 with: 
 
+$$i=i_0,...i_{nY-1}$$
+
+$$i'=f(i_0,dYm_0,dY_0),...f(i_{nY-1},dYm_{nY-1},dY_{nY-1})$$
+
 ### Constraints
 
 
