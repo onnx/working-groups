@@ -62,6 +62,11 @@ Concerning the access to data through [tensor index](https://github.com/ericjenn
 
 $$Ym[i]=Xm[i']$$
 
+with $i$ defined from $i'$:
+
+$$i=(1,...,1,i')
+     nY-nXm$$
+
 ### Constraints
 
 $dY_1$, ... $dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dYm_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
