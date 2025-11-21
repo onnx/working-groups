@@ -103,17 +103,15 @@ $$i=i_0,...i_{nY-1}$$
 
 $$i'=f(i_0,dYm_0,dY_0),...f(i_{nY-1},dYm_{nY-1},dY_{nY-1})$$
 
-### Constraints
+## Error conditions
 
+The following error condition applies to boardcasting:
 
-
-The following constraint applies to boardcasting:
-
-| Constraint    | Statement | Origin |
+| Error    | Statement | Origin |
 | -------- | ------- | ------- |
-| `C1` | $\forall m \in [1, N], \forall i \in [1, nY]$ either $dYm_i = dY_i$  or $dYm_i = 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
+| `E1` | $\exists m \in [0, L], \exists i \in [0, nY-1]$ such that $dYm_i \neq dY_i$  and $dYm_i \neq 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
 
-Constraint `C1` indicates that, for each tensor and each dimension, considering a common number of dimensions, the value of a dimension is either equal to the maximum dimension among all tensors or equal to one.
+For each tensor and each dimension, considering a common number of dimensions, the value of a dimension shall either equal to the maximum dimension among all tensors or equal to one. If not, Error `E1` occurs.
 
 ### Functionality description
 
