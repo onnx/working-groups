@@ -107,6 +107,10 @@ $$i=i_0,...i_{nY-1}$$
 
 $$i'=f(i_0,dYm_0,dY_0),...f(i_{nY-1},dYm_{nY-1},dY_{nY-1})$$
 
+The figure bellow presents for the example of the figure above, the way the function $f(.,.,.) allows to link elements of $Z0$ and $Z1$ with respectively elements of $Y0$ and $Y1$.
+
+<img src="assets/imgs/f.png" alt="drawing" width="100%"/>
+
 ## Error conditions
 
 The following error condition applies to boardcasting:
