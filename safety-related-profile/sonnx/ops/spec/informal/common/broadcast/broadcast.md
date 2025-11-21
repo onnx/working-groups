@@ -65,7 +65,7 @@ $$Ym[i]=Xm[i']$$
 with $i$ defined from $i'$:
 
 $$i=(1,...,1,i')
-     nY-nXm$$
+    \atop nY-nXm$$
 
 ### Constraints
 
