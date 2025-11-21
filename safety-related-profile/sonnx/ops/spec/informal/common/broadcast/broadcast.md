@@ -38,7 +38,7 @@ The shape of a $Zi$ satisfies two conditions.
 
 *Condition 2*: the size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. When a dimension size of an output tensor is larger than the corresponding dimension size of the corresponding input tensor the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor.
 
-<img src="assets/imgs/broadcast.png" alt="drawing" width="100%"/>
+<img src="assets/imgs/Broadcast.png" alt="drawing" width="100%"/>
 
 The operation can be described in two steps:
 - Step 1: make tensors with the same number of dimensions to ensure condition 1
