@@ -78,7 +78,9 @@ In order to define the output we have to set each dimension to its maximum among
 
 #### Seting each dimension to its maximum
 
-The maxima of dimensions $dY_0$, ... $dY_{nY-1}$ are reciprocaly defined as $dY_0 = \max_{m \in [0, L] } dYm_0$, ...  $dY_{nY-1} = \max_{m \in [0, L] } dYm_{nY-1}$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of $Ym$.
+The maxima of dimensions $dY_0$, ... $dY_{nY-1}$ are reciprocaly defined as $dY_0 = \max_{m \in [0, L] } dYm_0$, ...  $dY_{nY-1} = \max_{m \in [0, L] } dYm_{nY-1}$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of $Ym$. We have:
+
+$$\forall m \in [0,L] \forall i \in [0,nZm-1] ~~~~~ dZm_i = dY_i$$
 
 #### Access to data
 
