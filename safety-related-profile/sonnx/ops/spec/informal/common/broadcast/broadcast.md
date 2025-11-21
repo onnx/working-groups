@@ -125,14 +125,14 @@ $L-1$ input tensors with possibly different shapes.
  
 ## Outputs
 
-### $\text{Z}$: XXXX
+### $Zm$ for $m \in [0,L]$: `type tensor`
 
-XXXX
+$L-1$ output tensors with identical shapes.
 
 #### Constraints
 
  - `[C1]` XXXX
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $Xm$.
 
 ## Attributes
 
