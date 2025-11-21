@@ -113,6 +113,41 @@ The following error condition applies to boardcasting:
 
 For each tensor and each dimension, considering a common number of dimensions, the value of a dimension shall be either equal to the maximum dimension among all tensors or equal to one. If not, Error `E1` occurs.
 
+## Inputs
+
+### $\text{Xi}$: XXXX
+XXXX
+
+#### Constraints
+
+ - `[C1]` <a id="C1ra"></a> XXXXX
+   - Statement: XXXX
+ 
+
+
+## Outputs
+
+### $\text{Z}$: XXXX
+
+XXXX
+
+#### Constraints
+
+ - `[C1]` XXXX
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
+
+## Attributes
+
+No attribute.
+
+## Formal specification
+ 
+See the Why3 specification.
+
+## Numerical Accuracy
+
+Not applicable. I.e. the data values of the output tensors are stricly equal to the corresponding data values of the input tensors.
+
 
 
 
