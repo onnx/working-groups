@@ -76,7 +76,9 @@ $$ nZm = nY $$
 
 In order to define the output we have to set each dimension to its maximum among all tensors and, for tensors with increased dimension, access always to the first element whatever the value of the index in this dimension.
 
-> Dessin
+The figure bellow presents for the example of the figure above, the tensors obtained at the end of setp 1.
+
+<img src="assets/imgs/Y.png" alt="drawing" width="100%"/>
 
 #### Seting each dimension to its maximum
 
