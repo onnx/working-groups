@@ -68,15 +68,23 @@ $$i=(\underbrace{1,...,1},i')
     \atop nY-nXm$$
 ### Description of step 2
 
-Now $Y0$, ... $YL$ have a common number of dimensions but different dimension sizes. In order to define the output we have to set each dimension to its maximum among all tensors and, for tensors with increased dimension, access always to the first element whatever the value of the index in this dimension.
+Now $Y0$, ... $YL$ have a common number of dimensions but different dimension sizes. This common number of dimensions, is the number of dimensions of the output tensors:
+
+$$ nZm = nY $$
+
+In order to define the output we have to set each dimension to its maximum among all tensors and, for tensors with increased dimension, access always to the first element whatever the value of the index in this dimension.
 
 > Dessin
 
+#### Seting each dimension to its maximum
 
+The maxima of dimensions $dY_0$, ... $dY_{nY-1}$ are reciprocaly defined as $dY_0 = \max_{m \in [0, L] } dYm_0$, ...  $dY_{nY-1} = \max_{m \in [0, L] } dYm_{nY-1}$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of $Ym$.
+
+#### Access to data
 
 ### Constraints
 
-$dY_1$, ... $dY_{nY}$ are reciprocaly defined as $dY_1 = \max_{m \in [1, N] } dYm_1$, ...  $dY_{nY} = \max_{m \in [1, N] } dYm_{nY}$ where $dYm_1$, ... $dYm_{nY}$ are the dimensions of the $m$ th input tensor with already the common number of dimensions.
+
 
 The following constraint applies to boardcasting:
 
