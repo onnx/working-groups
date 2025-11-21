@@ -84,6 +84,15 @@ $$\forall m \in [0,L] \forall i \in [0,nZm-1] ~~~~~ dZm_i = dY_i$$
 
 #### Access to data
 
+Let $f(.,.,.)$ a function that provides an index value of 0 when the dimension size is not the maximum size and the current index of this dimension when the dimension size is equal to the maximum dimension size. This fonction is defined as:
+
+$f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 0$ otherwise where:
+- $a$ is the current index,
+- $B$ is the dimension size, and
+- $C$ is the target dimension size.
+
+When, for a given dimension $dYm_k$ of a tensor $Ym$ $dYm_k \neq dY_k$,  $f(i_k,dYm_k,dY_k)$ is 1 whatever the value of the index $i_k$ leading to $Zm$ related always to the first element of $Ym$ in the $k^{\text{th}}$ dimension.
+
 ### Constraints
 
 
