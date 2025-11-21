@@ -66,6 +66,13 @@ with $i$ defined from $i'$:
 
 $$i=(\underbrace{1,...,1},i')
     \atop nY-nXm$$
+### Description of step 2
+
+Now $Y0$, ... $YL$ have a common number of dimensions but different dimension sizes. In order to define the output we have to set each dimension to its maximum among all tensors and, for tensors with increased dimension, access always to the first element whatever the value of the index in this dimension.
+
+> Dessin
+
+
 
 ### Constraints
 
