@@ -115,7 +115,7 @@ For each tensor and each dimension, considering a common number of dimensions, t
 
 ## Inputs
 
-### Xm m \in [0,L]$: 'type tensor'
+### $Xm m \in [0,L]$: 'type tensor'
 $L-1$ input tensors with possibly different shapes
 
 #### Constraints
