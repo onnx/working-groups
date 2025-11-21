@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module tensor.OPAdd</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>module OPAdd</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">OPAdd</span><a href="tensor.proof.html#OPAdd" title="Partial proof (5/6 goals)" class="icon warning icofont-error"></a>
+  <span class="keyword">use</span> <a title="tensor.Tensor" href="tensor.Tensor.html">Tensor</a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> real.<a title="real.Real" href="https://www.why3.org/stdlib/real.html#Real_">Real</a>
+  <span class="keyword">use</span> std.<a title="std.Cfloat" href="std.Cfloat.html">Cfloat</a>
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="dadd">dadd</a><a href="tensor.proof.html#OPAdd.dadd" title="Valid (one goal)" class="icon valid icofont-check"></a> (a b : <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> real) : <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> real
+    = <span class="keyword">fun</span> ks -&gt; a ks <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> b ks
+
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="opadd">opadd</a><a href="tensor.proof.html#OPAdd.opadd" title="Partial proof (4/5 goals)" class="icon warning icofont-error"></a> (a b : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> real) : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> real
+    <span class="keyword">requires</span> { a <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> b }
+    <span class="keyword">ensures</span> { result <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> a }
+    <span class="keyword">ensures</span> { result.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <a title="tensor.OPAdd.dadd" href="#dadd">dadd</a> a.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> b.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> }
+    = { <a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = a.<a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> ;
+        <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <a title="tensor.OPAdd.dadd" href="#dadd">dadd</a> a.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> b.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> ;
+        <a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = a.<a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> b.<a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> }
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

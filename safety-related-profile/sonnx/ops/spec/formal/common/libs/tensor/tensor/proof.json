@@ -1,0 +1,35 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 30, "time": 0.14 },
+    { "prover": "cvc5@1.2.1", "size": 42, "time": 0.489 },
+    { "prover": "alt-ergo@2.5.4", "size": 16, "time": 0.171 }
+  ],
+  "proofs": {
+    "OPWhere": {
+      "dwhere": { "tactic": "split_vc", "children": [] },
+      "opwhere": { "prover": "alt-ergo@2.5.4", "time": 0.015 }
+    },
+    "Range": {
+      "positive_size": { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+      "positive_valid": { "prover": "alt-ergo@2.5.4", "time": 0.029 },
+      "size_append": { "prover": "alt-ergo@2.5.4", "time": 0.028 },
+      "size_push": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "valid_push": { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+    },
+    "Tensor": {
+      "const": { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+      "exteq": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 }
+        ]
+      },
+      "scalar": { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+      "zero": { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+      "zero_is_const": { "prover": "alt-ergo@2.5.4", "time": 0.012 }
+    }
+  }
+}

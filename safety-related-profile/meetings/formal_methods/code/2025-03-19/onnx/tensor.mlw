@@ -1,0 +1,124 @@
+(**
+    ONNX Tensor Definition.
+ *)
+
+module Shape
+  use int.Int
+  use list.Mem
+  use list.List
+  use sequence.Seq
+
+  predicate positive (ds : seq int) =
+    forall i. 0 <= i < length ds -> 0 < ds[i]
+
+  type shape = { dims : seq int }
+    invariant { positive dims }
+    meta coercion function dims
+
+  (*proof*)
+  (* Helper function for defining product *)
+  let rec function product (ds : list int) : int =
+    variant { ds }
+    match ds with
+    | Nil -> 1
+    | Cons d ds -> d * product ds
+    end
+
+  (* Lemma: shifted sequence *)
+  let ghost shift (xs : list 'a) (x : 'a) (rxs : list 'a)
+    requires { xs = Cons x rxs }
+    ensures { x = xs[0] }
+    ensures { forall i. 0 <= i < length rxs -> rxs[i] = xs[i+1] }
+    = ()
+
+  (* Lemma: forall s, 1 <= product s *)
+  let rec lemma product1 (ds : list int)
+    requires { positive ds }
+    ensures { 1 <= product ds }
+    (*proof*)
+    variant { ds }
+    = match ds with
+      | Nil -> ()
+      | Cons d rds ->
+        ghost shift ds d rds ;
+        product1 rds
+      end
+    (*qed*)
+  (*qed*)
+
+  let sizeof (s : shape) : int = product s.dims
+
+end
+
+module Index
+  use int.Int
+  use bool.Bool
+  use list.Mem
+  use list.List
+  use sequence.Seq
+  use Shape
+
+  type index = seq int
+
+  predicate valid (idx : index) (s : shape) =
+    length idx = length s /\
+    forall i. 0 <= i < length s -> 0 <= idx[i] < s[i]
+
+  let valid (idx : index) (s : shape) : bool
+    ensures { result <-> valid idx s }
+    (*proof*)
+    (* Efficient Implementation *)
+    = let rec inrange (ks ds : list int) : bool
+        requires { positive ds }
+        ensures { result <->
+          ( length ks = length ds /\
+            forall i. 0 <= i < length ks -> 0 <= ks[i] < ds[i] )
+        }
+        variant { ds }
+        = match ks, ds with
+          | Nil, Nil -> true
+          | Cons k ksr, Cons d dsr ->
+            ghost shift ks k ksr ;
+            ghost shift ds d dsr ;
+            0 <= k < d && inrange ksr dsr
+          | _ -> false
+          end
+      in inrange idx s.dims
+    (*qed*)
+
+end
+
+module Tensor
+  use int.Int
+  use sequence.Seq
+  use export Shape
+  use export Index
+
+  type tensor 'a = {
+    shape : shape ;
+    value : index -> 'a ;
+  }
+
+  let function dim (t : tensor 'a) : int = length t.shape.dims
+
+
+  predicate (<<) (idx : index) (t : tensor 'a) = valid idx t.shape
+  function ([]) (t : tensor 'a) (idx : index) : 'a = t.value idx
+
+  exception Invalid_index
+
+  let mem (idx : index) (t : tensor 'a) : bool
+    ensures { result <-> idx << t }
+    (*proof*)
+    = valid idx t.shape
+    (*qed*)
+
+  let get (idx : index) (t : tensor 'a) : 'a
+    ensures { idx << t }
+    ensures { result = t[idx] }
+    raises { Invalid_index -> not (idx << t) }
+    (*proof*)
+    = if valid idx t.shape then t.value idx else raise Invalid_index
+    (*qed*)
+
+end

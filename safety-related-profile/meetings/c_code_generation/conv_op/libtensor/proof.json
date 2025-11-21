@@ -1,0 +1,2595 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 30, "time": 0.14 },
+    { "prover": "cvc5@1.2.1", "size": 42, "time": 0.489 },
+    { "prover": "alt-ergo@2.5.4", "size": 16, "time": 0.215 }
+  ],
+  "proofs": {
+    "CITensor": {
+      "citensor_clear": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.039 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.056 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.076 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+        ]
+      },
+      "citensor_create": { "prover": "alt-ergo@2.5.4", "time": 0.054 },
+      "citensor_reset": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.03 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.029 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.039 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.058 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.087 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.028 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+        ]
+      },
+      "citensor_to_tensor": { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+      "gto_int32": {
+        "tactic": "split_vc",
+        "children": [ null, { "prover": "alt-ergo@2.5.4", "time": 0.023 } ]
+      },
+      "to_int32": { "prover": "alt-ergo@2.5.4", "time": 0.021 }
+    },
+    "CTensor": {
+      "ctensor_add": { "prover": "alt-ergo@2.5.4", "time": 0.87 },
+      "ctensor_clear": { "prover": "alt-ergo@2.5.4", "time": 0.157 },
+      "ctensor_conv2d": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.062 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.063 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.068 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.059 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.059 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.06 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.062 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.115 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.031 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.173 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.258 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.042 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.404 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.048 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.631 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.062 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.924 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.068 },
+          { "prover": "cvc5@1.2.1", "time": 0.594 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.064 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.035 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.023 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.636 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.625 },
+          { "prover": "cvc5@1.2.1", "time": 0.166 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.084 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.079 }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.177 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.085 }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.187 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.085 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.084 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.662 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.085 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.113 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.768 },
+          { "prover": "cvc5@1.2.1", "time": 0.104 },
+          { "prover": "cvc5@1.2.1", "time": 0.323 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.72 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.088 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.087 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.787 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.088 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.09 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.817 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.087 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.088 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.09 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.79 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.09 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.098 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.15 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.942 },
+          { "prover": "cvc5@1.2.1", "time": 0.107 },
+          { "prover": "cvc5@1.2.1", "time": 0.411 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.155 },
+          { "prover": "cvc5@1.2.1", "time": 0.174 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.173 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.037 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.194 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.182 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.116 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.734 },
+          { "prover": "cvc5@1.2.1", "time": 0.103 },
+          { "prover": "cvc5@1.2.1", "time": 0.366 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.116 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.075 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.067 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.063 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.061 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.122 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.063 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.155 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.098 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.759 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.125 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.023 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.127 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.134 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.134 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.074 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.178 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.121 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.124 },
+          { "prover": "cvc5@1.2.1", "time": 0.308 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.087 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.081 },
+          { "prover": "z3@4.13.4", "time": 0.118 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.056 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.05 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.044 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.043 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.039 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.119 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }, null
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                ]
+              },
+              null
+            ]
+          }
+        ]
+      },
+      "ctensor_create": { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+      "ctensor_reset": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.028 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.032 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.029 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.055 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 }
+        ]
+      },
+      "ctensor_where": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.061 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.062 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.062 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.044 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.063 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.22 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 }
+        ]
+      },
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.029 },
+      "tensorb": { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+    },
+    "CTensorConv": {
+      "ctensor_conv2d": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.066 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.065 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.064 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.067 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.071 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.068 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.065 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "z3@4.13.4", "time": 0.313 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.029 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.539 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.033 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.654 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.042 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.854 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.056 },
+          { "prover": "z3@4.13.4", "time": 0.927 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.065 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "inline_goal",
+                        "children": [
+                          { "prover": "alt-ergo@2.5.4", "time": 1.8 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.024 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.07 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      { "prover": "alt-ergo@2.5.4", "time": 1.9 },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.074 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.037 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "inline_goal",
+                        "children": [
+                          { "prover": "alt-ergo@2.5.4", "time": 0.569 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "inline_goal",
+                        "children": [
+                          { "prover": "alt-ergo@2.5.4", "time": 0.572 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.397 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.393 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.099 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "cvc5@1.2.1", "time": 0.4 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.101 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.11 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.106 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.102 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.105 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "cvc5@1.2.1", "time": 0.427 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.106 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.103 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.038 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.101 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.109 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.102 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.148 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.047 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.108 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.111 }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.099 },
+          { "prover": "cvc5@1.2.1", "time": 0.422 },
+          { "prover": "cvc5@1.2.1", "time": 0.478 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.103 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.088 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.858 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.089 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.091 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "cvc5@1.2.1", "time": 0.938 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.099 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.103 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.098 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          { "prover": "cvc5@1.2.1", "time": 1.9 },
+                          { "prover": "alt-ergo@2.5.4", "time": 0.1 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          { "prover": "cvc5@1.2.1", "time": 1.9 },
+                          { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.098 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.098 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.1 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.103 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.156 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.107 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.092 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.099 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.094 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.097 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.086 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.101 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.096 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.098 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.088 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.095 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.101 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.093 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.161 },
+          { "prover": "cvc5@1.2.1", "time": 0.326 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.316 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "cvc5@1.2.1", "time": 0.305 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null,
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "cvc5@1.2.1", "time": 0.468 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null,
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.035 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.133 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                    ]
+                  }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              }
+            ]
+          },
+          { "prover": "cvc5@1.2.1", "time": 0.089 },
+          { "prover": "cvc5@1.2.1", "time": 0.456 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.128 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.078 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.079 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.07 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.638 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.036 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.073 },
+          { "prover": "z3@4.13.4", "time": 0.31 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.116 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.763 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.712 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.032 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.776 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.021 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.835 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.023 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.029 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.734 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.035 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.034 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.039 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.033 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.085 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.039 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.037 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      {
+                        "tactic": "split_vc",
+                        "children": [
+                          null, { "prover": "alt-ergo@2.5.4", "time": 0.037 }
+                        ]
+                      },
+                      { "prover": "alt-ergo@2.5.4", "time": 0.03 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.127 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.127 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.988 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.08 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.089 },
+          { "prover": "z3@4.13.4", "time": 0.911 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.063 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.055 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.054 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.041 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.042 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      null, { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+                    ]
+                  },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+                ]
+              },
+              { "prover": "alt-ergo@2.5.4", "time": 0.031 }
+            ]
+          },
+          { "prover": "z3@4.13.4", "time": 0.206 },
+          null
+        ]
+      }
+    },
+    "CTensor_Int": {
+      "create_coords_array": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.034 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.037 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.04 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+        ]
+      },
+      "create_coords_array_int": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.031 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.031 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.037 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.042 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 }
+        ]
+      },
+      "ctensor_int_clear": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.045 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+        ]
+      },
+      "ctensor_int_create": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          {
+            "tactic": "inline_goal",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo@2.5.4", "time": 0.022 }, null, null
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ctensor_int_get": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.031 }, null
+            ]
+          }
+        ]
+      },
+      "ctensor_int_set": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.036 },
+          { "prover": "cvc5@1.2.1", "time": 0.372 },
+          null
+        ]
+      },
+      "tensor_int": { "prover": "alt-ergo@2.5.4", "time": 0.042 }
+    },
+    "CtensorConv2D": {
+      "conv_partial_sum_dilated": {
+        "tactic": "split_vc",
+        "children": [
+          null,
+          null,
+          null,
+          null,
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.02 }, null
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.02 }, null
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.023 }, null
+            ]
+          },
+          null
+        ]
+      }
+    }
+  }
+}

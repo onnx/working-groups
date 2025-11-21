@@ -1,0 +1,110 @@
+module OPClip
+  use tensor.Tensor
+  use int.Int
+  use list.List
+  use tensor.Range
+  use real.Real
+  use real.MinMax
+
+
+  predicate is_scalar_tensor (t : tensor real) =
+    t.dims = Nil /\ t.data = (fun _ -> t.background)
+
+  predicate ordered_bounds (l m y: tensor real) =
+    forall ks:list int. valid ks y.dims ->
+      (l.background <= m.background ->
+         l.background <= y.data ks /\ y.data ks <= m.background)
+
+  predicate inverted_bounds (l m y: tensor real) =
+    forall ks:list int. valid ks y.dims ->
+      (l.background > m.background ->
+         y.data ks = m.background) 
+
+  let ghost function dclip (x l m : tensor real): data real
+    (*proof*)
+    = fun ks ->
+        if valid ks x.dims then
+          min m.background (max (x.data ks) l.background)
+        else x.background
+
+  let ghost function opclip (x l m : tensor real): tensor real
+    requires { is_scalar_tensor l }
+    requires { is_scalar_tensor m }
+    ensures { result ~= x }
+    ensures { ordered_bounds l m result }
+    ensures { inverted_bounds l m result }
+    (*proof*)
+    = { dims = x.dims; data = dclip x l m; background = x.background }
+    (*qed*)
+
+  goal clip_correct:
+    forall x l m: tensor real.
+      is_scalar_tensor l /\ is_scalar_tensor m ->
+      let y = opclip x l m in
+        ordered_bounds l m y /\ inverted_bounds l m y
+        (* same as *)
+        (*
+          if l.background <= m.background then
+            ordered_bounds l m y
+          else
+            inverted_bounds l m y
+        *)
+
+end
+
+module ClipAux
+  use std.Cfloat
+  use real.MinMax
+  
+  val function (.>>) (a b : float) : float
+    ensures { Real.( result = max a b ) }
+
+  val function (.<<) (a b : float) : float
+    ensures { Real.( result = min a b ) }
+end
+
+module TensorClip
+  use std.Int
+  use std.List
+  use std.Clib
+  use std.Cfloat
+  use mach.int.Int32
+  use tensor.Range
+  use tensor.Tensor
+  use tensor.OPWhere
+  use layout.CFlat
+  use libvector.CIndex
+  use libtensor.CTensor
+  use OPClip
+  use ClipAux
+
+  let ctensor_clip (x l m r : ctensor) =
+    (*proof*)
+    requires { valid_tensor x }
+    requires { valid_tensor l }
+    requires { valid_tensor m }
+    requires { valid_tensor r }
+    requires { is_scalar_tensor (tensor l) }
+    requires { is_scalar_tensor (tensor m) }
+    requires { tensor x ~= tensor r }
+    (*qed*)
+    ensures { tensor r = opclip (tensor x) (tensor l) (tensor m) }
+    let n = cdim_size r.t_dims r.t_rank in
+    let l_backgroundl = value_at l.t_data 0 in
+    let m_backgroundl = value_at m.t_data 0 in
+    let l_background = l.t_data[0] in
+    let m_background = m.t_data[0] in
+    for i = 0 to n - 1 do
+      (*proof*)
+      invariant {
+        forall k. 0 <= k < i ->
+          value_at r.t_data k = (m_backgroundl .<< ( (value_at x.t_data k) .>> l_backgroundl))
+      }
+      (*qed*)
+      r.t_data[i] <- m_background .<< ( (x.t_data[i]) .>> l_background)
+      done
+    (*proof*)
+    ; assert { tensor r == opclip (tensor x) (tensor l) (tensor m) }
+    (*qed*)
+
+end

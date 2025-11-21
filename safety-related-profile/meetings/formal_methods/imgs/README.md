@@ -1,0 +1,1 @@
+All pictures referenced in the meeting minutes.
