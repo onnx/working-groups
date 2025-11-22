@@ -31,7 +31,7 @@ The following restrictions apply to the **Max** operator for the SONNX profile:
 
  ## Informal specification
  
-Operator **Max** is applied on $Z0$,... ,$ZL$ where $Z0$,...,$ZL$ is the broadcasted form of $X0$,...,$XL$,
+Operator **Max** is applied on $Z0$,... , $ZL$ where $Z0$,..., $ZL$ is the broadcasted form of $X0$,..., $XL$,
 i.e. ($Z0$, ... , $ZL$) = Broadcast($X0$, ... , $XL$) cf. [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md). 
 
 Thanks to broadcasting, all $Zi$ for $i \in [0, L]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [0, nZ-1]$ the same number of elements $dZ_j$.
