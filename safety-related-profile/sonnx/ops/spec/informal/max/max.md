@@ -76,10 +76,10 @@ See the Why3 specification.
 ## Numerical Accuracy
 Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
-Integer division is exact under the defined semantics; error is not introduced by the operator itself:
+Maximum is exact under the defined semantics; error is not introduced by the operator itself:
 
 ### Error Propagation
-For integer inputs modeled without error symbols, $C_{\textit{err}}^{\textit{propag}} = [0]$.
+For integer inputs modeled without error symbols, $Y_{\textit{err}}^{\textit{propag}} = [0]$.
 ### Error Introduction
 Error introduction for int arithmetic is null:
  $Y_{\textit{err}}^{\textit{intro}} = [0]$.
