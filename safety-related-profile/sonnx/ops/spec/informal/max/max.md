@@ -50,6 +50,7 @@ The following error condition applies to **Max** operator:
 | Error    | Statement | Origin |
 | -------- | ------- | ------- |
 | `E1` | $X0$,..., $XL$ not broadcastable | [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md)|
+| `E2` | Shape of $Y$ is not with $nZ$ dimensions or there is a dimension $j$ with a number of elements diferent to $dZ_j$| Explicit shape `[R2]` combined with broadcast | 
 
 ## Inputs
 
