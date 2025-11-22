@@ -62,7 +62,7 @@ No applicable constraints.
 
 ## Outputs
 
-#### $\text{Y}$: `int tensor`
+### $\text{Y}$: `int tensor`
 
 Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$.
 
@@ -147,7 +147,7 @@ No applicable constraints.
 
 ## Outputs
 
-#### $\text{Y}$: `float tensor`
+### $\text{Y}$: `float tensor`
 
 Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$ after broadcasting.
 
