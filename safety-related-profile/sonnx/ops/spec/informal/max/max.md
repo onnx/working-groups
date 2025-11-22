@@ -1,7 +1,17 @@
-# `max` operator
-### Contents
+# Contents
+
+- **Max** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
+- **Max** operator for types [bfloat16, float16, float, double](#float)
+
+Based on ONNX documentation version 13.
+
+# Link to ONNX description
+
+https://onnx.ai/onnx/operators/onnx__Max.html
+
+<a id="int"></a>
 - `Maximum` operator for a type on which an order is defined.
-## `Max`  `(type on which an order is defined, i.e. bfloat16, double, float, float16, int16, int32, int64, int8, uint16, uint32, uint64, uint8)`
+## `Max`  `type on which an order is defined`
 
 ### Signature
 $Y = \text{Max}(X0, ... , XL)$
@@ -12,7 +22,7 @@ where
 
 ### Link to ONNX description
 
-https://onnx.ai/onnx/operators/onnx__Max.html
+
 
 ### Constraints
 The following constraints apply to the `Max` operator for the SONNX profile:
