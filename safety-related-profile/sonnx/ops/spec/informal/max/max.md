@@ -10,25 +10,30 @@ Based on ONNX documentation version 13.
 https://onnx.ai/onnx/operators/onnx__Max.html
 
 <a id="int"></a>
+# **Max** (int, int)
+
+### Signature
+Definition of operator $\text{Max}$ signature:
+$Y = \text{Max}(X0, ... , XL)$
+
+where:
+- $X0$, ... ,$XL$ input tensors with L $\in [0, 2^{31}-1[$
+- $Y$: result of the element-wise maximum among $X0$, ... ,$XL$
+
+## Restrictions
+
+The following restrictions apply to the **Max** operator for the SONNX profile:
+
+| Restriction | Statement                                                   | Origin                                                                                      |
+|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
+| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+
 - `Maximum` operator for a type on which an order is defined.
 ## `Max`  `type on which an order is defined`
 
-### Signature
-$Y = \text{Max}(X0, ... , XL)$
 
-where
-- $X0$, ... ,$XL$ input tensors with L $\in [0, 2^{31}-1[$
-- $Y$: output tensor
-
-### Link to ONNX description
-
-
-
-### Constraints
-The following constraints apply to the `Max` operator for the SONNX profile:
-
-
- ### Informal specification
+ ## Informal specification
 > L'opérateur max est appliqué sur Z0,..? ZL où Z0,...,ZL est la "version" broadcasté de X0..XL.
 
 The result tensor $Y$ depends on the broadcasted values $Z0$, ... , $ZL$ of the input tensors $X0$, ... , $XL$, i.e. ($Z0$, ... , $ZL$) = Broadcast($X0$, ... , $XL$) cf. [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md). 
