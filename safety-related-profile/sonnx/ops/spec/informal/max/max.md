@@ -55,16 +55,19 @@ The following error condition applies to **Max** operator:
 ## Inputs
 
 ### $\text{X0,...,XL}$: `int tensors`
-Tensors among which the maximum is to be taken element-wise
+Tensors among which the maximum is to be taken element-wise.
 
 #### Constraints
-No applicable constraints
+No applicable constraints.
 
 ## Outputs
 
 #### $\text{Y}$: `int tensor`
 
 Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$.
+
+#### Constraints
+No applicable constraints.
 
 ## Attributes
 
@@ -137,16 +140,19 @@ The following error condition applies to **Max** operator:
 ## Inputs
 
 ### $\text{X0,...,XL}$: `float tensors`
-Tensors among which the maximum is to be taken element-wise
+Tensors among which the maximum is to be taken element-wise.
 
 #### Constraints
-No applicable constraints
+No applicable constraints.
 
 ## Outputs
 
 #### $\text{Y}$: `float tensor`
 
 Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$ after broadcasting.
+
+#### Constraints
+No applicable constraints.
 
 ## Attributes
 
