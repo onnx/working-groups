@@ -139,7 +139,7 @@ $L-1$ output tensors with identical shapes.
 
 #### Constraints
 
- - `[C1]` XXXX
+ - `[C1]` Type consitency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $Xm$.
 
 ## Attributes
