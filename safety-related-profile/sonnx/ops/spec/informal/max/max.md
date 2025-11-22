@@ -88,7 +88,7 @@ For integer inputs modeled without error symbols, $Y_{\textit{err}}^{\textit{pro
 Error introduction for int arithmetic is null:
  $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 ### Unit Verification
-TODO
+TODO?
 
 <a id="float"></a>
 # **Max** (float, float)
@@ -178,4 +178,4 @@ For all valid indexes $i$,
 Error introduction for float arithmetic is null:
  $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 ### Unit Verification
-TODO
+TODO?
