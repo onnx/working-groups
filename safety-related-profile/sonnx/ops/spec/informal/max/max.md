@@ -45,12 +45,46 @@ The maximum shall comply with the mathematical definition of the function denote
 
 ## Error conditions
 
-The following error condition applies to boardcasting:
+The following error condition applies to **Max** operator:
 
 | Error    | Statement | Origin |
 | -------- | ------- | ------- |
 | `E1` | $X0$,..., $XL$ not broadcastable | [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md)|
 
+## Inputs
+
+### $\text{X0,...,XL}$: `int tensors`
+Tensors among which the maximum is to be taken element-wise
+
+#### Constraints
+No applicable constraints
+
+## Outputs
+
+#### $\text{Y}$: `int tensor`
+
+Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$.
+
+## Attributes
+
+Operator $\text{Div}$ has no attribute.
+
+## Formal specification
+ 
+See the Why3 specification.
+
+## Numerical Accuracy
+Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+
+Integer division is exact under the defined semantics; error is not introduced by the operator itself:
+
+### Error Propagation
+For integer inputs modeled without error symbols, $C_{\textit{err}}^{\textit{propag}} = [0]$.
+### Error Introduction
+Error introduction for int arithmetic is null:
+ $Y_{\textit{err}}^{\textit{intro}} = [0]$.
+### Unit Verification
+TODO
 > Traiter type par type. Donc definir max entier, max flottant,...
 Note that some types such as `bfloat16`, `double`, `float`, `float16` have special values that do not inherit naturally the order defined on the real numbers (>) underlying the maximum function, i.e. Inf, 0+, 0-, NaN. For those values the following order shall be assumed when considering the maximum function:
 
