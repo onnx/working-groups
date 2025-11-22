@@ -171,7 +171,7 @@ Maximum is exact under the defined semantics; error is not introduced by the ope
 For all valid indexes $i$,
 
   $$
-  |Y_{\textit{err}}^{\textit{propag}}[i]| \leq \left|\frac{A_{\textit{err}}[i]}{B[i]}\right| + \left|\frac{A[i] \cdot B_{\textit{err}}[i]}{B[i]^2}\right|
+  |Y_{\textit{err}}^{\textit{propag}}[i]| \leq \max_{m \in [0, L] \left|Z_{\textit{err}}[i]\right|
   $$
 
 ### Error Introduction
