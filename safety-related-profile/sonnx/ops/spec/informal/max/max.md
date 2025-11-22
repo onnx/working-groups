@@ -17,8 +17,8 @@ Definition of operator $\text{Max}$ signature:
 $Y = \text{Max}(X0, ... , XL)$
 
 where:
-- $X0$, ... ,$XL$ input tensors with L $\in [0, 2^{31}-1[$
-- $Y$: result of the element-wise maximum among $X0$, ... ,$XL$
+- $X0$, ... , $XL$ input tensors with L $\in [0, 2^{31}-1[$
+- $Y$: result of the element-wise maximum among $X0$, ... , $XL$
 
 ## Restrictions
 
