@@ -43,6 +43,14 @@ $$Y[i] = \max_{m \in [0, L] } Zm[i]$$
 
 The maximum shall comply with the mathematical definition of the function denoted $\max$.
 
+## Error conditions
+
+The following error condition applies to boardcasting:
+
+| Error    | Statement | Origin |
+| -------- | ------- | ------- |
+| `E1` | $X0$,..., $XL$ not broadcastable | [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md)|
+
 > Traiter type par type. Donc definir max entier, max flottant,...
 Note that some types such as `bfloat16`, `double`, `float`, `float16` have special values that do not inherit naturally the order defined on the real numbers (>) underlying the maximum function, i.e. Inf, 0+, 0-, NaN. For those values the following order shall be assumed when considering the maximum function:
 
