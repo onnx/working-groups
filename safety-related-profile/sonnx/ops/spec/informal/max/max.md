@@ -35,7 +35,7 @@ Operator **Max** is applied on $Z0$,... , $ZL$ where $Z0$,..., $ZL$ is the broad
 i.e. ($Z0$, ... , $ZL$) = Broadcast($X0$, ... , $XL$) cf. [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md). 
 Thanks to broadcasting, all $Zm$ for $m \in [0, L]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [0, nZ-1]$ the same number of elements $dZ_j$.
 
-The maximum is taken element wize among the elements of the different input tensors presenting identical indexes.
+The maximum is taken element wize among the elements of the different broadcasted tensors presenting identical indexes.
 
 For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
@@ -55,7 +55,7 @@ The following error condition applies to **Max** operator:
 ## Inputs
 
 ### $\text{X0,...,XL}$: `int tensors`
-Tensors among which the maximum is to be taken element-wise.
+Tensors among which the maximum is to be taken element-wise after broadcasting.
 
 #### Constraints
 No applicable constraints.
@@ -64,7 +64,7 @@ No applicable constraints.
 
 ### $\text{Y}$: `int tensor`
 
-Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$.
+Tensor $Y$ is the element-wise result of the maximum among broadcasted $X0$,..., $XL$.
 
 #### Constraints
 No applicable constraints.
@@ -116,7 +116,7 @@ Operator **Max** is applied on $Z0$,... , $ZL$ where $Z0$,..., $ZL$ is the broad
 i.e. ($Z0$, ... , $ZL$) = Broadcast($X0$, ... , $XL$) cf. [broadcast](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/broadcast/broadcast.md). 
 Thanks to broadcasting, all $Zm$ for $m \in [0, L]$ have a common number of dimensions $nZ$. Moreover, they have in each dimension $j \in [0, nZ-1]$ the same number of elements $dZ_j$.
 
-The maximum is taken element wize among the elements of the different input tensors presenting identical indexes.
+The maximum is taken element wize among the elements of the different broadcasted tensors presenting identical indexes.
 
 For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
@@ -149,7 +149,7 @@ No applicable constraints.
 
 ### $\text{Y}$: `float tensor`
 
-Tensor $Y$ is the element-wise result of the maximum among $X0$,..., $XL$ after broadcasting.
+Tensor $Y$ is the element-wise result of the maximum among among broadcasted $X0$,..., $XL$.
 
 #### Constraints
 No applicable constraints.
