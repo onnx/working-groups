@@ -12,7 +12,7 @@ https://onnx.ai/onnx/operators/onnx__Max.html
 <a id="int"></a>
 # **Max** (int, int)
 
-### Signature
+## Signature
 Definition of operator $\text{Max}$ signature:
 $Y = \text{Max}(X0, ... , XL)$
 
