@@ -1,7 +1,7 @@
 # Contents
 - **Broadcast** functionality for type [real, float16, float, double, int8, int16, int32, int64, uint8, uint16, uint32, uint64, string, boolean] (#any).
 
-Based on ONNX documentation version 14.
+Based on ONNX documentation version 14, multidirectional broadcasting.
 <a id="any"></a>
 # **Broadcast**  (type, type, type...)
 
