@@ -20,7 +20,6 @@ Contact e-mail addresses of WG leads can be found [here](https://wiki.lfaidata.f
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
-| [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization |
 | [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX               |
 | Safety-Related-Profile | |
 | [Generative-AI](https://lfaifoundation.slack.com/archives/C08MERYU84T) | Accelerate GenAI support in ONNX |
@@ -29,6 +28,7 @@ Contact e-mail addresses of WG leads can be found [here](https://wiki.lfaidata.f
 
 | Working Group      | Objectives    | Status |
 | ------------------ | ------------- | ------ |
+| [Preprocessing](https://lfaifoundation.slack.com/archives/C02AANGFBJB) | Data pre/post processing and featurization | inactive |
 | [Release](https://lfaifoundation.slack.com/archives/C018VGGJUGK) | Improve and document release process, enhance release verification, identify fixes for release builds, recommend release operational guidelines in communication, frequency, scope, dependencies, and schedule | Completed - release process enhanced and documented at https://github.com/onnx/onnx/blob/main/docs/OnnxReleases.md
 | [Control Flow and Loops](https://gitter.im/onnx/ControlFlowWG) | Enable dynamic control structures to enable advanced models for NLP, speech, and video/image processing | Completed - If, Loop, and Scan operators were added in ONNX 1.3 release. |
 | Quantization | Enhance ONNX to support quantized data types and operators on a variety of runtimes and hardware devices | Completed - added in ONNX 1.5 release. |
