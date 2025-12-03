@@ -1,3 +1,32 @@
+# 2025/11/19
+## Participants
+  - Eric, Jean, Mariem, <to be completed>
+## Agenda
+- Review of actions [Eric]
+- DATE 2026 workshop 20-22 april, Verona (❤️) [Eric]
+- Status of SONNX as of end 2025 [Eric]
+  - Where should we be?
+  - Where are we?
+  - Where do we go now?
+  - How do we go there?
+    - Funding...
+
+## Actions
+### New actions
+
+### Previous actions
+- [ ] (1911-1, Jean) Put the contents of the [presented slides]() into some nice markdown file, and put it in [guidelines area](../sonnx/ops/docs/guidelines/) for review
+- [ ] (1911-2, All) Review Jean's proposal (see above)
+- [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
+- [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
+- Action from local work session 
+  - [ ] Modify existing operator specifications to comply with new conventions.
+    - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
+  - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
+  - [ ] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
+  - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+- [X] (0511-2, Jean) Provide a first draft of the document about verification. 
+
 
 # 2025/11/19
 ## Participants
@@ -36,9 +65,8 @@
   - [X] (Eric) Provide explanations about the new way to manage modifications (using Pull Requests).
     - See this [note](../sonnx/ops/docs/guidelines/lifecycle.md)
   - [ ] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
-  - [ ] (Eric) During next meeting ask participants if they know other issues similar to those raised by empty tensors...
-- [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
-- [ ] (0511-2, Jean) Provide a first draft of the document about verification. 
+  - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+- [X] (0511-2, Jean) Provide a first draft of the document about verification. 
 - [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
 - [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
   - Eric :
@@ -55,10 +83,11 @@
     > Apparently, this is no longer a doubt but we will have to check both these documentation to ensure that our provider(CPUProvider) supports the respective types. In this context the test generation will also depend on the provider being used
 
 ### Past actions
-- [ ] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
+- [-] (0406-1, Franck) Specify numerical accuracy for the `conv` operator.
   - First trial on something simpler than the conv (matrix multiplication).
   - Done on the [matmul](../documents/profile_opset/matmul/matmul.md)
   - A prototype tool is currently being developed. Possibly available in October (this is **not** a commitment).   
+  - Action cancelled.
   
 
 # 2025/11/05
