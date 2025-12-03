@@ -1,32 +1,39 @@
-# 2025/11/19
+# 2025/12/03
 ## Participants
-  - Eric, Jean, Mariem, <to be completed>
+  - Eric, João, Jean-Loup, Edoardo, Ricardo Silva, Mariem, Franck, Jean, Nicolas, Hugo, Mohammed et Henri. <to be completed>
 ## Agenda
 - Review of actions [Eric]
 - DATE 2026 workshop 20-22 april, Verona (❤️) [Eric]
 - Status of SONNX as of end 2025 [Eric]
   - Where should we be?
   - Where are we?
-  - Where do we go now?
+  - Where do we want to go now?
   - How do we go there?
     - Funding...
 
 ## Actions
 ### New actions
+- [ ] (0312-1,Edorado, Mohammed) Review of Broadcast
+- [ ] (0312-2,Ricardo,, Joao) Open PR on unsqueeze and flatten
+- [ ] (0312-3,Jean) Update Kanban to reflect the actual status of SONNX... 
 
 ### Previous actions
-- [ ] (1911-1, Jean) Put the contents of the [presented slides]() into some nice markdown file, and put it in [guidelines area](../sonnx/ops/docs/guidelines/) for review
+- [ ] (1911-1, Jean) Put the contents of the [presented slides](./slides/2025-11-20-Jean-verification-plan.pdf) into some nice markdown file, and put it in [guidelines area](../sonnx/ops/docs/guidelines/) for review
+  - Eric to put updated slides on the repo : Done.
 - [ ] (1911-2, All) Review Jean's proposal (see above)
-- [ ] (0511-3, Eric) Give access to the SONNX github project in order to facilitate the management of the artifacts statuses.
+  - File to be reviewed not yet delivered.  
+- [ ] (0511-3, Eric) Give access to the SONNX github "project" in order to facilitate the management of the artifacts statuses.
 - [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
+    - There is a dependency to the execution platform. The test setup must be described along with the test script.
+    - [ ] Check if there is a posisble wy to set the CPU provider so that test pass.
 - Action from local work session 
   - [ ] Modify existing operator specifications to comply with new conventions.
     - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
   - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
   - [ ] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
   - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
-- [X] (0511-2, Jean) Provide a first draft of the document about verification. 
-
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
 
 # 2025/11/19
 ## Participants
