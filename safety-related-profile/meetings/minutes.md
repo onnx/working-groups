@@ -1,6 +1,6 @@
 # 2025/12/03
 ## Participants
-  - Eric, João, Jean-Loup, Edoardo, Ricardo Silva, Mariem, Franck, Jean, Nicolas, Hugo, Mohammed et Henri. <to be completed>
+  - Eric, João, Jean-Loup, Edoardo, Ricardo Silva, Mariem, Franck, Jean, Nicolas, Hugo, Mohammed, Henri. 
 ## Agenda
 - Review of actions [Eric]
 - DATE 2026 workshop 20-22 april, Verona (❤️) [Eric]
@@ -9,13 +9,15 @@
   - Where are we?
   - Where do we want to go now?
   - How do we go there?
-    - Funding...
-
+    - Funding... proposal by IRT 
+## Minutes
+- See agenda ;-)
 ## Actions
 ### New actions
-- [ ] (0312-1,Edorado, Mohammed) Review of Broadcast
+
+- [ ] (0312-1,Edorado, Mohammed) Review of the broadcast operator
 - [ ] (0312-2,Ricardo,, Joao) Open PR on unsqueeze and flatten
-- [ ] (0312-3,Jean) Update Kanban to reflect the actual status of SONNX... 
+- [ ] (0312-3,Jean) Update the project's [Kanban](https://github.com/users/ericjenn/projects/4/views/8) to reflect the actual status of SONNX... 
 
 ### Previous actions
 - [ ] (1911-1, Jean) Put the contents of the [presented slides](./slides/2025-11-20-Jean-verification-plan.pdf) into some nice markdown file, and put it in [guidelines area](../sonnx/ops/docs/guidelines/) for review
