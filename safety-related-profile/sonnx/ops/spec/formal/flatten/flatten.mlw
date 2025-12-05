@@ -1,0 +1,215 @@
+module OPFlatten
+
+    use tensor.Tensor 
+    use int.Int 
+    use list.List
+    use list.Length
+    use list.FoldLeft
+    use tensor.Range
+    use list.Append
+    use list.Nth
+    use option.Option
+    use map.Map
+    use list.Mem
+    use int.EuclideanDivision
+    use list.Append
+    
+
+    predicate non_negative (x_dims: list int) =
+        match x_dims with
+        | Nil -> true
+        | Cons h t -> 0 <= h /\ non_negative t
+        end
+
+
+    function my_nth (l: list int) (i: int): int =
+        match nth i l with
+        | Some d -> d
+        | None -> -1
+        end
+
+
+    let rec lemma my_nth_non_negative (lst: list int) (i: int)
+        requires { non_negative lst }
+        requires { 0 <= i < length lst }
+        ensures { my_nth lst i >= 0 }
+        variant { lst }
+    =
+        match lst with
+        | Nil -> ()
+        | Cons _ t -> 
+            if i = 0 then ()
+            else my_nth_non_negative t (i - 1)
+        end
+
+
+    let rec ghost function test (l: list int) (i:int): int
+    requires { non_negative (l) }
+    requires { 0 <=i < length (l) }
+    ensures { result >= 0 }
+    =
+        match nth i l with
+        | Some d -> d
+        | None -> -1
+        end
+
+
+    let rec ghost function take (lst: list int) (n: int): list int
+        requires { positive lst }
+        requires { 0 <= n <= length (lst) }
+        ensures { positive result }
+        ensures { length (result) = n }
+        =
+        match lst with
+        | Nil -> Nil
+        | Cons h t ->
+            if n > 0 then
+                Cons h (take t (n - 1))
+            else
+                Nil
+        end
+
+
+    let rec ghost function drop (lst: list int) (n: int): list int
+        requires { positive lst }
+        requires { 0 <= n <= length (lst) }
+        ensures { positive result }
+        ensures { length (result) = length (lst) - n }
+        =
+        match lst with
+        | Nil -> Nil
+        | Cons _ t ->
+            if n > 0 then
+                drop t (n - 1)
+            else
+                lst
+        end
+
+
+    let rec lemma concatenation_take_drop (lst: list int) (n: int)
+        requires { positive lst }
+        requires { 0 <= n <= length (lst) }
+        ensures { take lst n ++ drop lst n = lst }
+        variant { lst }
+    =
+        match lst with
+        | Nil -> ()
+        | Cons _ t ->
+            if n > 0 then
+                concatenation_take_drop t (n - 1)
+            else
+                ()
+        end
+
+    let ghost function calculate_output_dims (input_dims: list int) (axis: int): list int
+    requires { positive input_dims }
+    (* Axis [C1] *)
+    requires { 0 <= axis <= length (input_dims) }
+    ensures { length (result) = 2 }
+    ensures { positive result }
+    ensures { size result = size input_dims }
+    =
+        let first_part = take input_dims axis in
+        let second_part = drop input_dims axis in
+        let first_dim = size first_part in
+        let second_dim = size second_part in
+        Cons first_dim (Cons second_dim Nil)
+
+
+    let rec ghost function productRangeGo (x_dims: list int) (start: int) (end_: int): int
+    requires { positive x_dims }
+    requires { 0 <= start <= end_ <= length (x_dims) + start }
+    variant { length (x_dims) }
+    ensures { result >= 1 }
+    = 
+        match x_dims with
+        | Nil -> 1
+        | Cons h t ->
+            if start >= end_ then
+                1
+            else
+                h * productRangeGo t (start + 1) end_
+        end
+    
+    let rec lemma append_preserves_non_negative (l1 l2: list int)
+        requires { non_negative l1 }
+        requires { non_negative l2 }
+        ensures { non_negative (l1 ++ l2) }
+        variant { l1 }
+    =
+        match l1 with
+        | Nil -> ()
+        | Cons _ t -> append_preserves_non_negative t l2
+        end
+
+    let rec lemma div_non_negative (a b: int)
+        requires { a >= 0 }
+        requires { b >= 1 }
+        ensures { div a b >= 0 }
+    = ()
+
+    (*Doesnt need to requires that y_coords is a valid value because we are going to call this functio with valid ks y.shape*)
+    let rec ghost function calculateAux (y_coords : int) (first_part: list int) (x_coords: list int) : list int
+    requires { y_coords >= 0 }
+    requires { positive first_part }
+    requires { non_negative x_coords }
+    ensures { length (result) = length (x_coords) + length (first_part) }
+    =
+        match first_part with
+        | Nil -> x_coords
+        | Cons _ t ->
+            let prod = productRangeGo first_part 0 (length first_part) in
+            let coord = div y_coords prod in
+            let y_coords_new = y_coords - coord * prod in
+            calculateAux y_coords_new t (x_coords ++ (Cons coord Nil))
+
+        end
+
+    let ghost function calculateX (x_shape: list int) (y_coords: list int) (axis: int): list int
+    requires { positive x_shape }
+    requires { non_negative y_coords }
+    requires { 0 <= axis <= length (x_shape) }
+    requires { length (y_coords) = 2 }
+    ensures { length (result) = length (x_shape) }
+    =
+        let first_part = take x_shape axis in
+        let second_part = drop x_shape axis in
+        let a = calculateAux (test y_coords 0) first_part Nil in
+        let b = calculateAux (test y_coords 1) second_part Nil in
+        a ++ b
+
+
+    let ghost function dflatten (x: tensor 'a) (axis: int): data 'a
+    requires { 0 <= axis <= length (x.dims) }
+    requires { let y_shape = calculate_output_dims x.dims axis in
+               forall ks. valid ks y_shape -> non_negative ks /\ length ks = 2 }
+    =
+        let y_shape = calculate_output_dims x.dims axis in
+        fun ks ->
+            if valid ks y_shape then
+                let x_coords = calculateX x.dims ks axis in
+                x.data x_coords
+            else
+                x.background
+
+
+    let ghost function flatten (x: tensor 'a) (axis: int): tensor 'a
+    requires { -length x.dims <= axis <= length x.dims }
+    requires {  let a_normalized =
+                    if axis < 0 then
+                        axis + length (x.dims)
+                    else
+                        axis
+               in
+               let y_shape = calculate_output_dims x.dims a_normalized in
+               forall ks. valid ks y_shape -> length ks = 2 /\ non_negative ks }
+    =
+    let a_normalized =
+        if axis < 0 then
+            axis + length (x.dims)
+        else
+            axis
+    in
+    { dims = calculate_output_dims x.dims a_normalized; data = dflatten x a_normalized; background = x.background }
+
+end
