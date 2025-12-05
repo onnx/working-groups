@@ -110,8 +110,9 @@ For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-
 $$
 Y[i] = 
 \begin{cases} 
-\text{NaN} & \text{if} A[i] = \text{NaN} \\
-\text{+Inf} & \text{if} A[i] = \pm \text{Inf} \\
+\text{NaN} & \text{if } A[i] = \text{NaN} \\
+\text{+Inf} & \text{if } A[i] = \pm \text{Inf} \\
+\text{+0} & \text{if } A[i] = \pm \text{0} \\
 A[i] & \text{otherwise} 
 \end{cases}
 $$
@@ -154,4 +155,5 @@ Absolute value of tensor $X$
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 See specification for [real numbers](#real).
+
 
