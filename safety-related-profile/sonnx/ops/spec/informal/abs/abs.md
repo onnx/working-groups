@@ -110,8 +110,9 @@ For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-
 $$
 Y[i] = 
 \begin{cases} 
-|X[i]| & \text{if } A[i] \text{ is different from NaN, including +Inf, -Inf, +0, -0} \\
-\text{NaN} & \text{otherwise} 
+\text{NaN} & \text{if} A[i] = \text{NaN} \\
+\text{+Inf} & \text{if} A[i] = \pm \text{Inf} \\
+A[i] & \text{otherwise} 
 \end{cases}
 $$
 
