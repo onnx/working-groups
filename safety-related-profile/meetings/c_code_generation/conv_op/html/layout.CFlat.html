@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module layout.CFlat</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="layout.index.html">layout</a></code> — <code>module CFlat</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">CFlat</span><a href="layout.proof.html#CFlat" title="Valid (13 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> std.<a title="std.Int" href="std.Int.html">Int</a>
+  <span class="keyword">use</span> std.<a title="std.List" href="std.List.html">List</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Range" href="tensor.Range.html">Range</a>
+
+  <span class="keyword">function</span> <a id="offset">offset</a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) : int =
+    <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> k ks , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ds -&gt; k <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> ds <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> <a title="layout.CFlat.offset" href="#offset">offset</a> ks ds
+    | _ -&gt; 0
+    <span class="keyword">end</span>
+
+  <span class="keyword">function</span> <a id="index">index</a> (p : int) (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int =
+    <span class="keyword">match</span> ds <span class="keyword">with</span>
+    | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ds -&gt; <span class="keyword">let</span> n = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> ds <span class="keyword">in</span> <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> (<a title="int.ComputerDivision.div" href="https://www.why3.org/stdlib/int.html#div_209">div</a> p n) (<a title="layout.CFlat.index" href="#index">index</a> (<a title="int.ComputerDivision.mod" href="https://www.why3.org/stdlib/int.html#mod_210">mod</a> p n) ds)
+    <span class="keyword">end</span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="offset_size">offset_size</a><a href="layout.proof.html#CFlat.offset_size" title="Valid (5 goals)" class="icon valid icofont-check"></a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> ks ds }
+    <span class="keyword">ensures</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="layout.CFlat.offset" href="#offset">offset</a> ks ds <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> ds }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> k krs , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d drs -&gt;
+        offset_size krs drs ;
+        <span class="keyword">let</span> p = <a title="layout.CFlat.offset" href="#offset">offset</a> ks ds <span class="keyword">in</span>
+        <span class="keyword">let</span> q = <a title="layout.CFlat.offset" href="#offset">offset</a> krs drs <span class="keyword">in</span>
+        <span class="keyword">assert</span> { p = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> drs <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> k <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> q } ;
+        <span class="keyword">assert</span> {
+             <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> drs <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> k
+          <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> drs <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> (d <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> 1)
+           = d <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> drs <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> drs
+        } ;
+      | _ -&gt; ()
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="index_range">index_range</a><a href="layout.proof.html#CFlat.index_range" title="Valid (one goal)" class="icon valid icofont-check"></a> (p : int) (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.positive" href="tensor.Range.html#positive">positive</a> ds }
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> ds }
+    <span class="keyword">ensures</span> { <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> (<a title="layout.CFlat.index" href="#index">index</a> p ds) ds }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ds <span class="keyword">with</span>
+      | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; ()
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ rds -&gt; index_range (<a title="int.ComputerDivision.mod" href="https://www.why3.org/stdlib/int.html#mod_284">mod</a> p (<a title="tensor.Range.size" href="tensor.Range.html#size">size</a> rds)) rds
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="index_of_offset">index_of_offset</a><a href="layout.proof.html#CFlat.index_of_offset" title="Valid (one goal)" class="icon valid icofont-check"></a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> ks ds }
+    <span class="keyword">ensures</span> { <a title="layout.CFlat.index" href="#index">index</a> (<a title="layout.CFlat.offset" href="#offset">offset</a> ks ds) ds = ks }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> k rks , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ rds -&gt;
+          index_of_offset rks rds ;
+          <span class="keyword">let</span> p = <a title="layout.CFlat.offset" href="#offset">offset</a> ks ds <span class="keyword">in</span>
+          <span class="keyword">let</span> n = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> rds <span class="keyword">in</span>
+          <span class="keyword">let</span> q = <a title="layout.CFlat.offset" href="#offset">offset</a> rks rds <span class="keyword">in</span>
+          <a title="std.Int.euclide" href="std.Int.html#euclide">euclide</a> p k n q ;
+      | _ -&gt; ()
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="offset_of_index">offset_of_index</a><a href="layout.proof.html#CFlat.offset_of_index" title="Valid (one goal)" class="icon valid icofont-check"></a> (p : int) (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.positive" href="tensor.Range.html#positive">positive</a> ds }
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> ds }
+    <span class="keyword">ensures</span> { <a title="layout.CFlat.offset" href="#offset">offset</a> (<a title="layout.CFlat.index" href="#index">index</a> p ds) ds = p }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ds <span class="keyword">with</span>
+      | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; ()
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ rds -&gt;
+        <span class="keyword">let</span> n = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> rds <span class="keyword">in</span>
+        offset_of_index (<a title="int.ComputerDivision.mod" href="https://www.why3.org/stdlib/int.html#mod_284">mod</a> p n) rds
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="offset_push">offset_push</a><a href="layout.proof.html#CFlat.offset_push" title="Valid (5 goals)" class="icon valid icofont-check"></a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) (k d : int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> ks ds }
+    <span class="keyword">ensures</span> { <a title="layout.CFlat.offset" href="#offset">offset</a> (<a title="std.List.push" href="std.List.html#push">push</a> ks k) (<a title="std.List.push" href="std.List.html#push">push</a> ds d) = <a title="layout.CFlat.offset" href="#offset">offset</a> ks ds <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> d <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ks }
+    = <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ krs , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ drs -&gt; offset_push krs drs k d
+      | _ -&gt; ()
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

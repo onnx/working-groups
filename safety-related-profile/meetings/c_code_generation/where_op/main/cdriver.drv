@@ -1,0 +1,11 @@
+module std.Clib
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  syntax val ([]) "%1[%2]" prec 1 1 15
+  syntax val ([]<-) "%1[%2] = %3" prec 14 14 15 14
+end
+
+module libvector.CIndex
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+end
