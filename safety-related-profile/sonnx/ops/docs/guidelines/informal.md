@@ -17,8 +17,10 @@ More precisely, the informal specification:
 - Without calling on a strict formal, mathematical language,
 - Knowing that the exact and complete specification is given in the "formal" part.
 - May provide diagrams and examples to make things clear.
-- Follow ONNX nomenclature, for operator names, types, identifiers of operator inputs, outputs and attribute, etc. 
-
+- Follows ONNX nomenclature, which includes naming convention, for operator names, types, identifiers of operator inputs, outputs and attribute, etc.
+  - Examples: 
+    - The element-wise addition of tensors is $Add$, not $add$
+    - The 16-bit floating-point type is $float16$, not $FP16$
 
 The writer of the informal specification must take care to keep it readable and understandable by a ML developer. The recommendations given in the following guidelines target this objective.
 
@@ -73,7 +75,7 @@ This is a reference to the tagged paragraph  [`[T1]`](#my_tag_name).
 - The data types allowed in SONNX operators are: 
   - IEEE 754 floating-point types: double, float, float16
   - Signed integer types: int64, int32, int16, int8
-  - Unsigned integer types: uint64, uint32 uint16, uint8
+  - Unsigned integer types: uint64, uint32, uint16, uint8
   - bool
   - string
 - IEEE 754 floating-point types, i.e., double, float and float16 have the following special numbers:
@@ -87,7 +89,9 @@ This is a reference to the tagged paragraph  [`[T1]`](#my_tag_name).
 
 ## Structure of the informal specification
 
-The specification on an operator is structured as follows. 
+This Section describes the required structure $and$ contents of the informal specification of an operator.
+
+[Informal specification template](informal_spec_template.md) contains the required structure only.
 
 ### Contents
 
@@ -134,7 +138,7 @@ When the same name is used for different arguments such as in
 
  this means that the operator is **variadic**, i.e., it accepts a variable number of arguments. In this example, there are n arguments that are discriminated by their index.  
 
-#### Restrictions
+### Restrictions
 This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. 
 
 There are SONNX general restrictions that apply to all the operators. Therefore, this section shall contain the following link:
@@ -152,7 +156,7 @@ An example is given hereafter
 | `[R1]` | Input tensor $X$ has 2 spatial axes | Transient |
 | `[R2]` | Attribute `auto_pad` is restricted to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
 
- ## Informal specification
+ ### Informal specification
  
  This section contains the informal specification of the operator. By "informal", we mean that the description does not rely on a formal language, even though it usually uses some mathematical formulae. The specification shall be readable, understandable, and self-contained. It can include figures if deemed necessary. The objective is that a human being can fully understand the domain, range, and semantic of the operator with no additional information. Stated differently, he/she should be able to implement the operator with no additional information.
  
@@ -179,8 +183,6 @@ For instance, for the $\text{conv}$ operator:
 >- $m \in [0,dY_2-1]$ is the index of the first spatial axis of output $Y$
 >- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output $Y$
 >- etc.
-
-[Informal specification template](informal_spec_template.md).
 
 ## Error conditions
 
