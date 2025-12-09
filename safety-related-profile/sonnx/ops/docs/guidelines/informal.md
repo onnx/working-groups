@@ -35,8 +35,8 @@ The writer of the informal specification must take care to keep it readable and 
 - The rank of a tensor $T$, i.e., the number of its dimensions, is denoted $rT$. 
 - For a tensor used as a variadic parameter (denoted $Ai$), the shape is denoted by $(dAi_{0}, dAi_{1}, ...)$.
 - A specific element of a tensor is denoted:
-  - either as: A[i], where "i" is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index)
-  - or as: A[i, j, ...], where "i, j, ..." are the indexes along the dimensions $dA_i$, $dA_j$, ... 
+  - either as: $A[i]$, where $i$ is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index)
+  - or as: $A[i, j, ...]$, where $i, j, ...$ are the indexes along the dimensions $dA_i$, $dA_j$, ... 
  
 #### Numerical errors
 - The numerical errors of a tensor $A$ are always represented by a tensor $A_{\textit{err}}$ that is the difference between the tensor $A_{\textit{impl}}$ computed by some implementation and the infinitely accurate tensor $A_{\textit{real}}$ expressed by the formal specification for real numbers.
