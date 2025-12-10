@@ -1,6 +1,6 @@
 # Introduction
 
-This document gives the guidelines to be followed when writing an operator's **informal** and **formal** specification.
+This document gives the guidelines to be followed when writing an operator's **informal** specification.
 
 Note: as of July 2025, guidelines are limited to the *informal* specification. 
 
@@ -15,7 +15,7 @@ The informal specification is intended for both users *and* implementers of oper
 More precisely, the informal specification:
 - Is aimed at showing clearly what a given operator is supposed to do,
 - Without calling on a strict formal, mathematical language,
-- Knowing that the exact and complete specification is given in the "formal" part.
+- Knowing that the exact and complete specification is given in the "formal" specification.
 - May provide diagrams and examples to make things clear.
 - Follows ONNX nomenclature, which includes naming convention, for operator names, types, identifiers of operator inputs, outputs and attribute, etc.
   - Examples: 
@@ -40,10 +40,6 @@ The writer of the informal specification must take care to keep it readable and 
   - either as: $A[i]$, where $i$ is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index)
   - or as: $A[i, j, ...]$, where $i, j, ...$ are the indexes along the dimensions $dA_i$, $dA_j$, ... 
  
-#### Numerical errors
-- The numerical errors of a tensor $A$ are always represented by a tensor $A_{\textit{err}}$ that is the difference between the tensor $A_{\textit{impl}}$ computed by some implementation and the infinitely accurate tensor $A_{\textit{real}}$ expressed by the formal specification for real numbers.
-  - In the section on numerical accuracy, the notation $A_{\textit{real}}$ is replaced by $A$ unless it introduces ambiguity.
-
 #### Tags
 The informal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated by tag `[R<i>]` where `<i>` is a number.\
@@ -245,46 +241,5 @@ where $\text{name}$ is the output's name and `<type>` is the output's type.
 
  #### Constraints
 Same as for the inputs.
- 
- ## Formal specification
- 
-This section contains a link to the formal specification expressed in Why3.
- 
 
-## Numerical Accuracy
- 
-This section provides a tight and verifiable specification of the numerical error
-on the operator's results. It decomposes the error into two parts:
-the first, the propagated error, depends on the numerical error and the
-numerical values of the inputs ; the second part, the introduced error,
-depends only on the numerical value of the inputs.
-
-The provided specification results from an over-approximated semantics (ex: IEEE-754) of the
-numerical error of native computer operations approximating real number
-operations. In order to preserve the readability of the formulas, the general specification introduces additional (conservative) simplifications compared to the original specifications.
-However, this general specification may be too over-approximated for some specific inputs (ex tensor representing diagonal matrices). In this case, more precise specific specifications are provided alongside the general specification.
-
-The error specification comes with unit verification scenarios to verify the implementation's conformity. In the absence of value ranges for the inputs, the unit verification scenarios operate on symbolic values and errors to propagate correct formulas throughout the scenario and thus provide a proof for the assertions. In particular, the C implementation generated from the Why3 formal specification must be verified using these scenarios, for example by using symbolic instrumentation libraries.
-
-### Error Propagation
-
-This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of an operator.
-
-### Error Introduction
-
-This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$, the introduced error, where $Y$ is the tensor result of an operator.
-
-Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
-
-### Unit Verification
-
-This section contains a verification scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
-
-* The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
-* The `float` field is a symbolic abstract domain for the computed value.  
-* The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
-* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
-
-# Formal specification guidelines
-
-*To be completed.*
+                          End of the document.
