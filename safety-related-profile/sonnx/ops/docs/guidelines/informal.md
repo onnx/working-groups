@@ -2,8 +2,6 @@
 
 This document gives the guidelines to be followed when writing an operator's **informal** specification.
 
-Note: as of July 2025, guidelines are limited to the *informal* specification. 
-
 # Informal specification guidelines
 This section is composed of two sub-sections:
 - *General guidelines*, which defines the use of fonts, notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
