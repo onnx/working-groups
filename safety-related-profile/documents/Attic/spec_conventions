@@ -1,0 +1,26 @@
+# Operator specification conventions
+
+**This is a DRAFT** to be completed. 
+
+## Specification principles
+
+The specification follows the following *principles*.
+
+1.  We are only concerned with the syntactic and semantics elements
+    concerning the **inference**. All ONNX constructs dealing with
+    training are out of the scope of the Safety-Related Standard.
+
+2.  We distinguish an *informal* and a *formal* specification. The
+    *informal* part is aimed at facilitating the understanding of the
+    ONNX construct (e.g., operator). It may be incomplete, as far as it
+    is clearly indicated. Conversely, the *formal* specification shall
+    be absolutely complete and non ambiguous.
+
+3.  Using mathematical formalism shall be avoided if not required. Since
+    we are essentially[^1] targeting data and computer scientists, using
+    a very cryptic – yet perfectly well defined and mathematically
+    grounded – notation may reveal being error prone and, consequently,
+    counter effective.
+
+4.  The specification can rely on a formal language, as far as this
+    language does not violate rule (2) above.
