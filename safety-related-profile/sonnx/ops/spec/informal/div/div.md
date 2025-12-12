@@ -26,7 +26,7 @@ The following restrictions apply to the **Div** operator for the SONNX profile:
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
 
 ## Informal specification
 
