@@ -57,16 +57,16 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `strides` is set to (3,2)
 
 The following figure illustrates $\text{pad}$ function applied to the input tensor `X`:
-<img src="./imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
+<img src="./assets/imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
 
 
 The following figure illustrates $\text{dilation}$ function applied to the kernel `W`:
 
-<img src="./imgs/onnx_conv_dilationop.png" alt="drawing" width="50%"/>
+<img src="./assets/imgs/onnx_conv_dilationop.png" alt="drawing" width="50%"/>
 
 
 Finally, the following figure illustrates operator `Conv` applied on input `X` with kernel `W` and bias `B`:
-<img src="./imgs/convwithoperators2.png" alt="drawing" width="100%"/>
+<img src="./assets/imgs/convwithoperators2.png" alt="drawing" width="100%"/>
 
 The following figure shows the case where the number of channels of `X` is 3. In this example:
 - shape of `Y` is ($1, 1, 4, 4$) 
@@ -76,7 +76,7 @@ The following figure shows the case where the number of channels of `X` is 3. In
 - `groups` is  set to 1 
 - the other attributes have the same values as in the previous figure.
 
-<img src="./imgs/3channels_std_conv_modified.png" alt="drawing" width="100%"/>
+<img src="./assets/imgs/3channels_std_conv_modified.png" alt="drawing" width="100%"/>
 
 ##### Depthwise convolution
 A _depthwise convolution_ applies a specific kernel (or "filter") to each input channels. The number of output channels is equal to the number of input channels.  This corresponds to the case where `group`= $dX_1$. 
@@ -97,7 +97,7 @@ The effect of the operator is illustrated on the following figure. In this examp
 - `groups` is  set to 3
 - the other attributes have the same values as in the previous figure.
 
-<img src="./imgs/conv_dep_3ch_mod2.png" alt="drawing" width="100%"/>
+<img src="./assets/imgs/conv_dep_3ch_mod2.png" alt="drawing" width="100%"/>
 
 #### Error conditions
 In the domain of real numbers, the operator has no error condition.
@@ -206,7 +206,7 @@ Attribute `pads` determines the padding at the beginning and end along each spat
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
-<img src="./imgs/conv_pad2.png" width="300" />
+<img src="./assets/imgs/conv_pad2.png" width="300" />
 
 ###### Constraints
 - <a id="T8"></a> <b><span style="font-family: 'Courier New', monospace">[T8]</span></b> `C1`: Value domain
@@ -226,7 +226,7 @@ Attribute `dilations` specifies the spacing between the kernel elements for each
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure. In this example, `dilations`=(2,2). 
 
-<img src="./imgs/dilation.png" width="300" />
+<img src="./assets/imgs/dilation.png" width="300" />
 
 
 ###### Constraints
@@ -292,4 +292,5 @@ This parameter specifies the shape of the convolution kernel `W`.
 #### Formal specification
 
 *(to be completed)*
+
 
