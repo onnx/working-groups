@@ -142,34 +142,33 @@ No error conditions.
  - `[C1]` <a id="C1iy"></a> First constraint on $Indices$
    - Statement: Description of the first constraint on $Indices$
 
-
 ## Attributes
 
-### $\text{auto\_pad}$: `string`
+### $auto\\_pad$: `string`
 
 *Attribute description*
 
-### $\text{ceil\_mode}$: `int`
+### $ceil\\_mode$: `int`
 
 *Attribute description*
 
-### $\text{dilations}$: `list of ints`
+### $dilations$: `list of ints`
 
 *Attribute description*
 
-### $\text{kernel\_shape}$: `list of ints`
+### $kernel\\_shape$: `list of ints`
 
 *Attribute description*
 
-### $\text{pads}$: `list of ints`
+### $pads$: `list of ints`
 
 *Attribute description*
 
-### $\text{storage\_order}$: `int`
+### $storage\\_order$: `int`
 
 *Attribute description*
 
-### $\text{strides}$: `list of ints`
+### $strides$: `list of ints`
 
 *Attribute description*
 
