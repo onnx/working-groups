@@ -1,4 +1,4 @@
-# `conv` operator
+/# `conv` operator
 ### Contents
 - `Convolution` operator for type real.
 
@@ -176,7 +176,7 @@ For instance, with $\mbox{\texttt{stride}}[0]=3$ and $\mbox{\texttt{stride}}[1]=
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
-<img src="./imgs/conv_stride3.png" width="300" />
+<img src="./assets/imgs/conv_stride3.png" width="300" />
 
 ###### Constraints
 - <a id="T6"></a> <b><span style="font-family: 'Courier New', monospace">[T6]</span></b> `C1`: Value domain
@@ -245,7 +245,7 @@ This attribute specifies the number of groups the input channels and output chan
 
 The effect of the `group` attribute for a tensor with two spatial axes is depicted on the following figure. In this example `group`=3.
 
-<img src="./imgs/grouped_convolution.png" width="300" />
+<img src="./assets/imgs/grouped_convolution.png" width="300" />
 
 (Taken from https://eli.thegreenplace.net/2018/depthwise-separable-convolutions-for-machine-learning)
 
@@ -292,5 +292,6 @@ This parameter specifies the shape of the convolution kernel `W`.
 #### Formal specification
 
 *(to be completed)*
+
 
 
