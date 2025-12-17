@@ -1,4 +1,4 @@
-# 2025/12/03
+# 2025/12/17
 ## Participants
   - _To be completed_
 ## Agenda
@@ -20,12 +20,16 @@
   - Have all guidelines : informal (OK), formal (todo), numerical accuracy (todo), tests (todo)   
 - About contacts to increase participation...
 ## Minutes
-  - _To be completed_
+  - See agenda.
+  - Possibe opportunity to present our work at the CTIC conf. (CfP in Jan. 2026).
 ## Actions
 ### New actions
-  - _To be completed_
+  - [ ] (1712-1, Joao, Ricardo) Give examples of values leading to discrepancies with operator **Range**
+  - [ ] (1712-2, Eric, Jean) Check opportunity to present our work at CTIC
 ### Previous actions
-- [ ] (0312-1,Edorado, Mohammed) Review of the broadcast operator
+- [ ] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
+  - Edorardo : Done
+  - Mohammed : To be done during Jan. 2026 
 - [X] (0312-2,Ricardo, Joao) Open PR on unsqueeze and flatten
 - [X] (0312-3,Jean) Update the project's [Kanban](https://github.com/users/ericjenn/projects/4/views/8) to reflect the actual status of SONNX... 
 - [X] (1911-1, Jean) Put the contents of the [presented slides](./slides/2025-11-20-Jean-verification-plan.pdf) into some nice markdown file, and put it in [guidelines area](../sonnx/ops/docs/guidelines/) for review
@@ -33,17 +37,19 @@
 - [ ] (1911-2, All) Review Jean's proposal (see above)
   - File to be reviewed not yet delivered.  
 - [X] (0511-3, Eric) Give access to the SONNX github "project" in order to facilitate the management of the artifacts statuses.
-- [ ] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
+- [X] (0511-4, João, Ricardo, Eric) Investigate the problem of Clip
     - There is a dependency to the execution platform. The test setup must be described along with the test script.
-    - [ ] Check if there is a possible way to set the CPU provider so that test pass.
+    - [X] Check if there is a possible way to set the CPU provider so that test pass.
+    - When running the script, the provider has to be chosen (with different types) 
 - Action from local work session 
   - [X] Modify existing operator specifications to comply with new conventions.
     - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
-  - [ ] (Mariem) Give R&J a feedback ont the formal spec (in particular: recall a few principles to be followed).
+  - [ ] (Mariem) Give R&J a feedback on the formal spec (in particular: recall a few principles to be followed).
   - [X] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
   - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
     - Some solutions are available. These solutions must be discussed with Loïc. 
     - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currenlty being discussed with Jorge then to be discussed with Loïc
 
 # 2025/12/03
 ## Participants
