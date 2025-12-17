@@ -8,6 +8,9 @@
 - Discussion about João and Ricardo's issues:
   - On **Range** (pb with FP), 
   - On **Reshape** (shape inference)  
+- Status of formal spec of **Conv** (and FP values modeling)
+- Numerical accurracy, the case of [**Conv**](https://github.com/ericjenn/working-groups/blob/spec-with-numerical-accuracy-info/safety-related-profile/sonnx/ops/spec/informal/conv/conv.md)
+  - Separation of accuracy from the rest of the spec (e.g., "conv_acc.md").
 - About guidelines
   - for formal spec...
   - for numerical precision...
