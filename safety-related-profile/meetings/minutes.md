@@ -14,6 +14,10 @@
 - About guidelines
   - for formal spec...
   - for numerical precision...
+- About the opportunity to organize an "event" in Feb. or March 2026
+  - Objective: present the status of our activity to the community
+  - Have **at least** one full example covering: informal spec, tests, formal spec (+proofs), generated code, integration in Aidge (ideally, a simple graph...)
+  - Have all guidelines : informal (OK), formal (todo), numerical accuracy (todo), tests (todo)   
 - About contacts to increase participation...
 ## Minutes
   - _To be completed_
