@@ -1,0 +1,249 @@
+module OPUnsqueeze
+
+    use list.List
+    use int.Int
+    use list.Mem
+    use list.Append
+    use list.Length
+    use list.Sorted
+    use list.Permut
+    use list.Nth
+    use option.Option
+    use list.NumOcc
+    use tensor.Tensor
+    use tensor.Range
+    use int.EuclideanDivision
+
+
+    function my_nth (l: list int) (i: int): int =
+    match nth i l with
+        | Some d -> d
+        | None -> -1
+    end
+
+    function head (l: list int): int =
+    match l with
+      | Cons d _ -> d
+      | Nil -> -1
+    end
+
+    predicate sorted (l:list int) =
+    match l with
+        | Nil -> true
+        | Cons x xs ->
+            forall y:int. mem y xs -> x <= y /\ sorted xs
+    end
+
+    let rec ghost  function takeSmaller (pivot:int) (l:list int) : list int
+    ensures { forall x:int. mem x result <-> (mem x l /\ x <= pivot) }
+    ensures { length result <= length l }
+    =
+    match l with
+        | Nil -> Nil
+        | Cons x xs  ->
+            if x <= pivot then
+            Cons x (takeSmaller pivot xs)
+            else
+            takeSmaller pivot xs
+    end
+
+
+    let rec ghost  function takeBigger (pivot:int) (l:list int) : list int 
+    ensures { forall x:int. mem x result <-> (mem x l /\ x > pivot) }
+    ensures { length result <= length l }
+    =
+    match l with
+        | Nil -> Nil
+        | Cons x xs  ->
+            if x > pivot then
+            Cons x (takeBigger pivot xs)
+            else
+            takeBigger pivot xs
+    end
+
+
+    let rec lemma partition_permut (pivot: int) (l: list int)
+    variant { l }
+    ensures { permut (takeSmaller pivot l ++ Cons pivot (takeBigger pivot l)) (Cons pivot l) }
+    =
+    match l with
+    | Nil -> ()
+    | Cons _ xs ->
+        partition_permut pivot xs
+    end
+
+    
+    axiom sorted_cons_pivot_smaller:
+    forall pivot:int, smaller:list int, bigger:list int.
+        sorted smaller ->
+        sorted bigger ->
+        (forall x:int. mem x smaller -> x <= pivot) ->
+        (forall x:int. mem x bigger -> x > pivot) ->
+        sorted (smaller ++ (Cons pivot bigger))
+    
+
+    let rec ghost function list_sort (l:list int) : list int 
+    variant { length l }
+    ensures { permut result l }
+    ensures { sorted result }
+    =
+    match l with
+        | Nil -> Nil
+        | Cons pivot rest ->
+            let smaller = list_sort (takeSmaller pivot rest) in
+            let bigger = list_sort (takeBigger pivot rest) in
+            smaller ++ (Cons pivot bigger)
+    end
+
+
+    lemma mem_helper: forall x:int, xs:list int. mem x (Cons x xs)
+
+    let rec ghost function normalize_axis (axis: list int) (rank: int) : list int
+    requires { rank >= 0 }
+    (* Axis Value Domain *)
+    requires { forall a. mem a axis -> -rank <= a < rank }
+    (* Axis Uniqueness *)
+    requires { forall a1 a2. mem a1 axis /\ mem a2 axis ->
+                (mod (a1 + rank) rank) = (mod (a2 + rank) rank) -> a1 = a2 }
+    (* All values on axis exists on normalize axis*)
+    ensures { length result = length axis }
+    (* All values on result are normalized *)
+    ensures { forall a. mem a result -> 0 <= a < rank }
+    (* Since axis are unique, each negative value is mapped to the corret non negative value *)
+    ensures { forall a. mem a axis /\ a < 0 -> mem (a + rank) result }
+    (* ensures { forall i. 0 <= i < length axis /\ length axis = length result ->
+                let a = my_nth axis i in
+                if a < 0 then
+                    my_nth result i = a + rank
+                else
+                    my_nth result i = a } *)
+    =
+    match axis with
+        | Nil -> Nil
+        | Cons h t ->
+            if h < 0 then
+            Cons (h + rank) (normalize_axis t rank)
+            else
+            Cons h (normalize_axis t rank)
+    end
+
+    let rec ghost function insert_by_order (x_dims: list int) (a: int) : list int  
+    requires { positive x_dims}
+    ensures { positive result }
+    ensures { length result = length x_dims + 1 }
+    ensures { forall i:int. 0 <= i < length result -> (i = a -> my_nth result i = 1) }
+    ensures { forall x. mem x x_dims -> mem x result }
+    =
+    match x_dims with
+        | Nil -> Cons 1 Nil
+        | Cons h t ->
+            if a = 0 then
+                Cons 1 (Cons h t)
+            else
+                Cons h (insert_by_order t (a - 1))
+    end
+            
+
+
+    let rec ghost function calculate_y_dims (x_dims: list int) (axis: list int) : list int
+    requires { positive x_dims}
+    ensures { positive result }
+    ensures { length result = length x_dims + length axis }
+    =
+    match x_dims, axis with
+        | Nil, Nil -> Nil
+        | x_dims, Nil -> x_dims
+        | x_dims, Cons y ys -> calculate_y_dims (insert_by_order x_dims y) ys
+    end
+
+    let rec ghost function decrease_axis (axis: list int): list int
+    ensures { length result = length axis }
+    =
+        match axis with
+        | Nil -> Nil
+        | Cons h t -> Cons (h - 1) (decrease_axis t)
+        end
+
+    let rec ghost function remove_by_order (y_dims: list int) (a: int) : list int
+    =
+    match y_dims with
+        | Nil -> Nil
+        | Cons h t ->
+            if a = 0 then
+            t
+            else
+            Cons h (remove_by_order t (a - 1))
+    end
+
+    let rec ghost function calculate_x_coords (y_coords: list int) (axis: list int)  : list int
+    variant { length axis }
+    =
+    match y_coords, axis with
+        | Nil, Nil -> Nil
+        | y_coords, Nil -> y_coords
+        | y_coords, Cons h t -> calculate_x_coords (remove_by_order y_coords h) (decrease_axis t)
+    end
+
+
+    let rec ghost function build_list (axis: tensor int) (ks: int) : list int
+    (* 1D Axis *)
+    requires { length axis.dims = 1 }
+    (* Valid values for ks, is 0 <= ks < size (axis.dims) *)
+    requires { 0 <= ks < size (axis.dims) }
+    variant { size (axis.dims) - ks }
+    (* size axis data is the same of the size of result *)
+    ensures { length result = size (axis.dims) - ks }
+    ensures { 0 <= ks < size (axis.dims) -> my_nth result 0 = axis.data (Cons ks Nil) }
+    (* ensures { forall j:int. 0 <= j < length result -> my_nth result j = axis.data (Cons (ks + j) Nil) } *)
+    =
+    if 0 <= ks < size (axis.dims) - 1 then
+        Cons (axis.data (Cons ks Nil)) (build_list axis (ks + 1))
+    else
+        Cons (axis.data (Cons ks Nil)) Nil
+
+
+    let ghost function dunsqueeze (x: tensor int) (axis: list int) : data int
+    =
+        let x_dims = x.dims in
+        let y_dims = calculate_y_dims x_dims axis in
+        fun ks ->
+            if valid ks y_dims then
+                let x_coords = calculate_x_coords ks axis in
+                x.data x_coords
+            else
+                x.background
+
+    let ghost function unsqueeze (x: tensor int) (axis: tensor int) : tensor int
+    (* 1D Axis *)
+    requires { length axis.dims = 1 }
+    (* Axis Value Domain *)
+    requires { 
+        let r = length x.dims + size (axis.dims) in
+        forall ks. valid ks axis.dims -> -r <= axis.data ks < r
+    }
+    requires {
+        let r = length x.dims + size (axis.dims) in
+        let axis_list = build_list axis 0 in
+        forall a. mem a axis_list -> -r <= a < r
+    }
+    (* Axis Uniqueness *)
+    requires { 
+    let r = length x.dims + size (axis.dims) in
+    forall ks1 ks2. valid ks1 axis.dims /\ valid ks2 axis.dims ->
+            (mod ((axis.data ks1) + r) (r)) = (mod ((axis.data ks2) + r) (r)) -> ks1 = ks2 }
+
+    requires { 
+        let r = length x.dims + size (axis.dims) in
+        let axis_list = build_list axis 0 in
+        forall a1 a2. mem a1 axis_list /\ mem a2 axis_list ->
+            (mod (a1 + r) r) = (mod (a2 + r) r) -> a1 = a2 
+    }
+    =
+        let axis_list = build_list axis 0 in
+        let x_dims = x.dims in
+        let axis_normalized = normalize_axis axis_list (length x_dims + (size axis.dims)) in
+        let axis_sorted_normalized = list_sort axis_normalized in
+        let y_dims = calculate_y_dims x_dims axis_sorted_normalized in
+        let y_data = dunsqueeze x axis_sorted_normalized in
+        { dims = y_dims; data = y_data; background = x.background }
+end
