@@ -3,7 +3,7 @@
 - **Op** operator for type [int8](#int8)
 
 
-Based on ONNX [Op version 14](https:/...).
+Based on ONNX documentation [Op version 14](https:/...).
 
 <a id="int8"></a>
 # **Op** (int8, int8)
