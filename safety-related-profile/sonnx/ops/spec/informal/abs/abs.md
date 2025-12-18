@@ -4,14 +4,14 @@
 - **Abs** operator for types [bfloat16, float16, float, double](#float)
 - **Abs** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
-Based on ONNX [Op version 13](https://onnx.ai/onnx/operators/onnx__Abs.html).
+Based on ONNX documentation [Abs version 13](https://onnx.ai/onnx/operators/onnx__Abs.html).
 
 <a id="real"></a>
 # **Abs** (real)
 
 ## Signature
 Definition of operator $\text{Abs}$ signature:
-$Y = \text{Abs}(X)$
+$Y = \textbf{Abs}(X)$
 
 where:
 - $X$: Input tensor
@@ -21,7 +21,7 @@ where:
 
 [General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-No specific restrictions apply to the **Abs** operator:
+No specific restrictions apply to the **Abs** operator.
 
 ## Informal specification
 
@@ -55,6 +55,10 @@ Y = \begin{bmatrix} 1.123 & 0 \\ 4 & 5 \\ 2 & 3 \end{bmatrix}
 ## Error conditions
 Not applicable
 
+## Attributes
+
+Operator **Abs** has no attribute.
+
 ## Inputs
 
 ### $\text{X}$: `real`
@@ -76,10 +80,6 @@ Absolute value of tensor $X$
 
  - `[C1]` <a id="C1ry"></a> Shape consistency
    - Statement: See [constraint (C1) on X](#C1rx)
-
-## Attributes
-
-Operator **Abs** has no attribute.
 
 <a id="float"></a>
 # **Abs** (float)
@@ -127,6 +127,10 @@ X = \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
 ## Error conditions
 Not applicable
 
+## Attributes
+
+Operator **Abs** has no attribute.
+
 ## Inputs
 
 ### $\text{X}$: `real`
@@ -155,5 +159,6 @@ Absolute value of tensor $X$
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 See specification for [real numbers](#real).
+
 
 
