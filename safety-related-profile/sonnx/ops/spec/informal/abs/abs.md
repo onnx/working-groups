@@ -61,7 +61,7 @@ Operator **Abs** has no attribute.
 
 ## Inputs
 
-### $\text{X}$: `real`
+### $\text{X}$: real
 
 Input tensor
 
@@ -72,7 +72,7 @@ Input tensor
     
 ## Outputs
 
-### $\text{Y}$: `real`
+### $\text{Y}$: real
 
 Absolute value of tensor $X$
 
@@ -133,7 +133,7 @@ Operator **Abs** has no attribute.
 
 ## Inputs
 
-### $\text{X}$: `real`
+### $\text{X}$: real
 
 Input tensor
 
@@ -144,7 +144,7 @@ Input tensor
     
 ## Outputs
 
-### $\text{Y}$: `real`
+### $\text{Y}$: real
 
 Absolute value of tensor $X$
 
@@ -159,6 +159,7 @@ Absolute value of tensor $X$
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 See specification for [real numbers](#real).
+
 
 
 
