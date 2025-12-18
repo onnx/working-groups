@@ -4,38 +4,35 @@
 - **Div** operator for types [float16, float, double](#float)
 - **Div** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
-Based on ONNX documentation version 14.
+Based on ONNX documentation [Div version 14](https://onnx.ai/onnx/operators/onnx__Div.html#div-14).
 
 <a id="real"></a>
 # **Div** (real, real)
 
 ## Signature
 Definition of operator $\text{Div}$ signature:
-$Y = \text{Div}(A, B)$
+$C =\textbf{Div}(A, B)$
 
 where:
 - $A$: numerator
 - $B$: denominator
-- $Y$: result of the element-wise division of $A$ by $B$
+- $C$: result of the element-wise division of $A$ by $B$
  
 
 ## Restrictions
 
-The following restrictions apply to the **Div** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
+No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
 
-Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 For any index $i$,
 
 $$
-Y[i] = 
+C[i] = 
 \begin{cases} 
 A[i]/B[i] & \text{if } B[i] \text{ is different from 0} \\
 \text{\it undefined} & \text{otherwise}
@@ -55,7 +52,7 @@ B = \begin{bmatrix} 3 & 3.3 & 5.1 \end{bmatrix}
 ```
 
 ```math
-Y = \frac{A}{B} = \begin{bmatrix} 6.1/3 & 9.5/3.3 & 35.7/5.1 \end{bmatrix}
+C = \frac{A}{B} = \begin{bmatrix} 6.1/3 & 9.5/3.3 & 35.7/5.1 \end{bmatrix}
 ```
 
 ### Example 2
@@ -77,7 +74,7 @@ B = \begin{bmatrix}
 ```
 
 ```math
-Y = \frac{A}{B} = \begin{bmatrix}
+C = \frac{A}{B} = \begin{bmatrix}
   3.7/3 & 2 \\
   16.2/4.1 & 0.5 \\
   25.3/5.2 & 6.2
@@ -87,6 +84,10 @@ Y = \frac{A}{B} = \begin{bmatrix}
 ## Error conditions
 No error condition.
 
+## Attributes
+
+Operator **Div** has no attribute.
+
 ## Inputs
 
 ### $\text{A}$: `real tensor`
@@ -95,7 +96,7 @@ Numerator of the division.
 #### Constraints
 
  - `[C1]` <a id="C1ra"></a> Shape consistency
-   - Statement: Tensors $A$, $B$, and $Y$ must have the same shape. 
+   - Statement: Tensors $A$, $B$, and $C$ must have the same shape. 
  
 ### $\text{B}$: `real tensor`
 Denominator of the division.
@@ -109,18 +110,14 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{Y}$: `real tensor`
+### $\text{C}$: `real tensor`
 
-Tensor $Y$ is the element-wise result of the division of $A$ by $B$.
+Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 
 #### Constraints
 
  - `[C1]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
-
-## Attributes
-
-Operator $\text{Div}$ has no attribute.
 
 ## Formal specification
  
@@ -128,21 +125,21 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-$Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+$C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
 
 ### Error Propagation
 
-This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of an operator.
-Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\textit{err}}$). For $Y = A/B$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ combines contributions from both $A$ and $B$:
+This section contains tight properties of $C_{\textit{err}}^{\textit{propag}}$, the propagated error, where $C$ is the tensor result of an operator.
+Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\textit{err}}$). For $C = A/B$, the propagated error $C_{\textit{err}}^{\textit{propag}}$ combines contributions from both $A$ and $B$:
 
 - For every $I$ such that $B[I] \neq 0$ and $B[I]$ does not cross zero under perturbation:
-  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{A_{\textit{err}}[I]}{B[I]}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2}\right|$
+  - $|C_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{A_{\textit{err}}[I]}{B[I]}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2}\right|$
 
 - If $B[I]$ and $B[I] + B_{\textit{err}}[I]$ have different signs, the bound may be unbounded (division by a near-zero denominator).
 
 ### Error Introduction
 Error introduction for real (ideal) arithmetic is null:
-- $Y_{\textit{err}}^{\textit{intro}} = [0]$.*
+- $C_{\textit{err}}^{\textit{intro}} = [0]$.*
 
 ### Unit Verification
 
@@ -181,30 +178,26 @@ where float is in {float16, float, double}
 
 # Signature
 Definition of operator $\text{Div}$ signature:
-$Y = \text{Div}(A, B)$
+$C = \textbf{Div}(A, B)$
 
 where
 
  - $A$: numerator
  - $B$: denominator
- - $Y$: result of element-wise division of $A$ by $B$
+ - $C$: result of element-wise division of $A$ by $B$
  
 ## Restrictions
-The following restrictions apply to the **Div** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1, GR2 and GR3 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1">  | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R2"></a>   | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
-| `[R3]` <a id="R3"></a>     | All tensors shall have the same datatype  | General restriction [GR3](../general_restrictions.md#GR3) |
+No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
 
-Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $Y[i]$ is the result of dividing $A[i]$ by $B[i]$
+Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
 For any index $i$,
 
 $$
-Y[i] = 
+C[i] = 
 \begin{cases} 
 A[i]/B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
 \text{inf} & \text{if } A[i] \neq 0 \text{ and } B[i]=0  \\
@@ -223,7 +216,7 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1.0 & 2.25 \\ 4.0 & +\infty \\ 5.1 & 6.0625 \end{bmatrix}
+C = \begin{bmatrix} 1.0 & 2.25 \\ 4.0 & +\infty \\ 5.1 & 6.0625 \end{bmatrix}
 ```
 
 ### Example 2
@@ -235,12 +228,16 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatrix}
+C = \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatrix}
 ```
 
 ## Error conditions
 - Values of the output tensor may be IEEE 754 infinity or NaN (case of a null denominator).  
-  
+
+## Attributes
+
+Operator **Div** has no attribute.
+
 ## Inputs
 
 ### $\text{A}$: `floating-point tensor`
@@ -249,7 +246,7 @@ Numerator of the division.
 #### Constraints
 
 - `[C1]` <a id="C1fa"></a> Shape consistency
-  - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape. 
 - `[C2]` <a id="C2fa"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
@@ -264,7 +261,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{Y}$: `floating-point tensor`
+### $\text{C}$: `floating-point tensor`
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -275,29 +272,25 @@ Result of the element-wise division of $A$ by $B$.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2fa) on tensor $A$.
 
-#### Attributes
-
-Operator **Div** has no attribute.
-
 ## Formal specification
  See Why3 specification.
 
 ## Numerical Accuracy
 
-For $Y = A / B$ with numerical errors $A_{\textit{err}}$, $B_{\textit{err}}$:
+For $C = A / B$ with numerical errors $A_{\textit{err}}$, $B_{\textit{err}}$:
 
 ### Error Propagation
 
   For all valid indexes $i$ where $B[i] \neq 0$ and $B[i] + B_{\textit{err}}[i]$ does not cross zero,
 
   $$
-  |Y_{\textit{err}}^{\textit{propag}}[i]| \leq \left|\frac{A_{\textit{err}}[i]}{B[i]}\right| + \left|\frac{A[i] \cdot B_{\textit{err}}[i]}{B[i]^2}\right|
+  |C_{\textit{err}}^{\textit{propag}}[i]| \leq \left|\frac{A_{\textit{err}}[i]}{B[i]}\right| + \left|\frac{A[i] \cdot B_{\textit{err}}[i]}{B[i]^2}\right|
   $$
 
 ### Error Introduction
 
-  Floating-point division introduces rounding error bounded by the unit in the last place (ulp) of $Y[i]$ in the target floating-point format.
-- $Y_{\textit{err}}^{\textit{intro}} = ulp(Y[i])$.
+  Floating-point division introduces rounding error bounded by the unit in the last place (ulp) of $C[i]$ in the target floating-point format.
+- $C_{\textit{err}}^{\textit{intro}} = ulp(C[i])$.
 
 ### Unit verification (symbolic)
 
@@ -332,25 +325,21 @@ where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
 Definition of operator $\text{Div}$ signature:
- $Y = \text{Div}(A,B)$
+ $C = \textbf{Div}(A,B)$
 
  where
  - $A$: numerator
  - $B$: denominator
- - $Y$: result of the element-wise division of $A$ by $B$
+ - $C$: result of the element-wise division of $A$ by $B$
 
 ### Restrictions
-The following restrictions apply to the **Div** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1, GR2 and GR3 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1">  | Sparse tensors are not supported                            | General restriction [GR1](../general_restrictions.md#GR1)
-| `[R2]` <a id="R2"></a>   | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
-| `[R3]` <a id="R3"></a>     | All tensors shall have the same datatype  | General restriction [GR3](../general_restrictions.md#GR3) |
+No specific restrictions apply to the **Div** operator.
 
-#### Informal specification
+## Informal specification
 
-Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. 
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. 
 
 The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded. If the quotient $A[i]/B[i]$ is representable, the expression $(A[i]/B[i])\times B[i] + A[i] \mod B[i]$ shall equal $A[i]$.
 
@@ -362,7 +351,7 @@ A = \begin{bmatrix} 6 & 5 & -35 \end{bmatrix}
 B = \begin{bmatrix} 3 & 3 & 3 \end{bmatrix}
 ```
 ```math
-Y = \begin{bmatrix} 2 & 1 & -11 \end{bmatrix}
+C = \begin{bmatrix} 2 & 1 & -11 \end{bmatrix}
 ```
 
 ### Example 2
@@ -374,11 +363,15 @@ B = \begin{bmatrix} 3 & 2 \\ 4 & 1 \\ 5 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 3 & 5 \\ 5 & 1 \\ 6 & 2 \end{bmatrix}
+C = \begin{bmatrix} 3 & 5 \\ 5 & 1 \\ 6 & 2 \end{bmatrix}
 ```
 
 ## Error conditions
 - The behaviour in case of a null denominator is implementation dependent.
+
+## Attributes
+
+Operator **Div** has no attribute.
 
 ## Inputs
 
@@ -389,7 +382,7 @@ Numerator of the division.
 #### Constraints
 
 - `[C1]` <a id="C1ia"></a> Shape consistency
-  - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape. 
 - `[C2]` <a id="C2ia"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
   
@@ -408,7 +401,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{Y}$: `integer tensor`
+### $\text{C}$: `integer tensor`
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -419,15 +412,12 @@ Result of the element-wise division of $A$ by $B$.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
 
-## Attributes
-
-Operator **Div** has no attribute.
 
 ## Formal specification
  See Why3 specification.
 
 ## Numerical Accuracy
-Hence $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+Hence $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
 
 Integer division is exact under the defined semantics; error is not introduced by the operator itself:
 
@@ -435,7 +425,7 @@ Integer division is exact under the defined semantics; error is not introduced b
  For integer inputs modeled without error symbols, $C_{\textit{err}}^{\textit{propag}} = [0]$.
 ### Error Introduction
 Error introduction for int arithmetic is null:
- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
+ $C_{\textit{err}}^{\textit{intro}} = [0]$.
 
 Division by zero remains undefined and shall be prevented by input constraints.
 ### Unit Verification
@@ -464,6 +454,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 

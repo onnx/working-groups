@@ -3,7 +3,7 @@
 - **Op** operator for type [int8](#int8)
 
 
-Based on ONNX [Op version 14](https:/...).
+Based on ONNX documentation [Op version 14](https:/...).
 
 <a id="int8"></a>
 # **Op** (int8, int8)
@@ -41,6 +41,17 @@ The effect of the operator is illustrated on the following examples.
 ## Error conditions
 ....
 
+## Attributes
+
+### $\text{ATTR}$: `int8`
+
+*Attribute description*
+
+#### Constraints
+
+ - `[C1]` <a id="C1iattr"></a> [See constraint (C1) on A](#C1ia). First constraint on $ATTR$
+   - Statement: Description of the first constraint on $ATTR$
+
 ## Inputs
 
 ### $\text{A}$: `int8`
@@ -72,13 +83,3 @@ The effect of the operator is illustrated on the following examples.
  - `[C1]` <a id="C1iy"></a> First constraint on $Y$
    - Statement: Description of the first constraint on $Y$
 
-## Attributes
-
-### $\text{ATTR}$: `int8`
-
-*Attribute description*
-
-#### Constraints
-
- - `[C1]` <a id="C1iattr"></a> [See constraint (C1) on A](#C1ia). First constraint on $ATTR$
-   - Statement: Description of the first constraint on $ATTR$
