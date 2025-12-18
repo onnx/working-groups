@@ -1,54 +1,61 @@
 # Contents
 
-- **flatten** operator for type [real](#real)
-- **flatten** operator for type [BFLOAT16, BOOL, FP64, FP32, FP16, INT16, INT32, INT4, INT64, INT8, STRING, UINT16, UINT32, UINT4, UINT64, UINT8](#types)
+- **Flatten** operator for type [real](#real)
+- **Flatten** operator for type [BFLOAT16, BOOL, FP64, FP32, FP16, INT16, INT32, INT4, INT64, INT8, STRING, UINT16, UINT32, UINT4, UINT64, UINT8](#types)
 
 Based on ONNX documentation version 24.
 
 <a id="real"></a>
-# **flatten** (real)
+# **Flatten** (real)
 
 ## Signature
-$Y = \text{flatten}(X)$
+$Y = \text{Flatten}(X)$
 
 where:
-- `X`: input tensor 
-- `Y`: output tensor (2D Tensor)
+- $X$: input tensor 
+- $Y$: output tensor (2D Tensor)
 
 ## Restrictions
-The following restrictions apply to the **flatten** operator for the SONNX profile:
+The following restrictions apply to the $\text{Flatten}$ operator for the SONNX profile:
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Attribute `axis` must be set                           | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
-| `[R2]`     | Sparse tensors are not supported              | General restriction [GR1](../general_restrictions.md#GR1) |
-| `[R3]`     <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
+[General Restrictions](../general_restrictions.md) are applicable
 
 ## Informal specification
 
-Operator **flatten** reshapes the input tensor `X` into a 2D matrix `Y`. The first dimension of `Y` is determined by the product of the dimensions of `X` from the start up to (but not including) the specified `axis`. The second dimension of `Y` is determined by the product of the dimensions of `X` from the specified `axis` to the end.
+Operator $\text{Flatten}$ reshapes the input tensor $X$ into a 2D matrix $Y$. The first dimension of $Y$ is determined by the product of the dimensions of $X$ from the start up to (but not including) the specified $\text{axis}$. The second dimension of $Y$ is determined by the product of the dimensions of $X$ from the specified $\text{axis}$ to the end.
 
-$$\text{dY}_{0} = \prod_{i=0}^{\text{axis}-1} \text{dX}_{i}$$
-$$\text{dY}_{1} = \prod_{i=\text{axis}}^{n-1} \text{dX}_{i}$$
+$$\text{dY}_{0} = \prod_{i=0}^{\text{axis'}-1} \text{dX}_{i}$$
+$$\text{dY}_{1} = \prod_{i=\text{axis'}}^{rX-1} \text{dX}_{i}$$
+
+Note that the product over an empty range/interval is defined to be 1. That means:
+- If $\text{axis'} = 0$, then $\text{dY}_{0} = 1$
+
+- If $\text{axis'} = rX$, then $\text{dY}_{1} = 1$
 
 Where 
 - $i$ is a dimension index
-- $n$ is the rank of tensor `X`
+- $la$ is the length of attribute `axis`
+
+- $\text{axis'}$  is the normalized $\text{axis}$ and is calculated as follows:
+
+$$\forall a \in [0, la -1]. \begin{cases}
+      \text{axis'[a]} = \text{axis[a]} & \text{if } \text{axis[a]} \geq 0 \\
+      \text{axis'[a]} = \text{axis[a]} + rX & \text{if } \text{axis[a]} < 0
+\end{cases}$$
 
 Flatten operation can be expressed as:
 
 <a id="Y"></a>
-$$
-Y[a, b] = X[j_0, j_1, \ldots, j_{n-1}]
-$$
+
+$$Y[a, b] = X[j_0, j_1, \ldots, j_{rX-1}]$$
+
 
 Where:
-- $n$ is the rank of tensor `X`
-- $z \in [0, n-1]$
-
+- $z \in [0, rX-1]$
 - $j_z \in [0, dX_z - 1]$
 - $a = \displaystyle\sum_{z=0}^{\text{axis}-1} \left( j_z \prod_{k=z+1}^{\text{axis}-1} dX_k \right)$
-- $b = \displaystyle\sum_{z=\text{axis}}^{n-1} \left( j_z \prod_{k=z+1}^{n-1} dX_k \right)$
+
+- $b = \displaystyle\sum_{z=\text{axis}}^{rX-1} \left( j_z \prod_{k=z+1}^{rX-1} dX_k \right)$
 
 
 ### Example 1
@@ -109,108 +116,103 @@ No error condition
 ## Inputs
 
 ### $X$: `real tensor`
-Tensor `X` is the input tensor to be flattened.
+Tensor $X$ is the input tensor to be flattened.
 
 ### Constraints
 
- - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor `X` and attribute `axis`
-   - Statement: $n \geq \text{axis}$
+ - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor $X$ and attribute `axis`
+   - Statement: $rX \geq \text{axis}$
    
-   where $n$ is the rank of tensor `X`.
    - Rationale: Ensures that the specified axis is valid for the given tensor rank.
  
 ## Attributes
 
-### axis: `int`
+### axis: `integer`
 The axis starting from which the input tensor will be flattened into the second dimension of the output.
 
 ### Constraints
- - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor `X` and attribute `axis`
+ - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor $X$ and attribute `axis`
     - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
 
  - `[C2]` <a id="C2ra"></a> Value domain
-    - Statement: $\text{axis} \in [-n, n]$
-
-    where $n$ is the rank of tensor `X`.
-    - Rationale: Ensures that the attribute `axis` is a valid axis for tensor `X`
+    - Statement: $\text{axis} \in [-rX, rX]$
+    - Rationale: Ensures that the attribute `axis` is a valid axis for tensor $X$
 
 ## Outputs
 
 ### $Y$: `real tensor`
-Tensor `Y` is the flattened output tensor.
+Tensor $Y$ is the flattened output tensor.
 
 ### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: The shape of tensor `Y` is $(dY_0, dY_1)$, where:
+   - Statement: The shape of tensor $Y$ is $(dY_0, dY_1)$, where:
      - $dY_0 = \prod_{i=0}^{\text{axis}-1} dX_i$
 
-     - $dY_1 = \prod_{i=\text{axis}}^{n-1} dX_i$
+     - $dY_1 = \prod_{i=\text{axis}}^{rX-1} dX_i$
    
    Where 
-   - $dX_i$ is the size of dimension $i$ of tensor `X`
-   - $n$ is the rank of tensor `X`.
-
- - `[C2]` Value Domain
-    - Statement: Each element in tensor `Y` must correspond to the appropriate flattened element from tensor `X` based on the flattening parameters. [<b><span style="font-family: 'Courier New', monospace">Y</span></b>](#Y)
-
-    - Rationale: Ensures that the output tensor `Y` accurately reflects the flattening operation performed on tensor `X`.
-
+   - $dX_i$ is the size of dimension $i$ of tensor $X$
 ## Formal specification
  
 See the Why3 specification.
 
 ## Numerical Accuracy
 
-The **flatten** operator does not introduce any numerical error. Hence, for all valid indices the output values are exactly equal to the corresponding input values.
+The $\text{Flatten}$ operator does not introduce any numerical error. Hence, for all valid indices the output values are exactly equal to the corresponding input values.
 
 
 <a id="type"></a>
-# **flatten** (type)
+# **Flatten** (type)
 Where type in in { BFLOAT16, BOOL, FP64, FP32, FP16, INT16, INT32, INT4, INT64, INT8, STRING, UINT16, UINT32, UINT4, UINT64, UINT8 }
 
 ## Signature
-$Y = \text{flatten}(X)$
+$Y = \text{Flatten}(X)$
 
 where:
-- `X`: input tensor 
-- `Y`: output tensor (2D Tensor)
+- $X$: input tensor 
+- $Y$: output tensor (2D Tensor)
 
 ## Restrictions
-The following restrictions apply to the **flatten** operator for the SONNX profile:
+The following restrictions apply to the $\text{Flatten}$ operator for the SONNX profile:
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Attribute `axis` must be set                           | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
-| `[R2]`     | Sparse tensors are not supported              | General restriction [GR1](../general_restrictions.md#GR1) |
-| `[R3]`     <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../general_restrictions.md#GR2) |
-| `[R4]`     <a id="tR9"></a>     | `X` and `Y` tensor must have the same type   |  General restriction [GR3](../general_restrictions.md#GR3) |
+[General Restrictions](../general_restrictions.md) are applicable
 
 ## Informal specification
 
-Operator **flatten** reshapes the input tensor `X` into a 2D matrix `Y`. The first dimension of `Y` is determined by the product of the dimensions of `X` from the start up to (but not including) the specified `axis`. The second dimension of `Y` is determined by the product of the dimensions of `X` from the specified `axis` to the end.
+Operator $\text{Flatten}$ reshapes the input tensor $X$ into a 2D matrix $Y$. The first dimension of $Y$ is determined by the product of the dimensions of $X$ from the start up to (but not including) the specified $\text{axis}$. The second dimension of $Y$ is determined by the product of the dimensions of $X$ from the specified $\text{axis}$ to the end.
 
-$$\text{dY}_{0} = \prod_{i=0}^{\text{axis}-1} \text{dX}_{i}$$
-$$\text{dY}_{1} = \prod_{i=\text{axis}}^{n-1} \text{dX}_{i}$$
+$$\text{dY}_{0} = \prod_{i=0}^{\text{axis'}-1} \text{dX}_{i}$$
+$$\text{dY}_{1} = \prod_{i=\text{axis'}}^{rX-1} \text{dX}_{i}$$
+
+Note that the product over an empty range/interval is defined to be 1. That means:
+- If $\text{axis'} = 0$, then $\text{dY}_{0} = 1$
+
+- If $\text{axis'} = rX$, then $\text{dY}_{1} = 1$
 
 Where 
 - $i$ is a dimension index
-- $n$ is the rank of tensor `X`
+- $la$ is the length of attribute `axis`
+
+- $\text{axis'}$  is the normalized $\text{axis}$ and is calculated as follows:
+
+$$\forall a \in [0, la -1]. \begin{cases}
+      \text{axis'[a]} = \text{axis[a]} & \text{if } \text{axis[a]} \geq 0 \\
+      \text{axis'[a]} = \text{axis[a]} + rX & \text{if } \text{axis[a]} < 0
+\end{cases}$$
 
 Flatten operation can be expressed as:
 
 <a id="Yt"></a>
-$$
-Y[a, b] = X[j_0, j_1, \ldots, j_{n-1}]
-$$
+
+$$Y[a, b] = X[j_0, j_1, \ldots, j_{rX-1}]$$
 
 Where:
-- $n$ is the rank of tensor `X`
-- $z \in [0, n-1]$
-
+- $z \in [0, rX-1]$
 - $j_z \in [0, dX_z - 1]$
 - $a = \displaystyle\sum_{z=0}^{\text{axis}-1} \left( j_z \prod_{k=z+1}^{\text{axis}-1} dX_k \right)$
-- $b = \displaystyle\sum_{z=\text{axis}}^{n-1} \left( j_z \prod_{k=z+1}^{n-1} dX_k \right)$
+
+- $b = \displaystyle\sum_{z=\text{axis}}^{rX-1} \left( j_z \prod_{k=z+1}^{rX-1} dX_k \right)$
 
 
 ### Example 1
@@ -271,18 +273,17 @@ No error condition
 ## Inputs
 
 ### $X$: `type tensor`
-Tensor `X` is the input tensor to be flattened.
+Tensor $X$ is the input tensor to be flattened.
 
 ### Constraints
 
- - `[C1]` <a id="C1ta"></a> Consistency between the shape of tensor `X` and attribute `axis`
-   - Statement: $n \geq \text{axis}$
+ - `[C1]` <a id="C1ta"></a> Consistency between the shape of tensor $X$ and attribute $\text{axis}$
+   - Statement: $rX \geq \text{axis}$
    
-   where $n$ is the rank of tensor `X`.
    - Rationale: Ensures that the specified axis is valid for the given tensor rank.
 
  - `[C2]` <a id="C20ta"></a> Type consistency
-   - Statement: Tensors X and Y must have the same type. [<b><span style="font-family: 'Courier New', monospace">[R4]</span></b>](#tR9)
+   - Statement: Tensors $X$ and $Y$ must have the same type.
  
 ## Attributes
 
@@ -290,38 +291,30 @@ Tensor `X` is the input tensor to be flattened.
 The axis starting from which the input tensor will be flattened into the second dimension of the output.
 
 ### Constraints
- - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor `X` and attribute `axis`
+ - `[C1]` <a id="C1ra"></a> Consistency between the shape of tensor $X$ and attribute $\text{axis}$
     - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ta) on tensor $X$.
 
  - `[C2]` <a id="C2ra"></a> Value domain
-    - Statement: $\text{axis} \in [-n, n]$
+    - Statement: $\text{axis} \in [-rX, rX]$
 
-    where $n$ is the rank of tensor `X`.
-    - Rationale: Ensures that the attribute `axis` is a valid axis for tensor `X`
-
+    - Rationale: Ensures that the attribute $\text{axis}$ is a valid axis for tensor $X$
 ## Outputs
 
 ### $Y$: `type tensor`
-Tensor `Y` is the flattened output tensor.
+Tensor $Y$ is the flattened output tensor.
 
 ### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: The shape of tensor `Y` is $(dY_0, dY_1)$, where:
+   - Statement: The shape of tensor $Y$ is $(dY_0, dY_1)$, where:
      - $dY_0 = \prod_{i=0}^{\text{axis}-1} dX_i$
 
-     - $dY_1 = \prod_{i=\text{axis}}^{n-1} dX_i$
+     - $dY_1 = \prod_{i=\text{axis}}^{rX-1} dX_i$
    
    Where 
-   - $dX_i$ is the size of dimension $i$ of tensor `X`
-   - $n$ is the rank of tensor `X`.
+   - $dX_i$ is the size of dimension $i$ of tensor $X$
 
- - `[C2]` Value Domain
-    - Statement: Each element in tensor `Y` must correspond to the appropriate flattened element from tensor `X` based on the flattening parameters. [<b><span style="font-family: 'Courier New', monospace">Y</span></b>](#Yt)
-
-    - Rationale: Ensures that the output tensor `Y` accurately reflects the flattening operation performed on tensor `X`.
-
- - `[C3]` Type consistency
+ - `[C2]` Type consistency
     - Statement: see constraint  [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C20ta) on tensor $X$.
 
 ## Formal specification
@@ -330,5 +323,4 @@ See the Why3 specification.
 
 ## Numerical Accuracy
 
-The **flatten** operator does not introduce any numerical error. Hence, for all valid indices the output values are exactly equal to the corresponding input values.
-
+The $\text{Flatten}$ operator does not introduce any numerical error. Hence, for all valid indices the output values are exactly equal to the corresponding input values.

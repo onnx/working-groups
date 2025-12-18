@@ -30,28 +30,45 @@ inputs_attributes = {
     "min_shape_size_input_x": 0, # Adjust as needed
     "max_shape_size_input_x": 4, # Adjust as needed
     "min_size_input_axis": 1, # Dimension should always be positive (no zero dimensions)
-    "max_size_input_axis": 10 # Adjust as needed
+    "max_size_input_axis": 10, # Adjust as needed
+    "ONNXRuntime_Provider": "CPUExecutionProvider" # available providers are CPUExecutionProvider, CUDAExecutionProvider, DmlExecutionProvider 
 }
 
 """
 Clip supported types
 """
-# TODO we try to convert, but ONNXruntime does not run. ONNXruntime supports bfloat16?
-# ONNX clip reference implementation supports bfloat16.
-
 clip_types = {
-    "INT8": np.int8,
-    "INT16": np.int16,
-    "INT32": np.int32,
-    "INT64": np.int64,
-    "UINT8": np.uint8,
-    "UINT16": np.uint16,
-    "UINT32": np.uint32,
-    "UINT64": np.uint64,
-    "FP16": np.float16,
-    "FP32": np.float32,
-    "FP64": np.float64,
-    "BFLOAT16": ml_dtypes.bfloat16
+    "CPUExecutionProvider": {
+        "INT8": np.int8,
+        "INT32": np.int32,
+        "UINT8": np.uint8,
+        "UINT32": np.uint32,
+        "UINT64": np.uint64,
+        "FP16": np.float16,
+        "FP32": np.float32,
+        "FP64": np.float64
+    },
+    "CUDAExecutionProvider": {
+        "INT8": np.int8,
+        "INT64": np.int64,
+        "UINT8": np.uint8,
+        "UINT64": np.uint64,
+        "FP16": np.float16,
+        "FP32": np.float32,
+        "FP64": np.float64,
+    },
+    "DmlExecutionProvider": {
+        "INT8": np.int8,
+        "INT16": np.int16,
+        "INT32": np.int32,
+        "INT64": np.int64,
+        "UINT8": np.uint8,
+        "UINT16": np.uint16,
+        "UINT32": np.uint32,
+        "UINT64": np.uint64,
+        "FP16": np.float16,
+        "FP32": np.float32,
+    }
 }
 
 """
@@ -75,9 +92,9 @@ def valid_clip_args(draw):
     #---------------------------------------------------
     # X [C2] - Type Consistency
 
-    all_valid_types = list(clip_types.keys())
+    all_valid_types = list(clip_types.get(inputs_attributes["ONNXRuntime_Provider"]).keys())
     dtype_name = draw(st.sampled_from(all_valid_types))
-    dtype = clip_types[dtype_name]
+    dtype = clip_types[inputs_attributes["ONNXRuntime_Provider"]][dtype_name]
 
     if np.issubdtype(dtype, np.integer):
         min_value = np.iinfo(dtype).min
@@ -86,10 +103,6 @@ def valid_clip_args(draw):
     elif np.issubdtype(dtype, np.floating):
         min_value = np.finfo(dtype).min
         max_value = np.finfo(dtype).max
-        a_numeric = st.floats(min_value=min_value, max_value=max_value)
-    elif dtype == ml_dtypes.bfloat16:
-        min_value = float(ml_dtypes.finfo(clip_types["BFLOAT16"]).min)
-        max_value = float(ml_dtypes.finfo(clip_types["BFLOAT16"]).max)
         a_numeric = st.floats(min_value=min_value, max_value=max_value)
 
     #---------------------------------------------------
@@ -109,43 +122,25 @@ def valid_clip_args(draw):
             max_value=inputs_attributes["max_size_input_axis"]))
         x_shape.append(dim)
 
-    # Create input tensor X
-    if dtype_name == "BFLOAT16":
-        # X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=x_shape, elements=a_numeric))
-        tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
-        x = tf_tensor.numpy()
-    else:        
-        # X [C2]
-        x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=a_numeric))
+    # Create input tensor X 
+    # X [C2]
+    x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=a_numeric))
 
     #---------------------------------------------------
     # Input L
     #---------------------------------------------------
 
     # Create input tensor L
-    if dtype_name == "BFLOAT16":
-        # L [C1] -> X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=a_numeric))
-        tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
-        l = tf_tensor.numpy()
-    else:
-        # L [C1] -> X [C2]
-        l = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
+    # L [C1] -> X [C2]
+    l = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
 
     #---------------------------------------------------
     # Input M
     #---------------------------------------------------
 
     # Create input tensor M
-    if dtype_name == "BFLOAT16":
-        # M [C1] -> X [C2]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=(), elements=a_numeric))
-        tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
-        m = tf_tensor.numpy()
-    else:
-        # M [C1] -> X [C2]
-        m = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
+    # M [C1] -> X [C2]
+    m = draw(hnp.arrays(dtype=dtype, shape=[], elements=a_numeric))
 
     #---------------------------------------------------
     # Output Y
@@ -169,7 +164,7 @@ def test_clip(args):
     generated_data["l_tensor"].append(l)
     generated_data["m_tensor"].append(m)
 
-    y = run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape)
+    y = run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape, inputs_attributes["ONNXRuntime_Provider"])
     check_constraints(x, l, m, y)
 
 
@@ -196,7 +191,7 @@ def teardown_module():
         json.dump(data, f, indent=4)
 
 
-def run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape):
+def run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape, provider):
     """
     Function that runs the ONNX Clip operation
     """
@@ -241,13 +236,8 @@ def run_onnx_clip(x_shape, x, l, m, dtype_name, y_shape):
     onnx.checker.check_model(onnx_model)
 
     # Do inference
-    #TODO WE NEED TO REVIEW THIS!
-    if dtype_name in ["INT8", "INT16", "INT64", "UINT8", "UINT16", "BFLOAT16"]:
-        # ! Using ONNX Reference Implementation -  ONNX Runtime does not give the right result
-        sess = onnx.reference.ReferenceEvaluator(onnx_model)
-    else:
-        sess = InferenceSession(onnx_model.SerializeToString(),
-                                providers=["CPUExecutionProvider"])
+    sess = InferenceSession(onnx_model.SerializeToString(),
+                                providers=[provider])
 
     y = sess.run(None, {'x': x, 'l': l, 'm': m})[0]
 
@@ -275,7 +265,6 @@ def check_constraints(x, l, m, y):
     # M [C1] -> X [C2]
     # Y [C3] -> X [C2]
     assert x.dtype == y.dtype == l.dtype == m.dtype
-
 
     # Output Constraints
     # Y [C2]
