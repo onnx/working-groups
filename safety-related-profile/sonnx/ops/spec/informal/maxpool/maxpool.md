@@ -68,7 +68,7 @@ The effect of the operator is illustrated on the following examples.
 $S, Ind = \text{MaxPool}(E)$
 
 - Shape of $E$ = [1, 1, 8, 8]
-- kernel shape = [3,3]
+- kernel\_shape = [3,3]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
@@ -139,10 +139,14 @@ No error conditions.
 
 #### Constraints
 
- - `[C1]` <a id="C1ia"></a> First constraint on $X$
+- `[C1]` <a id="C1ia"></a> First constraint on $X$
     - Statement: The number of spatial axes of tensor `X` is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
-    
+- `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+    - Statement:
+    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
+    and
+    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
 
 ## Attributes
 
@@ -150,14 +154,13 @@ No error conditions.
 
 The `auto_pad` attribute determines if and how automatic padding is done for the input tensor X.
 
-`auto_pad` is a DEPRECATED attribute. 
-
 #### Constraints
 -  `C1`: Value domain 
     - Statement: `auto_pad` shall be in set {`NOTSET`, `VALID`, `SAME_UPPER`, `SAME_LOWER`}.
 -  `C2`: Explicit padding 
     - Statement: `auto_pad` shall be set to `NOTSET` `[R2]`
     - Rationale: The SONNX profile imposes explicit padding.
+
 
 ### $ceil\\_mode$: `int`
 
@@ -174,6 +177,17 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 
 <img src="../common/assets/sliding_window_ops/imgs/dilation.png" width="300" />
 
+#### Constraints
+- `C1`: Value domain
+    - Statement: `dilations` is a list of strictly positive integers
+    - Rationale: The dilation is a *factor of expansion* along a certain axis. 
+- `C2`: Relation between `dilations` and `W` 
+    - Statement: The `dilations` and `kernel\_shape` lists have the same length
+    - Rationale: Dilation is defined for all spatial axes of `W`.
+- `C3`: Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [See constraint (C2) of X](#shape_consist)
+
+
 ### $kernel\\_shape$: `list of ints`
 
 The size of the kernel along each axis.
@@ -184,57 +198,57 @@ Attribute `pads` determines the padding at the beginning and end along each spat
 
 `pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements (possibly zero) added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
 
-<a id="T7"></a> <b><span style="font-family: 'Courier New', monospace">[T7]</span></b> The padding value is 0.
+The padding value is 0.
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
 <img src="../common/assets/sliding_window_ops/imgs/conv_pad2.png" width="300" />
 
 #### Constraints
-- <a id="T8"></a> <b><span style="font-family: 'Courier New', monospace">[T8]</span></b> `C1`: Value domain
+- `C1`: Value domain
     - Statement: `pads` is a list of positive or null integers.
     - Rationale: A padding value gives a *number of elements* to be added to some spatial axis.
-- <a id="T9"></a> <b><span style="font-family: 'Courier New', monospace">[T9]</span></b> `C2`: Consistency between the shape of `X` and the length of `pads`
-    - Statement: The length of the `pads` list is two times the number of spatial axes of `X`
+- `C2`: Consistency between the shape of `X` and the length of `pads`
+    - Statement: The length of the `pads` list is twice the number of spatial axes of `X`
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `C3`: Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`  
-    - Statement: [See constraint (C3) of X](#shape_consist)
+- `C3`: Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [See constraint (C2) of X](#shape_consist)
 
 ### $storage\\_order$: `int`
 
 The storage order of the tensor. 0 is row major, and 1 is column major.
 
+> To Be Completed
+
 ### $strides$: `list of ints`
 
 Attribute `strides` determines how the kernel is applied on tensor `X` during the convolution.
 
-For instance, with $\mbox{\texttt{stride}}[0]=3$ and $\mbox{\texttt{stride}}[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the convolution.
+For instance, with $stride[0]=3$ and $stride[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the max pooling.
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
 <img src="../common/assets/sliding_window_ops/imgs/conv_stride3.png" width="300" />
 
 #### Constraints
-- <a id="T6"></a> <b><span style="font-family: 'Courier New', monospace">[T6]</span></b> `C1`: Value domain
+- `C1`: Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
-- `C2`: Consistency between the shape of tensors `X`, `W`, `Y` and  attributes `pads`, `dilations` and `strides`
-    - Statement: [See constraint (C3) of X](#shape_consist)
+- `C2`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+    - Statement: [See constraint (C2) of X](#shape_consist)
 
 ## Outputs
 
 ### $\text{Y}$: `real`
 
-$Y\_spatial\_shape[i] = floor((X\_spatial\_shape[i] + pad\_shape[i] - dilation[i] * (kernel\_shape[i] - 1) - 1) / strides[i] + 1)$
+The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
+- $dY_0$ is the number of batches
+- $dY_1$ is the number of channels
+- $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes
 
-where
-- $i \in [0, 1]$ is the index of a spatial axis
-- $X\_spatial\\_shape[i]$ is the dimension of spatial axis $i$
-- $pad_shape[i] = pads[i] + pads[i+2]$ is the sum of the begin and end padding values along axis i.
-- $dilation[i]$ is the diilation value along spatial axis $i$
-- $kernel_shape[i]$ is the dimension of the kernel along spatial axis $i$
-- $strides[i]$ is the stride along spatial axis $i$
-
+###### Constraints.
+- `C1`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+    - Statement: [see constraint (C2) of X](#shape_consist)
 
 #### Constraints
 
