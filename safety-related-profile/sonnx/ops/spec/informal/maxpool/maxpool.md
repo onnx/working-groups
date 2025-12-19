@@ -130,24 +130,6 @@ Indices =
 ## Error conditions
 No error conditions.
 
-## Inputs
-
-### $\text{X}$: `real`
-
-`X` is the input tensor from which the max values are selected. 
-
-
-#### Constraints
-
-- `[C1]` <a id="C1ia"></a> First constraint on $X$
-    - Statement: The number of spatial axes of tensor `X` is 2. `R1`
-    - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
-- `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement:
-    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
-    and
-    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
-
 ## Attributes
 
 ### $auto\\_pad$: `string`
@@ -236,6 +218,27 @@ The effect of the `strides` attribute is illustrated on the following figure. In
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
 - `C2`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
     - Statement: [See constraint (C2) of X](#shape_consist)
+
+
+
+## Inputs
+
+### $\text{X}$: `real`
+
+`X` is the input tensor from which the max values are selected. 
+
+
+#### Constraints
+
+- `[C1]` <a id="C1ia"></a> First constraint on $X$
+    - Statement: The number of spatial axes of tensor `X` is 2. `R1`
+    - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
+- `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+    - Statement:
+    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
+    and
+    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
+
 
 ## Outputs
 
