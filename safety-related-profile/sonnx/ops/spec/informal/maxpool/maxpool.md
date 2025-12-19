@@ -35,7 +35,7 @@ The following specific restrictions apply to the **MaxPool** operator:
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
-Operator **MaxPool** also stores the indices of input tensor $X$ from which the max values are taken in $Indices$. The index values are those of a flatten 1-D view of $X$  
+Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
 The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
 
@@ -148,6 +148,8 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 
 Whether to use ceil or floor (default) to compute the output shape.
 
+> To be completed
+
 
 ### $dilations$: `list of ints`
 
@@ -166,8 +168,8 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 - `C2`: Relation between `dilations` and `W` 
     - Statement: The `dilations` and `kernel\_shape` lists have the same length
     - Rationale: Dilation is defined for all spatial axes of `W`.
-- `C3`: Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [See constraint (C2) of X](#shape_consist)
+- `C3`: Consistency between the shape of tensors `Y`, `X` and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
 ### $kernel\\_shape$: `list of ints`
@@ -193,8 +195,8 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 - `C2`: Consistency between the shape of `X` and the length of `pads`
     - Statement: The length of the `pads` list is twice the number of spatial axes of `X`
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `C3`: Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [See constraint (C2) of X](#shape_consist)
+- `C3`: Consistency between the shape of tensors `Y`, `X` and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [See constraint (C2) of Y](#shape_consist)
 
 ### $storage\\_order$: `int`
 
@@ -216,8 +218,8 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 - `C1`: Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
-- `C2`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
-    - Statement: [See constraint (C2) of X](#shape_consist)
+- `C2`: Consistency between the shape of tensors `Y`, `X` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+    - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
 
@@ -233,11 +235,9 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 - `[C1]` <a id="C1ia"></a> First constraint on $X$
     - Statement: The number of spatial axes of tensor `X` is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
-- `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `X`, `Y`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement:
-    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
-    and
-    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
+- `C2`: Consistency between the shape of tensors `Y`, `X` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+    - Statement: [See constraint (C2) of Y](#shape_consist)
+
 
 
 ## Outputs
@@ -249,17 +249,18 @@ The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - $dY_1$ is the number of channels
 - $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes
 
-###### Constraints.
+#### Constraints.
 - `C1`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
-    - Statement: [see constraint (C2) of X](#shape_consist)
+- `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `Y`, `X`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+    - Statement:
+    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
+    and
+    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
 
-#### Constraints
-
- - `[C1]` <a id="C1iy"></a> First constraint on $Y$
-   - Statement: Description of the first constraint on $Y$
 
 ### $\text{Indices}$: `int64`
 
+$Indices$ contains the indices of the input tensor $X$ from which the max values are taken.
 
 #### Constraints
 
