@@ -4,7 +4,7 @@
 - **MaxPool** operator for types [float16, float, double](#float)
 - **MaxPool** operator for types [int8, uint8](#int)
 
-Based on ONNX [Op version 22](https://onnx.ai/onnx/operators/onnx__MaxPool.html).
+Based on ONNX [MaxPool version 22](https://onnx.ai/onnx/operators/onnx__MaxPool.html).
 
 <a id="real"></a>
 # **MaxPool** (real)
@@ -15,7 +15,7 @@ $Y, Indices = \text{MaxPool}(X)$
 
 where:
 - $X$: input tensor
-- $Y$: output tensor containing max velue selected from $X$
+- $Y$: output tensor containing max value selected from $X$
 - $Indices$: output tensor containing the indices in $X$ from where the max values are taken.
    
 ## Restrictions
@@ -37,7 +37,7 @@ Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across
 
 Operator **MaxPool** also stores the indices of input tensor $X$ from which the max values are taken in $Indices$. The index values are those of a flatten 1-D view of $X$  
 
-The mathematical definition of output $Y$ and $Indices$ are given hereafter:
+The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
 
 $$\begin{gathered}
     Y[b, c, m, n] = max_{h=0}^{dW_2-1} max_{w=0}^{dW_3-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
@@ -52,10 +52,10 @@ Where
 - $w \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
 - $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
 - $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
-- $m \in [0,dY_2-1]$ is the index of the first spatial axis of output `Y`
-- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output `Y`
-- $dW_1$ is the dimension of the first spatial axis of the kernel
-- $dW_2$ is the dimension of the second spatial axis of the kernel
+- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output `Y`
+- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output `Y`
+- $dW_1$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
+- $dW_2$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
 - $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies zero-padding as specified by the pads attribute (see ONNX `Pad` operator).
@@ -75,57 +75,56 @@ $S, Ind = \text{MaxPool}(E)$
 - Shape of $Y$ = [1, 1, 6, 6]
 - Shape of $Ind$ = [1, 1, 6, 6]
 
-$X$ =
 
-[[[
-[ 5.67591154, -0.04859958, 2.94203104, 3.70327292, 2.47014306, 4.12455586, 5.81838665, 1.84118807],
+```math
+X =
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        5.67591154 & -0.04859958 & 2.94203104 & 3.70327292 & 2.47014306 & 4.12455586 & 5.81838665 & 1.84118807 \\
+        -0.05267874 & 2.75227858 & 2.16608732 & 4.03416243 & 1.28184638 & 4 81748948 & 4.64878412 & 3.31626988 \\
+        3.55427648 & 0.39997585 & 4.45761508 & 4.82722666 & 0.18843372 & 0.49564314 & 7.96647029 & 4.82851447 \\
+        1.52417623 & 2.28965587 & 0.36251913 & 1.64413983 & 4.67267459 & 3.73167179 & 2.20052118 & 2.06720836 \\
+        -1.22446366 & -0.86469519 & 6.01461967 & -1.08813165 & 2.11920055 & 0.78561867 & 0.29834533 & 1.94499626 \\
+        1.57776732 & 3.64260188 & 3.47181319 & 4.83723727 & 1.49868674 & 3.27683692 & 2.42625178 & 0.4401565 \\
+        6.8972704 & 5.51113868 & 5.99293336 & 4.24088721 & 1.94993561 & -0.04040625 & 3.07940675 & 3.06769141 \\
+        3.1299626 & 4.5546675 & 3.5008191 & 2.06181403 & 3.27400104 & 6.70386189 & 0.92777015 & -1.29092574
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
 
-[-0.05267874, 2.75227858, 2.16608732, 4.03416243, 1.28184638, 4 81748948, 4.64878412, 3.31626988],
-    
-[ 3.55427648, 0.39997585, 4.45761508, 4.82722666, 0.18843372, 0.49564314  7.96647029  4.82851447],
-  
-[ 1.52417623  2.28965587  0.36251913  1.64413983  4.67267459, 3.73167179  2.20052118  2.06720836],
+```math
+Y =
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        5.67591154 & 4.82722666 & 4.82722666 & 4.82722666 & 7.96647029 & 7.96647029 \\
+        4.45761508 & 4.82722666 & 4.82722666 & 4.82722666 & 7.96647029 & 7.96647029 \\
+        6.01461967 & 6.01461967 & 6.01461967 & 4.82722666 & 7.96647029 & 7.96647029 \\
+        6.01461967 & 6.01461967 & 6.01461967 & 4.83723727 & 4.67267459 & 3.73167179 \\
+        6.8972704 & 6.01461967 & 6.01461967 & 4.83723727 & 3.27683692 & 3.27683692 \\
+        6.8972704 & 5.99293336 & 5.99293336 & 6.70386189 & 6.70386189 & 6.70386189
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
 
-[-1.22446366 -0.86469519  6.01461967 -1.08813165  2.11920055, 0.78561867  0.29834533  1.94499626],
-  
-[ 1.57776732  3.64260188  3.47181319  4.83723727  1.49868674, 3.27683692  2.42625178  0.4401565],
-
-[ 6.8972704   5.51113868  5.99293336  4.24088721  1.94993561, -0.04040625  3.07940675  3.06769141],
-
-[ 3.1299626   4.5546675   3.5008191   2.06181403  3.27400104, 6.70386189  0.92777015 -1.29092574]
-    
-]]]
-
-$Y$ =
-
-[[[
-  
-[5.67591154, 4.82722666, 4.82722666, 4.82722666, 7.96647029, 7.96647029],
-[4.45761508, 4.82722666, 4.82722666, 4.82722666, 7.96647029, 7.96647029],
-[6.01461967, 6.01461967, 6.01461967, 4.82722666, 7.96647029, 7.96647029],
-[6.01461967, 6.01461967, 6.01461967, 4.83723727, 4.67267459, 3.73167179],
-[6.8972704, 6.01461967, 6.01461967, 4.83723727, 3.27683692, 3.27683692],
-[6.8972704, 5.99293336, 5.99293336, 6.70386189, 6.70386189, 6.70386189]
-
-]]]
-
-$Indices$ = 
-
-[[[
-
-[0, 19, 19, 19, 22, 22,],
-
-[18, 19, 19, 19, 22, 22],
-
-[34, 34, 34, 19,,22, 22],
-
-[34, 34, 34, 43, 28, 29],
-
-[48, 34, 34, 43, 45, 45],
-
-[48, 50, 50, 61, 61, 61]
-
-]]]
+```math
+Indices = 
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        0 & 19 & 19 & 19 & 22 & 22 \\
+        18 & 19 & 19 & 19 & 22 & 22 \\
+        34 & 34 & 34 & 19 & 22 & 22 \\
+        34 & 34 & 34 & 43 & 28 & 29 \\
+        48 & 34 & 34 & 43 & 45 & 45 \\
+        48 & 50 & 50 & 61 & 61 & 61
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
 
 
 ## Error conditions
