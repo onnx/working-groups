@@ -10,7 +10,7 @@ Based on ONNX documentation [Op version 14](https:/...).
 
 ## Signature
 Definition of operator $\text{Op}$ signature:
-$Y = \text{Op}(A, B)$
+$Y = \textbf{Op}(A, B)$
 
 where:
 - $A$: first input
@@ -43,7 +43,7 @@ The effect of the operator is illustrated on the following examples.
 
 ## Attributes
 
-### $\text{ATTR}$: `int8`
+### $\text{ATTR}$: int8
 
 *Attribute description*
 
@@ -54,7 +54,7 @@ The effect of the operator is illustrated on the following examples.
 
 ## Inputs
 
-### $\text{A}$: `int8`
+### $\text{A}$: int8
 
 *First input description*
 
@@ -63,7 +63,7 @@ The effect of the operator is illustrated on the following examples.
  - `[C1]` <a id="C1ia"></a> First constraint on $A$
    - Statement: Description of the first constraint on $A$
     
-### $\text{B}$: `int8`
+### $\text{B}$: int8
 
 *Second input description*
 
@@ -74,7 +74,7 @@ The effect of the operator is illustrated on the following examples.
 
 ## Outputs
 
-### $\text{Y}$: `int8`
+### $\text{Y}$: int8
 
 *Output description*
 

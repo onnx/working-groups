@@ -90,7 +90,7 @@ Operator **Div** has no attribute.
 
 ## Inputs
 
-### $\text{A}$: `real tensor`
+### $\text{A}$: real tensor
 Numerator of the division.
 
 #### Constraints
@@ -98,7 +98,7 @@ Numerator of the division.
  - `[C1]` <a id="C1ra"></a> Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ must have the same shape. 
  
-### $\text{B}$: `real tensor`
+### $\text{B}$: real tensor
 Denominator of the division.
 
 #### Constraints
@@ -110,7 +110,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{C}$: `real tensor`
+### $\text{C}$: real tensor
 
 Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 
@@ -240,7 +240,7 @@ Operator **Div** has no attribute.
 
 ## Inputs
 
-### $\text{A}$: `floating-point tensor`
+### $\text{A}$: floating-point tensor
 Numerator of the division.
 
 #### Constraints
@@ -250,7 +250,7 @@ Numerator of the division.
 - `[C2]` <a id="C2fa"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
-### $\text{B}$: `floating-point tensor`
+### $\text{B}$: floating-point tensor
 Denominator of the division.
 
 #### Constraints
@@ -261,7 +261,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{C}$: `floating-point tensor`
+### $\text{C}$: floating-point tensor
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -375,7 +375,7 @@ Operator **Div** has no attribute.
 
 ## Inputs
 
-### $\text{A}$: `integer tensor`
+### $\text{A}$: integer tensor
 
 Numerator of the division.
 
@@ -386,7 +386,7 @@ Numerator of the division.
 - `[C2]` <a id="C2ia"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
   
-### $\text{B}$: `integer tensor`
+### $\text{B}$: integer tensor
 
 Denominator of the division.
 
@@ -401,7 +401,7 @@ Denominator of the division.
 
 ## Outputs
 
-### $\text{C}$: `integer tensor`
+### $\text{C}$: integer tensor
 
 Result of the element-wise division of $A$ by $B$.
 
@@ -454,6 +454,7 @@ for (auto I : A.indexes()) {
    }
 }
 ```
+
 
 
 
