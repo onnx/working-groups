@@ -11,7 +11,7 @@ Based on ONNX [MaxPool version 22](https://onnx.ai/onnx/operators/onnx__MaxPool.
 
 ## Signature
 Definition of operator $\text{MaxPool}$ signature:
-$Y, Indices = \text{MaxPool}(X)$
+($Y, Indices) = \text{MaxPool}(X)$
 
 where:
 - $X$: input tensor
@@ -40,7 +40,7 @@ Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ fro
 The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = max_{h=0}^{dW_2-1} max_{w=0}^{dW_3-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
+    Y[b, c, m, n] = max_{h=0}^{dW_0-1} max_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
 $$\begin{gathered}
@@ -54,11 +54,11 @@ Where
 - $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
 - $m \in [0,dY_2-1]$ is the index along the first spatial axis of output `Y`
 - $n \in [0,dY_3-1]$ is the index along the second spatial axis of output `Y`
-- $dW_1$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
-- $dW_2$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
+- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
+- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies zero-padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -174,7 +174,7 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 
 ### $kernel\\_shape$: `list of ints`
 
-The size of the kernel along each axis.
+The size of the kernel along each spatial axis.
 
 ### $pads$: `list of ints`
 
@@ -182,11 +182,11 @@ Attribute `pads` determines the padding at the beginning and end along each spat
 
 `pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements (possibly zero) added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
 
-The padding value is 0.
+The padding value is -inf.
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2).
 
-<img src="../common/assets/sliding_window_ops/imgs/conv_pad2.png" width="300" />
+IMAGE TO BE CREATED
 
 #### Constraints
 - `C1`: Value domain
@@ -253,10 +253,12 @@ The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - `C1`: Consistency between the shape of tensors `X`, `Y` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
 - `C2`: <a name="shape_consist"></a> Consistency between the shape of tensors `Y`, `X`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
-    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilation[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
+    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / strides[0] + 1}\right\rfloor$
     and
-    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilation[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
-
+    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / strides[1] + 1} \right\rfloor$
+    where:
+        - $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
+   
 
 ### $\text{Indices}$: `int64`
 
