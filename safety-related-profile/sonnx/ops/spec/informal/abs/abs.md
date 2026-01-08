@@ -1,38 +1,41 @@
-# `Abs` operator (all numerical types)
+# Contents
 
-## Restrictions
-The following restrictions apply to the `abs` operator for the SONNX profile:
+- **Abs** operator for type [real](#real)
+- **Abs** operator for types [bfloat16, float16, float, double](#float)
+- **Abs** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
-| Restriction    | Statement | Origin |
-| -------- | ------- | ------- |
-| `[R1]` | Input and output tensors shall have the same shape | Restriction [Explicit types and shape](../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
+Based on ONNX documentation [Abs version 13](https://onnx.ai/onnx/operators/onnx__Abs.html).
 
+<a id="real"></a>
+# **Abs** (real)
 
 ## Signature
+Definition of operator $\text{Abs}$ signature:
+$Y = \textbf{Abs}(X)$
 
-`Y = Abs(X)`
+where:
+- $X$: Input tensor
+- $Y$: Absolute value of $X$
+   
+## Restrictions
 
-where
-- `X`: input tensor 
-- `Y`: output tensor
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-## Documentation
+No specific restrictions apply to the **Abs** operator.
 
-The `Abs` operator computes the element-wise absolute value of the input tensor `X`.
+## Informal specification
+
+The **Abs** operator computes the element-wise absolute value of the input tensor $X$.
 
 The mathematical definition of the operator is given hereafter.
 
-$$
-Y[i_0,i_1,...,i_n] = |X[i_0,i_1,...,i_n]|
-$$
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
-Where
-- $i_j$ is the index for dimension $j$.
+$$Y[i] = |X[i]|$$
 
-The effect of the operator is illustrated on the following examples:
-- `X` is a tensor holding numerical data
+The effect of the operator is illustrated on the following examples.
 
-Example 1:
+### Example 1
 ```math
 X = \begin{bmatrix} -2.1 & 3.4 & -7 \end{bmatrix}
 ```
@@ -41,7 +44,7 @@ X = \begin{bmatrix} -2.1 & 3.4 & -7 \end{bmatrix}
 Y = \begin{bmatrix} 2.1 & 3.4 & 7 \end{bmatrix}
 ```
 
-Example 2:
+### Example 2
 ```math
 X = \begin{bmatrix} -1.123 & 0 \\ 4 & -5 \\ 2 & -3 \end{bmatrix}
 ```
@@ -49,112 +52,115 @@ X = \begin{bmatrix} -1.123 & 0 \\ 4 & -5 \\ 2 & -3 \end{bmatrix}
 Y = \begin{bmatrix} 1.123 & 0 \\ 4 & 5 \\ 2 & 3 \end{bmatrix}
 ```
 
-Note in Python it is equivalent to do:
-```python
->>> import numpy as np
-np.abs([[-1, 2], [0, -4], [8, -3]])
-array([[1, 2],
-       [0, 4],
-       [8, 3]])
-```
-
-## Inputs
-
-### `X`
-
-#### Constraints
-
-- (C1)  <a name="shape_consist"></a> Shape consistency
-    - Statement: `X` and `Y` shall have the same shape. $ `[R1]`.
-
-## Outputs
-
-### `Y`
-
-#### Constraints
-
-- (C1) Shape consistency
-    - Statement: See [constraint (C1) on X](#shape_consist) .
+## Error conditions
+Not applicable
 
 ## Attributes
 
-The `Abs` operator has no attribute.
+Operator **Abs** has no attribute.
 
-### Formal specification
+## Inputs
 
-The formal specification of the `Abs` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
+### $\text{X}$: real
 
-```ocaml
-(**
-    Specification of Abs operation on tensors.
- *)
+Input tensor
 
-module Abs
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
+#### Constraints
 
-  let function abs (a : tensor 'a) : tensor 'a =
-  {
-    shape = a.shape ;
-    value = fun i -> if a.value[i] < 0 then -a.value[i] else a.value[i] ;
-  }
+ - `[C1]` <a id="C1rx"></a> Shape consistency
+   - Statement: $X$ and $Y$ shall have the same shape.
+    
+## Outputs
 
-end
+### $\text{Y}$: real
+
+Absolute value of tensor $X$
+
+#### Constraints
+
+ - `[C1]` <a id="C1ry"></a> Shape consistency
+   - Statement: See [constraint (C1) on X](#C1rx)
+
+<a id="float"></a>
+# **Abs** (float)
+where float is in {float16, float, double}
+
+## Signature
+Definition of operator $\text{Abs}$ signature:
+$Y = \text{Abs}(X)$
+
+where:
+- $X$: Input tensor
+- $Y$: Absolute value of $X$
+   
+## Restrictions
+
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+
+No specific restrictions apply to the **Abs** operator:
+
+## Informal specification
+
+The **Abs** operator computes the element-wise absolute value of the input tensor $X$.
+
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+
+$$
+Y[i] = 
+\begin{cases} 
+\text{NaN} & \text{if } A[i] = \text{NaN} \\
+\text{+Inf} & \text{if } A[i] = \pm \text{Inf} \\
+\text{+0} & \text{if } A[i] = \pm \text{0} \\
+A[i] & \text{otherwise} 
+\end{cases}
+$$
+
+The effect of the operator is illustrated on the following examples.
+
+### Example 1
+```math
+X = \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
 ```
 
-[^1]: See [Why3 documentation](https://www.why3.org/)
+## Error conditions
+Not applicable
 
-## Numerical Accuracy
+## Attributes
 
-If tensor $X_{\textit{err}}$ is the numerical error of `X`, let us consider
-$Y_{\textit{err}}^{\textit{propag}}$ the propagated error of `Abs` and `Y`
-and $Y_{\textit{err}}^{\textit{intro}}$ the introduced error of `Abs`.
-Hence the numerical error of `Y`, $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+Operator **Abs** has no attribute.
 
-### Error propagation
+## Inputs
 
-For every indexes $I = (i_0,i_1,...,i_n)$ over the axes, 
+### $\text{X}$: float
 
-- $Y_{\textit{err}}^{\textit{propag}}[I] = X_{\textit{err}}[i]$ if $X[I] \geq 0$
-  and $X[I]+X_{\textit{err}}[I] \geq 0$  
-- $Y_{\textit{err}}^{\textit{propag}}[I] = -X_{\textit{err}}[i]$ if $X[I] \leq 0$
-  and $X[I]+X_{\textit{err}}[I] \leq 0$ 
-- $Y_{\textit{err}}^{\textit{propag}}[I] \leq |X_{\textit{err}}[i]|$ if $X[I]$
-  and $X[I]+X_{\textit{err}}[I]$ do not have the same sign
+Input tensor
 
-### Error introduction
+#### Constraints
 
-The `Abs` operation should not introduce any error: $Y_{\textit{err}}^{\textit{intro}} = [0]$.
+ - `[C1]` <a id="C1rx"></a> Shape consistency
+   - Statement: $X$ and $Y$ shall have the same shape.
+    
+## Outputs
 
-### Unit verification
+### $\text{Y}$: float
 
-A symbolic inference of the error over the tensor components should ensure the
-above properties.
+Absolute value of tensor $X$
 
-```c++
-Tensor<SymbolicDomainError> X;
+#### Constraints
 
-/* X symbolic initialization */
+ - `[C1]` <a id="C1ry"></a> Shape consistency
+   - Statement: See [constraint (C1) on X](#C1rx)
 
-template <typename TypeFloat>
-std::function<TypeFloat (decltype(X.indexes()))>
-  result = [&X](decltype(X.indexes()) list_of_indexes)
-    { return (X[list_of_indexes] < 0) ? -X[list_of_indexes] : X[list_of_indexes]; }
 
-for (auto i : X.indexes()) {
-   SymbolicDomainError x = X[i];
-   SymbolicDomainError y = result(i);
-   if (x.real >= 0 && x.real+x.err >= 0)
-      assert(y.err == x.err);
-   if (x.real <= 0 && x.real+x.err <= 0)
-      assert(y.err == -x.err);
-   if (x.real >= 0 && x.real+x.err <= 0)
-      assert(std::abs(y.err) <= std::abs(x.err));
-   if (x.real <= 0 && x.real+x.err >= 0)
-      assert(std::abs(y.err) <= std::abs(x.err));
-}
-```
+<a id="int"></a>
+# **Abs** (int)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
+
+See specification for [real numbers](#real).
+
+
+
+
 

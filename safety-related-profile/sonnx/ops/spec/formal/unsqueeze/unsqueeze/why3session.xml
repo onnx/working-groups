@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="unsqueeze.mlw"/>
+<theory name="OPUnsqueeze" proved="true">
+ <goal name="takeSmaller&#39;vc" expl="VC for takeSmaller" proved="true">
+ <proof prover="1"><result status="valid" time="0.106668" steps="21778"/></proof>
+ </goal>
+ <goal name="takeBigger&#39;vc" expl="VC for takeBigger" proved="true">
+ <proof prover="1"><result status="valid" time="0.048927" steps="13579"/></proof>
+ </goal>
+ <goal name="partition_permut&#39;vc" expl="VC for partition_permut" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="98343"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="3326273"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="partition_permut&#39;vc.0" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.000001" steps="11851"/></proof>
+  </goal>
+  <goal name="partition_permut&#39;vc.1" expl="postcondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="157280"/></proof>
+  <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="4522213"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="partition_permut&#39;vc.1.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.024081" steps="161605"/></proof>
+   </goal>
+   <goal name="partition_permut&#39;vc.1.1" expl="postcondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.569187" steps="106579"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="list_sort&#39;vc" expl="VC for list_sort" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="128538"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2088654"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="list_sort&#39;vc.0" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.014725" steps="64919"/></proof>
+  </goal>
+  <goal name="list_sort&#39;vc.1" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.017395" steps="95478"/></proof>
+  </goal>
+  <goal name="list_sort&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.449800" steps="854714"/></proof>
+  </goal>
+  <goal name="list_sort&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.140501" steps="39130"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="mem_helper" proved="true">
+ <proof prover="2"><result status="valid" time="0.082582" steps="292148"/></proof>
+ </goal>
+ <goal name="normalize_axis&#39;vc" expl="VC for normalize_axis" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="104453"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="1376668"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="normalize_axis&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003925" steps="5089"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.018262" steps="71060"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.016279" steps="91177"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.006572" steps="5093"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.014925" steps="71037"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.018635" steps="91159"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.040752" steps="13276"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.133642" steps="39437"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.145527" steps="41321"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="insert_by_order&#39;vc" expl="VC for insert_by_order" proved="true">
+ <proof prover="0"><result status="valid" time="0.099116" steps="9298"/></proof>
+ </goal>
+ <goal name="calculate_y_dims&#39;vc" expl="VC for calculate_y_dims" proved="true">
+ <proof prover="1"><result status="valid" time="0.054184" steps="13818"/></proof>
+ </goal>
+ <goal name="decrease_axis&#39;vc" expl="VC for decrease_axis" proved="true">
+ <proof prover="1"><result status="valid" time="0.050125" steps="10814"/></proof>
+ </goal>
+ <goal name="calculate_x_coords&#39;vc" expl="VC for calculate_x_coords" proved="true">
+ <proof prover="2"><result status="valid" time="0.479899" steps="1015116"/></proof>
+ </goal>
+ <goal name="build_list&#39;vc" expl="VC for build_list" proved="true">
+ <proof prover="1"><result status="valid" time="0.555716" steps="55746"/></proof>
+ </goal>
+ <goal name="dunsqueeze&#39;vc" expl="VC for dunsqueeze" proved="true">
+ <proof prover="2"><result status="valid" time="0.018536" steps="57820"/></proof>
+ </goal>
+ <goal name="unsqueeze&#39;vc" expl="VC for unsqueeze" proved="true">
+ <proof prover="0"><result status="valid" time="0.056990" steps="1663"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

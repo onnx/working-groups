@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="flatten.mlw"/>
+<theory name="OPFlatten" proved="true">
+ <goal name="my_nth_non_negative&#39;vc" expl="VC for my_nth_non_negative" proved="true">
+ <proof prover="0"><result status="valid" time="0.049119" steps="1284"/></proof>
+ </goal>
+ <goal name="test&#39;vc" expl="VC for test" proved="true">
+ <proof prover="1"><result status="valid" time="0.012308" steps="35683"/></proof>
+ </goal>
+ <goal name="take&#39;vc" expl="VC for take" proved="true">
+ <proof prover="1"><result status="valid" time="0.147348" steps="551909"/></proof>
+ </goal>
+ <goal name="drop&#39;vc" expl="VC for drop" proved="true">
+ <proof prover="1"><result status="valid" time="0.020388" steps="35272"/></proof>
+ </goal>
+ <goal name="concatenation_take_drop&#39;vc" expl="VC for concatenation_take_drop" proved="true">
+ <proof prover="1"><result status="valid" time="0.061467" steps="202088"/></proof>
+ </goal>
+ <goal name="calculate_output_dims&#39;vc" expl="VC for calculate_output_dims" proved="true">
+ <proof prover="2"><result status="valid" time="0.444505" steps="76816"/></proof>
+ </goal>
+ <goal name="productRangeGo&#39;vc" expl="VC for productRangeGo" proved="true">
+ <proof prover="1"><result status="valid" time="0.008880" steps="40210"/></proof>
+ </goal>
+ <goal name="append_preserves_non_negative&#39;vc" expl="VC for append_preserves_non_negative" proved="true">
+ <proof prover="1"><result status="valid" time="0.012583" steps="53544"/></proof>
+ </goal>
+ <goal name="div_non_negative&#39;vc" expl="VC for div_non_negative" proved="true">
+ <proof prover="1"><result status="valid" time="0.004134" steps="34784"/></proof>
+ </goal>
+ <goal name="calculateAux&#39;vc" expl="VC for calculateAux" proved="true">
+ <proof prover="0"><result status="valid" time="0.023802" steps="1669"/></proof>
+ </goal>
+ <goal name="calculateX&#39;vc" expl="VC for calculateX" proved="true">
+ <proof prover="2"><result status="valid" time="0.047401" steps="15438"/></proof>
+ </goal>
+ <goal name="dflatten&#39;vc" expl="VC for dflatten" proved="true">
+ <proof prover="1"><result status="valid" time="0.014852" steps="53541"/></proof>
+ </goal>
+ <goal name="flatten&#39;vc" expl="VC for flatten" proved="true">
+ <proof prover="1"><result status="valid" time="0.084276" steps="384425"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>
