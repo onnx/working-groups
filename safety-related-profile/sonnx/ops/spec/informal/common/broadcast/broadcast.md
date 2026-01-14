@@ -25,9 +25,9 @@ No restriction.
 
 ## Informal specification
 
-The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes.
+The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes by explicitly normalising them to the same shape.
 
-Broadcasting consists in producing a set of tensors with the same shape: number of dimensions $nZ$ and for each dimension $i$, size $dZ_i$. Each produced tensor $Zi$ contains elements from $Xi$ repeated as necessary.
+Broadcasting consists in producing a set of tensors with the same shape: I.e. each output tensor will have a number of dimensions $nZ$ and for each dimension $i$, a size $dZ_i$. To achieve this goal, each produced tensor $Zi$ contains elements from $Xi$ repeated as necessary.
 
 The shape of a $Zi$ satisfies two conditions.
 
