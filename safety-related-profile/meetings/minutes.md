@@ -1,3 +1,51 @@
+# 2025/01/14
+## Participants
+*To be completed*
+## Agenda
+- Review of actions [Eric]
+- Review of project status ([Kanban](https://github.com/users/ericjenn/projects/4/views/8)
+- Discussion about issues raised by João and Ricardo
+  - Support for Integer Data Types in Tensor Modules
+  - Formalization Methodology (C-Level)
+  - Memory Allocation and C-Code Behavior
+  - Precedence Order in Operations
+- Status of float special values handling in Why3 [Mariem+João+Ricardo]
+- Status of activities on AIDGE [Mariem] 
+- Next meeting local WG (Toulouse)
+  - Agenda is [there](./Local%20WGs/Tlse/agenda.md)
+- Discuss opportunity to present our work in CTiC?
+- Review of [ONNX IR](https://github.com/onnx/onnx/blob/main/docs/IR.md). Who?
+- Announces 
+  - [DATE 2026 workshop](./attachments/date2026_workshop.pdf), April 20-22, Verona, Italy
+  - [ERTS 2026](https://conference-erts.org/), February 5-6, Toulouse, France 
+  - [Certification Together (CTiC)](https://www.certification-together.com/)
+## Minutes
+*To be completed*
+## Actions
+### New actions
+*To be completed*
+### Previous actions
+- [ ] (1712-1, Joao, Ricardo) Give examples of values leading to discrepancies with operator **Range**
+    - L=6459650.5, M=1928958.0 => 8388608.0 in fp32
+    - L=6459650.5, M=1928958.0 => 8388608.5 in fp64 
+    - 8388608 is $2^23$. At this magnitude, ULP=1 (minim distance between two successive values) hence 2^23+0.5=2^23, 0.5 is absorbed.
+- [X] (1712-2, Eric, Jean) Check opportunity to present our work at CTIC
+    - Date: June 17th-19th 2026, Toulouse, see [CfP](https://www.certification-together.com/index.php/call-for-papers/)
+      - Abstract or proposal for workshop expected before mid-March 2026
+    - Our work will be presented at ERTS2026 (in **February**) and (partially) DATE2026 (in April). Would it make sense to present an update to CTIC in **June**?
+- [ ] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
+  - Edorardo : Done
+  - Mohammed : To be done during Jan. 2026 
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- Action from local work session 
+  - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currenlty being discussed with Jorge then to be discussed with Loïc
+
+
 # 2025/12/17
 ## Participants
   - _To be completed_
@@ -44,7 +92,8 @@
 - Action from local work session 
   - [X] Modify existing operator specifications to comply with new conventions.
     - Ensure that all existing operators (and pseudo-op such as $bc$) handles tensors with null  dimensions correctly. (To be added in the guidelines.)
-  - [ ] (Mariem) Give R&J a feedback on the formal spec (in particular: recall a few principles to be followed).
+  - [-] (Mariem) Give R&J a feedback on the formal spec (in particular: recall a few principles to be followed).
+    - Cancelled
   - [X] Check the display problem with LaTeX formulae in Markdown (see $\text{Add}$)
   - [ ] (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
     - Some solutions are available. These solutions must be discussed with Loïc. 
