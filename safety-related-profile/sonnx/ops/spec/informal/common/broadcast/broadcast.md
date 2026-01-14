@@ -107,13 +107,13 @@ $$i=i_0,...i_{nY-1}$$
 
 $$i'=f(i_0,dYm_0,dY_0),...f(i_{nY-1},dYm_{nY-1},dY_{nY-1})$$
 
-The figure bellow presents for the example of the figure above, the way the function $f(.,.,.)$ allows to link elements of $Z0$ and $Z1$ with respectively elements of $Y0$ and $Y1$.
+For our running example, the figure below presents for the example of the figure above, the way the function $f(.,.,.)$ allows to link elements of $Z0$ and $Z1$ with respectively elements of $Y0$ and $Y1$.
 
 <img src="assets/imgs/f.png" alt="drawing" width="100%"/>
 
 ## Error conditions
 
-The following error condition applies to boardcasting:
+The following error condition applies to broadcasting:
 
 | Error    | Statement | Origin |
 | -------- | ------- | ------- |
@@ -128,7 +128,7 @@ $L-1$ input tensors with possibly different shapes.
 
 #### Constraints
 
- - `[C1]` <a id="C1ra"></a> Type consitency
+ - `[C1]` <a id="C1ra"></a> Type consistency
    - Statement: For any $m \in [0,L]$ tensors $Xm$ and $Zm$ must have the same type.
  
 ## Outputs
@@ -139,7 +139,7 @@ $L-1$ output tensors with identical shapes.
 
 #### Constraints
 
- - `[C1]` Type consitency
+ - `[C1]` Type consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $Xm$.
 
 ## Attributes
