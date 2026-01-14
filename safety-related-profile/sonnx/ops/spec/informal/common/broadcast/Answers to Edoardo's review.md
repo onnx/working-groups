@@ -12,7 +12,7 @@
 
 **"IF THAT IS THE CASE, THE MISSING DATA IS FILLED BY COPYING THE ENTRIES AT INDEX 0 OF THE CORRESPONDING DIMENSION" instead of "If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor".**
 
-*"COPYING" may indicate a specific implementation.
+*"COPYING" may indicate a specific implementation.*
 
 **Note 4: the notation was difficult to parse, I have tried to improve it.**
 
