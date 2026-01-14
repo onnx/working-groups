@@ -82,7 +82,7 @@ For our running example, the figure below presents for the example of the figure
 
 #### Setting each dimension to its maximum
 
-The maxima of dimensions $dY_0$, ... $dY_{nY-1}$ are reciprocaly defined as $dY_0 = \max_{m \in [0, L] } dYm_0$, ...  $dY_{nY-1} = \max_{m \in [0, L] } dYm_{nY-1}$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of $Ym$. We have:
+The dimensions $dY_0$, ... $dY_{nY-1}$ are defined as the maximum over all tensors, i.e. $dY_i = \max_{m \in [0, L] } dYm_i$ for all $i\in[0,nY-1]$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of tensor $Ym$. Overall, we have:
 
 $$\forall m \in [0,L] \forall i \in [0,nZm-1] ~~~~~ dZm_i = dY_i$$
 
