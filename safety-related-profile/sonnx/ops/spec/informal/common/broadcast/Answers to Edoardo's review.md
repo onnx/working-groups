@@ -24,4 +24,8 @@
 
 **Note 7: the shape might change, so is it really the same "type"? Maybe we can say "the entries of Xm and Zm must have the same numerical type"**
 
+*Moreover, it depends on the the operator using broadcasting... For instance the Where operator makes broadcasting from one bool tensor and two other data types tensors. I think that "numerical type" is the little restrictive because it is also applicable for string.*
+
 **Note 8: see note 6**
+
+*See answer to notes 6 and 2*
