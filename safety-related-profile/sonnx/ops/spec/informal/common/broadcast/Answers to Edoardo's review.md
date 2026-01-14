@@ -1,6 +1,6 @@
 **Note 1: all questions and comments are explicitly numbered. Whenever I have suggestions in terms of writing/phrasing, I just changed the text (highlighted in bold capital font).**
 
-*Got it.*
+*Got it. The document was modified condidering all suggestions highlighted in bold capital font except one. The numbered questions and comments and the suggestion not taken into acount are discussed below for future decision.*
 
 **Note 2: it is unclear why L cannot be 2^31-1. Why "minus one"?**
 
