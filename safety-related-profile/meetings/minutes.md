@@ -6,11 +6,20 @@
 - Review of project status ([Kanban](https://github.com/users/ericjenn/projects/4/views/8)
 - Discussion about issues raised by João and Ricardo
   - Support for Integer Data Types in Tensor Modules
-  - Formalization Methodology (C-Level)
+    - Use generic types (clone a generic version of Tensor)
+      - [ ] (1401-1) Mariem: provide what has been done on the use of generic types and cloning... 
+  - Formalization of empty tensors (C-Level)
+    - [ ] (1401-2) Check how ONNX behaves with respect to empty tensors (is it possible to create an empty tensor using OP1 and  resurrect it using OP2)
   - Memory Allocation and C-Code Behavior
+    - Consensus: use **parameter**
+  - cdrivers
+    - [ ] (1401-3) Find a reference to justify the precedence order of `max a b + c = max (a,b) + c`
+  - NaNs representation in Why3
+    - The high-level spec should match with the informal spec. So, if there are NaNs and Inf in the informal spec, then we should have NaNs and Infs in the high-level spec too. The refinement (high=>low) should focus on the structure of tensors not on the operations. In addition, we have to be clear that the formal spec does not model floating point but just R extended with special values. 
+    The interpretation of the two levels of spec must be discussed and validated with Loïc (esp. with respect to special values...). 
   - Precedence Order in Operations
-- Status of float special values handling in Why3 [Mariem+João+Ricardo]
 - Status of activities on AIDGE [Mariem] 
+  - See [slides]()
 - Next meeting local WG (Toulouse)
   - Agenda is [there](./Local%20WGs/Tlse/agenda.md)
 - Discuss opportunity to present our work in CTiC?
@@ -23,18 +32,22 @@
 *To be completed*
 ## Actions
 ### New actions
-*To be completed*
+- [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
+- [ ] (1401-5, Eric) Plan a meeting with Loïc to sort out the list of questions
+- [ ] (1401-6, Eric, Jean, Jean-Baptiste) Discuss a possible subject to be presented at CTiC
 ### Previous actions
-- [ ] (1712-1, Joao, Ricardo) Give examples of values leading to discrepancies with operator **Range**
+- [X] (1712-1, Joao, Ricardo) Give examples of values leading to discrepancies with operator **Range**
+(see Range folder review)
     - L=6459650.5, M=1928958.0 => 8388608.0 in fp32
     - L=6459650.5, M=1928958.0 => 8388608.5 in fp64 
-    - 8388608 is $2^23$. At this magnitude, ULP=1 (minim distance between two successive values) hence 2^23+0.5=2^23, 0.5 is absorbed.
+    - 8388608 is $2^23$. At this magnitude, ULP=1 (minimum distance between two successive values) hence 2^23+0.5=2^23, 0.5 is absorbed.
 - [X] (1712-2, Eric, Jean) Check opportunity to present our work at CTIC
     - Date: June 17th-19th 2026, Toulouse, see [CfP](https://www.certification-together.com/index.php/call-for-papers/)
       - Abstract or proposal for workshop expected before mid-March 2026
     - Our work will be presented at ERTS2026 (in **February**) and (partially) DATE2026 (in April). Would it make sense to present an update to CTIC in **June**?
+      - Jean: we have to focus on certification => If we have something to present on (e.g, ARP). Jean-Baptiste: we have already some material => To be discussed. 
 - [ ] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
-  - Edorardo : Done
+  - Edoardo : Done, analyzed by Jean-Loup, still some point to be analyze / discussed 
   - Mohammed : To be done during Jan. 2026 
 - [ ] (1911-2, All) Review Jean's V&V proposal
   - Eric to put updated slides on the repo : Done.
