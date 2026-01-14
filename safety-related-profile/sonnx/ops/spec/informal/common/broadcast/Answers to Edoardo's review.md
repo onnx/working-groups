@@ -12,9 +12,15 @@
 
 **Note 4: the notation was difficult to parse, I have tried to improve it.**
 
+*Fine. I think it improves the notation.*
+
 **Note 5: the link below ("Origin") does not cover the error conditions explicitly. Examples of errors are in the numpy documentation linked therein. Are we happy with the reader having to follow two links to get to the actual information? https://numpy.org/doc/stable/user/basics.broadcasting.html#general-broadcasting-rules**
 
+*We could provide both links to the reader*
+
 **Note 6: for m ∈ [ 0 , L ] means that there are L + 1 input tensors. This issue is present throughout the document.**
+
+*We made the choice to number the inputs in the same way than the indexes, i.e. from 0 to N-1. We use L for last index instead of N for number of elements.*
 
 **Note 7: the shape might change, so is it really the same "type"? Maybe we can say "the entries of Xm and Zm must have the same numerical type"**
 
