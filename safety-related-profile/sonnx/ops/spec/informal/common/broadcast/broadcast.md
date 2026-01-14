@@ -25,20 +25,20 @@ No restriction.
 
 ## Informal specification
 
-The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes.
+The broadcasting functionality allows element-wise operations, e.g. **Add** , **Mul** , etc., to take tensors with different shapes by explicitly normalising them to the same shape.
 
-Broadcasting consists in producing a set of tensors with the same shape: number of dimensions $nZ$ and for each dimension $i$, size $dZ_i$. Each produced tensor $Zi$ contains elements from $Xi$ repeated as necessary.
+Broadcasting consists in producing a set of tensors with the same shape: I.e. each output tensor will have a number of dimensions $nZ$ and for each dimension $i$, a size $dZ_i$. To achieve this goal, each produced tensor $Zi$ contains elements from $Xi$ repeated as necessary.
 
 The shape of a $Zi$ satisfies two conditions.
 
-*Condition 1*: the number of dimensions is the largest number of dimensions among all the input tensors. When the number of dimensions is increased for a tensor:
-- the dimensions to be completed are those of lower indexes,
+*Condition 1*: the number of dimensions of all output tensors is the largest number of dimensions among all the input tensors. When the number of dimensions is increased for a tensor:
+- the extra dimensions to be completed are prepended before the lower indexes,
 - those dimensions are set to a size equal to 1, and
 - the access to the tensor data remains possible.
 
-*Condition 2*: the size for a dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. When a dimension size of an output tensor is larger than the corresponding dimension size of the corresponding input tensor the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor.
+*Condition 2*: the size of each output dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. As a consequence the size of some dimensions in an output tensor might be larger than that of the corresponding input tensor. If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor.
 
-The figure bellow shows an exemple of broadcasting two tensors, i.e. $Z0, Z1 = \text{Broadcast}(X0, X1)$.
+The figure below shows an example of broadcasting two tensors, i.e. $Z0, Z1 = \text{Broadcast}(X0, X1)$.
 
 <img src="assets/imgs/Broadcast.png" alt="drawing" width="100%"/>
 
@@ -76,28 +76,28 @@ $$ nZm = nY $$
 
 In order to define the output we have to set each dimension to its maximum among all tensors and, for tensors with increased dimension, access always to the first element whatever the value of the index in this dimension.
 
-The figure bellow presents for the example of the figure above, the tensors obtained at the end of setp 1.
+For our running example, the figure below presents for the example of the figure above, the tensors obtained at the end of step 1.
 
 <img src="assets/imgs/Y.png" alt="drawing" width="100%"/>
 
-#### Seting each dimension to its maximum
+#### Setting each dimension to its maximum
 
-The maxima of dimensions $dY_0$, ... $dY_{nY-1}$ are reciprocaly defined as $dY_0 = \max_{m \in [0, L] } dYm_0$, ...  $dY_{nY-1} = \max_{m \in [0, L] } dYm_{nY-1}$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of $Ym$. We have:
+The dimensions $dY_0$, ... $dY_{nY-1}$ are defined as the maximum over all tensors, i.e. $dY_i = \max_{m \in [0, L] } dYm_i$ for all $i\in[0,nY-1]$ where $dYm_0$, ... $dYm_{nY-1}$ are the dimensions of tensor $Ym$. Overall, we have:
 
 $$\forall m \in [0,L] \forall i \in [0,nZm-1] ~~~~~ dZm_i = dY_i$$
 
 #### Access to data
 
-Let $f(.,.,.)$ a function that provides an index value of 0 when the dimension size is not the maximum size and the current index of this dimension when the dimension size is equal to the maximum dimension size. This fonction is defined as:
+Let $f(.,.,.)$ a function that provides an index value of 0 when the dimension size is not the maximum size and the current index of this dimension when the dimension size is equal to the maximum dimension size. This function is defined as:
 
 $f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 0$ otherwise where:
 - $a$ is the current index,
-- $B$ is the dimension size, and
-- $C$ is the target dimension size.
+- $B$ is the size of the input dimension, and
+- $C$ is the target size of the output dimension.
 
-When, for a given dimension $dYm_k$ of a tensor $Ym$, $dYm_k \neq dY_k$ then  $f(i_k,dYm_k,dY_k)$ is 0 whatever the value of the index $i_k$ leading to $Zm$ related always to the first element of $Ym$ in the $k^{\text{th}}$ dimension.
+When, for a given dimension $dYm_k$ of a tensor $Ym$, $dYm_k \neq dY_k$ then  $f(i_k,dYm_k,dY_k)$ is 0 whatever the value of the index $i_k$. This way, $Zm$ relates always to the first element of $Ym$ in the $k^{\text{th}}$ dimension.
 
-Then the relation between elements of boardcasted tensors $Z0,...ZL$ and tensors with common number of dimensions $Y0,...YL$ are:
+Then the relation between elements of broadcasted tensors $Z0,...ZL$ and tensors with common number of dimensions $Y0,...YL$ are:
 
 $$Zm[i]=Ym[i']$$
 
@@ -107,13 +107,13 @@ $$i=i_0,...i_{nY-1}$$
 
 $$i'=f(i_0,dYm_0,dY_0),...f(i_{nY-1},dYm_{nY-1},dY_{nY-1})$$
 
-The figure bellow presents for the example of the figure above, the way the function $f(.,.,.)$ allows to link elements of $Z0$ and $Z1$ with respectively elements of $Y0$ and $Y1$.
+For our running example, the figure below presents for the example of the figure above, the way the function $f(.,.,.)$ allows to link elements of $Z0$ and $Z1$ with respectively elements of $Y0$ and $Y1$.
 
 <img src="assets/imgs/f.png" alt="drawing" width="100%"/>
 
 ## Error conditions
 
-The following error condition applies to boardcasting:
+The following error condition applies to broadcasting:
 
 | Error    | Statement | Origin |
 | -------- | ------- | ------- |
@@ -128,7 +128,7 @@ $L-1$ input tensors with possibly different shapes.
 
 #### Constraints
 
- - `[C1]` <a id="C1ra"></a> Type consitency
+ - `[C1]` <a id="C1ra"></a> Type consistency
    - Statement: For any $m \in [0,L]$ tensors $Xm$ and $Zm$ must have the same type.
  
 ## Outputs
@@ -139,7 +139,7 @@ $L-1$ output tensors with identical shapes.
 
 #### Constraints
 
- - `[C1]` Type consitency
+ - `[C1]` Type consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $Xm$.
 
 ## Attributes
