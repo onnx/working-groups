@@ -10,6 +10,10 @@
 
 *The intention is not to say something about the implementation. The intention of the three bullet points is to indicate that there are consequences on (1) the number of dimensions, (2) the size of each dimension and (3) the indexes used to access the data. May be we could change this last bullet point by "access to the data through tensor index is modified accordingly"*
 
+**"IF THAT IS THE CASE, THE MISSING DATA IS FILLED BY COPYING THE ENTRIES AT INDEX 0 OF THE CORRESPONDING DIMENSION" instead of "If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor".**
+
+*"COPYING" may indicate a specific implementation.
+
 **Note 4: the notation was difficult to parse, I have tried to improve it.**
 
 *Fine. I think it improves the notation.*
