@@ -15,16 +15,17 @@ We also consider that these needs are specific and that the proposed changes and
 
 The main elements of this repository are:
 - [Slides of the Kick-Off Meeting](./meetings/general/2024-09-25%20-%20KOM/2024-09-25%20-%20SONNX%20KOM.pdf)
+- [Recent presentation of the projects results](./meetings/Other_meetings/SONNX%20-%20WG114-%20oct-2025.pdf)
 - [Minutes of the WG meetings](./meetings/minutes.md)
 - Deliverables (draft)
   - [Industrial needs](./deliverables/needs/needs.md) (What are the needs of the industrial partners?)
   - [Use cases](./deliverables/scope/scope.md) (What are the first models to be implemented using SONNX?)
   - [Requirements](./deliverables/reqs/reqs.md) (How do the needs translate to constraints on the SONNX profile?)
-  - [Issues](./deliverables/issues/issues.md) (What are the first issues identified for the usage of ONNX in a safety-related system?)
-  - [Informal specification of (a few) operators](./documents/profile_opset/)\
-    Note that we are also working on the formal specification of those operators using the [Why3](https://www.why3.org/) formal language. Our objective is to support the formal verification (or generation) of a reference implementation of those operators.\
-    Minutes of the meeting about this activity can be found [here](./meetings/formal_methods/minutes.md). 
-    
+  - [Issues](./deliverables/issues/issues.md) (What are the first issues identified for the usage of ONNX in a safety-related system?) (obsolete)
+  - [Informal specification of operators](./sonnx/ops/spec/informal/)
+  - [Formal specification of operators](./sonnx/ops/spec/formal/)
+    Formal specification of operators is done using the [Why3](https://www.why3.org/).
+  - [Formal specification of graphs](./sonnx/graph/README.md) (tbc)
 Note that this is a **work in progress**. 
 
 
@@ -34,7 +35,7 @@ Note that this is a **work in progress**.
 
 # WG Lead(s)
 
-* Eric JENN (IRT Saint-Exupery) and Jean SOUYRIS (Airbus) (July 22, 2024 - Current)
+* Eric JENN (IRT Saint-Exupery, France) and Jean SOUYRIS (Airbus, France) (July 22, 2024 - Current)
 
 
 # WG Meeting Info
