@@ -12,6 +12,9 @@
 #### 2025/01/15
 - Case of max:min/maxpool with NaN: for all operators, try to rely on the spec of Max and Min. (Nota: I don't like the spec NaN > Inf > ... I think that we should treat NaN as a special case because NaN is no normally  comparable and here we are defining a comparison...)
 - Processing of existing issues: see [issues tagged "TLSE WG"](https://github.com/users/ericjenn/projects/4/views/14))
+  - Clip
+  - Relu
+- Sujet pour CEtIC
 - Links identified by Jean-Loup in ONNX:
  - https://onnx.ai/onnx/repo-docs/DimensionDenotation.html
  - https://onnx.ai/onnx/repo-docs/TypeDenotation.html
