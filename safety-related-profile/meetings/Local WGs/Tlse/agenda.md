@@ -32,10 +32,11 @@
 ##### New actions
   - [ ] (1501-1, Jean-Baptiste) Faire une proposition de contenu pour une soumission à  CETiC
   - [ ] (1501-2, Jean-Loup) Remove the relation NaN>Inf... and replace it by an explicit test for NaNs... 
-  - [ ] (1501-3, ???) Introduce the term "Scalar" in the glossary. 
+  - [ ] (1501-3, ???) Introduce the term "Scalar" and (our) concept of "type" (numerical / value type) in the glossary. 
   - [ ] (1501-4, ???) Clarify the meaning of "heterogeneous" in ONNX
   - [ ] (1501-5, ???) Clarify how we handle  value constraints for attributes
   - [ ] (1501-6,Eric) Check the actual behavior of Relu and LeakyRelu in ONNX. Check if alpha can be negative.
   - [ ] (1501-7,???) Update the informal spec guidelines (enforce usage of ONNX names and provision of denotation, use of generic types: "with int in (int8,int16,...)" )
+
 ##### Past actions
 None.
