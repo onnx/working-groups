@@ -18,23 +18,21 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **Relu** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
+No specific restrictions apply to the **Relu** operator.
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
+Operator **Relu** is defined as follows: 
+- if $X[i] < 0$ then $Y[i] = 0$
+- If $X[i] \ge 0$ then $Y[i]=X[i]$
 
 ### Example 1
 
 ```math
 X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
 ```
-
 
 ```math
 Y = \text{Relu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
@@ -90,16 +88,16 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **Relu** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
+No specific restrictions apply to the **Relu** operator.
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
+Operator **Relu** is defined as follows: 
+- if $X[i] = \text{NaN}$ then $Y[i]=\text{NaN}$
+- if $X[i] < 0$ then $Y[i] = 0$
+- If $X[i] \ge 0$ then $Y[i]=X[i]$
 
 ### Example 1
 
@@ -164,16 +162,15 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **Relu** operator for the SONNX profile:
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]`     | Sparse tensors are not supported                            | General restriction [GR1](../common/general_restrictions.md#GR1)
-| `[R2]` <a id="R1"></a>     | Shape of tensors shall be explicit          | General restriction [GR2](../common/general_restrictions.md#GR2) |
+No specific restrictions apply to the **Relu** operator.
 
 ## Informal specification
 
-Operator **Relu** computes: $Y = \text{Max}(0, X)$ where $\text{Max}$ is ONNX **Max** operator.
+Operator **Relu** is defined as follows: 
+- if $X[i] < 0$ then $Y[i] = 0$
+- If $X[i] \ge 0$ then $Y[i]=X[i]$
 
 ### Example 1
 
