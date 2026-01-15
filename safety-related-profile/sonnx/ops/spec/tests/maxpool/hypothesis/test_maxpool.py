@@ -239,9 +239,14 @@ def check_constraints(x, auto_pad, y, mydy2,
     # C1
     #Same of C3 of x
 
+    #Shape of the outpout
+    my_y_shape = compute_MaxPool_output_shape(x.shape, kernel_shape, pads, dilation, strides)
+    print("check_constraints: my_y_shape =", my_y_shape)
+    assert np.array_equal(y.shape, my_y_shape)
+
     #Functional check    
     my_y = MaxPool(x, kernel_shape, strides, dilation, pads)
-    print("my_y:", my_y)
+    print("check_constraints: my_y =", my_y)
     assert np.array_equal(y, my_y)
 
 def compute_MaxPool_output_shape(input_shape, kernel_shape, pads, dilation, strides):
@@ -254,7 +259,9 @@ def compute_MaxPool_output_shape(input_shape, kernel_shape, pads, dilation, stri
     mybeta = dx3 + pads[1] + pads[3]
     mytheta = (dilation[0] * (dw0 - 1)) + 1
     mygamma = (dilation[1] * (dw1 - 1)) + 1
+#   dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor
     mydy2 = math.floor(((myalpha - (mytheta)) / strides[0]) + 1)
+#   dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor
     mydy3 = math.floor(((mybeta - (mygamma)) / strides[1]) + 1)
     
     output_shape = [dx0, dx1, mydy2, mydy3]
@@ -334,7 +341,7 @@ def MaxPool(X, kernel_shape, strides, dilation, pads):
     dX_p0, dX_p1, dX_p2, dX_p3 = X_p.shape
     dY_p0, dY_p1, dY_p2, dY_p3 = Y.shape
 
-    print("X_p:", X_p)
+    print("MaxPool: X_p =", X_p)
 
     for b in range(dX_p0):
        for c in range(dX_p1): 
