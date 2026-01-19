@@ -36,7 +36,7 @@ The shape of a $Zi$ satisfies two conditions.
 - those dimensions are set to a size equal to 1, and
 - the access to the tensor data remains possible.
 
-*Condition 2*: the size of each output dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. As a consequence the size of some dimensions in an output tensor might be larger than that of the corresponding input tensor. If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor.
+*Condition 2*: the size of each output dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. As a consequence the size of some dimensions in an output tensor might be larger than that of the corresponding input tensor. If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor. [Note that, after expansion, the size of the dimension is either the maximum size or one, cf. error condition.](#error)
 
 The figure below shows an example of broadcasting two tensors, i.e. $Z0, Z1 = \text{Broadcast}(X0, X1)$.
 
@@ -117,7 +117,7 @@ The following error condition applies to broadcasting:
 
 | Error    | Statement | Origin |
 | -------- | ------- | ------- |
-| `E1` | $\exists m \in [0, L], \exists i \in [0, nY-1]$ such that $dYm_i \neq dY_i$  and $dYm_i \neq 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
+| `E1` <a id="error"></a>| $\exists m \in [0, L], \exists i \in [0, nY-1]$ such that $dYm_i \neq dY_i$  and $dYm_i \neq 1$| https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md|
 
 For each tensor and each dimension, considering a common number of dimensions, the value of a dimension shall be either equal to the maximum dimension among all tensors or equal to one. If not, Error `E1` occurs.
 
