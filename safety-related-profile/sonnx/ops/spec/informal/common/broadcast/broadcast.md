@@ -119,7 +119,7 @@ The following error condition applies to broadcasting:
 | -------- | ------- | ------- |
 | `E1` <a id="error"></a>| $\exists m \in [0, L], \exists i \in [0, nY-1]$ such that $dYm_i \neq dY_i$  and $dYm_i \neq 1$| The ONNX documentation https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md refers to Numpy rules https://numpy.org/doc/stable/user/basics.broadcasting.html#general-broadcasting-rules|
 
-For each tensor and each dimension, considering a common number of dimensions, the value of a dimension shall be either equal to the maximum dimension among all tensors or equal to one. If not, Error `E1` occurs.
+For each tensor and each dimension, considering a common number of dimensions, the size of a dimension shall be either equal to the maximum dimension size among all tensors or equal to one. If not, Error `E1` occurs.
 
 ## Inputs
 
