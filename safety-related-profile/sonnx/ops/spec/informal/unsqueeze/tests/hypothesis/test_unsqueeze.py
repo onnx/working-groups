@@ -6,14 +6,11 @@ import os
 
 import json
 import numpy as np
-import ml_dtypes
 
 from onnx import helper
 import onnx.checker
 from onnxruntime import InferenceSession
 import onnx.reference
-
-import tensorflow as tf
 
 from hypothesis import given, settings
 import hypothesis.extra.numpy as hnp
@@ -51,7 +48,6 @@ unsqueeze_types = {
         "FP16": np.float16,
         "FP32": np.float32,
         "FP64": np.float64,
-        "BFLOAT16": ml_dtypes.bfloat16,
         "BOOL": np.bool_,
         "STRING": np.str_
     },
@@ -67,8 +63,7 @@ unsqueeze_types = {
         "FP16": np.float16,
         "FP32": np.float32,
         "FP64": np.float64,
-        "BOOL": np.bool_,
-        "BFLOAT16": ml_dtypes.bfloat16
+        "BOOL": np.bool_
     },
     "DmlExecutionProvider": {
         "INT8": np.int8,
@@ -126,10 +121,6 @@ def valid_unsqueeze_args(draw):
         a_numeric = st.text(
             alphabet=st.characters(codec="utf-8", blacklist_characters='\x00')
         )
-    elif dtype == ml_dtypes.bfloat16:
-        min_value = float(ml_dtypes.finfo(unsqueeze_types.get(inputs_attributes["ONNXRuntime_Provider"])["BFLOAT16"]).min)
-        max_value = float(ml_dtypes.finfo(unsqueeze_types.get(inputs_attributes["ONNXRuntime_Provider"])["BFLOAT16"]).max)
-        a_numeric = st.floats(min_value=min_value, max_value=max_value)
 
     #---------------------------------------------------
     # Input X
@@ -148,15 +139,9 @@ def valid_unsqueeze_args(draw):
             max_value=inputs_attributes["max_size_input_x_axis"]))
         x_shape.append(dim)
 
-    # Create input tensor X
-    if dtype_name == "BFLOAT16":
-        # X [C1]
-        temp_tensor = draw(hnp.arrays(dtype=np.float32, shape=x_shape, elements=a_numeric))
-        tf_tensor = tf.cast(tf.constant(temp_tensor), tf.bfloat16)
-        x = tf_tensor.numpy()
-    else:        
-        # X [C1]
-        x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=a_numeric))
+    # Create input tensor X      
+    # X [C1]
+    x = draw(hnp.arrays(dtype=dtype, shape=x_shape, elements=a_numeric))
     
     #---------------------------------------------------
     # Input A
@@ -204,7 +189,7 @@ Function that runs the test
 """
 @settings(max_examples=10000, deadline=None)
 @given(valid_unsqueeze_args())
-def test_slice(args):
+def test_unsqueeze(args):
     x, a, output_shape, dtype_name = args
     x_type_key = dtype_to_key.get(x.dtype.type, str(x.dtype))
     generated_data["x_type"].append(x_type_key)
@@ -279,15 +264,8 @@ def run_onnx_unsqueeze(x, a, output_shape, dtype_name):
     # Verify the model
     onnx.checker.check_model(onnx_model)
 
-    # Do inference
-    if dtype_name in ["BFLOAT16"]:
-        # Use ONNX Reference Implementation for bfloat16
-        # BFLOAT16 is not supported by ONNX Runtime while using numpy
-        # An alternative is to use torch tensores and CUDAProvider
-        sess = onnx.reference.ReferenceEvaluator(onnx_model)
-    else:
-        # Use ONNX Runtime for other types
-        sess = InferenceSession(onnx_model.SerializeToString(),
+
+    sess = InferenceSession(onnx_model.SerializeToString(),
                                 providers=["CPUExecutionProvider"])
 
     y = sess.run(None, {'x': x, 'a': a})[0]

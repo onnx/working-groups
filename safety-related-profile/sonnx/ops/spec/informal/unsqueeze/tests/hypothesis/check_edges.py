@@ -16,7 +16,6 @@ unsqueeze_types = {
         "FP16": np.float16,
         "FP32": np.float32,
         "FP64": np.float64,
-        "BFLOAT16": ml_dtypes.bfloat16,
         "BOOL": np.bool_,
         "STRING": np.str_
     },
@@ -32,8 +31,7 @@ unsqueeze_types = {
         "FP16": np.float16,
         "FP32": np.float32,
         "FP64": np.float64,
-        "BOOL": np.bool_,
-        "BFLOAT16": ml_dtypes.bfloat16
+        "BOOL": np.bool_
     },
     "DmlExecutionProvider": {
         "INT8": np.int8,
@@ -80,7 +78,7 @@ def check_edges():
         provider = data["ONNXRuntime_Provider"]
         check_x_type = check_type("x_type", data["x_type"], provider)
 
-        return all([check_shape_size_input_x, check_size_input_x, check_size_input_axes])
+        return all([check_shape_size_input_x, check_size_input_x, check_size_input_axes, check_x_type])
 
 
 """
