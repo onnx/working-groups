@@ -36,7 +36,7 @@ The shape of a $Zi$ satisfies two conditions.
 - those dimensions are set to a size equal to 1, and
 - the access to the data through tensor index is modified accordingly.
 
-*Condition 2*: the size of each output dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. As a consequence the size of some dimensions in an output tensor might be larger than that of the corresponding input tensor. If that is the case, the data associated with indexes larger than the input tensor dimension size is the data associated to index value 0 in the input tensor. [Note that, after expansion, the size of the dimension shall be either the maximum size or one, cf. error condition.](#error)
+*Condition 2*: the size of each output dimension is equal to the maximum of the sizes of all the input tensors for that dimension after expansion. As a consequence the size of some dimensions in an output tensor might be larger than that of the corresponding input tensor. If that is the case, the data associated with indexes larger than the input tensor dimension size corresponds to the data associated to index value 0 in the input tensor (depending on implementation it can be a copy or just an index manipulation). [Note that, after expansion, the size of the dimension shall be either the maximum size or one, cf. error condition.](#error)
 
 The figure below shows an example of broadcasting two tensors, i.e. $Z0, Z1 = \text{Broadcast}(X0, X1)$.
 
