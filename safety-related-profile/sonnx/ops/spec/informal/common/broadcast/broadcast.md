@@ -11,7 +11,7 @@ where type is in {real, float16, float, double, int8, int16, int32, int64, uint8
 Definition of functionality $\text{Broadcast}$ signature: $Z0, ..., ZL = \text{Broadcast}(X0, ... , XL)$
 
 where
-- $L \in [0, 2^{31}-1[$: number of tensors to be broadcasted minus one. Note that in ONNX broadcasting is applied to operators with 2 inputs, 3 inputs or a variable number of inputs between 1 and 2147483647 (cf. operators Max https://onnx.ai/onnx/operators/onnx__Max.html , Mean, Min and Sum). $2^{31}$ = 2147483648, thus $2^{31}-1$ = 2147483647 is the maximum number of inputs. Moreover, note that $L$ is the last index. I.e. the input tensors are numbered from 0 to $L$. In consequence $L$ is the number of inputs minus one and cannot be equal to 2^31-1 <a id="last"></a>.
+- $L \in [0, 2^{31}-1[$: number of tensors to be broadcasted minus one.  <a id="last"></a> Note that in ONNX broadcasting is applied to operators with 2 inputs, 3 inputs or a variable number of inputs between 1 and 2147483647 (cf. operators Max https://onnx.ai/onnx/operators/onnx__Max.html , Mean, Min and Sum). $2^{31}$ = 2147483648, thus $2^{31}-1$ = 2147483647 is the maximum number of inputs. Moreover, note that $L$ is the last index. I.e. the input tensors are numbered from 0 to $L$. In consequence $L$ is the number of inputs minus one and cannot be equal to 2^31-1.
 - $X0$, ... , $XL$: tensors to be broadcasted.
 - $Z0$, ... , $ZL$: broadcasted tensors.
 
@@ -126,7 +126,7 @@ For each tensor and each dimension, considering a common number of dimensions, t
 ### $Xm$ for $m \in [0,L]$: `type tensor`
 $L-1$ input tensors with possibly different shapes.
 
-Remember that this specification use $L$ for last index instead of $N$ for number of elements, [cf.](#last). The inputs are numbered in the same way than the indexes, i.e. from 0 to $N$-1, where $N$ is the number of inputs. 
+Remember that this specification use $L$ for last index instead of $N$ for number of elements, [cf. Signature](#last). The inputs are numbered in the same way than the indexes, i.e. from 0 to $N$-1, where $N$ is the number of inputs. 
 
 #### Constraints
 
@@ -139,7 +139,7 @@ Remember that this specification use $L$ for last index instead of $N$ for numbe
 
 $L-1$ output tensors with identical shapes.
 
-Remember that this specification use $L$ for last index instead of $N$ for number of elements, [cf.](#last). The outputs are numbered in the same way than the indexes, i.e. from 0 to $N$-1, where $N$ is the number of outputs. 
+Remember that this specification use $L$ for last index instead of $N$ for number of elements, [cf. Signature](#last). The outputs are numbered in the same way than the indexes, i.e. from 0 to $N$-1, where $N$ is the number of outputs. 
 
 #### Constraints
 
