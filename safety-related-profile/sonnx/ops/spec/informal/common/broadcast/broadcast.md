@@ -95,7 +95,7 @@ $f(a,B,C) = a$ if $B=C$ and $f(a,B,C) = 0$ otherwise where:
 - $B$ is the size of the input dimension, and
 - $C$ is the target size of the output dimension.
 
-When, for a given dimension $dYm_k$ of a tensor $Ym$, $dYm_k \neq dY_k$ then  $f(i_k,dYm_k,dY_k)$ is 0 whatever the value of the index $i_k$. This way, $Zm$ relates always to the first element of $Ym$ in the $k^{\text{th}}$ dimension.
+When, for a given dimension $k$, of size $dYm_k$, of a tensor $Ym$, $dYm_k \neq dY_k$ then  $f(i_k,dYm_k,dY_k)$ is 0 whatever the value of the index $i_k$. This way, $Zm$ relates always to the first element of $Ym$ in the $k^{\text{th}}$ dimension.
 
 Then the relation between elements of broadcasted tensors $Z0,...ZL$ and tensors with common number of dimensions $Y0,...YL$ are:
 
