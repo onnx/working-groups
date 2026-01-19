@@ -9,11 +9,14 @@
     - Use generic types (clone a generic version of Tensor)
       - [ ] (1401-1) Mariem: provide what has been done on the use of generic types and cloning... 
   - Formalization of empty tensors (C-Level)
-    - [ ] (1401-2) Check how ONNX behaves with respect to empty tensors (is it possible to create an empty tensor using OP1 and  resurrect it using OP2)
+    - [X] (1401-2, Eric) Check how ONNX behaves with respect to empty tensors (is it possible to create an empty tensor using OP1 and  resurrect it using OP2)
+      - It is not possible, see the paragraph about "null tensors" in the [glossary](../sonnx/ops/spec/informal/common/definitions.md).
   - Memory Allocation and C-Code Behavior
     - Consensus: use **parameter**
   - cdrivers
-    - [ ] (1401-3) Find a reference to justify the precedence order of `max a b + c = max (a,b) + c`
+    - [X] (1401-3) Find a reference to justify the precedence order of `max a b + c = max (a,b) + c`
+      - The precedence is defined in the Why3 manual. For `max`, the rule about precedence of functions applies. See picture below
+  ![alt text](./attachments/why3_op_prio.png)
   - NaNs representation in Why3
     - The high-level spec should match with the informal spec. So, if there are NaNs and Inf in the informal spec, then we should have NaNs and Infs in the high-level spec too. The refinement (high=>low) should focus on the structure of tensors not on the operations. In addition, we have to be clear that the formal spec does not model floating point but just R extended with special values. 
     The interpretation of the two levels of spec must be discussed and validated with Loïc (esp. with respect to special values...). 
