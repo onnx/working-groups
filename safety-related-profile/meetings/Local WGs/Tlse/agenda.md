@@ -97,11 +97,12 @@
                 shapes, *ctx.getOutputType(0)->mutable_tensor_type()->mutable_shape());
           }
         }));
-    ``` python
+    ``` 
+    
       - As all boolean values are "true", "heterogeneous" should not be displayed... Maybe has the documentation generation pipeline changed...
       - Normally, "heterogeneous" refers to variadic arguments: it is set arguments do not need to be of the same type. 
       - The generation of "heterogeneous" appear in version ONNX 1.4.0. And it is always related to variadic arguments:
-      ```
+      ```python
       def generate_formal_parameter_tags(formal_parameter: OpSchema.FormalParameter) -> str:
     tags: list[str] = []
     if OpSchema.FormalParameterOption.Optional == formal_parameter.option:
