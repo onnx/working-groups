@@ -1,5 +1,7 @@
 
-# 2026/02/XX
+# 2026/02/18
+
+See the list of [questions](./inputs/inputs-2026-02-18.md).
 
 # 2025/06/20
 
