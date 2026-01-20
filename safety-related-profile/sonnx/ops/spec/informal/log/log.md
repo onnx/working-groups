@@ -1,220 +1,258 @@
+
 # Contents
-- `Log` [operator (real)](#real)
-- `Log` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
 
+- **Log** operator for type [real](#real)
+- **Log** operator for types [float16, float, double](#float)
 
+Based on ONNX documentation \[Log version 13](https://onnx.ai/onnx/operators/onnx__Log.html).
 
 <a id="real"></a>
-# `Log` operator (real)
+# **Log** (real)
 
-### Restrictions
-The following restrictions apply to the `Log` operator for the SONNX profile:
-- The input tensor `X` must contain only positive values, as the logarithm is undefined for non-positive values. `[R1]`
-- Tensors `X`, `Y` must have the same shape.  `[R2]`
-- The input tensor `X` must be of floating-point types. `[R3]`
-- No broadcasting is allowed for the tensor `X`. `[R4]`
+## Signature
+Definition of operator $\text{Log}$ signature:  
+$Y = \textbf{Log}(X)$
 
-- Tensors of class `SparseTensor` are not supported [`[GR1]`](../general_restrictions.md) 
+where:
+- $X$: Input tensor
+- $Y$: Natural logarithm of $X$
 
-### Signature
+## Restrictions
 
-`Y = Log(X)`
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-where
-- `X`: input tensor containing real numbers.
-- `Y`: output tensor where each element is the natural logarithm of the corresponding element in `X`.
+No specific restrictions apply to the **Log** operator, besides domain constraints explicitly stated below.
 
-#### Informal specification
+## Informal specification
 
-The `Log` operator computes the natural logarithm for each element of the input tensor `X`. Each element in the resulting tensor `Y` is the natural logarithm of the corresponding element in `X`.
+The **Log** operator computes the element-wise natural logarithm of the input tensor $X$.
 
-The mathematical definition of the operator is given hereafter for an element $i$, covering all valid indexes of the tensor:
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] =
 \begin{cases}
 \log(X[i]) & \text{if } X[i] > 0 \\
-\text{undefined} & \text{if } X[i] <= 0
+\text{\it undefined} & \text{otherwise}
 \end{cases}
 $$
 
-The effect of the operator is illustrated on the following examples:
-- `X` and `Y` are tensors holding numerical data
+The effect of the operator is illustrated on the following examples.
 
-Example 1:
+### Example 1
+
 ```math
-X = \begin{bmatrix}  1 & 2 & 4 \end{bmatrix}
-```
-Result `Y` will be:
-```math
-Y =  \begin{bmatrix}  0 & 0.693147 & 1.386294 \end{bmatrix}
+X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
 
-Example 2:
 ```math
-X =  \begin{bmatrix} 2.718 & 7.389 \\ 0.01 & 0.1 \\ 10 & 1000 \end{bmatrix}
-```
-Result `Y` will be:
-```math
-Y =  \begin{bmatrix} 0.999896 & \text{1.999992} \\ \text{-4.605170} & -2.302585 \\ 2.302585 & \text{6.907755} \end{bmatrix}
+Y = \begin{bmatrix} 0 & 0.693147 & 1.386294 \end{bmatrix}
 ```
 
+### Example 2
 
-#### Inputs and outputs
+```math
+X = \begin{bmatrix}
+  2.718 & 7.389 \\
+  0.01  & 0.1   \\
+  10    & 1000
+\end{bmatrix}
+```
 
-##### `X`
+```math
+Y = \begin{bmatrix}
+  0.999896 & 1.999992 \\
+  -4.605170 & -2.302585 \\
+  2.302585 & 6.907755
+\end{bmatrix}
+```
 
-Tensor `X` is the input tensor containing real numbers for which the natural logarithm needs to be computed.
+## Error conditions
 
-###### Constraints
+No error condition beyond the undefined behavior for non-positive inputs in the mathematical model.
 
-- (C1) Positive values
-    - Statement: The tensor `X` must contain only positive values. $X[i] > 0$ for all non-zero results $i$. `[R1]`
-- (C2) Floating-point types
-    - Statement: The tensor `X` must be of floating-point types. `[R3]`
-- (C3) Shape consistency
-    - Statement: Tensors `X`, `Y` must have the same shape. $N(X)=N(Y)$ `[R2]` and `[R4]` 
+## Attributes
 
-##### `Y`
+Operator **Log** has no attribute.
 
-Tensor `Y` is the output tensor containing the computed logarithmic values for each element in `X`.
+## Inputs
 
-###### Constraints
+### $\text{X}$: real
 
-- (C1) Shape consistency
-    - Statement: The shape of `Y` must be the same as `X`. $N(Y)=N(X)$ `[R2]` and `[R4]`
+Input tensor.
 
-#### Attributes
+#### Constraints
 
-The `Log` operator does not require any attributes.
+- `[C1]` <a id="C1rx"></a> Shape consistency  
+  - Statement: $X$ and $Y$ shall have the same shape.
+- `[C2]` <a id="C2rdomain"></a> Definition domain  
+  - Statement: $\forall i,\ X[i] > 0$.
 
+## Outputs
 
+### $\text{Y}$: real
 
+Natural logarithm of tensor $X$.
 
+#### Constraints
 
+- `[C1]` <a id="C1ry"></a> Shape consistency  
+  - Statement: See [constraint (C1) on X](#C1rx).
 
----
+## Formal specification
+ 
+See the Why3 specification.
+
+## Numerical Accuracy
+
+$Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+
+### Error Propagation
+
+This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Log** operator.  
+Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \log(X)$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
+
+Using the derivative of $\log$ ($\mathrm{d}\log(x)/\mathrm{d}x = 1/x$), a first-order bound is:
+
+- For every index $I$ such that $X[I] > 0$ and $X[I] + X_{\textit{err}}[I] > 0$ (no crossing of the singularity at 0):
+  - $$
+    |Y_{\textit{err}}^{\textit{propag}}[I]|
+      \;\le\; \left|\frac{X_{\textit{err}}[I]}{X[I]}\right|
+    $$
+
+- If $X[I]$ and $X[I] + X_{\textit{err}}[I]$ have different signs or approach zero too closely, the bound may become very large (logarithm near its singularity at 0).
+
+### Unit Verification
+
+This section contains a test scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+
+- The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
+- The `float` field is a symbolic abstract domain for the computed value.  
+- The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
+- The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
+
+```c++
+Tensor<SymbolicDomainError> X;
+
+/* X symbolic initialization */
+
+auto result = [&X](auto I) {
+  // Real-domain log, undefined for non-positive inputs
+  return (X[I].real > 0) ? log(X[I])
+                         : SymbolicDomainError::undef();
+};
+
+for (auto I : X.indexes()) {
+   auto x = X[I];
+
+   // Ensure we stay in the domain of log under perturbation
+   if (x.real > 0 && x.real + x.err > 0) {
+      auto y = result(I);
+
+      // First-order propagated error bound: |err_log| <= |err_x / x|
+      double bound = std::abs(x.err / x.real);
+
+      assert(std::abs(y.err) <= bound + 1e-12);
+   }
+}
+```
 <a id="float"></a>
-# `Log` operator (FP16, FP32, FP64, BFLOAT16)
+# **Log** (float)
+where float is in {float16, float, double}
 
-### Restrictions
-The following restrictions apply to the `Log` operator for the SONNX profile:
-- The input tensor `X` must contain only positive values, as the logarithm is undefined for non-positive values. But nan or inf will be return otherwise`[R1]`
-- Tensors `X`, `Y` must have the same shape.  `[R2]`
-- The input tensor `X` must be of floating-point types. `[R3]`
-- No broadcasting is allowed for the tensor `X`. `[R4]`
-- Tensors of class `SparseTensor` are not supported [`[GR1]`](../general_restrictions.md) 
+## Signature
 
-### Signature
+Definition of operator $\text{Log}$ signature:  
+$Y = \text{Log}(X)$
 
-`Y = Log(X)`
+where:
+- $X$: Input tensor
+- $Y$: Natural logarithm of $X$
 
-where
-- `X`: input tensor containing real numbers.
-- `Y`: output tensor where each element is the natural logarithm of the corresponding element in `X`.
+## Restrictions
 
-#### Informal specification
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-The `Log` operator computes the natural logarithm for each element of the input tensor `X`. Each element in the resulting tensor `Y` is the natural logarithm of the corresponding element in `X`.
+No specific restrictions apply to the **Log** operator.
 
-The mathematical definition of the operator is given hereafter for an element $i$, covering all valid indexes of the tensor:
+## Informal specification
+
+The **Log** operator computes the element-wise natural logarithm of the input tensor $X$ according to IEEE 754 floating-point semantics.
+
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] =
 \begin{cases}
 \log(X[i]) & \text{if } X[i] > 0 \\
-\text{-inf} & \text{if } X[i] = 0 \\
-\text{nan} & \text{if } X[i] < 0
+-\infty & \text{if } X[i] = 0 \\
+\text{NaN} & \text{if } X[i] < 0
 \end{cases}
 $$
 
+The effect of the operator is illustrated on the following examples.
 
-#### Examples
-
-Example 1:
+### Example 1
 ```math
-X = \begin{bmatrix}  1 & 2 & 4 \end{bmatrix}
+X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
-Result `Y` will be:
+
 ```math
-Y =  \begin{bmatrix}  0 & 0.693147 & 1.386294 \end{bmatrix}
+Y = \begin{bmatrix} 0 & 0.693147 & 1.386294 \end{bmatrix}
 ```
 
-Example 2:
+### Example 2
+
 ```math
-X =  \begin{bmatrix} 2.718 & -7.389 \\ 0 & 0.1 \\ 10 & -1000 \end{bmatrix}
+X = \begin{bmatrix}
+  2.718  & -7.389 \\
+  0      & 0.1    \\
+  10     & -1000
+\end{bmatrix}
 ```
-Result `Y` will be:
+
 ```math
-Y =  \begin{bmatrix} 0.999896 & \text{nan} \\ \text{inf} & -2.302585 \\ 2.302585 & \text{nan} \end{bmatrix}
+Y = \begin{bmatrix}
+  0.999896 & \text{NaN}  \\
+  -\infty  & -2.302585   \\
+  2.302585 & \text{NaN}
+\end{bmatrix}
 ```
 
-Note in Python, this is equivalent to:
-```python
->>> import numpy as np
-np.log([[2.718, -7.389], [0, 0.1], [10, -1000]])
-array([[ 0.99989632,         nan],
-       [       -inf, -2.30258509],
-       [ 2.30258509,         nan]])
-```
+## Error conditions
 
-#### Inputs and outputs
+Values of the output tensor may be IEEE 754 $-\infty$ or NaN (case of null or negative input values).
 
-##### `X`
+## Attributes
 
-Tensor `X` is the input tensor containing real numbers for which the natural logarithm needs to be computed.
+Operator **Log** has no attribute.
 
-###### Constraints
+## Inputs
 
-- (C1) Positive values
-    - Statement: The tensor `X` must contain only positive values. $X[i] > 0$ for all non-zero results $i$. For $X[i] = 0$ or $X[i] < 0$, the result will be $\text{inf}$ or $\text{nan}$, respectively. `[R1]`
-- (C2) Floating-point types
-    - Statement: The tensor `X` must be of floating-point types. `[R3]`
-- (C3) Shape consistency
-    - Statement: Tensors `X`, `Y` must have the same shape. $N(X)=N(Y)$ `[R2]` and `[R4]` 
+### $\text{X}$: floating-point tensor
 
-##### `Y`
+Input tensor.
 
-Tensor `Y` is the output tensor containing the computed logarithmic values for each element in `X`.
+#### Constraints
 
-###### Constraints
+- `[C1]` <a id="C1fx"></a> Shape consistency  
+  - Statement: $X$ and $Y$ shall have the same shape.
+- `[C2]` <a id="C2fx"></a> Type consistency  
+  - Statement: $X$ and $Y$ shall have the same floating-point type.
 
-- (C1) Shape consistency
-    - Statement: The shape of `Y` must be the same as `X`. $N(Y)=N(X)$ `[R2]` and `[R4]`
+## Outputs
 
-#### Attributes
+### $\text{Y}$: floating-point tensor
 
-The `Log` operator does not require any attributes.
+Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inputs).
 
-### Formal specification
+#### Constraints
 
-The formal specification of the `Log` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
-
-```ocaml
-(** 
-    Specification of Log operation on tensors.
- *)
-module Log
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  use real.Log
-  let function log (a : tensor real) : tensor real =
-    ensures { 
-      forall i. if a.value[i] > 0.0 then result.value[i] = log a.value[i]
-                else if a.value[i] = 0.0 then result.value[i] = -infinity
-                else result.value[i] = nan 
-    }
-  {
-    shape = a.shape ;
-    value = fun i -> if a.value[i] > 0.0 then log a.value[i]
-                     else if a.value[i] = 0.0 then -infinity
-                     else nan ;
-  }
-end
-```
-
-[^1]: See [Why3 documentation](https://www.why3.org/)
+- `[C1]` Shape consistency  
+  - Statement: See [constraint (C1) on X](#C1fx).
+- `[C2]` Type consistency  
+  - Statement: See [constraint (C2) on X](#C2fx).
