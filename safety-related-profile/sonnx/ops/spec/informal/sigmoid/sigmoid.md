@@ -189,8 +189,21 @@ The mathematical definition of the operator is given hereafter.
 For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] = \frac{1}{1 + e^{-X[i]}}
+Y[i] = \frac{1}{1 + e^{-X[i]}} = \frac{e^{X[i]}}{e^{X[i]} + 1}
 $$
+
+### Algorithm
+Sigmoid is subject to exponent overflow when evaluating large positive exponents (e.g. exp(-X) for very negative values of X).
+To remain numerically stable, the algorithm shall split the `X` domain so that only negative exponents are computed.
+
+```
+if X >= 0
+    Y = 1 / (1 + exp(-X))
+else
+    Y = exp(X) / (1 + exp(X))
+```
+
+
 
 The effect of the operator is illustrated on the following examples.
 
