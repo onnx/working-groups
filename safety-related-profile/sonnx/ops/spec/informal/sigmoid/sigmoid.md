@@ -1,109 +1,272 @@
 # Contents
-- `Sigmoid` [operator (real)](#real)
-- `Sigmoid` [operator (FP16, FP32, FP64, BFLOAT16)](#float)
-- `Sigmoid` [operator (INT4, INT8, INT16, INT32, INT64, UINT4, UINT8, UINT16, UINT32, UINT64, )](#int)
+
+- **Sigmoid** operator for type [real](#real)
+- **Sigmoid** operator for types [float16, float, double](#float)
+
+Based on ONNX documentation \[Sigmoid version 13](https://onnx.ai/onnx/operators/onnx__Sigmoid.html).
 
 <a id="real"></a>
-# `Sigmoid` operator (real)
+# **Sigmoid** (real)
 
-#### Inputs and outputs
+## Signature
+Definition of operator $\text{Sigmoid}$ signature:  
+$Y = \textbf{Sigmoid}(X)$
 
-##### `X`
+where:
+- $X$: Input tensor
+- $Y$: Sigmoid of $X$
 
-Tensor `X` is the first input tensor.
+## Restrictions
 
-The shape of tensor `A` is $(m \times n)$.
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-##### `Y`
+No specific restrictions apply to the **Sigmoid** operator.
 
-Tensor `Y` is the output tensor.
+## Informal specification
 
-The shape of tensor `Y` is identical to `X`.
-
-### Signature
-`Y = Sigmoid(X)`
-where
-- `X`: input tensor
-- `Y`: output tensor
-  
-#### Informal specification
-
-Operator `Sigmoid` computes the sigmoid function.
+The **Sigmoid** operator computes the element-wise logistic sigmoid of the input tensor $X$.
 
 The mathematical definition of the operator is given hereafter.
 
-$$     
-   Y = \frac{1}{1+e^{-x}} = \frac{e^x}{1+e^x}  
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+
+$$
+Y[i] = \frac{1}{1 + e^{-X[i]}}
 $$
 
+The effect of the operator is illustrated on the following examples.
+
+### Example 1
+
+```math
+X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
+```
+
+### Example 2
+
+```math
+X = \begin{bmatrix}
+  -2 & 0 \\
+  1  & 2  \\
+  -4 & 4
+\end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix}
+  0.11920291 & 0.5       \\
+  0.73105860 & 0.88079709 \\
+  0.01798624 & 0.98201376
+\end{bmatrix}
+```
+
+## Error conditions
+
+No error condition.
+
+## Attributes
+
+Operator **Sigmoid** has no attribute.
+
+## Inputs
+
+### $\text{X}$: real
+
+Input tensor.
+
+#### Constraints
+
+- `[C1]` <a id="C1rx"></a> Shape consistency  
+  - Statement: $X$ and $Y$ shall have the same shape.
+
+## Outputs
+
+### $\text{Y}$: real
+
+Sigmoid of tensor $X$.
+
+#### Constraints
+
+- `[C1]` <a id="C1ry"></a> Shape consistency  
+  - Statement: See [constraint (C1) on X](#C1rx).
+
+## Formal specification
+ 
+See the Why3 specification.
+
+## Numerical Accuracy
+
+$Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
+
+### Error Propagation
+
+This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Sigmoid** operator.  
+Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \sigma(X)$ with $\sigma(x) = 1/(1+e^{-x})$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
+
+Using the derivative of $\sigma$ ($\mathrm{d}\sigma(x)/\mathrm{d}x = \sigma(x)\,(1-\sigma(x))$), a first-order bound is:
+
+- For every index $I$:
+  - $$
+    |Y_{\textit{err}}^{\textit{propag}}[I]|
+      \;\le\; |\sigma(X[I])\,(1-\sigma(X[I]))|\cdot|X_{\textit{err}}[I]|
+    $$
+
+- Since $0 \le \sigma(x)\,(1-\sigma(x)) \le 1/4$ for all real $x$, a global bound is:
+  - $$
+    |Y_{\textit{err}}^{\textit{propag}}[I]| \le \frac{1}{4}\,|X_{\textit{err}}[I]|
+    $$
+
+### Unit Verification
+
+This section contains a test scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+
+- The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
+- The `float` field is a symbolic abstract domain for the computed value.  
+- The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
+- The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
+
+```c++
+Tensor<SymbolicDomainError> X;
+
+/* X symbolic initialization */
+
+auto sigmoid = [](const SymbolicDomainError &v) {
+  // Sigmoid in the real domain: sigma(x) = 1 / (1 + exp(-x))
+  SymbolicDomainError r;
+  r.real = 1.0 / (1.0 + std::exp(-v.real));
+  // float/err/rel_err are set by the abstract interpreter / analysis framework
+  return r;
+};
+
+auto result = [&X,&sigmoid](auto I) {
+  return sigmoid(X[I]);
+};
+
+for (auto I : X.indexes()) {
+   auto x = X[I];
+   auto y = result(I);
+
+   // First-order propagated error bound:
+   // |err_sigmoid| <= |sigma(x) * (1 - sigma(x))| * |err_x|
+   double sigma_x = 1.0 / (1.0 + std::exp(-x.real));
+   double local_lipschitz = std::abs(sigma_x * (1.0 - sigma_x));
+   double bound = local_lipschitz * std::abs(x.err);
+
+   // Using the global bound 1/4 * |x.err| is also valid but less tight.
+   assert(std::abs(y.err) <= bound + 1e-12);
+}
+```
 
 <a id="float"></a>
-# `Sigmoid` operator (float32, float64)
+# **Sigmoid** (float)
+where float is in {float16, float, double}
 
-#### Inputs and outputs
+## Signature
 
-##### `X`
+Definition of operator $\text{Sigmoid}$ signature:  
+$Y = \text{Sigmoid}(X)$
 
-Tensor `X` is the first input tensor.
+where:
+- $X$: Input tensor
+- $Y$: Sigmoid of $X$
 
-##### `Y`
+## Restrictions
 
-Tensor `Y` is the output tensor.
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
 
-The shape of tensor `Y` is identical to `X`.
+No specific restrictions apply to the **Sigmoid** operator.
 
-### Signature
-`Y = Sigmoid(X)`
-where
-- `X`: input tensor
-- `Y`: output tensor
+## Informal specification
 
-### Algorithm
-Sigmoid is subject to exponent overflow for great negative values of `X`.
-To remain stable, the algorithm shall split the `X` domain to only compute negative exponent.
+The **Sigmoid** operator computes the element-wise logistic sigmoid of the input tensor $X$ according to IEEE 754 floating-point semantics.
 
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+
+$$
+Y[i] = \frac{1}{1 + e^{-X[i]}}
+$$
+
+The effect of the operator is illustrated on the following examples.
+
+### Example 1
+
+```math
+X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
-if X < 0
-    Y = exp(x)/(1+exp(x))
-else
-    Y = 1/(1+exp(-x))
+
+```math
+Y = \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
 ```
 
+### Example 2
 
-### Formal specification
+```math
+X = \begin{bmatrix}
+  -2 & 0 \\
+  1  & 2  \\
+  -4 & 4
+\end{bmatrix}
+```
 
-The formal specification of the `sigmoid` operator using the Why3 language is provided below. This specification ensures the consistency and desired behavior of the operator within the constraints described.
-
-```ocaml
-(**
-    Specification of Sigmoid operation on tensors with real numbers.
- *)
-module SigmoidReal
-  use int.Int
-  use map.Map
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  use real.Exp
-  (** Define the sigmoid function with piecewise conditions *)
-  let function sigmoid (x : real) : real =
-    ensures {
-      if x < 0.0 then result = exp(x) / (1.0 + exp(x)) 
-      else result = 1.0 / (1.0 + exp(-x))
-    }
-  {
-    if x < 0.0 then exp(x) / (1.0 + exp(x))
-    else 1.0 / (1.0 + exp(-x))
-  }
-  (** Define the sigmoid operation on a tensor **)
-  let function sigmoid_tensor (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = sigmoid (a.value[i]) }
-  {
-    shape = a.shape ;
-    value = fun i -> sigmoid (a.value[i]) ;
-  }
-end
+```math
+Y = \begin{bmatrix}
+  0.11920291 & 0.5       \\
+  0.73105860 & 0.88079709 \\
+  0.01798624 & 0.98201376
+\end{bmatrix}
 ```
 
 
-<a id="int"></a>
+### Example 3
+
+```math
+X = \begin{bmatrix}
+  +\infty & \text{NaN} & -\infty
+\end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix}
+  1.0 & \text{NaN} & 0.0
+\end{bmatrix}
+```
+
+## Error conditions
+
+Values of the output tensor may be IEEE 754 between 0, 1 (case of -inf and +inf in input), or NaN (case of NaN in input); a NaN in input is propagated.
+
+## Attributes
+
+Operator **Sigmoid** has no attribute.
+
+## Inputs
+
+### $\text{X}$: floating-point tensor
+
+Input tensor.
+
+#### Constraints
+
+- `[C1]` <a id="C1fx"></a> Shape consistency  
+  - Statement: $X$ and $Y$ shall have the same shape.
+- `[C2]` <a id="C2fx"></a> Type consistency  
+  - Statement: $X$ and $Y$ shall have the same floating-point type.
+
+## Outputs
+
+### $\text{Y}$: floating-point tensor
+
+Sigmoid of tensor $X$.
+
+#### Constraints
+
+- `[C1]` Shape consistency  
+  - Statement: See [constraint (C1) on X](#C1fx).
+- `[C2]` Type consistency  
+  - Statement: See [constraint (C2) on X](#C2fx).
