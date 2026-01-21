@@ -202,7 +202,7 @@ X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0 & 0.693147 & 1.386294 \end{bmatrix}
+Y = \begin{bmatrix} 0 & 0.69314718 & 1.38629436 \end{bmatrix}
 ```
 
 ### Example 2
@@ -217,9 +217,9 @@ X = \begin{bmatrix}
 
 ```math
 Y = \begin{bmatrix}
-  0.999896 & \text{NaN}  \\
-  -\infty  & -2.302585   \\
-  2.302585 & \text{NaN}
+  0.99989629 & \text{NaN}  \\
+  -\infty  & -2.30258512   \\
+  2.30258512 & \text{NaN}
 \end{bmatrix}
 ```
 
