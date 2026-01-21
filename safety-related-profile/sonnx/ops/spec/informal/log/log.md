@@ -223,9 +223,23 @@ Y = \begin{bmatrix}
 \end{bmatrix}
 ```
 
+### Example 3
+
+```math
+X = \begin{bmatrix}
+  +\infty & \text{NaN} & -\infty
+\end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix}
+  +\infty & \text{NaN} & \text{NaN}
+\end{bmatrix}
+```
+
 ## Error conditions
 
-Values of the output tensor may be IEEE 754 $-\infty$ or NaN (case of null or negative input values).
+Values of the output tensor may be IEEE 754 $-\infty$ or NaN (case of null or negative input values), a Nan in input is propagated.
 
 ## Attributes
 
