@@ -117,12 +117,14 @@ Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\t
 Using the derivative of $\log$ ($\mathrm{d}\log(x)/\mathrm{d}x = 1/x$), a first-order bound is:
 
 - For every index $I$ such that $X[I] > 0$ and $X[I] + X_{\textit{err}}[I] > 0$ (no crossing of the singularity at 0):
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]|
-      \;\le\; \left|\frac{X_{\textit{err}}[I]}{X[I]}\right|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{X_{\textit{err}}[I]}{X[I]}\right|$
+
 
 - If $X[I]$ and $X[I] + X_{\textit{err}}[I]$ have different signs or approach zero too closely, the bound may become very large (logarithm near its singularity at 0).
+
+### Error Introduction
+Error introduction for real (ideal) arithmetic is null:
+- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -269,4 +271,5 @@ Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inp
 - `[C1]` Shape consistency  
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` Type consistency  
+
   - Statement: See [constraint (C2) on X](#C2fx).
