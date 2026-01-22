@@ -112,15 +112,15 @@ Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\t
 Using the derivative of $\tanh$ ($\mathrm{d}\tanh(x)/\mathrm{d}x = 1 - \tanh^2(x)$), a first-order bound is:
 
 - For every index $I$:
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]|
-      \;\le\; |1 - \tanh^2(X[I])|\cdot|X_{\textit{err}}[I]|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |1 - \tanh^2(X[I])|\cdot|X_{\textit{err}}[I]|
+    $
 
 - Since $0 \le 1 - \tanh^2(x) \le 1$ for all real $x$, a global bound is:
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]| \le |X_{\textit{err}}[I]|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |X_{\textit{err}}[I]|$
+
+### Error Introduction
+Error introduction for real (ideal) arithmetic is null:
+- $C_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -281,4 +281,5 @@ Hyperbolic tangent of tensor $X$.
 - `[C1]` Shape consistency  
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` Type consistency  
+
   - Statement: See [constraint (C2) on X](#C2fx).
