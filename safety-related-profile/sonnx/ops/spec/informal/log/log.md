@@ -114,7 +114,7 @@ $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\text
 This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Log** operator.  
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \log(X)$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
 
-Using the derivative of $\log$ ($\mathrm{d}\log(x)/\mathrm{d}x = 1/x$), a first-order bound is:
+Using the derivative of $\log$ is $d\log(x)/dx = 1/x$, a first-order bound is:
 
 - For every index $I$ such that $X[I] > 0$ and $X[I] + X_{\textit{err}}[I] > 0$ (no crossing of the singularity at 0):
   - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{X_{\textit{err}}[I]}{X[I]}\right|$
@@ -273,3 +273,4 @@ Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inp
 - `[C2]` Type consistency  
 
   - Statement: See [constraint (C2) on X](#C2fx).
+
