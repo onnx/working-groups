@@ -109,7 +109,7 @@ $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\text
 This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Tanh** operator.  
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \tanh(X)$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
 
-Using the derivative of $\tanh$ ($\mathrm{d}\tanh(x)/\mathrm{d}x = 1 - \tanh^2(x)$), a first-order bound is:
+Using the derivative of $\tanh$ is $d\tanh(x)/dx = 1 - \tanh^2(x)$, a first-order bound is:
 
 - For every index $I$:
   - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |1 - \tanh^2(X[I])|\cdot|X_{\textit{err}}[I]|
@@ -120,7 +120,7 @@ Using the derivative of $\tanh$ ($\mathrm{d}\tanh(x)/\mathrm{d}x = 1 - \tanh^2(x
 
 ### Error Introduction
 Error introduction for real (ideal) arithmetic is null:
-- $C_{\textit{err}}^{\textit{intro}} = [0]$.
+- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -283,3 +283,4 @@ Hyperbolic tangent of tensor $X$.
 - `[C2]` Type consistency  
 
   - Statement: See [constraint (C2) on X](#C2fx).
+
