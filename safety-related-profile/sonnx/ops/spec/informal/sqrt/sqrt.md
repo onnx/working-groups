@@ -113,15 +113,16 @@ $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\text
 This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Sqrt** operator.  
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \sqrt{X}$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
 
-Using the derivative of $\sqrt{x}$ ($\mathrm{d}\sqrt{x}/\mathrm{d}x = 1/(2\sqrt{x})$), a first-order bound is:
+Using the derivative of $\sqrt{x}$ is $d\sqrt{x}/dx = 1/(2\sqrt{x})$, a first-order bound is:
 
 - For every index $I$ such that $X[I] > 0$ and $X[I] + X_{\textit{err}}[I] \ge 0$ (no crossing of the singularity at 0):
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]|
-      \;\le\; \left|\frac{X_{\textit{err}}[I]}{2\sqrt{X[I]}}\right|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{X_{\textit{err}}[I]}{2\sqrt{X[I]}}\right|$
 
 - If $X[I]$ and $X[I] + X_{\textit{err}}[I]$ have different signs or approach zero too closely, the bound may become very large (square root near its singularity at 0).
+
+### Error Introduction
+Error introduction for real (ideal) arithmetic is null:
+- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -268,4 +269,5 @@ Square root of tensor $X$ (with IEEE 754 handling of zero, negative, and infinit
 - `[C1]` Shape consistency  
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` Type consistency  
+
   - Statement: See [constraint (C2) on X](#C2fx).
