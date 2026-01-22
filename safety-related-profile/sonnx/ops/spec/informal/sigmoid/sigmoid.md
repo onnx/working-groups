@@ -110,15 +110,14 @@ Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\t
 Using the derivative of $\sigma$ ($\mathrm{d}\sigma(x)/\mathrm{d}x = \sigma(x)\,(1-\sigma(x))$), a first-order bound is:
 
 - For every index $I$:
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]|
-      \;\le\; |\sigma(X[I])\,(1-\sigma(X[I]))|\cdot|X_{\textit{err}}[I]|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |\sigma(X[I])(1-\sigma(X[I]))|\cdot|X_{\textit{err}}[I]|$
 
 - Since $0 \le \sigma(x)\,(1-\sigma(x)) \le 1/4$ for all real $x$, a global bound is:
-  - $$
-    |Y_{\textit{err}}^{\textit{propag}}[I]| \le \frac{1}{4}\,|X_{\textit{err}}[I]|
-    $$
+  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le \frac{1}{4}|X_{\textit{err}}[I]|$
+
+### Error Introduction
+Error introduction for real (ideal) arithmetic is null:
+- $C_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -283,3 +282,4 @@ Sigmoid of tensor $X$.
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` Type consistency  
   - Statement: See [constraint (C2) on X](#C2fx).
+
