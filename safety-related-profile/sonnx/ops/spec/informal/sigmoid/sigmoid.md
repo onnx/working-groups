@@ -107,7 +107,7 @@ $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\text
 This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Sigmoid** operator.  
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \sigma(X)$ with $\sigma(x) = 1/(1+e^{-x})$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
 
-Using the derivative of $\sigma$ ($\mathrm{d}\sigma(x)/\mathrm{d}x = \sigma(x)\,(1-\sigma(x))$), a first-order bound is:
+Using the derivative of $\sigma$ is $d\sigma(x)/dx = \sigma(x)(1-\sigma(x))$, a first-order bound is:
 
 - For every index $I$:
   - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |\sigma(X[I])(1-\sigma(X[I]))|\cdot|X_{\textit{err}}[I]|$
@@ -117,7 +117,7 @@ Using the derivative of $\sigma$ ($\mathrm{d}\sigma(x)/\mathrm{d}x = \sigma(x)\,
 
 ### Error Introduction
 Error introduction for real (ideal) arithmetic is null:
-- $C_{\textit{err}}^{\textit{intro}} = [0]$.
+- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
 
 ### Unit Verification
 
@@ -282,4 +282,5 @@ Sigmoid of tensor $X$.
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` Type consistency  
   - Statement: See [constraint (C2) on X](#C2fx).
+
 
