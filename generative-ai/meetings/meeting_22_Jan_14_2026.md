@@ -31,3 +31,39 @@ The meeting focused on three primary technical areas: reviewing an open-source c
 - Soumendu: Share the draft proposal for the Ternary Storage Format
 - Yamini & Rama: Finalize a new recurring meeting time (potentially 10:30 AM) to avoid conflicts.
 - Justin: Provide updates on the RFC system for tracking proposals.
+
+## Comparison between Auto and ORT model classes in Optimum (As of 1/23/2026):
+
+| Task                                     | Auto Class                              | ORT Class                              |
+| ---------------------------------------- | --------------------------------------- | -------------------------------------- |
+| audio-classification                     | AutoModelForAudioClassification         | ORTModelForAudioClassification         |
+| audio-frame-classification               | AutoModelForAudioFrameClassification    | ORTModelForAudioFrameClassification    |
+| audio-xvector                            | AutoModelForAudioXVector                | ORTModelForAudioXVector                |
+| automatic-speech-recognition             | AutoModelForSpeechSeq2Seq               | **Missing**                            |
+| automatic-speech-recognition             | AutoModelForCTC                         | ORTModelForCTC                         |
+| depth-estimation                         | AutoModelForDepthEstimation             | **Missing**                            |
+| feature-extraction                       | AutoModel                               | ORTModel                               |
+| feature-extraction / sentence-similarity | SentenceTransformer                     | **Missing**                            |
+| fill-mask                                | AutoModelForMaskedLM                    | ORTModelForMaskedLM                    |
+| image-classification                     | AutoModelForImageClassification         | ORTModelForImageClassification         |
+| image-text-to-text                       | AutoModelForImageTextToText             | **Missing**                            |
+| image-to-image                           | AutoModelForImageToImage                | ORTModelForImageToImage                |
+| image-to-image                           | AutoPipelineForImage2Image              | ORTPipelineForImage2Image              |
+| image-to-text                            | AutoModelForVision2Seq                  | ORTModelForVision2Seq                  |
+| inpainting                               | AutoPipelineForInpainting               | ORTPipelineForInpainting               |
+| masked-im                                | AutoModelForMaskedImageModeling         | **Missing**                            |
+| multiple-choice                          | AutoModelForMultipleChoice              | ORTModelForMultipleChoice              |
+| object-detection                         | AutoModelForObjectDetection             | **Missing**                            |
+| question-answering                       | AutoModelForQuestionAnswering           | ORTModelForQuestionAnswering           |
+| semantic-segmentation                    | AutoModelForSemanticSegmentation        | ORTModelForSemanticSegmentation        |
+| text2text-generation                     | AutoModelForSeq2SeqLM                   | ORTModelForSeq2SeqLM                   |
+| text-classification                      | AutoModelForSequenceClassification      | ORTModelForSequenceClassification      |
+| text-generation                          | AutoModelForCausalLM                    | ORTModelForCausalLM                    |
+| text-to-audio                            | AutoModelForTextToSpectrogram           | **Missing**                            |
+| text-to-audio                            | AutoModelForTextToWaveform              | **Missing**                            |
+| text-to-image                            | AutoPipelineForText2Image               | ORTPipelineForText2Image               |
+| token-classification                     | AutoModelForTokenClassification         | ORTModelForTokenClassification         |
+| visual-question-answering                | AutoModelForVisualQuestionAnswering     | **Missing**                            |
+| zero-shot-image-classification           | AutoModelForZeroShotImageClassification | ORTModelForZeroShotImageClassification |
+| zero-shot-object-detection               | AutoModelForZeroShotObjectDetection     | **Missing**                            |
+
