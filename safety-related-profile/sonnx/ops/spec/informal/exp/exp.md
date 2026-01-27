@@ -248,6 +248,13 @@ Operator **Exp** has no attribute.
 
 Input tensor.
 
+*FP16*: the input range for non +Inf values of `Y` is defined by $[-65504.0, \ln(65504.0)] = [-65504.0, 11.09375]$.
+
+*FP32*: the input range for non +Inf values of `Y` is defined by $[-3.4028234663852886e+38, \ln(3.4028234663852886e+38)] = [-3.4028234663852886e+38, 88.72283935546875]$.
+
+*FP64*: the input range for non +Inf values of `Y` is defined by $[-1.7976931348623157e+308, \ln(1.7976931348623157e+308)] = [-1.7976931348623157e+308, 709.782712893384]$.
+
+
 #### Constraints
 
 - `[C1]` <a id="C1fx"></a> Shape consistency  
