@@ -1,28 +1,87 @@
-(**
-    Specification of Sigmoid operation on tensors with real numbers.
- *)
-module SigmoidReal
-  use int.Int
-  use map.Map
-  use tensor.Shape
-  use tensor.Tensor
+(** OP-Sigmoid Tensor Operation *)
+module OPSigmoid
   use real.Real
-  use real.Exp
-  (** Define the sigmoid function with piecewise conditions *)
-  let function sigmoid (x : real) : real =
-    ensures {
-      if x < 0.0 then result = exp(x) / (1.0 + exp(x)) 
-      else result = 1.0 / (1.0 + exp(-x))
-    }
-  {
-    if x < 0.0 then exp(x) / (1.0 + exp(x))
-    else 1.0 / (1.0 + exp(-x))
-  }
-  (** Define the sigmoid operation on a tensor **)
-  let function sigmoid_tensor (a : tensor real) : tensor real =
-    ensures { forall i. result.value[i] = sigmoid (a.value[i]) }
-  {
-    shape = a.shape ;
-    value = fun i -> sigmoid (a.value[i]) ;
-  }
+  use real.ExpLog
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+
+
+  let ghost function sigmoid (x : real ) : real =
+    if x < Real.(0.0) then
+      0.0        *   exp x / (1.0 + exp x) (** j'ai ajoute * 0.0 pour aider au debug pour pas que l'exponentielle complique **)
+    else
+      1.0 + 0.0  *   1.0 / (1.0 + exp (-x)) (** j'ai ajoute * 0.0 + 1.0 pour aider au debug pour pas que l'exponentielle complique **)
+
+  let ghost function dsigmoid (x : tensor real) : data real
+    = fun ks -> 
+      if valid ks x.dims then 
+        sigmoid (x.data ks)
+      else
+        x.background
+
+
+  let ghost function opsigmoid (x : tensor real) : tensor real
+    ensures { result.dims = x.dims }
+    ensures { result.background = x.background }
+    ensures { result.data = dsigmoid x }
+    (*proof*)
+    = { dims = x.dims ; data = dsigmoid x ; background = x.background }
+    (*qed*)
+
+
+
 end
+
+
+
+module CTensorSigmoid
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use OPSigmoid
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.libtensor.CTensor
+
+let ctensor_sigmoid (x r : ctensor) =
+  (*proof*)
+  requires { valid_tensor x }
+  requires { valid_tensor r }
+  requires { tensor x ~= tensor r }
+  (*qed*)
+  ensures { tensor r = opsigmoid (tensor x) }
+
+  let m = cdim_size r.t_dims r.t_rank in
+  for i = 0 to m - 1 do
+    (*proof*)
+    invariant {
+      forall k. 0 <= k < i ->
+        value_at r.t_data k =
+          if Real.(value_at x.t_data k < 0.0) then
+            0.0 (**exp (value_at x.t_data k) / (1.0 + exp (value_at x.t_data k))**) (** j'ai mis * 0.0 pour aider au debug pour pas que l'exponentielle complique **)
+          else
+            1.0 (**1.0 / (1.0 + exp (- value_at x.t_data k))**) (** j'ai mis * 1.0 pour aider au debug pour pas que l'exponentielle complique **)
+    }
+    (*qed*)
+
+
+    r.t_data[i] <-
+      if Real.(x.t_data[i] .< (f32 0.0)) then
+        (f32 0.0) (*exp(x.t_data[i]) /. (f32 1.0 +. exp(x.t_data[i]))*) (** j'ai mis * 0.0 pour aider au debug pour pas que l'exponentielle complique **)
+      else
+        (f32 1.0) (*(f32 1.0) /. (f32 1.0 +. exp(-x.t_data[i]))*) (** j'ai mis * 1.0 pour aider au debug pour pas que l'exponentielle complique **)
+  done
+
+
+  (*proof*)
+  ; assert { tensor r == opsigmoid (tensor x) }
+  (*qed*)
+
+end
+
+
+
