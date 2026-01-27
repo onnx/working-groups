@@ -143,7 +143,7 @@ YoloNAS
 11) Softplus
 
 ### Priority 2 list:
-12) FullyConnected
+12) MatMul (FullyConnected)
 13) Conv2D (grouping & depthwise)
 14) Sub
 15) Abs
