@@ -17,7 +17,7 @@ The meeting focused on three primary technical areas: reviewing an open-source c
 ### LLM Model Export Paths
 - There is a discussion whether to focus on Optimum ONNX or Olive as the primary path for exporting Large Language Models (LLMs) at scale.
 - Intel has been using Optimum Intel and is considering integrating their quantization tool (NNCF) into Optimum ONNX to provide a consistent experience for users. Since Olive contains Optimum pass, the same integration can be used via Olive.
-- Rama explained that Microsoft’s main area of investment is the PyTorch-to-ONNX exporter. Exporter-related issues in Optimum-ONNX will be supported by the exporter team, though Olive remains Microsoft’s recommended solution.
+- Rama explained that any exporter-related issues in Optimum-ONNX will be supported by the exporter team. Further clarification is needed from Olive team regarding the ONNX export plans in Olive.
 - Freddy raised concerns about "model variation," suggesting the need for architectural guidelines to ensure exported models remain reusable and semantically equivalent across different tools.
 
 ### Ternary Storage Format Proposal
