@@ -1,3 +1,41 @@
+# 2025/01/28
+## Participants
+*To be completed*
+## Agenda
+- Review of actions [Eric]
+- Review of project status ([Kanban](https://github.com/users/ericjenn/projects/4/views/8)
+- Finalization of Clip spec. [João, Ricardo]
+- Discussion about the "Generic Tensor Module and Potential Extension to Operators" [Ricardo and João]
+- Discussion about the "Formalization of Purely Structural Operators" [Ricardo and João]
+- Discussion about the formalization of mathematical ops [Henri]
+## Minutes
+*To be completed*
+## Actions
+### New actions
+### Previous actions
+- [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
+  - Material shall be placed [here](https://github.dev/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/formal_methods/inputs/inputs-2026-02-18.md)
+- [X] (1401-5, Eric) Plan a meeting with Loïc to sort out the list of questions
+  - Planned on Feb 18th, 14:00-16:00
+- [X] (1401-6, Eric, Jean, Jean-Baptiste) Discuss a possible subject to be presented at CTiC
+  - Subject proposed by Jean-Baptiste on 2026/01/16
+  - Comments returned by Eric on 2026/01/19
+  - Waiting for Jean-Baptiste reply...
+- [X] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
+  - Completed after Edoardo's comment have been taken into account.
+  
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- Action from local work session 
+  - [- (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - To be discussed during Feb session with Loïc. 
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currenlty being discussed with Jorge then to be discussed with Loïc
+
+
+
 # 2025/01/14
 ## Participants
 *To be completed*
