@@ -1,47 +1,53 @@
 # Contents
 
 - **Clip** operator for type [real](#real)
-- **Clip** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64](#int)
-- **Clip** operator for types [FP16, FP32, FP64, BFLOAT16](#floats)
+- **Clip** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
+- **Clip** operator for types [float16, float, double](#floats)
 
-Based on ONNX documentation version 13.
+
+Based on ONNX [Clip version 13](https://onnx.ai/onnx/operators/onnx__Clip.html).
 
 <a id="real"></a>
-# **Clip** (real)
+# **Clip** (real, real, real)
 
 ## Signature
-$Y = \text{Clip}(X,L,M)$
+$Y = \textbf{Clip}(X,L,M)$
 
 where:
-- $X$: input tensor
-- $L$: minimum tensor (empty shape tensor - scalar)
-- $M$: maximum tensor (empty shape tensor - scalar)
+- $input$: input tensor (denoted by $X$)
+- $min$: minimum value (scalar) (denoted by $L$)
+- $max$: maximum value (scalar) (denoted by $M$)
+- $output$: output tensor (denoted by $Y$)
+
 
 ## Restrictions
-The following restrictions apply to the $\text{Clip}$ operator for the SONNX profile:
+The following restrictions apply to the **Clip** operator for the SONNX profile:
 
 [General restrictions](../general_restrictions.md) are applicable.
 
 
 ## Informal specification
 
-Operator $\text{Clip}$ limits the given input within an interval. For each element in the input tensor $X$: 
+Operator **Clip** limit the given input within an interval.
 - If $L$ $\leq$ $M$:
 
-  - if $X[i]$ < $L$ then $Y[i]$ = $L$.
+  - if $X[i]$ $\lt$ $L$ then $Y[i]$ = $L$.
 
-  - If $X[i]$ > $M$ then $Y[i]$ = $M$.
+  - If $X[i]$ $\gt$ $M$ then $Y[i]$ = $M$.
+
   - Otherwise, $Y[i]$ = $X[i]$.
+
 - If $L$ $\gt$ $M$:
-  - $\forall i,\ Y[i] = M$
+
+  - $Y[i] = M$
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
-The result is stored in output tensor $Y$.
 
-Clip operation can be expressed as:
+**Clip** operation can be expressed as:
 
-$$\forall i,\ Y[i] = \min(M, \max(X[i], L))$$
+$$ Y[i] = \min(M, \max(X[i], L))$$
+
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
@@ -49,7 +55,7 @@ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 ### Example 1
 
 ```math
-A = \begin{bmatrix} -6.1 & 9.5 & 35.7 \end{bmatrix}
+X = \begin{bmatrix} -6.1 & 9.5 & 35.7 \end{bmatrix}
 ```
 
 ```math
@@ -69,7 +75,7 @@ Y = \begin{bmatrix} 0 & 9.5 & 10 \end{bmatrix}
 ### Example 2
 
 ```math
-A = \begin{bmatrix} 6.1 & 9.5 & 35.7 \end{bmatrix}
+X = \begin{bmatrix} 6.1 & 9.5 & 35.7 \end{bmatrix}
 ```
 
 ```math
@@ -89,231 +95,114 @@ Y = \begin{bmatrix} 10 & 10 & 10 \end{bmatrix}
 ## Error conditions
 No error condition
 
+## Attributes
+
+Operator **Clip** has no attribute.
+
 ## Inputs
 
-### $\text{X}$: `real tensor`
-Tensor $X$ is the input tensor to be clipped within the specified bounds.
+### $input$: `real tensor`
+Tensor $input$ is the input tensor to be clipped within the specified bounds.
 
 ### Constraints
 
  - `[C1]` <a id="C1ra"></a> Shape consistency
-   - Statement: Tensors $X$ and $Y$ must have the same shape.
+   - Statement: Tensors $input$ and $output$ must have the same shape.
  
-### $\text{L}$: `real tensor`
-Tensor $L$ is the minimum bound for clipping.
+### $min$: `real tensor`
+Tensor $min$ is the minimum bound for clipping.
 
-The shape of tensor $L$ must be empty (scalar).
-
-### Constraints
-Tensor $L$ has no constraints.
-
-### $\text{M}$: `real tensor`
-Tensor $M$ is the maximum bound for clipping.
-
-The shape of tensor $M$ must be empty (scalar).
 
 ### Constraints
-Tensor $M$ has no constraints.
+  - `[C1]` Shape consistency
+    - Statement: The shape of tensor $min$ must be empty.
+
+### $max$: `real tensor`
+Tensor $max$ is the maximum bound for clipping.
+
+### Constraints
+  - `[C1]` Shape consistency
+    - Statement: The shape of tensor $max$ must be empty.
 
 ## Outputs
 
-### $\text{Y}$: `real tensor`
-Tensor $Y$ is the element-wise result of clipping $X$ by the interval $[L, M]$.
+### $output$: `real tensor`
+Tensor $output$ is the element-wise result of clipping $input$ by the interval $[min, max]$.
 
 ### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $input$.
 
-
-## Attributes
-
-Operator $\text{Clip}$ has no attribute.
 
 ## Formal specification
  
-See the Why3 specification.
+See the [Why3 specification](../formal/clip).
 
 ## Numerical Accuracy
 
-Operator $\text{Clip}$ does not introduce any numerical error. Hence, for all valid indexes, the output values are exactly equal to the corresponding input values.
+See the [Numerical accuracy specification](/clip_na.md).
 
 <a id="int"></a>
-# **clip** (int, int, int)
-where int is in {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64}
+# **Clip** (int, int, int)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
-## Signature
-$Y = \text{Clip}(X,L,M)$
+All arguments have the same data type.
 
-where:
-- $X$: input tensor
-- $L$: minimum tensor (empty shape tensor - scalar)
-- $M$: maximum tensor (empty shape tensor - scalar)
-## Restrictions
-The following restrictions apply to the $\text{Clip}$ operator for the SONNX profile:
-
-[General restrictions](../general_restrictions.md) are applicable.
-## Informal specification
-
-Operator $\text{Clip}$ limit the given input within an interval. For each element in the input tensor $X$: 
-- If $L$ $\leq$ $M$:
-
-  - if $X[i]$ < $L$ then $Y[i]$ = $L$.
-
-  - If $X[i]$ > $M$ then $Y[i]$ = $M$.
-  - Otherwise, $Y[i]$ = $X[i]$.
-- If $L$ $\gt$ $M$:
-  - $\forall i,\ Y[i] = M$
-
-where $i$ is a [tensor index](../common/definitions.md#tensor_index).
-
-The result is stored in output tensor $Y$.
-
-Clip operation can be expressed as:
-
-$$\forall i,\ Y[i] = \min(M, \max(X[i], L))$$
-
-where $i$ is a [tensor index](../common/definitions.md#tensor_index).
-
-### Example 1
-
-```math
-A = \begin{bmatrix} -6 & 9 & 35 \end{bmatrix}
-```
-
-```math
-L = 0
-\quad
-M = 10
-```
-
-```math
-Y = \begin{bmatrix} \min(10, \max(-6, 0)) & \min(10, \max(9, 0)) & \min(10, \max(35, 0)) \end{bmatrix}
-```
-
-```math
-Y = \begin{bmatrix} 0 & 9 & 10 \end{bmatrix}
-```
-
-### Example 2
-
-```math
-A = \begin{bmatrix} 6 & 9 & 35 \end{bmatrix}
-```
-
-```math
-L = 20
-\quad
-M = 10
-```
-
-```math
-Y = \begin{bmatrix} \min(10, \max(6, 20)) & \min(10, \max(9, 20)) & \min(10, \max(35, 20)) \end{bmatrix}
-```
-
-```math
-Y = \begin{bmatrix} 10 & 10 & 10 \end{bmatrix}
-```
-
-## Error conditions
-No error condition
-
-## Inputs
-
-### $\text{X}$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
-Tensor $X$ is the input tensor to be clipped within the specified bounds.
-
-### Constraints
-
- - `[C1]` <a id="C1ia"></a> Shape consistency
-   - Statement: Tensors $X$ and $Y$ must have the same shape.
- - `[C2]` <a id="C2ia"></a> Type consistency
-   - Statement: Tensors $X$, $L$, $M$ and $Y$ must have the same type.
- 
-### $\text{L}$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
-Tensor $L$ is the minimum bound for clipping.
-
-The shape of tensor $L$ must be empty (scalar).
-
-### Constraints
-- `[C1]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $X$.
-
-### $\text{M}$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
-Tensor $M$ is the maximum bound for clipping.
-
-The shape of tensor $M$ must be empty (scalar).
-### Constraints
-- `[C1]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $X$.
-
-## Outputs
-
-### $\text{Y}$: INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64
-Tensor $Y$ is the element-wise result of clipping $X$ by the interval $[L, M]$.
-
-### Constraints
-
- - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
- - `[C2]` Type consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">  [C2]</span></b>](#C2ia) on tensor $X$.
-
-## Attributes
-
-Operator $\text{Clip}$ has no attribute.
-
-## Formal specification
- 
-See the Why3 specification.
-
-## Numerical Accuracy
-
-Operator $\text{Clip}$ does not introduce any numerical error. Hence, for all valid indexes, the output values are exactly equal to the corresponding input values.
-
+See specification for [real numbers](#real).
 
 <a id="float"></a>
 # **Clip** (float, float, float)
-where float is in {FP16, FP32, FP64, BFLOAT16}
+where float is in {float16, float, double}
+
+All the arguments have the same data type.
 
 ## Signature
-$Y = \text{Clip}(X,L,M)$
+$Y = \textbf{Clip}(X,L,M)$
+
 where:
-- $X$: input tensor
-- $L$: minimum tensor (empty shape tensor - scalar)
-- $M$: maximum tensor (empty shape tensor - scalar)
+- $input$: input tensor (denoted by $X$)
+- $min$: minimum value (scalar) (denoted by $L$)
+- $max$: maximum value (scalar) (denoted by $M$)
+- $output$: output tensor (denoted by $Y$)
+
 
 ## Restrictions
-The following restrictions apply to the $\text{Clip}$ operator for the SONNX profile:
+The following restrictions apply to the **Clip** operator for the SONNX profile:
 
 [General restrictions](../general_restrictions.md) are applicable.
 
 ## Informal specification
 
-Operator $\text{Clip}$ limit the given input within an interval. For each element in the input tensor $X$ (discarding $nan$ values in $L$ or $M$, for more details see the definition below):
-- If $L$ $\leq$ $M$:
+Operator **Clip** limit the given input within an interval.
 
-  - if $X[i]$ < $L$ then $Y[i]$ = $L$.
+**Clip** operation can be divided into two steps:
 
-  - If $X[i]$ > $M$ then $Y[i]$ = $M$.
+- If any of the boundaries is $NaN$ it is readjusted to the respetive extreme value:
+
+  - If $L$ is $NaN$, then $L'$ = $-\infty$
+
+  - If $M$ is $NaN$, then $M'$ = $+\infty$
+
+  - Otherwise, $L'$ = $L$ and $M'$ = $M$
+
+- If $L'$ $\leq$ $M'$:
+
+  - if $X[i]$ $\lt$ $L'$ then $Y[i]$ = $L'$.
+
+  - If $X[i]$ $\gt$ $M'$ then $Y[i]$ = $M'$.
   - Otherwise, $Y[i]$ = $X[i]$.
-- If $L$ $\gt$ $M$:
-  - $\forall i,\ Y[i] = M$
+
+- If $L'$ $\gt$ $M'$:
+
+  - $Y[i] = M'$
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
-The result is stored in output tensor $Y$.
 
-Clip operation can be divided into two steps:
-
-- If any of the boundaries is $nan$ it is readjusted to the respetive extreme value:
-
-  - If $L$ is $nan$, it is set to the lowest representable value.
-
-  - If $M$ is $nan$, it is set to the highest representable value.
 - The clipping is then performed as:
 
-$$\forall i,\ Y[i] = \min(M, \max(X[i], L))$$
+$$ Y[i] = \min(M, \max(X[i], L))$$
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
@@ -322,7 +211,7 @@ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 ### Example 1
 
 ```math
-A = \begin{bmatrix} -6.3 & 9.2 & 35.5 \end{bmatrix}
+X = \begin{bmatrix} -6.3 & 9.2 & 35.5 \end{bmatrix}
 ```
 
 ```math
@@ -341,7 +230,7 @@ Y = \begin{bmatrix} 0.5 & 9.2 & 10.1 \end{bmatrix}
 ### Example 2
 
 ```math
-A = \begin{bmatrix} 6.5 & 9.2 & 35.1 \end{bmatrix}
+X = \begin{bmatrix} 6.5 & 9.2 & 35.1 \end{bmatrix}
 ```
 
 ```math
@@ -361,7 +250,7 @@ Y = \begin{bmatrix} 10.0 & 10.0 & 10.0 \end{bmatrix}
 ### Example 3
 
 ```math
-A = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+X = \begin{bmatrix} -\infty & 0.0 & +\infty & NaN \end{bmatrix}
 ```
 ```math
 L = -1.0
@@ -369,22 +258,21 @@ L = -1.0
 M = NaN
 ```
 ```math
-M = h 
-```
-where `h` is the highest representable value.
-
-```math
-Y = \begin{bmatrix} \min(h, \max(-\infty, -1.0)) & \min(h, \max(0.0, -1.0)) & \min(h, \max(\infty, -1.0)) & \min(h, \max(NaN, -1.0)) \end{bmatrix}
+M = +\infty
 ```
 
 ```math
-Y = \begin{bmatrix} -1.0 & 0.0 & \infty & NaN \end{bmatrix}
+Y = \begin{bmatrix} \min(+\infty, \max(-\infty, -1.0)) & \min(+\infty, \max(0.0, -1.0)) & \min(+\infty, \max(+\infty, -1.0)) & \min(+\infty, \max(NaN, -1.0)) \end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix} -1.0 & 0.0 & +\infty & NaN \end{bmatrix}
 ```
 
 ### Example 4
 
 ```math
-A = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+X = \begin{bmatrix} -\infty & 0.0 & +\infty & NaN \end{bmatrix}
 ```
 ```math
 L = NaN
@@ -392,70 +280,73 @@ L = NaN
 M = NaN
 ```
 ```math
-L = l \quad M = h
-```
-where: 
-  - `l` is the lowest representable value and 
-  - `h` is the highest representable value.
-
-```math
-Y = \begin{bmatrix} \min(h, \max(-\infty, l)) & \min(h, \max(0.0, l)) & \min(h, \max(\infty, l)) & \min(h, \max(NaN, l)) \end{bmatrix}
+L = - \infty \quad M = +\infty
 ```
 
 ```math
-Y = \begin{bmatrix} -\infty & 0.0 & \infty & NaN \end{bmatrix}
+Y = \begin{bmatrix} \min(+\infty, \max(-\infty, -\infty)) & \min(+\infty, \max(0.0, -\infty)) & \min(+\infty, \max(+\infty, -\infty)) & \min(+\infty, \max(NaN, -\infty)) \end{bmatrix}
+```
+
+```math
+Y = \begin{bmatrix} -\infty & 0.0 & +\infty & NaN \end{bmatrix}
 ```
 
 ## Error conditions
 - Values of the output tensor may be IEEE 754 infinity or NaN
 
+## Attributes
+
+Operator **Clip** has no attribute.
+
 ## Inputs
 
-### $\text{X}$: FP16, FP32, FP64, BFLOAT16
-Tensor $X$ is the input tensor to be clipped within the specified bounds.
+### $input$: [<b><span style="font-family: 'Courier New', monospace">float</span></b>](#float)
+Tensor $input$ is the input tensor to be clipped within the specified bounds.
 
 ### Constraints
 
  - `[C1]` <a id="C1ia"></a> Shape consistency
-   - Statement: Tensors $X$ and $Y$ must have the same shape.
+   - Statement: Tensors $input$ and $output$ must have the same shape.
  - `[C2]` <a id="C2ia"></a> Type consistency
-   - Statement: Tensors $X$, $L$, $M$ and $Y$ must have the same type.
+   - Statement: Tensors $input$, $min$, $max$ and $output$ must have the same type.
  
-### $\text{L}$: FP16, FP32, FP64, BFLOAT16
-Tensor $L$ is the minimum bound for clipping.
-
-The shape of tensor $L$ must be empty (scalar).
+### $min$: [<b><span style="font-family: 'Courier New', monospace">float</span></b>](#float)
+Tensor $min$ is the minimum bound for clipping.
 
 ### Constraints
-- `[C1]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $X$.
 
-### $\text{M}$: FP16, FP32, FP64, BFLOAT16
-Tensor $M$ is the maximum bound for clipping.
+- `[C1]` Shape consistency
+  - Statement: The shape of tensor $min$ must be empty.
 
-The shape of tensor $M$ must be empty (scalar).
+- `[C2]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $input$.
+
+
+### $max$: [<b><span style="font-family: 'Courier New', monospace">float</span></b>](#float)
+Tensor $max$ is the maximum bound for clipping.
 
 ### Constraints
-- `[C1]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $X$.
+
+- `[C1]` Shape consistency
+  - Statement: The shape of tensor $max$ must be empty.
+
+- `[C2]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $input$.
 ## Outputs
 
-### $\text{Y}$: FP16, FP32, FP64, BFLOAT16
-Tensor $Y$ is the element-wise result of clipping $X$ by the interval $[L, M]$.
+### $output$: [<b><span style="font-family: 'Courier New', monospace">float</span></b>](#float)
+Tensor $output$ is the element-wise result of clipping $input$ by the interval $[min, max]$.
 ### Constraints
 
  - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $X$.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $input$.
  - `[C2]` Type consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">  [C2]</span></b>](#C2ia) on tensor $X$.
-
-## Attributes
-
-Operator $\text{Clip}$ has no attribute.
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">  [C2]</span></b>](#C2ia) on tensor $input$.
 
 ## Formal specification
  
-See the Why3 specification.
+See the [Why3 specification](../formal/clip).
 
 ## Numerical Accuracy
-Operator $\text{Clip}$ does not introduce any numerical error. Hence, for all valid indexes, the output values are exactly equal to the corresponding input values.
+
+See the [Numerical accuracy specification](/clip_na.md).

@@ -1,33 +1,35 @@
-(** OP-ReLU Tensor Operation *)
-module OPReLU
+(** OP-LeakyReLU Tensor Operation *)
+module OPLeakyReLU
   use real.Real
   use tensor.tensor.Tensor
   use tensor.tensor.Range
 
-  let ghost function relu (x : real) : real =
+  let ghost constant alpha : real = 1.0  (* J'arrive pas a faire une multiplication avec OPLeakyReLU.alpha *)
+
+
+  let ghost function leakyrelu (x : real) : real =
     if x < Real.(0.0) then
-      0.0
+      alpha * x
     else
       x
 
-  let ghost function drelu (x : tensor real) : data real
+  let ghost function dleakyrelu (x : tensor real) : data real
     = fun ks ->
       if valid ks x.dims then
-        relu (x.data ks)
+        leakyrelu (x.data ks)
       else
         x.background
 
-  let ghost function oprelu (x : tensor real) : tensor real
+  let ghost function opleakyrelu (x : tensor real) : tensor real
     ensures { result.dims = x.dims }
     ensures { result.background = x.background }
-    ensures { result.data = drelu x }
+    ensures { result.data = dleakyrelu x }
     (*proof*)
-    = { dims = x.dims ; data = drelu x ; background = x.background }
+    = { dims = x.dims ; data = dleakyrelu x ; background = x.background }
     (*qed*)
 
 end
-
-module CTensorReLU
+module CTensorLeakyReLU
   use tensor.std.Int
   use tensor.std.List
   use tensor.std.Clib
@@ -35,18 +37,20 @@ module CTensorReLU
   use mach.int.Int32
   use tensor.tensor.Range
   use tensor.tensor.Tensor
-  use OPReLU
+  use OPLeakyReLU
   use tensor.layout.CFlat
   use tensor.libvector.CIndex
   use tensor.libtensor.CTensor
 
-let ctensor_relu (x r : ctensor) =
+  constant alpha_f : f32  = 1.0
+
+let ctensor_leakyrelu (x r : ctensor) =
   (*proof*)
   requires { valid_tensor x }
   requires { valid_tensor r }
   requires { tensor x ~= tensor r }
   (*qed*)
-  ensures { tensor r = oprelu (tensor x) }
+  ensures { tensor r = opleakyrelu (tensor x) }
 
   let m = cdim_size r.t_dims r.t_rank in
   for i = 0 to m - 1 do
@@ -55,7 +59,7 @@ let ctensor_relu (x r : ctensor) =
       forall k. 0 <= k < i ->
         value_at r.t_data k =
           if Real.(value_at x.t_data k < 0.0) then
-            0.0
+            value_at x.t_data k (* J'arrive pas a faire une multiplication avec alpha *)
           else
             value_at x.t_data k
     }
@@ -63,12 +67,12 @@ let ctensor_relu (x r : ctensor) =
 
     r.t_data[i] <-
       if Real.(x.t_data[i] .< (f32 0.0)) then
-        (f32 0.0)
+        x.t_data[i] (* J'arrive pas a faire une multiplication avec OPLeakyReLU.alpha *)
       else
         x.t_data[i]
   done
 
   (*proof*)
-  ; assert { tensor r == oprelu (tensor x) }
+  ; assert { tensor r == opleakyrelu (tensor x) }
   (*qed*)
 end
