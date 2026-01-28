@@ -1,6 +1,6 @@
 # 2025/01/28
 ## Participants
-*To be completed*
+- Hugo, Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Baptiste, Jean-Loup
 ## Agenda
 - Review of actions [Eric]
 - Review of project status ([Kanban](https://github.com/users/ericjenn/projects/4/views/8)
@@ -8,10 +8,29 @@
 - Discussion about the "Generic Tensor Module and Potential Extension to Operators" [Ricardo and João]
 - Discussion about the "Formalization of Purely Structural Operators" [Ricardo and João]
 - Discussion about the formalization of mathematical ops [Henri]
+- Remarks from Adrien (Airbus)[Jean]
 ## Minutes
-*To be completed*
+- Finalization of Clip spec. [João, Ricardo]
+  - We keep the 3 "ifs" and we add a remark that the 2nd and 3rd can be synthesized as min(m...max(...)).
+- Generic Tensor Module and Potential Extension to Operators
+  - We use a generic type and provide the necessary operator on type T.
+  - Where op: use int tensor for booleans...
+- Formalization of Purely Structural Operators
+  - Data are copied "naively" (no move) 
+- Question on $tanh$
+  - There are multiple ways to *implement* a $tanh$, with variable accuracy. In reality, we are not really specifying the floating point version of the operator (e.g., we are not specifying the expected accuracy): we are specifying the operator according to the semantics of real number + infinities and NaNs. In this context, the 3 versions of the $tanh$ (let's say I1, I2 and I3 see spec) are  equivalent. However, we **know** that this is not true (i.e., I1 =/= I2 =/= I3). If we want to promote one implementation rather than another, we have to write the spec for that implementation. 
+  - Off meeting (eric): in that case, we should not use "x" for the multiplication, but "x." (for instance), to refer to the multiplication with floating point numbers. Otherwise, if we propose one spec, let's say $a+b$, any one can interpret it as "b+a" because, in the domain of real numbers, these two forms are  strictly equivalent. 
+  - Remarks from Adrien
+    - In "**Informal** specification", the adjective "Informal" is negatively connoted: we should use "Specification".
+    - The test provided by SONNX shall **not** be considered as complete in the sense of the certification objectives. They are provided "as is" for the purpose of debugging, early testing, etc. We should add a "disclaimer" in the doc. 
+ - Other
+   - Focus shall be placed on the operators in the "scope" list (esp. Airbus' and Thales' who contibutes significantly to the work...
 ## Actions
 ### New actions
+- [ ] (2801-1, eric) Check why Jean-loup cannot change the project's kanban
+- [ ] (2801-2, all) Add a disclaimer on the tests
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+- [ ] (2801-4, Eric) Add a question to Loïc about the handling of mathematical operators in the formal spec; Floats are basically handled as real extended with infs and NaN. For the rest, the semantics is that of the reals.
 ### Previous actions
 - [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
   - Material shall be placed [here](https://github.dev/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/formal_methods/inputs/inputs-2026-02-18.md)
@@ -23,12 +42,11 @@
   - Waiting for Jean-Baptiste reply...
 - [X] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
   - Completed after Edoardo's comment have been taken into account.
-  
 - [ ] (1911-2, All) Review Jean's V&V proposal
   - Eric to put updated slides on the repo : Done.
   - File to be reviewed not yet delivered.  
 - Action from local work session 
-  - [- (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
     - To be discussed during Feb session with Loïc. 
     - Some solutions are available. These solutions must be discussed with Loïc. 
     - Solution to be sent to Mariem first...
