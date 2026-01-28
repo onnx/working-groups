@@ -59,7 +59,7 @@ B = \begin{bmatrix} 2 & 3 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = A + B = \begin{bmatrix} 4.1 & 6.5 & 31.7 \end{bmatrix}
+Y = A - B = \begin{bmatrix} 4.1 & 6.5 & 31.7 \end{bmatrix}
 ```
 
 ---
@@ -159,7 +159,7 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-Y = A + B = \begin{bmatrix} 0.0 & 2.5 \\ 12.0 & 1.0 \\ 20.5 & 20.25 \end{bmatrix}
+Y = A - B = \begin{bmatrix} 0.0 & 2.5 \\ 12.0 & 1.0 \\ 20.5 & 20.25 \end{bmatrix}
 ```
 ## Error conditions
 No error condition.
@@ -330,6 +330,7 @@ See Why3 specification.
 
 ## Numerical Accuracy
 *(To be completed.)*
+
 
 
 
