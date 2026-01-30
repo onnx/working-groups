@@ -20,7 +20,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Tanh** operator.
 
@@ -30,7 +30,7 @@ The **Tanh** operator computes the element-wise hyperbolic tangent of the input 
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = \tanh(X[i]) = \frac{e^X[i]-e^{-X[i]}}{e^X[i]+e^{-X[i]}} = \frac{e^{2X[i]}-1}{e^{2X[i]}+1} = \frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}}
@@ -115,7 +115,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Tanh** operator.
 
@@ -125,7 +125,7 @@ The **Tanh** operator computes the element-wise hyperbolic tangent of the input 
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = \tanh(X[i]) = \frac{e^{X[i]} - e^{-X[i]}}{e^{X[i]} + e^{-X[i]}} = \frac{e^{2X[i]} - 1}{e^{2X[i]} + 1} = \frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}}
@@ -209,3 +209,7 @@ Operator **Tanh** has no attribute.
   - Statement: See [constraint (C1) on X](#C1fx).
 - `[C2]` <a id="C2fy"></a> Type consistency  
   - Statement: See [constraint (C2) on X](#C2fx).
+
+## Numeric accuracy
+
+[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
