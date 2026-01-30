@@ -3,7 +3,7 @@
 - **Exp** operator for type [real](#real)
 - **Exp** operator for types [float16, float, double](#float)
 
-Based on ONNX documentation \[Exp version 13](https://onnx.ai/onnx/operators/onnx__Exp.html).
+Based on ONNX documentation [Exp version 13](https://onnx.ai/onnx/operators/onnx__Exp.html).
 
 <a id="real"></a>
 # **Exp** (real)
@@ -18,7 +18,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Exp** operator.
 
@@ -28,7 +28,7 @@ The **Exp** operator computes the element-wise exponential function of the input
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = e^{X[i]}
@@ -76,7 +76,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{X}$: real
 
-Input tensor.
+*Input tensor.*
 
 #### Constraints
 
@@ -87,7 +87,7 @@ Input tensor.
 
 ### $\text{Y}$: real
 
-Exponential of tensor $X$.
+*Exponential of tensor $X$.*
 
 #### Constraints
 
@@ -97,66 +97,6 @@ Exponential of tensor $X$.
 ## Formal specification
  
 See the Why3 specification.
-
-## Numerical Accuracy
-
-$Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
-
-### Error Propagation
-
-This section contains properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of the **Exp** operator.  
-Let tensors of numerical errors be denoted by subscripts “err” (e.g., $X_{\textit{err}}$). For $Y = \exp(X)$ with $\exp(x) = e^x$, the propagated error $Y_{\textit{err}}^{\textit{propag}}$ comes from the input error $X_{\textit{err}}$.
-
-Using the derivative of $\exp$ is $d\exp(x)/dx = \exp(x)$, a first-order bound is:
-
-- For every index $I$:
-  - $|Y_{\textit{err}}^{\textit{propag}}[I]| \le |\exp(X[I])|\cdot|X_{\textit{err}}[I]|$
-
-There is no uniform finite global Lipschitz bound on $\exp$ over $\mathbb{R}$, since $|\exp(x)|$ grows unboundedly as $x \to +\infty$.
-
-### Error Introduction
-Error introduction for real (ideal) arithmetic is null:
-- $Y_{\textit{err}}^{\textit{intro}} = [0]$.
-
-### Unit Verification
-
-This section contains a test scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
-
-- The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
-- The `float` field is a symbolic abstract domain for the computed value.  
-- The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
-- The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
-
-```c++
-Tensor<SymbolicDomainError> X;
-
-/* X symbolic initialization */
-
-auto exp_real = [](const SymbolicDomainError &v) {
-  // Exp in the real domain: exp(x) = e^x
-  SymbolicDomainError r;
-  r.real = std::exp(v.real);
-  // float/err/rel_err are set by the abstract interpreter / analysis framework
-  return r;
-};
-
-auto result = [&X,&exp_real](auto I) {
-  return exp_real(X[I]);
-};
-
-for (auto I : X.indexes()) {
-   auto x = X[I];
-   auto y = result(I);
-
-   // First-order propagated error bound:
-   // |err_exp| <= |exp(x)| * |err_x|
-   double exp_x = std::exp(x.real);
-   double local_lipschitz = std::abs(exp_x);
-   double bound = local_lipschitz * std::abs(x.err);
-
-   assert(std::abs(y.err) <= bound + 1e-12);
-}
-```
 
 <a id="float"></a>
 # **Exp** (float)
@@ -173,7 +113,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Exp** operator.
 
@@ -183,7 +123,7 @@ The **Exp** operator computes the element-wise exponential function of the input
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = e^{X[i]}
@@ -246,7 +186,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-Input tensor.
+*Input tensor.*
 
 *FP16*: the input range for non +Inf values of `Y` is defined by $[-65504.0, \ln(65504.0)] = [-65504.0, 11.09375]$.
 
@@ -266,11 +206,15 @@ Input tensor.
 
 ### $\text{Y}$: floating-point tensor
 
-Exponential of tensor $X$.
+*Exponential of tensor $X$.*
 
 #### Constraints
 
-- `[C1]` Shape consistency  
+- `[C1]` <a id="C1fy"></a> Shape consistency  
   - Statement: See [constraint (C1) on X](#C1fx).
-- `[C2]` Type consistency  
+- `[C2]` <a id="C2fy"></a> Type consistency  
   - Statement: See [constraint (C2) on X](#C2fx).
+
+## Numeric accuracy
+
+[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
