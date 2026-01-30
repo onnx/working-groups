@@ -19,7 +19,7 @@ where:
    
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Abs** operator.
 
@@ -29,7 +29,7 @@ The **Abs** operator computes the element-wise absolute value of the input tenso
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$Y[i] = |X[i]|$$
 
@@ -53,7 +53,8 @@ Y = \begin{bmatrix} 1.123 & 0 \\ 4 & 5 \\ 2 & 3 \end{bmatrix}
 ```
 
 ## Error conditions
-Not applicable
+
+No error condition.
 
 ## Attributes
 
@@ -63,7 +64,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{X}$: real
 
-Input tensor
+*Input tensor.*
 
 #### Constraints
 
@@ -74,12 +75,16 @@ Input tensor
 
 ### $\text{Y}$: real
 
-Absolute value of tensor $X$
+*Absolute value of tensor $X$*
 
 #### Constraints
 
  - `[C1]` <a id="C1ry"></a> Shape consistency
    - Statement: See [constraint (C1) on X](#C1rx)
+
+## Formal specification
+ 
+See the Why3 specification.
 
 <a id="float"></a>
 # **Abs** (float)
@@ -87,7 +92,7 @@ where float is in {float16, float, double}
 
 ## Signature
 Definition of operator $\text{Abs}$ signature:
-$Y = \text{Abs}(X)$
+$Y = \textbf{Abs}(X)$
 
 where:
 - $X$: Input tensor
@@ -95,7 +100,7 @@ where:
    
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Abs** operator:
 
@@ -105,7 +110,7 @@ The **Abs** operator computes the element-wise absolute value of the input tenso
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/common/definitions.md#tensor_index) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = 
@@ -125,7 +130,8 @@ X = \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
 ```
 
 ## Error conditions
-Not applicable
+
+No error condition.
 
 ## Attributes
 
@@ -135,7 +141,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{X}$: float
 
-Input tensor
+*Input tensor.*
 
 #### Constraints
 
@@ -146,7 +152,7 @@ Input tensor
 
 ### $\text{Y}$: float
 
-Absolute value of tensor $X$
+*Absolute value of tensor $X$*
 
 #### Constraints
 
