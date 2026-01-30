@@ -116,7 +116,7 @@ Operator **Div** has no attribute.
 
 ### $\text{C}$: real tensor
 
-Tensor $C$ is the element-wise result of the division of $A$ by $B$.
+*Tensor $C$ is the element-wise result of the division of $A$ by $B$.*
 
 #### Constraints
 
@@ -198,7 +198,7 @@ Operator **Div** has no attribute.
 ## Inputs
 
 ### $\text{A}$: floating-point tensor
-Numerator of the division.
+*Numerator of the division.*
 
 #### Constraints
 
@@ -208,7 +208,7 @@ Numerator of the division.
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
 ### $\text{B}$: floating-point tensor
-Denominator of the division.
+*Denominator of the division.*
 
 #### Constraints
 - `[C1]` Shape consistency
@@ -220,7 +220,7 @@ Denominator of the division.
 
 ### $\text{C}$: floating-point tensor
 
-Result of the element-wise division of $A$ by $B$.
+*Result of the element-wise division of $A$ by $B$.*
 
 #### Constraints
 
@@ -236,6 +236,25 @@ Result of the element-wise division of $A$ by $B$.
 
 [See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
 
+
+<a id="int"></a>
+
+# **Div** (int, int)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
+
+## Signature
+Definition of operator $\text{Div}$ signature:
+ $C = \textbf{Div}(A,B)$
+
+ where
+ - $A$: numerator
+ - $B$: denominator
+ - $C$: result of the element-wise division of $A$ by $B$
+
+### Restrictions
+[General restrictions](./../common/general_restrictions.md) : GR1, GR2 and GR3 are applicable.
+
+No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
 
