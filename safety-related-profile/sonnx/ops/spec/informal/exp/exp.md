@@ -105,7 +105,7 @@ where float is in {float16, float, double}
 ## Signature
 
 Definition of operator $\text{Exp}$ signature:  
-$Y = \text{Exp}(X)$
+$Y = \text{bfExp}(X)$
 
 where:
 - $X$: Input tensor

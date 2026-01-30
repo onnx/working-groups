@@ -114,7 +114,7 @@ where float is in {float16, float, double}
 ## Signature
 
 Definition of operator $\text{Log}$ signature:  
-$Y = \text{Log}(X)$
+$Y = \textbf{Log}(X)$
 
 where:
 - $X$: Input tensor
