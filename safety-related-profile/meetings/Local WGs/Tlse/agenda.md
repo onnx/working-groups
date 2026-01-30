@@ -7,7 +7,11 @@
 
 #### 2025/02/04 
 
-*To be completed.*
+- Discussion (1h max) about the specification of ops in FP. 
+  - What do we need exactly?
+  - Specification *vs.* implementation... Up to what point shall we be prescritive wrt the implementation?
+  - The question of accuracy...
+- Review of [Max](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/max/max.md), [Range](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/range/range.md), [Div](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/div/div.md)?
 
 #### 2025/01/15
 ##### Agenda
