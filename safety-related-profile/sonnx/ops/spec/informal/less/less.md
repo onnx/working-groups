@@ -47,11 +47,11 @@ The effect of the operator is illustrated on the following examples.
 ### Example 1
 
 ```math
-A = \begin{bmatrix} 2 & 3 & 7 \end{bmatrix}
+A = \begin{bmatrix} 2.0 & 3.0 & 7.0 \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} 3 & 3 & 5 \end{bmatrix}
+B = \begin{bmatrix} 3.0 & 3.0 & 5.0 \end{bmatrix}
 ```
 
 Result $C$ is:
@@ -63,11 +63,11 @@ C = \begin{bmatrix} \text{True} & \text{False} & \text{False} \end{bmatrix}
 ### Example 2
 
 ```math
-A = \begin{bmatrix} 1 & 2 \\ 4 & 0 \\ 5 & 6 \end{bmatrix}
+A = \begin{bmatrix} 1.1 & 2.0 \\ 4.2 & 0.0 \\ 5.3 & 6.4 \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} 3 & 2 \\ 4 & 1 \\ 5 & 4 \end{bmatrix}
+B = \begin{bmatrix} 3.5 & 2.0 \\ 4.6 & 1.0 \\ 5.7 & 4.8 \end{bmatrix}
 ```
 
 Result $C$ is:
@@ -75,8 +75,8 @@ Result $C$ is:
 ```math
 C = \begin{bmatrix}
 \text{True} & \text{False} \\
-\text{False} & \text{True} \\
-\text{False} & \text{False}
+\text{True} & \text{True} \\
+\text{True} & \text{False}
 \end{bmatrix}
 ```
 
@@ -165,11 +165,11 @@ The effect of the operator is illustrated on the following examples.
 ### Example 1
 
 ```math
-A = \begin{bmatrix} 2.0 & 3.0 & 7.0 \end{bmatrix}
+A = \begin{bmatrix} 2.5 & 3.7 & 7.9 \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} 3.0 & 3.0 & 5.0 \end{bmatrix}
+B = \begin{bmatrix} 3.1 & 3.7 & 5.8 \end{bmatrix}
 ```
 
 Result $C$ is:
@@ -181,11 +181,11 @@ C = \begin{bmatrix} \text{True} & \text{False} & \text{False} \end{bmatrix}
 ### Example 2
 
 ```math
-A = \begin{bmatrix} 1.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 6.0 \end{bmatrix}
+A = \begin{bmatrix} 1.1 & 2.0 \\ 4.2 & 0.0 \\ 5.3 & 6.4 \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 1.0 \\ 5.0 & 4.0 \end{bmatrix}
+B = \begin{bmatrix} 3.5 & 2.0 \\ 4.6 & 1.0 \\ 5.7 & 4.8 \end{bmatrix}
 ```
 
 Result $C$ is:
@@ -193,23 +193,23 @@ Result $C$ is:
 ```math
 C = \begin{bmatrix}
 \text{True} & \text{False} \\
-\text{False} & \text{True} \\
-\text{False} & \text{False}
+\text{True} & \text{True} \\
+\text{True} & \text{False}
 \end{bmatrix}
 ```
 
 ### Example 3
 
 ```math
-A = \begin{bmatrix} +\infty & \text{NaN} & -\infty \end{bmatrix}
+A = \begin{bmatrix} -\infty & -\infty & -\infty & -\infty & 0.0 & 0.0 & 0.0 & 0.0 & +\infty & +\infty & +\infty & +\infty & \text{NaN} & \text{NaN} & \text{NaN} & \text{NaN} \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} +\infty & 0.0 & -\infty \end{bmatrix}
+B = \begin{bmatrix} -\infty & 0.0 & +\infty & \text{NaN} &  -\infty & 0.0 & +\infty & \text{NaN} & -\infty & 0.0 & +\infty & \text{NaN} & -\infty & 0.0 & +\infty & \text{NaN}  \end{bmatrix}
 ```
 
 ```math
-C = \begin{bmatrix} \text{False} & \text{False} & \text{False} \end{bmatrix}
+C = \begin{bmatrix} \text{False} & \text{True} & \text{True} &\text{False} &\text{False} &\text{False} & \text{True} &\text{False} &\text{False} &\text{False} &\text{False} &\text{False} &\text{False} &\text{False} & \text{False} & \text{False}  \end{bmatrix}
 ```
 
 
@@ -217,7 +217,7 @@ C = \begin{bmatrix} \text{False} & \text{False} & \text{False} \end{bmatrix}
 ## Error conditions
 
 Values of the output tensor may be $\text{True}$ or $\text{False}$ according to IEEE 754 comparison semantics. 
-Comparisons involving NaN follow IEEE 754 rules (e.g., $\text{NaN} < x$ is False for any $x$). 
+Comparisons involving NaN follow IEEE 754 rules (e.g., $\text{NaN} < x$ or $x < \text{NaN}$  is False for any $x$). 
 
 ## Attributes
 
@@ -299,6 +299,42 @@ C[i] =
 $$
 
 The examples given in the real section apply directly when restricted to integer values.
+### Example 1
+
+```math
+A = \begin{bmatrix} 2 & 3 & 7 \end{bmatrix}
+```
+
+```math
+B = \begin{bmatrix} 3 & 3 & 5 \end{bmatrix}
+```
+
+Result $C$ is:
+
+```math
+C = \begin{bmatrix} \text{True} & \text{False} & \text{False} \end{bmatrix}
+```
+
+### Example 2
+
+```math
+A = \begin{bmatrix} 1 & 2 \\ 4 & 0 \\ 5 & 6 \end{bmatrix}
+```
+
+```math
+B = \begin{bmatrix} 3 & 2 \\ 4 & 1 \\ 5 & 4 \end{bmatrix}
+```
+
+Result $C$ is:
+
+```math
+C = \begin{bmatrix}
+\text{True} & \text{False} \\
+\text{False} & \text{True} \\
+\text{False} & \text{False}
+\end{bmatrix}
+```
+
 
 ## Error conditions
 
