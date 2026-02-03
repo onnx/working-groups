@@ -27,7 +27,7 @@ No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
 
-Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](h./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
 
@@ -37,9 +37,12 @@ $$
 C[i] = 
 \begin{cases} 
 A[i]/B[i] & \text{if } B[i] \text{ is different from 0} \\
-\text{\it undefined} & \text{otherwise}
+\text{ undefined} & \text{otherwise}
 \end{cases}
 $$
+
+
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -153,6 +156,7 @@ Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEE
 The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
+
 $$
 C[i] = 
 \begin{cases} 
@@ -161,6 +165,7 @@ A[i]/B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
 \text{nan} & \text{if } A[i]=0 \text{ and } B[i]=0 
 \end{cases}
 $$
+
 
 The sign of inf is determined according to the IEEE754 rules.
 
@@ -338,6 +343,7 @@ Operator **Div** has no attribute.
 ## Numeric accuracy (int)
 
 [See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
+
 
 
 
