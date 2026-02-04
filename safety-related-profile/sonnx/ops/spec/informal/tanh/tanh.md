@@ -33,7 +33,7 @@ The mathematical definition of the operator is given hereafter.
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] = \tanh(X[i]) = \frac{e^X[i]-e^{-X[i]}}{e^X[i]+e^{-X[i]}} = \frac{e^{2X[i]}-1}{e^{2X[i]}+1} = \frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}}
+Y[i] = \tanh(X[i]) = \frac{e^{X[i]}-e^{-X[i]}}{e^{X[i]}+e^{-X[i]}} = \frac{e^{2X[i]}-1}{e^{2X[i]}+1} = \frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}}
 $$
 
 The effect of the operator is illustrated on the following examples.
@@ -45,7 +45,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0.0 & 0.76159418 & -0.76159418 \end{bmatrix}
+Y \approx \begin{bmatrix} 0.0 & 0.76159418 & -0.76159418 \end{bmatrix}
 ```
 
 ### Example 2
@@ -59,7 +59,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx \begin{bmatrix}
   -0.96402758 & 0.0         \\
   0.76159418  & 0.96402758  \\
   -0.99932921 & 0.99932921
@@ -89,7 +89,7 @@ Operator **Tanh** has no attribute.
 
 ### $\text{Y}$: real
 
-*Hyperbolic tangent of tensor $X$.*
+Hyperbolic tangent of tensor $X$.
 
 #### Constraints
 
@@ -140,7 +140,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0.0 & 0.76159418 & -0.76159418 \end{bmatrix}
+Y \approx \begin{bmatrix} 0.0 & 0.76159418 & -0.76159418 \end{bmatrix}
 ```
 
 ### Example 2
@@ -154,7 +154,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx \begin{bmatrix}
   -0.96402758 & 0.0         \\
   0.76159418  & 0.96402758  \\
   -0.99932921 & 0.99932921
@@ -166,12 +166,12 @@ Y = \begin{bmatrix}
 
 ```math
 X = \begin{bmatrix}
-  +\infty & \text{NaN} & -\infty
+  \text{+inf} & \text{NaN} & \text{-inf}
 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx \begin{bmatrix}
   1.0 & \text{NaN} & -1.0
 \end{bmatrix}
 ```
@@ -212,4 +212,4 @@ Operator **Tanh** has no attribute.
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
+[See the numeric accuracy note](./tanh_acc.md).
