@@ -16,8 +16,6 @@ where:
 - $X$: Input tensor
 - $Y$: Hyperbolic tangent of $X$
 
-
-
 ## Restrictions
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
@@ -201,7 +199,7 @@ Operator **Tanh** has no attribute.
 
 ### $\text{Y}$: floating-point tensor
 
-*Hyperbolic tangent of tensor $X$.*
+Hyperbolic tangent of tensor $X$.
 
 #### Constraints
 

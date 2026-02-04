@@ -21,7 +21,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](./../common/general_restrictions.md) : GR1 and GR2 are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Div** operator.
 
@@ -97,7 +97,7 @@ Operator **Div** has no attribute.
 
 ### $\text{A}$: real tensor
 
-*Numerator of the division.*
+Numerator of the division.
 
 #### Constraints
 
@@ -106,7 +106,7 @@ Operator **Div** has no attribute.
  
 ### $\text{B}$: real tensor
 
-*Denominator of the division.*
+Denominator of the division.
 
 #### Constraints
 
@@ -119,7 +119,7 @@ Operator **Div** has no attribute.
 
 ### $\text{C}$: real tensor
 
-*Tensor $C$ is the element-wise result of the division of $A$ by $B$.*
+Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 
 #### Constraints
 
@@ -145,7 +145,7 @@ where
  - $C$: result of element-wise division of $A$ by $B$
  
 ## Restrictions
-[General restrictions](./../common/general_restrictions.md) : GR1, GR2 and GR3 are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Div** operator.
 
@@ -161,13 +161,12 @@ $$
 C[i] = 
 \begin{cases} 
 A[i]/B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
-\text{inf} & \text{if } A[i] \neq 0 \text{ and } B[i]=0  \\
-\text{nan} & \text{if } A[i]=0 \text{ and } B[i]=0 
+\pm\text{inf} & \text{if } A[i] \neq 0 \text{ and } B[i]= 0  \\
+\text{NaN} & \text{if } A[i]=0 \text{ and } B[i]=0 
 \end{cases}
 $$
 
-
-The sign of inf is determined according to the IEEE754 rules.
+In the second case, the sign of $\pm \text{inf}$ is determined from the signs of $A[i]$ and the zero ($\pm 0$) according to the IEEE754 rules.
 
 ### Example 1
 
@@ -178,7 +177,7 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-C = \begin{bmatrix} 1.0 & 2.25 \\ 4.0 & +\infty \\ 5.1 & 6.0625 \end{bmatrix}
+C \approx \begin{bmatrix} 1.0 & 2.25 \\ 4.0 & \text{+inf} \\ 5.1 & 6.0625 \end{bmatrix}
 ```
 
 ### Example 2
@@ -190,11 +189,11 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-C = \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatrix}
+C \approx \begin{bmatrix} 1.0833 & 2.25 \\ 4.0 & \text{NaN} \\ 5.1 & 6.0625 \end{bmatrix}
 ```
 
 ## Error conditions
-- Values of the output tensor may be IEEE 754 infinity or NaN (case of a null denominator).  
+  A value in the output tensor is NaN if the numerator and denominator are both 0 (+0.0 or -0.0 according to IEEE754).  
 
 ## Attributes
 
@@ -203,7 +202,7 @@ Operator **Div** has no attribute.
 ## Inputs
 
 ### $\text{A}$: floating-point tensor
-*Numerator of the division.*
+Numerator of the division.
 
 #### Constraints
 
@@ -213,7 +212,7 @@ Operator **Div** has no attribute.
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
 ### $\text{B}$: floating-point tensor
-*Denominator of the division.*
+Denominator of the division.
 
 #### Constraints
 - `[C1]` Shape consistency
@@ -225,7 +224,7 @@ Operator **Div** has no attribute.
 
 ### $\text{C}$: floating-point tensor
 
-*Result of the element-wise division of $A$ by $B$.*
+Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
@@ -234,10 +233,7 @@ Operator **Div** has no attribute.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2fa) on tensor $A$.
 
-## Formal specification
- See Why3 specification.
-
-## Numeric accuracy (float)
+## Numeric accuracy
 
 [See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
 
@@ -257,7 +253,7 @@ Definition of operator $\text{Div}$ signature:
  - $C$: result of the element-wise division of $A$ by $B$
 
 ### Restrictions
-[General restrictions](./../common/general_restrictions.md) : GR1, GR2 and GR3 are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Div** operator.
 
@@ -265,7 +261,7 @@ No specific restrictions apply to the **Div** operator.
 
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. 
 
-The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded. If the quotient $A[i]/B[i]$ is representable, the expression $(A[i]/B[i])\times B[i] + A[i] \mod B[i]$ shall equal $A[i]$.
+The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded.
 
 ### Example 1
 
@@ -291,7 +287,7 @@ C = \begin{bmatrix} 3 & 5 \\ 5 & 1 \\ 6 & 2 \end{bmatrix}
 ```
 
 ## Error conditions
-- The behaviour in case of a null denominator is implementation dependent.
+The behaviour in case of a null denominator is implementation dependent.
 
 ## Attributes
 
@@ -301,7 +297,7 @@ Operator **Div** has no attribute.
 
 ### $\text{A}$: integer tensor
 
-*Numerator of the division.*
+Numerator of the division.
 
 #### Constraints
 
@@ -312,7 +308,7 @@ Operator **Div** has no attribute.
   
 ### $\text{B}$: integer tensor
 
-*Denominator of the division.*
+Denominator of the division.
 
 #### Constraints
 
@@ -327,7 +323,7 @@ Operator **Div** has no attribute.
 
 ### $\text{C}$: integer tensor
 
-*Result of the element-wise division of $A$ by $B$.*
+Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
@@ -336,13 +332,6 @@ Operator **Div** has no attribute.
 - `[C2]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
 
-
-## Formal specification
- See Why3 specification.
-
-## Numeric accuracy (int)
-
-[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
 
 
 
