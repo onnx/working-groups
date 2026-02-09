@@ -1,3 +1,7 @@
+#### Objectives and limits
+
+*To be completed: describe the objectives and the limits of the accuracy analysis...*
+
 #### Numerical Accuracy
  
 This section provides a tight and verifiable specification of the numerical error

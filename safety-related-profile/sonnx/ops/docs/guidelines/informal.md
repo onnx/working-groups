@@ -1,16 +1,16 @@
 # Introduction
 
-This document gives the guidelines to be followed when writing an operator's **informal** specification.
+This document gives the guidelines to be followed when writing an operator's non-formal specification. Guidelines for the development of formal specification are given in a [dedicated document](./formal.md).
 
-# Informal specification guidelines
+# Specification guidelines
 This section is composed of two sub-sections:
-- *General guidelines*, which defines the use of fonts, notations (e.g., for tensor) and tags (e.g., for constraints), and, finally, specifies how to deal with the numerical types involved in the operator at stake.
-- *Structure of the informal specification*, which defines the structure and contents of the informal specification of an operator. This section applies the general guidelines.
+- *General guidelines* defining presentation rules such as fonts, notations, use of tags for tracability, etc. 
+- *Structure and Contents of the specification* defining the organization and the contents of the non-formal specification of an operator. This section applies the general guidelines.
 
 ## General guidelines  
-The informal specification is intended for both users *and* implementers of operators who both need to understand what an operator does and how to use it. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
+The non-formal specification is intended for both users *and* implementers of operators who both need to understand what an operator does and how to use it. For instance, the first kind of readers might be satisfied with one or two sentences about the semantics of an operator whereas the second category of readers would like to get all the details of the semantics.
 
-More precisely, the informal specification:
+More precisely, the non-formal specification:
 - Is aimed at showing clearly what a given operator is supposed to do,
 - Without calling on a strict formal, mathematical language,
 - Knowing that the exact and complete specification is given in the "formal" specification.
@@ -20,10 +20,22 @@ More precisely, the informal specification:
     - The element-wise addition of tensors is $Add$, not $add$
     - The 16-bit floating-point type is $float16$, not $FP16$
 
-The writer of the informal specification must take care to keep it readable and understandable by a ML developer. The recommendations given in the following guidelines target this objective.
+The writer of the non-formal specification must take care to keep it readable and understandable by a ML developer. The recommendations given in the following guidelines target this objective.
 
 ### Styling
 - Mathematical objects are represented using *italic*. LaTeX formulae are used.
+- In the text, operator attributes are represented using `this font`.  
+- As far as possible, names of arguments and attributes shall be used in mathematical formulae. In the case the name is "too long", another, shorter designation, may be used with a clear statement of the redefinition. If the symbol refers to a greek symbol (e.g., $\text{alpha}$), the symbol itself can be used (e.g., $\alpha$).  
+
+### Basic operators
+
+The specification may use some mathematical operators or functions without defining them. Those operators / functions are considered to be "well-known" so that there is no need to define them.
+
+The following operators and functions belong to this set:
+- basic mathematical operations ($+$, $-$, $*$, $/$)
+- trignonometric operations ($sin$, $cos$, $tan$, $asin$, $acos$, $atan$)
+- $min$ and $max$
+  
 
 ### Naming conventions
 - As far as possible, ONNX names for inputs, outputs, and attributes must be used.
@@ -40,11 +52,11 @@ The writer of the informal specification must take care to keep it readable and 
   - or as: $A[i_0, i_1, ..., i_{rA-1}]$. 
  
 #### Tags
-The informal specification makes use of three different types of tags:
+The non-formal specification makes use of three different types of tags:
 - A **restrictions tag** expresses a restriction with respect to the ONNX standard (see the section about restriction below). They are indicated by tag `[R<i>]` where `<i>` is a number.\
 A synthesis of all restrictions is given in section "Restrictions" (see below).
 - A **constraints tag** expresses a constraint on one or several inputs, outputs, or attributes. They are indicated using `[C<i>]` where `<i>` is a number.
-- A **traceability tag** identifies a specific location in the informal specification. These tags are used to establish traceability between the informal and formal specifications. They are indicated by `[T<i>]` where `<i>` is a number.
+- A **traceability tag** identifies a specific location in the non-formal specification. These tags are used to establish traceability between the informal and formal specifications. They are indicated by `[T<i>]` where `<i>` is a number.
  
 For instance, here is a tag introducing a constraint relating some input and output tensors:
 >`[C1]` Shape consistency \
@@ -65,10 +77,9 @@ Here is an example: <br>
 
 This is a reference to the tagged paragraph  [`[T1]`](#my_tag_name).
 
-
 ### Types
 - The type names shall be the ones used in the ONNX description of the operators, without surrounding them with "tensor()".
-  - Example: "tensor(double)" in ONNX becomes "double" in the informal specification.
+  - Example: "tensor(double)" in ONNX becomes "double" in the non-formal specification.
 - The data types allowed in SONNX operators are: 
   - IEEE 754 floating-point types: double, float, float16
   - Signed integer types: int64, int32, int16, int8
@@ -77,21 +88,20 @@ This is a reference to the tagged paragraph  [`[T1]`](#my_tag_name).
   - string
 - IEEE 754 floating-point types, i.e., double, float and float16 have the following special numbers:
   - +0 and -0
-  - +Inf and -Inf
+  - +inf and -inf
   - NaN (Not a Number)
-- All operators applicable to numeric values shall be specified for values in the domain of real numbers. 
-- Specific description shall be given for the other types (float, double, etc.).
+- All operators applicable to numeric values shall first be specified for values in the domain of real numbers, then specific descriptions shall be given for the other types (float, double, etc.).
 - A description can be applicable to multiple types as long as its **semantics description** remains the same for all types.  
 
-## Structure of the informal specification
+## Structure and contents of the specification
 
-This Section describes the required structure $and$ contents of the informal specification of an operator.
+This section describes the required structure and contents of the non-formal specification of an operator.
 
-The [informal specification template](informal_spec_template.md) gives the required structure.
+The [specification template](informal_spec_template.md) gives an example of the required structure.
 
 ### Contents
 
-This section gives the list of all informal specifications of the operator, for each of the applicable types, with hyperlinks to the sections (see [template](informal_spec_template.md)). 
+This section gives the list of all non-formal specifications of the operator, for each of the applicable types, with hyperlinks to the sections (see [template](informal_spec_template.md)). 
 
 - **Op** operator for type real
 - **Op** operator for types &lt;T1&gt;, &lt;T2&gt;,...
@@ -135,15 +145,15 @@ When the same name is used for different arguments such as in
  this means that the operator is **variadic**, i.e., it accepts a variable number of arguments. In this example, there are n arguments that are discriminated by their index.  
 
 ### Restrictions
-This section lists all restrictions applicable to the operator. A restriction is a limit with respect to the normal usage domain of the ONNX operator. A restriction may concern the dimension of tensors, values of attributes, etc. 
+This section lists all restrictions applicable to the operator. A restriction is **a limit with respect to the normal usage domain** of the ONNX operator. A restriction may concern the dimension of tensors, the values of attributes, etc. 
 
-There are SONNX general restrictions that apply to all the operators. Therefore, this section shall contain the following markdown link:
+Some SONNX restrictions apply to all the operators. Therefore, this section shall contain the following markdown link:
 
 `\[General restrictions](../common/general_restrictions.md)`
 
-Restrictions marked as "Transient" are introduced by the working group in order to reduce the specification effort. Such restrictions, which are not traceable to a need, are aimed at being eventually relaxed. However, in the meantime, both transient and non-transient restrictions are applicable by the operator user or implementer. 
+Restrictions marked as "Transient" are introduced by the working group in order to reduce the specification, proof, etc. effort. Those restrictions, which are not traceable to a need, are aimed at being eventually relaxed. However, in the meantime, both transient and non-transient restrictions are applicable by the operator user or implementer. 
 
-Restrictions not marked as "transient" are traceable to some requirement. The requirement is identified using an hyperlink.
+Restrictions not marked as "transient" are traced to some [end-user requirement](../../../../deliverables/reqs/reqs.md) using an hyperlink.
  
 An example is given hereafter
 
@@ -152,12 +162,12 @@ An example is given hereafter
 | `[R1]` | Input tensor $X$ has 2 spatial axes | Transient |
 | `[R2]` | Attribute `auto_pad` is restricted to NOTSET  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
 
- ### Informal specification
+ ### Specification
  
- This section contains the informal specification of the operator. By "informal", we mean that the description does not rely on a formal language, even though it usually uses some mathematical formulae. The specification shall be readable, understandable, and self-contained. It can include figures if deemed necessary. The objective is that a human being can fully understand the domain, range, and semantic of the operator with no additional information. Stated differently, he/she should be able to implement the operator with no additional information.
+ This section contains the specification of the operator. The specification is "informal", ie., it does not use a formal language, even though it usually uses some mathematical formulae. The specification shall be readable, understandable, and self-contained. It can include illustrations if deemed necessary. The objective is that a human being can fully understand the domain, range, and semantic of the operator with no additional information. Stated differently, he/she should be able to implement the operator with no additional information.
  
-The informal specification shall be composed of the following parts:
-- A short description of the operator. For instance, for the $conv$ operator: 
+The specification shall be composed of the following parts:
+- A short description of the operator. For instance, for the $Conv$ operator: 
 
 > Operator **Conv}** computes the convolution of the input tensor $A$ with the kernel $W$ and adds bias $B$ to the result. Two types of convolutions are supported: standard convolution and depthwise convolution.
 
@@ -179,9 +189,15 @@ $$
 >- $n \in [0,dY_3-1]$ is the index of the second spatial axis of output $Y$
 >- etc.
 
+## Examples
+
+The specification must provide examples to illustrate the behaviour of the operator. As far as possible, examples must cover special values, domain bounds, etc., in order to clarify the behaviour of the operator, especially for non trivial cases. If possible, a jupyter notebook allowing the generation of the examples shall be provided (and placed aside the specification document). 
+
+When the displayed result is not exact (for instance when using some real or float numbers that cannot be represented exactly), please use the $\approx$ symbol instead of the $=$ symbol.
+
 ## Error conditions
 
-This section identifies the errors that may occur during the execution of the operator (or *runtime errors*).
+This section identifies the conditions that may occur during the execution of the operator leading to unexpected results (e.g., a IEEE special value while there was no special value in the inputs, a runtime error, etc.)
 
 When writing a specification, the writer must identify the following failure conditions:
 - for floating point computations 
@@ -198,18 +214,18 @@ When writing a specification, the writer must identify the following failure con
   - overflows, i.e., operations leading to a value out of the range (e.g., addition of two large int32 values non representable in int32)
 
 The following rules must be applied.
-  - Restrict the input domain to prevent the occurrence failures if it is not too conservative. for instance, $x \ge 0$ for $sqrt(x)$ is deemed acceptable whereas, using uint32, $A\leq2^{31}$ and $B\leq2^{31}$ for $A+B$ is deemed too conservative.
+  - Restrict the input domain to prevent the occurrence failures if it is not too conservative. for instance, $x \ge 0$ for $sqrt(x)$ is deemed acceptable whereas, using `uint32`, $A\leq2^{31}$ and $B\leq2^{31}$ for $A+B$ is deemed too conservative.
   - Give the most detailed description of the conditions in which a failure can occur, and the possible expected result. For instance for a matrix multiplication in int32, explain that the accumulator may overflow and may wrap around, leading to an incorrect and inconsistent result. If possible, point out the location in the specification where the error may occur. 
 - If no indication is given about occurrence of a "failure", this means that the operator returns a correct value (as per specification) for **any** input value in the domain defined by the type.  
 - If applicable and possible, provide "recommendations" about the implementation to prevent failure. For instance, propose to substract $max(Xi)$ to the argument to make the **Softmax** operator more robust.
 
-Note that these rules concern the *specification* of the operation. Therefore,  they must be independent from implementation choices. For instance, *generally speaking* it* is always possible for the operation to overflow if the domain is output domain limited (e.g., int32), so there must be a warning about this failure condition. Nevertheless, a specific implementation may be failure-free if, for example, the size for the matrices is limited and the accumulator is sufficiently large. In that case, the implementation must give these conditions. Otherwise, the implementation is deemed compliant with the specification. 
+Note that these rules concern the *specification* of the operation. Therefore,  they must be independent from implementation choices. For instance, *generally speaking*, it is always possible for the operation to overflow if the domain is output domain limited (e.g., `int32`), so there must be a warning about this failure condition. Nevertheless, a specific implementation may be failure-free if, for example, the size for the matrices is limited and the accumulator is sufficiently large. In that case, the implementation must give these conditions. Otherwise, the implementation is deemed compliant with the specification. 
 
 ## Attributes
-This section describes the operator's attributes. 
+This section describes the operator's attributes. This section must be introduced in the section about real numbers. Sections concerning the other types (floats, integers) shall shall not repeat this contents and provide a link to it whenever applicable. See the [template](./informal_spec_template.md) for an example. 
 
-### $\text{name}$: \<type\>
-where $\text{name}$ is the attribute's name and \<type\> is the attribute's type.
+### `name`: \<type\>
+where `name` is the attribute's name and \<type\> is the attribute's type.
 
  #### Constraints
 This section gives all constraints applicable to the attribute.

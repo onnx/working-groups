@@ -10,7 +10,7 @@ Based on ONNX documentation [Div version 14](https://onnx.ai/onnx/operators/onnx
 # **Div** (real, real)
 
 ## Signature
-Definition of operator $\text{Div}$ signature:
+
 $C =\textbf{Div}(A, B)$
 
 where:

@@ -1,1 +1,0 @@
-*To be completed: this document will describe how to write tests with hypothesis..*
