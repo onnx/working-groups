@@ -12,7 +12,7 @@ This repository is where ONNX Probabilistic WG will capture various artifacts an
 
 # WG Lead(s)
 
-* Brian Parbhu, Adam Pocock (Oracle) (July 22, 2024 - Current)
+* Brian Parbhu, Adam Pocock (Oracle) (February 11, 2026 - Current)
 
 # Logistics
 
