@@ -44,7 +44,7 @@ Operator **Clip** limit the given input within an interval.
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 
-**Clip** operation can be expressed as:
+The following **Clip** formula captures the behavior expressed by the previous if-statements:
 
 $$ Y[i] = \min(M, \max(X[i], L))$$
 
@@ -178,29 +178,33 @@ Operator **Clip** limit the given input within an interval.
 
 **Clip** operation can be divided into two steps:
 
-- If any of the boundaries is $NaN$ it is readjusted to the respetive extreme value:
+- First step : normalize the boundaries $L$ and $M$ as follows:
 
-  - If $L$ is $NaN$, then $L'$ = $-\infty$
+  If any of the boundaries is $NaN$ it is readjusted to the respetive extreme value:
 
-  - If $M$ is $NaN$, then $M'$ = $+\infty$
+    - If $L$ is $NaN$, then $L'$ = $-\infty$
 
-  - Otherwise, $L'$ = $L$ and $M'$ = $M$
+    - If $M$ is $NaN$, then $M'$ = $+\infty$
 
-- If $L'$ $\leq$ $M'$:
+    - Otherwise, $L'$ = $L$ and $M'$ = $M$
 
-  - if $X[i]$ $\lt$ $L'$ then $Y[i]$ = $L'$.
+- Second step: perform the clipping as follows:
+  - If $L'$ $\leq$ $M'$:
 
-  - If $X[i]$ $\gt$ $M'$ then $Y[i]$ = $M'$.
-  - Otherwise, $Y[i]$ = $X[i]$.
+    - if $X[i]$ $\lt$ $L'$ then $Y[i]$ = $L'$.
 
-- If $L'$ $\gt$ $M'$:
+    - If $X[i]$ $\gt$ $M'$ then $Y[i]$ = $M'$.
+    - Otherwise, $Y[i]$ = $X[i]$.
 
-  - $Y[i] = M'$
+  - If $L'$ $\gt$ $M'$:
+
+    - $Y[i] = M'$
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 
-- The clipping is then performed as:
+The following **Clip** formula captures the behavior expressed of the second step, previously defined:
+
 
 $$ Y[i] = \min(M, \max(X[i], L))$$
 
