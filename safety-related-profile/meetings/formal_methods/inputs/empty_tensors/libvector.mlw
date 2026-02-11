@@ -1,0 +1,187 @@
+(** C-Library to compute Offsets & Dimensions *)
+
+module CIndex
+  use std.Int
+  use std.List
+  use std.Clib
+  use mach.int.Int32
+  use tensor.Range
+  use layout.CFlat
+
+  type iarray = ptr int32
+
+  function ivector (u : iarray) (n : int) : list int
+    = map Int32.to_int (vector u n)
+
+  function islice (u : iarray) (p q : int) : list int
+    = map Int32.to_int (slice u p q)
+
+  (** ## Dimensions *)
+
+  function vdim (u : iarray) (n : int) : int = size (ivector u n)
+  function sdim (u : iarray) (p q : int) : int = size (islice u p q)
+
+  
+  predicate pdim (u : iarray) (p q : int) =
+    forall k. p <= k < q -> 0 < value_at u k
+  
+  (*New*)
+  predicate ndim (u : iarray) (p q : int) =
+    forall k. p <= k < q -> 0 <= value_at u k
+  (*End New*)
+  predicate dimension (u : iarray) (n : int) =
+    0 <= n /\ valid_range u 0 n /\ pdim u 0 n /\ 0 < vdim u n <= max_int32
+
+  (*New*)
+  predicate ndimension (u : iarray) (n : int) =
+    0 <= n /\ valid_range u 0 n /\ ndim u 0 n /\ 0 < vdim u n <= max_int32
+  (*End New*)
+
+  (** Equivalence betwen {pdim} and {tensor.Range.positive}. *)
+  let rec lemma positive_pdim (u : iarray) (p q : int)
+  (*proof*)
+    ensures { pdim u p q <-> positive (islice u p q) }
+    variant { q - p }
+    = if p < q then positive_pdim u (p+1) q
+  (*qed*)  
+
+  (*New*)
+  (** Equivalence betwen {ndim} and {tensor.Range.non_negative}. *)
+  let rec lemma non_negative_ndim (u : iarray) (p q : int)
+  (*proof*)
+    ensures { ndim u p q <-> non_negative (islice u p q) }
+    variant { q - p }
+    = if p < q then non_negative_ndim u (p+1) q
+  (*qed*)
+
+  let ghost sdim_split (u : iarray) (p k q : int)
+  (*proof*)
+    requires { p <= k < q }
+    requires { ndim u p q }
+    ensures { sdim u p k * value_at u k * sdim u (k+1) q = sdim u p q }
+    = assert { islice u p k ++ islice u k q = islice u p q }
+  (*qed*)
+  
+
+  let rec lemma vdim_zero (u:iarray) (n:int)
+    requires { ndim u 0 n }
+    ensures { (exists i. 0 <= i < n /\ value_at u i = 0) <-> vdim u n = 0 }
+    variant { n }
+    = if n > 0 then
+        if value_at u (n-1) = 0 then
+          ()
+        else
+          vdim_zero u (n-1)
+
+  let null_dimension_check (u : iarray) (n : int32) : bool =
+    requires { ndimension u n }
+    ensures { result = (exists i. 0 <= i < n /\ value_at u i = 0) }
+    ensures { result -> vdim u n = 0 }
+    ensures { not result = (forall i. 0 <= i < n -> value_at u i <> 0) }
+    ensures { not result -> vdim u n > 0 }
+    (*proof*)
+    let ref is_null_dim = false in
+    for i = 0 to n - 1 do
+    invariant {
+      (is_null_dim = false -> forall k. 0 <= k < i -> value_at u k <> 0) /\
+      (is_null_dim = true -> exists j. 0 <= j < i /\ value_at u j = 0)
+    }
+      if u[i] = 0 then
+        is_null_dim <- true
+    done ;
+    is_null_dim
+
+  let cdim_size (u : iarray) (n : int32): int32 =
+    ensures { result = vdim u n }
+    (*proof*)
+    requires { ndimension u n }
+    (*qed*)
+    if null_dimension_check u n then 
+      0
+    else  
+      begin
+        let ref p = 1 in
+        for i = 0 to n - 1 do
+          (*proof*)
+          invariant { p = vdim u i }
+          ghost
+            begin
+              ensures { 1 <= p * u[i] <= max_int32 }
+              let ghost dl = pure { sdim u 0 i } in
+              let ghost di = Int32.to_int u[i] in
+              let ghost dr = pure { sdim u (i+1) n } in
+              let ghost dn = pure { sdim u 0 n } in
+              sdim_split u 0 (Int32.to_int i) (Int32.to_int n) ;
+              mult_bound (dl * di) dr dn ;
+            end ;
+          (*qed*)
+          p <- p * u[i] ;
+        done ; p
+      end
+
+
+  let cdim_create_1 (n : int32) : iarray =
+    requires { 0 < n }
+    ensures { is_not_null result -> vdim result 1 = n }
+    (*proof*)
+    ensures { is_not_null result -> ndimension result 1 }
+    ensures { is_not_null result -> value_at result 0 = n }
+    (*qed*)
+    let cd = malloc 1 in
+    if is_not_null cd then cd[0] <- n ; cd
+
+  let cdim_create_2 (p q : int32) : iarray =
+    requires { 0 < p /\ 0 < q /\ p * q <= max_int32 }
+    ensures { is_not_null result -> vdim result 2 = p * q }
+    (*proof*)
+    ensures { is_not_null result -> ndimension result 2 }
+    ensures { is_not_null result -> value_at result 0 = p }
+    ensures { is_not_null result -> value_at result 1 = q }
+    (*qed*)
+    let cd = malloc 2 in
+    if is_not_null cd then (cd[0] <- p ; cd[1] <- q) ; cd
+  (*End New*)
+
+  
+  (** ## Coordinates *)
+
+    let coffset (ks : iarray) (ds : iarray) (n : int32) : int32 =
+      (*proof*)
+      requires { 0 <= n }
+      requires { valid_range ks 0 n }
+      requires { dimension ds n }
+      ensures { 0 <= result -> valid (ivector ks n) (ivector ds n) }
+      ensures { 0 <= result -> result = offset (ivector ks n) (ivector ds n) }
+      (*qed*)
+      begin
+        let ref p = 0 in
+        for i = 0 to n - 1 do
+          (*proof*)
+          invariant { valid (ivector ks i) (ivector ds i) }
+          invariant { p = offset (ivector ks i) (ivector ds i) }
+          (*qed*)
+          let d = ds[i] in
+          let k = ks[i] in
+          if 0 <= k && k < d then
+            begin
+              (*proof*)
+              assert { p * d + k = offset (ivector ks (i+1)) (ivector ds (i+1)) } ;
+              ghost
+                begin
+                  ensures { Int32.in_bounds (p * d) }
+                  ensures { Int32.in_bounds (p * d + k) }
+                  let ghost dl = pure { sdim ds 0 i } in
+                  let ghost di = Int32.to_int ds[i] in
+                  let ghost dr = pure { sdim ds (i+1) n } in
+                  let ghost dn = pure { sdim ds 0 n } in
+                  sdim_split ds 0 (Int32.to_int i) (Int32.to_int n) ;
+                  mult_bound (dl * di) dr dn ;
+                end ;
+              (*qed*)
+              p <- p * d + k ;
+            end
+          else return (-1)
+        done ; p
+      end
+
+end

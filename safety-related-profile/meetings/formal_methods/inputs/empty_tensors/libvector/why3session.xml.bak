@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="libvector.mlw"/>
+<theory name="CIndex" proved="true">
+ <goal name="positive_pdim&#39;vc" expl="VC for positive_pdim" proved="true">
+ <proof prover="0"><result status="valid" time="0.039399" steps="1198"/></proof>
+ </goal>
+ <goal name="non_negative_ndim&#39;vc" expl="VC for non_negative_ndim" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="non_negative_ndim&#39;vc.0" expl="variant decrease" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_ndim&#39;vc.0.0" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.000001" steps="55897"/></proof>
+   </goal>
+   <goal name="non_negative_ndim&#39;vc.0.1" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.027026" steps="4725"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="non_negative_ndim&#39;vc.1" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_ndim&#39;vc.1.0" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.024664" steps="760"/></proof>
+   </goal>
+   <goal name="non_negative_ndim&#39;vc.1.1" expl="postcondition" proved="true">
+   <proof prover="0"><result status="valid" time="0.032502" steps="1712"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="sdim_split&#39;vc" expl="VC for sdim_split" proved="true">
+ <proof prover="0"><result status="valid" time="0.218965" steps="11510"/></proof>
+ </goal>
+ <goal name="vdim_zero&#39;vc" expl="VC for vdim_zero" proved="true">
+ <proof prover="0"><result status="valid" time="0.292236" steps="25754"/></proof>
+ </goal>
+ <goal name="null_dimension_check&#39;vc" expl="VC for null_dimension_check" proved="true">
+ <proof prover="2"><result status="valid" time="0.043676" steps="349227"/></proof>
+ </goal>
+ <goal name="cdim_size&#39;vc" expl="VC for cdim_size" proved="true">
+ <proof prover="0"><result status="valid" time="1.159602" steps="118634"/></proof>
+ </goal>
+ <goal name="cdim_create_1&#39;vc" expl="VC for cdim_create_1" proved="true">
+ <proof prover="0"><result status="valid" time="0.113463" steps="12595"/></proof>
+ </goal>
+ <goal name="cdim_create_2&#39;vc" expl="VC for cdim_create_2" proved="true">
+ <proof prover="0"><result status="valid" time="1.060415" steps="115239"/></proof>
+ </goal>
+ <goal name="coffset&#39;vc" expl="VC for coffset" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="104719"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="3984889"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="coffset&#39;vc.0" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.013411" steps="63532"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.1" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.011884" steps="67698"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.008910" steps="68064"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.049628" steps="12149"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.031818" steps="9471"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.5" expl="assertion" proved="true">
+  <proof prover="0"><result status="valid" time="0.725124" steps="52880"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.050391" steps="13521"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.010731" steps="65219"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.007816" steps="74511"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.9" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.052993" steps="4924"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.123055" steps="15453"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.11" expl="postcondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="157810"/></proof>
+  <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="2589981"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="coffset&#39;vc.11.0" expl="postcondition" proved="true">
+   <proof prover="0" timelimit="5" memlimit="2000"><result status="valid" time="2.127735" steps="292991"/></proof>
+   </goal>
+   <goal name="coffset&#39;vc.11.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.005464" steps="5652"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="coffset&#39;vc.12" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.000001" steps="5400"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.13" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.022010" steps="70872"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.14" expl="loop invariant preservation" proved="true">
+  <proof prover="0"><result status="valid" time="0.825160" steps="95767"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.15" expl="loop invariant preservation" proved="true">
+  <proof prover="2"><result status="valid" time="0.867022" steps="2575749"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.16" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003821" steps="5365"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.17" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004549" steps="5388"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.18" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.014886" steps="64845"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.19" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.012644" steps="67481"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.20" expl="out of loop bounds" proved="true">
+  <proof prover="2"><result status="valid" time="0.018401" steps="63179"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

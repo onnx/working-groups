@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="libtensor.mlw"/>
+<theory name="CTensor" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="tensor&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.011242" steps="64592"/></proof>
+  </goal>
+  <goal name="tensor&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.013698" steps="95801"/></proof>
+  </goal>
+  <goal name="tensor&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004860" steps="6104"/></proof>
+  </goal>
+  <goal name="tensor&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004931" steps="6117"/></proof>
+  </goal>
+  <goal name="tensor&#39;vc.4" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.000001" steps="6126"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="tensorb&#39;vc" expl="VC for tensorb" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="tensorb&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.013136" steps="64592"/></proof>
+  </goal>
+  <goal name="tensorb&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.017449" steps="98004"/></proof>
+  </goal>
+  <goal name="tensorb&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003524" steps="6152"/></proof>
+  </goal>
+  <goal name="tensorb&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.005031" steps="6165"/></proof>
+  </goal>
+  <goal name="tensorb&#39;vc.4" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004759" steps="6172"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_create&#39;vc" expl="VC for ctensor_create" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_create&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003393" steps="4981"/></proof>
+  </goal>
+  <goal name="ctensor_create&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003701" steps="62031"/></proof>
+  </goal>
+  <goal name="ctensor_create&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.008705" steps="65372"/></proof>
+  </goal>
+  <goal name="ctensor_create&#39;vc.3" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_create&#39;vc.3.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.011656" steps="74214"/></proof>
+   </goal>
+   <goal name="ctensor_create&#39;vc.3.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.011642" steps="81454"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_create&#39;vc.4" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_create&#39;vc.4.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.017232" steps="74308"/></proof>
+   </goal>
+   <goal name="ctensor_create&#39;vc.4.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.004914" steps="5891"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_clear&#39;vc" expl="VC for ctensor_clear" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_clear&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.008337" steps="62774"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.013484" steps="63929"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.005806" steps="5766"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.015192" steps="103669"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.4" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_clear&#39;vc.4.0" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.072164" steps="13410"/></proof>
+   </goal>
+   <goal name="ctensor_clear&#39;vc.4.1" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.063018" steps="13408"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.5" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.077562" steps="12200"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.6" expl="assertion" proved="true">
+  <proof prover="0"><result status="valid" time="0.046214" steps="587"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.026201" steps="131305"/></proof>
+  </goal>
+  <goal name="ctensor_clear&#39;vc.8" expl="out of loop bounds" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_clear&#39;vc.8.0" expl="assertion" proved="true">
+   <proof prover="2"><result status="valid" time="0.020715" steps="108479"/></proof>
+   </goal>
+   <goal name="ctensor_clear&#39;vc.8.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.012113" steps="110087"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_reset&#39;vc" expl="VC for ctensor_reset" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_reset&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.007488" steps="62918"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.012158" steps="64150"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.003783" steps="5762"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.019413" steps="79462"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.4" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_reset&#39;vc.4.0" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.010666" steps="86766"/></proof>
+   </goal>
+   <goal name="ctensor_reset&#39;vc.4.1" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.016036" steps="86948"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.5" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.065936" steps="11835"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.6" expl="assertion" proved="true">
+  <proof prover="0"><result status="valid" time="0.049203" steps="578"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.036094" steps="131803"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.8" expl="out of loop bounds" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_reset&#39;vc.8.0" expl="assertion" proved="true">
+   <proof prover="2"><result status="valid" time="0.017238" steps="108960"/></proof>
+   </goal>
+   <goal name="ctensor_reset&#39;vc.8.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.017315" steps="110637"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_where&#39;vc" expl="VC for ctensor_where" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_where&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.266925" steps="725985"/></proof>
+  </goal>
+  <goal name="ctensor_where&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.034066" steps="143132"/></proof>
+  </goal>
+  <goal name="ctensor_where&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.007098" steps="6942"/></proof>
+  </goal>
+  <goal name="ctensor_where&#39;vc.3" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.3.0" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.110514" steps="20999"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.3.1" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.119569" steps="21008"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.4" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.4.0" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.119198" steps="21534"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.4.1" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.123912" steps="21537"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.5" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.5.0" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.123001" steps="21510"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.5.1" expl="precondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.109254" steps="21507"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.6" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.6.0" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.025033" steps="151072"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.6.1" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.024465" steps="151017"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.7" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.7.0" expl="precondition" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="ctensor_where&#39;vc.7.0.0" expl="precondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.094587" steps="21349"/></proof>
+    </goal>
+    <goal name="ctensor_where&#39;vc.7.0.1" expl="precondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.104817" steps="21331"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="ctensor_where&#39;vc.7.1" expl="precondition" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="ctensor_where&#39;vc.7.1.0" expl="precondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.104492" steps="21359"/></proof>
+    </goal>
+    <goal name="ctensor_where&#39;vc.7.1.1" expl="precondition" proved="true">
+    <proof prover="1"><result status="valid" time="0.098179" steps="21341"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.8" expl="loop invariant preservation" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.8.0" expl="loop invariant preservation" proved="true">
+   <proof prover="1"><result status="valid" time="0.061088" steps="17274"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.8.1" expl="loop invariant preservation" proved="true">
+   <proof prover="1"><result status="valid" time="0.053823" steps="17267"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_where&#39;vc.9" expl="assertion" proved="true">
+  <proof prover="0"><result status="valid" time="0.138992" steps="2333"/></proof>
+  </goal>
+  <goal name="ctensor_where&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.040472" steps="185486"/></proof>
+  </goal>
+  <goal name="ctensor_where&#39;vc.11" expl="out of loop bounds" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="ctensor_where&#39;vc.11.0" expl="assertion" proved="true">
+   <proof prover="2"><result status="valid" time="0.037380" steps="150832"/></proof>
+   </goal>
+   <goal name="ctensor_where&#39;vc.11.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.034401" steps="152038"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

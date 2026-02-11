@@ -1,0 +1,224 @@
+module CInt32Tensor
+
+  use mach.int.Int32
+  use int.Int
+  use list.List
+  use tensor.Tensor
+  
+  constant zero : int32 = 0
+  clone export generictensor.GenericTensor with
+      type data_type = int32,
+      type abstract_data_type = int,
+      function to_abstract = Int32.to_int
+
+  type ctensorint32 = ctensor
+    
+end
+
+module CInt64Tensor
+
+  use mach.int.Int64
+  use int.Int
+  use list.List
+  use tensor.Tensor
+  
+  constant zero : int64 = 0
+  clone export generictensor.GenericTensor with
+      type data_type = int64,
+      type abstract_data_type = int,
+      function to_abstract = Int64.to_int
+
+  type ctensorint64 = ctensor
+  
+end
+
+module CBooleanTensor
+
+  use int.Int
+  use list.List
+  use tensor.Tensor
+  
+  function id (b : bool) : bool = b
+  
+  constant zero : bool = false
+  clone export generictensor.GenericTensor with
+      type data_type = bool,
+      type abstract_data_type = bool,
+      function to_abstract = id
+
+  type ctensorbool = ctensor
+  
+end
+
+
+
+module CFloatTensor
+  
+  use std.Cfloat
+  use real.Real
+  use std.Clib
+  use list.List
+  use tensor.Tensor
+
+  constant zero : float = Cfloat.zero
+  clone export generictensor.GenericTensor with
+      type data_type = float,
+      type abstract_data_type = real,
+      function to_abstract = Cfloat.to_real
+
+  type ctensorfloat = ctensor
+
+  (*Remove this?*)
+  function tensor_valueb (t : ctensorfloat) : list int -> bool =
+    fun k -> Real.(tensor_value_at k t Cfloat.zero > 0.0)
+
+  let ghost function tensorb (t : ctensorfloat) : tensor bool
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_valueb t }
+    ensures { result.background = false }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_valueb t } ;
+      background = false ;
+    }
+
+end
+
+
+module CWhere1
+
+  use CFloatTensor
+  use CBooleanTensor
+  use libvector.CIndex
+  use mach.int.Int32
+  use std.Cfloat
+  use std.Clib
+  use int.Int
+  use tensor.OPWhere
+  use tensor.Tensor
+
+  
+  let ctensor_where (cond: ctensorbool) (a b r : ctensorfloat) =
+    (*proof*)
+    requires { CBooleanTensor.valid_tensor cond }
+    requires { CFloatTensor.valid_tensor a }
+    requires { CFloatTensor.valid_tensor b }
+    requires { CFloatTensor.valid_tensor r }
+    requires { CFloatTensor.tensor a Cfloat.zero ~= CFloatTensor.tensor b Cfloat.zero ~= CFloatTensor.tensor r Cfloat.zero }
+    (*qed*)
+    requires { CBooleanTensor.tensor cond CBooleanTensor.zero ~ CFloatTensor.tensor a Cfloat.zero ~ CFloatTensor.tensor b Cfloat.zero }
+    ensures { CFloatTensor.tensor r Cfloat.zero = opwhere (CBooleanTensor.tensor cond CBooleanTensor.zero) 
+                                                          (CFloatTensor.tensor a Cfloat.zero) (CFloatTensor.tensor b Cfloat.zero) }
+    let m = cdim_size r.CFloatTensor.t_dims r.CFloatTensor.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant {
+        forall k. 0 <= k < i ->
+          value_at r.CFloatTensor.t_data k =
+            if  value_at cond.CBooleanTensor.t_data k
+            then a.CFloatTensor.t_data[k] else b.CFloatTensor.t_data[k]
+      }
+      (*qed*)
+      r.CFloatTensor.t_data[i] <-
+        if cond.CBooleanTensor.t_data[i] then a.CFloatTensor.t_data[i] else b.CFloatTensor.t_data[i]
+    done
+    (*proof*)
+    ; assert { CFloatTensor.tensor r Cfloat.zero == opwhere (CBooleanTensor.tensor cond CBooleanTensor.zero) (CFloatTensor.tensor a Cfloat.zero) 
+                                                            (CFloatTensor.tensor b Cfloat.zero) }
+    (*qed*)
+
+
+end
+
+
+module CWhere
+
+  use CFloatTensor
+  use libvector.CIndex
+  use mach.int.Int32
+  use std.Cfloat
+  use std.Clib
+  use int.Int
+  use tensor.OPWhere
+  use tensor.Tensor
+
+  
+  let ctensor_where (cond a b r : ctensorfloat) =
+    (*proof*)
+    requires { valid_tensor cond }
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a Cfloat.zero ~= tensor b Cfloat.zero ~= tensor r Cfloat.zero }
+    (*qed*)
+    requires { tensorb cond ~ tensor a Cfloat.zero ~ tensor b Cfloat.zero }
+    ensures { tensor r Cfloat.zero = opwhere (tensorb cond) (tensor a Cfloat.zero) (tensor b Cfloat.zero) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant {
+        forall k. 0 <= k < i ->
+          value_at r.t_data k =
+            if Real.(0.0 < value_at cond.t_data k)
+            then a.t_data[k] else b.t_data[k]
+      }
+      (*qed*)
+      r.t_data[i] <-
+        if (f32 0.0) .< cond.t_data[i] then a.t_data[i] else b.t_data[i]
+    done
+    (*proof*)
+    ; assert { tensor r Cfloat.zero == opwhere (tensorb cond) (tensor a Cfloat.zero) (tensor b Cfloat.zero) }
+    (*qed*)
+
+
+end
+
+
+
+
+module Test
+
+    (* =============================== *)
+    (* Demonstration Module - Important *)
+    (* This module is not intended for proofs. *)
+    (* Its purpose is to illustrate best practices when working with multiple cloned datatypes from the generic tensor module. *)
+    (* In particular, it shows how to properly prefix variables and functions to avoid ambiguity 
+       and ensure clarity when using two or more different tensor types in the same context. *)
+    (* =============================== *)
+
+    use generictensor.GenericTensor
+    use CInt32Tensor
+    use CInt64Tensor
+    use tensor.Tensor
+    use libvector.CIndex
+    use mach.int.Int32
+    use mach.int.Int64
+    use std.Clib
+    use int.Int
+
+    let ctensor_where (cond : ctensorint32) (a b r : ctensorint64) (b64 : int64) (b32 : int32) = 
+        requires { CInt32Tensor.valid_tensor cond }
+        requires { CInt64Tensor.valid_tensor a }
+        requires { CInt64Tensor.valid_tensor b }
+        requires { CInt64Tensor.valid_tensor r }
+        requires { CInt64Tensor.tensor a b64 ~= CInt64Tensor.tensor b b64 ~= CInt64Tensor.tensor r b64 }
+        requires { CInt32Tensor.tensor cond b32 ~ CInt64Tensor.tensor a b64 ~ CInt64Tensor.tensor b b64 }
+        let m = cdim_size (CInt32Tensor.t_dims cond) (CInt32Tensor.t_rank cond) in
+        for i = 0 to m-1 do
+            (*proof*)
+                invariant { forall k. 0 <= k < i ->
+                    value_at (CInt64Tensor.t_data r) k =
+                    if 0 < value_at (CInt32Tensor.t_data cond) k then
+                        value_at (CInt64Tensor.t_data a) k
+                    else
+                        value_at (CInt64Tensor.t_data b) k
+                }
+            (*qed*)
+            (CInt64Tensor.t_data r)[i] <- if 0 < (CInt32Tensor.t_data cond)[i] then (CInt64Tensor.t_data a)[i] else (CInt64Tensor.t_data b)[i]
+        done;
+
+
+end
