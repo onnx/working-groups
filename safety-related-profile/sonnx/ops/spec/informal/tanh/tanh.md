@@ -76,7 +76,7 @@ Operator **Tanh** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -186,7 +186,7 @@ Operator **Tanh** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 

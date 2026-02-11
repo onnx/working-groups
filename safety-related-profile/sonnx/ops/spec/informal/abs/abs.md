@@ -64,7 +64,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -75,7 +75,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{Y}$: real
 
-*Absolute value of tensor $X$*
+Absolute value of tensor $X$
 
 #### Constraints
 
@@ -141,7 +141,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{X}$: float
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -152,7 +152,7 @@ Operator **Abs** has no attribute.
 
 ### $\text{Y}$: float
 
-*Absolute value of tensor $X$*
+Absolute value of tensor $X$
 
 #### Constraints
 

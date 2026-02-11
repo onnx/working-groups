@@ -78,7 +78,7 @@ Operator **Sigmoid** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -89,7 +89,7 @@ Operator **Sigmoid** has no attribute.
 
 ### $\text{Y}$: real
 
-*Sigmoid of tensor $X$.*
+Sigmoid of tensor $X$.
 
 #### Constraints
 
@@ -188,7 +188,7 @@ Operator **Sigmoid** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -201,7 +201,7 @@ Operator **Sigmoid** has no attribute.
 
 ### $\text{Y}$: floating-point tensor
 
-*Sigmoid of tensor $X$.*
+Sigmoid of tensor $X$.
 
 #### Constraints
 

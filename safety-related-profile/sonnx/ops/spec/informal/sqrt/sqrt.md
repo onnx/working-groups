@@ -82,7 +82,7 @@ Operator **Sqrt** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -95,7 +95,7 @@ Operator **Sqrt** has no attribute.
 
 ### $\text{Y}$: real
 
-*Square root of tensor $X$.*
+Square root of tensor $X$.
 
 #### Constraints
 
@@ -196,7 +196,7 @@ Operator **Sqrt** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -209,7 +209,7 @@ Operator **Sqrt** has no attribute.
 
 ### $\text{Y}$: floating-point tensor
 
-*Square root of tensor $X$ (with IEEE 754 handling of zero, negative, and infinite inputs).*
+Square root of tensor $X$ (with IEEE 754 handling of zero, negative, and infinite inputs).
 
 #### Constraints
 

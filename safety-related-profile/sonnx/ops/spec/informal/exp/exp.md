@@ -76,7 +76,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -87,7 +87,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{Y}$: real
 
-*Exponential of tensor $X$.*
+Exponential of tensor $X$.
 
 #### Constraints
 
@@ -186,7 +186,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-*Input tensor.*
+Input tensor.
 
 *FP16*: the input range for non +Inf values of `Y` is defined by $[-65504.0, \ln(65504.0)] = [-65504.0, 11.09375]$.
 
@@ -206,7 +206,7 @@ Operator **Exp** has no attribute.
 
 ### $\text{Y}$: floating-point tensor
 
-*Exponential of tensor $X$.*
+Exponential of tensor $X$.
 
 #### Constraints
 

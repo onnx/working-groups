@@ -83,7 +83,7 @@ Operator **Log** has no attribute.
 
 ### $\text{X}$: real
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -96,7 +96,7 @@ Operator **Log** has no attribute.
 
 ### $\text{Y}$: real
 
-*Natural logarithm of tensor $X$.*
+Natural logarithm of tensor $X$.
 
 #### Constraints
 
@@ -200,7 +200,7 @@ Operator **Log** has no attribute.
 
 ### $\text{X}$: floating-point tensor
 
-*Input tensor.*
+Input tensor.
 
 #### Constraints
 
@@ -213,7 +213,7 @@ Operator **Log** has no attribute.
 
 ### $\text{Y}$: floating-point tensor
 
-*Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inputs).*
+Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inputs).
 
 #### Constraints
 

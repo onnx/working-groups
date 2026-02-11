@@ -91,7 +91,7 @@ Operator **Less** has no attribute.
 
 ### $\text{A}$: real tensor
 
-*First input tensor to be compared.*
+First input tensor to be compared.
 
 #### Constraints
 
@@ -100,7 +100,7 @@ Operator **Less** has no attribute.
  
 ### $\text{B}$: real tensor
 
-*Second input tensor to be compared with $A$.*
+Second input tensor to be compared with $A$.
 
 #### Constraints
 
@@ -227,7 +227,7 @@ Operator **Less** has no attribute.
 
 ### $\text{A}$: floating-point tensor
 
-*First input tensor to be compared.*
+First input tensor to be compared.
 
 #### Constraints
 
@@ -239,7 +239,7 @@ Operator **Less** has no attribute.
 
 ### $\text{B}$: floating-point tensor
 
-*Second input tensor to be compared with $A$.*
+Second input tensor to be compared with $A$.
 
 #### Constraints
 - `[C1]` Shape consistency
@@ -348,7 +348,7 @@ Operator **Less** has no attribute.
 
 ### $\text{A}$: integer tensor
 
-*First input tensor to be compared.*
+First input tensor to be compared.
 
 #### Constraints
 
@@ -359,7 +359,7 @@ Operator **Less** has no attribute.
 
 ### $\text{B}$: integer tensor
 
-*Second input tensor to be compared with $A$.*
+Second input tensor to be compared with $A$.
 
 #### Constraints
 
@@ -372,7 +372,7 @@ Operator **Less** has no attribute.
 
 ### $\text{C}$: bool tensor
 
-*Output tensor formed by the element-wise comparison of $A$ and $B$.*
+Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 #### Constraints
 
