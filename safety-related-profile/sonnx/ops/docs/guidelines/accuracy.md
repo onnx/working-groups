@@ -127,7 +127,7 @@ since their algorithms combine many atomic operations on $\mathbb{R}$.
         C[i][j] = 0;
         for (int k = 0; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
-```
+    ```
 
 2. Progressive decoration of the algorithm starting from inner loop
 
