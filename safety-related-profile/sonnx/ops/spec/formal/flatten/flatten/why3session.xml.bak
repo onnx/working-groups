@@ -2,50 +2,107 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
-<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="4000"/>
 <prover id="1" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
 <prover id="2" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
-<file format="whyml" proved="true">
+<file format="whyml">
 <path name=".."/><path name="flatten.mlw"/>
 <theory name="OPFlatten" proved="true">
- <goal name="my_nth_non_negative&#39;vc" expl="VC for my_nth_non_negative" proved="true">
- <proof prover="0"><result status="valid" time="0.049119" steps="1284"/></proof>
+ <goal name="my_nth&#39;vc" expl="VC for my_nth" proved="true">
+ <proof prover="1"><result status="valid" time="0.012308" steps="27051"/></proof>
  </goal>
- <goal name="test&#39;vc" expl="VC for test" proved="true">
- <proof prover="1"><result status="valid" time="0.012308" steps="35683"/></proof>
+ <goal name="my_nth_non_negative&#39;vc" expl="VC for my_nth_non_negative" proved="true">
+ <proof prover="1"><result status="valid" time="0.007732" steps="29656"/></proof>
  </goal>
  <goal name="take&#39;vc" expl="VC for take" proved="true">
- <proof prover="1"><result status="valid" time="0.147348" steps="551909"/></proof>
+ <proof prover="1"><result status="valid" time="0.924759" steps="8826511"/></proof>
  </goal>
  <goal name="drop&#39;vc" expl="VC for drop" proved="true">
- <proof prover="1"><result status="valid" time="0.020388" steps="35272"/></proof>
+ <proof prover="1"><result status="valid" time="0.020388" steps="30502"/></proof>
  </goal>
  <goal name="concatenation_take_drop&#39;vc" expl="VC for concatenation_take_drop" proved="true">
- <proof prover="1"><result status="valid" time="0.061467" steps="202088"/></proof>
- </goal>
- <goal name="calculate_output_dims&#39;vc" expl="VC for calculate_output_dims" proved="true">
- <proof prover="2"><result status="valid" time="0.444505" steps="76816"/></proof>
- </goal>
- <goal name="productRangeGo&#39;vc" expl="VC for productRangeGo" proved="true">
- <proof prover="1"><result status="valid" time="0.008880" steps="40210"/></proof>
+ <proof prover="1"><result status="valid" time="0.061467" steps="197521"/></proof>
  </goal>
  <goal name="append_preserves_non_negative&#39;vc" expl="VC for append_preserves_non_negative" proved="true">
- <proof prover="1"><result status="valid" time="0.012583" steps="53544"/></proof>
+ <proof prover="1"><result status="valid" time="0.012583" steps="40003"/></proof>
+ </goal>
+ <goal name="calculate_output_dims&#39;vc" expl="VC for calculate_output_dims" proved="true">
+ <proof prover="2"><result status="valid" time="0.214410" steps="39576"/></proof>
+ </goal>
+ <goal name="productRangeGo&#39;vc" expl="VC for productRangeGo" proved="true">
+ <proof prover="1"><result status="valid" time="0.008880" steps="35844"/></proof>
  </goal>
  <goal name="div_non_negative&#39;vc" expl="VC for div_non_negative" proved="true">
- <proof prover="1"><result status="valid" time="0.004134" steps="34784"/></proof>
+ <proof prover="1"><result status="valid" time="0.004134" steps="31251"/></proof>
  </goal>
- <goal name="calculateAux&#39;vc" expl="VC for calculateAux" proved="true">
- <proof prover="0"><result status="valid" time="0.023802" steps="1669"/></proof>
+ <goal name="calculateXAux&#39;vc" expl="VC for calculateXAux" proved="true">
+ <proof prover="0" memlimit="1000"><result status="valid" time="0.023802" steps="1666"/></proof>
  </goal>
  <goal name="calculateX&#39;vc" expl="VC for calculateX" proved="true">
- <proof prover="2"><result status="valid" time="0.047401" steps="15438"/></proof>
+ <proof prover="2"><result status="valid" time="0.047401" steps="14019"/></proof>
  </goal>
  <goal name="dflatten&#39;vc" expl="VC for dflatten" proved="true">
- <proof prover="1"><result status="valid" time="0.014852" steps="53541"/></proof>
+ <proof prover="1"><result status="valid" time="0.014852" steps="48118"/></proof>
  </goal>
  <goal name="flatten&#39;vc" expl="VC for flatten" proved="true">
- <proof prover="1"><result status="valid" time="0.084276" steps="384425"/></proof>
+ <proof prover="1"><result status="valid" time="0.059266" steps="332132"/></proof>
+ </goal>
+</theory>
+<theory name="COPFlatten">
+ <goal name="cflatten&#39;vc" expl="VC for cflatten">
+ <transf name="split_vc" >
+  <goal name="cflatten&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.049670" steps="167340"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="1"><result status="valid" time="0.023061" steps="157161"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.007349" steps="8923"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.129396" steps="25831"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.040765" steps="175818"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.148440" steps="26073"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.6" expl="loop invariant preservation" proved="true">
+  <proof prover="2"><result status="valid" time="0.120591" steps="22624"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.7" expl="assertion">
+  <transf name="split_vc" >
+   <goal name="cflatten&#39;vc.7.0" expl="assertion">
+   <transf name="inline_goal" >
+    <goal name="cflatten&#39;vc.7.0.0" expl="assertion">
+    <transf name="split_all_full" >
+     <goal name="cflatten&#39;vc.7.0.0.0" expl="VC for cflatten" proved="true">
+     <proof prover="2"><result status="valid" time="0.199565" steps="29774"/></proof>
+     </goal>
+     <goal name="cflatten&#39;vc.7.0.0.1" expl="VC for cflatten">
+     <transf name="split_vc" >
+      <goal name="cflatten&#39;vc.7.0.0.1.0" expl="VC for cflatten">
+      <proof prover="0" timelimit="30"><result status="timeout" time="30.000000" steps="1409973"/></proof>
+      <proof prover="1" timelimit="30" memlimit="4000"><result status="timeout" time="30.000000" steps="20603384"/></proof>
+      <proof prover="2" timelimit="30" memlimit="4000"><result status="timeout" time="30.000000"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="cflatten&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.007920" steps="204636"/></proof>
+  </goal>
+  <goal name="cflatten&#39;vc.9" expl="out of loop bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.036691" steps="174619"/></proof>
+  </goal>
+ </transf>
  </goal>
 </theory>
 </file>

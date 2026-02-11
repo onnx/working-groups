@@ -14,26 +14,44 @@ module OPFlatten
     use int.EuclideanDivision
     use list.Append
     
-
-    predicate non_negative (x_dims: list int) =
-        match x_dims with
+    (*
+        Predicate to check if all values in a list are non-negative.
+    *)
+    predicate non_negative (l: list int) =
+        match l with
         | Nil -> true
         | Cons h t -> 0 <= h /\ non_negative t
         end
 
-
-    function my_nth (l: list int) (i: int): int =
-        match nth i l with
-        | Some d -> d
-        | None -> -1
+    (*
+        Auxiliary function to return the element at a given index from a list.
+        Given:
+        - l: input list
+        - n: index (0 <= n < length l)
+        Returns the element at position n in l (0-based indexing).
+        Used to access a specific element in a list by its index.
+    *)
+    let rec ghost function my_nth (n: int) (l:list int) : int
+    requires { n >= 0 /\ n < length(l) }
+    requires { length(l) > 0 }
+    variant { length(l) }
+    =
+        match l with
+        | Cons h t ->
+            if n = 0 then
+                h
+            else
+                my_nth (n-1) t
         end
 
-
+    (*
+        Lemma to prove that if a list is non-negative, then any element accessed by my_nth is also non-negative.
+    *)
     let rec lemma my_nth_non_negative (lst: list int) (i: int)
-        requires { non_negative lst }
-        requires { 0 <= i < length lst }
-        ensures { my_nth lst i >= 0 }
-        variant { lst }
+    requires { non_negative lst }
+    requires { 0 <= i < length lst }
+    ensures { my_nth i lst >= 0 }
+    variant { lst }
     =
         match lst with
         | Nil -> ()
@@ -42,18 +60,14 @@ module OPFlatten
             else my_nth_non_negative t (i - 1)
         end
 
-
-    let rec ghost function test (l: list int) (i:int): int
-    requires { non_negative (l) }
-    requires { 0 <=i < length (l) }
-    ensures { result >= 0 }
-    =
-        match nth i l with
-        | Some d -> d
-        | None -> -1
-        end
-
-
+    (*
+        Auxiliary function to take the first n elements from a list.
+        Given:
+        - lst: input list
+        - n: number of elements to take (0 <= n <= length lst)
+        Returns a list with the first n elements of lst, i.e., lst[0:n], n-indexed element is not included.
+        Used to split a list into two parts, extracting the prefix of length n.
+    *)
     let rec ghost function take (lst: list int) (n: int): list int
         requires { positive lst }
         requires { 0 <= n <= length (lst) }
@@ -70,6 +84,14 @@ module OPFlatten
         end
 
 
+    (*
+        Auxiliary function to drop the first n elements from a list.
+        Given:
+        - lst: input list
+        - n: number of elements to drop (0 <= n <= length lst)
+        Returns a list with the first n elements removed, i.e., lst[n:].
+        Used to split a list into two parts, discarding the prefix of length n.
+    *)
     let rec ghost function drop (lst: list int) (n: int): list int
         requires { positive lst }
         requires { 0 <= n <= length (lst) }
@@ -85,7 +107,9 @@ module OPFlatten
                 lst
         end
 
-
+    (*
+        Lemma to prove that concatenating the result of take and drop on a list, lst, with the same n, results in the original list, lst.
+    *)
     let rec lemma concatenation_take_drop (lst: list int) (n: int)
         requires { positive lst }
         requires { 0 <= n <= length (lst) }
@@ -101,9 +125,32 @@ module OPFlatten
                 ()
         end
 
+    (*
+        Lemma to prove that if two lists, l1 and l2, are non-negative, then their concatenation is also non-negative.
+    *)
+    let rec lemma append_preserves_non_negative (l1 l2: list int)
+        requires { non_negative l1 }
+        requires { non_negative l2 }
+        ensures { non_negative (l1 ++ l2) }
+        variant { l1 }
+    =
+        match l1 with
+        | Nil -> ()
+        | Cons _ t -> append_preserves_non_negative t l2
+        end
+
+    (*
+        Function to compute the output dimensions after flattening a tensor along a given axis.
+        Given:
+        - input_dims: list of input tensor dimensions (shape)
+        - axis: axis along which to flatten (axis is normalized to be non-negative)
+        Returns a list with two elements:
+        - The product of dimensions before the axis 
+        - The product of dimensions from the axis onwards
+        Used to determine the shape of the output tensor after flattening.
+    *)
     let ghost function calculate_output_dims (input_dims: list int) (axis: int): list int
     requires { positive input_dims }
-    (* Axis [C1] *)
     requires { 0 <= axis <= length (input_dims) }
     ensures { length (result) = 2 }
     ensures { positive result }
@@ -115,7 +162,15 @@ module OPFlatten
         let second_dim = size second_part in
         Cons first_dim (Cons second_dim Nil)
 
-
+    (*
+        Auxiliary function to compute the product of a range of dimensions in a list.
+        Given:
+        - x_dims: list of dimensions (e.g., shape of a tensor)
+        - start: starting index (inclusive) of the range
+        - end_: ending index (exclusive) of the range
+        Returns the product of x_dims[start] * ... * x_dims[end_-1].
+        Used to compute the size of a subspace of a tensor shape.
+    *)
     let rec ghost function productRangeGo (x_dims: list int) (start: int) (end_: int): int
     requires { positive x_dims }
     requires { 0 <= start <= end_ <= length (x_dims) + start }
@@ -130,41 +185,49 @@ module OPFlatten
             else
                 h * productRangeGo t (start + 1) end_
         end
-    
-    let rec lemma append_preserves_non_negative (l1 l2: list int)
-        requires { non_negative l1 }
-        requires { non_negative l2 }
-        ensures { non_negative (l1 ++ l2) }
-        variant { l1 }
-    =
-        match l1 with
-        | Nil -> ()
-        | Cons _ t -> append_preserves_non_negative t l2
-        end
 
+    (*
+        Lemma to prove that the division of a non-negative integer, a, by a positive integer, b, is also non-negative.
+    *)
     let rec lemma div_non_negative (a b: int)
         requires { a >= 0 }
         requires { b >= 1 }
         ensures { div a b >= 0 }
     = ()
 
-    (*Doesnt need to requires that y_coords is a valid value because we are going to call this functio with valid ks y.shape*)
-    let rec ghost function calculateAux (y_coords : int) (first_part: list int) (x_coords: list int) : list int
+    (*
+        Auxiliary function to compute input tensor coordinates from output coordinates.
+        Given:
+        - y_coords: coords of output tensor
+        - part: remaining input dimensions to process
+        - x_coords: coordinates already computed for earlier dimensions
+        Returns the complete list of coordinates in the input tensor.
+    *)
+    let rec ghost function calculateXAux (y_coords : int) (part: list int) (x_coords: list int) : list int
     requires { y_coords >= 0 }
-    requires { positive first_part }
+    requires { positive part }
     requires { non_negative x_coords }
-    ensures { length (result) = length (x_coords) + length (first_part) }
+    ensures { length (result) = length (x_coords) + length (part) }
     =
-        match first_part with
+        match part with
         | Nil -> x_coords
         | Cons _ t ->
-            let prod = productRangeGo first_part 0 (length first_part) in
+            let prod = productRangeGo part 0 (length part) in
             let coord = div y_coords prod in
             let y_coords_new = y_coords - coord * prod in
-            calculateAux y_coords_new t (x_coords ++ (Cons coord Nil))
+            calculateXAux y_coords_new t (x_coords ++ (Cons coord Nil))
 
         end
 
+    (*
+        Function to compute the input tensor coordinates from output coordinates after flattening.
+        Given:
+        - x_shape: shape of the input tensor (list of dimensions)
+        - y_coords: coordinates in the output (flattened) tensor (length 2)
+        - axis: axis along which flattening occurs (axis is normalized to be non-negative)
+        Returns the corresponding coordinates in the input tensor (length result = length x_shape).
+        Used to map output indices back to input indices for the flatten operation.
+    *)
     let ghost function calculateX (x_shape: list int) (y_coords: list int) (axis: int): list int
     requires { positive x_shape }
     requires { non_negative y_coords }
@@ -174,11 +237,19 @@ module OPFlatten
     =
         let first_part = take x_shape axis in
         let second_part = drop x_shape axis in
-        let a = calculateAux (test y_coords 0) first_part Nil in
-        let b = calculateAux (test y_coords 1) second_part Nil in
+        let a = calculateXAux (my_nth 0 y_coords) first_part Nil in
+        let b = calculateXAux (my_nth 1 y_coords) second_part Nil in
         a ++ b
 
 
+    (*
+        Function to produce the data of the flattened tensor.
+        Given:
+        - x: input tensor
+        - axis: axis along which flattening occurs (axis is normalized to be non-negative)
+        Returns a function that maps output coordinates (in the flattened tensor) to the corresponding value in the input tensor.
+        Used to define the data field of the output tensor after flattening.
+    *)
     let ghost function dflatten (x: tensor 'a) (axis: int): data 'a
     requires { 0 <= axis <= length (x.dims) }
     requires { let y_shape = calculate_output_dims x.dims axis in
@@ -193,7 +264,16 @@ module OPFlatten
                 x.background
 
 
+    (*
+        Main function to flatten a tensor along a given axis.
+        Given:
+        - x: input tensor
+        - axis: axis along which to flatten (can be negative for reverse indexing)
+        Returns a new tensor with two dimensions, where the shape is determined by calculate_output_dims.
+        The data and background fields are set accordingly, using dflatten for the data mapping.
+    *)
     let ghost function flatten (x: tensor 'a) (axis: int): tensor 'a
+    (* Informal Spec Constraint - axis [C2]*)
     requires { -length x.dims <= axis <= length x.dims }
     requires {  let a_normalized =
                     if axis < 0 then
@@ -202,7 +282,11 @@ module OPFlatten
                         axis
                in
                let y_shape = calculate_output_dims x.dims a_normalized in
-               forall ks. valid ks y_shape -> length ks = 2 /\ non_negative ks }
+               forall ks:list int. valid ks y_shape -> (length ks = 2 /\ non_negative ks) }
+
+    ensures { result.background = x.background }
+    ensures { forall ks:list int. valid ks result.dims -> (non_negative ks /\ length ks = 2) }
+    ensures { result.dims = calculate_output_dims x.dims (if axis < 0 then axis + length (x.dims) else axis) }
     =
     let a_normalized =
         if axis < 0 then
@@ -210,6 +294,60 @@ module OPFlatten
         else
             axis
     in
-    { dims = calculate_output_dims x.dims a_normalized; data = dflatten x a_normalized; background = x.background }
+    { dims = calculate_output_dims x.dims a_normalized; data = dflatten x a_normalized ; background = x.background }
+
+end
+
+module COPFlatten
+    use libtensor.CTensor
+    use mach.int.Int32
+    use libvector.CIndex
+    use std.Clib
+    use int.Int
+    use tensor.Tensor
+    use tensor.Range
+    use list.Length
+    use list.List
+    use OPFlatten
+
+
+    let cflatten (x: ctensor) (axis: int32) (y: ctensor) = 
+    (*Information need for tensor X*)
+    requires { x.t_rank = length (tensor x).dims }
+    (*Informal spec constraint X [C1] *)
+    requires { x.t_rank >= axis }
+    (*Informal spec constraint A [C2], second branch redundant*)
+    requires { -x.t_rank <= axis <= x.t_rank }
+    (*Informal spec constraint Y [C1]*)
+    requires { y.t_rank = 2 }
+    requires { let a_normalized = 
+                    if (Int32.to_int axis) < 0 then
+                        (Int32.to_int axis) + length (tensor x).dims
+                    else
+                        (Int32.to_int axis)
+               in
+               let y_shape = calculate_output_dims (tensor x).dims a_normalized in
+               (tensor y).dims = y_shape /\ 
+               (forall ks. valid ks y_shape -> (length ks = 2 /\ non_negative ks))
+           }
+    requires { (tensor y).background = (tensor x).background }
+    (* Valid tensors *)
+    requires { valid_tensor x }
+    requires { valid_tensor y }
+
+    (*The number of elements remains the same*)
+    requires { vdim x.t_dims x.t_rank = vdim y.t_dims y.t_rank }
+
+    ensures { tensor y = flatten (tensor x) (Int32.to_int axis) }
+
+    let m = cdim_size y.t_dims y.t_rank in
+    for i = 0 to m - 1 do 
+        invariant {
+            forall k. 0 <= k < i ->
+                value_at y.t_data k = value_at x.t_data k
+        }
+        y.t_data[i] <- x.t_data[i]
+    done;
+    assert { tensor y == flatten (tensor x) (Int32.to_int axis) }
 
 end
