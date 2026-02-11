@@ -125,9 +125,19 @@ The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+
+
 $$
-Y[i] = \tanh(X[i]) = \frac{e^{X[i]} - e^{-X[i]}}{e^{X[i]} + e^{-X[i]}} = \frac{e^{2X[i]} - 1}{e^{2X[i]} + 1} = \frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}}
+Y[i] = \tanh(X[i]) = 
+\begin{cases} 
+\frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}} \\
+\text{-1.0} & \text{if } X[i]=\text{-inf} \\
+\text{1.0} & \text{if } X[i]=\text{inf} \\
+\text{NaN} & \text{if } X[i]=\text{NaN} 
+\end{cases}
 $$
+
+
 
 The effect of the operator is illustrated on the following examples.
 
