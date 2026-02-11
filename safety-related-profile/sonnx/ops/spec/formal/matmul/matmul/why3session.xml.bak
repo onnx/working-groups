@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="matmul.mlw"/>
+<theory name="OPMatmul" proved="true">
+ <goal name="my_nth&#39;vc" expl="VC for my_nth" proved="true">
+ <proof prover="2"><result status="valid" time="0.017060" steps="24961"/></proof>
+ </goal>
+ <goal name="dot_product&#39;vc" expl="VC for dot_product" proved="true">
+ <proof prover="2"><result status="valid" time="0.000001" steps="1766"/></proof>
+ </goal>
+ <goal name="dmatmul&#39;vc" expl="VC for dmatmul" proved="true">
+ <proof prover="1"><result status="valid" time="0.030308" steps="11384"/></proof>
+ </goal>
+ <goal name="matmul&#39;vc" expl="VC for matmul" proved="true">
+ <proof prover="2"><result status="valid" time="0.008449" steps="59703"/></proof>
+ </goal>
+</theory>
+<theory name="COPMatmul" proved="true">
+ <goal name="ctensor_matmul&#39;vc" expl="VC for ctensor_matmul" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="89367"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2412229"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_matmul&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.083353" steps="22758"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.085215" steps="22791"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.100668" steps="22793"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.000001" steps="6473"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004286" steps="9472"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004027" steps="6992"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.007566" steps="10157"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003862" steps="7060"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.000001" steps="10273"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.9" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.035820" steps="164887"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.10" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.075974" steps="284390"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.11" expl="integer overflow" proved="true">
+  <proof prover="2"><result status="valid" time="0.039496" steps="203859"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.12" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003518" steps="17693"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.13" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004603" steps="13382"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.14" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003271" steps="18678"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.15" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004957" steps="14117"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.16" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004611" steps="18922"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.17" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.005035" steps="14293"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.18" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004544" steps="19180"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.19" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.006613" steps="14479"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.20" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.014866" steps="62845"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.21" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.045013" steps="214436"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.22" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.047112" steps="263626"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.23" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.027563" steps="176776"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.24" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.032498" steps="215500"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.25" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.104996" steps="382344"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.26" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.105947" steps="33620"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.27" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.118676" steps="33756"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.28" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.006893" steps="17653"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.29" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.009636" steps="13354"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.30" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.008642" steps="18638"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.31" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.008910" steps="14089"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.32" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.045308" steps="191074"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.33" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.019759" steps="208580"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.34" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.030085" steps="14815"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.35" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.025681" steps="172911"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.36" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.094674" steps="29976"/></proof>
+  </goal>
+  <goal name="ctensor_matmul&#39;vc.37" expl="out of loop bounds" proved="true">
+  <proof prover="2"><result status="valid" time="0.035290" steps="196014"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

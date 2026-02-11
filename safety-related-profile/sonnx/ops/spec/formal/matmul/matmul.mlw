@@ -1,6 +1,6 @@
 (**
     Specification of MatMul operation on tensors with real numbers.
- *)
+ 
 module MatMulReal
   use int.Int
   use map.Map
@@ -14,4 +14,131 @@ module MatMulReal
     shape = [nth a.shape 0; nth b.shape 1] ;
     value = fun i j -> sum (fun k -> a.value[i][k] * b.value[k][j]) (nth a.shape 1)
   }
+end
+*)
+
+module OPMatmul
+
+    use tensor.Tensor
+    use map.Const
+    use list.List
+    use int.Int
+    use list.Length
+    use tensor.Range
+    use map.Map
+    use real.Real
+
+    let rec ghost function my_nth (n: int) (l:list int) : int
+    requires { Int.(n >= 0 /\ n < length(l)) }
+    requires { Int.(length(l) > 0) }
+    variant { length(l) }
+    =
+        match l with
+        | Cons h t ->
+            if n = 0 then
+                h
+            else
+                my_nth (n-1) t
+        end
+
+    let ghost function dot_product (a b: tensor real) (row col commun_value: int) : real
+    requires { length a.dims = 2 /\ length b.dims = 2 }
+    =
+        let ref sum = 0.0 in
+        for k = 0 to commun_value - 1 do
+            let a_val = a.data (Cons row (Cons k Nil)) in
+            let b_val = b.data (Cons k (Cons col Nil)) in
+            sum <- sum + a_val * b_val
+        done;
+        sum
+
+    let ghost function dmatmul ( a b: tensor real) (y_rows y_cols : int) : data real
+    requires { a.background = b.background }
+    requires {  length a.dims = length b.dims = 2 }
+    requires { my_nth 1 a.dims = my_nth 0 b.dims }
+    requires { y_rows = my_nth 0 a.dims /\ y_cols = my_nth 1 b.dims }
+    ensures { forall ks. not valid ks (Cons y_rows (Cons y_cols Nil)) -> result ks = a.background }
+    =   
+        let commun_value = my_nth 1 a.dims in
+        let y_shape = Cons y_rows (Cons y_cols Nil) in
+        fun ks ->
+            if valid ks y_shape then
+                let row = my_nth 0 ks in
+                let col = my_nth 1 ks in
+                dot_product a b row col commun_value
+            else
+                a.background
+
+    let ghost function matmul ( a b: tensor real) : tensor real
+    requires { a.background = b.background }
+    requires {  length a.dims = length b.dims = 2 }
+    requires { my_nth 1 a.dims = my_nth 0 b.dims }
+    ensures { result.background = a.background }
+    ensures { result.dims = Cons (my_nth 0 a.dims) (Cons (my_nth 1 b.dims) Nil) }
+    ensures { length result.dims = 2 }
+    ensures { result.data = dmatmul a b (my_nth 0 a.dims) (my_nth 1 b.dims) }
+    =
+        let y_rows = my_nth 0 a.dims in
+        let y_cols = my_nth 1 b.dims in
+        let y_shape = Cons y_rows (Cons y_cols Nil) in
+        { dims = y_shape; data = dmatmul a b y_rows y_cols ; background = a.background }
+
+end
+
+
+module COPMatmul
+
+    use OPMatmul
+    use tensor.Tensor
+    use libtensor.CTensor
+    use libvector.CIndex
+    use std.Clib
+    use int.Int
+    use mach.int.Int32
+    use std.Cfloat
+
+    let ctensor_matmul (a b r : ctensor) = 
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { (tensor a).background = (tensor b).background = (tensor r).background }
+    requires { a.t_rank = b.t_rank = r.t_rank = 2 }
+    requires { a.t_dims[1] = b.t_dims[0] }
+    requires { r.t_dims[0] = a.t_dims[0] /\ r.t_dims[1] = b.t_dims[1] }
+    (*ensures { tensor r = matmul (tensor a) (tensor b) }*)
+    let lines = a.t_dims[0] in
+    let columns = b.t_dims[1] in
+    let commun_value = a.t_dims[1] in
+    
+    let a_coords_array = malloc (to_uint32 2) in
+    let b_coords_array = malloc (to_uint32 2) in
+    let r_coords_array = malloc (to_uint32 2) in
+    if is_not_null a_coords_array && is_not_null b_coords_array && is_not_null r_coords_array then
+        for i = 0 to lines - 1 do
+            for j = 0 to columns - 1 do
+                let ref sum = (f32 0.0) in
+                for k = 0 to commun_value - 1 do
+                    set_ofs a_coords_array 0 i;
+                    set_ofs a_coords_array 1 k;
+                    set_ofs b_coords_array 0 k;
+                    set_ofs b_coords_array 1 j;             
+                    let a_coords = coffset a_coords_array a.t_dims a.t_rank in
+                    let b_coords = coffset b_coords_array b.t_dims b.t_rank in
+                    if a_coords >= 0 && b_coords >= 0 then
+                        let a_val = a.t_data[a_coords] in
+                        let b_val = b.t_data[b_coords] in
+                        sum <- sum .+ a_val .* b_val
+                    else
+                        sum <- sum .+ (f32 0.0)
+                done;
+                set_ofs r_coords_array 0 i;
+                set_ofs r_coords_array 1 j;
+                let r_coords = coffset r_coords_array r.t_dims r.t_rank in
+                if r_coords >= 0 then
+                    r.t_data[r_coords] <- sum
+            done;
+        done;
+    (*assert { tensor r  == matmul (tensor a) (tensor b) }*)
+
+
 end
