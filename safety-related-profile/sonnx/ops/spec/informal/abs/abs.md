@@ -115,10 +115,10 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] = 
 \begin{cases} 
-\text{NaN} & \text{if } A[i] = \text{NaN} \\
-\text{+Inf} & \text{if } A[i] = \pm \text{Inf} \\
-\text{+0} & \text{if } A[i] = \pm \text{0} \\
-A[i] & \text{otherwise} 
+\text{NaN} & \text{if } X[i] = \text{NaN} \\
+\text{+Inf} & \text{if } X[i] = \pm \text{Inf} \\
+\text{+0} & \text{if } X[i] = \pm \text{0} \\
+X[i] & \text{otherwise} 
 \end{cases}
 $$
 
@@ -126,7 +126,11 @@ The effect of the operator is illustrated on the following examples.
 
 ### Example 1
 ```math
-X \approx  \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
+X =  \begin{bmatrix} -2.1 & \text{-Inf} & \text{NaN} & -0 \end{bmatrix}
+```
+
+```math
+Y \approx  \begin{bmatrix} 2.1 & \text{Inf} & \text{NaN} & +0 \end{bmatrix}
 ```
 
 ## Error conditions
@@ -159,12 +163,18 @@ Absolute value of tensor $X$
  - `[C1]` <a id="C1ry"></a> Shape consistency
    - Statement: See [constraint (C1) on X](#C1rx)
 
+## Numeric accuracy
+
+[See the numeric accuracy note](./assets/abs_acc.md).
+
 
 <a id="int"></a>
 # **Abs** (int)
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 See specification for [real numbers](#real).
+
+
 
 
 
