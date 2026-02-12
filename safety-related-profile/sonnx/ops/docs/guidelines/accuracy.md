@@ -245,9 +245,9 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$,
 the introduced error, where $Y$ is the tensor result of an operator.
-The objective is to provide a specification that any implementation should respect.
+The objective is to provide a specification that any implementation should respect. Hence
 
-Hence $Y_{\textit{err}}^{\textit{intro}} = (op_{\textit{impl}}(\overrightarrow{x}) - op_{\textit{ideal}}(\overrightarrow{x})$.
+$$Y_{\textit{err}}^{\textit{intro}} = (op_{\textit{impl}}(\overrightarrow{x}) - op_{\textit{ideal}}(\overrightarrow{x})$$
 
 From the theoretical point of view, the introduced error depends on the storage format of the result of any intermediate computation.
 It is always defined as the difference between the implementation result and the ideal result, for which we additionaly
