@@ -152,13 +152,21 @@ The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+
 $$
-C[i] =
+Y[i] =
 \begin{cases}
+\text{False} & \text{if } A[i]=\text{NaN} \\
+\text{False} & \text{if } B[i]=\text{NaN} \\
+\text{False} & \text{if } A[i]=\text{-0.0} & and & B[i]=\text{0.0} \\
+\text{False} & \text{if } A[i]=\text{0.0} & and & B[i]=\text{-0.0} \\
+
 \text{True} & \text{if } A[i] < B[i] \\
-\text{False} & \text{otherwise}
 \end{cases}
 $$
+
+Note : \text{-inf} < float < \text{+inf}
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -201,11 +209,11 @@ C = \begin{bmatrix}
 ### Example 3
 
 ```math
-A = \begin{bmatrix} -\infty & -\infty & -\infty & -\infty & 0.0 & 0.0 & 0.0 & 0.0 & +\infty & +\infty & +\infty & +\infty & \text{NaN} & \text{NaN} & \text{NaN} & \text{NaN} \end{bmatrix}
+A = \begin{bmatrix} \text{-inf} & \text{-inf} & \text{-inf} & \text{-inf} & 0.0 & 0.0 & 0.0 & 0.0 & \text{+inf} & \text{+inf} & \text{+inf} & \text{+inf} & \text{NaN} & \text{NaN} & \text{NaN} & \text{NaN} \end{bmatrix}
 ```
 
 ```math
-B = \begin{bmatrix} -\infty & 0.0 & +\infty & \text{NaN} &  -\infty & 0.0 & +\infty & \text{NaN} & -\infty & 0.0 & +\infty & \text{NaN} & -\infty & 0.0 & +\infty & \text{NaN}  \end{bmatrix}
+B = \begin{bmatrix} \text{-inf} & 0.0 & \text{+inf} & \text{NaN} &  \text{-inf} & 0.0 & \text{+inf} & \text{NaN} & \text{-inf} & 0.0 & \text{+inf} & \text{NaN} & \text{-inf} & 0.0 & \text{+inf} & \text{NaN}  \end{bmatrix}
 ```
 
 ```math

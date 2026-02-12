@@ -49,7 +49,7 @@ X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1 & 1.41421354 & 2 \end{bmatrix}
+Y \approx  \begin{bmatrix} 1 & 1.41421354 & 2 \end{bmatrix}
 ```
 
 ### Example 2
@@ -63,7 +63,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.5   & 1.5   \\
   0.0   & 0.31622776  \\
   3.16227770 & 31.62277603
@@ -136,10 +136,18 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] =
 \begin{cases}
+\text{NaN} & \text{if } X[i]=\text{-inf} \\
+\text{-0.0} & \text{if } X[i]=\text{-0.0} \\
+\text{inf} & \text{if } X[i]=\text{inf} \\
+\text{NaN} & \text{if } X[i]=\text{NaN} \\
+
 \sqrt{X[i]} & \text{if } X[i] \ge 0 \\
 \text{NaN} & \text{if } X[i] < 0
 \end{cases}
 $$
+
+
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -149,7 +157,7 @@ X = \begin{bmatrix} 1.0 & 2.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1.0 & 1.41421354 & 2.0 \end{bmatrix}
+Y \approx  \begin{bmatrix} 1.0 & 1.41421354 & 2.0 \end{bmatrix}
 ```
 
 ### Example 2
@@ -163,7 +171,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.5   & \text{NaN} \\
   0.0   & 0.31622776       \\
   3.16227770 & \text{NaN}
@@ -174,15 +182,17 @@ Y = \begin{bmatrix}
 
 ```math
 X = \begin{bmatrix}
-  +\infty & \text{NaN} & -\infty
+  \text{+inf} & \text{NaN} & \text{-inf} & -0.0
 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
-  +\infty & \text{NaN} & \text{NaN}
+Y \approx  \begin{bmatrix}
+  \text{+inf} & \text{NaN} & \text{NaN} & -0.0
 \end{bmatrix}
 ```
+
+
 
 ## Error conditions
 

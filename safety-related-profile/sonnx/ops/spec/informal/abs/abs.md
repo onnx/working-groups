@@ -126,7 +126,7 @@ The effect of the operator is illustrated on the following examples.
 
 ### Example 1
 ```math
-X = \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
+X \approx  \begin{bmatrix} -2.1 & -Inf & NaN & +0 \end{bmatrix}
 ```
 
 ## Error conditions

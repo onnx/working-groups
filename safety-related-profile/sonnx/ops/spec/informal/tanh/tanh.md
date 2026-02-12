@@ -130,10 +130,10 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] = \tanh(X[i]) = 
 \begin{cases} 
-\frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}} \\
 \text{-1.0} & \text{if } X[i]=\text{-inf} \\
 \text{1.0} & \text{if } X[i]=\text{inf} \\
-\text{NaN} & \text{if } X[i]=\text{NaN} 
+\text{NaN} & \text{if } X[i]=\text{NaN} \\
+\frac{1 - e^{-2X[i]}}{1 + e^{-2X[i]}} & \text{otherwise}   \\
 \end{cases}
 $$
 

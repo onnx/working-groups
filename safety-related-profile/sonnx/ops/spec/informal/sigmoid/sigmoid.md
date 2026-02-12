@@ -45,7 +45,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
+Y \approx  \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
 ```
 
 ### Example 2
@@ -59,7 +59,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.11920291 & 0.5       \\
   0.73105860 & 0.88079709 \\
   0.01798624 & 0.98201376
@@ -127,9 +127,18 @@ The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+
 $$
-Y[i] = \frac{1}{1 + e^{-X[i]}} = \frac{e^{X[i]}}{e^{X[i]} + 1}
+Y[i] =
+\begin{cases}
+\text{0.0} & \text{if } X[i]=\text{-inf} \\
+\text{1.0} & \text{if } X[i]=\text{inf} \\
+\text{NaN} & \text{if } X[i]=\text{NaN} \\
+
+\frac{1}{1 + e^{-X[i]}} & \text{otherwise}   \\
+\end{cases}
 $$
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -140,7 +149,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
+Y \approx  \begin{bmatrix} 0.5 & 0.73105860 & 0.26894143 \end{bmatrix}
 ```
 
 ### Example 2
@@ -154,7 +163,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.11920291 & 0.5       \\
   0.73105860 & 0.88079709 \\
   0.01798624 & 0.98201376
@@ -166,12 +175,12 @@ Y = \begin{bmatrix}
 
 ```math
 X = \begin{bmatrix}
-  +\infty & \text{NaN} & -\infty
+  \text{+inf} & \text{NaN} & \text{-inf}
 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   1.0 & \text{NaN} & 0.0
 \end{bmatrix}
 ```

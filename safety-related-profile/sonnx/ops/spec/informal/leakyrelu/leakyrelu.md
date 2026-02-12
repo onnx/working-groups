@@ -39,7 +39,7 @@ X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix} \\
 ```
 
 ```math
-Y = \text{LeakyRelu}(X) = \begin{bmatrix} 6.1 & -0.95 & 35.7 \end{bmatrix}
+Y \approx  \text{LeakyRelu}(X) = \begin{bmatrix} 6.1 & -0.95 & 35.7 \end{bmatrix}
 ```
 
 ## Error conditions
@@ -123,7 +123,7 @@ X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
 
 
 ```math
-Y = \text{LeakyRelu}(X) = \begin{bmatrix} 6.1 & 0 & 35.7 \end{bmatrix}
+Y \approx  \text{LeakyRelu}(X) = \begin{bmatrix} 6.1 & -0.95 & 35.7 \end{bmatrix}
 ```
 
 ## Error conditions

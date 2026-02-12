@@ -57,7 +57,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.135335281 & 1.0        \\
   2.71828175 & 7.38905621 \\
   0.018315639 & 54.5981483
@@ -138,7 +138,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1.0 & 2.71828175 & 0.36787945 \end{bmatrix}
+Y \approx  \begin{bmatrix} 1.0 & 2.71828175 & 0.36787945 \end{bmatrix}
 ```
 
 ### Example 2
@@ -152,7 +152,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.135335281 & 1.0        \\
   2.71828175 & 7.38905621 \\
   0.0183156393 & 54.5981483
@@ -169,7 +169,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   +\infty & \text{NaN} & 0.0
 \end{bmatrix}
 ```

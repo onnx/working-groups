@@ -50,7 +50,7 @@ X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0 & 0.693147 & 1.386294 \end{bmatrix}
+Y \approx  \begin{bmatrix} 0 & 0.693147 & 1.386294 \end{bmatrix}
 ```
 
 ### Example 2
@@ -64,7 +64,7 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.999896 & 1.999992 \\
   -4.605170 & -2.302585 \\
   2.302585 & 6.907755
@@ -134,14 +134,21 @@ The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+
 $$
 Y[i] =
 \begin{cases}
+\text{NaN} & \text{if } X[i]=\text{-inf} \\
+\text{-inf} & \text{if } X[i]=\text{-0.0} \\
+\text{inf} & \text{if } X[i]=\text{inf} \\
+\text{NaN} & \text{if } X[i]=\text{NaN} \\
+
 \log(X[i]) & \text{if } X[i] > 0 \\
--\infty & \text{if } X[i] = 0 \\
+\text{-inf} & \text{if } X[i] = 0 \\
 \text{NaN} & \text{if } X[i] < 0
 \end{cases}
 $$
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -152,7 +159,7 @@ X = \begin{bmatrix} 1 & 2 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 0 & 0.69314718 & 1.38629436 \end{bmatrix}
+Y \approx  \begin{bmatrix} 0 & 0.69314718 & 1.38629436 \end{bmatrix}
 ```
 
 ### Example 2
@@ -166,9 +173,9 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
+Y \approx  \begin{bmatrix}
   0.99989629 & \text{NaN}  \\
-  -\infty  & -2.30258512   \\
+  \text{-inf}  & -2.30258512   \\
   2.30258512 & \text{NaN}
 \end{bmatrix}
 ```
@@ -178,13 +185,13 @@ Y = \begin{bmatrix}
 
 ```math
 X = \begin{bmatrix}
-  +\infty & \text{NaN} & -\infty
+  \text{inf} & \text{NaN} & \text{-inf} & -0.0 & 0.0
 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix}
-  +\infty & \text{NaN} & \text{NaN}
+Y \approx  \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{NaN} & \text{-inf} & \text{-inf}
 \end{bmatrix}
 ```
 
