@@ -196,7 +196,7 @@ Y \approx  \begin{bmatrix}
 
 ## Error conditions
 
-Values of the output tensor may be IEEE 754 NaN (case of negative input values), a NaN in input is propagated; $+\infty$ is mapped to $+\infty$.
+The function returns $\text{NaN}$ when the input is $\text{NaN}$ or negative, but -0.0 return 0.0
 
 ## Attributes
 

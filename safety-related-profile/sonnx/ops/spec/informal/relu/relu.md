@@ -184,7 +184,8 @@ Y = \text{Relu}(X) = \begin{bmatrix} 6 & 0 & 35 \end{bmatrix}
 ```
 
 ## Error conditions
-No error condition.
+
+No particular error, the function returns $\text{NaN}$ when the input is $\text{NaN}$.
 
 ## Inputs
 

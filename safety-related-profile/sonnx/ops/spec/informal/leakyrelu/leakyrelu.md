@@ -201,7 +201,7 @@ Y \approx  \begin{bmatrix}
 
 
 ## Error conditions
-Only when $/alpha$ or input is \text{NaN} the fonction return \text{NaN}
+The function returns $\text{NaN}$ only when the input is $\text{NaN}$, or when the input is negative and alpha is $\text{NaN}$.
 
 ## Inputs
 

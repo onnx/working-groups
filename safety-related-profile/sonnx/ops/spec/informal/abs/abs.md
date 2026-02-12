@@ -135,7 +135,7 @@ Y \approx  \begin{bmatrix} 2.1 & \text{Inf} & \text{NaN} & +0 \end{bmatrix}
 
 ## Error conditions
 
-No error condition.
+No particular error, the function returns $\text{NaN}$ only when the input is $\text{NaN}$
 
 ## Attributes
 

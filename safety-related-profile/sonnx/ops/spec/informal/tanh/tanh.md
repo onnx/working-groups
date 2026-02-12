@@ -186,7 +186,7 @@ Y \approx \begin{bmatrix}
 
 ## Error conditions
 
-Values of the output tensor may be IEEE 754 between -1 and 1 (case of -inf and +inf in input), or NaN (case of NaN in input); a NaN in input is propagated.
+No particular error, the function returns $\text{NaN}$ only when the input is $\text{NaN}$
 
 ## Attributes
 
