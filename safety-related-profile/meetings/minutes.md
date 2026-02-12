@@ -1,3 +1,52 @@
+# 2025/02/11 ((shortened to 1h)
+## Participants
+- Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Loup, Franck
+## Agenda 
+- WG progress
+- The case of MaxPool
+- Accuracy analysis approach (Franck)
+- News from DeepGreen (Mariem)
+
+## Minutes
+- News
+  - Our work has been presented to the ERTS 2026 conference. The slides are [there](./Other_meetings/SONNX%20-%20ERTS2026.pdf).   
+- Status of actions (Eric)
+  - See also [those for the local WG](./Local%20WGs/Tlse/agenda.md).
+- Work done by the Tlse WG and actions (Eric)
+  - See also [those for the local WG](./Local%20WGs/Tlse/agenda.md).
+- Discussion about the section on accuracy (see supporting slides) 
+  - We have to provide the user some information to support the analysis of error, including propagated error. We provide the expression of the propagated error at first order. 
+  - Examples are being developed (Franck) on **Div**, **Matmul**, and possibly **tanh**.  
+  - (Note that the accurracy section shall be named `<op>_acc.md` and be placed along with the informal specification (`op.md`). )
+
+## Actions
+### New actions
+- [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**.  
+### Previous actions
+- [X] (2801-1, eric) Check why Jean-loup cannot change the project's kanban
+- [X] (2801-2, all) Add a disclaimer on the tests
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+- [X] (2801-4, Eric) Add a question to Loïc about the handling of mathematical operators in the formal spec; Floats are basically handled as real extended with infs and NaN. For the rest, the semantics is that of the reals.
+- [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
+  - Material shall be placed [here](https://github.dev/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/formal_methods/inputs/inputs-2026-02-18.md)
+- [X] (1401-5, Eric) Plan a meeting with Loïc to sort out the list of questions
+  - Planned on Feb 18th, 14:00-16:00
+- [X] (1401-6, Eric, Jean, Jean-Baptiste) Discuss a possible subject to be presented at CTiC
+  - Subject proposed by Jean-Baptiste on 2026/01/16
+  - Comments returned by Eric on 2026/01/19
+  - Waiting for Jean-Baptiste reply...
+- [X] (0312-1, Edoardo, Mohammed) Review of the broadcast operator
+  - Completed after Edoardo's comment have been taken into account.
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- Action from local work session 
+    - (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - To be discussed during Feb session with Loïc. 
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
+
 # 2025/01/28
 ## Participants
 - Hugo, Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Baptiste, Jean-Loup
@@ -51,8 +100,6 @@
     - Some solutions are available. These solutions must be discussed with Loïc. 
     - Solution to be sent to Mariem first...
     - On-going: First proposal sent by J&R ; currenlty being discussed with Jorge then to be discussed with Loïc
-
-
 
 # 2025/01/14
 ## Participants

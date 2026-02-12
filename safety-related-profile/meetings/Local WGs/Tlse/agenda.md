@@ -3,7 +3,8 @@
  
  #### 2025/02/13 
 
-*To be completed.*
+- Feedback about MaxPool to ORT?
+- Operators : 
 
 #### 2025/02/04 
 
@@ -11,7 +12,7 @@
 - Proposal of guidelines modifications to factorize restrictions and constraints. 
 - Discussion (1h max) about the specification of ops in FP. 
   - What do we need exactly?
-  - Specification *vs.* implementation... Up to what point shall we be prescritive wrt the implementation?
+  - Specification *vs.* implementation... Up to what point shall we be prescriptive wrt the implementation?
   - Paper pointed out by Jean-Loup "Make it Real: Effective Floating Point Reasoning via Exact Arithmetic"
   - The question of accuracy...
 - Review of [Max](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/max/max.md), [Range](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/range/range.md), [Div](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/informal/div/div.md)?
@@ -19,7 +20,7 @@
 #### Minutes
 
 ##### Updates to the guidelines
-- Th esection about attributes must be described only once, in the subsection about reals. The other sections (for the other types) must simply refer to it and express other specific constraint is necessary.
+- The section about attributes must be described only once, in the subsection about reals. The other sections (for the other types) must simply refer to it and express other specific constraint is necessary.
 - The same applies to constraints: as far as they are not specific to a certain data type, they will not be restated, but simply refered to by an hyperlink. See the example of $Maxpool$.  
 - About constraints : 
 	- We add a line about the "general constraints" for all operators. We do not specify precisely which of those constraints are actually applicable. This is up to the user to check...
@@ -31,8 +32,8 @@
 	- Tests are provided to support the validation of the specification and the verification of a given implementation against the reference implementation. However:
 		- They only cover functional tests (they do not cover implementation) 
 		- They are not aimed at being exhaustive and do not substitute to applicable practices in the domain of use (e.g., aeronautics...)
-##### Mathematical operators
 
+##### Mathematical operators
 - The specification is defined using the operators in R (in particular).
 - A specific implementation (the one that we will actually generate) may be described in the "Accuracy" section in order to suport the accuracy abnalysis. In that case, the operators will not be those in R but thos ein F. So we will use (e.g., "+." to express the addition in F).
 - The specification will be written using a certain set of "basic" operator that will nt be defined abny further. This includes at least `+`, `-`, `*`, `/`, `exp`, `sin`, etc.  They have to be defined in the "preamble" or "introduction" to SONNX.
@@ -46,7 +47,7 @@
 - [ ] In the section about accuracy, clarify the purpose of the analysis (methodological)  
 - [X] In the examples, use $\approx$ instead of $=$ when applicable 
   - Added in the guidelines (eric)
-- [X] The jupyternotebook used to compute the examples must be provided
+- [X] The jupyter notebook used to compute the examples must be provided
   - Added in the guidelines (Eric)
 
 ##### Tests 
@@ -60,7 +61,7 @@
 
 ##### Error conditions
 - An "error condition" is a condition for which an operator can not compute a value that maps to some real counterpart (i.e., excluding Infs and NaN). It shall not cover the case where the output is not a value due to a simple propagation (of NaN, of Inf...).
-- basically, we must put in the "error conditoins" all results that are, intuively, "not expected". 
+- basically, we must put in the "error conditions" all results that are,  , "not expected". 
 - The name of this section could possibly be changed: "Special cases" ? 
 
 #### 2025/01/15
