@@ -68,7 +68,7 @@ $$\sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^
 
 is a correct propagated error with the natural following definition for $\mathcal{O}(X^2_{\textit{err}})$:
 
-$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}} \;\;\textcolor{blue}{\textit{ (Big O Definition)}}$$
+$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}} \textcolor{blue}{\tag{Big O Definition}}$$
 
 If there are no error on the arguments, the propagated error is $0$.
 Otherwise, we preconise a first order expression like:
