@@ -235,7 +235,7 @@ Result of the element-wise division of $A$ by $B$.
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
+[See the numeric accuracy note](./assets/div_acc.md).
 
 
 <a id="int"></a>

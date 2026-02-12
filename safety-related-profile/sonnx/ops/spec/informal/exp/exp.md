@@ -126,8 +126,16 @@ The mathematical definition of the operator is given hereafter.
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] = e^{X[i]}
+Y[i] =
+\begin{cases}
+\text{0.0} & \text{if } X[i]=\text{-inf} \\
+\text{+inf} & \text{if } X[i]=\text{+inf} \\
+\text{NaN} & \text{if } X[i]=\text{NaN} \\
+
+Y[i] = e^{X[i]} & \text{otherwise}   \\
+\end{cases}
 $$
+
 
 The effect of the operator is illustrated on the following examples.
 
@@ -164,13 +172,13 @@ Y \approx  \begin{bmatrix}
 
 ```math
 X = \begin{bmatrix}
-  +\infty & \text{NaN} & -\infty
+  \text{+inf} & \text{NaN} & \text{-inf}
 \end{bmatrix}
 ```
 
 ```math
 Y \approx  \begin{bmatrix}
-  +\infty & \text{NaN} & 0.0
+  \text{+inf} & \text{NaN} & 0.0
 \end{bmatrix}
 ```
 
@@ -217,4 +225,4 @@ Exponential of tensor $X$.
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/numeric_accuracy/numeric_accuracy.md).
+[See the numeric accuracy note](./assets/exp_acc.md).
