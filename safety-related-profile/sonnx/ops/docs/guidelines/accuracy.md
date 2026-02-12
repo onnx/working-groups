@@ -247,7 +247,7 @@ This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$,
 the introduced error, where $Y$ is the tensor result of an operator.
 The objective is to provide a specification that any implementation should respect. Hence
 
-$$Y_{\textit{err}}^{\textit{intro}} = (op_{\textit{impl}}(\overrightarrow{x}) - op_{\textit{ideal}}(\overrightarrow{x})$$
+$$Y_{\textit{err}}^{\textit{intro}} = op_{\textit{impl}}(\overrightarrow{x}) - op_{\textit{ideal}}(\overrightarrow{x})$$
 
 From the theoretical point of view, the introduced error depends on the storage format of the result of any intermediate computation.
 It is always defined as the difference between the implementation result and the ideal result, for which we additionaly
@@ -434,7 +434,7 @@ since their algorithms combine many atomic operations.
         // |C[i][j])| <= ((1+u)^(p+1)-1)/u*a*b*(1+u)²
     ```
 
-Hence, for the matrix multiplication, the **introduced error** should be less or equal than
+Hence, for the matrix multiplication of A, matrix of dimension $n \times p$ with B, matrix of dimension $p \times q$, the **introduced error** should be less or equal than
 
 $$\begin{array}{rcl}
   |IE(C[i][j])| & \leq & \left(\frac{(1+u)^{p+1}-1}{u}\times(1+u)^2 - p-1\right)\times a \times b\\
