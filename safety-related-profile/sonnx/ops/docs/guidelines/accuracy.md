@@ -34,9 +34,7 @@ This framework decomposes the error into two parts:
 * the second part, the <span style="color:red">introduced error</span>, depends on the
   concrete value of the inputs and the implementation with its storage format. 
 
-$$op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x})
-=   \textcolor{blue}{(op_{\textit{ideal}}(\overrightarrow{x+e}) - op_{\textit{ideal}}(\overrightarrow{x}))}
-  + \textcolor{red}{(op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x+e})}$$
+$$op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x}) = \textcolor{blue}{(op_{\textit{ideal}}(\overrightarrow{x+e}) - op_{\textit{ideal}}(\overrightarrow{x}))} + \textcolor{red}{(op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x+e})}$$
 
 The error associated with the result of the operator corresponds to the sum of the propagated
 errors and the introduced error and this new error is then propagated by the next operator.
@@ -70,7 +68,7 @@ $$\sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^
 
 is a correct propagated error with the natural following definition for $\mathcal{O}(X^2_{\textit{err}})$:
 
-$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}} \tag{Big O definition}$$
+$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}$$
 
 If there are no error on the arguments, the propagated error is $0$.
 Otherwise, we preconise a first order expression like:
