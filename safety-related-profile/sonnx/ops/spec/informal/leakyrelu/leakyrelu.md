@@ -17,7 +17,7 @@ where:
 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 
 | Restriction    | Statement | Origin |
@@ -28,8 +28,16 @@ where:
 ## Informal specification
 
 Operator **LeakyRelu** is defined as follows: 
-- if $X[i] < 0$ then $Y[i] = \alpha X[i]$
-- If $X[i] \ge 0$ then $Y[i]=X[i]$
+
+$$
+Y[i] =
+\begin{cases}
+X[i] & \text{if } X[i] \ge 0 \\
+\alpha \cdot X[i] & \text{if } X[i] < 0 \\
+\end{cases}
+$$
+
+
 
 ### Example 1
 
@@ -83,11 +91,6 @@ Operator **LeakyRelu** has no attribute.
  
 See the Why3 specification.
 
-## Numerical Accuracy
-
-Operator **LeakyRelu** does not introduce any numerical error. 
-
-
 <a id="float"></a>
 # **LeakyRelu** (float)
 where float is in {float16, float, double}
@@ -99,7 +102,7 @@ where:
 - $X$: input tensor
 - $Y$: result of the element-wise application of **LeakyRelu** on $X$
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) : GR1 and GR2 are applicable.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
 
 | Restriction    | Statement | Origin |
@@ -109,13 +112,28 @@ where:
 ## Informal specification
 
 Operator **LeakyRelu** is defined as follows: 
-- if $X[i] = \text{NaN}$ then $Y[i]=\text{NaN}$
-- if $X[i] < 0$ then 
-  - if $\alpha \neq \text{NaN}$ then $Y[i] = \alpha X[i]$
-  - else $Y[i] = \text{NaN}$
-- If $X[i] \ge 0$ then $Y[i]=X[i]$
+
+$$
+Y[i] =
+\begin{cases}
+\text{NaN} & \text{if } X[i] = \text{NaN} \\
+\alpha \cdot X[i] & \text{if } X[i] < 0 \text{ and } \alpha \neq \text{NaN} \\
+\text{NaN} & \text{if } X[i] < 0 \text{ and } \alpha = \text{NaN} \\
+\text{inf} & \text{if } X[i] = \text{inf} \\
+\text{-inf} & \text{if } X[i] = \text{-inf} \text{ and } \alpha \neq \text{NaN} \\
+\text{NaN} & \text{if } X[i] = \text{-inf} \text{ and } \alpha = \text{NaN} \\
+-0 & \text{if } X[i] = -0 \\
+X[i] & \text{if } X[i] > 0 \\
+\end{cases}
+$$
+
+
 
 ### Example 1
+
+```math
+ \alpha = 0.01
+```
 
 ```math
 X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
@@ -123,11 +141,67 @@ X = \begin{bmatrix} 6.1 & -9.5 & 35.7 \end{bmatrix}
 
 
 ```math
-Y \approx  \text{LeakyRelu}(X) = \begin{bmatrix} 6.1 & -0.95 & 35.7 \end{bmatrix}
+Y = \text{LeakyRelu}(X) \approx  \begin{bmatrix} 6.1 & -0.95 & 35.7 \end{bmatrix}
 ```
 
+### Example 2
+
+```math
+ \alpha = 0.01
+```
+
+```math
+X = \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{-inf} & -0.0 & 0.0 & 1.0 & -1.0
+\end{bmatrix}
+```
+
+```math
+Y \approx  \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{-inf} & \text{-0.0} & \text{0.0} & \text{1.0} & \text{-0.01}
+\end{bmatrix}
+```
+
+### Example 3
+
+```math
+ \alpha = \text{Nan}
+```
+
+```math
+X = \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{-inf} & -0.0 & 0.0 & 1.0 & -1.0
+\end{bmatrix}
+```
+
+```math
+Y \approx  \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{Nan} & \text{-0.0} & \text{0.0} & \text{1.0} & \text{Nan}
+\end{bmatrix}
+```
+
+### Example 4
+
+```math
+ \alpha = \text{-inf}
+```
+
+```math
+X = \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{-inf} & -0.0 & 0.0 & 1.0 & -1.0
+\end{bmatrix}
+```
+
+```math
+Y \approx  \begin{bmatrix}
+  \text{inf} & \text{NaN} & \text{inf} & \text{-0.0} & \text{0.0} & \text{1.0} & \text{inf}
+\end{bmatrix}
+```
+
+
+
 ## Error conditions
-No error condition.
+Only when $/alpha$ or input is \text{NaN} the fonction return \text{NaN}
 
 ## Inputs
 
@@ -158,8 +232,8 @@ Operator **LeakyRelu** has no attribute.
  
 See the Why3 specification.
 
-## Numerical Accuracy
+## Numeric accuracy
 
-Operator **LeakyRelu** does not introduce any numerical error. 
+[See the numeric accuracy note](./leakyrelu_acc.md).
 
 

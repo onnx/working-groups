@@ -165,7 +165,7 @@ Absolute value of tensor $X$
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/abs_acc.md).
+[See the numeric accuracy note](./abs_acc.md).
 
 
 <a id="int"></a>

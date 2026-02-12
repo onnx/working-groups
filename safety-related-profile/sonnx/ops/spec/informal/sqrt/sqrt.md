@@ -230,4 +230,4 @@ Square root of tensor $X$ (with IEEE 754 handling of zero, negative, and infinit
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/sqrt_acc.md).
+[See the numeric accuracy note](./sqrt_acc.md).

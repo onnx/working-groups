@@ -225,4 +225,4 @@ Exponential of tensor $X$.
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/exp_acc.md).
+[See the numeric accuracy note](./exp_acc.md).

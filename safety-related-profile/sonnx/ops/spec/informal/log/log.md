@@ -231,4 +231,4 @@ Natural logarithm of tensor $X$ (with IEEE 754 handling of zero and negative inp
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/log_acc.md).
+[See the numeric accuracy note](./log_acc.md).

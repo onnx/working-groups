@@ -221,4 +221,4 @@ Sigmoid of tensor $X$.
 
 ## Numeric accuracy
 
-[See the numeric accuracy note](./assets/sigmoid_acc.md).
+[See the numeric accuracy note](./sigmoid_acc.md).
