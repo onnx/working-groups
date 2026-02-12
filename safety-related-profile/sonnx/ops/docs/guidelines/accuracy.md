@@ -70,9 +70,7 @@ $$\sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^
 
 is a correct propagated error with the natural following definition for $\mathcal{O}(X^2_{\textit{err}})$:
 
-$$\mathcal{O}(X^2_{\textit{err}}) =
-\left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right)
-- \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}$$
+$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}$$
 
 If there are no error on the arguments, the propagated error is $0$.
 Otherwise, we preconise a first order expression like:
@@ -107,12 +105,8 @@ $$\begin{array}{rcl}
 The definition of $\mathcal{O}(X^2_{\textit{err}})$ is optional, since it is always
 
 $$\begin{array}{rcl}
-  \mathcal{O}(X^2_{\textit{err}}) & = &
-  \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right)
-  - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}\\
-  & = & (x_{\textit{val}} + x_{\textit{err}})\times(y_{\textit{val}} + y_{\textit{err}})
-        - x_{\textit{val}}\times y_{\textit{val}}
-        - (y_{\textit{val}}\times x_{\textit{err}} + x_{\textit{val}}\times y_{\textit{err}})\\
+  \mathcal{O}(X^2_{\textit{err}}) & = & \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}\\
+  & = & (x_{\textit{val}} + x_{\textit{err}})\times(y_{\textit{val}} + y_{\textit{err}}) - x_{\textit{val}}\times y_{\textit{val}} - (y_{\textit{val}}\times x_{\textit{err}} + x_{\textit{val}}\times y_{\textit{err}})\\
   & = & x_{\textit{err}}\times y_{\textit{err}}
 \end{array}$$
 
@@ -143,8 +137,7 @@ $$\begin{array}{rcl}
 Hence, the accuracy definition of the operator will just indicate that
 
 $$\begin{array}{rcl}
-|PE(g)| & \leq & \frac{1}{|y_{\textit{val}}|}\times |x_{\textit{err}}| + \frac{|x_{\textit{val}}|}{y^2_{\textit{val}}}\times |y_{\textit{err}}|
-   + |\mathcal{O}(X^2_{\textit{err}})|
+|PE(g)| & \leq & \frac{1}{|y_{\textit{val}}|}\times |x_{\textit{err}}| + \frac{|x_{\textit{val}}|}{y^2_{\textit{val}}}\times |y_{\textit{err}}| + |\mathcal{O}(X^2_{\textit{err}})|
 \end{array}$$
 
 **Example:** 2D Matrix multiplication
