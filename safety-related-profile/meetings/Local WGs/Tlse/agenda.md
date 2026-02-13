@@ -1,13 +1,36 @@
 
  (Availability : use the [When2Meet](https://www.when2meet.com/?34146939-oceVQ))
  
- #### 2025/02/13 
-- Operators : MaxPool
+#### 2025/02/27 
 
- #### 2025/02/13 
+##### Agenda
+- Operators: [MaxPool](../../../sonnx/ops/spec/informal/maxpool/maxpool.md)
+- Accurary: check the accuracy analysis of [div](../../../sonnx/ops/spec/informal/div/div_acc.md) and [tanh](../../../sonnx/ops/spec/informal/tanh/tanh_acc.md). See Franck's mail dated 2026/02/13.
+
+#### 2025/02/13
+##### Agenda
+No agenda defined...
+
+##### Minutes 
+- Travail sur **LeakyRelu**, **Max**, **Sigmoid**,  **Sqrt**, **Exp**, **Log**
+
+- [ ] Complete the disclaimer about tests and place emphasis on the last sentence (the rest being more methodological)
+- [ ] In the set of "basic mathematical operators" that , remove the inverse trigonometric functions
+- [ ] Check if, in the real domain, we use "$=\pm \infty$" without sayng that it is a limit.
+- [ ] Check that the sections of the inf. spec are always ordered Real, Float, Int  
+- [ ] Introduce broacdacting for all operators that support it. 
+    - (Eric) The other solution is to specify what is broadcasting and simply indicate, for a given operator, if it supports broadcasting or not. The effect of broadcasting on the operator can be explained once for all (see e.g., what has been done for **Max**).
+- [ ] Checks that all hyperlinks are relative (i.e., they shall not point to the current repo / branch)
+- [ ] Introduce the IEEE special values in the definition section. In particular, define "+0", "-0"
+    - (Eric) I think that a brief section about FP number would be worthwhile (with appropriate referenecs to the standard and to the well-known "What Every Computer Scientist...") ) 
+- [ ] When 0 is actually "+0", use "+0". "0" must be used either as the usual 0, or as "+0" or "-0".
+- [ ] Check the behaviour of **Max** for NaNs
+- [ ] Check **Max** for "-0".
+- [ ] Check all integer operators against overflow conditions
+- [ ] In the definition section, introduce the constants `minfloat16`, `maxfloat16`, etc. that are used (e.g.,) in the specification of **Exp**.
+
 
 #### 2025/02/04 
-
 - Feedback on strange observations on $MaxPool$ and code analysis. (30 min max)
 - Proposal of guidelines modifications to factorize restrictions and constraints. 
 - Discussion (1h max) about the specification of ops in FP. 
@@ -35,8 +58,8 @@
 
 ##### Mathematical operators
 - The specification is defined using the operators in R (in particular).
-- A specific implementation (the one that we will actually generate) may be described in the "Accuracy" section in order to suport the accuracy abnalysis. In that case, the operators will not be those in R but thos ein F. So we will use (e.g., "+." to express the addition in F).
-- The specification will be written using a certain set of "basic" operator that will nt be defined abny further. This includes at least `+`, `-`, `*`, `/`, `exp`, `sin`, etc.  They have to be defined in the "preamble" or "introduction" to SONNX.
+- A specific implementation (the one that we will actually generate) may be described in the "Accuracy" section in order to support the accuracy analysis. In that case, the operators will not be those in R but thos ein F. So we will use (e.g., "+." to express the addition in F).
+- The specification will be written using a certain set of "basic" operator that will nt be defined any further. This includes at least `+`, `-`, `*`, `/`, `exp`, `sin`, etc.  They have to be defined in the "preamble" or "introduction" to SONNX.
 - [X] Define the set of basic operators in the SONNX introduction
   - Added in the guidelines (Eric)
 - The operator shall be specified for all special values (infs, +/-0, and NaN). 
