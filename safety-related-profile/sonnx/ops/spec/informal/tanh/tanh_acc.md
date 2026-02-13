@@ -92,12 +92,10 @@ The bounds are tighter than the following computations
 
 for which the accuracy would be bound by
 
-$$\begin{array}{rcl}
-  |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + 8(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - 4\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right)\textit{ if } x\in [-1, 0] \\
-  |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + (8+n)(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - (4+\frac{n}{2})\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right) \textit{ if } x\in [-2^n, -1] \textit{ with integer } n >= 0 \textit { and } \exp(x) \textit{ is normal}\\
-  |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + \textcolor{red}{9}(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - \textcolor{red}{4.5}\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [0, 1]\\
-  |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}
-  \end{array}$$
+$$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + 8(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - 4\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right)\textit{ if } x\in [-1, 0]$$
+$$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + (8+n)(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - (4+\frac{n}{2})\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right) \textit{ if } x\in [-2^n, -1] \textit{ with integer } n >= 0 \textit { and } \exp(x) \textit{ is normal}$$
+$$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + \textcolor{red}{9}(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - \textcolor{red}{4.5}\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [0, 1]$$
+$$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}$$
 
 and
 
