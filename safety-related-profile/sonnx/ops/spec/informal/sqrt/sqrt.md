@@ -8,14 +8,12 @@ Based on ONNX documentation [Sqrt version 13](https://onnx.ai/onnx/operators/onn
 <a id="real"></a>
 # **Sqrt** (real)
 
-## Signature
-Definition of operator $\text{Sqrt}$ signature:  
+## Signature 
 $Y = \textbf{Sqrt}(X)$
 
 where:
 - $X$: Input tensor
 - $Y$: Square root of $X$
-
 
 
 ## Restrictions
@@ -30,14 +28,12 @@ The **Sqrt** operator computes the element-wise square root of the input tensor 
 
 The mathematical definition of the operator is given hereafter.
 
+**Sqrt** is only defined for positive values.  
+
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] =
-\begin{cases}
-\sqrt{X[i]} & \text{if } X[i] \ge 0 \\
-\text{\it undefined} & \text{otherwise}
-\end{cases}
+Y[i] = \sqrt{X[i]} 
 $$
 
 The effect of the operator is illustrated on the following examples.
@@ -102,10 +98,6 @@ Square root of tensor $X$.
 - `[C1]` <a id="C1ry"></a> Shape consistency  
   - Statement: See [constraint (C1) on X](#C1rx).
 
-## Formal specification
- 
-See the Why3 specification.
-
 <a id="float"></a>
 # **Sqrt** (float)
 where float is in {float16, float, double}
@@ -136,18 +128,13 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] =
 \begin{cases}
-\text{NaN} & \text{if } X[i]=\text{-inf} \\
-\text{-0.0} & \text{if } X[i]=\text{-0.0} \\
-\text{inf} & \text{if } X[i]=\text{inf} \\
 \text{NaN} & \text{if } X[i]=\text{NaN} \\
-
-\sqrt{X[i]} & \text{if } X[i] \ge 0 \\
-\text{NaN} & \text{if } X[i] < 0
+\text{NaN} & \text{if } X[i] \in [\text{-inf}, \text{-0}[  \\
+\text{-0} & \text{if } X[i]=\text{-0} \\
+\text{inf} &  \text{if } X[i] = \text{inf} \\
+\sqrt{X[i]} & \text{otherwise} \\
 \end{cases}
 $$
-
-
-
 
 The effect of the operator is illustrated on the following examples.
 
@@ -166,7 +153,7 @@ Y \approx  \begin{bmatrix} 1.0 & 1.41421354 & 2.0 \end{bmatrix}
 X = \begin{bmatrix}
   0.25 & -1.0 \\
   0.0    & 0.1 \\
-  10   & -1000
+  10.0   & -1000.0
 \end{bmatrix}
 ```
 
@@ -187,16 +174,14 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y \approx  \begin{bmatrix}
+Y = \begin{bmatrix}
   \text{+inf} & \text{NaN} & \text{NaN} & -0.0
 \end{bmatrix}
 ```
 
-
-
 ## Error conditions
 
-The function returns $\text{NaN}$ when the input is $\text{NaN}$ or negative, but -0.0 return 0.0
+The function returns $\text{NaN}$ when the input is strictly negative and different from -0. 
 
 ## Attributes
 

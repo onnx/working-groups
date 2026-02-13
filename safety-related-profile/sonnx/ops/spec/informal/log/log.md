@@ -9,15 +9,12 @@ Based on ONNX documentation [Log version 13](https://onnx.ai/onnx/operators/onnx
 <a id="real"></a>
 # **Log** (real)
 
-## Signature
-Definition of operator $\text{Log}$ signature:  
+## Signature 
 $Y = \textbf{Log}(X)$
 
 where:
 - $X$: Input tensor
 - $Y$: Natural logarithm of $X$
-
-
 
 ## Restrictions
 
@@ -31,14 +28,12 @@ The **Log** operator computes the element-wise natural logarithm of the input te
 
 The mathematical definition of the operator is given hereafter.
 
+**Log** is only defined for strictly positive values.
+
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] =
-\begin{cases}
-\log(X[i]) & \text{if } X[i] > 0 \\
-\text{\it undefined} & \text{otherwise}
-\end{cases}
+Y[i] = \log(X[i]) 
 $$
 
 The effect of the operator is illustrated on the following examples.
@@ -73,7 +68,7 @@ Y \approx  \begin{bmatrix}
 
 ## Error conditions
 
-No error condition beyond the undefined behavior for non-positive inputs in the mathematical model.
+No error condition.
 
 ## Attributes
 
@@ -81,7 +76,7 @@ Operator **Log** has no attribute.
 
 ## Inputs
 
-### $\text{X}$: real
+### $\text{X}$: real tensor
 
 Input tensor.
 
@@ -94,7 +89,7 @@ Input tensor.
 
 ## Outputs
 
-### $\text{Y}$: real
+### $\text{Y}$: real tensor
 
 Natural logarithm of tensor $X$.
 
@@ -102,10 +97,7 @@ Natural logarithm of tensor $X$.
 
 - `[C1]` <a id="C1ry"></a> Shape consistency  
   - Statement: See [constraint (C1) on X](#C1rx).
-
-## Formal specification
  
-See the Why3 specification.
 
 <a id="float"></a>
 # **Log** (float)
@@ -138,14 +130,12 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] =
 \begin{cases}
-\text{NaN} & \text{if } X[i]=\text{-inf} \\
-\text{-inf} & \text{if } X[i]=\text{-0.0} \\
-\text{inf} & \text{if } X[i]=\text{inf} \\
 \text{NaN} & \text{if } X[i]=\text{NaN} \\
-
-\log(X[i]) & \text{if } X[i] > 0 \\
+\text{NaN} & \text{if } X[i] \in [\text{-inf}, \text{-0}[ \\
 \text{-inf} & \text{if } X[i] = 0 \\
-\text{NaN} & \text{if } X[i] < 0
+\text{inf} &  \text{if } X[i] = \text{inf} \\
+\log(X[i]) & \text{otherwise} \\
+
 \end{cases}
 $$
 
@@ -167,7 +157,7 @@ Y \approx  \begin{bmatrix} 0 & 0.69314718 & 1.38629436 \end{bmatrix}
 ```math
 X = \begin{bmatrix}
   2.718  & -7.389 \\
-  0      & 0.1    \\
+  0.0      & 0.1    \\
   10     & -1000
 \end{bmatrix}
 ```
@@ -190,14 +180,14 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y \approx  \begin{bmatrix}
+Y =  \begin{bmatrix}
   \text{inf} & \text{NaN} & \text{NaN} & \text{-inf} & \text{-inf}
 \end{bmatrix}
 ```
 
 ## Error conditions
 
-The function returns $\text{NaN}$ when the input is $\text{NaN}$ or negative, but -0.0 return $\text{-inf}$.
+The function returns $\text{NaN}$ when the input is strictly negative and different from -0.0.
 
 ## Attributes
 

@@ -9,7 +9,7 @@ Based on ONNX documentation [Tanh version 13](https://onnx.ai/onnx/operators/onn
 # **Tanh** (real)
 
 ## Signature
-Definition of operator $\text{Tanh}$ signature:  
+
 $Y = \textbf{Tanh}(X)$
 
 where:

@@ -64,7 +64,7 @@ No constraint.
 
 ## Inputs
 
-### $\text{X}$: `real tensor`
+### $\text{X}$: real tensor
 Argument of the **LeakyRelu**.
 
 #### Constraints
@@ -74,7 +74,7 @@ Argument of the **LeakyRelu**.
   
 ## Outputs
 
-### $\text{Y}$: `real tensor`
+### $\text{Y}$: real tensor
 
 Tensor $Y$ is the output of the **LeakyRelu** applied to $X$.
 
@@ -116,18 +116,11 @@ Operator **LeakyRelu** is defined as follows:
 $$
 Y[i] =
 \begin{cases}
-\text{NaN} & \text{if } X[i] = \text{NaN} \\
-\alpha \cdot X[i] & \text{if } X[i] < 0 \text{ and } \alpha \neq \text{NaN} \\
-\text{NaN} & \text{if } X[i] < 0 \text{ and } \alpha = \text{NaN} \\
-\text{inf} & \text{if } X[i] = \text{inf} \\
-\text{-inf} & \text{if } X[i] = \text{-inf} \text{ and } \alpha \neq \text{NaN} \\
-\text{NaN} & \text{if } X[i] = \text{-inf} \text{ and } \alpha = \text{NaN} \\
--0 & \text{if } X[i] = -0 \\
-X[i] & \text{if } X[i] > 0 \\
+\text{NaN} & \text{if } X[i] \in [\text{-Inf}, -0[~~ \wedge ~\alpha = \text{NaN} \\
+\alpha\cdot X[i]  & \text{if } X[i] \in [\text{-Inf}, -0[~~ \wedge ~\alpha \neq \text{NaN} \\
+X[i] & \text{otherwise} \\
 \end{cases}
 $$
-
-
 
 ### Example 1
 
@@ -205,7 +198,7 @@ The function returns $\text{NaN}$ only when the input is $\text{NaN}$, or when t
 
 ## Inputs
 
-### $\text{X}$: `floating-point tensor`
+### $\text{X}$: floating-point tensor
 Argument of the **LeakyRelu**.
 
 #### Constraints
@@ -215,7 +208,7 @@ Argument of the **LeakyRelu**.
   
 ## Outputs
 
-### $\text{Y}$: `floating-point tensor`
+### $\text{Y}$: floating-point tensor
 
 Tensor $Y$ is the output of the **LeakyRelu** applied to $X$.
 

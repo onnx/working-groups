@@ -9,7 +9,6 @@ Based on ONNX documentation [Sigmoid version 13](https://onnx.ai/onnx/operators/
 # **Sigmoid** (real)
 
 ## Signature
-Definition of operator $\text{Sigmoid}$ signature:  
 $Y = \textbf{Sigmoid}(X)$
 
 where:
@@ -26,7 +25,7 @@ No specific restrictions apply to the **Sigmoid** operator.
 
 ## Informal specification
 
-The **Sigmoid** operator computes the element-wise logistic sigmoid of the input tensor $X$.
+The **Sigmoid** operator computes the element-wise  sigmoid of the input tensor $X$.
 
 The mathematical definition of the operator is given hereafter.
 
@@ -106,7 +105,6 @@ where float is in {float16, float, double}
 
 ## Signature
 
-Definition of operator $\text{Sigmoid}$ signature:  
 $Y = \textbf{Sigmoid}(X)$
 
 where:
@@ -135,7 +133,7 @@ Y[i] =
 \text{1.0} & \text{if } X[i]=\text{inf} \\
 \text{NaN} & \text{if } X[i]=\text{NaN} \\
 
-\frac{1}{1 + e^{-X[i]}} & \text{otherwise}   \\
+1 / (1 + e^{-X[i]}) & \text{otherwise}   \\
 \end{cases}
 $$
 
@@ -187,7 +185,7 @@ Y \approx  \begin{bmatrix}
 
 ## Error conditions
 
-No particular error, the function returns $\text{NaN}$ when the input is $\text{NaN}$.
+No error condition.
 
 ## Attributes
 

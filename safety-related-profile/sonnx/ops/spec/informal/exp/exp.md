@@ -9,7 +9,7 @@ Based on ONNX documentation [Exp version 13](https://onnx.ai/onnx/operators/onnx
 # **Exp** (real)
 
 ## Signature
-Definition of operator $\text{Exp}$ signature:  
+ 
 $Y = \textbf{Exp}(X)$
 
 where:
@@ -43,7 +43,7 @@ X = \begin{bmatrix} 0 & 1 & -1 \end{bmatrix}
 ```
 
 ```math
-Y = \begin{bmatrix} 1.0 & 2.71828175 & 0.36787945 \end{bmatrix}
+Y \approx \begin{bmatrix} 1 & 2.71828175 & 0.36787945 \end{bmatrix}
 ```
 
 ### Example 2
@@ -58,7 +58,7 @@ X = \begin{bmatrix}
 
 ```math
 Y \approx  \begin{bmatrix}
-  0.135335281 & 1.0        \\
+  0.135335281 & 1        \\
   2.71828175 & 7.38905621 \\
   0.018315639 & 54.5981483
 \end{bmatrix}
@@ -74,7 +74,7 @@ Operator **Exp** has no attribute.
 
 ## Inputs
 
-### $\text{X}$: real
+### $\text{X}$: real tensor
 
 Input tensor.
 
@@ -85,7 +85,7 @@ Input tensor.
 
 ## Outputs
 
-### $\text{Y}$: real
+### $\text{Y}$: real tensor
 
 Exponential of tensor $X$.
 
@@ -105,7 +105,7 @@ where float is in {float16, float, double}
 ## Signature
 
 Definition of operator $\text{Exp}$ signature:  
-$Y = \text{bfExp}(X)$
+$Y = \textbf{Exp}(X)$
 
 where:
 - $X$: Input tensor
@@ -128,14 +128,18 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 Y[i] =
 \begin{cases}
-\text{0.0} & \text{if } X[i]=\text{-inf} \\
-\text{+inf} & \text{if } X[i]=\text{+inf} \\
 \text{NaN} & \text{if } X[i]=\text{NaN} \\
+\text{0.0} & \text{if } X[i]=\text{-inf} \\
+\text{+inf} & \text{if } X[i]=\text{+inf} ~\text{or}~X[i]> X_{max}\\
 
-Y[i] = e^{X[i]} & \text{otherwise}   \\
+e^{X[i]} & \text{otherwise}   \\
 \end{cases}
 $$
 
+The values of $X_{max}$ are defined hereafter:
+- float16: $X_{max}= \ln(\text{maxfp16}) \approx 11.09375$.
+- float: $X_{max}= \ln(\text{maxfp32}) \approx 88.72283935546875$.
+- double: $X_{max} = \ln(\text{maxfp64}) \approx 709.782712893384$.
 
 The effect of the operator is illustrated on the following examples.
 
@@ -177,14 +181,14 @@ X = \begin{bmatrix}
 ```
 
 ```math
-Y \approx  \begin{bmatrix}
+Y =  \begin{bmatrix}
   \text{+inf} & \text{NaN} & 0.0
 \end{bmatrix}
 ```
 
 ## Error conditions
 
-No particular error, the function returns $\text{NaN}$ only when the input is $\text{NaN}$
+No error condition.
 
 ## Attributes
 
@@ -195,13 +199,6 @@ Operator **Exp** has no attribute.
 ### $\text{X}$: floating-point tensor
 
 Input tensor.
-
-*FP16*: the input range for non +Inf values of `Y` is defined by $[-65504.0, \ln(65504.0)] = [-65504.0, 11.09375]$.
-
-*FP32*: the input range for non +Inf values of `Y` is defined by $[-3.4028234663852886e+38, \ln(3.4028234663852886e+38)] = [-3.4028234663852886e+38, 88.72283935546875]$.
-
-*FP64*: the input range for non +Inf values of `Y` is defined by $[-1.7976931348623157e+308, \ln(1.7976931348623157e+308)] = [-1.7976931348623157e+308, 709.782712893384]$.
-
 
 #### Constraints
 

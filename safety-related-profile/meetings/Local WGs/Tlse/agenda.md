@@ -2,9 +2,9 @@
  (Availability : use the [When2Meet](https://www.when2meet.com/?34146939-oceVQ))
  
  #### 2025/02/13 
+- Operators : MaxPool
 
-- Feedback about MaxPool to ORT?
-- Operators : 
+ #### 2025/02/13 
 
 #### 2025/02/04 
 
@@ -55,9 +55,8 @@
 - [ ] Elaborate a clear testing strategy
 - The main test oracle is ORT. However, in some cases (e.g., MaxPool) the behaviour of ORT may be different from what we would expect (example: effect of inf in inputs). In that case, if the behaviour is not a manifest error (such as the case of "-4)...), we will add a notice explaining the discrepancy between our spec and the observable behaviour of ORT. 
   - Notice added (Eric)
-- [ ] Move the existing tests in the test folder
-
-- [ ] Check the behaviour of MaxPool with ORT on a GPU executor. 
+- [X] Move the existing tests in the test folder
+- [ ] (Henri) Check the behaviour of MaxPool with ORT on a GPU executor. 
 
 ##### Error conditions
 - An "error condition" is a condition for which an operator can not compute a value that maps to some real counterpart (i.e., excluding Infs and NaN). It shall not cover the case where the output is not a value due to a simple propagation (of NaN, of Inf...).
@@ -88,7 +87,7 @@
   - [X] (1501-1, Jean-Baptiste) Faire une proposition de contenu pour une soumission à  CETiC
     - Proposition faite par JB le 16/01. 
     - Modifications proposées par Eric le <19/01>
-  - [ ] (1501-2, Jean-Loup) Remove the relation NaN>Inf... and replace it by an explicit test for NaNs... 
+  - [X] (1501-2, Jean-Loup) Remove the relation NaN>Inf... and replace it by an explicit test for NaNs... 
   - [X] (1501-3, Eric) Introduce the term "Scalar" and (our) concept of "type" (numerical / value type) in the glossary. 
     - Done, see [here](../../../sonnx/ops/spec/informal/common/definitions.md).
   - [X] (1501-4, eric Clarify the meaning of "heterogeneous" in ONNX

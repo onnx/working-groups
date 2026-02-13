@@ -32,9 +32,10 @@ The writer of the non-formal specification must take care to keep it readable an
 The specification may use some mathematical operators or functions without defining them. Those operators / functions are considered to be "well-known" so that there is no need to define them.
 
 The following operators and functions belong to this set:
-- basic mathematical operations ($+$, $-$, $*$, $/$)
-- trignonometric operations ($sin$, $cos$, $tan$, $asin$, $acos$, $atan$)
-- $min$ and $max$
+- basic mathematical operations: $+$, $-$, $*$, $/$
+- trignonometric operations: $-x$, $\sin(x)$, $\cos(x)$, $\tan(x)$, $\exp(x)$, $\sqrt x$, $\ln(x)$, $x^y$, $|x|$
+- $\min(x,y)$ and $\max(x,y)$
+- logical operators: $\wedge$, $\vee$, $\lnot$ 
   
 
 ### Naming conventions
