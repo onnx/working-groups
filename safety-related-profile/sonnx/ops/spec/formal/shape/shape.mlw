@@ -1,0 +1,83 @@
+module OPShape
+    use list.List
+    use int.Int
+    use tensor.Range
+    use list.Length
+    use tensor.Tensor
+    use list.Mem
+
+    let rec ghost function my_nth (n: int) (l:list int) : int
+        requires { n >= 0 /\ n < length(l) }
+        requires { length(l) > 0 }
+        variant { length(l) }
+        =
+            match l with
+            | Cons h t ->
+                if n = 0 then
+                    h
+                else
+                    my_nth (n-1) t
+            end
+
+    let ghost function clamp_boundaries (x_rank: int) (start: int) (end_: int) : (int, int)
+    ensures { let (s,e) = result in 0 <= s /\ e <= x_rank }
+    =
+        let start = if start < 0 then start + x_rank else start in
+        let end_ = if end_ < 0 then end_ + x_rank else end_ in
+        let start = if start < 0 then 0 else start in
+        let end_ = if end_ > x_rank then x_rank else end_ in
+        (start, end_)
+    
+    let rec ghost function calculate_y_dims (x_dims: list int) (start: int) (end_: int) : list int
+    requires { positive x_dims }
+    requires { 0 <= start /\ end_ <= length x_dims }
+    ensures {start = 0  /\ end_ >= start -> length result = end_ - start }
+    ensures { forall i. 0 <= i < length result /\ start = 0 -> my_nth i result = my_nth i x_dims }
+    ensures { positive result }
+    =
+        if start >= end_ then
+            Nil
+        else
+            match x_dims with
+                | Nil -> Nil
+                | Cons h t -> 
+                    if start > 0 then 
+                        calculate_y_dims t (start - 1) (end_ - 1)
+                    else 
+                        Cons h (calculate_y_dims t 0 (end_ - 1))
+            end
+
+    (*Try to find a smarter way to describe 2nd requires*)
+    let ghost function dshape_ (x: tensor int) (start: int) (end_: int) (result_y: list int ) (y_dims: list int): data int
+    requires { 0 <= start /\ end_ <= length x.dims }
+    requires { result_y = calculate_y_dims x.dims start end_ }
+    requires { y_dims = if length result_y > 0 then Cons (length result_y) Nil else Nil }
+    ensures { forall ks. valid ks y_dims -> length ks <= 1 /\
+                match ks with
+                | Cons k0 Nil -> result ks = my_nth k0 result_y
+                | _ -> true
+                end
+            }
+    ensures { forall ks. not (valid ks y_dims) -> result ks = x.background }
+    = 
+        fun ks ->
+            if valid ks y_dims then
+                match ks with
+                    | Cons k0 Nil -> my_nth k0 result_y
+                    | Nil -> x.background
+                    | _ -> absurd
+                end
+            else
+                x.background
+
+    
+    let ghost function opshape (x: tensor int) (start: int) (end_: int) : tensor int
+    =
+        let x_rank = length x.dims in
+        let (clamped_start, clamped_end) = clamp_boundaries x_rank start end_ in
+        let result_y = calculate_y_dims x.dims clamped_start clamped_end in
+        let y_dims = if length result_y > 0 then Cons (length result_y) Nil else Nil in
+        let y_data = dshape_ x clamped_start clamped_end result_y y_dims in
+        { dims = y_dims; data = y_data; background = x.background }
+       
+end 

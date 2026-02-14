@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="tensor.mlw"/>
+<theory name="Range" proved="true">
+ <goal name="valid_push&#39;vc" expl="VC for valid_push" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="valid_push&#39;vc.0" expl="unreachable point" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.0.0" expl="unreachable point" proved="true">
+   <proof prover="1"><result status="valid" time="0.021458" steps="3774"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="valid_push&#39;vc.1" expl="variant decrease" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.1.0" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.000001" steps="2436"/></proof>
+   </goal>
+   <goal name="valid_push&#39;vc.1.1" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.004016" steps="6470"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="valid_push&#39;vc.2" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.2.0" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.000001" steps="1716"/></proof>
+   </goal>
+   <goal name="valid_push&#39;vc.2.1" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.003401" steps="1716"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="valid_push&#39;vc.3" expl="precondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.3.0" expl="precondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.009139" steps="19756"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="valid_push&#39;vc.4" expl="unreachable point" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.4.0" expl="unreachable point" proved="true">
+   <proof prover="1"><result status="valid" time="0.020069" steps="3923"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="valid_push&#39;vc.5" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="valid_push&#39;vc.5.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.013200" steps="57902"/></proof>
+   </goal>
+   <goal name="valid_push&#39;vc.5.1" expl="postcondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.027993" steps="6508"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="size_append&#39;vc" expl="VC for size_append" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="size_append&#39;vc.0" expl="variant decrease" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="size_append&#39;vc.0.0" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.003789" steps="2632"/></proof>
+   </goal>
+   <goal name="size_append&#39;vc.0.1" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.000001" steps="6949"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="size_append&#39;vc.1" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="size_append&#39;vc.1.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.013000" steps="34703"/></proof>
+   </goal>
+   <goal name="size_append&#39;vc.1.1" expl="postcondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.026320" steps="4594"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="size_push" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="size_push.0" proved="true">
+  <proof prover="0"><result status="valid" time="0.011320" steps="61"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="positive_size&#39;vc" expl="VC for positive_size" proved="true">
+ <proof prover="1"><result status="valid" time="0.041247" steps="5826"/></proof>
+ </goal>
+ <goal name="positive_valid&#39;vc" expl="VC for positive_valid" proved="true">
+ <proof prover="1"><result status="valid" time="0.043858" steps="6680"/></proof>
+ </goal>
+ <goal name="non_negative_size&#39;vc" expl="VC for non_negative_size" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="non_negative_size&#39;vc.0" expl="variant decrease" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_size&#39;vc.0.0" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.000001" steps="3089"/></proof>
+   </goal>
+   <goal name="non_negative_size&#39;vc.0.1" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.004411" steps="8166"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="non_negative_size&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.013546" steps="23984"/></proof>
+  </goal>
+  <goal name="non_negative_size&#39;vc.2" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_size&#39;vc.2.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.008196" steps="35144"/></proof>
+   </goal>
+   <goal name="non_negative_size&#39;vc.2.1" expl="postcondition" proved="true">
+   <proof prover="1"><result status="valid" time="0.030936" steps="8247"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="non_negative_valid&#39;vc" expl="VC for non_negative_valid" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="non_negative_valid&#39;vc.0" expl="variant decrease" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_valid&#39;vc.0.0" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.003370" steps="3139"/></proof>
+   </goal>
+   <goal name="non_negative_valid&#39;vc.0.1" expl="variant decrease" proved="true">
+   <proof prover="2"><result status="valid" time="0.003518" steps="8321"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="non_negative_valid&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.006743" steps="24790"/></proof>
+  </goal>
+  <goal name="non_negative_valid&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.024026" steps="5416"/></proof>
+  </goal>
+  <goal name="non_negative_valid&#39;vc.3" expl="postcondition" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="non_negative_valid&#39;vc.3.0" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.014777" steps="25153"/></proof>
+   </goal>
+   <goal name="non_negative_valid&#39;vc.3.1" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.010514" steps="25417"/></proof>
+   </goal>
+   <goal name="non_negative_valid&#39;vc.3.2" expl="postcondition" proved="true">
+   <proof prover="2"><result status="valid" time="0.007848" steps="25082"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="Tensor" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <proof prover="1"><result status="valid" time="0.022056" steps="5713"/></proof>
+ </goal>
+ <goal name="exteq" proved="true">
+ <proof prover="0" obsolete="true"><result status="timeout" time="1.000000" steps="88730"/></proof>
+ <proof prover="1" obsolete="true"><result status="unknown" time="0.048063" steps="12069"/></proof>
+ <proof prover="2" obsolete="true"><result status="timeout" time="1.000000" steps="3625774"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="exteq.0" proved="true">
+  <proof prover="0"><result status="valid" time="0.018235" steps="49"/></proof>
+  </goal>
+  <goal name="exteq.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.008565" steps="25467"/></proof>
+  </goal>
+  <goal name="exteq.2" proved="true">
+  <proof prover="2"><result status="valid" time="0.003978" steps="21337"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="scalar&#39;vc" expl="VC for scalar" proved="true">
+ <proof prover="1"><result status="valid" time="0.023596" steps="6626"/></proof>
+ </goal>
+ <goal name="zero&#39;vc" expl="VC for zero" proved="true">
+ <proof prover="2"><result status="valid" time="0.011510" steps="29596"/></proof>
+ </goal>
+ <goal name="const&#39;vc" expl="VC for const" proved="true">
+ <proof prover="2"><result status="valid" time="0.003957" steps="30107"/></proof>
+ </goal>
+ <goal name="zero_is_const" proved="true">
+ <proof prover="0"><result status="valid" time="0.013489" steps="65"/></proof>
+ </goal>
+</theory>
+<theory name="OPWhere" proved="true">
+ <goal name="dwhere&#39;vc" expl="VC for dwhere" proved="true">
+ <proof prover="2"><result status="valid" time="0.006044" steps="1872"/></proof>
+ </goal>
+ <goal name="opwhere&#39;vc" expl="VC for opwhere" proved="true">
+ <proof prover="2"><result status="valid" time="0.009305" steps="38880"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>
