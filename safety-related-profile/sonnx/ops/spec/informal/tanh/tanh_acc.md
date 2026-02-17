@@ -59,7 +59,7 @@ it should adapt the formula below to show that the `tanh` opeator verifies it.
 
 $$\begin{array}{rcl}
   |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & 
-  \frac{\textit{err}_{\textit{rel}}(\exp(-2|x|))\times 2e^{-2|x|}(1+\textit{\textbf{u}}) + 2\textit{\textbf{u}}(1-e^{-4|x|})}{(1+e^{-2|x|})\left((1+e^{-2|x|})\times(1 - \textit{\textbf{u}}) - \textit{err}_{\textit{rel}}(\exp(-2x))\times e^{-2|x|}\times(1+\textit{\textbf{u}})\right)}\times(1 + \textit{\textbf{u}}) + u\times\frac{1-e^{-2|x|}}{1+e^{-2|x|}}
+  \frac{\textit{err}_{\textit{rel}}(\exp(-2|x|))\times 2e^{-2|x|}(1+\textit{\textbf{u}}) + 2\textit{\textbf{u}}(1-e^{-4|x|})}{(1+e^{-2|x|})\left((1+e^{-2|x|})\times(1 - \textit{\textbf{u}}) - \textit{err}_{\textit{rel}}(\exp(-2|x|))\times e^{-2|x|}\times(1+\textit{\textbf{u}})\right)}\times(1 + \textit{\textbf{u}}) + u\times\frac{1-e^{-2|x|}}{1+e^{-2|x|}}
   \end{array}$$
 
 for the standard rounding mode round to nearest even, provided $e^{-2|x|}$ and $Y_{\textit{val}}[I]$ are
