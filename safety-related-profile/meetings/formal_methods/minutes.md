@@ -1,7 +1,7 @@
 
 # 2026/02/18
 
-See the list of [topics](./inputs/inputs-2026-02-18.md)
+See the list of [topics](./inputs/2026-02-18%20-%20Inputs.md) and [Loïc's notes](../formal_methods/slides/2026-02-18%20-%20Loic%20notes.pdf).
 
 # 2025/06/20
 
