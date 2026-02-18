@@ -2,6 +2,54 @@
 
 This document gives the guidelines to be followed when writing an operator's non-formal specification. Guidelines for the development of formal specification are given in a [dedicated document](./formal.md).
 
+# Rationales
+
+The non-formal specification is first an entry-point for any *user* of the SONNX profile. Towards that goal, it must explain clearly the purpose of the operator, i.e., the relation between its inputs (arguments and attributes) and its outputs. Towards that goal, it may use whatever means deemed useful including text description, mathematical formulae, graphics, examples. 
+
+It must also provide a clear statement about:
+- the usage restrictions for the operator imposed by SONNX,
+- the constraints on the arguments and attributes of the operator (or pre-conditions") that must be satisfied for the operator to be applicable, 
+- the possible errors that may raise during the execution of the operator.
+
+In the following paragraphs, we express some of the "principles" that we applied to eleborate the  guidelines.
+
+#### About the level of formalization
+The non-formal specifications aims at providing a clear and complete description of the behavior of the subset of operators considered in the SONNX profile. Understandability is favored over formalization, accordingly, the non-formal specification essentially relies on natural language, with mathematical formulae when deemed necessary. In addition, for each operator, a formal specification expressed using a formal language (Why3) is provided separately.  
+
+#### About data types
+The non-formal specification is given for all data types considered in SONNX i.e.: int8, uint8, int16, uint16, int32, uint32, int64, uint64, float, double and float64. In addition, SONNX also provides a specification of each (mathematical) operator for real numbers. This is aimed at facilitating the understanding of the core function of the operator without dealing with implementation-specific issues such as the effect of overflows (for ints and uints) or the handling of special float values (+Inf, -Inf, NaN, 0+, 0-).   
+
+#### About floating point numbers
+
+Floating point operations are specified in compliance with the the IEEE 754 standards (IEEE Standard for Floating-Point Arithmetic, IEEE Std 754 2019, IEEE). In particular, care is taken to describe the expected behaviour of mathematical operator when dealing with IEEE special values (+Inf, -Inf, +0+, -0, and NaN).
+
+#### About the compliance with implementation standards
+
+SONNX is essentially a specification effort. As such, it must remain independent from any specific implementation and, instead, must simply express the intended behavior of each operator according to some usual and/or consensual understanding of its semantics. However, tests realized by the SONNX WG on the implementations of some operators (e.g., **MaxPool**) show that the actual behavior sometimes differs significantly from the expected one, due to implementation choices or, sometimes, implementation bugs. 
+
+Even if we consider that the SONNX specification shall not "reflect" a specific implementation, it shall preferably stick to the ONNX Runtime implementation when choices have to be made. When, for a given operator, the usual/consensual semantics and the ONNRtime implementation diverge, the SONNX WG choose to indicate this discrepancy. This is for instance the case for the **MaxPool** operator. 
+Note also that the semantics of an operator in ONNX runtime may depend on the execution backend (CPU, GPU,...). 
+
+#### About error conditions
+
+An error condition is a condition leading to an unexpected result. Obviously, if the specification is clear and complete, all possible behaviour should be "expected". However, we consider worth being mentioned any result leading to 
+- an "unexpected result", such as a division by zero in the  integer domain
+- a NaN in the floating point domain *when this NaN is not simply the propagation of a NaN in the operator inputs*
+
+In some cases, a pre-condition may be stated on the inputs so that, if the pre-condition is satisfied, then no error -- NaN, division by zero, etc. -- can occur. For instance, no division by zero can occur if the condition stating that "the denominator shall not be null" is satisfied.  Nevertheless, the possibility for an error to occur will still be signaled to the reader.
+
+Systematically providing pre-conditions on the inputs to prevent error conditions was not considered useful for the end-user since operators are generally used in complex graphs for which verifying the preconditions to prevent the occurrence of error is not achievable in practice. 
+
+#### About accuracy
+
+The SONNX profile does not specify the accuracy of operators, instead, it provides guidance on how to analyze the propagation and introduction of errors on a given implementation and illustrates the approach on SONNX' reference implementation.
+
+The analysis is carried out in two steps: 
+- During step 1, an analysis is carried out to specify bounds on propagated and introduced errors considering the IEEE rounding error. This bounds may not be the tightest one, but a bound that can be determined with a reasonable analysis effort.  
+- During step 2, an analysis of the code of an actual implementation (in our case, the reference implementation) is carried out using a tool developed for that purpose by one of the SONNX WG contributor (Franck Vedrine, [CEA List](www.cea.fr/)).
+
+Please refer to the [specific set of guidelines](../../docs/guidelines/accuracy.md) are given for the analysis of accuracy.
+
 # Specification guidelines
 This section is composed of two sub-sections:
 - *General guidelines* defining presentation rules such as fonts, notations, use of tags for tracability, etc. 
