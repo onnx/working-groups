@@ -4,9 +4,11 @@
 #### 2025/02/27 
 
 ##### Agenda
-- Operators: [MaxPool](../../../sonnx/ops/spec/informal/maxpool/maxpool.md)
-- Accurary: check the accuracy analysis of [div](../../../sonnx/ops/spec/informal/div/div_acc.md) and [tanh](../../../sonnx/ops/spec/informal/tanh/tanh_acc.md). See Franck's mail dated 2026/02/13.
-
+- Review of actions 
+- Operators: [MaxPool](../../../sonnx/ops/spec/informal/maxpool/maxpool.md) and [Pow](../../../sonnx/ops/spec/informal/pow/pow.md).
+- Accuracy: check the accuracy analysis of [div](../../../sonnx/ops/spec/informal/div/div_acc.md) and [tanh](../../../sonnx/ops/spec/informal/tanh/tanh_acc.md). See Franck's mail dated 2026/02/13.
+- (Re-)discussion about using composition when defining complex operator. The case of **Conv**.
+  
 #### 2025/02/13
 ##### Agenda
 No agenda defined...
@@ -14,20 +16,25 @@ No agenda defined...
 ##### Minutes 
 - Travail sur **LeakyRelu**, **Max**, **Sigmoid**,  **Sqrt**, **Exp**, **Log**
 
-- [ ] Complete the disclaimer about tests and place emphasis on the last sentence (the rest being more methodological)
-- [ ] In the set of "basic mathematical operators" that , remove the inverse trigonometric functions
-- [ ] Check if, in the real domain, we use "$=\pm \infty$" without sayng that it is a limit.
-- [ ] Check that the sections of the inf. spec are always ordered Real, Float, Int  
-- [ ] Introduce broacdacting for all operators that support it. 
+- [X] Complete the disclaimer about tests and place emphasis on the last sentence (the rest being more methodological)
+  - (Eric) Done. 
+- [X In the set of "basic mathematical operators" that , remove the inverse trigonometric functions
+  - (Eric) Done.
+- [ ] Check if, in the real domain, we use "$=\pm \infty$" without saying that it is a limit.
+- [ ] Check that the sections of the spec are always ordered as follows: Real, Float, Int  
+- [ ] Introduce broadcasting for all operators that support it. 
     - (Eric) The other solution is to specify what is broadcasting and simply indicate, for a given operator, if it supports broadcasting or not. The effect of broadcasting on the operator can be explained once for all (see e.g., what has been done for **Max**).
 - [ ] Checks that all hyperlinks are relative (i.e., they shall not point to the current repo / branch)
-- [ ] Introduce the IEEE special values in the definition section. In particular, define "+0", "-0"
-    - (Eric) I think that a brief section about FP number would be worthwhile (with appropriate referenecs to the standard and to the well-known "What Every Computer Scientist...") ) 
-- [ ] When 0 is actually "+0", use "+0". "0" must be used either as the usual 0, or as "+0" or "-0".
+- [X] Introduce the IEEE special values in the definition section. In particular, define "+0", "-0"
+    - (Eric) Done.
+    - I think that a brief section about FP number would be worthwhile (with appropriate references to the standard and to the well-known "What Every Computer Scientist...") ) 
+- [X] When 0 is actually "+0", use "+0". "0" must be used either as the usual 0, or as "+0" or "-0".
+  - (eric) Added in [notations](../../../sonnx/ops/spec/informal/common/notations.md).
 - [ ] Check the behaviour of **Max** for NaNs
 - [ ] Check **Max** for "-0".
 - [ ] Check all integer operators against overflow conditions
-- [ ] In the definition section, introduce the constants `minfloat16`, `maxfloat16`, etc. that are used (e.g.,) in the specification of **Exp**.
+- [X] In the definition section, introduce the constants `minfloat16`, `maxfloat16`, etc. that are used (e.g.,) in the specification of **Exp**.
+  - (Eric) Added in [definitions](../../../sonnx/ops/spec/informal/common/definitions.md).
 
 
 #### 2025/02/04 

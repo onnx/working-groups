@@ -75,16 +75,13 @@ The writer of the non-formal specification must take care to keep it readable an
 - In the text, operator attributes are represented using `this font`.  
 - As far as possible, names of arguments and attributes shall be used in mathematical formulae. In the case the name is "too long", another, shorter designation, may be used with a clear statement of the redefinition. If the symbol refers to a greek symbol (e.g., $\text{alpha}$), the symbol itself can be used (e.g., $\alpha$).  
 
-### Basic operators
-
-The specification may use some mathematical operators or functions without defining them. Those operators / functions are considered to be "well-known" so that there is no need to define them.
-
-The following operators and functions belong to this set:
-- basic mathematical operations: $+$, $-$, $*$, $/$
-- trignonometric operations: $-x$, $\sin(x)$, $\cos(x)$, $\tan(x)$, $\exp(x)$, $\sqrt x$, $\ln(x)$, $x^y$, $|x|$
-- $\min(x,y)$ and $\max(x,y)$
+### Basic operations
+The specification may use the following operations without first defining them:
+- $+$, $-$, $*$, $/$, $-x$ (negation),
+- $\sin(x)$, $\cos(x)$, $\tan(x)$,
+- $\exp(x)$, $\sqrt x$, $\ln(x)$, $|x|$
+- $\min(x,y)$, $\max(x,y)$
 - logical operators: $\wedge$, $\vee$, $\lnot$ 
-  
 
 ### Naming conventions
 - As far as possible, ONNX names for inputs, outputs, and attributes must be used.
