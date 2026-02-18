@@ -132,6 +132,7 @@ where float is in {float16, float, double}
 ## Signature
 
 Definition of operator $\text{Pow}$ signature:
+
 $C = \textbf{Pow}(A, B)$
 
 where:
@@ -144,7 +145,10 @@ where:
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
-No specific restrictions apply to the **Pow** operator.
+In more than the additionnal [Restrictions](#restrictions) the input range of $B[i]$ is limited for float :
+
+- Even if it is possible to compute **Pow** in the real space when B$[i] = \frac{q}{p} \text{ in its simplest form with } q \text{ odd}$ this value will be not defined in float and will return a NaN. `[R4]`
+
 
 ## Informal specification
 
@@ -152,40 +156,45 @@ Operator **Pow** computes the element-wise power between input tensors $A$ and $
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
-$$
-C[i] =
-\begin{cases}
-\text{NaN} & \text{if } A[i]=\text{NaN} \text{ or } B[i]=\text{NaN} \\
-1.0 & \text{if } B[i]=0 \text{ and } A[i]\neq \text{NaN} \\
-0.0 & \text{if } A[i]=0 \text{ and } B[i] > 0 \\
-+\text{inf} & \text{if } A[i]=+\text{inf} \text{ and } B[i] > 0 \\
-A[i]^{B[i]} & \text{otherwise (IEEE754)}
-\end{cases}
-$$
 
-In particular:
 
-* If $A[i] < 0$ and $B[i]$ is not an integer value, the result is NaN.
-* If $A[i]=0$ and $B[i]<0$, the result is $+\text{inf}$ according to IEEE 754 rules.
-* Overflow results in $\pm\text{inf}$.
-* Underflow results in $\pm 0.0$.
+
 
 $$
-C[i] =
-\begin{cases}
+C[i] = \begin{cases}
+\text{NaN} & \text{if } (A[i] = \text{NaN} \text{ and } B[i] \neq \pm0) \text{ or } B[i] = \text{NaN} \\
+\text{NaN} & \text{if } A[i] \in ]-\infty, +\infty[ \text{ and } B[i] \notin \mathbb{Z}  \text{ and } B[i] \neq \pm0 \\
+
+1.0 & \text{if } B[i] = \pm 0 \\
 0.0 & \text{if } A[i] = 0 \text{ and } B[i] > 0 \\
-A[i]^{B[i]} & \text{if } A[i] > 0 \\
-\text{undefined} & \text{if } A[i] = 0 \text{ and } B[i] \leq 0 \\
-\text{undefined} & \text{if } A[i] < 0 \text{ and } B[i] \text{ is not an integer} \\
-\text{NaN} & \text{if } A[i] = \text{NaN} \text{ or } B[i] = \text{NaN} \\
-1.0 & \text{if } B[i] = 0 \text{ and } A[i] \neq \text{NaN} \\
-0.0 & \text{if } A[i] = 0 \text{ and } B[i] > 0 \\
+0.0 & \text{if } A[i] = \pm\infty \text{ and } B[i] < 0 \\
+0.0 & \text{if } A[i] \in ]-\infty, +\infty[  and A[i] \neq \pm0 \text{ and } B[i] = -\infty \\
 +\infty & \text{if } A[i] = +\infty \text{ and } B[i] > 0 \\
-A[i]^{B[i]} & \text{otherwise (IEEE 754 standard)}
++\infty & \text{if } A[i] = \pm0 \text{ and } B[i] < 0 \\
+A[i]^{B[i]} & \text{otherwise}
 \end{cases}
 $$
+
+
+
+
 
 [HBE revoir la formule, un tableau ? C'est pas fini]
+
+|  A\B   | -inf |$$]-\infty, 0[ \in \mathbb{Z}$$|$$]-\infty, 0[ \notin \mathbb{Z} $$| -0.0 | 0.0  |$$]0,+\infty[ \notin \mathbb{Z} $$ |$$]0,+\infty[ \in \mathbb{Z}$$| inf  | nan  |
+|--------|------|----------|---------|------|------|------|-------|------|------|
+|  -inf  | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
+|]-inf,0[| 0    |    A^B   |    nan  | 1    | 1    | nan  |  A^B  | inf  | nan  |
+|  -0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
+|   0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
+|]0,inf[ | 0    |    A^B   |    A^B  | 1    | 1    | A^B  |  A^B  | inf  | nan  |
+| inf    | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
+| nan    | nan  |    nan   |    nan  | 1    | 1    | nan  |  nan  | nan  | nan  |
+
+
+
+
+
 
 ### Example 1
 
