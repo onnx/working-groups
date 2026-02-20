@@ -154,45 +154,95 @@ In more than the additionnal [Restrictions](#restrictions) the input range of $B
 
 Operator **Pow** computes the element-wise power between input tensors $A$ and $B$ according to IEEE 754 floating-point semantics and stores the result in output tensor $C$.
 
+
+
+Note : a revoir si 100% correct car meme si la source est mpfr, il manque des cas de NaN exemple B=NaN, A=NaN sauf pour 0
+|source mpfr :|---|
+|-------------|---|
+|pow(±0, B[i]) | C[i]= ±Inf for B[i] a negative odd integer.|
+|pow(±0, B[i]) | C[i]=  +Inf for B[i] negative and not an odd integer.|
+|pow(±0, B[i]) | C[i]=  ±0 for B[i] a positive odd integer.|
+|pow(±0, B[i]) | C[i]=  +0 for B[i] positive and not an odd integer.|
+|pow(-1, ±Inf) | C[i]=  1.|
+|pow(+1, B[i]) | C[i]=  1 for any B[i], even a NaN.|
+|pow(A[i], ±0) | C[i]=  1 for any A[i], even a NaN.|
+|pow(A[i], B[i]) | C[i]=  NaN for finite negative A[i] and finite non-integer B[i].|
+|pow(A[i], -Inf) | C[i]=  +Inf for 0 < abs(A[i]) < 1, and C[i]= +0 for abs(A[i]) > 1.|
+|pow(A[i], +Inf) | C[i]=  +0 for 0 < abs(A[i]) < 1, and C[i]= +Inf for abs(A[i]) > 1.|
+|pow(-Inf, B[i]) | C[i]=  −0 for B[i] a negative odd integer.|
+|pow(-Inf, B[i]) | C[i]=  +0 for B[i] negative and not an odd integer.|
+|pow(-Inf, B[i]) | C[i]=  −Inf for B[i] a positive odd integer.|
+|pow(-Inf, B[i]) | C[i]=  +Inf for B[i] positive and not an odd integer.|
+|pow(+Inf, B[i]) | C[i]=  +0 for B[i] negative, and +Inf for B[i] positive.|
+|pow(A[i], B[i]) | C[i]=  A[i]^B[i] otherwise.|
+
+
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
-
-
-
-
 $$
-C[i] = \begin{cases}
-\text{NaN} & \text{if } (A[i] = \text{NaN} \text{ and } B[i] \neq \pm0) \text{ or } B[i] = \text{NaN} \\
-\text{NaN} & \text{if } A[i] \in ]-\infty, +\infty[ \text{ and } B[i] \notin \mathbb{Z}  \text{ and } B[i] \neq \pm0 \\
+C[i] = \operatorname{pow}(A[i],B[i]) =
+\begin{cases}
 
-1.0 & \text{if } B[i] = \pm 0 \\
-0.0 & \text{if } A[i] = 0 \text{ and } B[i] > 0 \\
-0.0 & \text{if } A[i] = \pm\infty \text{ and } B[i] < 0 \\
-0.0 & \text{if } A[i] \in ]-\infty, +\infty[  and A[i] \neq \pm0 \text{ and } B[i] = -\infty \\
-+\infty & \text{if } A[i] = +\infty \text{ and } B[i] > 0 \\
-+\infty & \text{if } A[i] = \pm0 \text{ and } B[i] < 0 \\
-A[i]^{B[i]} & \text{otherwise}
+\text{NaN}
+&
+\begin{aligned}
+&(B[i]=\text{NaN}) \\
+&\lor (A[i]=\text{NaN}\land B[i]\neq \pm0) \\
+&\lor (A[i]\in\mathbb{R}_{<0}\text{finit}\land B[i]\notin\mathbb{Z})
+\end{aligned}\\
+\\
++\infty
+&
+\begin{aligned}
+&(|A[i]|>1\land B[i]=+\infty) \\
+&\lor (A[i]=+0\land B[i]<0\land B[i]\in \text{odd}) \\
+&\lor (A[i]=\pm0\land B[i]<0\land B[i]\notin 2\mathbb{Z}+1) \\
+&\lor (A[i]=+\infty\land B[i]>0) \\
+&\lor (A[i]=-\infty\land B[i]>0\land B[i]\notin 2\mathbb{Z}+1) \\
+&\lor (0<|A[i]|<1\land B[i]=-\infty)
+\end{aligned}\\
+\\
+-\infty
+&
+\begin{aligned}
+&(A[i]=-\infty\land B[i]\in\mathbb{Z}*{>0}\land B[i]\text{ odd}) \\
+&\lor (A[i]=-0\land B[i]\in\mathbb{Z}*{<0}\land B[i]\text{ odd})
+\end{aligned}\\
+\\
++0
+&
+\begin{aligned}
+&B[i]=+\infty \land (0<|A[i]|<1) \\
+&\lor (A[i]=-\infty\land B[i]<0\land B[i]\notin 2\mathbb{Z}+1) \\
+&\lor (A[i]=\pm0\land B[i]>0\land B[i]\text{odd}) \\
+&\lor (A[i]=\pm0\land B[i]>0\land B[i]\notin 2\mathbb{Z}+1) \\
+&\lor (A[i]=+\infty\land B[i]<0) \\
+&\lor (B[i]=-\infty \land (|A[i]|>1))
+\end{aligned}\\
+\\
+-0
+&
+\begin{aligned}
+&(A[i]=-0\land B[i]\in\mathbb{Z}*{>0}\land B[i]\text{ odd})\\
+&\lor(A[i]=-\infty\land B[i]\in\mathbb{Z}*{<0}\land B[i]\text{ odd})
+\end{aligned}\\
+\\
+1
+&
+\begin{aligned}
+&(A[i]=-1\land B[i]=\pm\inf) \\
+&\lor(A[i]=+1 \land \forall B[i] ) \\
+&\lor(B[i]=\pm0 \land \forall A[i])
+\end{aligned}\\
+\\
+A[i]^{B[i]}
+&
+\text{otherwise}
+
 \end{cases}
 $$
 
-
-
-
-
-[HBE revoir la formule, un tableau ? C'est pas fini]
-
-|  A\B   | -inf |$$]-\infty, 0[ \in \mathbb{Z}$$|$$]-\infty, 0[ \notin \mathbb{Z} $$| -0.0 | 0.0  |$$]0,+\infty[ \notin \mathbb{Z} $$ |$$]0,+\infty[ \in \mathbb{Z}$$| inf  | nan  |
-|--------|------|----------|---------|------|------|------|-------|------|------|
-|  -inf  | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
-|]-inf,0[| 0    |    A^B   |    nan  | 1    | 1    | nan  |  A^B  | inf  | nan  |
-|  -0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
-|   0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
-|]0,inf[ | 0    |    A^B   |    A^B  | 1    | 1    | A^B  |  A^B  | inf  | nan  |
-| inf    | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
-| nan    | nan  |    nan   |    nan  | 1    | 1    | nan  |  nan  | nan  | nan  |
-
-
-
+Note : a revoir si 100% correct
 
 
 
