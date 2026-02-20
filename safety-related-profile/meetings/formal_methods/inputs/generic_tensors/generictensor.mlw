@@ -1,0 +1,117 @@
+module GenericTensor
+  use std.Int
+  use std.List
+  use std.Clib
+  use mach.int.Int32
+  use tensor.Range
+  use tensor.Tensor
+  use tensor.OPWhere
+  use layout.CFlat
+  use libvector.CIndex
+
+  (* data_type defines the type of t_data on the ctensor *)
+  type data_type
+  (* abstract_data_type defines the type of abstract data corresponding to data_type *) 
+  type abstract_data_type
+  (* Function to convert data_type to abstract_data_type *)
+  (* Here the function is only declared *)
+  function to_abstract (v : data_type) : abstract_data_type
+
+  (* Note *)
+  (* When clonning this module, data_type, abstract_data_type and to_abstract must be defined  *)
+
+
+  (** C Tensor **)
+  
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : ptr data_type ; 
+    }
+
+  (** Dimension List **)
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  (** Number of entries **)
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  (** Valid index predicate **)
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  (** Empty tensor predicate **)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  (** Valid tensor  **)
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  (*Coordinate Index for ctensor*)
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) (cbackground : data_type) : abstract_data_type =
+    if valid_index k t then
+      to_abstract (value_at t.t_data (tensor_offset k t))
+    else to_abstract cbackground    
+
+  function tensor_value (t : ctensor) (cbackground : data_type) : list int -> abstract_data_type =
+    fun k -> tensor_value_at k t cbackground
+
+  let ghost function tensor (t : ctensor) (cbackground : data_type) : tensor abstract_data_type
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t cbackground }
+    ensures { result.background = to_abstract cbackground }
+    (*qed*)
+    = 
+    {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t cbackground } ;
+      background = to_abstract cbackground ;
+    }
+
+  let ctensor_create (ds : iarray) (n : int32) : ctensor =
+    (*proof*)
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    (*qed*)
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  
+  let ctensor_clear (r : ctensor) (cbackground : data_type) =
+    requires { valid_tensor r }
+    ensures { tensor r cbackground = Tensor.zero (to_abstract cbackground) (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> to_abstract (value_at r.t_data k) = to_abstract cbackground }
+      (*qed*)
+      r.t_data[i] <- cbackground
+    done
+    (*proof*)
+    ; assert { tensor r cbackground == Tensor.zero (to_abstract cbackground) (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_reset (r : ctensor) (v : data_type) (cbackground : data_type) =
+    requires { valid_tensor r }
+    ensures { tensor r cbackground == Tensor.const (to_abstract v) (to_abstract cbackground) (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = v }
+      (*qed*)
+      r.t_data[i] <- v
+    done
+    (*proof*)
+    ; assert { tensor r cbackground == Tensor.const (to_abstract v) (to_abstract cbackground) (tensor_dim r) }
+    (*qed*)
+  
+
+end

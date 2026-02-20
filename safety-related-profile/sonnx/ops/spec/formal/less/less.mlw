@@ -1,0 +1,76 @@
+(** OP-Less Tensor Operation *)
+module OPLess
+  use real.Real
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+
+  let ghost function less (x y : real) : real =
+    if Real.(x < y) then 1.0 else 0.0
+
+  let ghost function dless (x y : tensor real) : data real
+    = fun ks ->
+      if valid ks x.dims && valid ks y.dims then
+        less (x.data ks) (y.data ks)
+      else
+        0.0
+
+  let ghost function opless (x y : tensor real) : tensor real
+    requires { x ~= y }
+    ensures { result.dims = x.dims }
+    ensures { result.background = 0.0 }
+    ensures { result.data = dless x y }
+    (*proof*)
+    = { dims = x.dims ; data = dless x y ; background = 0.0 }
+    (*qed*)
+
+end
+
+module CTensorLess
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use OPLess
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.libtensor.CTensor
+
+let ctensor_less (x y r : ctensor) =
+  (*proof*)
+  requires { valid_tensor x }
+  requires { valid_tensor y }
+  requires { valid_tensor r }
+  requires { tensor x ~= tensor y ~= tensor r }
+  (*qed*)
+  ensures { tensor r == opless (tensor x) (tensor y) }
+
+  let m = cdim_size r.t_dims r.t_rank in
+  for i = 0 to m - 1 do
+
+
+
+    (*proof*)
+    invariant {
+      forall k. 0 <= k < i ->
+        value_at r.t_data k =
+          (if Real.(value_at x.t_data k < value_at y.t_data k)
+           then 1.0 else 0.0)
+    }
+    (*qed*)
+
+
+    r.t_data[i] <-
+      if Real.(x.t_data[i] .< y.t_data[i]) then
+        (f32 1.0)
+      else
+        (f32 0.0)
+  done
+
+
+  (*proof*)
+  ; assert { tensor r == opless (tensor x) (tensor y) }
+  (*qed*)
+end

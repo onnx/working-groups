@@ -1,0 +1,24 @@
+{
+  "profile": [],
+  "proofs": {
+    "OPWhere": {
+      "dwhere": { "tactic": "split_vc", "children": [] },
+      "opwhere": null
+    },
+    "Range": {
+      "positive_size": null,
+      "positive_valid": null,
+      "size_append": null,
+      "size_push": null,
+      "valid_push": null
+    },
+    "Tensor": {
+      "const": null,
+      "exteq": null,
+      "scalar": null,
+      "tensor": null,
+      "zero": null,
+      "zero_is_const": null
+    }
+  }
+}
