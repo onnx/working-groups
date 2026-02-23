@@ -1,0 +1,55 @@
+module OPAdd
+  use tensor.Tensor
+  use int.Int
+  use real.Real
+  use std.Cfloat
+
+  let ghost function dadd (a b : data real) : data real
+    = fun ks -> a ks + b ks
+  
+
+  let ghost function opadd (a b : tensor real) : tensor real
+    requires { a ~= b }
+    ensures { result ~= a }
+    ensures { result.data = dadd a.data b.data }
+    = { dims = a.dims ;
+        data = dadd a.data b.data ;
+        background = a.background + b.background }
+
+end
+
+module CTensorAdd
+  use int.Int
+  use std.List
+  use std.Clib
+  use std.Cfloat
+  use mach.int.Int32
+  use tensor.Range
+  use tensor.Tensor
+  use layout.CFlat
+  use libvector.CIndex
+  use ref.Ref
+  use tensor.OPAdd
+  use libtensor.CTensor
+
+let ctensor_add (a b r : ctensor) =
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    ensures { tensor r = opadd (tensor a) (tensor b) }
+    (*proof*)
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k.
+        0 <= k < i ->
+          value_at r.t_data k =
+            value_at a.t_data k .+ value_at b.t_data k
+      }
+      r.t_data[i] <- a.t_data[i] .+ b.t_data[i]
+    done
+    ;
+    assert { tensor r == opadd (tensor a) (tensor b) }
+    (*qed*)
+
+    end

@@ -23,6 +23,11 @@ module tensor.std.Cfloat
   syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
 end
 
+module tensor.log.Log
+  syntax val log "/* %1 */" prec 0
+end
+
+
 module tensor.libvector.CIndex
   interface "#include <stdlib.h>"
   interface "#include <stdint.h>"
@@ -35,3 +40,4 @@ module tensor.libtensor.CTensor
   
   
 end
+
