@@ -3,7 +3,7 @@
 - **Conv** operator for type [real](#real)
 - **Conv** operator for types [float16, float, double](#float)
 
-Based on ONNX documentation [Div version 22](https://onnx.ai/onnx/operators/onnx__Conv.html#conv-22).
+Based on ONNX documentation [Conv version 22](https://onnx.ai/onnx/operators/onnx__Conv.html#conv-22).
 
 <a id="real"></a>
 # **Conv** (real)
@@ -23,8 +23,8 @@ The following restrictions apply to the **conv** operator for the SONNX profile:
 | Restriction    | Statement | Origin |
 | -------- | ------- | ------- |
 | `R1` | Input tensor $X$ has 2 spatial axes | Transient |
-| `R2` | Attribute $auto_pad$ is set to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
-| `R3` | Attribute $group$ is set to 1 (standard convolution) or to the number of channels of the input tensor X$ (depthwise convolution) | Transient |
+| `R2` | Attribute $auto\\_pad$ is set to `NOTSET`  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value) |
+| `R3` | Attribute $group$ is set to 1 (standard convolution) or to the number of channels of the input tensor $X$ (depthwise convolution) | Transient |
 
  ## Informal specification
   
@@ -136,15 +136,15 @@ The effect of the $strides$ attribute is illustrated on the following figure. In
        * $$\left\lfloor{\frac{beta-((dilations[1] \cdot dW_3-1)+1)}{strides[1]}} \right\rfloor +1 = dY_3  \mbox{ with } beta=dX_3+pads[1]+pads[3]$$
     - Rationale: The size of the output is determined by the number of times the kernel can be applied on a given spatial axis.
 
-### $\text{auto\_pad}$: string
+### $auto\\_pad$: string
 
-The $auto\_pad$ attribute determines if and how automatic padding is done for the input tensor $X$.
+The $auto\\_pad$ attribute determines if and how automatic padding is done for the input tensor $X$.
 
 #### Constraints
 - `[C1]` Value domain 
-    - Statement: $auto\_pad$ shall be in set {`NOTSET`, `VALID`, `SAME_UPPER`, `SAME_LOWER`}.
+    - Statement: $auto\\_pad$ shall be in set {`NOTSET`, `VALID`, `SAME_UPPER`, `SAME_LOWER`}.
 - `[C2]` Explicit padding 
-    - Statement: $auto\_pad$ shall be set to `NOTSET` `[R2]`
+    - Statement: $auto\\_pad$ shall be set to `NOTSET` `[R2]`
     - Rationale: The SONNX profile imposes explicit padding.
 
 ### $\text{pads}$: list of int
@@ -215,18 +215,18 @@ In the example, with $group$ set to 3 and an input $X$ and an output $Y$ with 3 
     - Statement: $group=1$ or $group=dX_1$ `[R3]`
     - Rationale: SONNX only supports the most usual types of convolutions: standard ($group=1$) and depthwise convolutions $group=dX_1$ 
 
-### $\text{kernel\_shape}$: list of int
+### $kernel\\_shape$: list of int
 
 This parameter specifies the shape of the convolution kernel $W$.
 
 #### Constraints
 
 - `[C1]` <a id="C1rattr4"></a> Value domain
-    - Statement: $kernel\_shape$ is a list of strictly positive integers
+    - Statement: $kernel\\_shape$ is a list of strictly positive integers
     - Rationale: A dimension is always positive and cannot be null.
-- `[C2]` <a id="C2rattr4"></a> Consistency between $W$ and $kernel\_shape$
-    - Statement:  The size of $W$ for an axis must bve equal to the value of $kernel\_shape$ for that axis
-   - Rationale: $kernel_shape$ represents the shape of $W$, where $kernel\_shape[0] = dW_3$ and $kernel\_shape[1] = dW_2$.
+- `[C2]` <a id="C2rattr4"></a> Consistency between $W$ and $kernel\\_shape$
+    - Statement:  The size of $W$ for an axis must bve equal to the value of $kernel\\_shape$ for that axis
+   - Rationale: $kernel\\_shape$ represents the shape of $W$, where $kernel\\_shape[0] = dW_3$ and $kernel\\_shape[1] = dW_2$.
 
 
 ## Inputs
@@ -267,9 +267,9 @@ The shape of tensor $W$ is $(dW_0 , dW_1 , dW_2 , dW_3)$, where
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2rx) on tensor $X$.
 - `[C2]` <a id="C2rw"></a> Consistency between the shape of tensors $X$, $W$, $Y$ and  attributes $pads$, $dilations$ and $strides$
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C3]</span></b>](#C3rx) on tensor $X$.
-- `[C3]` <a id="C3rw"></a> Consistency between $W$ and $kernel\_shape$
-   - Statement:  The size of $W$ for an axis must bve equal to the value of $kernel\_shape$ for that axis
-   - Rationale: $kernel\_shape$ represents the shape of $W$, where $kernel\_shape[0] = dW_3$ and $kernel\_shape[1] = dW_2$.
+- `[C3]` <a id="C3rw"></a> Consistency between $W$ and $kernel\\_shape$
+   - Statement:  The size of $W$ for an axis must bve equal to the value of $kernel\\_shape$ for that axis
+   - Rationale: $kernel\\_shape$ represents the shape of $W$, where $kernel\\_shape[0] = dW_3$ and $kernel\\_shape[1] = dW_2$.
 - `[C4]` <a id="C4rw"></a> Compliance with axis denotations
     - Statement: If axis denotation is in effect, the operation expects the weight tensor to have axis denotation \[`FILTER_OUT_CHANNEL`, `FILTER_IN_CHANNEL`, `FILTER_SPATIAL`, `FILTER_SPATIAL`\].
 - `[C5]` <a id="C5rw"></a> Consistency between output channels and group
@@ -306,5 +306,6 @@ See the Why3 specification.
 <a id="float"></a>
 # **Conv** (float)
 where float is in {float16, float, double}
+
 
 ## Signature
