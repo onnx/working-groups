@@ -1,0 +1,6 @@
+module Log
+  use string.String
+  type world = abstract { mutable universe : int }
+  val ghost world : world
+  val log string : unit writes { world }
+end
