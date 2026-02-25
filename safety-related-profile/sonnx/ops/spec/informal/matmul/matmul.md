@@ -170,7 +170,7 @@ Tensor $Y$ is the output tensor.
   - [See constraint (C3) of A](#C3r) and [constraint (C3) of B](#C4r)
 
 ## Formal specification
-See [here](./why3/opmatmul.mlw).
+See Why3 specification [here](../../formal/matmul/matmul.mlw).
 
 ## Numerical Accuracy
 The **MatMul** operator does not introduce any numerical error.
@@ -342,7 +342,7 @@ Tensor $Y$ is the output tensor.
   - [See constraint (C3) of A](#C3i) and [constraint (C3) of B](#C4i)
 
 ## Formal specification
-See [here](./why3/opmatmul.mlw).
+See Why3 specification [here](../../formal/matmul/matmul.mlw).
 
 ## Numerical Accuracy
 To be completed.
@@ -473,9 +473,8 @@ $$
 $$
 Y = \begin{bmatrix}
       \infty & \infty & \infty & \infty \\
-      NaN & NaN & NaN & NaN
+      NaN & NaN & NaN & NaN \\
     \end{bmatrix}
-
 $$
 
 ## Error conditions
@@ -536,7 +535,7 @@ Tensor $Y$ is the output tensor.
   - [See constraint (C3) of A](#C3f) and [constraint (C3) of B](#C4f)
 
 ## Formal specification
-See [here](./why3/opmatmul.mlw).
+See Why3 specification [here](../../formal/matmul/matmul.mlw).
 
 ## Numerical Accuracy
 To be completed.
