@@ -7,7 +7,8 @@ A null tensor can be created by operators  such as **Slice** or **Where**.
     >- Operators **Reshape** and **Flatten** preserve the number of elements of their input tensors, so a null input tensor will generate a null output tensor.
     >- Operator **Squeeze** can only remove dimensions with size 1.
     
-    >However, using `keepdims=0`, operators **ReduceSum** (resp. **ReduceProd**) applied (e.g.) on a tensor with shape `[0,X]` will produce a tensor with X zeroes (resp. with `ReduceProd`, the result would be a vector of X ones). Note that the values of the resulting tensor do not depend on the values of the initial tensor. They are the  identity values for the addition (resp. multiplication. In practice, this means that, if one dimension of a tensor becomes 0, the tensor cannot be reduced to some canonical null tensor (e.g., a tensor with only one dimension equal to 0) since its shape still matters. 
+    >However, using `keepdims=0`, operators **ReduceSum** (resp. **ReduceProd**) applied (e.g.) on a tensor with shape `[0,X]` will produce a tensor with X zeroes (resp. with `ReduceProd`, the result would be a vector of X ones). Note that the values of the resulting tensor do not depend on the values of the initial tensor. They are the  identity values for the addition (resp. multiplication). Additionally, the multiplication of two null tensors (e.g. using the **Matmul** operator) can also produce a non-null tensor with all values equal to zero.<br/> 
+    In practice, this means that, if one dimension of a tensor becomes 0, the tensor cannot be reduced to some canonical null tensor (e.g., a tensor with only one dimension equal to 0) since its shape still matters.  
 - **Scalar**: A 0-rank tensor. 
 - **Vector**: A 1-rank tensor. 
 - **Matrix**: A 2-rank tensor. 

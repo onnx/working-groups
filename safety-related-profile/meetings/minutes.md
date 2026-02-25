@@ -13,11 +13,11 @@
     - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
 ## Minutes
 - Ricardo and João have explained their approach to specify **MatMul**. Having a written version of the  general principles, methods (and possibly tricks...) that have been applied would be extremely useful for the team. Hopefully, this could be part of the R&J's master's thesis report.
-- On ORT, the behaviour of **Matmul** differs when applied on  float null tensors and integer null tensors. We consider that multiplying null tensors is well defined and can lead to non null tensors. We have to add a notice explaining that the behaviour of ORT differ from the spec. 
+- On ORT, the behaviour of **Matmul** differs when applied on  float null tensors and integer null tensors. Multiplying null tensors is well defined and can lead to non null tensors. We have to add a notice explaining that the behaviour of ORT differ from the spec. 
 - More generally, we agree that the spec must provide a unique output even though different implementations may return different result. We will add a notice stating the possible divergence (limited to ORT). It is up to an implementer to show where his/her implementation does not comply with the spec. We may produce some kind of a "compliance report" for ORT CPU (for instance) as an example. 
 - Back to **Maxpool**: 
   - we have to take care of optional outputs. 
-  - the behaviour of **Maxpool** is extremely variable depending on the backend (CPU, tensortRT, CUDA). Besides the erroneous indexes when dealing with Infs, we also observe strange results on the max valeu themselves. Refer to [Henri's notebook](../sonnx/ops/spec/tests/maxpool/Test_Max_Pool_Divergence.ipynb) for further details.
+  - the behaviour of **Maxpool** is extremely variable depending on the backend (CPU, tensortRT, CUDA). Besides the erroneous indexes when dealing with Infs, we also observe strange results on the max value themselves. Refer to [Henri's notebook](../sonnx/ops/spec/tests/maxpool/Test_Max_Pool_Divergence.ipynb) for further details.
 ## Actions
 ### New actions
 ### Previous actions
