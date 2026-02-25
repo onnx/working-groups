@@ -8,6 +8,8 @@
 - Operators: [MaxPool](../../../sonnx/ops/spec/informal/maxpool/maxpool.md) and [Pow](../../../sonnx/ops/spec/informal/pow/pow.md).
 - Accuracy: check the accuracy analysis of [div](../../../sonnx/ops/spec/informal/div/div_acc.md) and [tanh](../../../sonnx/ops/spec/informal/tanh/tanh_acc.md). See Franck's mail dated 2026/02/13.
 - (Re-)discussion about using composition when defining complex operator. The case of **Conv**.
+- Testing
+  - Shouldn't our reference implementation be using multiple precision (e.g., mpfr)? 
   
 #### 2025/02/13
 ##### Agenda

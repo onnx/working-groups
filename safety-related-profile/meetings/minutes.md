@@ -1,3 +1,35 @@
+# 2025/02/25
+## Participants
+- To be completed.
+## Agenda 
+- Review of actions (Eric)
+- Meeting on accuracy (Eric+Jean+Franck), see the [minutes](../meetings/numerical%20accuracy/2026-02-17%20-%20DeepGreen%20-%20Accuracy.md).
+- Meeting on formal methods (Eric+All)
+- Progress and questions from Portugal! (Ricardo and João)
+- The case of **MaxPool**, continued, see the [Jupyter notebook](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/tests/maxpool/Test_Max_Pool_Divergence.ipynb) (Henri)
+- On the spec of mathematical oeprators, using [mpfr](https://www.mpfr.org/mpfr-current/mpfr.html#index-mpfr_005fpowr) (Eric)
+- Local WG (Eric)
+    - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
+## Minutes
+
+## Actions
+### New actions
+### Previous actions
+- [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**.  
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+- [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
+  - Material shall be placed [here](https://github.dev/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/formal_methods/inputs/inputs-2026-02-18.md)
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- [ ] Actions from local work sessions 
+    - (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - To be discussed during Feb session with Loïc. 
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
+
+
 # 2025/02/11 ((shortened to 1h)
 ## Participants
 - Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Loup, Franck
