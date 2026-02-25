@@ -65,7 +65,6 @@ Where
 - `dilation` is an attribute of the operator. It will be described later in this section.
 - $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
-
 The effect of the operator is illustrated on the following examples.
 
 ### Example 1
@@ -312,6 +311,8 @@ See [Restrictions](#restrictions).
 ## Informal specification
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
+
+**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$, in this document, has no existence. Indeed, there is no need for kernel values. At a given posittion, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
 Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
@@ -626,6 +627,8 @@ See [Restrictions](#restrictions).
 ## Informal specification
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
+
+**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$, in this document, has no existence. Indeed, there is no need for kernel values. At a given posittion, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
 Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
