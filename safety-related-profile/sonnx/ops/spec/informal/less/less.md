@@ -273,7 +273,7 @@ Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 <a id="int"></a>
 # **Less** (int,int)
-where int is in (int8, int16, int32, int64, uint8, uint16, uint32, uint64)
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}
 
 ## Signature
 
