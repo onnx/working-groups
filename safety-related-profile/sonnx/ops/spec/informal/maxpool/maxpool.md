@@ -185,7 +185,7 @@ In the example above:
     - Statement: `dilations` is a list of strictly positive integers
     - Rationale: The dilation is a *factor of expansion* along a certain axis. 
 - `C2`: Relation between `dilations` and $W$ 
-    - Statement: The `dilations` and `kernel\_shape` lists have the same length
+    - Statement: The `dilations` and `kernel_shape` lists have the same length
     - Rationale: Dilation is defined for all spatial axes of $W$.
 - `C3`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
     - Statement: [See constraint (C2) of Y](#shape_consist)
@@ -206,7 +206,7 @@ The value of the constant to pad depends on the input tensor data type. Therefor
 - see [floating-point value to pad](#pad_const_float_val)
 - see [integer values to pad](#pad_const_int_val)
 
-The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2) and the padded value is zero.
+The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2) and the padded value is the one for type uint8, i.e., zero.
 
 <img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
 
@@ -226,8 +226,7 @@ The storage order of the tensor. 0 is row major, and 1 is column major.
 
 #### Constraints
 -  `C1`: Explicit storage order
-    - Statement: `storage_order` shall be set to zero.
-    - Rationale: TO BE COMPLETED.
+    - Statement: `storage_order` shall be set to zero. `[R5]`
 
 ### `strides`: list of ints
 
