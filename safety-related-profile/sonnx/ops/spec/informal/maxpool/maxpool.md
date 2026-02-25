@@ -21,17 +21,17 @@ where:
 <a id="restrictions"></a> 
 ## Restrictions
 
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+[General restrictions](../common/general_restrictions.md) are applicable.
 
 The following specific restrictions apply to the **MaxPool** operator:
 
 | Restriction | Statement                                                   | Origin                                                                                      |
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a> | Input tensor $X$ has 2 spatial axes | Transient |
-| `[R2]` <a id="R2"></a> | All attributes must be explicitly set  | [No default values](../../../deliverables/reqs/reqs.md#no_default_value)
-| `[R3]` <a id="R2"></a> | Attribute `auto_pad` is set to `NOTSET`  | Transient?
-| `[R4]` <a id="R3"></a> | Attribute `ceil_mode` is set to zero  | Transient?
-| `[R5]` <a id="R4"></a> | Attribute `storage_order` is set to zero | Transient?
+| `[R2]` <a id="R2"></a> | All attributes must be explicitly set  | [No default values](../../../../../deliverables/reqs/reqs.md#no_default_value)
+| `[R3]` <a id="R2"></a> | Attribute `auto_pad` is restricted to NOTSET  | Transient
+| `[R4]` <a id="R3"></a> | Attribute `ceil_mode` is set to zero  | Transient
+| `[R5]` <a id="R4"></a> | Attribute `storage_order` is set to zero | Transient
 
 ## Informal specification
 
