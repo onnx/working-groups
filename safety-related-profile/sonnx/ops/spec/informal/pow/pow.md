@@ -154,78 +154,184 @@ In more than the additionnal [Restrictions](#restrictions) the input range of $B
 
 Operator **Pow** computes the element-wise power between input tensors $A$ and $B$ according to IEEE 754 floating-point semantics and stores the result in output tensor $C$.
 
+
+
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
-
-
-
-
 $$
-C[i] = \begin{cases}
-\text{NaN} & \text{if } (A[i] = \text{NaN} \text{ and } B[i] \neq \pm0) \text{ or } B[i] = \text{NaN} \\
-\text{NaN} & \text{if } A[i] \in ]-\infty, +\infty[ \text{ and } B[i] \notin \mathbb{Z}  \text{ and } B[i] \neq \pm0 \\
+C[i] = \operatorname{pow}(A[i],B[i]) =
+\begin{cases}
 
-1.0 & \text{if } B[i] = \pm 0 \\
-0.0 & \text{if } A[i] = 0 \text{ and } B[i] > 0 \\
-0.0 & \text{if } A[i] = \pm\infty \text{ and } B[i] < 0 \\
-0.0 & \text{if } A[i] \in ]-\infty, +\infty[  and A[i] \neq \pm0 \text{ and } B[i] = -\infty \\
-+\infty & \text{if } A[i] = +\infty \text{ and } B[i] > 0 \\
-+\infty & \text{if } A[i] = \pm0 \text{ and } B[i] < 0 \\
-A[i]^{B[i]} & \text{otherwise}
+\text{NaN}
+&
+\begin{aligned}
+&B[i]=\text{NaN} \\
+&\lor (A[i]=\text{NaN}\land B[i]\neq \pm0) \\
+&\lor (A[i]\in\mathbb{R}_{<0}\land A[i]\neq -\inf\land B[i]\notin\mathbb{Z})
+\end{aligned}\\
+\\
++\inf
+&
+\begin{aligned}
+&B[i]=+\inf \land |A[i]|>1  \\
+&\lor (A[i]=+0\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=\pm0\land B[i]<0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=+\inf\land B[i]>0) \\
+&\lor (A[i]=-\inf\land B[i]>0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
+&\lor (B[i]=-\inf \land 0<|A[i]|<1 )
+\end{aligned}\\
+\\
+-\inf
+&
+\begin{aligned}
+&(A[i]=-\inf\land B[i]\in\mathbb{Z}_{>0}\land B[i]\in \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=-0\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd})
+\end{aligned}\\
+\\
++0
+&
+\begin{aligned}
+&B[i]=+\inf \land (0<|A[i]|<1) \\
+&\lor (A[i]=-\inf\land B[i]<0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=+0\land B[i]\in\mathbb{Z}_{>0}\land B[i]\in \mathbb{Z}\text{ odd})\\
+&\lor (A[i]=\pm0\land B[i]>0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=+\inf\land B[i]<0) \\
+&\lor (B[i]=-\inf \land |A[i]|>1)
+\end{aligned}\\
+\\
+-0
+&
+\begin{aligned}
+&(A[i]=-0\land B[i]\in\mathbb{Z}_{>0}\land B[i]\in \mathbb{Z}\text{ odd})\\
+&\lor(A[i]=-\inf\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd})
+\end{aligned}\\
+\\
+1
+&
+\begin{aligned}
+&(A[i]=-1\land B[i]=\pm\inf) \\
+&\lor(A[i]=+1 \land \forall B[i] ) \\
+&\lor(B[i]=\pm0 \land \forall A[i])
+\end{aligned}\\
+\\
+A[i]^{B[i]}
+&
+\text{otherwise}
+
 \end{cases}
 $$
 
 
-
-
-
-[HBE revoir la formule, un tableau ? C'est pas fini]
-
-|  A\B   | -inf |$$]-\infty, 0[ \in \mathbb{Z}$$|$$]-\infty, 0[ \notin \mathbb{Z} $$| -0.0 | 0.0  |$$]0,+\infty[ \notin \mathbb{Z} $$ |$$]0,+\infty[ \in \mathbb{Z}$$| inf  | nan  |
-|--------|------|----------|---------|------|------|------|-------|------|------|
-|  -inf  | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
-|]-inf,0[| 0    |    A^B   |    nan  | 1    | 1    | nan  |  A^B  | inf  | nan  |
-|  -0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
-|   0.0  | inf  |    inf   |    inf  | 1    | 1    | 0    |  0    | 0    | nan  |
-|]0,inf[ | 0    |    A^B   |    A^B  | 1    | 1    | A^B  |  A^B  | inf  | nan  |
-| inf    | 0    |    0     |    0    | 1    | 1    | inf  |  inf  | inf  | nan  |
-| nan    | nan  |    nan   |    nan  | 1    | 1    | nan  |  nan  | nan  | nan  |
-
-
-
+Note :
+|source mpfr :|---|
+|-------------|---|
+|pow(±0, B[i]) | C[i]= ±Inf for B[i] a negative odd integer.|
+|pow(±0, B[i]) | C[i]=  +Inf for B[i] negative and not an odd integer.|
+|pow(±0, B[i]) | C[i]=  ±0 for B[i] a positive odd integer.|
+|pow(±0, B[i]) | C[i]=  +0 for B[i] positive and not an odd integer.|
+|pow(-1, ±Inf) | C[i]=  1.|
+|pow(+1, B[i]) | C[i]=  1 for any B[i], even a NaN.|
+|pow(A[i], ±0) | C[i]=  1 for any A[i], even a NaN.|
+|pow(A[i], B[i]) | C[i]=  NaN for finite negative A[i] and finite non-integer B[i] or if B[i]=NaN or A[i]=NaN and B[i] different of $\pm0$|
+|pow(A[i], -Inf) | C[i]=  +Inf for 0 < abs(A[i]) < 1, and C[i]= +0 for abs(A[i]) > 1.|
+|pow(A[i], +Inf) | C[i]=  +0 for 0 < abs(A[i]) < 1, and C[i]= +Inf for abs(A[i]) > 1.|
+|pow(-Inf, B[i]) | C[i]=  −0 for B[i] a negative odd integer.|
+|pow(-Inf, B[i]) | C[i]=  +0 for B[i] negative and not an odd integer.|
+|pow(-Inf, B[i]) | C[i]=  −Inf for B[i] a positive odd integer.|
+|pow(-Inf, B[i]) | C[i]=  +Inf for B[i] positive and not an odd integer.|
+|pow(+Inf, B[i]) | C[i]=  +0 for B[i] negative, and +Inf for B[i] positive.|
+|pow(A[i], B[i]) | C[i]=  A[i]^B[i] otherwise.|
 
 
 
 ### Example 1
 
 ```math
-A = \begin{bmatrix} 9 & 4 & 16 & 8 & 2 \end{bmatrix}
-\quad
-B = \begin{bmatrix} 2 & 2.5 & \frac{1}{2} & \frac{1}{3} & \frac{3}{2} \end{bmatrix}
+A = \begin{bmatrix} 9.0 & 4.0 & 16.0 & 8.0 & 2.0 \end{bmatrix}
+\\
+B = \begin{bmatrix} 2 & 2.5 & 0.5 & 0.33333333 & 1.5 \end{bmatrix}
 ```
 
 ```math
-C \approx \begin{bmatrix} 81 & 32 & 4 & 2 & 2.82842708 \end{bmatrix}
+C \approx \begin{bmatrix} 81.0 & 32.0 & 4.0 & 2.0 & 2.82842708 \end{bmatrix}
 ```
 
 ### Example 2
 
 ```math
-A = \begin{bmatrix} 0 & 0 & 5 & -5 & -25 & -8 \end{bmatrix}
-\quad
-B = \begin{bmatrix} 0 & 2 & 0 & 0 & \frac{3}{5} & \frac{1}{3} \end{bmatrix}
+A = \begin{bmatrix} 0.0 & 0.0 & 5.0 & -5.0 & -25.0 & -8.0 \end{bmatrix}
+\\
+B = \begin{bmatrix} 0 & 2.0 & 0.0 & 0.0 & 0.6 & 0.33333333 \end{bmatrix}
 ```
 
 ```math
-C \approx \begin{bmatrix} 1 & 0 & 1 & 1 & NaN & NaN \end{bmatrix}
+C \approx \begin{bmatrix} 1.0 & 0.0 & 1.0 & 1.0 & NaN & NaN \end{bmatrix}
 ```
-[HBE exemple float]
+
+### Example 3
+
+```math
+A = \begin{bmatrix}
+-2.0 & -2.0 & -1.0 & -1.0 & 0.0 & -0.0 & 2.0 & 0.5 & 2.0
+\end{bmatrix}
+\\
+B = \begin{bmatrix}
+0.5 & 3.0 & +\inf & -\inf & -3.0 & -3.0 & -\inf & +\inf & NaN
+\end{bmatrix}
+```
+
+```math
+C \approx \begin{bmatrix}
+NaN & -8.0 & 1.0 & 1.0 & +\inf & -\inf & 0.0 & 0.0 & NaN
+\end{bmatrix}
+```
+
+
+### Example 4
+
+```math
+A = \begin{bmatrix}
+NaN & +1.0 & -1.0 & -\inf & -\inf & +\inf & 0.5 & 2.0 & -0.0
+\end{bmatrix}
+\\
+B = \begin{bmatrix}
+2.0 & -\inf & +\inf & 3.0 & -2.0 & -1.0 & -\inf & +\inf & 3.0
+\end{bmatrix}
+```
+
+```math
+C \approx \begin{bmatrix}
+NaN & 1.0 & 1.0 & -\inf & +0.0 & +0.0 & +\inf & +\inf & -0.0
+\end{bmatrix}
+```
+
+
+### Example 5 : (round consequence) 2.0 and next representable float
+
+```math
+A = \begin{bmatrix}
+-8.0 & -8.0
+\end{bmatrix}
+\\
+B = \begin{bmatrix}
+2.00000000 & 2.00000024
+\end{bmatrix}
+```
+
+```math
+C \approx \begin{bmatrix}
+64.00000000 & Nan
+\end{bmatrix}
+```
+
+
+
+
 
 
 ## Error conditions
 
-No error condition.
-[HBE A ANALYSER]
+No error condition in more than the definition. See $\text{NaN}$. 
 
 ## Attributes
 
@@ -279,7 +385,6 @@ Result of the element-wise power of $A$ to $B$.
 [See the numeric accuracy note](./pow_acc.md).
 
 
-[HBE A PASSER DEVANT FLOAT ?]
 <a id="int"></a>
 
 # **Pow** (int, int)
@@ -302,7 +407,6 @@ where:
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Pow** operator.
-[HBE A ANALYSER]
 
 ## Informal specification
 
@@ -313,7 +417,7 @@ For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 $$
 C[i] =
 \begin{cases}
-A[i]^{B[i]} & \text{if } B[i] \ge 0 \
+A[i]^{B[i]} & \text{if } B[i] \ge 0 \\
 \text{undefined} & \text{otherwise}
 \end{cases}
 $$
@@ -350,7 +454,6 @@ The behaviour is implementation dependent if:
 
 - An exponent is negative.
 - An overflow occurs during the computation.
-[HBE A ANALYSER]
 
 ## Attributes
 

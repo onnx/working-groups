@@ -1,144 +1,215 @@
-(**
-    Specification of MatMul operation on tensors with real numbers.
- 
-module MatMulReal
-  use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
-  use real.Real
-  let function matmul (a : tensor real) (b : tensor real) : tensor real =
-    ensures { result.shape = [nth a.shape 0; nth b.shape 1] }
-  {
-    shape = [nth a.shape 0; nth b.shape 1] ;
-    value = fun i j -> sum (fun k -> a.value[i][k] * b.value[k][j]) (nth a.shape 1)
-  }
-end
-*)
-
 module OPMatmul
-
+ 
     use tensor.Tensor
-    use map.Const
+    use std.Int
     use list.List
-    use int.Int
-    use list.Length
     use tensor.Range
-    use map.Map
+    use list.Length
+    use int.Int
     use real.Real
-
-    let rec ghost function my_nth (n: int) (l:list int) : int
-    requires { Int.(n >= 0 /\ n < length(l)) }
-    requires { Int.(length(l) > 0) }
-    variant { length(l) }
+ 
+ 
+    let rec ghost function dot_product (a b: tensor real) (row col i iter: int) : real
+      variant { Int.(iter - i) }
     =
-        match l with
-        | Cons h t ->
-            if n = 0 then
-                h
-            else
-                my_nth (n-1) t
-        end
-
-    let ghost function dot_product (a b: tensor real) (row col commun_value: int) : real
-    requires { length a.dims = 2 /\ length b.dims = 2 }
-    =
-        let ref sum = 0.0 in
-        for k = 0 to commun_value - 1 do
+        if Int.(>=) i iter then
+            0.0
+        else
+            let a_val = a.data (Cons row (Cons i Nil)) in
+            let b_val = b.data (Cons i (Cons col Nil)) in
+            Real.(a_val * b_val + dot_product a b row col Int.(i + 1) iter)
+ 
+ 
+    let rec lemma dot_product_aux_step (a b: tensor real) (row col i k iter: int)
+        requires { Int.(i <= k < iter) }
+        variant { Int.(k - i) }
+        ensures {
             let a_val = a.data (Cons row (Cons k Nil)) in
             let b_val = b.data (Cons k (Cons col Nil)) in
-            sum <- sum + a_val * b_val
-        done;
-        sum
-
-    let ghost function dmatmul ( a b: tensor real) (y_rows y_cols : int) : data real
-    requires { a.background = b.background }
-    requires {  length a.dims = length b.dims = 2 }
-    requires { my_nth 1 a.dims = my_nth 0 b.dims }
-    requires { y_rows = my_nth 0 a.dims /\ y_cols = my_nth 1 b.dims }
-    ensures { forall ks. not valid ks (Cons y_rows (Cons y_cols Nil)) -> result ks = a.background }
-    =   
-        let commun_value = my_nth 1 a.dims in
-        let y_shape = Cons y_rows (Cons y_cols Nil) in
+            dot_product a b row col i Int.(k + 1) =
+                Real.(dot_product a b row col i k + a_val * b_val)
+        }
+    =
+        if i < k then Real.(dot_product_aux_step a b row col (i + 1) k iter) else ()
+ 
+    function dmatmul ( a b: tensor real) (a_rows b_cols : int) : data real
+    =  
+        let iter = get_dim a.dims 1 in
+        let y_shape = Cons a_rows (Cons b_cols Nil) in
         fun ks ->
             if valid ks y_shape then
-                let row = my_nth 0 ks in
-                let col = my_nth 1 ks in
-                dot_product a b row col commun_value
+                let row = get_dim ks 0 in
+                let col = get_dim ks 1 in
+                dot_product a b row col 0 iter
             else
                 a.background
-
+ 
+ 
     let ghost function matmul ( a b: tensor real) : tensor real
     requires { a.background = b.background }
-    requires {  length a.dims = length b.dims = 2 }
-    requires { my_nth 1 a.dims = my_nth 0 b.dims }
+    requires { length a.dims = length b.dims = 2 }
+    requires { get_dim a.dims 1 = get_dim b.dims 0 }
     ensures { result.background = a.background }
-    ensures { result.dims = Cons (my_nth 0 a.dims) (Cons (my_nth 1 b.dims) Nil) }
+    ensures { result.dims = Cons (get_dim a.dims 0) (Cons (get_dim b.dims 1) Nil) }
     ensures { length result.dims = 2 }
-    ensures { result.data = dmatmul a b (my_nth 0 a.dims) (my_nth 1 b.dims) }
+    ensures { result.data = dmatmul a b (get_dim a.dims 0) (get_dim b.dims 1) }
     =
-        let y_rows = my_nth 0 a.dims in
-        let y_cols = my_nth 1 b.dims in
-        let y_shape = Cons y_rows (Cons y_cols Nil) in
-        { dims = y_shape; data = dmatmul a b y_rows y_cols ; background = a.background }
-
+    { dims = Cons (get_dim a.dims 0) (Cons (get_dim b.dims 1) Nil) ; data = dmatmul a b (get_dim a.dims 0) (get_dim b.dims 1) ; background = a.background }
+ 
 end
-
-
+ 
+ 
 module COPMatmul
-
+ 
     use OPMatmul
     use tensor.Tensor
+    use tensor.Range
+    use real.Real
+    use int.Int
+    use list.List
+    use layout.CFlat
+ 
     use libtensor.CTensor
     use libvector.CIndex
     use std.Clib
-    use int.Int
     use mach.int.Int32
     use std.Cfloat
-
-    let ctensor_matmul (a b r : ctensor) = 
+    use std.Int
+    use list.Length
+ 
+ 
+    let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
+      requires { p <= q }
+      requires { valid_range ks p q }
+      requires { valid_range ds p q }
+      requires { pdim ds p q }
+      requires  { forall i. p <= i < q -> 0 <= value_at ks i < value_at ds i }
+      ensures { Range.valid (islice ks p q) (islice ds p q) }
+      variant  { q - p }
+      = if p < q then
+          begin
+            assert { islice ks p q = Cons (Int32.to_int (value_at ks p)) (islice ks (p+1) q) };
+            assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
+            valid_bounds_2 ks ds (p+1) q
+          end
+ 
+ 
+    let matmul (a b r: ctensor) : bool =
     requires { valid_tensor a }
     requires { valid_tensor b }
     requires { valid_tensor r }
-    requires { (tensor a).background = (tensor b).background = (tensor r).background }
+    requires { value_at a.t_dims 1 = value_at b.t_dims 0 }
+    requires { value_at r.t_dims 0 = value_at a.t_dims 0 }
+    requires { value_at r.t_dims 1 = value_at b.t_dims 1 }
     requires { a.t_rank = b.t_rank = r.t_rank = 2 }
-    requires { a.t_dims[1] = b.t_dims[0] }
-    requires { r.t_dims[0] = a.t_dims[0] /\ r.t_dims[1] = b.t_dims[1] }
-    (*ensures { tensor r = matmul (tensor a) (tensor b) }*)
-    let lines = a.t_dims[0] in
-    let columns = b.t_dims[1] in
-    let commun_value = a.t_dims[1] in
-    
+    requires { length (tensor a).Tensor.dims = length (tensor b).Tensor.dims = length (tensor r).Tensor.dims = 2 }
+    requires { get_dim (tensor a).Tensor.dims 1 = get_dim (tensor b).Tensor.dims 0 }
+ 
+    ensures { result -> tensor r = matmul (tensor a) (tensor b) }
+ 
+    let ghost matmul_result = matmul (tensor a) (tensor b) in
+    assert { matmul_result.dims = ivector r.t_dims r.t_rank };
+ 
+    let rows = a.t_dims[0] in
+    let cols = b.t_dims[1] in
+    let iter = a.t_dims[1] in
+    let ref flag = False in
+    let ref sum = (f32 0.0) in
     let a_coords_array = malloc (to_uint32 2) in
     let b_coords_array = malloc (to_uint32 2) in
     let r_coords_array = malloc (to_uint32 2) in
-    if is_not_null a_coords_array && is_not_null b_coords_array && is_not_null r_coords_array then
-        for i = 0 to lines - 1 do
-            for j = 0 to columns - 1 do
-                let ref sum = (f32 0.0) in
-                for k = 0 to commun_value - 1 do
+ 
+    if is_not_null a_coords_array && is_not_null b_coords_array && is_not_null r_coords_array then begin
+        flag <- True;
+        for i = 0 to rows - 1 do
+            invariant { sum = 0.0 }
+            invariant {
+                forall ii:int, jj:int.
+                    0 <= ii < i ->
+                    0 <= jj < cols ->
+                    (tensor r).Tensor.data (Cons ii (Cons jj Nil)) =
+                        dot_product (tensor a) (tensor b) ii jj 0 iter
+            }
+            for j = 0 to cols - 1 do
+                invariant { sum = 0.0 }
+                invariant {
+                    forall ii, jj:int.
+                        0 <= ii < i ->
+                        0 <= jj < cols ->
+                        (tensor r).Tensor.data (Cons ii (Cons jj Nil)) =
+                            dot_product (tensor a) (tensor b) ii jj 0 iter
+                }
+                invariant {
+                    forall jj:int.
+                        0 <= jj < j ->
+                        (tensor r).Tensor.data (Cons i (Cons jj Nil)) =
+                            dot_product (tensor a) (tensor b) i jj 0 iter
+                }
+                for k = 0 to iter - 1 do
+                    invariant { sum = dot_product (tensor a) (tensor b) i j 0 k }
                     set_ofs a_coords_array 0 i;
                     set_ofs a_coords_array 1 k;
                     set_ofs b_coords_array 0 k;
-                    set_ofs b_coords_array 1 j;             
-                    let a_coords = coffset a_coords_array a.t_dims a.t_rank in
-                    let b_coords = coffset b_coords_array b.t_dims b.t_rank in
-                    if a_coords >= 0 && b_coords >= 0 then
-                        let a_val = a.t_data[a_coords] in
-                        let b_val = b.t_data[b_coords] in
-                        sum <- sum .+ a_val .* b_val
-                    else
-                        sum <- sum .+ (f32 0.0)
+                    set_ofs b_coords_array 1 j;
+ 
+                    ghost
+                        begin
+                            valid_bounds_2 a_coords_array a.t_dims 0 2;
+ 
+                            valid_bounds_2 b_coords_array b.t_dims 0 2;
+
+                            dot_product_aux_step (tensor a) (tensor b) (to_int i) (to_int j) 0 (to_int k) (to_int iter);
+                        end;
+ 
+                    let a_coords = coffset_1 a_coords_array a.t_dims a.t_rank in
+                    let b_coords = coffset_1 b_coords_array b.t_dims b.t_rank in
+                    let a_val = a.t_data[a_coords] in
+                    let b_val = b.t_data[b_coords] in
+ 
+                    assert {Cons ((i)) (Cons ((k)) Nil) = ivector a_coords_array a.t_rank };
+                    assert { (tensor a).Tensor.data (Cons ((i)) (Cons ((k)) Nil)) = value_at a.t_data a_coords };
+               
+                    assert {Cons ((k)) (Cons ((j)) Nil) = ivector b_coords_array b.t_rank };
+                    assert { (tensor b).Tensor.data (Cons ((k)) (Cons ((j)) Nil)) = value_at b.t_data b_coords };
+ 
+                    sum <- sum .+ (a_val .* b_val);
+
                 done;
+
                 set_ofs r_coords_array 0 i;
                 set_ofs r_coords_array 1 j;
-                let r_coords = coffset r_coords_array r.t_dims r.t_rank in
-                if r_coords >= 0 then
-                    r.t_data[r_coords] <- sum
+                let r_coords = coffset_1 r_coords_array r.t_dims r.t_rank in
+ 
+                assert { Cons i (Cons j Nil) = ivector r_coords_array r.t_rank };
+                assert { r_coords = CFlat.offset (Cons i (Cons j Nil)) (ivector r.t_dims r.t_rank) };
+ 
+                r.t_data[r_coords] <- sum;
+ 
+                assert { (tensor r).Tensor.data (Cons i (Cons j Nil)) = value_at r.t_data r_coords };
+
+                assert {
+                    forall jj:int.
+                        0 <= jj < j ->
+                        CFlat.offset (Cons i (Cons jj Nil)) (ivector r.t_dims r.t_rank) <> r_coords
+                };
+
+                sum <- (f32 0.0);
+
             done;
+
         done;
-    (*assert { tensor r  == matmul (tensor a) (tensor b) }*)
 
+        assert { ivector a.t_dims a.t_rank = Cons (to_int rows) (Cons (to_int iter) Nil) };
+        assert { ivector b.t_dims b.t_rank = Cons (to_int iter) (Cons (to_int cols) Nil) };
+        assert { ivector r.t_dims r.t_rank = Cons (to_int rows) (Cons (to_int cols) Nil) };
+        assert { rows = get_dim (tensor a).Tensor.dims 0 };
+        assert { cols = get_dim (tensor b).Tensor.dims 1 };
+        assert { iter = get_dim (tensor a).Tensor.dims 1 };
 
+        assert { tensor r == matmul (tensor a) (tensor b) };
+        flag
+    end
+    else
+        flag
+ 
 end
