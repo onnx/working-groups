@@ -52,15 +52,15 @@ $$\begin{gathered}
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
 - $w \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
-- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
-- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
-- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output `Y`
-- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output `Y`
-- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
-- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
+- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output $Y$
+- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output $Y$
+- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output $Y$
+- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output $Y$
+- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute `kernel_shape`
+- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -135,19 +135,19 @@ No error conditions.
 <a id="real_attributes"></a>
 ## Attributes
 
-### $auto\\_pad$: `string`
+### `auto_pad`: string
 
 The `auto_pad` attribute determines if and how automatic padding is done for the input tensor X.
 
 #### Constraints
 -  `C1`: Value domain 
-    - Statement: `auto_pad` shall be in set {`NOTSET`, `VALID`, `SAME_UPPER`, `SAME_LOWER`}. `[R2]`
+    - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}. `[R2]`
 -  `C2`: Explicit padding 
-    - Statement: `auto_pad` shall be set to `NOTSET`. `[R3]`
+    - Statement: `auto_pad` shall be set to NOTSET. `[R3]`
     - Rationale: The SONNX profile imposes explicit padding.
 
 
-### $ceil\\_mode$: `int`
+### `ceil_mode`: int
 
 Whether to use ceil or floor (default) to compute the output shape.
 
@@ -158,9 +158,9 @@ Whether to use ceil or floor (default) to compute the output shape.
     - Statement: `ceil_mode` shall be set to zero. `[R4]`
     - Rationale: TO BE COMPLETED.
 
-### $dilations$: `list of ints`
+### `dilations`: list of ints
 
-Attribute `dilations` specifies the spacing between the kernel elements for each spatial axis of the filter `W`. The ith value in the list gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel elements are spaced out by the dilation factor for that axis. 
+Attribute `dilations` specifies the spacing between the kernel elements for each spatial axis of the filter $W$. The ith value in the list gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel elements are spaced out by the dilation factor for that axis. 
 
 <a id="T10"></a> <b><span style="font-family: 'Courier New', monospace">[T10]</span></b> The value of the elements introduced by the dilation is 0.
 
@@ -172,23 +172,23 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 - `C1`: Value domain
     - Statement: `dilations` is a list of strictly positive integers
     - Rationale: The dilation is a *factor of expansion* along a certain axis. 
-- `C2`: Relation between `dilations` and `W` 
+- `C2`: Relation between `dilations` and $W$ 
     - Statement: The `dilations` and `kernel\_shape` lists have the same length
-    - Rationale: Dilation is defined for all spatial axes of `W`.
-- `C3`: Consistency between the shape of tensors `Y`, `X` and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Rationale: Dilation is defined for all spatial axes of $W$.
+- `C3`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
-### $kernel\\_shape$: `list of ints`
+### `kernel_shape`: list of ints
 
 The size of the kernel along each spatial axis.
 
 <a id="real_pads"></a>
-### $pads$: list of ints
+### `pads`: list of ints
 
-Attribute `pads` determines the padding at the beginning and end along each spatial axis of the input tensor `X`.
+Attribute `pads` determines the padding at the beginning and end along each spatial axis of the input tensor $X$.
 
-`pads` is a list of the form (`x1_begin`, `x2_begin`,..., `x1_end`, `x2_end`,...), where `xi_begin` is the number of elements (possibly zero) added at the beginning of axis $i$ and `xi_end` is the number of elements added at the end of axis $i$.
+`pads` is a list of the form (x1_begin, x2_begin,..., x1_end, x2_end,...), where xi_begin is the number of elements (possibly zero) added at the beginning of axis $i$ and xi_end is the number of elements added at the end of axis $i$.
 
 The value of the constant to pad depends on the input tensor data type. Therefore:
 - see [floating-point value to pad](#pad_const_float_val)
@@ -202,13 +202,13 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 - `C1`: Value domain
     - Statement: `pads` is a list of positive or null integers.
     - Rationale: A padding value gives a *number of elements* to be added to some spatial axis.
-- `C2`: Consistency between the shape of `X` and the length of `pads`
-    - Statement: The length of the `pads` list is twice the number of spatial axes of `X`
+- `C2`: Consistency between the shape of $X$ and the length of `pads`
+    - Statement: The length of the `pads` list is twice the number of spatial axes of $X$
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `C3`: Consistency between the shape of tensors `Y`, `X` and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+- `C3`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
-### $storage\\_order$: int
+### `storage_order`: int
 
 The storage order of the tensor. 0 is row major, and 1 is column major.
 
@@ -217,9 +217,9 @@ The storage order of the tensor. 0 is row major, and 1 is column major.
     - Statement: `storage_order` shall be set to zero.
     - Rationale: TO BE COMPLETED.
 
-### $strides$: list of ints
+### `strides`: list of ints
 
-Attribute `strides` determines how the kernel is applied on tensor `X` during the convolution.
+Attribute `strides` determines how the kernel is applied on tensor $X$ during the convolution.
 
 For instance, with $stride[0]=3$ and $stride[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the max pooling.
 
@@ -231,7 +231,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
 - `C1`: Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
-- `C2`: Consistency between the shape of tensors `Y`, `X` and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+- `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
@@ -248,7 +248,7 @@ $X$ is the input tensor from which the max values are selected.
 - `[C1]` <a id="C1ia"></a> First constraint on $X$
     - Statement: The number of spatial axes of tensor $X$ is 2. `R1`
     - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
-- `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel\_shape`, `pads`, `dilations` and `strides`
+- `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
@@ -256,13 +256,13 @@ $X$ is the input tensor from which the max values are selected.
 
 ### $\text{Y}$: real
 
-The size of the output `Y` will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
+The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - $dY_0$ is the number of batches
 - $dY_1$ is the number of channels
 - $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes
 
 #### Constraints.
-- `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors `Y`, `X`, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+- `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
     $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
     and
@@ -319,15 +319,15 @@ $$\begin{gathered}
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
 - $w \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
-- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
-- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
-- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output `Y`
-- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output `Y`
-- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
-- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
+- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output $Y$
+- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output $Y$
+- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output $Y$
+- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output $Y$
+- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute `kernel_shape`
+- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -338,7 +338,7 @@ $S, Ind = \text{MaxPool}(E)$
 
 - Data type: double
 - Shape of $E$ = [1, 1, 3, 3]
-- kernel\_shape = [2,2]
+- kernel_shape = [2,2]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
@@ -631,15 +631,15 @@ $$\begin{gathered}
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
 - $w \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
-- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output `Y`
-- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output `Y`
-- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output `Y`
-- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output `Y`
-- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute kernel\_shape
-- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute kernel\_shape
+- $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output $Y$
+- $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output $Y$
+- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output $Y$
+- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output $Y$
+- $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute `kernel_shape`
+- $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor `X`. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -959,5 +959,3 @@ $Indices$ contains the indices of the input tensor $X$ from which the max values
 
  - `[C1]` <a id="C1iy"></a> First constraint on $Indices$
    - Statement: $Indices$ and $Y$ shall have the same shape
-
-
