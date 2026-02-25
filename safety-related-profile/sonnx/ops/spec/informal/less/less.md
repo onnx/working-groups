@@ -111,7 +111,7 @@ Second input tensor to be compared with $A$.
 
 ### $\text{C}$: bool tensor
 
-*Output tensor formed by the element-wise comparison of $A$ and $B$.*
+Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 #### Constraints
 
