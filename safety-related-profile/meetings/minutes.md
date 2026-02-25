@@ -1,6 +1,6 @@
 # 2025/02/25
 ## Participants
-- To be completed.
+- Joõ, Camille, Eric, Mariem, Dumitru, Ricardo, Franck
 ## Agenda 
 - Review of actions (Eric)
 - Status of [specification](https://github.com/users/ericjenn/projects/4) 
@@ -8,17 +8,23 @@
 - Meeting on formal methods (Eric+All)
 - Progress and questions from Portugal! (Ricardo and João)
 - The case of **MaxPool**, continued, see the [Jupyter notebook](https://github.com/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/sonnx/ops/spec/tests/maxpool/Test_Max_Pool_Divergence.ipynb) (Henri)
-- On the spec of mathematical oeprators, using [mpfr](https://www.mpfr.org/mpfr-current/mpfr.html#index-mpfr_005fpowr) (Eric)
+- On the spec of mathematical operators, using [mpfr](https://www.mpfr.org/mpfr-current/mpfr.html#index-mpfr_005fpowr) (Eric)
 - Local WG (Eric)
     - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
 ## Minutes
-
+- Ricardo and João have explained their approach to specify **MatMul**. Having a written version of the  general principles, methods (and possibly tricks...) that have been applied would be extremely useful for the team. Hopefully, this could be part of the R&J's master's thesis report.
+- On ORT, the behaviour of **Matmul** differs when applied on  float null tensors and integer null tensors. We consider that multiplying null tensors is well defined and can lead to non null tensors. We have to add a notice explaining that the behaviour of ORT differ from the spec. 
+- More generally, we agree that the spec must provide a unique output even though different implementations may return different result. We will add a notice stating the possible divergence (limited to ORT). It is up to an implementer to show where his/her implementation does not comply with the spec. We may produce some kind of a "compliance report" for ORT CPU (for instance) as an example. 
+- Back to **Maxpool**: 
+  - we have to take care of optional outputs. 
+  - the behaviour of **Maxpool** is extremely variable depending on the backend (CPU, tensortRT, CUDA). Besides the erroneous indexes when dealing with Infs, we also observe strange results on the max valeu themselves. Refer to [Henri's notebook](../sonnx/ops/spec/tests/maxpool/Test_Max_Pool_Divergence.ipynb) for further details.
 ## Actions
 ### New actions
 ### Previous actions
-- [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**.  
+- [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
+  - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
 - [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
-- [ ] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
+- [X] (1401-4, All) Collect all questions to be asked to Loïc with enough material to present the issues (example) and give our own solution (when available) 
   - Material shall be placed [here](https://github.dev/ericjenn/working-groups/blob/ericjenn-srpwg-wg1/safety-related-profile/meetings/formal_methods/inputs/inputs-2026-02-18.md)
 - [ ] (1911-2, All) Review Jean's V&V proposal
   - Eric to put updated slides on the repo : Done.
