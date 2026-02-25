@@ -3,6 +3,7 @@
 - To be completed.
 ## Agenda 
 - Review of actions (Eric)
+- Status of [specification](https://github.com/users/ericjenn/projects/4) 
 - Meeting on accuracy (Eric+Jean+Franck), see the [minutes](../meetings/numerical%20accuracy/2026-02-17%20-%20DeepGreen%20-%20Accuracy.md).
 - Meeting on formal methods (Eric+All)
 - Progress and questions from Portugal! (Ricardo and João)
