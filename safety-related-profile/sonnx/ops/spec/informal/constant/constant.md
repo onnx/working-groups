@@ -1,103 +1,255 @@
-# Preliminary remarks
 
-## Types
+# Contents
 
-- The `Constant` operator produces a constant tensor, which can be of various data types. The supported types for the constant value include `tensor(bfloat16)`, `tensor(bool)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`, `tensor(int16)`, `tensor(int32)`, `tensor(int64)`, `tensor(int8)`, `tensor(string)`, `tensor(uint16)`, `tensor(uint32)`, `tensor(uint64)`, and `tensor(uint8)`. The dimension size for the tensor is defined by $N(tensor)$.
+- **Constant** operator for type [real](#real)
+- **Constant** operator for types [float16, float, double](#float)
+- **Constant** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
-# `Constant` operator
+<a id="real"></a>
 
-### Restrictions
+# **Constant** (real)
 
-The following restrictions apply to the `Constant` operator for the ONNX profile:
-- The operator must have a defined constant value through the attribute `value` `[R1]`
-- The operator does not support sparse tensors `[R2]`
-- all element of the attribut shall be of the same type `[R3]`
+## Signature
 
-### Signature
+Definition of operator $\text{Constant}$ signature:
+$C = \textbf{Constant}(\text{value})$
 
-`C = Constant(value)` with a fixed value attribut
+where:
 
-where
+* `value`: the constant value to fill the output tensor
+* `C`: output tensor containing the constant value
+
+## Restrictions
+
+[General restrictions](./../common/general_restrictions.md) are applicable.
+
+Specific restrictions for **Constant**:
+
+- `[R1]` Attribute `value` must be defined.
+- `[R2]` Sparse tensors are not supported.
+- `[R3]` All elements in `value` must have the same type.
+
+## Informal specification
+
+Operator **Constant** generates a tensor filled with a single constant value specified by the attribute `value`. The output tensor `C` has the same shape and type as defined by `value`.
+
+Mathematically, for all tensor indices $i$:
+
+$$
+C[i] = \text{value}[i]
+$$
+
+### Example 1
+
+```math
+\text{value} = 4.2
+```
+
+Result $C$:
+
+```math
+C = \begin{bmatrix} 4.2 \end{bmatrix}
+```
+
+### Example 2
+
+```math
+\text{value} = \begin{bmatrix} 1.1 & 2.2 \\ 3.3 & 4.4 \end{bmatrix}
+```
+
+Result $C$:
+
+```math
+C = \begin{bmatrix} 1.1 & 2.2 \\ 3.3 & 4.4 \end{bmatrix}
+```
+
+## Error conditions
+
+No error condition.
+
+## Attributes
+
+### `value`
+
+* **Description:** The constant value to fill the output tensor.
+* **Type:** `tensor(real)`
+* **Requirement:** Required `[R1]`.
+
+## Inputs
+
+Not applicable. **Constant** does not take any input tensors.
+
+## Outputs
+
+### `C`: real tensor
+
+Output tensor filled with the constant value.
+
+#### Constraints
+
+- `[C1]` Value consistency
+
+  - Statement: The shape and type of `C` are determined by the attribute `value`. `[R1]` `[R2]` `[R3]`
+
+
+
+<a id="float"></a>
+
+# **Constant** (float)
+
+where float is in {float16, float, double}
+
+## Signature
+
+$C = \textbf{Constant}(\text{value})$
+
+where:
+
+- `value`: constant floating-point tensor
 - `C`: output tensor containing the constant value
 
-#### Informal specification
+## Restrictions
 
-The `Constant` operator generates a tensor that contains a constant value. The value of the tensor is specified by an attribute `value`, which determines both the type and value of the output tensor. The output tensor can be of any shape and data type, as long as they are consistent with the provided `value`.
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
-The mathematical definition of the operator is given hereafter.
+Specific restrictions:
 
-$$
-C = value
-$$
+* `[R1]` Attribute `value` must be defined.
+* `[R2]` Sparse tensors not supported.
+* `[R3]` All elements must have the same floating-point type.
 
-##### Example 1:
+## Informal specification
+
+Operator **Constant** produces a tensor of floating-point values where each element equals the corresponding value in the attribute `value`. Selection follows standard IEEE 754 semantics (NaN and infinity preserved).
+
+### Example 1
+
 ```math
-\text{value} = 4.5
-```
-Result `C` will be:
-```math
-`C` = \begin{bmatrix} 4.5 \end{bmatrix}
+\text{value} = 3.14
 ```
 
-##### Example 2:
+Result $C$:
+
+```math
+C = \begin{bmatrix} 3.14 \end{bmatrix}
+```
+
+### Example 2
+
+```math
+\text{value} = \begin{bmatrix} -0.0 & -\inf \\ \text{NaN} & +\inf \end{bmatrix}
+```
+
+Result $C$:
+
+```math
+C = \begin{bmatrix} -0.0 & -\inf \\ \text{NaN} & +\inf \end{bmatrix}
+```
+
+## Error conditions
+
+No error condition.
+
+## Attributes
+
+### `value`
+
+* **Description:** Constant floating-point tensor to fill output.
+* **Type:** `tensor(float16, float, double)`
+* **Requirement:** Required `[R1]`.
+
+## Inputs
+
+Not applicable.
+
+## Outputs
+
+### `C`: floating-point tensor
+
+#### Constraints
+
+- `[C1]` Value consistency
+
+  - Statement: Shape and type of `C` determined by attribute `value`. `[R1]` `[R2]` `[R3]`
+
+
+
+<a id="int"></a>
+
+# **Constant** (int)
+
+where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}
+
+## Signature
+
+$C = \textbf{Constant}(\text{value})$
+
+where:
+
+- `value`: constant integer tensor
+- `C`: output tensor containing the constant value
+
+## Restrictions
+
+[General restrictions](./../common/general_restrictions.md) are applicable.
+
+Specific restrictions:
+
+* `[R1]` Attribute `value` must be defined.
+* `[R2]` Sparse tensors not supported.
+* `[R3]` All elements must have the same integer type.
+
+## Informal specification
+
+Operator **Constant** produces a tensor of integer values where each element equals the corresponding value in the attribute `value`.
+
+### Example 1
+
+```math
+\text{value} = 7
+```
+
+Result $C$:
+
+```math
+C = \begin{bmatrix} 7 \end{bmatrix}
+```
+
+### Example 2
+
 ```math
 \text{value} = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}
 ```
-Result `C` will be:
+
+Result $C$:
+
 ```math
-`C` = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}
+C = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}
 ```
 
-#### Inputs and outputs
+## Error conditions
 
-##### `C`
+No error condition.
 
-Tensor `C` is the output tensor containing the provided constant value.
+## Attributes
 
-The shape of tensor `C` and its type are determined by the attribute `value`. `[R1]` & `[R2]` & `[R3]`
+### `value`
 
-###### Constraints
+* **Description:** Constant integer tensor to fill output.
+* **Type:** `tensor(int8, int16, int32, int64, uint8, uint16, uint32, uint64)`
+* **Requirement:** Required `[R1]`.
 
-- (C1) Value consistency
-    - Statement: The shape and type of `C` are determined by the attribute `value`. 
+## Inputs
 
-#### Attributes
+Not applicable.
 
-##### `value`
-- **Description:** The constant value to fill the output tensor.
-- **Type:** Any supported tensor type : `tensor(bfloat16, bool, double, float, float16, int16, int32, int64, int8, string, uint16, uint32, uint64, uint8)`.
-- **Requirement:** This attribute is required to define the constant value for the output tensor `[R1]`.
+## Outputs
 
-### Formal specification
+### `C`: integer tensor
 
-The formal specification of the `Constant` operator using the Why3 language[^1] is provided below. This specification ensures the consistency and desired behavior of the operator within the described constraints.
+#### Constraints
 
+- `[C1]` Value consistency
 
-```ocaml
-use int.Int
-use real.Real
-use array.Array
+  - Statement: Shape and type of `C` determined by attribute `value`. `[R1]` `[R2]` `[R3]`
 
-type tensor = {
-  data: array real;
-  dims: array int;
-}
-
-function size (t: tensor) : int =
-  product t.dims 0
-  where rec product (a: array int) (i: int) : int =
-    if i = length a then 1 else a[i] * product a (i + 1)
-
-predicate same_dimensions (dims1: array int) (dims2: array int) : bool =
-  length dims1 = length dims2 /\ (forall i. dims1[i] = dims2[i])
-
-predicate constant_result (X: tensor, Y: tensor, i: int) =
-  Y.data[i] = X.data[i]
-
-val check_constant (X: tensor): tensor
-  requires { same_dimensions X.dims X.dims }
-  ensures { Y.dims = X.dims }
-  ensures { length Y.data = size X }
-  ensures { forall i. constant_result X Y i }
-```
-[^1]: See [Why3 documentation](https://www.why3.org/)
