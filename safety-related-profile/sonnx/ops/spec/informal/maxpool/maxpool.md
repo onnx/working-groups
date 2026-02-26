@@ -63,7 +63,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#real_pads).
 
 ### A graphical view of MaxPool:
 
@@ -338,7 +338,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies $-inf$ padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -567,7 +567,7 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
 
 <a id="pad_const_float_val"></a>
-The constant float value tp pad is -inf.
+The constant float value tp pad is $-inf$.
 
 
 ## Inputs
@@ -652,7 +652,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies $-inf$ padding as specified by the pads attribute (see ONNX `Pad` operator).
 
 
 The effect of the operator is illustrated on the following examples.
