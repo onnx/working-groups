@@ -274,10 +274,8 @@ The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
         - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
-    and
         - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
-    where:
-        - $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
+        - where $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
    
 
 ### $\text{Indices}$: int64
@@ -481,7 +479,7 @@ Y =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -1.79769313e+308 (????) & 4.56432533e+000 \\
+        -inf & 4.56432533e+000 \\
         3.46789489e+000 & 5.23979851e+000 \\
     \end {bmatrix}
   \end {bmatrix}
@@ -493,7 +491,7 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????) & 2 \\
+        0 & 2 \\
         7 & 8 \\
     \end {bmatrix}
   \end {bmatrix}
@@ -532,7 +530,7 @@ Y =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -1.79769313e+308 (????) & 9.57875561e+000 & 9.57875561e+000 & 4.56432533e+000 \\
+        -inf & 9.57875561e+000 & 9.57875561e+000 & 4.56432533e+000 \\
         2.72844928e+000 & 9.57875561e+000 & 9.57875561e+000 & 4.56432533e+000 \\
         2.83691720e+000 & 3.54234851e+000 & 5.23979851e+000 & 5.23979851e+000 \\
         2.83691720e+000 & 3.46789489e+000 & 5.23979851e+000 & 5.23979851e+000 \\
@@ -546,7 +544,7 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????)& 1 & 1 & 2 \\
+        0 & 1 & 1 & 2 \\
         3 & 1 & 1 & 2 \\
         6 & 4 & 8 & 8 \\
         6 & 7 & 8 & 8 \\
@@ -784,7 +782,7 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????) & 5 \\
+        0 & 5 \\
         7 & 7 \\
     \end {bmatrix}
   \end {bmatrix}
@@ -890,10 +888,10 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????) & 1 & 2 & 2 \\ 
-        -4 (Bug ????)& 1 & 5 & 5 \\
+        0 & 1 & 2 & 2 \\ 
+        3 & 1 & 5 & 5 \\
         6 & 7 & 7 & 5 \\
-        6 & 7 & 7 & -4 (Bug ????)\\
+        6 & 7 & 7 & 8 \\
     \end {bmatrix}
   \end {bmatrix}
 \end {bmatrix}
@@ -945,10 +943,10 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????) & 1 & 2 & 2 \\
+         0 & 1 & 2 & 2 \\
          3 & 1 & 5 & 5 \\
          6 & 7 & 7 & 5 \\
-         6 & 7 & 7 & -4 (Bug ????) \\
+         6 & 7 & 7 & 8 \\
     \end {bmatrix}
   \end {bmatrix}
 \end {bmatrix}
@@ -964,10 +962,10 @@ Indices =
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
-        -4 (Bug ????) & 1 & 2 & 2 \\ 
-        -4 (Bug ????)& 1 & 5 & 5 \\
+        -4 & 1 & 2 & 2 \\ 
+        -4 & 1 & 5 & 5 \\
         6 & 7 & 7 & 5 \\
-        6 & 7 & 7 & -4 (Bug ????)\\
+        6 & 7 & 7 & -4 \\
     \end {bmatrix}
   \end {bmatrix}
 \end {bmatrix}
