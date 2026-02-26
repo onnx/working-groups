@@ -63,7 +63,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#real_pads).
 
 ### A graphical view of MaxPool:
 
@@ -206,7 +206,7 @@ The value of the constant to pad depends on the input tensor data type. Therefor
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2) and the padded value is the one for type uint8, i.e., zero.
 
-<img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
+<img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="80%"/>
 
 #### Constraints
 - `C1`: Value domain
@@ -273,9 +273,9 @@ The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 #### Constraints.
 - `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
-    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
+        - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
     and
-    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
+        - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
     where:
         - $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
    
@@ -338,7 +338,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#pad_const_float_val).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -555,6 +555,38 @@ Indices =
 \end {bmatrix}
 ```
 
+### Dicreapancies observed in an existing implementation
+
+Runnning Example 3 above on ONNX runtime with CPU as provider produces the following output tensors:
+
+```math
+Y =
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -1.79769313e+308 & 4.56432533e+000 \\
+        3.46789489e+000 & 5.23979851e+000 \\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+```math
+Indices = 
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -4 & 2 \\
+        7 & 8 \\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+Two discreapancies appear:
+- in $Y$: -1.79769313e+308 instead of $-inf$ as first element.
+- in $Indices$: $-4$ instead of $0$ (first element of $X$).
+
 ## Error conditions
 No error conditions.
 
@@ -567,7 +599,7 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
 
 <a id="pad_const_float_val"></a>
-The constant float value tp pad is -inf.
+The constant float value to pad is $-inf$.
 
 
 ## Inputs
@@ -652,7 +684,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#pad_const_int_val).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -923,6 +955,30 @@ Indices =
 ```
 
 
+### Dicreapancies observed in an existing implementation
+
+Runnning Example 4 above on ONNX runtime with CPU as provider produces the following $Indices$ output tensor:
+
+```math
+Indices = 
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -4 (Bug ????) & 1 & 2 & 2 \\ 
+        -4 (Bug ????)& 1 & 5 & 5 \\
+        6 & 7 & 7 & 5 \\
+        6 & 7 & 7 & -4 (Bug ????)\\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+The following discreapancies of the same kind appear in it:
+- $-4$ instead of $0$ (first element of $X$).
+- $-4$ instead of $3$ (fourth element of $X$).
+- $-4$ instead of $8$ (ninth element of $X$).
+
+
 ## Error conditions
 No error conditions.
 
@@ -933,10 +989,11 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 ### $pads$: list of ints
 
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
+
 <a id="pad_const_int_val"></a>
 The integer const value to pad is:
--  -128 for int8
--  0 for uint8.
+-  $-128$ for int8
+-  $0$ for uint8.
 
 ## Inputs
 
