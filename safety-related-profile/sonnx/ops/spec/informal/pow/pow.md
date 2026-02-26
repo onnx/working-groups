@@ -159,9 +159,8 @@ Operator **Pow** computes the element-wise power between input tensors $A$ and $
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-C[i] = \operatorname{pow}(A[i],B[i]) =
+C[i] = \text{pow}(A[i],B[i]) =
 \begin{cases}
-
 \text{NaN}
 &
 \begin{aligned}
@@ -169,6 +168,8 @@ C[i] = \operatorname{pow}(A[i],B[i]) =
 &\lor (A[i]=\text{NaN}\land B[i]\neq \pm0) \\
 &\lor (A[i]\in\mathbb{R}_{<0}\land A[i]\neq -\inf\land B[i]\notin\mathbb{Z})
 \end{aligned}\\
+\\
+\\
 \\
 +\inf
 &
@@ -181,12 +182,16 @@ C[i] = \operatorname{pow}(A[i],B[i]) =
 &\lor (B[i]=-\inf \land 0<|A[i]|<1 )
 \end{aligned}\\
 \\
+\\
+\\
 -\inf
 &
 \begin{aligned}
 &(A[i]=-\inf\land B[i]\in\mathbb{Z}_{>0}\land B[i]\in \mathbb{Z}\text{ odd}) \\
 &\lor (A[i]=-0\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd})
 \end{aligned}\\
+\\
+\\
 \\
 +0
 &
@@ -199,12 +204,16 @@ C[i] = \operatorname{pow}(A[i],B[i]) =
 &\lor (B[i]=-\inf \land |A[i]|>1)
 \end{aligned}\\
 \\
+\\
+\\
 -0
 &
 \begin{aligned}
 &(A[i]=-0\land B[i]\in\mathbb{Z}_{>0}\land B[i]\in \mathbb{Z}\text{ odd})\\
 &\lor(A[i]=-\inf\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd})
 \end{aligned}\\
+\\
+\\
 \\
 1
 &
@@ -214,10 +223,11 @@ C[i] = \operatorname{pow}(A[i],B[i]) =
 &\lor(B[i]=\pm0 \land \forall A[i])
 \end{aligned}\\
 \\
+\\
+\\
 A[i]^{B[i]}
 &
 \text{otherwise}
-
 \end{cases}
 $$
 
@@ -241,7 +251,6 @@ Note :
 |pow(-Inf, B[i]) | C[i]=  +Inf for B[i] positive and not an odd integer.|
 |pow(+Inf, B[i]) | C[i]=  +0 for B[i] negative, and +Inf for B[i] positive.|
 |pow(A[i], B[i]) | C[i]=  A[i]^B[i] otherwise.|
-
 
 
 ### Example 1
@@ -504,3 +513,4 @@ Result of the element-wise power of $A$ to $B$.
 - `[C2]` Type consistency
 
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia_pow) on tensor $A$.
+
