@@ -49,7 +49,7 @@ $$\begin{gathered}
 \end{gathered}$$
 
 $$\begin{gathered}
-    Indices[b, c, m, n] = (h \cdot dX_3 + w) \ with \ X_{p}[h,w] = Y[b, c, m, n]
+   Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
 \end{gathered}$$
 
 Where
@@ -322,7 +322,7 @@ $$\begin{gathered}
 In the defintion of $Y$ above, any NaN value in $X_p$ is considered as $-inf$.
 
 $$\begin{gathered}
-    Indices[b, c, m, n] = (h \cdot dX_3 + w) \ with \ X_{p}[h,w] = Y[b, c, m, n]
+    Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
 \end{gathered}$$
 
 Where
@@ -668,7 +668,7 @@ $$\begin{gathered}
 \end{gathered}$$
 
 $$\begin{gathered}
-    Indices[b, c, m, n] = (h \cdot dX_3 + w) \ with \ X_{p}[h,w] = Y[b, c, m, n]
+    Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
 \end{gathered}$$
 
 Where
