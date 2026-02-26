@@ -555,6 +555,38 @@ Indices =
 \end {bmatrix}
 ```
 
+### Dicreapancies observed in an existing implementation
+
+Runnning Example 3 above on ONNX runtime with CPU as provider produces the following output tensors:
+
+```math
+Y =
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -1.79769313e+308 & 4.56432533e+000 \\
+        3.46789489e+000 & 5.23979851e+000 \\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+```math
+Indices = 
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -4 & 2 \\
+        7 & 8 \\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+Two discreapancies appear:
+- in $Y$: -1.79769313e+308 instead of $-inf$ as first element.
+- in $Indices$: $-4$ instead of $0$ (first element of $X$).
+
 ## Error conditions
 No error conditions.
 
@@ -567,7 +599,7 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
 
 <a id="pad_const_float_val"></a>
-The constant float value tp pad is $-inf$.
+The constant float value to pad is $-inf$.
 
 
 ## Inputs
@@ -923,6 +955,30 @@ Indices =
 ```
 
 
+### Dicreapancies observed in an existing implementation
+
+Runnning Example 4 above on ONNX runtime with CPU as provider produces the following $Indices$ output tensor:
+
+```math
+Indices = 
+\begin{bmatrix}
+  \begin{bmatrix}
+    \begin{bmatrix}
+        -4 (Bug ????) & 1 & 2 & 2 \\ 
+        -4 (Bug ????)& 1 & 5 & 5 \\
+        6 & 7 & 7 & 5 \\
+        6 & 7 & 7 & -4 (Bug ????)\\
+    \end {bmatrix}
+  \end {bmatrix}
+\end {bmatrix}
+```
+
+The following discreapancies of the same kind appear in it:
+- $-4$ instead of $0$ (first element of $X$).
+- $-4$ instead of $3$ (fourth element of $X$).
+- $-4$ instead of $8$ (ninth element of $X$).
+
+
 ## Error conditions
 No error conditions.
 
@@ -933,10 +989,11 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 ### $pads$: list of ints
 
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
+
 <a id="pad_const_int_val"></a>
 The integer const value to pad is:
--  -128 for int8
--  0 for uint8.
+-  $-128$ for int8
+-  $0$ for uint8.
 
 ## Inputs
 
