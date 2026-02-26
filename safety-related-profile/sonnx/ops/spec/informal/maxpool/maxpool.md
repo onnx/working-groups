@@ -206,7 +206,7 @@ The value of the constant to pad depends on the input tensor data type. Therefor
 
 The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2) and the padded value is the one for type uint8, i.e., zero.
 
-<img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="100%"/>
+<img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="80%"/>
 
 #### Constraints
 - `C1`: Value domain
@@ -273,9 +273,9 @@ The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 #### Constraints.
 - `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
-    $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
+        - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
     and
-    $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
+        - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
     where:
         - $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
    
@@ -338,7 +338,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies $-inf$ padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#pad_const_float_val).
 
 
 The effect of the operator is illustrated on the following examples.
@@ -652,7 +652,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies $-inf$ padding as specified by the pads attribute (see ONNX `Pad` operator).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#pad_const_int_val).
 
 
 The effect of the operator is illustrated on the following examples.
