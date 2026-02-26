@@ -65,9 +65,11 @@ Where
 - `dilation` is an attribute of the operator. It will be described later in this section.
 - $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies -inf padding as specified by the pads attribute (see ONNX `Pad` operator).
 
-The effect of the operator is illustrated on the following examples.
+### A graphical view of MaxPool:
 
-### Example 1
+<img src="./assets/imgs/MaxPool_with_dilation.drawio.png" width="650" />
+
+### Example
 
 $S, Ind = \text{MaxPool}(E)$
 
@@ -158,15 +160,12 @@ Whether to use ceil or floor (default) to compute the output shape.
     - Statement: `ceil_mode` shall be in set, i.e., to 0 (zero) or 1. `[R2]`
 -  `C2`: floor mode is selected 
     - Statement: `ceil_mode` shall be set to zero. `[R4]`
-    - Rationale: TO BE COMPLETED.
 
 ### `dilations`: list of ints
 
 Dilation value along each spatial axis of filter. If not present, the dilation defaults to 1 along each spatial axis.
 
 Attribute `dilations` specifies the spacing between the elements of $W$. The ith value in the list gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel elements are spaced out by the dilation factor for that axis. 
-
-<a id="T10"></a> <b><span style="font-family: 'Courier New', monospace">[T10]</span></b> The value of the elements introduced by the dilation is 0.
 
 The effect of the `dilations` attribute for a tensor with two spatial axes is depicted on the following figure.  
 
@@ -176,7 +175,7 @@ In the example above:
 - `dilations`=(2,2)
 - The '1' in $W$ have no real existence ([See Informal specification introduction](#Informal_spec)), they can be seen here as selectors of values of $X$.
 - A '0' in the dilated $W$ means that the value in $X$ is not selected
-- The space between two '1' in the dilated $W$ along one spacial axis equals the dilation value for that axis.
+- The space between two '1' in the dilated $W$ along one spacial axis equals the dilation value for that axis, i.e., '2' in the example
 - Therefore, at a given position of $W$ on $X$, one value of $X$ over two is selected for computing the max along each spatial axis. 
   
 #### Constraints
