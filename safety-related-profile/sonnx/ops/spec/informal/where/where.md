@@ -14,12 +14,11 @@ Based on ONNX documentation [Where version 16](https://onnx.ai/onnx/operators/on
 
 ## Signature
 
-Definition of operator $\text{Where}$ signature:
 $Z = \textbf{Where}(condition, X, Y)$
 
 where:
 
-* $condition$: boolean input tensor used to select values
+* $condition$: boolean input tensor used to select values between $X$ and $Y$
 * $X$: first input tensor
 * $Y$: second input tensor
 * $Z$: output tensor formed by element-wise selection between $X$ and $Y$
@@ -36,6 +35,8 @@ Operator **Where** selects elements from tensors $X$ and $Y$ element-wise accord
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+> Image en fond blanc.
+
 $$
 Z[i] =
 \begin{cases}
@@ -43,8 +44,6 @@ X[i] & \text{if } condition[i] = \text{True} \\
 Y[i] & \text{otherwise}
 \end{cases}
 $$
-
-The tensors $condition$, $X$, and $Y$ must have identical shapes.
 
 The effect of the operator is illustrated on the following examples.
 The following figure illustrates operator **Where** applied on inputs $X$,$Y$ with condition $condition$ :
