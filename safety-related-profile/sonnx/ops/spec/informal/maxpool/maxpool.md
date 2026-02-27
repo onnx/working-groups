@@ -10,13 +10,13 @@ Based on ONNX [MaxPool version 22](https://onnx.ai/onnx/operators/onnx__MaxPool.
 # **MaxPool** (real)
 
 ## Signature
-Definition of operator $\text{MaxPool}$ signature:
-($Y, Indices) = \text{MaxPool}(X)$
+$\textbf{MaxPool}$ signature:
+($Y, \textit{Indices}) = \textbf{MaxPool}(X)$
 
 where:
-- $X$: input tensor
-- $Y$: output tensor containing max value selected from $X$
-- $Indices$: output tensor containing the indices in $X$ from where the max values are taken.
+- $X$: Input tensor
+- $Y$: Output tensor containing max value selected from $X$
+- $\textit{Indices}$: Output tensor containing the indices in $X$ from where the max values are taken.
 
 <a id="restrictions"></a> 
 ## Restrictions
@@ -29,28 +29,30 @@ The following specific restrictions apply to the **MaxPool** operator:
 |-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | `[R1]` <a id="R1"></a> | Input tensor $X$ has 2 spatial axes | Transient |
 | `[R2]` <a id="R2"></a> | All attributes must be explicitly set  | [No default values](../../../../../deliverables/reqs/reqs.md#no_default_value)
-| `[R3]` <a id="R2"></a> | Attribute `auto_pad` is restricted to NOTSET  | Transient
-| `[R4]` <a id="R3"></a> | Attribute `ceil_mode` is set to zero  | Transient
-| `[R5]` <a id="R4"></a> | Attribute `storage_order` is set to zero | Transient
+| `[R3]` <a id="R3"></a> | Attribute `auto_pad` is restricted to NOTSET  | Transient
+| `[R4]` <a id="R4"></a> | Attribute `ceil_mode` is set to zero  | Transient
+| `[R5]` <a id="R5"></a> | Attribute `storage_order` is set to zero | Transient
 
 <a id="Informal_spec"></a>
 ## Informal specification
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
-**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$, in this document, has no existence. Indeed, there is no need for kernel values. At a given posittion, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
+**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$. At a given position, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
 Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
-The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
+The mathematical definition of output $Y$ and $Indices$ are given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = max_{h=0}^{dW_0-1} max_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
+    Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
 $$\begin{gathered}
-   Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
+   Indices[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
 \end{gathered}$$
+
+(Voir quel est l'index s'il y a "plusieurs max": première valeur trouvée en privilégiant la premère en haut à gauche, à tester.)
 
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
@@ -63,7 +65,7 @@ Where
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
-- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified in section [pads](#real_pads).
+- $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified by attribute [pads](#real_pads).
 
 ### A graphical view of MaxPool:
 
@@ -71,15 +73,15 @@ Where
 
 ### Example
 
-$S, Ind = \text{MaxPool}(E)$
+$\text{Y},\text{indices} = \text{MaxPool}(X)$
 
-- Shape of $E$ = [1, 1, 8, 8]
+- Shape of $X$ = [1, 1, 8, 8]
 - kernel\_shape = [3,3]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 6, 6]
-- Shape of $Ind$ = [1, 1, 6, 6]
+- Shape of $\text{indices}$ = [1, 1, 6, 6]
 
 
 ```math
@@ -144,26 +146,30 @@ No error conditions.
 The `auto_pad` attribute determines if and how automatic padding is done for the input tensor X.
 
 #### Constraints
--  `C1`: Value domain 
-    - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}. `[R2]`
--  `C2`: Explicit padding 
-    - Statement: `auto_pad` shall be set to NOTSET. `[R3]`
-    - Rationale: The SONNX profile imposes explicit padding.
+-  `[C1]`: Value domain 
+    - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}. 
+    - Rationale: `[R2]`
+-  `[C2]`: Explicit padding 
+    - Statement: `auto_pad` shall be set to NOTSET. 
+    - Rationale: `[R3]`
 
+> (rajouter les liens vers les Rx)
 
 ### `ceil_mode`: int
 
-Whether to use ceil or floor (default) to compute the output shape.
+Whether to use floor (0, default) or ceil (1) to compute the output shape. See the description of output $Y$.
 
 #### Constraints
--  `C1`: Value domain 
-    - Statement: `ceil_mode` shall be in set, i.e., to 0 (zero) or 1. `[R2]`
--  `C2`: floor mode is selected 
-    - Statement: `ceil_mode` shall be set to zero. `[R4]`
+-  `[C1]`: Value domain 
+    - Statement: `ceil_mode` shall be in set, i.e., to 0 (zero) or 1.
+    - Rationale: `[R2]`
+-  `[C2]`: floor mode is selected 
+    - Statement: `ceil_mode` shall be set to 0.
+    - Rationale: `[R4]`
 
 ### `dilations`: list of ints
 
-Dilation value along each spatial axis of filter. If not present, the dilation defaults to 1 along each spatial axis.
+Dilation value along each spatial axis of filter.
 
 Attribute `dilations` specifies the spacing between the elements of $W$. The ith value in the list gives the dilation factor for spatial axis $i$. If the dilation factor is greater than 1 for axis $i$, then the kernel elements are spaced out by the dilation factor for that axis. 
 
@@ -173,19 +179,18 @@ The effect of the `dilations` attribute for a tensor with two spatial axes is de
 
 In the example above:
 - `dilations`=(2,2)
-- The '1' in $W$ have no real existence ([See Informal specification introduction](#Informal_spec)), they can be seen here as selectors of values of $X$.
-- A '0' in the dilated $W$ means that the value in $X$ is not selected
-- The space between two '1' in the dilated $W$ along one spacial axis equals the dilation value for that axis, i.e., '2' in the example
-- Therefore, at a given position of $W$ on $X$, one value of $X$ over two is selected for computing the max along each spatial axis. 
+- Before dilation, $W$ contains only 1s. Those 1s are used as selectors of values of $X$.
+- After dilation, a '0' means that the value in $X$ is not selected.
+- The offset between two '1' in the dilated $W$ along one spacial axis equals the dilation value for that axis, i.e., '2' in the example. Therefore, at a given position of $W$ on $X$, one value of $X$ over two is selected for computing the max along each spatial axis. 
   
 #### Constraints
-- `C1`: Value domain
+- `[C1]`: Value domain
     - Statement: `dilations` is a list of strictly positive integers
     - Rationale: The dilation is a *factor of expansion* along a certain axis. 
-- `C2`: Relation between `dilations` and $W$ 
+- `[C2]`: Relation between `dilations` and $W$ 
     - Statement: The `dilations` and `kernel_shape` lists have the same length
     - Rationale: Dilation is defined for all spatial axes of $W$.
-- `C3`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
@@ -204,18 +209,15 @@ The value of the constant to pad depends on the input tensor data type. Therefor
 - see [floating-point value to pad](#pad_const_float_val)
 - see [integer values to pad](#pad_const_int_val)
 
-The effect of the `pads` attribute is illustrated on the following figure. In this example,  `pads`=(2,1,2,2) and the padded value is the one for type uint8, i.e., zero.
+The effect of the `pads` attribute is illustrated on the following figure on integers. In this example,  `pads`=(2,1,2,2) and the padded value is the one for type uint8, i.e., zero.
 
 <img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="80%"/>
 
 #### Constraints
-- `C1`: Value domain
-    - Statement: `pads` is a list of positive or null integers.
-    - Rationale: A padding value gives a *number of elements* to be added to some spatial axis.
-- `C2`: Consistency between the shape of $X$ and the length of `pads`
+- `[C1]`: Consistency between the shape of $X$ and the length of `pads`
     - Statement: The length of the `pads` list is twice the number of spatial axes of $X$
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `C3`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+- `[C2]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 ### `storage_order`: int
@@ -223,24 +225,25 @@ The effect of the `pads` attribute is illustrated on the following figure. In th
 The storage order of the tensor. 0 is row major, and 1 is column major.
 
 #### Constraints
--  `C1`: Explicit storage order
-    - Statement: `storage_order` shall be set to zero. `[R5]`
+-  `[C1]`: Explicit storage order
+    - Statement: `storage_order` shall be set to zero.
+    - Rationale: `[R2]`, `[R5]`
 
 ### `strides`: list of ints
 
-Attribute `strides` determines how the kernel is applied on tensor $X$ during the convolution.
+Attribute `strides` determines how the kernel is applied on tensor $X$ during the **MaxPool**.
 
-For instance, with $stride[0]=3$ and $stride[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the max pooling.
+For instance, with $\texttt{stride}[0]=3$ and $\texttt{stride}[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the max pooling.
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
 <img src="../common/assets/sliding_window_ops/imgs/conv_stride3.png" width="300" />
 
 #### Constraints
-- `C1`: Value domain
+- `[C1]`: Value domain
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
-- `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
+- `[C2]`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
 
@@ -255,8 +258,8 @@ $X$ is the input tensor from which the max values are selected.
 #### Constraints
 
 - `[C1]` <a id="C1ia"></a> First constraint on $X$
-    - Statement: The number of spatial axes of tensor $X$ is 2. `R1`
-    - Rationale: This restriction is introduced to reduce the specification effort. It matches the industrial use cases considered in the profile.
+    - Statement: The number of spatial axes of tensor $X$ is 2. 
+    - Rationale: `R1`.
 - `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement: [See constraint (C2) of Y](#shape_consist)
 
@@ -265,18 +268,21 @@ $X$ is the input tensor from which the max values are selected.
 
 ### $\text{Y}$: real
 
-The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
+The shape of the output $Y$ is $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 - $dY_0$ is the number of batches
 - $dY_1$ is the number of channels
 - $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes
 
 #### Constraints.
-- `C1`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+- `[C1]`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
-        - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - dilations[0] * (kernel\_shape[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
-        - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - dilations[1] * (kernel\_shape[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
+        - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - \texttt{dilations}[0] \times (\texttt{kernel\_shape}[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
+        - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - \texttt{dilations}[1] \times (\texttt{kernel\_shape}[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
         - where $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
-   
+        - In the previous formula, `ceil_mode` is considered set to 0.
+  
+> Rajouter un renvoi sur le ceil_mode...
+> Vérifier la validité du "+1" 
 
 ### $\text{Indices}$: int64
 
@@ -290,7 +296,7 @@ $Indices$ contains the indices of the input tensor $X$ from which the max values
 <a id="float"></a>
 # **MaxPool** (float)
 where float is in {float16, float, double}
-
+> Reporter les modifications faites sur "real".
 ## Signature
 Definition of operator $\text{MaxPool}$ signature:
 ($Y, Indices) = \text{MaxPool}(X)$
@@ -319,7 +325,9 @@ $$\begin{gathered}
     Y[b, c, m, n] = max_{h=0}^{dW_0-1} max_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
-In the defintion of $Y$ above, any NaN value in $X_p$ is considered as $-inf$.
+In the definition of $Y$ above, any NaN value in $X_p$ is considered as -inf.
+
+> Supprimer les `$` autour de inf.
 
 $$\begin{gathered}
     Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
@@ -448,6 +456,9 @@ Indices =
 ```
 
 ### Example 3
+> Changer (s, ind)...
+ 
+> Rajouter la contrainte sur la taille du padding (inférieure taille kernel)
 
 $S, Ind = \text{MaxPool}(E)$
 
@@ -553,9 +564,17 @@ Indices =
 \end {bmatrix}
 ```
 
-### Dicreapancies observed in an existing implementation
+### Dicrepancies observed in an existing implementations
 
-Runnning Example 3 above on ONNX runtime with CPU as provider produces the following output tensors:
+**WARNING: Non compliances with the SONNX specification have been observed on the ONNX Runtime implementation (version 1.23.2).**
+
+> S'assurer que les tests suivants ont été exécuté sur la bonne version d'ORT.
+
+Non compliance concern both the max values ($Y$) and the indices ($\text{indices}$). Refer to this [jupyter notebook](../../tests/maxpool/maxpool_divergence.ipynb) for further details on the observed problems.
+
+> Mettre les exemples dans `maxpool_doc.ypnb`.  
+
+For instance, example 3 above executed on ONNX runtime with CPU provider produces the following output tensors:
 
 ```math
 Y =
@@ -570,7 +589,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\text{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -581,7 +600,7 @@ Indices =
 \end {bmatrix}
 ```
 
-Two discreapancies appear:
+Two discrepancies appear:
 - in $Y$: -1.79769313e+308 instead of $-inf$ as first element.
 - in $Indices$: $-4$ instead of $0$ (first element of $X$).
 
@@ -627,6 +646,7 @@ The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#shape_consist) on MaxPool(real) Output $Y$.
 
 ### $\text{Indices}$: int64
+> Appliquer les modification faites pour Real.
 
 $Indices$ contains the indices of the input tensor $X$ from which the max values are taken.
 
@@ -953,7 +973,9 @@ Indices =
 ```
 
 
-### Dicreapancies observed in an existing implementation
+### Discrepancies observed in an existing implementation
+
+> Reporter les modifs ci-dessus.
 
 Runnning Example 4 above on ONNX runtime with CPU as provider produces the following $Indices$ output tensor:
 
