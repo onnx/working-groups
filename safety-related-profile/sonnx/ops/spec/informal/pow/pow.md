@@ -18,34 +18,30 @@ where:
 
 - $A$: base tensor
 - $B$: exponent tensor
-- $C$: result of the element-wise power of $A$ to $B$
+- $C$: result of the element-wise power of $A$ by $B$
+
+> Change A, B and C by X, Y, and Z.
 
 ## Restrictions
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
-The following restrictions apply to the `Pow` operator for the SONNX profile:
-- All input elements in `A` and `B` must be of types that support the power operation `[R1]`
-- All input `A` and output element shall be of the same type (not possible to mix integer and real) `[R2]`
-- All `B` element of the exponent shall be of the same type (it is not possible to mix integer and real) `[R3]`
-
-
 ## Informal specification
 
-Operator **Pow** computes the element-wise power between input tensors $A$ and $B$ and stores the result in output tensor $C$.
+Operator **Pow** computes the element-wise power of $A$ by $B$ and stores the result in output tensor $C$.
 
 The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
-**pow** is indefined for the value  $A[i] < 0 \text{ and } B[i] \notin \mathbb{Z} ~~or~~ B[i] = \frac{q}{p} \text{ in its simplest form with } q \text{ even}  \ ~~or~~ A[i] = 0 \text{ et } B[i] \leq 0$ , otherwise **pow** is defined by :
+**pow** is undefined for the value  $A[i] < 0 \text{ and } B[i] \notin \mathbb{Z} ~or~ B[i] = q/p \text{ in its simplest form with } q \text{ even} ~or~ A[i] = 0 \text{ et } B[i] \leq 0$ , otherwise **pow** is defined by :
 
 $$
 C[i] =
 \begin{cases}
-0.0 & \text{si } A[i] = 0 \text{ et } B[i] > 0 \\
-1.0 & \text{si } A[i] \neq 0 \text{ et } B[i] = 0\\
-A[i]^{B[i]} & \text{otherwise}
+0 & \text{si } A[i] = 0 \text{ et } B[i] > 0 \\
+1 & \text{si } A[i] \neq 0 \text{ et } B[i] = 0\\
+e^{ B[i]\ln A[i]} = A[i]^{B[I]} & \text{otherwise}
 \end{cases}
 $$
 
@@ -119,10 +115,6 @@ Result of the element-wise power of $A$ to $B$.
 
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra_pow) on tensor $A$.
 
-## Formal specification
-
-See the Why3 specification.
-
 <a id="float"></a>
 
 # **Pow** (float, float)
@@ -145,18 +137,12 @@ where:
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
-In more than the additionnal [Restrictions](#restrictions) the input range of $B[i]$ is limited for float :
-
-- Even if it is possible to compute **Pow** in the real space when B$[i] = \frac{q}{p} \text{ in its simplest form with } q \text{ odd}$ this value will be not defined in float and will return a NaN. `[R4]`
-
-
 ## Informal specification
 
 Operator **Pow** computes the element-wise power between input tensors $A$ and $B$ according to IEEE 754 floating-point semantics and stores the result in output tensor $C$.
 
-
-
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
+
 
 $$
 C[i] = \text{pow}(A[i],B[i]) =
@@ -166,7 +152,7 @@ C[i] = \text{pow}(A[i],B[i]) =
 \begin{aligned}
 &B[i]=\text{NaN} \\
 &\lor (A[i]=\text{NaN}\land B[i]\neq \pm0) \\
-&\lor (A[i]\in\mathbb{R}_{<0}\land A[i]\neq -\inf\land B[i]\notin\mathbb{Z})
+&\lor (A[i]\in\mathbb{R}^-{<0}\land A[i]\neq -\inf\land B[i]\notin\mathbb{Z})
 \end{aligned}\\
 \\
 \\
@@ -175,14 +161,12 @@ C[i] = \text{pow}(A[i],B[i]) =
 &
 \begin{aligned}
 &B[i]=+\inf \land |A[i]|>1  \\
-&\lor (A[i]=+0\land B[i]\in\mathbb{Z}_{<0}\land B[i]\in \mathbb{Z}\text{ odd}) \\
+&\lor (A[i]=+0\land B[i]\in\mathbb{Z}^- \land B[i]\in \mathbb{Z}\text{ odd}) \\
 &\lor (A[i]=\pm0\land B[i]<0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
 &\lor (A[i]=+\inf\land B[i]>0) \\
 &\lor (A[i]=-\inf\land B[i]>0\land B[i]\notin \mathbb{Z}\text{ odd}) \\
 &\lor (B[i]=-\inf \land 0<|A[i]|<1 )
 \end{aligned}\\
-\\
-\\
 \\
 -\inf
 &
@@ -219,39 +203,21 @@ C[i] = \text{pow}(A[i],B[i]) =
 &
 \begin{aligned}
 &(A[i]=-1\land B[i]=\pm\inf) \\
-&\lor(A[i]=+1 \land \forall B[i] ) \\
-&\lor(B[i]=\pm0 \land \forall A[i])
+&\lor(A[i]=+1 ) \\
+&\lor(B[i]=\pm0 )
 \end{aligned}\\
 \\
 \\
 \\
-A[i]^{B[i]}
+e^{B[i] \ln A[i]} = A[i]^{B[i]}
 &
 \text{otherwise}
 \end{cases}
 $$
 
-
-Note :
-|source mpfr :|---|
-|-------------|---|
-|pow(±0, B[i]) | C[i]= ±Inf for B[i] a negative odd integer.|
-|pow(±0, B[i]) | C[i]=  +Inf for B[i] negative and not an odd integer.|
-|pow(±0, B[i]) | C[i]=  ±0 for B[i] a positive odd integer.|
-|pow(±0, B[i]) | C[i]=  +0 for B[i] positive and not an odd integer.|
-|pow(-1, ±Inf) | C[i]=  1.|
-|pow(+1, B[i]) | C[i]=  1 for any B[i], even a NaN.|
-|pow(A[i], ±0) | C[i]=  1 for any A[i], even a NaN.|
-|pow(A[i], B[i]) | C[i]=  NaN for finite negative A[i] and finite non-integer B[i] or if B[i]=NaN or A[i]=NaN and B[i] different of $\pm0$|
-|pow(A[i], -Inf) | C[i]=  +Inf for 0 < abs(A[i]) < 1, and C[i]= +0 for abs(A[i]) > 1.|
-|pow(A[i], +Inf) | C[i]=  +0 for 0 < abs(A[i]) < 1, and C[i]= +Inf for abs(A[i]) > 1.|
-|pow(-Inf, B[i]) | C[i]=  −0 for B[i] a negative odd integer.|
-|pow(-Inf, B[i]) | C[i]=  +0 for B[i] negative and not an odd integer.|
-|pow(-Inf, B[i]) | C[i]=  −Inf for B[i] a positive odd integer.|
-|pow(-Inf, B[i]) | C[i]=  +Inf for B[i] positive and not an odd integer.|
-|pow(+Inf, B[i]) | C[i]=  +0 for B[i] negative, and +Inf for B[i] positive.|
-|pow(A[i], B[i]) | C[i]=  A[i]^B[i] otherwise.|
-
+> Review with respect to MPFR and IEEE.
+> 
+> Rajouter une note pour indiquer l'extension vis-à-vis de l'IEEE. 
 
 ### Example 1
 
@@ -276,6 +242,8 @@ B = \begin{bmatrix} 0 & 2.0 & 0.0 & 0.0 & 0.6 & 0.33333333 \end{bmatrix}
 ```math
 C \approx \begin{bmatrix} 1.0 & 0.0 & 1.0 & 1.0 & NaN & NaN \end{bmatrix}
 ```
+
+Note that $-8^{1/3} = -(2\times2\times2)^{1/3}= -2$ but $2^{0.33333333}$ gives a NaN. Some implementations do return -2.
 
 ### Example 3
 
@@ -315,7 +283,8 @@ NaN & 1.0 & 1.0 & -\inf & +0.0 & +0.0 & +\inf & +\inf & -0.0
 ```
 
 
-### Example 5 : (round consequence) 2.0 and next representable float
+### Example 5
+This example illustrates the potential consequence of rounding on **pow**. 
 
 ```math
 A = \begin{bmatrix}
@@ -323,7 +292,7 @@ A = \begin{bmatrix}
 \end{bmatrix}
 \\
 B = \begin{bmatrix}
-2.00000000 & 2.00000024
+2.0 & 2.00000024
 \end{bmatrix}
 ```
 
@@ -423,15 +392,13 @@ Operator **Pow** computes the element-wise integer power between input tensors $
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
+**pow** is undefined for $B[i] \lt 0$
+otherwise
 $$
-C[i] =
-\begin{cases}
-A[i]^{B[i]} & \text{if } B[i] \ge 0 \\
-\text{undefined} & \text{otherwise}
-\end{cases}
+C[i] =A[i]^{B[i]}
 $$
 
-The exponent must be non-negative. The result is the exact integer power, provided no overflow occurs. Overflow behavior is implementation dependent.
+The result is the exact integer power, provided no overflow occurs. Overflow behavior is implementation dependent.
 
 ### Example 1
 
@@ -497,7 +464,7 @@ Exponent of the power operation.
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia_pow) on tensor $A$.
 - `[C3]` Definition domain
 
-  - Statement: $\forall i, B[i] \ge 0$.
+  - Statement: for all index $i$, $B[i] \ge 0$.
 
 ## Outputs
 
