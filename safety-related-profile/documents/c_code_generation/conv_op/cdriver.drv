@@ -1,0 +1,87 @@
+module std.Clib
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  syntax val to_uint32 "(uint32_t) %1"
+  syntax val is_null "!%1" prec 0
+  syntax val ([]) "%1[%2]" prec 1 1 15
+  syntax val ([]<-) "%1[%2] = %3" prec 14 14 15 14
+end
+
+
+
+module std.Cint
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+   syntax type int "int32_t" 
+  syntax val of_int       "(int32_t) %1"
+  syntax val ( .+ ) "%1 + %2" prec 8 8 7
+  syntax val ( .- ) "%1 - %2" prec 8 8 7
+  syntax val ( .* ) "%1 * %2" prec 7 7 6
+  syntax val ( ./ ) "%1 / %2" prec 7 7 6
+  syntax val malloc_int "malloc(%1 * sizeof(int))"
+  syntax val malloc_int32 "malloc(%1 * sizeof(int32_t))"
+  syntax val get "%1[%2]"
+  syntax val ([]) "%1[%2]" prec 1 1 15
+end
+
+module std.Clib
+  syntax val malloc_int32 "malloc(%1 * sizeof(int32_t))"
+end
+
+module mach.int.Int32
+  syntax type int32 "int32_t"
+  syntax val of_int "(int32_t) %1"
+  syntax val to_int "(int) %1"
+  syntax val (>=) "%1 >= %2" prec 11 11 10
+  syntax val (<=) "%1 <= %2" prec 11 11 10  
+  syntax val (<) "%1 < %2" prec 11 11 10
+  syntax val (>) "%1 > %2" prec 11 11 10
+  syntax val (=) "%1 == %2" prec 11 11 10
+end
+
+module mach.int.UInt32
+  syntax type uint32 "uint32_t"
+  syntax val to_int "(int) %1"
+end
+
+module std.Cfloat
+  syntax type float    "double"
+  syntax val zero      "0.0"
+  syntax val one       "1.0"
+  syntax val f32       "(double) %1"
+  syntax val f64       "(double) %1"
+  syntax val      ( .+ )     "%1 + %2"   prec 8 8 7
+  syntax val      ( .- )     "%1 - %2"   prec 8 8 7
+  syntax val      (.-_)      "- %1"      prec 5 4
+  syntax val      ( .* )     "%1 * %2"   prec 7 7 6
+  syntax val      ( ./ )     "%1 / %2"   prec 7 7 6
+  syntax val      ( .= )     "%1 = %2"   prec 11 11 10
+  syntax val      ( .< )     "%1 < %2"   prec 11 11 10
+  syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
+end
+
+module ref.Ref
+  syntax type ref "%1*"
+  syntax val ref "&%1"
+  syntax val (!) "*%1"
+  syntax val (:=) "*%1 = %2"
+end
+
+module mach.c.C
+  syntax type ptr "%1*"
+end
+
+
+module libvector.CIndex
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+end
+
+module libtensor.CTensor
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+  interface "#include \"cindex.h\"" 
+  
+ 
+end
+

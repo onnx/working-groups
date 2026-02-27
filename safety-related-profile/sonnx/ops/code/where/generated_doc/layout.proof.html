@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Library layout</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="layout.index.html">layout</a></code> — <code>proofs</code></header>
+<h1>Provers</h1>
+<pre class="src">
+  alt-ergo     @2.5.4  n=16  171ms
+  cvc5         @1.2.1  n=42  492ms
+  z3           @4.13.4 n=33  865ms
+</pre>
+<h1>Proofs</h1>
+<pre class="src"><span class="keyword">module</span> <a id="CFlat" href="layout.CFlat.html">layout.CFlat</a><span title="Valid (13 goals)" class="icon valid icofont-check"></span></pre>
+<pre class="src">
+  <span class="keyword">goal</span> <a id="CFlat.offset_size" href="layout.CFlat.html#offset_size">offset_size</a><span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 25ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 13ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 17ms
+      <span class="prover" title="z3@4.13.4">z3</span> 13ms
+      <span class="prover" title="cvc5@1.2.1">cvc5</span> 102ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="CFlat.index_range" href="layout.CFlat.html#index_range">index_range</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 101ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="CFlat.index_of_offset" href="layout.CFlat.html#index_of_offset">index_of_offset</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="cvc5@1.2.1">cvc5</span> 72ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="CFlat.offset_of_index" href="layout.CFlat.html#offset_of_index">offset_of_index</a><span title="Valid (one goal)" class="icon valid icofont-check"></span>
+    <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 189ms</pre><pre class="src">
+  <span class="keyword">goal</span> <a id="CFlat.offset_push" href="layout.CFlat.html#offset_push">offset_push</a><span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+    split_vc<span title="Valid (5 goals)" class="icon valid icofont-check"></span>
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 56ms
+      <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 15ms
+      split_vc<span title="Valid (3 goals)" class="icon valid icofont-check"></span>
+        <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 1.4s
+        <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 17ms
+        <span class="prover" title="alt-ergo@2.5.4">alt-ergo</span> 43ms</pre><script type="text/javascript" src="script.js"></script>
+</body>
+</html>

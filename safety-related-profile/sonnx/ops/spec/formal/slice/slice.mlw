@@ -1,0 +1,557 @@
+module OPSlice
+  use tensor.Tensor 
+  use tensor.Range
+  use int.Int
+  use int.EuclideanDivision
+  use list.List
+  use list.Length
+  use list.Nth
+  use option.Option
+  use list.Map
+  use list.Mem
+
+
+  function get (o: option int): int =
+    match o with
+      | Some v -> v
+      | None -> -1
+    end
+
+  function my_nth (l: list int) (i: int): int =
+    match nth i l with
+      | Some d -> d
+      | None -> -1
+    end
+
+    
+  function head (l: list int): int =
+    match l with
+      | Cons d _ -> d
+      | Nil -> -1
+    end
+
+
+  let ghost function normalize_axis (dims: list int) (axis_dim : list int) (axis: tensor int): tensor int
+    (*1D Index Tensors*)
+    requires { length axis.dims = 1 }
+    (*X [C1]*)
+    requires { length dims = size axis.dims }
+    requires { axis.dims = axis_dim }
+    (*A [C2]*)
+    requires { forall ks. valid ks axis_dim -> -length dims <= axis.data ks <= length dims - 1}
+    (*A [C3]*)
+    requires { forall ks1 ks2. valid ks1 axis_dim /\ valid ks2 axis_dim ->
+  (mod ((axis.data ks1) + length dims) (length dims)) = (mod ((axis.data ks2) + length dims) (length dims)) -> ks1 = ks2 }
+    (*Rank > 0, see this better*)
+    requires { length dims > 0 }
+    (*Normalization*)
+    ensures { forall ks. valid ks axis_dim -> 0 <= result.data ks < length dims }
+    ensures {forall ks. valid ks axis_dim -> axis.data ks < 0 -> result.data ks = axis.data ks + length dims }
+    ensures {forall ks. valid ks axis_dim -> axis.data ks >= 0 -> result.data ks = axis.data ks }
+    (*Index Uniqueness*)
+    ensures { forall ks1 ks2. valid ks1 axis_dim /\ valid ks2 axis_dim -> result.data ks1 = result.data ks2 -> ks1 = ks2 }
+    (*Same dimension, Same background*)
+    ensures { result ~= axis}
+    (*proof*)
+    = let data = fun ks ->
+                  if valid ks axis_dim then
+                    let a = axis.data ks in
+                      if a < 0 then a + length dims else a
+                  else axis.background
+      in { dims = axis_dim ; data = data ; background = axis.background }
+
+  let ghost function normalize_start (dims: list int) (start_dims: list int) (start axis : tensor int): tensor int
+    (*Additionally*)
+    requires { start_dims = start.dims }
+    (*1D Index Tensors*)
+    requires { length start.dims = length axis.dims = 1 }
+    (*X [C1]*)
+    requires { length dims = size start.dims = size axis.dims }
+    (*Redundant with 2 previous requires*)
+    requires { start ~ axis }
+    (*A [C2]*)
+    requires { forall ks. valid ks axis.dims -> 0 <= axis.data ks <= length dims -1}
+    (*A [C3]*)
+    requires { forall ks1 ks2. valid ks1 axis.dims /\ valid ks2 axis.dims ->
+      (mod (axis.data ks1 + length dims) (length dims)) = (mod (axis.data ks2 + length dims) (length dims)) -> ks1 = ks2 }
+    (*S [C2]*)
+    requires { forall ks. valid ks start.dims -> -my_nth dims (axis.data ks) <= start.data ks <= my_nth dims (axis.data ks) - 1 }
+    (*Rank > 0, see this better*)
+    requires { length dims > 0 }
+    (*Normalization*)
+    ensures { forall ks. valid ks start.dims -> 0 <= result.data ks < my_nth dims (axis.data ks) }
+    ensures { forall ks. valid ks start.dims -> start.data ks < 0 -> result.data ks = start.data ks + my_nth dims (axis.data ks) }
+    ensures { forall ks. valid ks start.dims -> start.data ks >= 0 -> result.data ks = start.data ks }
+    (*Same dimension, Same background*)
+    ensures { result ~= start }
+    (*proof*)
+    = let data = fun ks ->
+                  if valid ks start_dims then
+                    let s = start.data ks in
+                    let axis_index = axis.data ks in
+                      if s < 0 then s + my_nth dims axis_index else s
+                  else start.background
+      in { dims = start_dims ; data = data ; background = start.background }
+
+  let ghost function normalize_end (dims: list int) (ends_dims: list int) (end_ axis steps: tensor int): tensor int
+    (*Additionally*)
+    requires { ends_dims = end_.dims }
+    (*1D Index Tensors*)
+    requires { length end_.dims = length axis.dims = length steps.dims = 1 }
+    (**X [C1]*)
+    requires { length dims = size end_.dims = size axis.dims = size steps.dims }
+    (*Redundant with  previous requires*)
+    requires { end_ ~ axis ~ steps }
+    (*A [C2]*)
+    requires { forall ks. valid ks axis.dims -> 0 <= axis.data ks <= length dims -1}
+    (*A [C3]*)
+    requires { forall ks1 ks2. valid ks1 axis.dims /\ valid ks2 axis.dims ->
+      (mod (axis.data ks1 + length dims) (length dims)) = (mod (axis.data ks2 + length dims) (length dims)) -> ks1 = ks2 }
+    (*K [C2]*)
+    requires { forall ks. valid ks steps.dims -> steps.data ks <> 0  }
+    (*E [C2]*)
+    requires { forall ks. valid ks end_.dims  -> steps.data ks > 0 ->
+              let idx = my_nth dims (axis.data ks) in
+              -(idx) <= end_.data ks <= idx }
+    (*E [C3]*)
+    requires { forall ks. valid ks end_.dims -> steps.data ks < 0 ->
+              let idx = my_nth dims (axis.data ks) in
+              -(idx) - 1 <= end_.data ks <= idx - 1 }
+    (*Rank > 0, see this better*)
+    requires { length dims > 0 }
+    (**Normalization*)
+    ensures { forall ks. valid ks end_.dims  ->
+      let idx = my_nth dims (axis.data ks) in
+      let step = steps.data ks in
+      let e = end_.data ks in
+      let res = if e < 0 then e + idx else e in
+        (step > 0 -> 0 <= res <= idx) /\
+        (step < 0 -> -1 <= res <= idx - 1)
+    }
+    ensures { forall ks. valid ks end_.dims -> 
+      let idx = my_nth dims (axis.data ks) in
+      let e = end_.data ks in
+      result.data ks = (if e < 0 then e + idx else e)
+    }
+    (*Same dimension, Same background*)
+    ensures { result ~= end_ }
+    (*proof*)
+    = let data = fun ks ->
+                  if valid ks ends_dims then
+                    let e = end_.data ks in
+                    let axis_index = axis.data ks in
+                      if e < 0 then e + my_nth dims axis_index else e
+                  else end_.background
+      in { dims = ends_dims ; data = data ; background = end_.background }
+
+  
+  let rec ghost function dY_shape_rec (x:tensor 'a) (s e k a: tensor int) (t: list int) (i: int) : list int
+    (*1D Index Tensors*)
+    requires { length s.dims =  length e.dims = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension - CHECK THIS*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size e.dims = size k.dims = size a.dims = length t }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ e ~ k ~ a }
+    (*Normalize Axis*)
+    requires { forall ks. valid ks a.dims -> 0 <= a.data ks < length x.dims }
+    (*Index Uniqueness*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims -> a.data ks1 = a.data ks2 -> ks1 = ks2 }
+    (*Normalize Start*)
+    requires { forall ks. valid ks s.dims -> 0 <= s.data ks < my_nth x.dims (a.data ks) }
+    (*Normalize End*)
+    requires { forall ks. valid ks e.dims  ->
+      let idx = my_nth x.dims (a.data ks) in
+      let step = k.data ks in
+      let e_value = e.data ks in
+      let res = if e_value < 0 then e_value + idx else e_value in
+        (step > 0 -> 0 <= res <= idx) /\
+        (step < 0 -> -1 <= res <= idx - 1)
+    }
+    (*K [C2]*)
+    (*requires { forall ks. valid ks k.dims -> k.data ks <> 0 }*)
+    requires { forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    (*Real Index t*)
+    requires { forall h. 0 <= h < length x.dims -> mem h t }
+    (*R6*)
+    requires { forall ks. valid ks s.dims -> k.data ks > 0 -> s.data ks <= e.data ks }
+    (*R7*)
+    requires { forall ks. valid ks s.dims -> k.data ks < 0 -> s.data ks >= e.data ks }
+    (*Y [C2]*)
+    requires {
+      forall z. 0 <= z < length x.dims ->
+        let real_index = my_nth t z in
+        let space = e.data (Cons real_index Nil) - s.data (Cons real_index Nil) in
+        let step = k.data (Cons real_index Nil) in
+        div space step + (if mod space step = 0 then 0 else 1) > 0
+    }
+    requires { 0 <= i < length x.dims }
+    variant { length x.dims - i }
+    ensures { length result = length x.dims - i }
+    ensures { forall z. 0 <= z < length result -> my_nth result z > 0 }
+    = if i < (length x.dims - 1) then 
+      let real_index = my_nth t i in
+      let space = e.data (Cons real_index Nil) - s.data (Cons real_index Nil) in
+      let f = if (mod space (k.data (Cons real_index Nil))) = 0 then 0 else 1 in
+      let y = div space (k.data (Cons real_index Nil)) + f in
+      Cons y (dY_shape_rec x s e k a t (i+1))
+    else
+      let real_index = my_nth t i in
+      let space = e.data (Cons real_index Nil) - s.data (Cons real_index Nil) in
+      let f = if (mod space (k.data (Cons real_index Nil))) = 0 then 0 else 1 in
+      let y = div space (k.data (Cons real_index Nil)) + f in
+      Cons y Nil
+
+
+  let ghost function dY_shape (x : tensor 'a) (s e k a: tensor int) (t: list int) : list int 
+    (*1D Index Tensors*)
+    requires { length s.dims =  length e.dims = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size e.dims = size k.dims = size a.dims = length t }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ e ~ k ~ a }
+    (*Normalize Axis*)
+    requires { forall ks. valid ks a.dims -> 0 <= a.data ks < length x.dims }
+    (*Index Uniqueness*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims -> a.data ks1 = a.data ks2 -> ks1 = ks2 }
+    (*Normalize Start*)
+    requires { forall ks. valid ks s.dims -> 0 <= s.data ks < my_nth x.dims (a.data ks) }
+    (*Normalize End*)
+    requires { forall ks. valid ks e.dims  ->
+      let idx = my_nth x.dims (a.data ks) in
+      let step = k.data ks in
+      let e_value = e.data ks in
+      let res = if e_value < 0 then e_value + idx else e_value in
+        (step > 0 -> 0 <= res <= idx) /\
+        (step < 0 -> -1 <= res <= idx - 1)
+    }
+    (*K [C2]*)
+    requires { forall ks. valid ks k.dims -> k.data ks <> 0 }
+    requires { forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    (*Real Index t*)
+    requires { forall h. 0 <= h < length x.dims -> mem h t }
+    (*R6*)
+    requires { forall ks. valid ks s.dims -> k.data ks > 0 -> s.data ks <= e.data ks }
+    (*R7*)
+    requires { forall ks. valid ks s.dims -> k.data ks < 0 -> s.data ks >= e.data ks }
+    (*Y [C2]*)
+    requires {
+      forall z. 0 <= z < length x.dims ->
+        let real_index = my_nth t z in
+        let space = e.data (Cons real_index Nil) - s.data (Cons real_index Nil) in
+        let step = k.data (Cons real_index Nil) in
+        div space step + (if mod space step = 0 then 0 else 1) > 0
+    }
+    ensures { length result = length x.dims }
+    ensures { forall z. 0 <= z < length result -> my_nth result z > 0 }
+  = dY_shape_rec x s e k a t 0
+
+
+  (*Given an axis, find the index of that specific axis representation in axis tensor*)
+  (*axis -> tensor normalized*)
+  (*x_rank -> rank of input X*)
+  (*i -> looking value*)
+  (*j -> current searching index*)
+  let rec ghost function find_j (axis: tensor int) (x_rank: int) (i: int) (j: int) : int
+    (*1D Index Tensors*)
+    requires { length axis.dims = 1 }
+    (*X [C1]*)
+    requires { x_rank = size axis.dims }
+    (*Rank > 0, see this better*)
+    requires { x_rank > 0 }
+    (*A [C2]*)
+    requires { forall z. 0 <= z < x_rank -> 0 <= axis.data (Cons z Nil) <= x_rank -1}
+    (*A [C3]*)
+    requires { forall z1 z2. 0 <= z1 < x_rank /\ 0 <= z2 < x_rank ->
+      (mod (axis.data (Cons z1 Nil) + x_rank) (x_rank)) = (mod (axis.data (Cons z2 Nil) + x_rank) (x_rank)) -> z1 = z2 }
+    requires { 0 <= i < x_rank }
+    requires { 0 <= j < x_rank }
+    requires { forall h. 0 <= h < j -> axis.data (Cons h Nil) <> i }
+    requires { exists z. 0 <= z < x_rank /\ axis.data (Cons z Nil) = i }
+    ensures { 0 <= result < x_rank }
+    ensures { axis.data (Cons result Nil) = i }
+    variant { x_rank - j }
+    = if j < (x_rank - 1) then
+        if axis.data (Cons j Nil) = i then 
+          j
+        else find_j axis x_rank i (j+1)
+      else
+        if axis.data (Cons j Nil) = i then 
+          j
+        else 
+          absurd
+
+  (*REVIEW THIS AXIOM*)
+  axiom axis_data_surjective:
+    forall axis: tensor int, x_rank: int, v: int.
+      length axis.dims = 1 /\
+      x_rank = size axis.dims /\
+      x_rank > 0 /\
+      (forall z. 0 <= z < x_rank -> 0 <= axis.data (Cons z Nil) <= x_rank - 1) /\
+      (forall z1 z2. 0 <= z1 < x_rank /\ 0 <= z2 < x_rank ->
+        (mod (axis.data (Cons z1 Nil) + x_rank) x_rank) = (mod (axis.data (Cons z2 Nil) + x_rank) x_rank) -> z1 = z2) /\
+      0 <= v < x_rank
+    -> exists h. 0 <= h < x_rank /\ axis.data (Cons h Nil) = v
+
+  (*Builds a list with the real indices representation for each index in axis*)
+  (* axis = [2,3,1,0]*)
+  (* real_axis = [3,2,0,1]*)
+  (* axis -> tensor normalized*)
+  (* axis_rank -> rank of axis tensor = rank of input tensor*)
+  (* i -> current index in the axis tensor*)
+  let rec ghost function real_index_aux (axis: tensor int) (x_rank: int) (i: int) : list int
+    (*1D Index Tensors*)
+    requires { length axis.dims = 1 }
+    (*X [C1]*)
+    requires { x_rank = size axis.dims }
+    (*Rank > 0, see this better*)
+    requires { x_rank > 0 }
+    (*A [C2]*)
+    requires { forall z. 0 <= z < x_rank -> 0 <= axis.data (Cons z Nil) <= x_rank -1}
+    (*A [C3]*)
+    requires { forall z1 z2. 0 <= z1 < x_rank /\ 0 <= z2 < x_rank ->
+      (mod (axis.data (Cons z1 Nil) + x_rank) (x_rank)) = (mod (axis.data (Cons z2 Nil) + x_rank) (x_rank)) -> z1 = z2 }
+    requires { 0 <= i < x_rank }
+    requires { forall v. i <= v < x_rank -> exists h. 0 <= h < x_rank /\ axis.data (Cons h Nil) = v }
+    ensures { forall k. 0 <= k < length result ->
+            let z = i + k in
+            axis.data (Cons (my_nth result k) Nil) = z }
+    ensures { length result = x_rank - i }
+    variant { x_rank - i }
+    = if i < (x_rank - 1) then
+        let j = find_j axis x_rank i 0 in
+        Cons j (real_index_aux axis x_rank (i+1))
+      else
+        let j = find_j axis x_rank i 0 in
+        Cons j Nil
+  
+  let ghost function real_index (axis: tensor int): list int
+    (*1D Index Tensors*)
+    requires { length axis.dims = 1 }
+    (*Rank > 0, see this better*)
+    requires { size axis.dims > 0 }
+    (*A [C2]*)
+    requires { forall z. 0 <= z < size axis.dims -> 0 <= axis.data (Cons z Nil) <= size axis.dims -1}
+    (*A [C3]*)
+    requires { forall z1 z2. 0 <= z1 < size axis.dims /\ 0 <= z2 < size axis.dims ->
+      (mod (axis.data (Cons z1 Nil) + size axis.dims) (size axis.dims)) = (mod (axis.data (Cons z2 Nil) + size axis.dims) (size axis.dims)) -> z1 = z2 }
+    requires { forall v. 0 <= v < size axis.dims -> exists h. 0 <= h < size axis.dims /\ axis.data (Cons h Nil) = v }
+    ensures { forall k. 0 <= k < length result ->
+            let z = k in
+            axis.data (Cons (my_nth result k) Nil) = z }
+    ensures { length result = size axis.dims }
+    = let x_rank = size axis.dims in
+      real_index_aux axis x_rank 0
+  
+
+  let rec ghost function dX_coords_rec (x: tensor 'a) (coords t: list int) (s k a: tensor int) (i: int) : list int
+    (*1D Index Tensors*)
+    requires { length s.dims = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size k.dims = size a.dims }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ k ~ a }
+    (*Normalize Axis*)
+    requires { forall ks. valid ks a.dims -> 0 <= a.data ks < length x.dims }
+    (*Index Uniqueness*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims -> a.data ks1 = a.data ks2 -> ks1 = ks2 }
+    (*Normalize Start*)
+    requires { forall ks. valid ks s.dims -> 0 <= s.data ks < my_nth x.dims (a.data ks) }
+    (*K [C2]*)
+    requires { forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    requires { length coords = length x.dims }
+    requires { 0 <= i < length coords }
+    ensures { length result = length x.dims - i }
+
+    variant { length coords - i }
+    = if i < ((length coords)-1) then
+        let real_index = my_nth t i in
+        let original_index = s.data (Cons real_index Nil) + my_nth coords i * k.data (Cons real_index Nil) in
+        Cons original_index (dX_coords_rec x coords t s k a (i+1))
+      else
+        let real_index = my_nth t i in
+        let original_index = s.data (Cons real_index Nil) + my_nth coords i * k.data (Cons real_index Nil) in
+        Cons original_index Nil
+
+
+  let ghost function dX_coords (x: tensor 'a) (coords t: list int) (s k a: tensor int): list int =
+    (*1D Index Tensors*)
+    requires { length s.dims = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size k.dims = size a.dims }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ k ~ a }
+    (*Normalize Axis*)
+    requires { forall ks. valid ks a.dims -> 0 <= a.data ks < length x.dims }
+    (*Index Uniqueness*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims -> a.data ks1 = a.data ks2 -> ks1 = ks2 }
+    (*Normalize Start*)
+    requires { forall ks. valid ks s.dims -> 0 <= s.data ks < my_nth x.dims (a.data ks) }
+    (*K [C2]*)
+    requires { forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    requires { length coords = length x.dims }
+    ensures { length result = length x.dims }
+    dX_coords_rec x coords t s k a 0
+
+  let ghost function dslice (x : tensor 'a) (s k a : tensor int) (dy_shape t: list int) : data 'a
+    (*1D Index Tensors*)
+    requires { length s.dims = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size k.dims = size a.dims }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ k ~ a }
+    (*Normalize Axis*)
+    requires { forall ks. valid ks a.dims -> 0 <= a.data ks < length x.dims }
+    (*Index Uniqueness*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims -> a.data ks1 = a.data ks2 -> ks1 = ks2 }
+    (*Normalize Start*)
+    requires { forall ks. valid ks s.dims -> 0 <= s.data ks < my_nth x.dims (a.data ks) }
+    (*K [C2]*)
+    requires { forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    requires { forall ks. valid ks dy_shape -> length ks = length x.dims }
+    (*proof*)
+    = fun ks ->
+        if valid ks dy_shape then
+          let x_coords = dX_coords x ks t s k a in
+          x.data x_coords
+        else x.background
+
+  let ghost function opslice (x: tensor 'a) (s e k a: tensor int): tensor 'a
+    (*Additional dslice*)
+     requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+                let s_normalized = normalize_start x.dims s.dims s a_normalized in
+                let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+                let t = real_index a_normalized in
+                let y_shape = dY_shape x s_normalized e_normalized k a_normalized t in
+                positive y_shape /\ forall ks. valid ks y_shape -> length ks = length x.dims  }
+
+    (*Additional dY_shape*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               let t = real_index a_normalized in
+               forall z. 0 <= z < length t -> k.data (Cons (my_nth t z) Nil) <> 0 }
+    
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               let t = real_index a_normalized in
+               forall h. 0 <= h < length x.dims -> mem h t }
+
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               let t = real_index a_normalized in
+               let s_normalized = normalize_start (x.dims) s.dims s a_normalized in
+               let e_normalized = normalize_end (x.dims) e.dims e a_normalized k in
+              forall z. 0 <= z < length x.dims ->
+                let real_index = my_nth t z in
+                let space = e_normalized.data (Cons real_index Nil) - s_normalized.data (Cons real_index Nil) in
+                let step = k.data (Cons real_index Nil) in
+                div space step + (if mod space step = 0 then 0 else 1) > 0 }
+
+    (*Additional normalize Axis*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall ks. valid ks a_normalized.dims -> 0 <= a_normalized.data ks <= length x.dims -1}
+    (*Necessary because of real_index but redundant, maybe check real_index and change this*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall z. 0 <= z < size a_normalized.dims -> 0 <= a_normalized.data (Cons z Nil) <= size a_normalized.dims -1}
+
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall ks1 ks2. valid ks1 a_normalized.dims /\ valid ks2 a_normalized.dims ->
+                 (mod (a_normalized.data ks1 + length x.dims) (length x.dims)) = (mod (a_normalized.data ks2 + length x.dims) (length x.dims)) -> ks1 = ks2 }
+    (*Necessary because of real_index but redundant, maybe check real_index and change this*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall z1 z2. 0 <= z1 < size a_normalized.dims /\ 0 <= z2 < size a_normalized.dims ->
+                (mod (a_normalized.data (Cons z1 Nil) + size a_normalized.dims) (size a_normalized.dims)) = (mod (a_normalized.data (Cons z2 Nil) + size a_normalized.dims) (size a_normalized.dims)) -> z1 = z2 }
+
+    (*Additional normalize Start*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               length s.dims = length a_normalized.dims = 1 }
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               length x.dims = size s.dims = size a_normalized.dims }
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               s ~ a_normalized }
+    (*Additional normalize End*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               length e.dims = length a_normalized.dims = length k.dims = 1 }
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               length x.dims = size e.dims = size a_normalized.dims = size k.dims }
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               e ~ a_normalized ~ k }
+    (*1D Index Tensors*)
+    requires {length s.dims = length e.dims  = length k.dims = length a.dims = 1 }
+    (*X Tensor as at least 1 dimension*)
+    requires { length x.dims > 0}
+    (*X [C1]*)
+    requires {length x.dims = size s.dims = size e.dims = size k.dims = size a.dims }
+    (*Redudant with 2 previous requires*)
+    requires { s ~ e ~ k ~ a }
+    (*A [C2]*)
+    (*requires { forall i. 0 <= i < length x.dims -> -length x.dims <= a.data (Cons i Nil) <= length x.dims -1}*)
+    requires { forall ks. valid ks a.dims -> -length x.dims <= a.data ks <= length x.dims -1}
+    (*A [C3]*)
+    (*requires {forall i j. 0 <= i < length x.dims /\ 0 <= j < length x.dims  -> ( mod (a.data (Cons i Nil) + length x.dims)  (length x.dims) ) = (mod (a.data (Cons j Nil) + length x.dims)  (length x.dims)) -> i = j }*)
+    requires { forall ks1 ks2. valid ks1 a.dims /\ valid ks2 a.dims ->
+      ( mod (a.data ks1 + length x.dims)  (length x.dims) ) = (mod (a.data ks2 + length x.dims)  (length x.dims)) -> ks1 = ks2 }
+    (*K [C2]*)
+    (*requires { forall i. 0 <= i < length x.dims -> k.data(Cons i Nil) <> 0  }*)
+    requires { forall ks. valid ks k.dims -> k.data ks <> 0  }
+    (*S [C2]*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall ks. valid ks s.dims ->
+                 let axis_index = a_normalized.data ks in
+                 - (my_nth x.dims axis_index) <= s.data ks <= (my_nth x.dims axis_index) - 1 }
+    (*E [C2]*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall ks. valid ks e.dims ->
+                 let axis_index = a_normalized.data ks in
+                 let step = k.data ks in
+                 let e_val = e.data ks in
+                 (step > 0 -> - (my_nth x.dims axis_index) <= e_val <= (my_nth x.dims axis_index))}
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               forall ks. valid ks e.dims ->
+                 let axis_index = a_normalized.data ks in
+                 let step = k.data ks in
+                 let e_val = e.data ks in
+                 (step < 0 -> - (my_nth x.dims axis_index) - 1 <= e_val <= (my_nth x.dims axis_index) - 1) }
+    (*S [C3], E [C3], K [C3]*)
+    (*requires { forall i. 0 <= i < length x.dims -> k.data (Cons i Nil) > 0 -> s.data (Cons i Nil) <= e.data (Cons i Nil) }*)
+    (*requires { forall i. 0 <= i < length x.dims -> k.data (Cons i Nil) < 0 -> s.data (Cons i Nil) >= e.data (Cons i Nil) }*)
+    (*R6*)
+    requires {  let a_normalized = normalize_axis (x.dims) a.dims a in
+                let s_normalized = normalize_start x.dims s.dims s a_normalized in
+                let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+                forall ks. valid ks s_normalized.dims -> k.data ks > 0 -> s_normalized.data ks <= e_normalized.data ks }
+    (*R7*)
+    requires { let a_normalized = normalize_axis (x.dims) a.dims a in
+               let s_normalized = normalize_start x.dims s.dims s a_normalized in
+               let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+               forall ks. valid ks s_normalized.dims -> k.data ks < 0 -> s_normalized.data ks >= e_normalized.data ks }
+    (*X [C2]*)
+    ensures { length result.dims = length x.dims /\ result.background = x.background }
+    (*Y [C2]*)
+    ensures { let a_normalized = normalize_axis (x.dims) a.dims a in
+              let s_normalized = normalize_start x.dims s.dims s a_normalized in
+              let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+              let t = real_index a_normalized in
+              let y_shape = dY_shape x s_normalized e_normalized k a_normalized t in
+                result.dims = y_shape }
+    ensures { let a_normalized = normalize_axis (x.dims) a.dims a in
+              let s_normalized = normalize_start x.dims s.dims s a_normalized in
+              let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+              let t = real_index a_normalized in
+              let y_shape = dY_shape x s_normalized e_normalized k a_normalized t in
+                result.data = dslice x s_normalized k a_normalized y_shape t }
+    (*proof*)
+    = let a_normalized = normalize_axis x.dims a.dims a in
+      let s_normalized = normalize_start x.dims s.dims s a_normalized in
+      let e_normalized = normalize_end x.dims e.dims e a_normalized k in
+      let t = real_index a_normalized in
+      let y_shape = dY_shape x s_normalized e_normalized k a_normalized t in
+
+      { dims = y_shape; data = dslice x s_normalized k a_normalized y_shape t; background = x.background}
+end
