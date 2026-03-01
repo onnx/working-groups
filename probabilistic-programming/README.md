@@ -13,14 +13,12 @@ This repository is where the ONNX Probabilistic Programming Working Group captur
 ## Slack Channel
 
 onnx-probabilistic-programming
-
 ---
 
 ## WG Lead(s)
 
-- Brian Parbhu  
-- Adam Pocock (Oracle)  
-(February 11, 2026 – Current)
+- Brian Parbhu, (February 11, 2026 – Current)  
+- Adam Pocock (Oracle), (February 11, 2026 – Current)
 
 ---
 
@@ -34,7 +32,8 @@ WG leads will drive the meeting.
 - Meeting ID: 91272546777  
 
 ### Meeting Notes
-(To be added)
+
+The meeting notes can be found [here](https://github.com/onnx/working-groups/probabilistic-programming/meetings)
 
 ---
 
