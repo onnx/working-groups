@@ -269,6 +269,7 @@ Standardize inference operators:
 - Pyro
 - TensorFlow Probability
 - JAX-native probabilistic models
+- rxinfer
 - BayesFlow
 
 ### Future Alignment
@@ -332,3 +333,96 @@ Create a unified ONNX-backed probability and inference layer that all frameworks
 - Turing.jl → ONNX interoperability
 - R-INLA → ONNX interoperability
 - Integration into ONNX 2.0 roadmap
+
+---
+
+# Deployment & Ecosystem Context
+
+## Deployment Gap in Probabilistic Programming
+
+Many probabilistic programming languages (PPLs) operate in siloed computational environments.
+
+- Some use JAX or PyTorch
+- Some rely on custom compute engines (e.g., Stan)
+- Many are optimized for notebook-based workflows
+- Deployment of inferred probabilistic models is often framework-specific
+
+However, the core probabilistic operations across PPLs are structurally similar:
+
+- Sampling from probability distributions
+- Accumulating log-probability terms
+- Executing iterative inference updates
+
+ONNX provides a cross-platform runtime abstraction that can unify deployment across ecosystems and hardware targets.
+
+---
+
+# Operator & Runtime Constraints
+
+Certain probabilistic primitives cannot be fully expressed as pure ONNX graph compositions.
+
+Examples include:
+
+- Special mathematical functions (LogGamma, Digamma, etc.)
+- Distribution samplers that require unbounded looping
+
+These require:
+
+- Runtime-level implementations
+- Reference CPU/CUDA kernels
+- Explicit execution semantics inside ONNX Runtime
+
+This working group will clearly define which constructs are:
+
+- Primitive operators
+- FunctionProto graph decompositions
+- Runtime extension requirements
+
+---
+
+# Inference Operator Interface Model
+
+Inference operators are typically iterative and update model state based on observed data.
+
+For example, a proposed HMC operator would accept:
+
+- A model graph
+- A gradient graph
+- A PRNG state
+- Observed data
+- Current model parameters
+
+And emit:
+
+- Updated model parameters
+
+This allows ONNX to function not only as a model exchange format, but as a backend execution engine for probabilistic inference and deployment.
+
+---
+
+# Exporter Strategy & Scope Control
+
+While many probabilistic frameworks are candidates for export:
+
+- Stan
+- PyMC
+- Pyro
+- NumPyro
+- TensorFlow Probability
+- JAX-native probabilistic systems
+- rxinfer
+- BayesFlow
+
+The initial strategy is to focus on two exporters first.
+
+This prevents overfitting the specification to too many framework-specific abstractions and ensures the operator design remains general and stable.
+
+---
+
+# Current Status
+
+- Proposal presented to the ONNX Steering Committee in December.
+- Feedback requested demonstrated interest from the probabilistic programming community.
+- Prior PRNG specification work predates the formation of this WG and remains a foundational component.
+- A formal PRNG specification and Python reference implementation are planned as early deliverables.
+- Community outreach across the PPL ecosystem is ongoing.
