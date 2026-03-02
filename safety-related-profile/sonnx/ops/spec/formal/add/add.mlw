@@ -3,18 +3,23 @@ module OPAdd
   use int.Int
   use real.Real
   use std.Cfloat
+  use tensor.Range
 
-  let ghost function dadd (a b : data real) : data real
-    = fun ks -> a ks + b ks
+   let ghost function dadd (a b : tensor real) : data real
+    = fun ks -> 
+        if valid ks a.dims then
+          a.data ks + b.data ks
+        else
+          a.background
   
 
   let ghost function opadd (a b : tensor real) : tensor real
     requires { a ~= b }
     ensures { result ~= a }
-    ensures { result.data = dadd a.data b.data }
+    ensures { result.data = dadd a b }
     = { dims = a.dims ;
-        data = dadd a.data b.data ;
-        background = a.background + b.background }
+        data = dadd a b ;
+        background = a.background }
 
 end
 
@@ -51,5 +56,6 @@ let ctensor_add (a b r : ctensor) =
     ;
     assert { tensor r == opadd (tensor a) (tensor b) }
     (*qed*)
+
 
     end
