@@ -1,9 +1,9 @@
 (* Abstract level *)
 module OPLeakyRelu
-  use tensor.Tensor
+  use tensor.tensor.Tensor
   use real.Real
   use tensor.std.Cfloat
-  use tensor.Range
+  use tensor.tensor.Range
 
   (** Define the value for each coordinate ks *)
   let ghost function dleaky_relu (alpha : real) (x : tensor real) : data real =
@@ -103,3 +103,4 @@ let ctensor_leaky_relu (alpha : float) (x r : ctensor) =
   (*qed*)
 
 end
+
