@@ -27,7 +27,7 @@ onnx-probabilistic-programming
 WG leads will drive the meeting.
 
 ### WG Meeting Info
-- Meeting: Friday @12pm EST every week cadance  
+- Meeting: Friday @12pm EST every 2 weeks cadance  
 - Zoom Meeting link: https://zoom-lfx.platform.linuxfoundation.org/meeting/91272546777?password=43562609-9034-428b-af28-7562be759814  
 - Meeting ID: 91272546777  
 
