@@ -98,7 +98,25 @@ Automates the **build and verification process**.
 ![Project Dependency Graph](imgs/diagram.png)
 
 ---
+## Making the tensor library visible
 
+To expose the tensor library, we need to add its path to the .why3.conf file (typically located in your home directory), for example:
+```code
+loadpath ="/home/user/sonnx/working-groups/safety-related-profile/sonnx/ops/spec/formal/common/libs"
+```
+You can adapt this path according to your local setup.
+
+**Note** 
+
+When using tensor modules inside other Why3 modules, their usage must be prefixed with 'tensor', for example:
+```code
+use tensor.std.Int
+use tensor.std.List
+use tensor.std.Clib
+use tensor.std.Cfloat
+```
+
+For more details refer to the formal specification of Where operator.
 ## Building and Verification
 
 The `Makefile` simplifies the entire process with a few commands:
@@ -125,5 +143,6 @@ This command creates an HTML documentation from the formal specifications in the
 make clean
 ```
 Removes all generated files, including the C library and documentation. and insert the figure in the right place
+
 
 
