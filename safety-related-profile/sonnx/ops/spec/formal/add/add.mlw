@@ -1,9 +1,9 @@
 module OPAdd
-  use tensor.Tensor
+  use tensor.tensor.Tensor
   use int.Int
   use real.Real
-  use std.Cfloat
-  use tensor.Range
+  use tensor.std.Cfloat
+  use tensor.tensor.Range
 
    let ghost function dadd (a b : tensor real) : data real
     = fun ks -> 
@@ -25,17 +25,17 @@ end
 
 module CTensorAdd
   use int.Int
-  use std.List
-  use std.Clib
-  use std.Cfloat
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
   use mach.int.Int32
-  use tensor.Range
-  use tensor.Tensor
-  use layout.CFlat
-  use libvector.CIndex
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
   use ref.Ref
   use tensor.OPAdd
-  use libtensor.CTensor
+  use tensor.libtensor.CTensor
 
 let ctensor_add (a b r : ctensor) =
     requires { valid_tensor a }
@@ -59,3 +59,4 @@ let ctensor_add (a b r : ctensor) =
 
 
     end
+
