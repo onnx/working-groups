@@ -35,7 +35,7 @@ https://lfaifoundation.slack.com/archives/C08MERYU84T
 # WG Lead(s)
 
 * Yamini Nimmagadda (Intel)
-* Ramakrishna Sivakumar (AMD)
+* Javier E Martinez (Intel)
 
 # Logistics
 
