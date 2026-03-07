@@ -10,13 +10,11 @@ New Working Groups are created when there is sufficient interest in a topic area
 ## Joining a working group
 Working Groups have their discussions on Slack in dedicated channels. (Older working groups used Gitter rooms which are now archived)
 
-You can find the schedule of meetings on the [LF AI wiki](https://wiki.lfai.foundation/pages/viewpage.action?pageId=18481196)
+You can find the schedule of meetings on the [LFX calender](https://onnx.ai/calendar)
 
 Working Groups store these artifacts, including meeting notes, in this repository. The working group leads have merge permissions on the repo but should only handle PRs related to their working group.
 
 ## Active working groups
-
-Contact e-mail addresses of WG leads can be found [here](https://wiki.lfaidata.foundation/pages/viewpage.action?pageId=18481196).
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
