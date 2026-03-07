@@ -18,10 +18,10 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
-| [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX               |
+| [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX |
 | Safety-Related-Profile | |
 | [Generative-AI](https://lfaifoundation.slack.com/archives/C08MERYU84T) | Accelerate GenAI support in ONNX |
-| Probabilistic Programming | 
+| Probabilistic Programming |  Extending ONNX with probabilistic modeling and Bayesian inference capabilities | 
 
 ## Completed working groups
 
