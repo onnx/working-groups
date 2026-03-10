@@ -36,6 +36,7 @@ https://lfaifoundation.slack.com/archives/C08MERYU84T
 
 * Yamini Nimmagadda (Intel)
 * Javier E Martinez (Intel)
+* Ganesan Ramalingam (Microsoft)
 
 # Logistics
 
