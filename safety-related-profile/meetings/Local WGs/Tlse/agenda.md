@@ -15,11 +15,10 @@
 - Reviewed: **Maxpool**, **Where**, **Pow**
 - About **Pow**
   - The specification currently imposes no restriction and goes beyond what is required by IEEE. 
-- [ ] Review **Pow** against IEEE 754
-- [ ] Restrict **Pwo** to match IEEE's spec of Pow.
+- [ ] Review **Pow** against IEEE 754 and restrict **Pow** to match IEEE's spec of Pow.
 - About formal specification and verification
   - Might be wise to limit format specification and proof to "complex" operators (and the graph semantics), especially the structural ones that make complex (hence error prone) manipulations of indexes.
-- [ ] Propose a restriction for the format specification and verification effort (at least in a first phase)
+- [ ] Propose a restriction to the scope of formal specification and verification (at least in a first phase)
 
 
 #### 2025/02/13

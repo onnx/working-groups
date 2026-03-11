@@ -1,3 +1,31 @@
+# 2025/03/11
+## Participants
+- To be completed
+## Agenda 
+- Welcome to Amine, presentation of AIRE
+- Review of actions (Eric)
+- Status of [specification](https://github.com/users/ericjenn/projects/4) 
+- Progress of João and Ricardo's work
+- The case of **MaxPool**, continued... (Jean)
+- Local WG (Eric)
+    - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
+## Minutes
+## Actions
+### New actions
+### Previous actions
+- [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
+  - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- [ ] Actions from local work sessions 
+    - (0511-1, Joao, Ricardo) Check how to handle NaN in Why3 (if possible!)... See Mariem's link.
+    - To be discussed during Feb session with Loïc. 
+    - Some solutions are available. These solutions must be discussed with Loïc. 
+    - Solution to be sent to Mariem first...
+    - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
+
 # 2025/02/25
 ## Participants
 - Joõ, Camille, Eric, Mariem, Dumitru, Ricardo, Franck
@@ -36,8 +64,7 @@
     - Solution to be sent to Mariem first...
     - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
 
-
-# 2025/02/11 ((shortened to 1h)
+# 2025/02/11 (shortened to 1h)
 ## Participants
 - Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Loup, Franck
 ## Agenda 
