@@ -1,8 +1,7 @@
 # 2025/03/11
 ## Participants
-- To be completed
+- João, Ricardo, Hugo, Edoardo, Franck, Mariem, Henri, Jean
 ## Agenda 
-- Welcome to Amine, presentation of AIRE
 - Review of actions (Eric)
 - Status of [specification](https://github.com/users/ericjenn/projects/4) 
 - Progress of João and Ricardo's work
@@ -10,8 +9,26 @@
 - Local WG (Eric)
     - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
 ## Minutes
+- João and Ricardo 
+  - have completed the formal specification and verification guidelines (to be reviewed)
+  - have completed the formal spec of **Conv**, **Reshape**, **Flatten**
+  - are making progress on the extension or reals with IEEE special values
+  - have created the formal specification of complete (simple) networks and 
+    - proved some properties on them (Lipschitz). 
+    - generated a C implementation that can be executed and used as a reference implementation to verify some implementation (this is a simpler way than specifying a generic graph executor) 
+- Jean: presentation of the new problem found on MaxPool when the size of the kernel is larger than the size of the argument...
+- Jean: We should clearly discriminate the formal part fo the specification for the informative part.
+  - This could be done by 
+    - numbering paragraphs (not easy with markdown...)
+    - adding tags to the specifying paragraphs (a lot of tags)
+    - using a specific font / color to discriminate the informative part, as follows :
+      - <p style="color: black; background-color: lightgrey;"> This is an informative part </p>
 ## Actions
 ### New actions
+- [ ] (1103-1) Review Ricardo and João's formal specification and verification guidelines 
+- [ ] (1103-2) Concludes on the expected behaviour of a **Conv** or **MaxPool** with incompatible sizes (should these conditions be verified statically? what should happen if these conditions cannot be guaranteed statically?)
+- [ ] (1103-3) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+- [ ] (1103-4) Find a practical way to discriminate the "specifying"  part of the informal specification from the informative part.  
 ### Previous actions
 - [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
   - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
