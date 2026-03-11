@@ -25,10 +25,13 @@
       - <p style="color: black; background-color: lightgrey;"> This is an informative part </p>
 ## Actions
 ### New actions
-- [ ] (1103-1) Review Ricardo and João's formal specification and verification guidelines 
-- [ ] (1103-2) Concludes on the expected behaviour of a **Conv** or **MaxPool** with incompatible sizes (should these conditions be verified statically? what should happen if these conditions cannot be guaranteed statically?)
-- [ ] (1103-3) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
-- [ ] (1103-4) Find a practical way to discriminate the "specifying"  part of the informal specification from the informative part.  
+- [ ] (1103-1, all) Review Ricardo and João's formal specification and verification guidelines 
+- [ ] (1103-2, all) Concludes on the expected behaviour of a **Conv** or **MaxPool** with incompatible sizes (should these conditions be verified statically? what should happen if these conditions cannot be guaranteed statically?)
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+- [ ] (1103-4, all) Find a practical way to discriminate the "specifying"  part of the informal specification from the informative part.  
+- [ ] (1103-5, Mariem) Check why the SONNX backend has not been pushed in the AIDGE repo.  
+- [ ] (1103-6) Ensure that the **Conv** op integrated in Aidge is actually the one generated out of Ricardo and João's formal spec.
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
 ### Previous actions
 - [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
   - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
