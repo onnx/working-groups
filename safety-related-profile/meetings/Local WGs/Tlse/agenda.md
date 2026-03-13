@@ -1,6 +1,15 @@
 
  (Availability : use the [When2Meet](https://www.when2meet.com/?34146939-oceVQ))
- 
+#### 2025/03/13
+
+##### Agenda
+
+##### Minutes
+- Back on **MaxPool**: do we expect null tensor when preconditions are not satisfied? Do we consider that pre-conditions are necessarily satisfied? 
+  - We consider that incompatible kernel / argument sizes leads to a null tensor.
+- Segregation of "specifying elements" from "non specifying elements" 
+
+
 #### 2025/02/27 
 
 ##### Agenda

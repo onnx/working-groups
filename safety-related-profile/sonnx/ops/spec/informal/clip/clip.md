@@ -28,7 +28,11 @@ The following restrictions apply to the **Clip** operator for the SONNX profile:
 
 ## Informal specification
 
+[t1]
+
 Operator **Clip** limit the given input within an interval.
+
+[t1.1]
 - If $L$ $\leq$ $M$:
 
   - if $X[i]$ $\lt$ $L$ then $Y[i]$ = $L$.
@@ -37,12 +41,15 @@ Operator **Clip** limit the given input within an interval.
 
   - Otherwise, $Y[i]$ = $X[i]$.
 
+[/t1.1]
+
 - If $L$ $\gt$ $M$:
 
   - $Y[i] = M$
 
 where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
+[/t1]
 
 The following **Clip** formula captures the behavior expressed by the previous if-statements:
 
@@ -93,7 +100,8 @@ Y = \begin{bmatrix} 10 & 10 & 10 \end{bmatrix}
 ```
 
 ## Error conditions
-No error condition
+
+If any precondition is not satisfied, the behaviour of the operator is not defined.
 
 ## Attributes
 
