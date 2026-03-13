@@ -1,0 +1,33 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 34, "time": 0.538 },
+    { "prover": "cvc5@1.2.1", "size": 50, "time": 0.537 },
+    { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.525 }
+  ],
+  "proofs": {
+    "CTensorWhere": {
+      "ctensor_where": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.041 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.042 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.044 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.028 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.052 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.167 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 }
+        ]
+      }
+    },
+    "OPWhere": {
+      "dwhere": { "prover": "alt-ergo@2.5.4", "time": 0.01 },
+      "opwhere": { "prover": "alt-ergo@2.5.4", "time": 0.012 }
+    },
+    "Where": {}
+  }
+}

@@ -1,0 +1,117 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module std.Clib</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="std.index.html">std</a></code> — <code>module Clib</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Clib</span><a href="std.proof.html#Clib" title="2 value parameters, 0 instance found" class="icon small warning icofont-warning-alt"></a><a href="std.proof.html#Clib" title="Valid (6 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> map.<a title="map.Map" href="https://www.why3.org/stdlib/map.html#Map_">Map</a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> mach.int.<a title="mach.int.Int32" href="https://www.why3.org/stdlib/mach.int.html#Int32_">Int32</a>
+  <span class="keyword">use</span> <span class="keyword">export</span> mach.c.<a title="mach.c.C" href="https://www.why3.org/stdlib/mach.c.html#C_">C</a>
+
+  <span class="keyword">type</span> <a id="int32">int32</a> = Int32.<a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>
+  <span class="keyword">type</span> <a id="uint32">uint32</a> = UInt32.<a title="mach.int.UInt32Gen.uint32" href="https://www.why3.org/stdlib/mach.int.html#uint32_350">uint32</a>
+
+  <span class="keyword">val</span> <span class="keyword">function</span> <a id="to_uint32">to_uint32</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (v : <a title="std.Clib.int32" href="#int32">int32</a>) : <a title="std.Clib.uint32" href="#uint32">uint32</a>
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> v }
+    <span class="keyword">ensures</span> { Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> v = UInt32.<a title="mach.int.UInt32GMP.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_396">to_int</a> result }
+</pre>
+<div class="doc">
+<p>Null&ndash;Pointer</p>
+</div>
+<pre class="src">
+  <span class="keyword">val</span> <span class="keyword">predicate</span> <a id="is_null">is_null</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) : bool
+    <span class="keyword">ensures</span> { result &lt;-&gt; vp.<a title="mach.c.C.zone" href="https://www.why3.org/stdlib/mach.c.html#zone_27">zone</a> = <a title="mach.c.C.null_zone" href="https://www.why3.org/stdlib/mach.c.html#null_zone_18">null_zone</a> }
+</pre>
+<div class="doc">
+<p>Array&ndash;range validity</p>
+</div>
+<pre class="src">
+  <span class="keyword">predicate</span> <a id="valid_range">valid_range</a> (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (p q : int) =
+    q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p \/
+    ( 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.min" href="https://www.why3.org/stdlib/mach.c.html#min_24">min</a> <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> /\
+      0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="mach.int.Int32.max_int32" href="https://www.why3.org/stdlib/mach.int.html#max_int32_286">max_int32</a> /\
+      0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.min" href="https://www.why3.org/stdlib/mach.c.html#min_24">min</a> <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> p /\
+      vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.max" href="https://www.why3.org/stdlib/mach.c.html#max_25">max</a> <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.plength" href="https://www.why3.org/stdlib/mach.c.html#plength_30">plength</a> )
+
+  <span class="keyword">let</span> <span class="keyword">lemma</span> <a id="valid_in_range">valid_in_range</a><a href="std.proof.html#Clib.valid_in_range" title="Valid (one goal)" class="icon valid icofont-check"></a> (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (p k q : int)
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { p <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q }
+    <span class="keyword">requires</span> { <a title="std.Clib.valid_range" href="#valid_range">valid_range</a> vp p q }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.valid_ptr_shift" href="https://www.why3.org/stdlib/mach.c.html#valid_ptr_shift_85">valid_ptr_shift</a> vp k }
+    = ()
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+</pre>
+<div class="doc">
+<p>Array as map</p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="value_at">value_at</a> (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) : <a title="map.Map.map" href="https://www.why3.org/stdlib/map.html#map_9">map</a> int &#39;a =
+    <span class="keyword">pure</span> { <span class="keyword">fun</span> k -&gt; vp.<a title="mach.c.C.data" href="https://www.why3.org/stdlib/mach.c.html#data_22">data</a>.Array.<a title="array.Array.elts" href="https://www.why3.org/stdlib/array.html#elts_16">elts</a> (vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k) }
+</pre>
+<div class="doc">
+<p>Array access (ghost)</p>
+</div>
+<pre class="src">
+  <span class="keyword">function</span> (<a id="mixfix%20%5B%5D">[]</a><a href="std.proof.html#Clib.mixfix%20%5B%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (k : int) : &#39;a = <a title="std.Clib.value_at" href="#value_at">value_at</a> vp k
+</pre>
+<div class="doc">
+<p>Array access (C, inlined)</p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> (<a id="mixfix%20%5B%5D">[]</a><a href="std.proof.html#Clib.mixfix%20%5B%5D" title="Valid (one goal)" class="icon valid icofont-check"></a>) (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (k : <a title="std.Clib.int32" href="#int32">int32</a>) : &#39;a
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { vp.<a title="mach.c.C.min" href="https://www.why3.org/stdlib/mach.c.html#min_24">min</a> <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> vp.<a title="mach.c.C.max" href="https://www.why3.org/stdlib/mach.c.html#max_25">max</a> }
+    <span class="keyword">ensures</span> { result = vp[k] }
+    = <a title="mach.c.C.get_ofs" href="https://www.why3.org/stdlib/mach.c.html#get_ofs_62">get_ofs</a> vp k
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+</pre>
+<div class="doc">
+<p>Array update (C, inlined)</p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> (<a id="mixfix%20%5B%5D%3C-">[]&lt;-</a><a href="std.proof.html#Clib.mixfix%20%5B%5D%3C-" title="Valid (one goal)" class="icon valid icofont-check"></a>) (vp : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (k : <a title="std.Clib.int32" href="#int32">int32</a>) (v : &#39;a) : unit
+    <span class="keyword">requires</span> { <a title="mach.c.C.writable" href="https://www.why3.org/stdlib/mach.c.html#writable_26">writable</a> vp }
+    <span class="keyword">requires</span> { vp.<a title="mach.c.C.min" href="https://www.why3.org/stdlib/mach.c.html#min_24">min</a> <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> vp.<a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> vp.<a title="mach.c.C.max" href="https://www.why3.org/stdlib/mach.c.html#max_25">max</a> }
+    <span class="keyword">ensures</span> { <a title="std.Clib.value_at" href="#value_at">value_at</a> vp = Map.(<a title="map.Map.([<-])" href="https://www.why3.org/stdlib/map.html#mixfix%20%5B%3C-%5D_18">[&lt;-]</a>) (<span class="keyword">old</span> (<a title="std.Clib.value_at" href="#value_at">value_at</a> vp)) k v }
+    = <a title="mach.c.C.set_ofs" href="https://www.why3.org/stdlib/mach.c.html#set_ofs_75">set_ofs</a> vp k v
+</pre>
+<div class="doc">
+<p>Array as list</p>
+</div>
+<pre class="src">
+  <span class="keyword">use</span> <a title="std.List" href="std.List.html">List</a>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="slice">slice</a><a href="std.proof.html#Clib.slice" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (p q : int) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> &#39;a =
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { q <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> p }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">if</span> q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p <span class="keyword">then</span> <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> <span class="keyword">else</span> <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> (<a title="std.Clib.value_at" href="#value_at">value_at</a> u p) (slice u (p<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) q)
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="slice_append">slice_append</a><a href="std.proof.html#Clib.slice_append" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (p q r : int)
+    <span class="keyword">requires</span> { p <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> r }
+    <span class="keyword">ensures</span> { <a title="std.Clib.slice" href="#slice">slice</a> u p r = <a title="std.Clib.slice" href="#slice">slice</a> u p q <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> <a title="std.Clib.slice" href="#slice">slice</a> u q r }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { q <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> p }
+    = <span class="keyword">if</span> p <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q <span class="keyword">then</span> slice_append u (p<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) q r
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="vector">vector</a> (u : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (n : int) = <a title="std.Clib.slice" href="#slice">slice</a> u 0 n
+
+  <span class="keyword">let</span> <span class="keyword">lemma</span> <a id="vector_push">vector_push</a><a href="std.proof.html#Clib.vector_push" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> &#39;a) (n : int)
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> n }
+    <span class="keyword">ensures</span> { <a title="std.Clib.vector" href="#vector">vector</a> u (n<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) = <a title="std.List.push" href="std.List.html#push">push</a> (<a title="std.Clib.vector" href="#vector">vector</a> u n) (<a title="std.Clib.value_at" href="#value_at">value_at</a> u n) }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    = <a title="std.Clib.slice_append" href="#slice_append">slice_append</a> u 0 n (n<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1)
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

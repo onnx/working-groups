@@ -1,0 +1,43 @@
+module tensor.std.Clib
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  syntax val to_uint32 "(uint32_t) %1"
+  syntax val is_null "!%1" prec 0
+  syntax val ([]) "%1[%2]" prec 1 1 15
+  syntax val ([]<-) "%1[%2] = %3" prec 14 14 15 14
+end
+
+module tensor.std.Cfloat
+  syntax type float    "double"
+  syntax val zero      "0.0"
+  syntax val one       "1.0"
+  syntax val f32       "(double) %1"
+  syntax val f64       "(double) %1"
+  syntax val      ( .+ )     "%1 + %2"   prec 8 8 7
+  syntax val      ( .- )     "%1 - %2"   prec 8 8 7
+  syntax val      (.-_)      "- %1"      prec 5 4
+  syntax val      ( .* )     "%1 * %2"   prec 7 7 6
+  syntax val      ( ./ )     "%1 / %2"   prec 7 7 6
+  syntax val      ( .= )     "%1 = %2"   prec 11 11 10
+  syntax val      ( .< )     "%1 < %2"   prec 11 11 10
+  syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
+end
+
+module tensor.log.Log
+  syntax val log "/* %1 */" prec 0
+end
+
+
+module tensor.libvector.CIndex
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+end
+
+module tensor.libtensor.CTensor
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+  
+  
+end
+

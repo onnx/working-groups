@@ -1,0 +1,148 @@
+module OPFlatten
+    
+    use tensor.Tensor
+    use tensor.Range
+    use layout.CFlat
+    use int.Int
+    use real.Real
+    use std.Int
+    use list.List
+    use list.Length
+    
+
+    let rec lemma get_dim_positive (ds : list int)
+    requires { positive ds }
+    ensures { forall i. 0 <= i < length ds -> 0 < get_dim ds i }
+    variant { ds }
+    = match ds with 
+        | Nil -> () 
+        | Cons d ds -> get_dim_positive ds end
+
+
+    let rec ghost function calculate_dY0 (x : tensor real) (axis : int) (i : int) : int
+    (*Need this requires because of get_dim requires*)
+    requires { 0 <= axis <= length x.dims }
+    requires { 0 <= i <= axis }
+    variant { axis - i }
+    =
+    if Int.(i >= axis) then
+        1
+    else
+        get_dim x.dims i * calculate_dY0 x axis Int.(i + 1)
+
+    
+    let rec lemma calculate_dY0_positive (x: tensor real) (axis: int) (i: int)
+    requires { positive x.dims }
+    requires { 0 <= axis <= length x.dims }
+    requires { 0 <= i <= axis }
+    ensures  { 0 < calculate_dY0 x axis i }
+    variant  { axis - i }
+    =
+    if i >= axis then
+        ()
+    else
+        let d = get_dim x.dims i in
+        calculate_dY0_positive x axis (i + 1)
+
+    let rec ghost function calculate_dY1 (x : tensor real) (axis : int) (i : int) : int
+    requires { 0 <= axis <= length x.dims }
+    requires { axis <= i <= length x.dims }
+    variant { length x.dims - i }
+    =
+    if Int.(i >= length x.dims) then
+        1
+    else
+        get_dim x.dims i * calculate_dY1 x axis Int.(i + 1)
+
+    let rec lemma calculate_dY1_positive (x: tensor real) (axis: int) (i: int)
+    requires { positive x.dims }
+    requires { 0 <= axis <= length x.dims }
+    requires { axis <= i <= length x.dims }
+    ensures  { 0 < calculate_dY1 x axis i }
+    variant  { length x.dims - i }
+    =
+    if i >= length x.dims then
+        ()
+    else
+        let d = get_dim x.dims i in
+        assert { 0 <= i < length x.dims };
+        calculate_dY1_positive x axis (i + 1)
+
+    function calculate_dims (x : tensor real) (axis : int) : list int
+    =
+    let dY0 = calculate_dY0 x axis 0 in
+    let dY1 = calculate_dY1 x axis axis in
+    Cons dY0 (Cons dY1 Nil)
+
+    
+    function dflatten (x : tensor real) (y_shape: list int) : data real
+    =
+    fun ks ->
+        if valid ks y_shape then
+            let y_coords_flat = offset ks y_shape in
+            let x_coords = index y_coords_flat x.dims in
+            x.data x_coords
+        else 
+            x.background
+
+    function normalize_axis (axis : int) (x_rank : int) : int
+    =
+    if axis < 0 then
+        axis + x_rank
+    else
+        axis
+
+    let ghost function flatten (x : tensor real) (axis : int) : tensor real
+    requires { -length x.dims <= axis <= length x.dims }
+
+    ensures {   let axis_normalized = normalize_axis axis (length x.dims) in
+                result.dims = calculate_dims x axis_normalized }
+
+    ensures { result.background = x.background }
+
+    ensures {   let axis_normalized = normalize_axis axis (length x.dims) in
+                result.data = dflatten x (calculate_dims x axis_normalized) }
+    =
+    let axis_normalized = normalize_axis axis (length x.dims) in
+    let y_shape = calculate_dims x axis_normalized in
+    { dims = y_shape ; data = dflatten x y_shape ; background = x.background }
+
+end
+
+
+module COPFlatten
+
+    use OPFlatten
+    use tensor.Tensor
+    use list.List
+    use list.Length
+    use int.Int
+    use libtensor.CTensor
+    use libvector.CIndex
+    use std.Clib
+    use mach.int.Int32
+    use std.Cfloat
+
+    
+    let flatten (x r : ctensor) (axis: int32)
+    requires { valid_tensor x }
+    requires { valid_tensor r }
+    requires { r.t_rank = 2 }
+    requires {  let axis_normalized = normalize_axis (to_int axis) (length (tensor x).dims) in  
+                (ivector r.t_dims r.t_rank) = calculate_dims (tensor x) axis_normalized }
+    requires { vdim x.t_dims x.t_rank = vdim r.t_dims r.t_rank }
+    requires { -length (tensor x).dims <= (to_int axis) <= length (tensor x).dims }
+    ensures { tensor r = flatten (tensor x) (to_int axis) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m - 1 do
+        invariant { forall k. 0 <= k < i -> value_at r.t_data k = value_at x.t_data k }
+        r.t_data[i] <- x.t_data[i]
+    done;
+    assert { tensor r == flatten (tensor x) (to_int axis) }
+
+    
+end
+
+
+
