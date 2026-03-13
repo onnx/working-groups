@@ -7,8 +7,25 @@
 ##### Minutes
 - Back on **MaxPool**: do we expect null tensor when preconditions are not satisfied? Do we consider that pre-conditions are necessarily satisfied? 
   - We consider that incompatible kernel / argument sizes leads to a null tensor.
-- Segregation of "specifying elements" from "non specifying elements" 
-
+  - We keep the current organization where pre-conditions are expressed in the section dedicated to parameters and attributes, and provide an explanation of the expected behaviour in the "Error condition" section. 
+  - In the most frequent case, we will simply state that the behaviour of the operator is not defined if any of the pre-conditions is not satisfied (see **Clip**).  In some specific cases (e.g., the case of **MaxPool** and **Conv**, when the dimensions of the kernel and tensors are not compatible), we indicate that we return a null tensor. 
+    - Why? Because it is not always trivial to verify that the condition is satisfied if dynamic shape modifications are performed. More often than not, conditions can be checked statically when all parameters related to sizes can be computed in advance. 
+  - [X] Add a paragraph about constraint violation on the "informal spec guidelines".
+    - Eric: fait 
+- Segregation of "specifying elements" from "non specifying elements".
+  - There are two objectives: 
+    - discriminate the specifying parts from the documentation parts
+    - provide "hooks" for traceability purposes
+  - We propose to 
+    - use section names when traceability is a the scale of the section. 
+    - introduce tags `[specx.y...]` and `[/specx.y...]`, where `x`, `y`,... are numbers, when a specific element in the section needs to be designated. The dot notation (`x.y...`) is introduced when a more specific element needs to be identified within an element that is already tagged. 
+    The exact tag is : `<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span>`
+  - Elements that are provided for information are tagged using `[info]` `[/info]`. All other elements are specifying. See the spec of operator [**Div**](../../../sonnx/ops/spec/informal/div/div.md). 
+  - [X]  Add a paragraph about tagging in guidelines 
+    - Eric: Fait
+  - [ ]  Address the case of negative axes 
+  - [ ]  Check the behaviour of softmax for nb of axes > 2
+- Review of **SoftMax**
 
 #### 2025/02/27 
 

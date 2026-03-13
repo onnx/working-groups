@@ -27,6 +27,7 @@ No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
 
+<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
@@ -41,8 +42,10 @@ A[i]/B[i] & \text{if } B[i] \text{ is different from 0} \\
 \end{cases}
 $$
 
+<span style="background: red; color: white; font-size:0.7em;">[/spec1]</br></span>
 
 
+<span style="font-size:0.7em;">[info]</br></span> 
 
 The effect of the operator is illustrated on the following examples.
 
@@ -85,6 +88,7 @@ C = \frac{A}{B} = \begin{bmatrix}
   25.3/5.2 & 6.2
 \end{bmatrix}
 ```
+<span style="font-size:0.7em;">[/info]</br></span> 
 
 ## Error conditions
 No error condition.
@@ -258,11 +262,14 @@ Definition of operator $\text{Div}$ signature:
 No specific restrictions apply to the **Div** operator.
 
 ## Informal specification
-
+<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span> 
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. 
 
 The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded.
 
+<span style="background: red; color: white; font-size:0.7em;">[/spec1]</br></span> 
+
+<span style="font-size:0.7em;">[info]</br></span> 
 ### Example 1
 
 ```math
@@ -285,6 +292,8 @@ B = \begin{bmatrix} 3 & 2 \\ 4 & 1 \\ 5 & 4 \end{bmatrix}
 ```math
 C = \begin{bmatrix} 3 & 5 \\ 5 & 1 \\ 6 & 2 \end{bmatrix}
 ```
+
+<span style="font-size:0.7em;">[/info]</br></span> 
 
 ## Error conditions
 The behaviour in case of a null denominator is implementation dependent.

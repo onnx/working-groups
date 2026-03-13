@@ -30,6 +30,28 @@ SONNX is essentially a specification effort. As such, it must remain independent
 Even if we consider that the SONNX specification shall not "reflect" a specific implementation, it shall preferably stick to the ONNX Runtime implementation when choices have to be made. When, for a given operator, the usual/consensual semantics and the ONNRtime implementation diverge, the SONNX WG choose to indicate this discrepancy. This is for instance the case for the **MaxPool** operator. 
 Note also that the semantics of an operator in ONNX runtime may depend on the execution backend (CPU, GPU,...). 
 
+#### About specifying and non specifying information and traceability 
+
+By default, all the text of the specification is "specifying" (i.e., it expresses a constraint to be followed). 
+
+Reference to the specification elements can be done using the section names (tagged `#` in the markdown document).
+
+If a more precise location must be identified, a tag can be used. tags can be nested.
+<span style="background: red; color: white; font-size:0.7em;">[spec1]</span>
+This is some traceable text. 
+<span style="background: red; color: white; font-size:0.7em;">[spec1.1]</span> This is another text. <span style="background: red; color: white; font-size:0.7em;">[/spec1.1]</span> <span style="background: red; color: white; font-size:0.7em;">[spec1]</span>
+
+Additional *non specifying* information may may be given. In that case, it must be enclosed between the following tags:
+
+`<span style="font-size:0.7em;">[info]</br></span>`
+
+`<span style="font-size:0.7em;">[/info]</br></span>`
+
+For instance:
+<span style="font-size:0.7em;"></br>[info]</br></span>
+This is non specifying information.
+<span style="font-size:0.7em;"></br>[/info]</br></span>
+
 #### About error conditions
 
 An error condition is a condition leading to an unexpected result. Obviously, if the specification is clear and complete, all possible behaviour should be "expected". However, we consider worth being mentioned any result leading to 
@@ -39,6 +61,8 @@ An error condition is a condition leading to an unexpected result. Obviously, if
 In some cases, a pre-condition may be stated on the inputs so that, if the pre-condition is satisfied, then no error -- NaN, division by zero, etc. -- can occur. For instance, no division by zero can occur if the condition stating that "the denominator shall not be null" is satisfied.  Nevertheless, the possibility for an error to occur will still be signaled to the reader.
 
 Systematically providing pre-conditions on the inputs to prevent error conditions was not considered useful for the end-user since operators are generally used in complex graphs for which verifying the preconditions to prevent the occurrence of error is not achievable in practice. 
+
+By default, pre-conditions are supposed to be satisfied for an operator to be defined or, stated the other way round, if at least one precondition is not satisfied, then the behaviour of the operator is undefined.  In some cases, a pre-condition can be violated but the behaviour is nevertheless defined. For instance, when applying **MapPool** with no padding, the pooling kernel can be larger than the argument tensor, which violates one precondition. In that case, SONNX states that the operator shall return an empty tensor. This specific behavior must be specified in the error section.
 
 #### About accuracy
 
