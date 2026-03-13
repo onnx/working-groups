@@ -1,0 +1,188 @@
+module OPReshape
+    use tensor.Tensor
+    use tensor.Range
+    use layout.CFlat
+    use int.Int
+    use real.Real
+    use std.Int
+    use list.List
+    use list.Length
+    use int.EuclideanDivision
+
+    let rec lemma get_dim_positive (ds : list int)
+    requires { positive ds }
+    ensures { forall i. 0 <= i < length ds -> 0 < get_dim ds i }
+    variant { ds }
+    = match ds with 
+        | Nil -> () 
+        | Cons _ ds -> get_dim_positive ds end
+    
+
+    function zero_clamp (x_dims s_dims : list int) : list int
+    =
+    match x_dims, s_dims with
+        | Cons x xs, Cons s ss -> if s = 0 then
+                            Cons x (zero_clamp xs ss)
+                        else
+                            Cons s (zero_clamp xs ss)
+        | _ -> Nil
+    end
+    
+
+    function inferred_dim (x_dims s_dims : list int) (x_size s_size : int) : list int
+    =
+    match s_dims with
+        | Cons s ss -> if (s = -1) then
+                            let inferred = div x_size (- s_size) in
+                            Cons inferred ss
+                       else 
+                            Cons s (inferred_dim x_dims ss x_size s_size)
+        | Nil -> Nil
+    end
+
+
+    function calculate_dims (x: tensor real) (s: tensor int) (allowzero: int) : list int
+    =
+    let s_dims = 
+        if allowzero = 0 then 
+            (zero_clamp x.dims s.dims) 
+        else 
+            s.dims 
+    in
+    inferred_dim x.dims s_dims (size x.dims) (size s_dims)
+    
+
+    function dreshape (x: tensor real) (y_shape: list int) : data real
+    =
+    fun ks ->
+        if valid ks y_shape then
+            let y_coords_flat = offset ks y_shape in
+            let x_coords = index y_coords_flat x.dims in
+            x.data x_coords
+        else 
+            x.background
+
+
+    let ghost function reshape (x: tensor real) (s: tensor int) (allowzero: int) : tensor real
+    (* allowzero C[1] *)
+    requires { allowzero = 0 \/ allowzero = 1 }
+    (* allowzero C[2] *)
+    requires {  let rank = get_dim s 0 in
+                allowzero = 0 -> (
+                    (forall i. 0 <= i < rank ->
+                        (s.data (Cons i Nil) = 0 -> i < length x.dims))
+                )
+            }
+    (* allowzero C[3] *)
+    requires {  let rank = get_dim s 0 in
+                allowzero = 0 -> (
+                    (forall i. 0 <= i < rank -> s.data (Cons i Nil) >= -1) /\ 
+                    ((exists j. 0 <= j < rank -> s.data (Cons j Nil) = -1) ->
+                        (forall d. 0 <= d < length x.dims -> get_dim x.dims d <> 0))
+                        (* (forall d. 0 <= d < length x.dims -> get_dim x.dims d <> 0)) *)
+                )
+            }
+    requires {  let rank = get_dim s 0 in
+                allowzero = 1 -> (
+                    (forall i. 0 <= i < rank ->
+                        (s.data (Cons i Nil) > 0 \/
+                        (s.data (Cons i Nil) = 0 -> ((exists d. 0 <= d < length x.dims -> get_dim x.dims d = 0) /\ 
+                                                     (forall z. 0 <= z < rank -> s.data (Cons z Nil) <> -1))) \/
+                        (s.data (Cons i Nil) = -1 -> (forall z. 0 <= z < rank -> s.data (Cons z Nil) <> 0))
+                        )
+                    )
+                )
+            }
+    (* X C[1] *)
+    requires { let y_shape = calculate_dims x s allowzero in
+                size x.dims = size y_shape }
+    (* S is a 1D tensor *)
+    requires { length s.dims = 1}
+    (* S C[2] *)
+    requires {  let rank = get_dim s 0 in
+                forall i, j: int. (0 <= i < rank /\ 0 <= j < rank) -> 
+                    (s.data (Cons i Nil) = -1 /\ s.data (Cons j Nil) = -1) -> (i = j) 
+            }
+
+    ensures { result.dims = calculate_dims x s allowzero }
+    ensures { result.background = x.background }
+    ensures { let y_shape = calculate_dims x s allowzero in
+                result.data = dreshape x y_shape }
+    =
+    let y_shape = calculate_dims x s allowzero in
+    { dims = y_shape ; data = dreshape x y_shape ; background = x.background }
+
+end
+
+module COPReshape
+    use OPReshape
+    use tensor.Tensor
+    use list.List
+    use list.Length
+    use int.Int
+    use libvector.CIndex
+    use std.Clib
+    use mach.int.Int32
+    use std.Cfloat
+    use specifictensor.CFloatTensor
+    use specifictensor.CInt32Tensor
+    use tensor.Range
+
+    let reshape (x r: ctensorfloat) (s: ctensorint32) (allowzero: int32)
+    (* Valid tensors *)
+    requires { CFloatTensor.valid_tensor x }
+    requires { CFloatTensor.valid_tensor r }
+    requires { CInt32Tensor.valid_tensor s }
+    (* Shape match *)
+    requires {  let y_shape = calculate_dims (CFloatTensor.tensor x CFloatTensor.zero) (CInt32Tensor.tensor s CInt32Tensor.zero) allowzero in
+                (ivector r.CFloatTensor.t_dims r.CFloatTensor.t_rank) = y_shape }
+    (* allowzero C[1] *)
+    requires { allowzero = 0 \/ allowzero = 1 }
+    (* allowzero C[2] *)
+    requires {  let rank = value_at s.t_dims 0 in
+            allowzero = 0 -> (
+                (forall i. 0 <= i < rank ->
+                    (value_at s.t_data i = 0 -> i < length (CFloatTensor.tensor x CFloatTensor.zero).dims))
+            )
+        }
+    (* allowzero C[3] *)
+    requires {  let rank = value_at s.t_dims 0 in
+                allowzero = 0 -> (
+                    (forall i. 0 <= i < rank -> value_at s.t_data i >= -1) /\ 
+                    ((exists j. 0 <= j < rank -> value_at s.t_data j = -1) ->
+                        (forall d. 0 <= d < length (CFloatTensor.tensor x CFloatTensor.zero).dims -> value_at x.CFloatTensor.t_dims d <> 0))
+                        (* (forall d. 0 <= d < length x.dims -> get_dim x.dims d <> 0)) *)
+                )
+            }
+    requires {  let rank = value_at s.t_dims 0 in
+                allowzero = 1 -> (
+                    (forall i. 0 <= i < rank ->
+                        (value_at s.t_data i > 0 \/
+                        (value_at s.t_data i = 0 -> ((exists d. 0 <= d < length (CFloatTensor.tensor x CFloatTensor.zero).dims -> value_at x.CFloatTensor.t_dims d = 0) /\ 
+                                                     (forall z. 0 <= z < rank -> value_at s.t_data z <> -1))) \/
+                        (value_at s.t_data i = -1 -> (forall z. 0 <= z < rank -> value_at s.t_data z <> 0))
+                        )
+                    )
+                )
+            }
+    (* X C[1] *)
+    requires { let y_shape = calculate_dims (CFloatTensor.tensor x CFloatTensor.zero) (CInt32Tensor.tensor s CInt32Tensor.zero) allowzero in
+                size (CFloatTensor.tensor x CFloatTensor.zero).dims = size y_shape }
+    (* S is a 1D tensor *)
+    requires { s.t_rank = 1 }
+    (* S C[2] *)
+    requires {  let rank = value_at s.t_dims 0 in
+                forall i, j: int. (0 <= i < rank /\ 0 <= j < rank) -> 
+                    (value_at s.t_data i = -1 /\ value_at s.t_data j = -1) -> (i = j) 
+            }
+
+    ensures { (CFloatTensor.tensor r CFloatTensor.zero) = reshape (CFloatTensor.tensor x CFloatTensor.zero) (CInt32Tensor.tensor s CInt32Tensor.zero) allowzero }
+    =
+    let ghost value = reshape (CFloatTensor.tensor x CFloatTensor.zero) (CInt32Tensor.tensor s CInt32Tensor.zero) (to_int allowzero) in
+    let m = cdim_size r.CFloatTensor.t_dims r.CFloatTensor.t_rank in
+    for i = 0 to m - 1 do
+        invariant { forall k. 0 <= k < i -> value_at r.CFloatTensor.t_data k = value_at x.CFloatTensor.t_data k }
+        r.CFloatTensor.t_data[i] <- x.CFloatTensor.t_data[i]
+    done;
+    assert { (CFloatTensor.tensor r CFloatTensor.zero) == reshape (CFloatTensor.tensor x CFloatTensor.zero) (CInt32Tensor.tensor s CInt32Tensor.zero) allowzero }
+end
