@@ -41,7 +41,7 @@ module OPReshape
     end
 
 
-    function calculate_dims (x: tensor real) (s: tensor int) (allowzero: int) : list int
+    function calculate_dims (x: tensor 'a) (s: tensor int) (allowzero: int) : list int
     =
     let s_dims = 
         if allowzero = 0 then 
@@ -52,7 +52,7 @@ module OPReshape
     inferred_dim x.dims s_dims (size x.dims) (size s_dims)
     
 
-    function dreshape (x: tensor real) (y_shape: list int) : data real
+    function dreshape (x: tensor 'a) (y_shape: list int) : data 'a
     =
     fun ks ->
         if valid ks y_shape then
@@ -63,7 +63,7 @@ module OPReshape
             x.background
 
 
-    let ghost function reshape (x: tensor real) (s: tensor int) (allowzero: int) : tensor real
+    let ghost function reshape (x: tensor 'a) (s: tensor int) (allowzero: int) : tensor 'a
     (* allowzero C[1] *)
     requires { allowzero = 0 \/ allowzero = 1 }
     (* allowzero C[2] *)
