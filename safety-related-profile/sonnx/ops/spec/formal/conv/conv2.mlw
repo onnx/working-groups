@@ -100,7 +100,7 @@ module OPConv2d
     =
       if cc < k then w_channels_split x w c i Int.(cc+1) k j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
 
-  function dconv (x w : tensor real) (y_dims : list int) (str_h str_w :int) (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : data real
+  function dconv (x w : tensor real) (y_dims : list int) (str_h str_w :int) (dir_h dir_w :int) (pad_top pad_left :int) : data real
   = 
   let c = get_dim w.dims 1 in
   let i = get_dim w.dims 2 in
@@ -121,29 +121,27 @@ module OPConv2d
     variant { ds }
     = match ds with 
         | Nil -> () 
-        | Cons d ds -> get_dim_positive ds end
+        | Cons _ ds -> get_dim_positive ds end
 
   let ghost function conv (x w : tensor real) (str_h str_w :int) (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : tensor real
-  (*Strides [C1]*)
   requires { str_h > 0 /\ str_w > 0 }
-  (*Pads [C1], [C2] *)
   requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
-  (*Dilations [C1], [C2]*)
   requires { dir_h > 0 /\ dir_w > 0 }
-  (*X [C1],[C4]*)
   requires { length x.dims = 4 }
-  (*X [C2] *)
   requires { get_dim x.dims 1 = get_dim w.dims 1 }
-  (* W [C4]*)
   requires { length w.dims = 4 }
-  (* Strides [C2] *)
   requires { let y_shape = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right in
               get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0
            }
+  ensures { result.background = x.background }
+  ensures { result.dims = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right }
+  ensures { let y_dims = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+            result.data = dconv x w y_dims str_h str_w dir_h dir_w pad_top pad_left  
+         }
   =
   let y_dims = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right in
   { dims = y_dims;
-    data = dconv x w y_dims str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right;
+    data = dconv x w y_dims str_h str_w dir_h dir_w pad_top pad_left  ;
     background = x.background;
   }
 end
@@ -170,17 +168,18 @@ module COPConv2d
     use tensor.Range
 
 
-  let rec lemma ivector_get_dim_value_at (coords: iarray) (n: int) (i: int)
-        requires { n = 4 } 
-        requires { 0 <= i < n }
-        requires { valid_range coords 0 n }
-        ensures  { get_dim (ivector coords n) i = value_at coords i }
-        variant  { i }
+  let lemma ivector_get_dim_value_at (coords: iarray) (n: int) (i: int)
+    requires { n = 4 }
+    requires { 0 <= i < n }
+    requires { valid_range coords 0 n }
+    ensures  { get_dim (ivector coords n) i = value_at coords i }
     =
-        if i > 0 then
-        ivector_get_dim_value_at coords n (i - 1)
+    assert { ivector coords 4 = Cons (to_int (value_at coords 0)) 
+                              (Cons (to_int (value_at coords 1)) 
+                              (Cons (to_int (value_at coords 2)) 
+                              (Cons (to_int (value_at coords 3)) Nil))) };
+    assert { i = 0 \/ i = 1 \/ i = 2 \/ i = 3 }
 
-  
 
   let coords_from_X_p (x: ctensor) (x_p_coords : iarray) ( pad_top pad_left :int32) : (float, bool) = 
     requires { valid_tensor x }
@@ -223,19 +222,6 @@ module COPConv2d
     end
 
 
-  let conv2d (x w r : ctensor) (str_h str_w : int32) (dir_h dir_w : int32) 
-             (pad_top pad_left pad_bottom pad_right : int32) : ctensor
-
-  requires { valid_tensor x}
-  requires { valid_tensor w}
-  requires { valid_tensor r}
-  requires { x.t_rank = w.t_rank = r.t_rank = 4 }
-  requires { ivector r.t_dims r.t_rank = convDims (tensor x) (tensor w) str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right }
-  ensures { (tensor r).dims = convDims (tensor x) (tensor w) str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right }
-  =
-    r
-
-
   let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
     requires { p <= q }
     requires { valid_range ks p q }
@@ -258,8 +244,7 @@ module COPConv2d
   requires { 0 <= m < value_at w.t_dims 0 }
   requires { 0 <= c < value_at w.t_dims 1 }
   requires { 0 <= i < value_at w.t_dims 2 }
-  
-  (*Try to remove this block like Loic do it*)
+
   requires { in_bounds (i * dil_h) }
   requires { in_bounds (y_h * str_h) }
   requires { in_bounds (y_h * str_h + i * dil_h) }
@@ -337,7 +322,6 @@ module COPConv2d
   requires { 0 <= m < value_at w.t_dims 0 }
   requires { 0 <= c < value_at w.t_dims 1 }
 
-  (*Try to remove this block like Loic do it*)
   requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
   requires { in_bounds (y_h * str_h) }
   requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }
@@ -386,7 +370,6 @@ let w_channels_calculate (x w : ctensor) (n m y_h y_w: int32)  (str_h str_w :int
   requires { x.t_rank = w.t_rank = 4 }
   requires { 0 <= m < value_at w.t_dims 0 }
 
-  (*Try to remove this block like Loic do it*)
   requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
   requires { in_bounds (y_h * str_h) }
   requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }
@@ -415,13 +398,6 @@ let w_channels_calculate (x w : ctensor) (n m y_h y_w: int32)  (str_h str_w :int
     let (value, aux_flag) = w_lines_calculate x w cc n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left in
     if aux_flag then begin
       flag <- True;
-      (*Lemma is not needed on this function*)
-      (*
-      ghost
-        begin
-          w_channels_split (tensor x) (tensor w) (to_int c) (to_int(value_at w.t_dims 2)) 0 (to_int cc) (to_int(value_at w.t_dims 3)) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left)
-        end;
-      *)
       sum <- sum .+ value;
     end
     else begin
@@ -432,7 +408,7 @@ let w_channels_calculate (x w : ctensor) (n m y_h y_w: int32)  (str_h str_w :int
   (sum, flag)
 
 
-let c_conv (x w r : ctensor) (str_h str_w : int32) (dil_h dil_w : int32) 
+let cconv (x w r : ctensor) (str_h str_w : int32) (dil_h dil_w : int32) 
              (pad_top pad_left pad_bottom pad_right : int32) : bool
 
   requires { valid_tensor x}
@@ -440,24 +416,16 @@ let c_conv (x w r : ctensor) (str_h str_w : int32) (dil_h dil_w : int32)
   requires { valid_tensor r}
   requires { x.t_rank = w.t_rank = r.t_rank = 4 }
   requires { ivector r.t_dims r.t_rank = convDims (tensor x) (tensor w) str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right }
-  (*Strides [C1]*)
   requires { str_h > 0 /\ str_w > 0 }
-  (*Pads [C1], [C2] *)
   requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
-  (*Dilations [C1], [C2]*)
   requires { dil_h > 0 /\ dil_w > 0 }
-  (*X [C1],[C4]*)
   requires { length (tensor x).dims = 4 }
-  (*X [C2] *)
   requires { get_dim (tensor x).dims 1 = get_dim (tensor w).dims 1 }
-  (* W [C4]*)
   requires { length (tensor w).dims = 4 }
-  (* Strides [C2] *)
   requires { let y_shape = convDims (tensor x) (tensor w) str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
               get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0
            }
 
-  (*Try to remove this block like Loic do it*)
   requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
   requires { forall y_h: int. 0 <= y_h < value_at r.t_dims 2 -> in_bounds (y_h * str_h) }
   requires { forall ii y_h:int. 0 <= ii < value_at w.t_dims 2 /\ 0 <= y_h < value_at r.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }

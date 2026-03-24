@@ -19,7 +19,7 @@ module OPFlatten
         | Cons d ds -> get_dim_positive ds end
 
 
-    let rec ghost function calculate_dY0 (x : tensor real) (axis : int) (i : int) : int
+    let rec ghost function calculate_dY0 (x : tensor 'a) (axis : int) (i : int) : int
     (*Need this requires because of get_dim requires*)
     requires { 0 <= axis <= length x.dims }
     requires { 0 <= i <= axis }
@@ -31,7 +31,7 @@ module OPFlatten
         get_dim x.dims i * calculate_dY0 x axis Int.(i + 1)
 
     
-    let rec lemma calculate_dY0_positive (x: tensor real) (axis: int) (i: int)
+    let rec lemma calculate_dY0_positive (x: tensor 'a) (axis: int) (i: int)
     requires { positive x.dims }
     requires { 0 <= axis <= length x.dims }
     requires { 0 <= i <= axis }
@@ -44,7 +44,7 @@ module OPFlatten
         let d = get_dim x.dims i in
         calculate_dY0_positive x axis (i + 1)
 
-    let rec ghost function calculate_dY1 (x : tensor real) (axis : int) (i : int) : int
+    let rec ghost function calculate_dY1 (x : tensor 'a) (axis : int) (i : int) : int
     requires { 0 <= axis <= length x.dims }
     requires { axis <= i <= length x.dims }
     variant { length x.dims - i }
@@ -54,7 +54,7 @@ module OPFlatten
     else
         get_dim x.dims i * calculate_dY1 x axis Int.(i + 1)
 
-    let rec lemma calculate_dY1_positive (x: tensor real) (axis: int) (i: int)
+    let rec lemma calculate_dY1_positive (x: tensor 'a) (axis: int) (i: int)
     requires { positive x.dims }
     requires { 0 <= axis <= length x.dims }
     requires { axis <= i <= length x.dims }
@@ -68,14 +68,14 @@ module OPFlatten
         assert { 0 <= i < length x.dims };
         calculate_dY1_positive x axis (i + 1)
 
-    function calculate_dims (x : tensor real) (axis : int) : list int
+    function calculate_dims (x : tensor 'a) (axis : int) : list int
     =
     let dY0 = calculate_dY0 x axis 0 in
     let dY1 = calculate_dY1 x axis axis in
     Cons dY0 (Cons dY1 Nil)
 
     
-    function dflatten (x : tensor real) (y_shape: list int) : data real
+    function dflatten (x : tensor 'a) (y_shape: list int) : data 'a
     =
     fun ks ->
         if valid ks y_shape then
@@ -92,7 +92,7 @@ module OPFlatten
     else
         axis
 
-    let ghost function flatten (x : tensor real) (axis : int) : tensor real
+    let ghost function flatten (x : tensor 'a) (axis : int) : tensor 'a
     requires { -length x.dims <= axis <= length x.dims }
 
     ensures {   let axis_normalized = normalize_axis axis (length x.dims) in
