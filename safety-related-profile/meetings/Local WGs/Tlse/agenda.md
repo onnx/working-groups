@@ -11,7 +11,7 @@
   - In the most frequent case, we will simply state that the behaviour of the operator is not defined if any of the pre-conditions is not satisfied (see **Clip**).  In some specific cases (e.g., the case of **MaxPool** and **Conv**, when the dimensions of the kernel and tensors are not compatible), we indicate that we return a null tensor. 
     - Why? Because it is not always trivial to verify that the condition is satisfied if dynamic shape modifications are performed. More often than not, conditions can be checked statically when all parameters related to sizes can be computed in advance. 
   - [X] Add a paragraph about constraint violation on the "informal spec guidelines".
-    - Eric: fait 
+    - Eric: done 
 - Segregation of "specifying elements" from "non specifying elements".
   - There are two objectives: 
     - discriminate the specifying parts from the documentation parts
@@ -22,7 +22,7 @@
     The exact tag is : `<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span>`
   - Elements that are provided for information are tagged using `[info]` `[/info]`. All other elements are specifying. See the spec of operator [**Div**](../../../sonnx/ops/spec/informal/div/div.md). 
   - [X]  Add a paragraph about tagging in guidelines 
-    - Eric: Fait
+    - Eric: done
   - [ ]  Address the case of negative axes 
   - [ ]  Check the behaviour of softmax for nb of axes > 2
 - Review of **SoftMax**
