@@ -1,37 +1,46 @@
 # 2025/03/25
 ## Participants
-- Eric, Mariem, Jean, TBC
+- Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Henri, Franck, Amine
 ## Agenda 
 - Review of actions (Eric)
-- Presentation of Amine Abid (Saneaon.de).
-- Submission of João and Ricardo paper at SAIV'26 on formal verification. 
-- Testing 
-  - see [current guidelines](../sonnx/ops/docs/guidelines/tests.md) and some [additionnal material (draft)](../sonnx/ops/docs/guidelines/reviews/tests/tests_additional%20_material.md).
-- Roundtable
+- Submission of João and Ricardo's paper at SAIV'26 on formal verification
+- Testing (eric)
+  - See [current guidelines](../sonnx/ops/docs/guidelines/tests.md) and some [additionnal material (draft)](../sonnx/ops/docs/guidelines/reviews/tests/tests_additional%20_material.md).
+- Roundtable 
+  - Presentation of the first work done on graph modeling (Ricardo & João)
+  - Latest news on the integration of operators in AIDGE (Henri)
+- Welcome to Amine Abid from Saneaon.  
 - Local WG (Eric)
-    - See [actions](../meetings/Local%20WGs/Tlse/agenda.md)
+    - See [actions](../meetings/Local%20WGs/Tlse/agenda.md).
 ## Minutes
-- To be completed.
+- See agenda. 
+- Discussion on testing and equivalence-classes based testing. 
+- Amine presented his AI agentic framework. It could potentially be used to boost our activities by undertaking some of the specification or testing activities. A meeting may be useful to setup a first experiment. 
 ## Actions
 ### New actions
-### Previous actions
-- [ ] (1103-1, all) Review Ricardo and João's formal specification and verification guidelines 
-  - Eric: started but not yet finished..
-- [ ] (1103-2, all) Concludes on the expected behaviour of a **Conv** or **MaxPool** with incompatible sizes (should these conditions be verified statically? what should happen if these conditions cannot be guaranteed statically?)
+- [ ] (2503-1, Eric, Amine) Organize meeting with Amine to setup a first application of the proposed framework.
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+- [ ] (2503-3, Eric, Ricardo, João) Plan a meeting to review Eric's comments 
+- [ ] ### Previous actions
+- [ ] (1103-1, Eric, Jean-Loup, Jean, Mariem, Edoardo) Review Ricardo and João's formal specification and verification guidelines 
+  - Eric: started but not yet finished...
+- [X] (1103-2, all) Concludes on the expected behaviour of a **Conv** or **MaxPool** with incompatible sizes (should these conditions be verified statically? what should happen if these conditions cannot be guaranteed statically?)
   - "If conditions cannot be ensured statically" (this point can be discussed), the violation of a precondition is considered as an error conditions and, in that case,  the behaviour of the operator, must be described explicitly. 
 - [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
   - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
-- [ ] (1103-4, all) Find a practical way to discriminate the "specifying"  part of the informal specification from the informative part.  
+- [X] (1103-4, all) Find a practical way to discriminate the "specifying"  part of the informal specification from the informative part.  
     - From local WG:
       - Introduce tags `[specx.y...]` and `[/specx.y...]`, where `x`, `y`,... are numbers, when a specific element in the section needs to be designated. The dot notation (`x.y...`) is introduced when a more specific element needs to be identified within an element that is already tagged. 
         The exact tag is : `<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span>`
       - Elements that are provided for information are tagged using `[info]` `[/info]`. All other elements are specifying. See the spec of operator [**Div**](../sonnx/ops/spec/informal/div/div.md). 
       - Use section names when traceability is a the scale of the section. (i.e., the complete section would be enclosed in `[specx.y...]` and `[/specx.y...]`).
-- [ ] (1103-5, Mariem) Check why the SONNX backend has not been pushed in the AIDGE repo.  
-- [ ] (1103-6) Ensure that the **Conv** op integrated in Aidge is actually the one generated out of Ricardo and João's formal spec.
+- [X] (1103-5, Mariem) Check why the SONNX backend has not been pushed in the AIDGE repo.  
+- [X] (1103-6) Ensure that the **Conv** op integrated in Aidge is actually the one generated out of Ricardo and João's formal spec.
+    - It is currently the first version.
 - [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
 - [ ] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
   - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
+    - **Div** to be done. 
 - [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
 - [ ] (1911-2, All) Review Jean's V&V proposal
   - Eric to put updated slides on the repo : Done.
