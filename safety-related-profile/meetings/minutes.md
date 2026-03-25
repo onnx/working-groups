@@ -4,6 +4,7 @@
 ## Agenda 
 - Review of actions (Eric)
 - Presentation of Amine Abid (Saneaon.de).
+- Submission of João and Ricardo paper at SAIV'26 on formal verification. 
 - Testing 
   - see [current guidelines](../sonnx/ops/docs/guidelines/tests.md) and some [additionnal material (draft)](../sonnx/ops/docs/guidelines/reviews/tests/tests_additional%20_material.md).
 - Roundtable
