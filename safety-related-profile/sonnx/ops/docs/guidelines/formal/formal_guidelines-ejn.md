@@ -263,7 +263,6 @@ Such relation will be explored in [3.2](#32-auxiliary-helper-functions) and [3.3
 ---
 <br>
 
-> (eric) As of 2026/03/04, proofreading stopped HERE. To be continued...
 
 # Part 2 — Guidelines for Abstract Formalization
 
@@ -285,6 +284,8 @@ end
 
 Neither all the above sections are mandatory nor its order is fixed, however, it is recommended to follow this structure as much as possible for consistency and readability across different operator specifications.
 
+> (eric) On the contrary, shouldn't we enforce this structure and make it possible for a section to be left empty?
+
 On the other hand, **4**, **5** and **6** are usually written in such order as each one of them depends on the previous one.
 
 
@@ -294,27 +295,39 @@ Why3 supports several ways to declare functions, each with different purposes an
 
 We can have any of the following function signatures:
 
-- `function`
+> (eric) I have added some elements of description below:
+
+- `function`, which introduces a pure logical function that can be used in contracts, lemmas , etc. and cannot contain algorithmic code.
 
 - `let`
 
-- `let function`
+- `let function`, which introduces a function that can be used both in code and specifications. 
 
-- `let ghost function`
+- `let ghost function`, which is similar to `let function`, but that can only be used for verification.  
 
-- `let rec function`
+- `let rec function`, which introduces a recursive function that can be used both in code and specifications. 
 
-- `let rec ghost function`
+- `let rec ghost function`, which is similar to a `let ghost function` but for a recursive function. 
 
 - more information on this in the [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html)
 
+> (eric) A precise definition of these constructs is given in [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html).
+
 Ideally, according to Loïc's proposal, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
+
+> Remove reference to Loîc in the guidelines... Instead, recall why this is considered as good practice.
+
+> (eric) Todo (not necessarily by you!): give a few words of explanation on the major differences between these types of functions and their main usage.   
+
 
 However, this happens to be not always possible.
 
 ### 2.2.1 Termination and Variants
 
 In order to understand that have a look at the following module which computes the unit summation in the range $[0, n-1]$.
+
+>(eric) link with previous paragraph to be modified.
+
 
 ```why3
 module OPSummation
@@ -327,16 +340,25 @@ module OPSummation
       0
 end
 ```
+
+> This way of computing the sum seem pretty strange to me... sum (i) = if i > 0 then i + sum (i -1) else 0... but I guess that this was part of some more complicated function. 
+
 In this case, if you attempt to open the why3 ide the following error will be shown:
 
 ![Cannot prove termination error](./imgs/termination.png)
 
 In fact, `functions` are too weak to successfully prove recursion termination and therefore we need to help them prove termination.
 
+>(eric) "... we need to help the prover..." 
+
+>(eric) It is not really that "function is too weak". It is the consequence of what a function denotes:  a `function` is a purely logical construct that has no semantics of "execution", so it does not denote an algorithm, i.e,  something that iterates and maintain some state. Consequently, it cannot have a "variant" (since nothing "variates").
+
 To do so, we have to introduce a **variant** (some expression that repeatedly decreases with each recursive call).
 
 However, `function` **does not support contracts** and therefore **variants** are **forbidden**, so we need to switch to `let rec function` and provide the variant there.
 
+> (eric) Maybe should we explain things the other rund: when the function denotes an algorithm, then we have to use a `let [rec] function` and specify variants.
+ 
 ```why3
   let rec function summation (i : int) (iter : int) : int =
       variant { iter - i}
@@ -351,7 +373,11 @@ end
 
 Note that, functions declared by the keyword `function` never generate verification conditions, even if some of the functions called inside it need to hold some **pre-conditions**.
 
+> (eric) "Note that, pure logical functions declared by the keyword..."
+
 Changing the signature from `function` to `let rec function` will, on the other hand, generate such verification conditions.
+
+>(eric) We could possibly write that a `function` is a definition and, in that sense, it cannot be verified. Stated differently, a verification condition is only generated when there is something to be verified, such as a precondition before calling some function or a post condition after having executed a function. Here again, the key point is that to generate a verification condition, we need an algorithm, i.e., something to be executed. And a `function` does not specify an algorithm. 
 
 That's why, under such circumstances, requires clauses can be added **only** to properly prove such verification conditions.
 
@@ -384,6 +410,7 @@ This piece of code - from the [flatten formalization](./examples/flatten.mlw) - 
 
 Consequently, verification conditions will be raised as is depicted in the picture below:
 
+> (eric) "raised" => "generated".
 ![Flatten abstract Verification Conditions - not proved](./imgs/flatten_VC_not_proved.png)
 
 In such cases we need explicitly to provide all the requires clauses raised by the verification conditions of the called functions. 
@@ -415,11 +442,17 @@ Therefore, the code above should be adapted to include such contracts:
 
 The code written above will not generate any verification conditions, even if the functions called inside it explicitly need **requires clauses**. 
 
+> (eric) Maybe the word "called" is a bit misleading. As far as I understand, When a function is referred to in a pure logical function, as it is a definition, it only refers to the contract of the "called" function (pre, post) which define the function, but not describe how it behaves. 
+
 Therefore, no verification condtions were raised and the function `calculate_dims` does not appear on the Verification Conditions menu (left pannel in the picture above).
+
+> (eric) "condtions" => "conditions", "pannel" => "panel".
 
 ### 2.2.3 TypeInvariant Lemmas
 
 When using `let rec function` declarations, their logical context sometimes does not propagate to subsequent functions, or it may appear only in axiomatic form.
+
+> (eric) I am not sure to understand what you mean by "it may appear only...".
 
 As a consequence, proving the type invariants of tensors — in particular, ensuring that the output dimensions satisfy the positivity invariant — requires explicit lemmas that establish these properties.
 
@@ -448,6 +481,9 @@ The different kinds of lemmas and how to use them will be covered in section [3.
 
 Moreover, the main operator function cannot be declared as `function` because it needs to have contracts (`requires` / `ensures`) and `function` does not support contracts.
 
+>(eric) Again, I feel as if we were presenting the problem the other way round : what we are specifying is an algorithm to compute the operator because we want to generate code. So, as we are dealing with an algorithm and not a pure logical definition, what we specify is a "let [rec) function."... 
+> (eric) But I am not sure why we use a ghost function for an operator since we want to generate code out of it.  
+
 Therefore, the main operator function should be declared as `let ghost function` with full contracts.
 
 ```why3
@@ -475,6 +511,8 @@ end
 | Use `function` for total functions and whenever it is possible! | A `function` is a logical function. |
 | Use `let rec function` only when recursion needs a variant. | If Why3 cannot prove termination of a `function`, switch to `let rec function` and provide a `variant` clause. |
 | Use `let ghost function` for the **main operator**. | The main function should be a `let ghost function` with full contracts (`requires` / `ensures`). |
+
+>(eric) I think that we should discuss those "guidelines" because I feel as if we were presenting things in the "wrong direction"...
 
 ### Examples
 
@@ -515,6 +553,7 @@ let ghost function opclip (x l m : tensor real) : tensor real
 
 Whenever we want to specify the operator along all possible coordinates we can follow any of the following pattern:
 
+> (eric) I am HERE.
 
 ### Anonymous function declaration
 
