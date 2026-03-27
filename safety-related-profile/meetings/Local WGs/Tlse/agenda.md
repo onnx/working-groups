@@ -1,5 +1,29 @@
 
  (Availability : use the [When2Meet](https://www.when2meet.com/?34146939-oceVQ))
+
+#### 2025/03/26
+
+##### Agenda
+- Finalization of **flatten**, **Clip** and **Tanh**.
+
+##### Minutes
+- Brief discussion on the composite operators (operators built out of other operators). No clear statement as of today...
+- Identification of an unexpected behaviour of **Clip** when using +0 and -0. **Clip(X,L,M)** is not equivalent to `min(M,max(X,L))`. For instance,  `min(-0,max(-1,+0)) = -0` while, according to the specification, the value should be +0. 
+- Note that the case of +0 and -0 raise a problem when writing the expression `Y= f(...)` to specify the value of output `Y` : `f()` may return +0 or -0 indifferently (because +0 = -0) whereas the subsequent behaviour (based on `Y`) may be different. Instead of `=` we should use an arrow annotation to denote the assignment, not the equality (or we must write somewhere that `=` must be understood `symbol-wise`)
+
+###### New actions   
+- [ ] In the definition of tensor indexes in the glossary, add a range constraint of each index.
+- [ ] In the examples, check that we use consistent notations for tensors (use of brackets)
+- [ ] In the guidelines and templates, propose to use tages that are not visible in the rendered page
+  - Prevent cluttering of the spec. and tags can still be processed on the markdown source file.
+- [ ] In the guidelines,  give precise rules about the factorization of the spec. between types
+  - For structural operators, there is a unique spec for all types including "reals"
+  - [ ] Check if we could suppress "real" for structural operators.
+- [ ] Add tests for the "special" values of tensor dimensions: scalar (rank 0) and null tensors
+###### Previous actions   
+- [ ]  Address the case of negative axes 
+- [ ]  Check the behaviour of softmax for nb of axes > 2
+
 #### 2025/03/13
 
 ##### Agenda
