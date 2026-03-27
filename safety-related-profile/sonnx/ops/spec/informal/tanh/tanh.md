@@ -20,7 +20,6 @@ where:
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
-No specific restrictions apply to the **Tanh** operator.
 
 ## Informal specification
 
@@ -94,17 +93,12 @@ Hyperbolic tangent of tensor $X$.
 - `[C1]` <a id="C1ry"></a> Shape consistency  
   - Statement: See [constraint (C1) on X](#C1rx).
 
-## Formal specification
- 
-See the Why3 specification.
-
 <a id="float"></a>
 # **Tanh** (float)
-where float is in {float16, float, double}
+where float is in {float16, float, double}.
 
 ## Signature
 
-Definition of operator $\text{Tanh}$ signature:  
 $Y = \textbf{Tanh}(X)$
 
 where:
@@ -115,13 +109,12 @@ where:
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
-No specific restrictions apply to the **Tanh** operator.
 
 ## Informal specification
 
 The **Tanh** operator computes the element-wise hyperbolic tangent of the input tensor $X$ according to IEEE 754 floating-point semantics.
 
-The mathematical definition of the operator is given hereafter.
+The definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
@@ -194,7 +187,7 @@ Operator **Tanh** has no attribute.
 
 ## Inputs
 
-### $\text{X}$: floating-point tensor
+### $\text{X}$: `float`
 
 Input tensor.
 
@@ -207,7 +200,7 @@ Input tensor.
 
 ## Outputs
 
-### $\text{Y}$: floating-point tensor
+### $\text{Y}$: `float`
 
 Hyperbolic tangent of tensor $X$.
 
