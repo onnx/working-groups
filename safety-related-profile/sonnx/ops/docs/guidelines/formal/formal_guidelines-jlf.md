@@ -38,6 +38,8 @@
 
 In SONNX, every operator is formalized at **two distinct levels**. 
 
+> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization."
+
 Each level serves a different purpose and follows a different style. 
 
 Understanding both is essential before writing any specification.
