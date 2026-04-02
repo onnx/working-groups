@@ -91,6 +91,8 @@ No implementation details should be present at this level, which means that the 
         end
         ```
       - `invariant { positive dims }`
+    
+  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil. There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates?
 
   2. **Valid values**
   
