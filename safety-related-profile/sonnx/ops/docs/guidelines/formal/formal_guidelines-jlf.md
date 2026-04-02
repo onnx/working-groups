@@ -92,7 +92,7 @@ No implementation details should be present at this level, which means that the 
         ```
       - `invariant { positive dims }`
     
-  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil. There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates?
+  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil (Even if I intuitively understand...). There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates? May be the begining of the guidelines should indicate that Why3 should be used and that the reader should first be familiarized with Why3.
 
   2. **Valid values**
   
