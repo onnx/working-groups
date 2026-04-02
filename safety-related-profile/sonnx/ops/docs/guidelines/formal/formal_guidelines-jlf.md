@@ -72,6 +72,8 @@ No implementation details should be present at this level, which means that the 
 
 - **Type Invariants**: There are two important invariants that must be satisfied by this tensor representatio:
 
+  > (Jean-Loup) "representatio" <- "representation"
+
   1. **Positive Dimensions**
     
       All dimensions in the `dims` list of a tensor must be positive integers. <br>
