@@ -281,6 +281,8 @@ However, `function` **does not support contracts** and therefore **variants** ar
 end
 ```
 
+> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"?
+
 ### 2.2.2 Verification Conditions and Requires Clauses
 
 Note that, functions declared by the keyword `function` never generate verification conditions, even if some of the functions called inside it need to hold some **pre-conditions**.
