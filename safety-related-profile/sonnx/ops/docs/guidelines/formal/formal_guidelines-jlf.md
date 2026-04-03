@@ -118,6 +118,8 @@ No implementation details should be present at this level, which means that the 
   
   For example, while computing the data of the tensor it is **highly recommended** to use the predicate `valid`, essentially to capture and pass the invariant.
 
+  > (Jean-Loup) Are the predicates positive and valid in a Why3 library? If it is the case, inclusion of the library should be recomended to avoid copy errors.
+
 ### Specification Style
 
 Throughout this level, the specification should be carried out in a **purely functional style** meaning that there should be no side effects and no mutable state (functions do not modify state, they receive one as input and return a new one as output).
