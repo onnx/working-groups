@@ -158,7 +158,7 @@ It describes it based on a **target C representation** for tensors called **cten
 
 Note that, unlike the previous level, here the tensors are defined based on a concrete target representation - tensors are essentially flat arrays in memory. 
 
-> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures".
+> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures". May be it should be "target C representation" or "C built in concrete representation".
 
 Moreover, there is no `background` value in this representation - **tensors entries must be accessed only in valid coordinates** (i.e., coordinates that are within the bounds of the tensor shape).
 
@@ -169,6 +169,8 @@ Throughout this level, the specification should be carried out in an **imperativ
 ### Importance of this level
 
 It provides the necessary details to extract executable C code and reason about memory, bounds, and machine integers.
+
+> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.
 
 ## 1.3 Link between the two levels
 
