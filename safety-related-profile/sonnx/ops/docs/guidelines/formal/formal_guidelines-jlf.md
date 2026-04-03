@@ -244,6 +244,10 @@ We can have any of the following function signatures:
 
 Ideally, according to Loïc's proposal, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
 
+> (Jean-Loup) To remove "according to Loïc's proposal". May be describe shortly the proposal.
+>
+> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.
+
 However, this happens to be not always possible.
 
 ### 2.2.1 Termination and Variants
