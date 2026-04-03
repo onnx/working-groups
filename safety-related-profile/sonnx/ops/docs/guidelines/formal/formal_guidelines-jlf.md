@@ -158,6 +158,8 @@ It describes it based on a **target C representation** for tensors called **cten
 
 Note that, unlike the previous level, here the tensors are defined based on a concrete target representation - tensors are essentially flat arrays in memory. 
 
+> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures".
+
 Moreover, there is no `background` value in this representation - **tensors entries must be accessed only in valid coordinates** (i.e., coordinates that are within the bounds of the tensor shape).
 
 ### Specification Style
