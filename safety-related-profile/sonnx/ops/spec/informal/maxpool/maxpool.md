@@ -10,7 +10,6 @@ Based on ONNX [MaxPool version 22](https://onnx.ai/onnx/operators/onnx__MaxPool.
 # **MaxPool** (real)
 
 ## Signature
-$\textbf{MaxPool}$ signature:
 ($Y, \textit{Indices}) = \textbf{MaxPool}(X)$
 
 where:
@@ -38,21 +37,21 @@ The following specific restrictions apply to the **MaxPool** operator:
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
-**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$. At a given position, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
+**MaxPool** is a sliding window operator like **Conv**, for instance. At a given position, the sliding window, called "kernel" or "$W$" in this document, is only there to select the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
-Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
+Operator **MaxPool** stores in $\textit{Indices}$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
-The mathematical definition of output $Y$ and $Indices$ are given hereafter:
+In any position of the kernel over $X_p$, if the max value is present more than once, then the corresponding index value in $\textit{Indices}$ points the most upper left max value.
+
+The mathematical definition of output $Y$ and $\textit{Indices}$ are given hereafter:
 
 $$\begin{gathered}
     Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
 $$\begin{gathered}
-   Indices[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
+   \textit{Indices}[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
 \end{gathered}$$
-
-(Voir quel est l'index s'il y a "plusieurs max": première valeur trouvée en privilégiant la premère en haut à gauche, à tester.)
 
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
@@ -73,7 +72,7 @@ Where
 
 ### Example
 
-$\text{Y},\text{indices} = \text{MaxPool}(X)$
+$\textit{Y},\textit{Indices} = \text{MaxPool}(X)$
 
 - Shape of $X$ = [1, 1, 8, 8]
 - kernel\_shape = [3,3]
@@ -81,7 +80,7 @@ $\text{Y},\text{indices} = \text{MaxPool}(X)$
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 6, 6]
-- Shape of $\text{indices}$ = [1, 1, 6, 6]
+- Shape of $\textit{Indices}$ = [1, 1, 6, 6]
 
 
 ```math
@@ -119,7 +118,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -148,13 +147,14 @@ The `auto_pad` attribute determines if and how automatic padding is done for the
 #### Constraints
 -  `[C1]`: Value domain 
     - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}. 
-    - Rationale: `[R2]`
+    - Rationale: [`[R2]`](#R2)
 -  `[C2]`: Explicit padding 
     - Statement: `auto_pad` shall be set to NOTSET. 
-    - Rationale: `[R3]`
+    - Rationale: [`[R3]`](#R3)
 
-> (rajouter les liens vers les Rx)
+[See constraint (C2) of Y](#shape_consist)
 
+<a id="ceil_mode"></a>
 ### `ceil_mode`: int
 
 Whether to use floor (0, default) or ceil (1) to compute the output shape. See the description of output $Y$.
@@ -162,10 +162,10 @@ Whether to use floor (0, default) or ceil (1) to compute the output shape. See t
 #### Constraints
 -  `[C1]`: Value domain 
     - Statement: `ceil_mode` shall be in set, i.e., to 0 (zero) or 1.
-    - Rationale: `[R2]`
+    - Rationale: [`[R2]`](#R2)
 -  `[C2]`: floor mode is selected 
     - Statement: `ceil_mode` shall be set to 0.
-    - Rationale: `[R4]`
+    - Rationale: [`[R4]`](#R4)
 
 ### `dilations`: list of ints
 
@@ -186,17 +186,31 @@ In the example above:
 #### Constraints
 - `[C1]`: Value domain
     - Statement: `dilations` is a list of strictly positive integers
-    - Rationale: The dilation is a *factor of expansion* along a certain axis. 
-- `[C2]`: Relation between `dilations` and $W$ 
-    - Statement: The `dilations` and `kernel_shape` lists have the same length
-    - Rationale: Dilation is defined for all spatial axes of $W$.
-- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [See constraint (C2) of Y](#shape_consist)
+    - Rationale: The dilation is a *factor of expansion* along a certain axis.
+- `[C2]`: Relation between `dilations`and $X$ 
+    - Statement: the length of the `dilations` list is the number of spatial dimensions of $X$ ([see constraint `C1` of $X$](#C1ia)).
+    - Rationale: Dilation is defined for all axes of $X$.
+- `[C3]`<a id="dil_kernel_lists"></a>: Relation between `dilations` and $W$ 
+    - Statement: The `dilations` and `kernel_shape` lists have the same length.
+    - Rationale: Dilation is defined for all axes of $W$.
+- `[C4]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [see constraint `C2` of $Y$](#shape_consist)
 
 
 ### `kernel_shape`: list of ints
 
 The size of the kernel along each spatial axis.
+
+#### Constraints
+- `[C1]`: Value domain
+    - Statement: `kernel_shape` is a list of strictly positive integers
+    - Rationale: The max must be computed on at least one element.
+- `[C2]`: Relation between `kernel_shape`and `pads`
+    - Statement: [see constraint `[C2]` of `pads`](#Keff_less_than_pads)
+- `[C3]`: Relation between `kernel_shape` and `dilation` 
+    - Statement: [see constraint `[C3]` of `dilation`](#dil_kernel_lists)
+- `[C4]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [see constraint `[C1]` and `[C2]` of $Y$](#shape_consist)
 
 <a id="real_pads"></a>
 ### `pads`: list of ints
@@ -217,8 +231,14 @@ The effect of the `pads` attribute is illustrated on the following figure on int
 - `[C1]`: Consistency between the shape of $X$ and the length of `pads`
     - Statement: The length of the `pads` list is twice the number of spatial axes of $X$
     - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `[C2]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [See constraint (C2) of Y](#shape_consist)
+- `[C2]`<a id="Keff_less_than_pads"></a> : Consistency between padding and possibly dilated kernel
+    - Statement: Each dimension of the possibly dilated kernel shall be strictly greater than the greatest value in `pads` for the same dimension, i.e.:
+    
+        $Keff_i > \text{max}(pads[i], pads[i+2])$
+        where $Keff_i = (\texttt{dilations}[i] * (\texttt{kernel\_shape}[i] - 1) + 1)$
+    - Rationale: TBD.
+- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
+    - Statement: [See constraint `[C1]` of Y](#shape_consist)
 
 ### `storage_order`: int
 
@@ -227,7 +247,7 @@ The storage order of the tensor. 0 is row major, and 1 is column major.
 #### Constraints
 -  `[C1]`: Explicit storage order
     - Statement: `storage_order` shall be set to zero.
-    - Rationale: `[R2]`, `[R5]`
+    - Rationale: [`[R2]`](#R2), [`[R5]`](#R5)
 
 ### `strides`: list of ints
 
@@ -244,7 +264,7 @@ The effect of the `strides` attribute is illustrated on the following figure. In
     - Statement: `strides` is a list of strictly positive integers.
     - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
 - `[C2]`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement: [See constraint (C2) of Y](#shape_consist)
+    - Statement: [See constraint `[C1]` of Y](#shape_consist)
 
 
 
@@ -259,9 +279,9 @@ $X$ is the input tensor from which the max values are selected.
 
 - `[C1]` <a id="C1ia"></a> First constraint on $X$
     - Statement: The number of spatial axes of tensor $X$ is 2. 
-    - Rationale: `R1`.
+    - Rationale: [`[R1]`](#R1).
 - `C2`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement: [See constraint (C2) of Y](#shape_consist)
+    - Statement: [See constraint `[C1]` of Y](#shape_consist)
 
 
 ## Outputs
@@ -276,35 +296,40 @@ The shape of the output $Y$ is $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 #### Constraints.
 - `[C1]`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
     - Statement:
-        - $dY_2 = \left\lfloor{(dX_2 + pad\_shape[0] - \texttt{dilations}[0] \times (\texttt{kernel\_shape}[0] - 1) - 1) / (strides[0] + 1)}\right\rfloor$
-        - $dY_3 = \left\lfloor{(dX_3 + pad\_shape[1] - \texttt{dilations}[1] \times (\texttt{kernel\_shape}[1] - 1) - 1) / (strides[1] + 1)} \right\rfloor$
+        - $dY_2 = \left\lfloor{((dX_2 + pad\_shape[0] - (\texttt{dilations}[0] * (\texttt{kernel\_shape}[0] - 1) + 1)) / \texttt{strides}[0]) + 1}\right\rfloor$
+        - $dY_3 = \left\lfloor{((dX_3 + pad\_shape[1] - (\texttt{dilations}[1] * (\texttt{kernel\_shape}[1] - 1) + 1)) / \texttt{strides}[1]) + 1}\right\rfloor$
         - where $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
-        - In the previous formula, `ceil_mode` is considered set to 0.
+        - In the previous formulae, `ceil_mode`(#ceil_mode) is considered set to 0 ([see `ceil_mode` definition](#ceil_mode)).
+- `[C2]`: <a id="ydim_strictly_pos"></a> $dY_2$ and $dY_3$ positive.
+    - Statement:
+      - $\left\lfloor{(dX_2 + pad\_shape[0] - 1 - n*\texttt{strides}[0]) / \texttt{dilations}[0]}\right\rfloor + 2 \le \texttt{kernel\_shape}[0] \le \left\lfloor{(dX_2 + pad\_shape[0] - 1 - (n-1)*\texttt{strides}[0]) / \texttt{dilations}[0]}\right\rfloor + 1$
+      - $\left\lfloor{(dX_3 + pad\_shape[1] - 1 - n*\texttt{strides}[1]) / \texttt{dilations}[1]}\right\rfloor + 2 \le \texttt{kernel\_shape}[1] \le \left\lfloor{(dX_3 + pad\_shape[1] - 1 - (n-1)*\texttt{strides}[1]) / \texttt{dilations}[1]}\right\rfloor + 1$
+      - where $pad\_shape[i]$ is the sum of the pads along spatial axis $i$
+    - Rationale: TBD.
+ 
   
-> Rajouter un renvoi sur le ceil_mode...
-> Vérifier la validité du "+1" 
 
 ### $\text{Indices}$: int64
 
-$Indices$ contains the indices of the input tensor $X$ from which the max values are taken.
+$\textit{Indices}$ contains the indices of the input tensor $X$ from which the max values are taken.
 
 #### Constraints
 
- - `[C1]` <a id="C1iy"></a> First constraint on $Indices$
-   - Statement: $Indices$ and $Y$ shall have the same shape
+ - `[C1]` <a id="C1iy"></a> First constraint on $\textit{Indices}$
+   - Statement: $\textit{Indices}$ and $Y$ shall have the same shape
 
 <a id="float"></a>
 # **MaxPool** (float)
 where float is in {float16, float, double}
-> Reporter les modifications faites sur "real".
+
+
 ## Signature
-Definition of operator $\text{MaxPool}$ signature:
-($Y, Indices) = \text{MaxPool}(X)$
+($Y, \textit{Indices}) = \textbf{MaxPool}(X)$
 
 where:
-- $X$: input tensor
-- $Y$: output tensor containing max value selected from $X$
-- $Indices$: output tensor containing the indices in $X$ from where the max values are taken.
+- $X$: Input tensor
+- $Y$: Output tensor containing max value selected from $X$
+- $\textit{Indices}$: Output tensor containing the indices in $X$ from where the max values are taken.
    
 ## Restrictions
 
@@ -315,23 +340,22 @@ See [Restrictions](#restrictions).
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
-**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$, in this document, has no existence. Indeed, there is no need for kernel values. At a given posittion, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
+**MaxPool** is a sliding window operator like **Conv**, for instance. At a given position, the sliding window, called "kernel" or "$W$" in this document, is only there to select the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
-Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
+Operator **MaxPool** stores in $\textit{Indices}$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
-The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
+In any position of the kernel over $X_p$, if the max value is present more than once, then the corresponding index value in $\textit{Indices}$ points the most upper left max value.
 
-$$\begin{gathered}
-    Y[b, c, m, n] = max_{h=0}^{dW_0-1} max_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
-\end{gathered}$$
-
-In the definition of $Y$ above, any NaN value in $X_p$ is considered as -inf.
-
-> Supprimer les `$` autour de inf.
+The mathematical definition of output $Y$ and $\textit{Indices}$ are given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
+    Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
+
+$$\begin{gathered}
+   \textit{Indices}[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
+\end{gathered}$$
+
 
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
@@ -351,16 +375,16 @@ The effect of the operator is illustrated on the following examples.
 
 ### Example 1
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{Indices} = \text{MaxPool}(X)$
 
 - Data type: double
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel_shape = [2,2]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 2, 2]
-- Shape of $Ind$ = [1, 1, 2, 2]
+- Shape of $\textit{Indices}$ = [1, 1, 2, 2]
 
 
 ```math
@@ -389,7 +413,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -402,16 +426,16 @@ Indices =
 
 ### Example 2
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{Indices} = \text{MaxPool}(X)$
 
 - Data type: double
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [1,0,1,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 4, 2]
-- Shape of $Ind$ = [1, 1, 4, 2]
+- Shape of $\textit{Indices}$ = [1, 1, 4, 2]
 
 
 ```math
@@ -442,7 +466,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -456,20 +480,19 @@ Indices =
 ```
 
 ### Example 3
-> Changer (s, ind)...
  
 > Rajouter la contrainte sur la taille du padding (inférieure taille kernel)
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: double
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 2, 2]
-- Shape of $Ind$ = [1, 1, 2, 2]
+- Shape of $\textit{indices}$ = [1, 1, 2, 2]
 
 
 ```math
@@ -498,7 +521,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -511,16 +534,16 @@ Indices =
 
 ### Example 4
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{Indices} = \text{MaxPool}(X)$
 
 - Data type: double
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [1,1,1,1]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 4, 4]
-- Shape of $Ind$ = [1, 1, 4, 4]
+- Shape of $\textit{Indices}$ = [1, 1, 4, 4]
 
 
 ```math
@@ -551,7 +574,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -564,11 +587,11 @@ Indices =
 \end {bmatrix}
 ```
 
-### Dicrepancies observed in an existing implementations
+### Discrepancies observed in an existing implementations
 
 **WARNING: Non compliances with the SONNX specification have been observed on the ONNX Runtime implementation (version 1.23.2).**
 
-> S'assurer que les tests suivants ont été exécuté sur la bonne version d'ORT.
+> S'assurer que les tests suivants ont été exécutés sur la bonne version d'ORT.
 
 Non compliance concern both the max values ($Y$) and the indices ($\text{indices}$). Refer to this [jupyter notebook](../../tests/maxpool/maxpool_divergence.ipynb) for further details on the observed problems.
 
@@ -589,7 +612,7 @@ Y =
 ```
 
 ```math
-\text{Indices} = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -601,8 +624,8 @@ Y =
 ```
 
 Two discrepancies appear:
-- in $Y$: -1.79769313e+308 instead of $-inf$ as first element.
-- in $Indices$: $-4$ instead of $0$ (first element of $X$).
+- in $Y$: -1.79769313e+308 instead of -inf as first element.
+- in $\textit{Indices}$: $-4$ instead of $0$ (first element of $X$).
 
 ## Error conditions
 No error conditions.
@@ -616,7 +639,7 @@ For all attributes except `pads`, see section [<b><span style="font-family: 'Cou
 For the structural definition of `pads`, see [<b><span style="font-family: 'Courier New', monospace">[MaxPool(real)->Attributes->pads]</span></b>](#real_pads).
 
 <a id="pad_const_float_val"></a>
-The constant float value to pad is $-inf$.
+The constant float value to pad is -inf.
 
 
 ## Inputs
@@ -646,27 +669,27 @@ The size of the output $Y$ will be $(dY_0 , dY_1 , dY_2 , dY_3)$ where
 See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#shape_consist) on MaxPool(real) Output $Y$.
 
 ### $\text{Indices}$: int64
-> Appliquer les modification faites pour Real.
 
-$Indices$ contains the indices of the input tensor $X$ from which the max values are taken.
+
+$\textit{Indices}$ contains the indices of the input tensor $X$ from which the max values are taken.
 
 #### Constraints
 
- - `[C1]` <a id="C1iy"></a> First constraint on $Indices$
-   - Statement: $Indices$ and $Y$ shall have the same shape
+ - `[C1]` <a id="C1iy"></a> First constraint on $\textit{Indices}$
+   - Statement: $\textit{Indices}$ and $Y$ shall have the same shape
 
 <a id="int"></a>
 # **MaxPool** (int)
 where int is in {int8, uint8}.
 
 ## Signature
-Definition of operator $\text{MaxPool}$ signature:
-($Y, Indices) = \text{MaxPool}(X)$
+
+($Y, \textit{Indices}) = \text{MaxPool}(X)$
 
 where:
 - $X$: input tensor
 - $Y$: output tensor containing max value selected from $X$
-- $Indices$: output tensor containing the indices in $X$ from where the max values are taken.
+- $\textit{Indices}$: output tensor containing the indices in $X$ from where the max values are taken.
    
 ## Restrictions
 
@@ -677,19 +700,22 @@ See [Restrictions](#restrictions).
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
-**MaxPool** is a sliding window operator like **Conv**, for instance. In contrast to **Conv**, the sliding window, called "kernel", or $W$, in this document, has no existence. Indeed, there is no need for kernel values. At a given posittion, the kernel is only there for indicating the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
+**MaxPool** is a sliding window operator like **Conv**, for instance. At a given position, the sliding window, called "kernel" or "$W$" in this document, is only there to select the set of elements of $X$ of which the maximum shall be computed. Therefore, only the shape of the kernel matters for **MaxPool**.
 
-Operator **MaxPool** stores in $Indices$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
+Operator **MaxPool** stores in $\textit{Indices}$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
-The mathematical definitions of output $Y$ and $Indices$ are given hereafter:
+In any position of the kernel over $X_p$, if the max value is present more than once, then the corresponding index value in $\textit{Indices}$ points the most upper left max value.
+
+The mathematical definition of output $Y$ and $\textit{Indices}$ are given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = max_{h=0}^{dW_0-1} max_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
+    Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
 $$\begin{gathered}
-    Y[b, c, m, n] = X_{p}[h,w] \implies Indices[b, c, m, n] = (h \cdot dX_3 + w)
+   \textit{Indices}[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
 \end{gathered}$$
+
 
 Where
 - $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
@@ -709,16 +735,16 @@ The effect of the operator is illustrated on the following examples.
 
 ### Example 1:
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: int8
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 2, 2]
-- Shape of $Ind$ = [1, 1, 2, 2]
+- Shape of $\textit{Indices}$ = [1, 1, 2, 2]
 
 
 ```math
@@ -747,7 +773,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -760,16 +786,16 @@ Indices =
 
 ### Example 2:
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: int8
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [0,0,0,0]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 2, 2]
-- Shape of $Ind$ = [1, 1, 2, 2]
+- Shape of $\textit{Indices}$ = [1, 1, 2, 2]
 
 
 ```math
@@ -798,7 +824,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -811,16 +837,16 @@ Indices =
 
 ### Example 3
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: int8 
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [0,1,1,1]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 3, 4]
-- Shape of $Ind$ = [1, 1, 3, 4]
+- Shape of $\textit{Indices}$ = [1, 1, 3, 4]
 
 
 ```math
@@ -850,7 +876,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -864,16 +890,16 @@ Indices =
 
 ### Example 4
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: int8
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [1,1,1,1]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 4, 4]
-- Shape of $Ind$ = [1, 1, 4, 4]
+- Shape of $\textit{Indices}$ = [1, 1, 4, 4]
 
 
 ```math
@@ -904,7 +930,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -919,16 +945,16 @@ Indices =
 
 ### Example 5
 
-$S, Ind = \text{MaxPool}(E)$
+$\textit{Y},\textit{indices} = \text{MaxPool}(X)$
 
 - Data type: uint8
-- Shape of $E$ = [1, 1, 3, 3]
+- Shape of $X$ = [1, 1, 3, 3]
 - kernel\_shape = [2,2]
 - pads = [1,1,1,1]
 - dilation = [1,1]
 - strides = [1,1]
 - Shape of $Y$ = [1, 1, 4, 4]
-- Shape of $Ind$ = [1, 1, 4, 4]
+- Shape of $\textit{Indices}$ = [1, 1, 4, 4]
 
 
 ```math
@@ -959,7 +985,7 @@ Y =
 ```
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -977,10 +1003,10 @@ Indices =
 
 > Reporter les modifs ci-dessus.
 
-Runnning Example 4 above on ONNX runtime with CPU as provider produces the following $Indices$ output tensor:
+Runnning Example 4 above on ONNX runtime with CPU as provider produces the following $\textit{Indices}$ output tensor:
 
 ```math
-Indices = 
+\textit{Indices} = 
 \begin{bmatrix}
   \begin{bmatrix}
     \begin{bmatrix}
@@ -1043,9 +1069,9 @@ See constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</spa
 
 ### $\text{Indices}$: int64
 
-$Indices$ contains the indices of the input tensor $X$ from which the max values are taken.
+$\textit{Indices}$ contains the indices of the input tensor $X$ from which the max values are taken.
 
 #### Constraints
 
- - `[C1]` <a id="C1iy"></a> First constraint on $Indices$
-   - Statement: $Indices$ and $Y$ shall have the same shape
+ - `[C1]` <a id="C1iy"></a> First constraint on $\textit{Indices}$
+   - Statement: $\textit{Indices}$ and $Y$ shall have the same shape

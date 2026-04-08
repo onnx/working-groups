@@ -1,8 +1,6 @@
 # SONNX — Formalization Guidelines
 
-A structured guide for writing formal specifications of SONNX operators in Why3.
-
-This guidelines do not cover the basics of Why3, so familiarity with its syntax, semantics and features is expected.
+**A structured guide for writing formal specifications of SONNX operators in Why3**
 
 ---
 
@@ -38,77 +36,83 @@ This guidelines do not cover the basics of Why3, so familiarity with its syntax,
 
 # Part 1 — Formalization Styles
 
-In SONNX, every operator must be formalized at two distinct levels: abstract formalization and concrete formalization. 
+In SONNX, every operator is formalized at **two distinct levels**. 
 
-Each level serves a different purpose and follows a different style.
+> (Jean-Loup) "is" or "must be" or "should be"?
+> 
+> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization."
 
-We start from an abstract formalization — which captures the mathematical semantics of the operator and serves as the **source of truth** for correctness — and progressively refine it into a concrete formalization that is close enough to the target implementation to be automatically extracted into C code - reasoning about memory, bounds, and machine data types.
+Each level serves a different purpose and follows a different style. 
 
 Understanding both is essential before writing any specification.
 
 ## 1.1 Abstract Formalization
 
-At this level the operator must be specified making no reference to any implementation detail, and therefore it should be **implementation-agnostic**.
+At this level the operator must be specified based only on its behavior and **mathematical semantics**. 
 
-It shall be **traceable** to the **informal specification**, being easy to validate, first and easy to read and understand, second. Traceability must be enforced:
+It should the **as close as possible transalation** of the mathematical definition of the operator - **presented in the informal specification**, being therefore easy to read and understand.
 
-- first by keeping the formal specification as close to the informal specification (e.g., stick to the mathematical specification given in the informal specification)
+No implementation details should be present at this level, which means that the **tensor' representation** should **mimic the mathematical definition of a tensor** (also similar to the ONNX tensor concept) - a multidimensional array - in which each entry is accessed by its coordinates.
 
-- second by providing explicit link via `[tags]` to specific parts of the informal specification.
+### Tensor
 
-No implementation details should be present at this level, which means that the specification of tensors shall remain as abstract as possible, focusing on their mathematical properties.
-
-### Tensors
-
-- **Type**: At this level tensors are specified as **polymorphic structures**, i.e., they are parameterized by the type of the values they contain. <br>
-            This means that the specification author should be as generic as possible when defining an operator. <br>
+- **Type**: At this level tensors are said to be **polymorphic**. <br>
+            This means that the specifier should be as generic as possible when defining an operator. <br>
             More details in - [2.5 - Operator tensor types](#25-operator-tensor-types).
+
+  > (Jean-Loup) I have no idea of what a specifier is. Depending on the targeted reader the term should be defined.
 
 - **Representation**: Tensors are represented as structures containing the following records:
 
   - `dims` - List of integers representing the shape
 
-  - `data` - A map from [indexes](../../../spec/informal/common/definitions.md) to values
+  - `data` - A map from coordinates to values
+ 
+    > (Jean-Loup) May be valid coordinates or in-bounds coordinates instead of just coordinates. "coordinates" seems to be equal to "tensor index". If it is the case, a link to tensor index should be added.
 
-  - `background` - The default value for indexes out of the bounds defined by the shape
+  - `background` - The default value for out-of-bounds coordinates
 
-  A "valid index" is an index compatible with the dimension of the tensor, i.e. the i-th components of the index is strictly positive and strictly less than the i-th dimension of the tensor
-  
-  The data mapping is complete since it maps all possible indexes to values, but the value mapped by invalid indexes is the `background` value.
+- **Type Invariants**: There are two important invariants that must be satisfied by this tensor representatio:
 
-- **Type Invariants**: There are two important invariants that must be satisfied by this tensor representation:
+  > (Jean-Loup) "representatio" <- "representation"
 
   1. **Positive Dimensions**
     
-      All dimensions in the `dims` list of a tensor must be **strictly positive integers**. <br>
-      This constraint may be relaxed in a lated version of the specification to support tensors with **null** dimensions. [***Work in Progress***]
+      All dimensions in the `dims` list of a tensor must be positive integers. <br>
+      From our point of view this will be updated to support **non-negative integers**, therefore allowing for tensors with null dimensions. [***Work in Progress***]
 
-    - Predicate `positive`
+      **Definition:**
 
-      ```why3
-      predicate positive (ds : list int) =
-      match ds with
-      | Nil -> true
-      | Cons d ds -> 0 < d /\ positive ds
-      end
-      ```
-    - `invariant { positive dims }`
+      - Predicate `positive`
+
+        ```why3
+        predicate positive (ds : list int) =
+        match ds with
+        | Nil -> true
+        | Cons d ds -> 0 < d /\ positive ds
+        end
+        ```
+      - `invariant { positive dims }`
+    
+  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil (Even if I intuitively understand...). There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates? May be the begining of the guidelines should indicate that Why3 should be used and that the reader should first be familiarized with Why3.
 
   2. **Valid values**
   
-      Indexes are either valid for the tensor shape or the value mapped by those indexes is the `background` value.
-     
-    - Predicate `valid`
+      Coordinates are either valid for the tensor shape or the value mapped by those coordinates is the `background` value.
 
-      ```why3
-        predicate valid (ks ds : list int) =
-          match ks , ds with
-          | Nil , Nil -> true
-          | Cons k ks , Cons d ds -> 0 <= k < d /\ valid ks ds
-          | _ -> false
-          end
-      ```
-    - `invariant { forall k. valid k dims \/ data k = background }`
+      **Definition:**
+        
+      - Predicate `valid`
+
+        ```why3
+          predicate valid (ks ds : list int) =
+            match ks , ds with
+            | Nil , Nil -> true
+            | Cons k ks , Cons d ds -> 0 <= k < d /\ valid ks ds
+            | _ -> false
+            end
+        ```
+      - `invariant { forall k. valid k dims \/ data k = background }`
   
   <br>
 
@@ -116,15 +120,21 @@ No implementation details should be present at this level, which means that the 
   
   For example, while computing the data of the tensor it is **highly recommended** to use the predicate `valid`, essentially to capture and pass the invariant.
 
-  An alternative was to define the data through recursive definitions once the shape is already computed, but this approach is much more complex and usually requires auxiliary lemmas to help the proof.
-
-  The above predicates and invariants are available in the [tensors library](../../../spec/formal/common/libs/tensor/).
+  > (Jean-Loup) Are the predicates positive and valid in a Why3 library? If it is the case, inclusion of the library should be recomended to avoid copy errors.
 
 ### Specification Style
 
 Throughout this level, the specification should be carried out in a **purely functional style** meaning that there should be no side effects and no mutable state (functions do not modify state, they receive one as input and return a new one as output).
 
-Users should specify the operator based on mathematically and recursive definitions, avoiding loops and mutable state, increasing the **provability** and **ease of proof** of this specification.
+Looping constructs are forbidden at this level, and instead, **recursive functions** and **mathematical constructs** should be used to define the behavior of the operator.
+
+> (Jean-Loup) The concept of mathematical construct should be defined.
+
+### Importance of this level
+
+It establishes the logical and mathematical specification of the operator, which serves as the **source of truth** for correctness. 
+
+It also provides the perfect link between the informal specification and the formalization.
 
 ## 1.2 Concrete Formalization
 
@@ -132,9 +142,9 @@ The concrete level describes the **imperative implementation** that will be extr
 
 It describes it based on a **target C representation** for tensors called **ctensors** which are essentially structures backed by flat arrays in memory.
 
-### Tensors
+### Tensor
 
-- **Type**: At this level the type of tensor elements is fixed to be `float32`, `float64`, `int32`, `int64`, etc. and the operator should be defined specifically for that type.
+- **Type**: At this level the type of tensor elements is fixed to be `float32`, `float64`, `int32`, `int64`, etc..., and the operator should be defined specifically for that type.
 
 - **Representation**: Tensors are represented as pointers to structures that contain:
 
@@ -146,23 +156,27 @@ It describes it based on a **target C representation** for tensors called **cten
 
 <br>
 
-Note that, unlike the previous level, here the tensors are defined based on a target C representation - tensors are essentially flat arrays in memory. 
+Note that, unlike the previous level, here the tensors are defined based on a concrete target representation - tensors are essentially flat arrays in memory. 
 
-Moreover, there is no `background` value in this representation - **only valid indexes must be used to access values of tensors** (i.e. coordinates that are within the bounds of the tensor shape).
+> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures". May be it should be "target C representation" or "C built in concrete representation".
+
+Moreover, there is no `background` value in this representation - **tensors entries must be accessed only in valid coordinates** (i.e., coordinates that are within the bounds of the tensor shape).
 
 ### Specification Style
 
-In this level, the specification should be carried out in an **imperative style** meaning that **loops and mutable state** are allowed and often necessary to express the implementation.
+Throughout this level, the specification should be carried out in an **imperative style** meaning that **loops and mutable state** are allowed and often necessary to express the implementation.
 
 ### Importance of this level
 
-It provides the necessary details to extract executable C code and reason about memory, bounds, and machine data types.
+It provides the necessary details to extract executable C code and reason about memory, bounds, and machine integers.
+
+> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.
 
 ## 1.3 Link between the two levels
 
 ### Why is it important to have two levels?
 
-- We need somehow to express that the **concrete specification** is correct with respect to the **operator's intended behavior** - which is captured by the **abstract specification**.
+- We need somehow to express that the **concrete implementation** is correct with respect to the **operator's intended behavior** - which is captured by the **abstract specification**.
 
 - The abstract spec is easy to **read, understand, and reason about** — it directly mirrors the mathematical definition from its informal specification.
 
@@ -203,42 +217,42 @@ module OP<OperatorName>
 end
 ```
 
-If any section is not needed, it can be left empty, but the overall structure must be maintained for consistency and readability across different operator specifications.
+Neither all the above sections are mandatory nor its order is fixed, however, it is recommended to follow this structure as much as possible for consistency and readability across different operator specifications.
+
+On the other hand, **4**, **5** and **6** are usually written in such order as each one of them depends on the previous one.
+
 
 ## 2.2 Function Declarations
 
-Why3 supports several ways to declare functions, each with different purposes and objectives. 
+Why3 supports several ways to declare functions, each with different purposes and objectives.
 
-In order to fully understand each one of this features please take into account that whyml supports **two different programming namespaces**, a **logical** and a **programming** one, each one of them built upon a different syntax and with different features. For instance both of them support **conjunctions** but while the logical one expresses it through $\land$, the programming one expresses it through the `&&` operator.
-
-<a id="functions_def"></a>
 We can have any of the following function signatures:
 
-- `function`: Belongs to the **logical namespace** and is used to define purely logical functions. Contracts are not supported.
+- `function`
 
-- `let`: Belongs to the **programming namespace** and defines a non recursive function.
+- `let`
 
-- `let rec`: Belongs to the **programming namespace** and defines a recursive function.
+- `let function`
 
-- `let function`: Belongs to the **programming namespace**, however, it represents **pure functions**, that are **non recursive** and allows them to be used at the logical namespace as well.
+- `let ghost function`
 
-- `let rec function`: Belongs to the **programming namespace**, however, it represents **pure functions**, that are **recursive** and allows them to be used at the logical namespace as well.
+- `let rec function`
 
-- `let ghost function`: Belongs to the **programming namespace**, however, it represents **pure functions**, that are **non recursive** and **can only** be used at the **logical namespace**.
+- `let rec ghost function`
 
-- `let rec ghost function`: Belongs to the **programming namespace**, however, it represents **pure functions**, that are **recursive** and **can only** be used at the **logical namespace**.
+- more information on this in the [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html)
 
--  A precise definition of these constructs is given in the [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html)
+Ideally, according to Loïc's proposal, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
 
-Ideally, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
+> (Jean-Loup) To remove "according to Loïc's proposal". May be describe shortly the proposal.
+>
+> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.
 
-> Recall why this is considered as good practice.
+However, this happens to be not always possible.
 
 ### 2.2.1 Termination and Variants
 
-It is not always possible to define all the necessary functions with the `function` construct, especially when we need to define recursive functions whose termination is not trivially provable by Why3.
-
-In order to understand that have a look at the following module which computes the unit summation in the range $[0, n-1]$. This might not be the most traditional way of computing a summation, although, it intentionally resembles the iterative way of computing a summation, starting from 0 up to $n-1$.
+In order to understand that have a look at the following module which computes the unit summation in the range $[0, n-1]$.
 
 ```why3
 module OPSummation
@@ -255,24 +269,29 @@ In this case, if you attempt to open the why3 ide the following error will be sh
 
 ![Cannot prove termination error](./imgs/termination.png)
 
-In fact, `functions` are not supposed to be used in recursive definitions, unless their termination is trivially provable by Why3 such as recursive calls over the tail of a list.
+In fact, `functions` are too weak to successfully prove recursion termination and therefore we need to help them prove termination.
 
-Intead one should use a `let rec ghost function` declaration, which allows to define recursive functions with a **variant** (some expression that repeatedly decreases with each recursive call) that can only be used in the logical namespace.
+To do so, we have to introduce a **variant** (some expression that repeatedly decreases with each recursive call).
+
+However, `function` **does not support contracts** and therefore **variants** are **forbidden**, so we need to switch to `let rec function` and provide the variant there.
 
 ```why3
-  let rec ghost function summation (i : int) (iter : int) : int =
-    variant { iter - i}
-    if i < iter then
-      1 + summation (i + 1) iter
-    else
+  let rec function summation (i : int) (iter : int) : int =
+      variant { iter - i}
+      if i < iter then
+          1 + summation (i + 1) iter
+      else
       0
+end
 ```
+
+> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"?
 
 ### 2.2.2 Verification Conditions and Requires Clauses
 
-Note that, pure logical functions declared by the keyword `function` never generate verification conditions, even if some of the functions called inside it need to hold some **pre-conditions**.
+Note that, functions declared by the keyword `function` never generate verification conditions, even if some of the functions called inside it need to hold some **pre-conditions**.
 
-Recalling to the [definitions](#functions_def) it is clear that `function` and `let rec ghost function` belong to different namespaces, although both of them can only be used at the logical namespace. As a consequence, since `let rec ghost function` is not a definition but an actual executable function, it generates verification conditions for all the functions called inside it that have preconditions.
+Changing the signature from `function` to `let rec function` will, on the other hand, generate such verification conditions.
 
 That's why, under such circumstances, requires clauses can be added **only** to properly prove such verification conditions.
 
@@ -303,7 +322,7 @@ To compare such different behaviors, check the examples below:
 
 This piece of code - from the [flatten formalization](./examples/flatten.mlw) - will generate verification condition because the function is signed with `let rec function` and `get_dims`, which is called inside it, has **preconditions** stating that the value being accessed is valid within the list. 
 
-Consequently, verification conditions will be generated as is depicted in the picture below:
+Consequently, verification conditions will be raised as is depicted in the picture below:
 
 ![Flatten abstract Verification Conditions - not proved](./imgs/flatten_VC_not_proved.png)
 
@@ -334,9 +353,9 @@ Therefore, the code above should be adapted to include such contracts:
 ```
 <br>
 
-The code written above will not generate any verification conditions, even if the functions referenced inside it explicitly need **requires clauses**. 
+The code written above will not generate any verification conditions, even if the functions called inside it explicitly need **requires clauses**. 
 
-Therefore, no verification conditions were raised and the function `calculate_dims` does not appear on the Verification Conditions menu (left panel in the picture above).
+Therefore, no verification condtions were raised and the function `calculate_dims` does not appear on the Verification Conditions menu (left pannel in the picture above).
 
 ### 2.2.3 TypeInvariant Lemmas
 
@@ -367,17 +386,15 @@ The different kinds of lemmas and how to use them will be covered in section [3.
 
 ### 2.2.4 Main Operator Function
 
-To enforce traceability, as [previously mentioned](#traceability), the main operator function should capture the constraints present in the informal specification as preconditions (`requires`) while providing postconditions (`ensures`) for every record of the output tensor.
+Moreover, the main operator function cannot be declared as `function` because it needs to have contracts (`requires` / `ensures`) and `function` does not support contracts.
 
-To capture such contracts one needs to define a construct that belongs to the programming namespace. Moreover, since this function is only used to specification purposes it is not supposed to be used in any implementation context. To enforce that this function can only be used at the logical level sign it as **ghost**.
-
-Therefore, the main operator function should be declared as `let rec ghost function` with full contracts.
+Therefore, the main operator function should be declared as `let ghost function` with full contracts.
 
 ```why3
 module OPSummation
     use int.Int
 
-    let rec ghost function summation (i : int) (iter : int) : int =
+    let rec function summation (i : int) (iter : int) : int =
         variant { iter - i}
         if i < iter then
             1 + summation (i + 1) iter
@@ -391,6 +408,14 @@ module OPSummation
 end
 ```
 
+### 2.2.5 Guidelines
+
+| Guideline | Details |
+|:---|:---|
+| Use `function` for total functions and whenever it is possible! | A `function` is a logical function. |
+| Use `let rec function` only when recursion needs a variant. | If Why3 cannot prove termination of a `function`, switch to `let rec function` and provide a `variant` clause. |
+| Use `let ghost function` for the **main operator**. | The main function should be a `let ghost function` with full contracts (`requires` / `ensures`). |
+
 ### Examples
 
 Besides the summation example above, here are some examples of such formalization styles:
@@ -401,7 +426,7 @@ Besides the summation example above, here are some examples of such formalizatio
 
 ## 2.3. Contracts on the Main Function
 
-Until now, we have stated that no function should have contracts except for the `main function` or any other function declared with `let rec ghost function`. 
+Until now, we have stated that no function should have contracts except for the `main function` or any other function declared with `let rec`. 
 
 The `main function`, **must** include as preconditions (`requires`) all the necessary constraints that are present in the informal specification for the inputs and the attributes. Output constraints (such as shape) will not be included at this point.
 
@@ -724,7 +749,7 @@ Translating the preconditions from the abstract level to the concrete level can 
 
   2. Express that precondition, but resort to `concrete predicates` instead of the abstract structure.
 
-In the example above, the first precondition follows the `1.` pattern, while the second one follows the `2.`. There is not really a standard for this, as sometimes one is more readable and even provable than the other, so it is up to the specification author to choose which one to use. Having said so, the second **precondition** could also have been expressed through abstract terms:
+In the example above, the first precondition follows the `1.` pattern, while the second one follows the `2.`. There is not really a standard for this, as sometimes one is more readable and even provavle than the other, so it is up to the specifier to choose which one to use. Having said so, the second **precondition** could also have been expressed through abstract terms:
 
 - `requires { size (tensor x) = size (tensor r) }`
 
@@ -766,7 +791,7 @@ then, the strategy proposed above would have generated the following verificatio
 
 ![Debugging VCs 1](./imgs/flatten_requires_1.png)
 
-By inspecting the task menu, the specification author would be able to understand which precondition is missing and add it to the specification.
+By inspecting the task menu, the specifier would be able to understand which precondition is missing and add it to the specification.
 
 
 

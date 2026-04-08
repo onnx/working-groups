@@ -93,43 +93,59 @@ module CIndex
 
   (** ## Coordinates *)
 
-  let coffset (ks : iarray) (ds : iarray) (n : int32) : int32 =
-    (*proof*)
-    requires { 0 <= n }
-    requires { valid_range ks 0 n }
-    requires { dimension ds n }
-    ensures { 0 <= result -> valid (ivector ks n) (ivector ds n) }
-    ensures { 0 <= result -> result = offset (ivector ks n) (ivector ds n) }
-    (*qed*)
-    begin
-      let ref p = 0 in
-      for i = 0 to n - 1 do
-        (*proof*)
-        invariant { valid (ivector ks i) (ivector ds i) }
-        invariant { p = offset (ivector ks i) (ivector ds i) }
-        (*qed*)
-        let d = ds[i] in
-        let k = ks[i] in
-        if 0 <= k && k < d then
-          begin
-            (*proof*)
-            assert { p * d + k = offset (ivector ks (i+1)) (ivector ds (i+1)) } ;
-            ghost
+    let rec lemma valid_bounds (ks ds: iarray) (p q: int)
+          requires { p <= q }
+          requires { valid_range ks p q }
+          requires { valid_range ds p q }
+          requires { pdim ds p q }
+          requires { valid (islice ks p q) (islice ds p q) }
+          ensures  { forall i. p <= i < q -> 0 <= value_at ks i < value_at ds i }
+          variant  { q - p }
+          = if p < q then
               begin
-                ensures { Int32.in_bounds (p * d) }
-                ensures { Int32.in_bounds (p * d + k) }
-                let ghost dl = pure { sdim ds 0 i } in
-                let ghost di = Int32.to_int ds[i] in
-                let ghost dr = pure { sdim ds (i+1) n } in
-                let ghost dn = pure { sdim ds 0 n } in
-                sdim_split ds 0 (Int32.to_int i) (Int32.to_int n) ;
-                mult_bound (dl * di) dr dn ;
-              end ;
-            (*qed*)
-            p <- p * d + k ;
-          end
-        else return (-1)
-      done ; p
-    end
+                assert { islice ks p q = Cons (Int32.to_int (value_at ks p)) (islice ks (p+1) q) };
+                assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
+                assert { 0 <= value_at ks p < value_at ds p };
+                valid_bounds ks ds (p+1) q
+              end
+
+    let coffset (ks : iarray) (ds : iarray) (n : int32) : int32 =
+      (*proof*)
+      requires { 0 <= n }
+      requires { valid_range ks 0 n }
+      requires { dimension ds n }
+      ensures { 0 <= result <-> valid (ivector ks n) (ivector ds n) }
+      ensures { 0 <= result -> result = offset (ivector ks n) (ivector ds n) }
+      (*qed*)
+      begin
+        let ref p = 0 in
+        for i = 0 to n - 1 do
+          (*proof*)
+          invariant { valid (ivector ks i) (ivector ds i) }
+          invariant { p = offset (ivector ks i) (ivector ds i) }
+          (*qed*)
+          let d = ds[i] in
+          let k = ks[i] in
+          if 0 <= k && k < d then
+            begin
+              (*proof*)
+              assert { p * d + k = offset (ivector ks (i+1)) (ivector ds (i+1)) } ;
+              ghost
+                begin
+                  ensures { Int32.in_bounds (p * d) }
+                  ensures { Int32.in_bounds (p * d + k) }
+                  let ghost dl = pure { sdim ds 0 i } in
+                  let ghost di = Int32.to_int ds[i] in
+                  let ghost dr = pure { sdim ds (i+1) n } in
+                  let ghost dn = pure { sdim ds 0 n } in
+                  sdim_split ds 0 (Int32.to_int i) (Int32.to_int n) ;
+                  mult_bound (dl * di) dr dn ;
+                end ;
+              (*qed*)
+              p <- p * d + k ;
+            end
+          else return (-1)
+        done ; p
+      end
 
 end

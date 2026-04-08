@@ -1,0 +1,930 @@
+module ExtendedReal
+
+    use real.Real
+    use real.MinMax
+
+    type extended_real = Finite real | NaN | PosInf | NegInf
+
+    predicate is_nan (e: extended_real) =
+        match e with
+            | NaN -> true
+            | _ -> false
+        end
+
+    predicate is_pos_inf (e: extended_real) =
+        match e with
+            | PosInf -> true
+            | _ -> false
+        end
+    
+    predicate is_neg_inf (e: extended_real) =
+        match e with
+            | NegInf -> true
+            | _ -> false
+        end
+    
+    predicate is_finite (e: extended_real) =
+        match e with
+            | Finite _ -> true
+            | _ -> false
+        end
+
+    val (=) (e1 e2: extended_real) : bool
+        ensures {
+            result <-> (
+                match e1, e2 with
+                | Finite r1, Finite r2 -> r1 = r2
+                | NaN, NaN -> true
+                | PosInf, PosInf -> true
+                | NegInf, NegInf -> true
+                | _, _ -> false
+                end
+            )
+        }
+ 
+
+    function add_extended_real (e1 e2: extended_real) : extended_real =
+        match e1, e2 with
+        | Finite r1, Finite r2 -> Finite (r1 + r2)
+        | NaN, _  -> NaN
+        | _, NaN  -> NaN
+        | PosInf, NegInf -> NaN
+        | NegInf, PosInf -> NaN
+        | PosInf, _ -> PosInf
+        | _, PosInf -> PosInf
+        | NegInf, _ -> NegInf
+        | _, NegInf -> NegInf
+        end
+
+    function max_extended_real (e1 e2: extended_real) : extended_real =
+        match e1, e2 with
+        | Finite r1, Finite r2 -> Finite (max r1 r2)
+        | NaN, _  -> NaN
+        | _, NaN  -> NaN
+        | PosInf, _ -> PosInf
+        | _, PosInf -> PosInf
+        | NegInf, e -> e
+        | e, NegInf -> e
+        end
+
+    function min_extended_real (e1 e2: extended_real) : extended_real =
+        match e1, e2 with
+        | Finite r1, Finite r2 -> Finite (min r1 r2)
+        | NaN, _  -> NaN
+        | _, NaN  -> NaN
+        | NegInf, _ -> NegInf
+        | _, NegInf -> NegInf
+        | PosInf, e -> e
+        | e, PosInf -> e
+        end
+    
+end
+
+
+module ExtendedCFloat
+
+    use real.Real
+    use ExtendedReal
+    
+    type float = 
+        | FFinite real
+        | FNaN
+        | FPosInf
+        | FNegInf
+
+    function to_extended_real (f: float) : extended_real =
+        match f with
+            | FFinite r -> Finite r
+            | FNaN -> NaN
+            | FPosInf -> PosInf
+            | FNegInf -> NegInf
+        end
+    
+    type f32 = < float 8 24 >  (* single precision literals *)
+    type f64 = < float 11 53 > (* double precision literals *)
+
+
+    meta coercion function to_extended_real
+
+
+    val predicate is_nan (f: float) : bool
+        ensures { result <-> is_nan (to_extended_real f) }
+    
+    val predicate is_pos_inf (f: float) : bool
+        ensures { result <-> is_pos_inf (to_extended_real f) }
+    
+    val predicate is_neg_inf (f: float) : bool
+        ensures { result <-> is_neg_inf (to_extended_real f) }
+    
+    val predicate is_finite (f: float) : bool
+        ensures { result <-> is_finite (to_extended_real f) }
+
+    val predicate ( .= ) (a b : float) : bool
+        ensures { result <-> to_extended_real a = to_extended_real b }
+
+    val function f32 (k : f32) : float
+        ensures { result = FFinite (f32'real k) }
+    
+    val function f64 (k : f64) : float
+        ensures { result = FFinite (f64'real k) }
+
+    let constant zero = f64 0.0
+    let constant one  = f64 1.0
+
+    val function (.+) (a b : float) : float
+        ensures { result = add_extended_real (to_extended_real a) (to_extended_real b) }
+
+    val function max (a b : float) : float
+        ensures { result = max_extended_real (to_extended_real a) (to_extended_real b) }
+
+    val function min (a b : float) : float
+        ensures { result = min_extended_real (to_extended_real a) (to_extended_real b) }
+
+end
+
+
+module MyCtensor
+
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use ExtendedCFloat
+  use ExtendedReal
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  
+  (** C Tensor **)
+
+  type farray = ptr float
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : farray ; 
+  }
+
+  (** Dimension List **)
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  (** Number of entries **)
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  (** Valid index predicate **)
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  (** Empty tensor predicate **)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  (** Valid tensor  **)
+  (**valid dimensions**)
+  (**valid_range [0, Number of entries] are valid indices**)
+  (**data writable??**)
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  (*Coordinate Index for ctensor*)
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : extended_real =
+    if valid_index k t then
+      value_at t.t_data (tensor_offset k t)
+    else Finite 0.0
+
+  function tensor_value (t : ctensor) : list int -> extended_real =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor) : tensor extended_real
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = Finite 0.0 }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = Finite 0.0 ;
+    }
+
+  let ctensor_create (ds : iarray) (n : int32) : ctensor =
+    (*proof*)
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    (*qed*)
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear (r : ctensor) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero (Finite 0.0) (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = Finite 0.0 }
+      (*qed*)
+      r.t_data[i] <- f32 0.0
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.zero (Finite 0.0) (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_reset (r : ctensor) (v : float) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_extended_real v) (Finite 0.0) (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = to_extended_real v }
+      (*qed*)
+      r.t_data[i] <- v
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.const (to_extended_real v) (Finite 0.0) (tensor_dim r) }
+    (*qed*)
+end
+
+
+module OPMaxPool2d
+
+    use tensor.tensor.Tensor
+    use real.Real
+    use int.Int
+    use tensor.std.Int
+    use list.List
+    use int.EuclideanDivision
+    use tensor.tensor.Range
+    use list.Length
+    use ExtendedReal
+
+
+
+    let rec lemma get_dim_positive (ds : list int)
+    requires { positive ds }
+    ensures { forall i. 0 <= i < length ds -> 0 < get_dim ds i }
+    variant { ds }
+    = match ds with 
+        | Nil -> () 
+        | Cons d ds -> get_dim_positive ds end
+
+
+    function maxpoolDims (x:tensor extended_real) (str_h str_w :int) (ker_h ker_w :int)
+                        (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : list int
+    =
+        let dY_0 = get_dim x.dims 0 in
+        let dY_1 = get_dim x.dims 1 in
+
+        let alpha = get_dim x.dims 2 + pad_top + pad_bottom in
+        let theta = dir_h * (ker_h - 1) + 1 in
+        let dY_2 = div (alpha - theta) str_h + 1 in
+
+        let beta = get_dim x.dims 3 + pad_left + pad_right in
+        let gamma = dir_w * (ker_w - 1) + 1 in
+        let dY_3 = div (beta - gamma) str_w + 1 in
+
+        Cons dY_0 (Cons dY_1 (Cons dY_2 (Cons dY_3 Nil
+        )))
+
+    function coords_from_X_p (x: tensor extended_real) (x_p_coords : list int) ( pad_top pad_left :int) : extended_real
+    =
+        let b = get_dim x_p_coords 0 in
+        let c = get_dim x_p_coords 1 in
+        let n = (get_dim x_p_coords 2) - pad_top in
+        let m = (get_dim x_p_coords 3) - pad_left in
+        let x_coords = Cons b (Cons c (Cons n (Cons m Nil))) in
+        if valid x_coords x.dims then
+            x.data x_coords
+        else
+            NegInf
+    
+
+    let rec ghost function w_cools_calculate (x: tensor extended_real) (h: int) (w:int) (ww:int) (b c m n :int) (dil_h dil_w :int) (pad_top pad_left pad_bottom pad_rigth :int) (str_h str_w :int) : extended_real
+    variant { w - ww }
+    =
+    if Int.(ww >= w) then
+        NegInf
+    else
+        let x_h = m * str_h + h * dil_h in
+        let x_w = n * str_w + ww * dil_w in
+        let x_val = coords_from_X_p  x (Cons b (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left in
+        max_extended_real x_val (w_cools_calculate x h w (ww+1) b c m n dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w)
+
+
+    let rec lemma w_cools_split (x: tensor extended_real) (h w ww k b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w: int)
+    requires { ww <= k < w }
+    variant  { k - ww }
+    ensures {
+    let x_h = m * str_h + h * dil_h in
+    let x_w = n * str_w + k * dil_w in
+    let x_val = coords_from_X_p x (Cons b (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left in
+    w_cools_calculate x h Int.(k+1) ww b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w =
+    max_extended_real x_val
+    (w_cools_calculate x h k ww b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w)
+    }
+    =
+    if ww < k then
+        w_cools_split x h w Int.(ww+1) k b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w
+    else    
+        assert { ww = k };
+    ()
+
+
+    let rec ghost function w_lines_calculate (x: tensor extended_real) (h: int) (hh: int) (w:int) (b c m n :int) (dil_h dil_w :int) (pad_top pad_left pad_bottom pad_rigth :int) (str_h str_w :int) : extended_real
+    variant { h - hh }
+    =
+    if Int.(hh >= h) then
+        NegInf
+    else
+        max_extended_real (w_cools_calculate x hh w 0 b c m n dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w)
+        (w_lines_calculate x h Int.(hh+1) w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w)
+    
+
+    let rec lemma w_lines_split (x: tensor extended_real) (h hh k w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w: int)
+    requires { hh <= k < h }
+    variant  { k - hh }
+    ensures {
+        w_lines_calculate x Int.(k+1) hh w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w =
+        max_extended_real (w_cools_calculate x k w 0 b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w)
+        (w_lines_calculate x k hh w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w)
+
+    }
+    =
+    if hh < k then
+        w_lines_split x h Int.(hh+1) k w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w
+    else
+        ()
+
+
+    function dmaxpool (x : tensor extended_real) (y_dims: list int) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : data extended_real
+    =
+        fun ks ->
+            if valid ks y_dims then
+                let b = get_dim ks 0 in
+                let c = get_dim ks 1 in
+                let m = get_dim ks 2 in
+                let n = get_dim ks 3 in
+                w_lines_calculate x h 0 w b c m n dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w
+            else
+                x.background
+
+
+    let ghost function maxpool (x : tensor extended_real) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : tensor extended_real
+    (*dilations [C1] [C2]*)
+    requires { dir_h > 0 /\ dir_w > 0 }
+    (*pads [C1] - yes*)
+    (*strides [C1]*)
+    requires { str_h > 0 /\ str_w > 0 }
+    (* X[C1]*)
+    requires { length x.dims = 4 }
+    (*Y[C1]*)
+    requires { let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+            get_dim y_dims 2 > 0 /\ get_dim y_dims 3 > 0
+        }
+    (*Add this to informal?*)
+    requires { h > 0 /\ w > 0}
+
+    ensures { result.dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right }
+    ensures {let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+             result.data = dmaxpool x y_dims h w dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w
+            
+            }
+    ensures { result.background = x.background }
+    =
+        let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+        {
+            dims = y_dims ;
+            data = dmaxpool x y_dims h w dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w ;
+            background = x.background ;
+        }
+
+end
+
+
+module COPMaxpool2d
+
+    use OPMaxPool2d
+    use tensor.tensor.Tensor
+    use tensor.tensor.Range
+    use real.Real
+    use int.Int
+    use list.List
+    use tensor.layout.CFlat
+ 
+    use tensor.libvector.CIndex
+    use tensor.std.Clib
+    use mach.int.Int32
+    use tensor.std.Int
+    use list.Length
+    use tensor.layout.CFlat
+    use tensor.tensor.Range
+
+    use MyCtensor
+    use ExtendedCFloat
+    use ExtendedReal
+
+
+    let coords_from_X_p (x: ctensor) (x_p_coords : iarray) ( pad_top pad_left : int32) : (float, bool)
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { valid_range x_p_coords 0 4 }
+    requires { writable x_p_coords }
+    requires { in_bounds (value_at x_p_coords 2 - pad_top) }
+    requires { in_bounds (value_at x_p_coords 3 - pad_left) }
+    
+    ensures { let (value, flag) = result in
+              flag -> coords_from_X_p (tensor x) (ivector x_p_coords 4) (to_int pad_top) (to_int pad_left) = value
+            }
+    =
+    let ref flag = False in
+    let b = x_p_coords[0] in
+    let c = x_p_coords[1] in
+    let n = x_p_coords[2] - pad_top in
+    let m = x_p_coords[3] - pad_left in
+    let x_coords_array = malloc (to_uint32 4) in
+    if is_not_null x_coords_array then begin
+        x_coords_array[0] <- b ;
+        x_coords_array[1] <- c ;
+        x_coords_array[2] <- n ;
+        x_coords_array[3] <- m ;
+        
+        assert { ivector x_coords_array 4 = Cons (to_int b) (Cons (to_int c) (Cons (to_int n) (Cons (to_int m) Nil))) } ;
+
+        let x_coords = coffset x_coords_array x.t_dims x.t_rank in
+        if x_coords >= 0 then begin
+            (x.t_data[x_coords], flag)
+        end
+        else begin
+            (FNegInf, flag)
+        end
+    end
+    else begin
+        flag <- False;
+        (FNegInf, flag)
+    end
+
+
+    let w_cools_calculate (x: ctensor) (h w: int32) (b c m n: int32) (dil_h dil_w :int32) (pad_top pad_left pad_bottom pad_rigth :int32) (str_h str_w :int32) : (float, bool)
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { w > 0}
+
+    requires { in_bounds (h*dil_h)}
+    requires { in_bounds (m*str_h)}
+    requires { in_bounds(m*str_h+h*dil_h) /\ in_bounds( (m*str_h+h*dil_h) - pad_top) }
+
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(ww*dil_w)    
+            }
+    requires { in_bounds(n*str_w)}
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(n*str_w+ww*dil_w) /\ in_bounds( (n*str_w+ww*dil_w) - pad_left)    
+            }
+
+    ensures {
+        let (value, flag) = result in
+        flag -> value = w_cools_calculate (tensor x) (to_int h) (to_int w) 0 (to_int b) (to_int c) (to_int m) (to_int n) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+    }
+    =
+    let ref flag = False in
+    let ref max_value = FNegInf in
+    let x_p_coords_array = malloc (to_uint32 4) in
+    if is_not_null x_p_coords_array then begin
+        flag <- True;
+        let x_h = m * str_h + h * dil_h in
+        for ww = 0 to w-1 do
+            invariant { max_value = w_cools_calculate (tensor x) (to_int h) ww 0 (to_int b) (to_int c) (to_int m) (to_int n) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w) }
+            let x_w = n * str_w + ww * dil_w in
+            x_p_coords_array[0] <- b ;
+            x_p_coords_array[1] <- c ;
+            x_p_coords_array[2] <- x_h;
+            x_p_coords_array[3] <- x_w ;
+            let (x_val, aux_flag) = coords_from_X_p x x_p_coords_array pad_top pad_left in
+            if aux_flag then begin
+
+                ghost w_cools_split (tensor x) (to_int h) (to_int w) 0 (to_int ww) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w);
+
+                max_value <- max max_value x_val ;
+                assert { ivector x_p_coords_array 4 = Cons (to_int b) (Cons (to_int c) (Cons (to_int x_h) (Cons (to_int x_w) Nil))) } ;
+            end
+            else
+                return (FNegInf, False)
+        done ;
+        (max_value, flag)
+    end
+    else
+        (FNegInf, flag)
+
+
+    let w_lines_calculate (x: ctensor) (h w: int32) (b c m n: int32) (dil_h dil_w :int32) (pad_top pad_left pad_bottom pad_rigth :int32) (str_h str_w :int32) : (float, bool)
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { h > 0 }
+    requires { w > 0 }
+
+    requires { forall hh. 0 <= hh < h ->
+                in_bounds (hh*dil_h)
+            }
+    requires { in_bounds (m*str_h)}
+    requires { forall hh. 0 <= hh < h -> 
+                in_bounds(m*str_h+hh*dil_h) /\ in_bounds( (m*str_h+hh*dil_h) - pad_top) 
+            }
+
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(ww*dil_w)    
+            }
+    requires { in_bounds(n*str_w)}
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(n*str_w+ww*dil_w) /\ in_bounds( (n*str_w+ww*dil_w) - pad_left)    
+            }
+
+    ensures {
+        let (value, flag) = result in
+        flag -> value = w_lines_calculate (tensor x) (to_int h) 0 (to_int w) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+    }
+    =
+    let ref flag = False in
+    let ref max_value = FNegInf in
+    for hh = 0 to h-1 do
+        invariant { max_value = w_lines_calculate (tensor x) hh 0 (to_int w) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w) }
+        let (value, aux_flag) = w_cools_calculate x hh w b c m n dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w in
+        if aux_flag then begin
+            max_value <- max max_value value ;
+        end
+        else
+            return (FNegInf, False)
+    done ;
+    (max_value, True)
+
+
+  let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
+    requires { p <= q }
+    requires { valid_range ks p q }
+    requires { valid_range ds p q }
+    requires { pdim ds p q }
+    requires  { forall i. p <= i < q -> 0 <= value_at ks i < value_at ds i }
+    ensures { Range.valid (islice ks p q) (islice ds p q) }
+    variant  { q - p }
+    = if p < q then
+        begin
+          assert { islice ks p q = Cons (Int32.to_int (value_at ks p)) (islice ks (p+1) q) };
+          assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
+          valid_bounds_2 ks ds (p+1) q
+        end
+
+
+    let c_maxpool (x r: ctensor) (h w: int32) (dil_h dil_w: int32) (pad_top pad_left pad_bottom pad_right: int32) (str_h str_w: int32) : bool
+    requires { valid_tensor x }
+    requires { valid_tensor r }
+    (* X[C1]*)
+    requires { x.t_rank = r.t_rank = 4 }
+    requires { length (tensor x).Tensor.dims = length (tensor r).Tensor.dims  = 4}
+    requires { ivector r.t_dims r.t_rank = maxpoolDims (tensor x) str_h str_w h w dil_h dil_w pad_top pad_left pad_bottom pad_right }
+    (*dilations [C1] [C2]*)
+    requires { dil_h > 0 /\ dil_w > 0 }
+    (*pads [C1] - yes*)
+    (*strides [C1]*)
+    requires { str_h > 0 /\ str_w > 0 }
+    (*Y[C1]*)
+    requires { let y_dims = maxpoolDims (tensor x) str_h str_w h w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+            get_dim y_dims 2 > 0 /\ get_dim y_dims 3 > 0
+        }
+    (*Add this to informal??*)
+    requires { h > 0 /\ w > 0}
+
+    (*in_bounds requires*)
+     requires { forall hh. 0 <= hh < h ->
+                in_bounds (hh*dil_h)
+            }
+    requires { forall mm. 0 <= mm < value_at r.t_dims 2 ->
+                in_bounds (mm*str_h)
+            }
+    requires { forall mm hh. 0 <= hh < h /\ 0 <= mm < value_at r.t_dims 2-> 
+                in_bounds(mm*str_h+hh*dil_h) /\ in_bounds( (mm*str_h+hh*dil_h) - pad_top) 
+            }
+
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(ww*dil_w)    
+            }
+    requires { forall nn. 0 <= nn < value_at r.t_dims 3 ->
+                in_bounds (nn*str_w)
+            }
+    requires { forall nn ww. 0 <= ww < w /\ 0 <= nn < value_at r.t_dims 3 ->
+                in_bounds(nn*str_w+ww*dil_w) /\ in_bounds( (nn*str_w+ww*dil_w) - pad_left)    
+            }
+    ensures { result -> tensor r =  maxpool (tensor x) (to_int h) (to_int w)(to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w) }        
+    =
+    let b = r.t_dims[0] in
+    let c = r.t_dims[1] in
+    let m = r.t_dims[2] in
+    let n = r.t_dims[3] in
+    let r_coords_array = malloc (to_uint32 4) in
+    if is_not_null r_coords_array then begin
+        for bb = 0 to b-1 do
+            invariant {
+                forall bb_ . 0 <= bb_ < bb ->
+                    (forall cc_. 0 <= cc_ < c ->
+                        (forall mm_. 0 <= mm_ < m ->
+                            (forall nn_. 0 <= nn_ < n ->
+                                let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                let dims = ivector r.t_dims r.t_rank in
+                                let off = CFlat.offset coords dims in
+                                value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb_ cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                            )
+                        )
+                    )
+            }
+            r_coords_array[0] <- bb ;
+            for cc = 0 to c-1 do
+                invariant { value_at r_coords_array 0 = bb }
+                invariant {
+                    forall bb_ . 0 <= bb_ < bb ->
+                        (forall cc_. 0 <= cc_ < c ->
+                            (forall mm_. 0 <= mm_ < m ->
+                                (forall nn_. 0 <= nn_ < n ->
+                                    let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                    let dims = ivector r.t_dims r.t_rank in
+                                    let off = CFlat.offset coords dims in
+                                    value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb_ cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                )
+                            )
+                        )
+                }
+                invariant {
+                    forall cc_. 0 <= cc_ < cc ->
+                        (forall mm_. 0 <= mm_ < m ->
+                            (forall nn_. 0 <= nn_ < n ->
+                                let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                let dims = ivector r.t_dims r.t_rank in
+                                let off = CFlat.offset coords dims in
+                                value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                            )
+                        )
+                }
+                r_coords_array[1] <- cc ;
+                for mm = 0 to m-1 do
+                    invariant { value_at r_coords_array 0 = bb /\ value_at r_coords_array 1 = cc }
+                    invariant {
+                        forall bb_ . 0 <= bb_ < bb ->
+                            (forall cc_. 0 <= cc_ < c ->
+                                (forall mm_. 0 <= mm_ < m ->
+                                    (forall nn_. 0 <= nn_ < n ->
+                                        let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                        let dims = ivector r.t_dims r.t_rank in
+                                        let off = CFlat.offset coords dims in
+                                        value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb_ cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                    )
+                                )
+                            )
+                    }
+                    invariant {
+                        forall cc_. 0 <= cc_ < cc ->
+                            (forall mm_. 0 <= mm_ < m ->
+                                (forall nn_. 0 <= nn_ < n ->
+                                    let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                    let dims = ivector r.t_dims r.t_rank in
+                                    let off = CFlat.offset coords dims in
+                                    value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                )
+                            )
+                    }
+                    invariant { 
+                        forall mm_. 0 <= mm_ < mm ->
+                            (forall nn_. 0 <= nn_ < n ->
+                                let coords = Cons bb (Cons cc (Cons mm_ (Cons nn_ Nil)) ) in
+                                let dims = ivector r.t_dims r.t_rank in
+                                let off = CFlat.offset coords dims in
+                                value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                            )
+                    }
+                    r_coords_array[2] <- mm ;
+                    for nn = 0 to n-1 do
+                        invariant { value_at r_coords_array 0 = bb /\ value_at r_coords_array 1 = cc /\ value_at r_coords_array 2 = mm }
+                        invariant {
+                            forall bb_ . 0 <= bb_ < bb ->
+                                (forall cc_. 0 <= cc_ < c ->
+                                    (forall mm_. 0 <= mm_ < m ->
+                                        (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                            let dims = ivector r.t_dims r.t_rank in
+                                            let off = CFlat.offset coords dims in
+                                            value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb_ cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                        )
+                                    )
+                                )
+                        }
+                        invariant {
+                            forall cc_. 0 <= cc_ < cc ->
+                                (forall mm_. 0 <= mm_ < m ->
+                                    (forall nn_. 0 <= nn_ < n ->
+                                        let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil)) ) in
+                                        let dims = ivector r.t_dims r.t_rank in
+                                        let off = CFlat.offset coords dims in
+                                        value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc_ mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                    )
+                                )
+                        }
+                        invariant { 
+                            forall mm_. 0 <= mm_ < mm ->
+                                (forall nn_. 0 <= nn_ < n ->
+                                    let coords = Cons bb (Cons cc (Cons mm_ (Cons nn_ Nil)) ) in
+                                    let dims = ivector r.t_dims r.t_rank in
+                                    let off = CFlat.offset coords dims in
+                                    value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc mm_ nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                )
+                        }
+                        invariant { 
+                            forall nn_. 0 <= nn_ < nn ->
+                                let coords = Cons bb (Cons cc (Cons mm (Cons nn_ Nil)) ) in
+                                let dims = ivector r.t_dims r.t_rank in
+                                let off = CFlat.offset coords dims in
+                                value_at r.t_data off =  w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc mm nn_ (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                        }
+                        r_coords_array[3] <- nn ;
+                        let r_coords = coffset r_coords_array r.t_dims r.t_rank in
+                        let (value, flag) = w_lines_calculate x h w bb cc mm nn dil_h dil_w pad_top pad_left pad_bottom pad_right str_h str_w in
+                        if flag then begin
+                            r.t_data[r_coords] <- value;
+                            assert { ivector r_coords_array r.t_rank = Cons bb (Cons cc (Cons mm (Cons nn Nil))) } ;
+                            assert { value = w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc mm nn (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w) } ;
+                            assert { let r_coords = CFlat.offset (ivector r_coords_array r.t_rank) (ivector r.t_dims r.t_rank) in
+                                        value_at r.t_data r_coords = w_lines_calculate (tensor x) (to_int h) 0 (to_int w) bb cc mm nn (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w)
+                                    };
+
+                            (* Nao é escrito na mesma pos - 4º Ciclo *)
+                            assert { forall nn_. 0 <= nn_ < nn -> 
+                                    let coords = Cons (bb) (Cons (cc) (Cons (mm) (Cons nn_ Nil)) ) in
+                                    coords <> (ivector r_coords_array r.t_rank)
+                                    };
+
+                            assert  { forall nn_. 0 <= nn_ < nn -> 
+                                    let coords = Cons (bb) (Cons (cc) (Cons (mm) (Cons nn_ Nil)) ) in
+                                    Range.valid coords (ivector r.t_dims r.t_rank)
+                                    };
+
+                            assert { forall nn_. 0 <= nn_ < nn -> 
+                                    let coords = Cons (bb) (Cons (cc) (Cons (mm) (Cons nn_ Nil)) ) in
+                                    let dims = ivector r.t_dims r.t_rank in
+                                    let off = CFlat.offset coords dims in
+                                    let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                                    off <> off1 
+                                    };
+                            
+                            assert {
+                                    forall nn_. 0 <= nn_ < nn -> 
+                                            let coords = Cons (bb) (Cons (cc) (Cons (mm) (Cons nn_ Nil)) ) in
+                                            let dims = ivector r.t_dims r.t_rank in
+                                            let off = CFlat.offset coords dims in
+                                            off <> r_coords
+                                };
+
+                            (* Nao é escrito na mesma pos - 3º Ciclo *)
+                            assert {
+                                forall mm_. 0 <= mm_ < mm ->
+                                    (forall nn_. 0 <= nn_ < n ->
+                                        let coords = Cons (bb) (Cons (cc) (Cons mm_ (Cons nn_ Nil)) ) in
+                                        coords <> (ivector r_coords_array r.t_rank)
+                                    )
+                            };
+
+                            assert { forall mm_. 0 <= mm_ < mm ->
+                                    (forall nn_. 0 <= nn_ < n ->
+                                        let coords = Cons (bb) (Cons (cc) (Cons mm_ (Cons nn_ Nil)) ) in
+                                        Range.valid coords (ivector r.t_dims r.t_rank)
+                                    )
+                            };
+                            assert { forall mm_. 0 <= mm_ < mm ->
+                                    (forall nn_. 0 <= nn_ < n ->
+                                        let coords = Cons (bb) (Cons (cc) (Cons mm_ (Cons nn_ Nil)) ) in
+                                        let dims = ivector r.t_dims r.t_rank in
+                                        let off = CFlat.offset coords dims in
+                                        let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                                        off <> off1 
+                                    )
+                            };
+                            assert {
+                                    forall mm_. 0 <= mm_ < mm ->
+                                            (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons (bb) (Cons (cc) (Cons mm_ (Cons nn_ Nil)) ) in
+                                            let dims = ivector r.t_dims r.t_rank in
+                                            let off = CFlat.offset coords dims in
+                                            off <> r_coords
+                                            )
+                            };
+
+                            (* Nao é escrito na mesma pos - 2º Ciclo*)
+                            assert {
+                                forall cc_. 0 <= cc_ < cc ->
+                                    (forall mm_. 0 <= mm_ < m ->
+                                        (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                            coords <> (ivector r_coords_array r.t_rank)
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall cc_. 0 <= cc_ < cc ->
+                                    (forall mm_. 0 <= mm_ < m ->
+                                        (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                            Range.valid coords (ivector r.t_dims r.t_rank)
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall cc_. 0 <= cc_ < cc ->
+                                    (forall mm_. 0 <= mm_ < m ->
+                                        (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                            let dims = ivector r.t_dims r.t_rank in
+                                            let off = CFlat.offset coords dims in
+                                            let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                                            off <> off1
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall cc_. 0 <= cc_ < cc ->
+                                    (forall mm_. 0 <= mm_ < m ->
+                                        (forall nn_. 0 <= nn_ < n ->
+                                            let coords = Cons bb (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                            let dims = ivector r.t_dims r.t_rank in
+                                            let off = CFlat.offset coords dims in
+                                            off <> r_coords
+                                        )
+                                    )
+                            }; 
+
+                            (*Nao é escrito na mesma pos - 1º Ciclo*)
+                            assert {
+                                forall bb_. 0 <= bb_ < bb ->
+                                    (forall cc_. 0 <= cc_ < c ->
+                                        (forall mm_. 0 <= mm_ < m ->
+                                            (forall nn_. 0 <= nn_ < n ->
+                                                let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                                coords <> (ivector r_coords_array r.t_rank)
+                                            )
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall bb_. 0 <= bb_ < bb ->
+                                    (forall cc_. 0 <= cc_ < c ->
+                                        (forall mm_. 0 <= mm_ < m ->
+                                            (forall nn_. 0 <= nn_ < n ->
+                                                let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                                Range.valid coords (ivector r.t_dims r.t_rank)
+                                            )
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall bb_. 0 <= bb_ < bb ->
+                                    (forall cc_. 0 <= cc_ < c ->
+                                        (forall mm_. 0 <= mm_ < m ->
+                                            (forall nn_. 0 <= nn_ < n ->
+                                                let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                                let dims = ivector r.t_dims r.t_rank in
+                                                let off = CFlat.offset coords dims in
+                                                let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                                                off <> off1
+                                            )
+                                        )
+                                    )
+                            };
+                            assert {
+                                forall bb_. 0 <= bb_ < bb ->
+                                    (forall cc_. 0 <= cc_ < c ->
+                                        (forall mm_. 0 <= mm_ < m ->
+                                            (forall nn_. 0 <= nn_ < n ->
+                                                let coords = Cons bb_ (Cons cc_ (Cons mm_ (Cons nn_ Nil))) in
+                                                let dims = ivector r.t_dims r.t_rank in
+                                                let off = CFlat.offset coords dims in
+                                                off <> r_coords
+                                            )
+                                        )
+                                    )
+                            };
+                        end
+                        else
+                            return false
+                    done;
+                done;
+            done;
+        done;        
+        assert { ivector r.t_dims r.t_rank = Cons (to_int b) (Cons (to_int c) (Cons (to_int m) (Cons (to_int n) Nil))) };
+        assert { tensor r == maxpool (tensor x) (to_int h) (to_int w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) (to_int str_h) (to_int str_w) };
+        true
+    end
+    else
+        false
+
+end
+  
