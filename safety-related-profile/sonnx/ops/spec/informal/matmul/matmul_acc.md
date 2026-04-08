@@ -39,8 +39,8 @@ $$
 Where
 
 - $m$ is the number of rows of matrix $A$ (= $dA[0]$)
-- $n$ the number of columns of matrix $A$ (= $dA[1]$) and the number of rows of matrix B (=$dA[0]$),
-- $p$ is the number of columns of matrix $B$ (=$dB[1]$)
+- $n$ the number of columns of matrix $A$ (= $dA[1]$) and the number of rows of matrix B (= $dA[0]$),
+- $p$ is the number of columns of matrix $B$ (= $dB[1]$)
 
 Let us define $|A| = \max_{0 \leq i < m, 0 \leq j < n} | A[i, j] |$,
 $|B| = \max_{0 \leq i < n, 0 \leq j < p} | B[i, j] |$,
@@ -78,7 +78,9 @@ Error introduction for real (ideal) arithmetic is null:
 Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
 for the considered format and $\textit{\textbf{u}} = \frac{\varepsilon}{2}$.
 
-We suppose a naïve implementation for the computation of $\sum_{k=0}^{n-1} A[i, k]\times B[k, j]$.
+We suppose a naïve implementation for the computation of $\sum_{k=0}^{n-1} A[i, k]\times B[k, j]$
+to establish the formula above. Every implementation could improve the accuracy by reordering
+the terms of the sum and/or with more accurate local additions and multiplications.
 
 Hence, for the standard rounding mode round to nearest even, provided $Y_{\textit{val}}[i, j]$ are
 normal numbers
