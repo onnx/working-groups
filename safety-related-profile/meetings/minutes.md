@@ -1,3 +1,48 @@
+# 2025/04/08
+## Participants
+- Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Franck
+## Agenda 
+- Review of actions (Eric)
+- Roundtable
+## Minutes
+- Jean is working on the test strategy (based on equivalence classes). To be discussed during the next local meeting.
+- J&R have completed the formal spec of **Maxpool**, except for the part concerning the indices output. See action.
+- J&R have proposed a first formal spec of a graph.
+  - They have also specified pre conditions for the execution of operators. (i.e., a graph is executable iff its operators are executable).  
+  - Discussion on the way to model the fact that an operator has been executed. In J&R model, this is modled using a "flag" attached to the operator. In Eric's, this was modeled as a property of the tensor... 
+  - Discussion of the relation between the abstract and concrete spec of the operator execution order spec.
+    - The abstract spec is non-deterministic with regards to the execution order (any order compatible with the dataflow semantics is fine) whereas the concrete spec imposes *one* specific order. In that sense, the two specs are not equivalent, but the concrete one complies with the abstract one, which is the expected "result"
+## Actions
+- [ ] (0804-1) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+- [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
+- [ ] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
+### New actions
+### Previous actions
+- [X] (2503-1, Eric, Amine) Organize meeting with Amine to setup a first 
+- application of the proposed framework.
+  - Meeting with Amine and Andryi on 07/04
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+- [X] (2503-3, Eric, Ricardo, João) Plan a meeting to review Eric's comments 
+  - Done on 27/03
+- [ ] (1103-1, Eric, Jean-Loup, Jean, Mariem, Edoardo) Review Ricardo and João's formal specification and verification guidelines 
+  - Eric: done
+  - Jean-Loup: Done
+  - Edoardo: to be done by next week.
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [X] Provision of the accuracy section for **Div**, **Matmul**, and possibly **tanh**. 
+  - (Franck) Bounds for propagation **Tanh** and **Div**. About **Matmul**, see Franck's slides.   
+    - **Div** to be done. 
+  - Ready to be reviewed.
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+- [ ] (1911-2, All) Review Jean's V&V proposal
+  - Eric to put updated slides on the repo : Done.
+  - File to be reviewed not yet delivered.  
+- Actions from local work sessions
+
+
 # 2025/03/25
 ## Participants
 - Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Henri, Franck, Amine
@@ -18,8 +63,11 @@
 - Amine presented his AI agentic framework. It could potentially be used to boost our activities by undertaking some of the specification or testing activities. A meeting may be useful to setup a first experiment. 
 ## Actions
 ### New actions
-- [ ] (2503-1, Eric, Amine) Organize meeting with Amine to setup a first application of the proposed framework.
+- [X] (2503-1, Eric, Amine) Organize meeting with Amine to setup a first 
+- application of the proposed framework.
+  - Meetng with Amine and Andryi on 07/04
 - [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
 - [ ] (2503-3, Eric, Ricardo, João) Plan a meeting to review Eric's comments 
 - [ ] ### Previous actions
 - [ ] (1103-1, Eric, Jean-Loup, Jean, Mariem, Edoardo) Review Ricardo and João's formal specification and verification guidelines 
