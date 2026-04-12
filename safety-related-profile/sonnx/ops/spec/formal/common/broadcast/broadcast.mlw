@@ -1,1 +1,11 @@
+module OPBroadcast
+  use tensor.tensor.Tensor
+  use tensor.Range
 
+  let ghost function broadcast1 (x1, x2 : tensor 'a) : tensor 'a
+
+
+  let ghost function broadcast2 (x1, x2 : tensor 'a) : tensor 'a
+
+
+end
