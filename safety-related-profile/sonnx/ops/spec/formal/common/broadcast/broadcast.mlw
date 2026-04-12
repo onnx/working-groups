@@ -2,6 +2,8 @@ module OPBroadcast
   use tensor.tensor.Tensor
   use tensor.Range
 
+
+(*don't know how to have a list of tensors as input and as output->2 functions with two arguments*)
   let ghost function broadcast1 (x1, x2 : tensor 'a) : tensor 'a
 
 
