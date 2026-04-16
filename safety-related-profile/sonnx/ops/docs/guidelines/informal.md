@@ -36,28 +36,21 @@ By default, all the text of the specification is "specifying" (i.e., it expresse
 
 Reference to the specification elements can be done using the section names (tagged `#` in the markdown document).
 
-If a more precise location must be identified, a tag can be used. Tags can be nested, as shown below:
-```
-<span class="req" data-tag="req1">
-This is a first traceable specification item. 
-<span class="req" data-tag="req1.1"> This is another traceable specification item.</span>
-<span class="info" data-tag="info1.1">
-This is some information. </span>
-</span>
-</span>
-```
+If a more precise location must be identified, a tag can be used. tags can be nested.
+<span style="background: red; color: white; font-size:0.7em;">[spec1]</span>
+This is some traceable text. 
+<span style="background: red; color: white; font-size:0.7em;">[spec1.1]</span> This is another text. <span style="background: red; color: white; font-size:0.7em;">[/spec1.1]</span> <span style="background: red; color: white; font-size:0.7em;">[spec1]</span>
 
-Ths will be rendered:
+Additional *non specifying* information may may be given. In that case, it must be enclosed between the following tags:
 
-<span class="req" data-tag="req1">
-This is a first traceable specification item. 
-<span class="req" data-tag="req1.1"> This is another traceable specification item.</span>
-<span class="info" data-tag="info1.1">
-This is some information. </span>
-</span>
-</span>
+`<span style="font-size:0.7em;">[info]</br></span>`
 
+`<span style="font-size:0.7em;">[/info]</br></span>`
 
+For instance:
+<span style="font-size:0.7em;"></br>[info]</br></span>
+This is non specifying information.
+<span style="font-size:0.7em;"></br>[/info]</br></span>
 
 #### About error conditions
 
