@@ -7,14 +7,15 @@
 ###### Minutes   
 ###### New actions   
 ###### Previous actions   
-- [ ] In the definition of tensor indexes in the glossary, add a range constraint of each index.
-- [ ] In the examples, check that we use consistent notations for tensors (use of brackets)
+- [X] In the definition of tensor indexes in the glossary, add a range constraint of each index.
+- [ ] In the examples, check that we use consistent notations for tensors (use of square brackets)
 - [X] In the guidelines and templates, propose to use tags that are not visible in the rendered page
   - This prevents cluttering of the spec. and tags can still be processed on the markdown source file.
   - Proposed solution:
   ```
   <span class="req" data-tag="req1"> This is a first traceable specification item. <span class="req" data-tag="req1.1"> This is another traceable specification item.</span> <span class="info" data-tag="info1.1"> This is some information. </span> </span> </span>
   ```
+  - [ ] Rollback to the previous version with visible tags.
 - [ ] In the guidelines,  give precise rules about the factorization of the spec. between types
   - For structural operators, there is a unique spec for all types including "reals"
   - [ ] Check if we could suppress "real" for structural operators.
