@@ -2,6 +2,7 @@
 - Discussion about Jean-Loup's mail dated 10/04 "Re: SONNX Graph status"
 - Discussion on the test strategy
 - Validation of guidelines on formal spec
+- Review of numerical accuracy
 - Review of operators TBD
 ###### Minutes   
 ###### New actions   
