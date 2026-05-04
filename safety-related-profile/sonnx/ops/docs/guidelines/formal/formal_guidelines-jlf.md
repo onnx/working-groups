@@ -33,6 +33,7 @@
 ---
 
 <br>
+> (Jean-Loup) I think that the use of Why3 shall be recomended from the start and that some usefull links shall be provided for readers not familiar with Why3.
 
 # Part 1 — Formalization Styles
 
