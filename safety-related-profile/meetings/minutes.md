@@ -1,4 +1,61 @@
-# 2025/04/08
+  # 2026/05/06
+## Participants
+- Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Franck
+## Agenda 
+- Review of actions (Eric)
+- "Feeedback" on DATE 2026
+- Status of papers (Ricardo+João)
+- ONNX meetup 2026
+- Test strategy
+- Roundtable
+## Minutes
+- Paper submissions
+  - SAIV 2026
+    - Notif. 15th May
+  - Overlay 2026
+    - Notif. 25th May
+- DATE 2026
+  - See the workshop program at https://www.date-conference.com/workshop/w03 
+  - Very limited (and non satisfying...) number of attendees... 
+- Roundtable
+  - R&J:
+    - Modification of the graph modelling. 
+      - Closer to the graph informal spec.
+      - Pb with varargs op.
+  - Eric: test strategy
+  - Mariem 
+    - Work on AIDGE benchmarking module to compare SONNX vs. ONNX runtime
+    - Use of static allocation for CONV?
+      - Loïc proposes to pass the array as a parameter rather than use a local decl. 
+      - Mariem modified the formal spec. 
+      - Solution validated by R&J.
+  - Hamza
+    - Integration of LeakyRelu + Mul + Tanh in AIDGE
+## Actions
+### New actions
+- [ ] (0605-1, J&R) Check the modeling of varargs operators
+- [ ] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
+### Previous actions
+- [ ] (0804-1) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+- To be done during next local meeting
+- [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
+  - Spec of second output of MaxPool by Mariem (concrete part to be completed)
+- [ ] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
+  - **MaxPool** was incomplete because the informal spec not clear on the second output. Inconsistency between R&J and Jean
+    - Check Jean's formula.
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft
+- [X] (1103-1, Eric, Jean-Loup, Jean, Mariem, Edoardo) Review Ricardo and João's formal specification and verification guidelines 
+  - Eric: done
+  - Jean-Loup: Done
+  - Edoardo: to be done by next week.
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+
+# 2026/04/08
 ## Participants
 - Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Franck
 ## Agenda 
@@ -37,13 +94,13 @@
     - **Div** to be done. 
   - Ready to be reviewed.
 - [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
-- [ ] (1911-2, All) Review Jean's V&V proposal
+- [-] (1911-2, All) Review Jean's V&V proposal
   - Eric to put updated slides on the repo : Done.
   - File to be reviewed not yet delivered.  
 - Actions from local work sessions
+- Cancelled.
 
-
-# 2025/03/25
+# 2026/03/25
 ## Participants
 - Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Henri, Franck, Amine
 ## Agenda 
@@ -95,7 +152,7 @@
   - File to be reviewed not yet delivered.  
 - Actions from local work sessions
 
-# 2025/03/11
+# 2026/03/11
 ## Participants
 - João, Ricardo, Hugo, Edoardo, Franck, Mariem, Henri, Jean, Eric
 ## Agenda 
@@ -138,7 +195,7 @@
   - File to be reviewed not yet delivered.  
 - Actions from local work sessions 
 
-# 2025/02/25
+# 2026/02/25
 ## Participants
 - Joõ, Camille, Eric, Mariem, Dumitru, Ricardo, Franck
 ## Agenda 
@@ -176,7 +233,7 @@
     - Solution to be sent to Mariem first...
     - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
 
-# 2025/02/11 (shortened to 1h)
+# 2026/02/11 (shortened to 1h)
 ## Participants
 - Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Loup, Franck
 ## Agenda 
@@ -225,7 +282,7 @@
     - Solution to be sent to Mariem first...
     - On-going: First proposal sent by J&R ; currently being discussed with Jorge then to be discussed with Loïc
 
-# 2025/01/28
+# 2026/01/28
 ## Participants
 - Hugo, Henri, Ricardo, João, Jean, Mariem, Edoardo, Jean-Baptiste, Jean-Loup
 ## Agenda
@@ -279,7 +336,7 @@
     - Solution to be sent to Mariem first...
     - On-going: First proposal sent by J&R ; currenlty being discussed with Jorge then to be discussed with Loïc
 
-# 2025/01/14
+# 2026/01/14
 ## Participants
 *To be completed*
 ## Agenda

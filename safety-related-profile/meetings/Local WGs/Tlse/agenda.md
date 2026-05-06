@@ -5,6 +5,7 @@
 - Review of numerical accuracy
 - Review of operators TBD
 ###### Minutes   
+- Points 1 and 2 addressed.
 ###### New actions   
 ###### Previous actions   
 - [X] In the definition of tensor indexes in the glossary, add a range constraint of each index.
