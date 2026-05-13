@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="0.013167" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="tensor.mlw"/>
+<theory name="Range" proved="true">
+ <goal name="valid_push&#39;vc" expl="VC for valid_push" proved="true">
+ <proof prover="0" timelimit="0.02581"><result status="valid" time="0.025810" steps="0"/></proof>
+ </goal>
+ <goal name="size_append&#39;vc" expl="VC for size_append" proved="true">
+ <proof prover="0" timelimit="0.016529"><result status="valid" time="0.016529" steps="0"/></proof>
+ </goal>
+ <goal name="size_push" proved="true">
+ <proof prover="0" timelimit="0.009797"><result status="valid" time="0.009797" steps="0"/></proof>
+ </goal>
+ <goal name="positive_size&#39;vc" expl="VC for positive_size" proved="true">
+ <proof prover="0" timelimit="0.016868"><result status="valid" time="0.016868" steps="0"/></proof>
+ </goal>
+ <goal name="positive_valid&#39;vc" expl="VC for positive_valid" proved="true">
+ <proof prover="0" timelimit="0.020382"><result status="valid" time="0.020382" steps="0"/></proof>
+ </goal>
+</theory>
+<theory name="Tensor" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <proof prover="0" timelimit="0.008079"><result status="valid" time="0.008079" steps="0"/></proof>
+ </goal>
+ <goal name="exteq" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="exteq.0" proved="true">
+  <proof prover="0" timelimit="0.009159"><result status="valid" time="0.009159" steps="0"/></proof>
+  </goal>
+  <goal name="exteq.1" proved="true">
+  <proof prover="0" timelimit="0.011913"><result status="valid" time="0.011913" steps="0"/></proof>
+  </goal>
+  <goal name="exteq.2" proved="true">
+  <proof prover="0" timelimit="0.010952"><result status="valid" time="0.010952" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="scalar&#39;vc" expl="VC for scalar" proved="true">
+ <proof prover="0" timelimit="0.009376"><result status="valid" time="0.009376" steps="0"/></proof>
+ </goal>
+ <goal name="zero&#39;vc" expl="VC for zero" proved="true">
+ <proof prover="0"><result status="valid" time="0.013167" steps="0"/></proof>
+ </goal>
+ <goal name="const&#39;vc" expl="VC for const" proved="true">
+ <proof prover="0" timelimit="0.008658"><result status="valid" time="0.008658" steps="0"/></proof>
+ </goal>
+ <goal name="zero_is_const" proved="true">
+ <proof prover="0" timelimit="0.009162"><result status="valid" time="0.009162" steps="0"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

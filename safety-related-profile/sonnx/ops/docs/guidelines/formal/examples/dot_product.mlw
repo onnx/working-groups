@@ -1,0 +1,101 @@
+module OPMatmul
+ 
+    use tensor.Tensor
+    use std.Int
+    use list.List
+    use tensor.Range
+    use list.Length
+    use int.Int
+    use real.Real
+ 
+ 
+    let rec ghost function dot_product_rec (a b: tensor real) (row col i iter: int) : real
+      variant { Int.(iter - i) }
+    =
+        if Int.(>=) i iter then
+            0.0
+        else
+            let a_val = a.data (Cons row (Cons i Nil)) in
+            let b_val = b.data (Cons i (Cons col Nil)) in
+            Real.(a_val * b_val + dot_product_rec a b row col Int.(i + 1) iter)
+ 
+end
+ 
+ 
+module COPMatmul
+ 
+    use OPMatmul
+    use tensor.Tensor
+    use tensor.Range
+    use real.Real
+    use int.Int
+    use list.List
+    use layout.CFlat
+ 
+    use libtensor.CTensor
+    use libvector.CIndex
+    use std.Clib
+    use mach.int.Int32
+    use std.Cfloat
+    use std.Int
+    use list.Length
+ 
+ 
+    let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
+      requires { p <= q }
+      requires { valid_range ks p q }
+      requires { valid_range ds p q }
+      requires { pdim ds p q }
+      requires  { forall i. p <= i < q -> 0 <= value_at ks i < value_at ds i }
+      ensures { Range.valid (islice ks p q) (islice ds p q) }
+      variant  { q - p }
+      = if p < q then
+          begin
+            assert { islice ks p q = Cons (Int32.to_int (value_at ks p)) (islice ks (p+1) q) };
+            assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
+            valid_bounds_2 ks ds (p+1) q
+          end
+ 
+    let dot_product (a b: ctensor) (row col iter: int32) : (float, bool) =
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { value_at a.t_dims 1 = value_at b.t_dims 0 = iter }
+    requires { a.t_rank = b.t_rank = 2 }
+    requires { iter >= 0 }
+    requires { row >= 0 /\ row < value_at a.t_dims 0 }
+    requires { col >= 0 /\ col < value_at b.t_dims 1 }
+    ensures { let (value, flag) = result in
+               flag -> value = dot_product_rec (tensor a) (tensor b) row col 0 iter
+            }
+        let ref sum = (f32 0.0) in
+        let ref flag = False in
+        let a_coords_array = malloc (to_uint32 2) in
+        let b_coords_array = malloc (to_uint32 2) in
+        if is_not_null a_coords_array && is_not_null b_coords_array then begin
+            flag <- True;
+            for i = 0 to iter - 1 do
+                invariant { sum = dot_product_rec (tensor a) (tensor b) row col 0 i }
+                set_ofs a_coords_array 0 row;
+                set_ofs a_coords_array 1 i;
+                set_ofs b_coords_array 0 i;
+                set_ofs b_coords_array 1 col;
+ 
+                let a_coords = coffset a_coords_array a.t_dims a.t_rank in
+                let a_val = a.t_data[a_coords] in
+                let b_coords = coffset b_coords_array b.t_dims b.t_rank in
+                let b_val = b.t_data[b_coords] in
+ 
+                assert {Cons ((to_int row)) (Cons (i) Nil) = ivector a_coords_array a.t_rank };
+                assert { (tensor a).Tensor.data (Cons ((to_int row)) (Cons (i) Nil)) = value_at a.t_data a_coords };
+               
+                assert {Cons (i) (Cons ((to_int col)) Nil) = ivector b_coords_array b.t_rank };
+                assert { (tensor b).Tensor.data (Cons (i) (Cons ((to_int col)) Nil)) = value_at b.t_data b_coords };
+               
+                sum <- sum .+ (a_val .* b_val);
+            done;
+            (sum, flag)
+        end
+        else
+            (sum, flag)
+ 
+end

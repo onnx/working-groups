@@ -1,0 +1,761 @@
+module OPConv2d
+
+  use tensor.Tensor
+  use real.Real
+  use int.Int
+  use std.Int
+  use list.List
+  use int.EuclideanDivision
+  use tensor.Range
+  use list.Length
+
+  function convDims (x w :tensor real) (str_h str_w :int) 
+                    (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : list int
+  =
+    let dY_0 = get_dim x.dims 0 in
+    let dY_1 = get_dim w.dims 0 in
+
+    let alpha = get_dim x.dims 2 + pad_top + pad_bottom in
+    let theta = dir_h * (get_dim w.dims 2 - 1) + 1 in
+    let dY_2 = div (alpha - theta) str_h + 1 in
+
+    let beta = get_dim x.dims 3 + pad_left + pad_right in
+    let gamma = dir_w * (get_dim w.dims 3 - 1) + 1 in
+    let dY_3 = div (beta - gamma) str_w + 1 in
+
+    Cons dY_0 (Cons dY_1 (Cons dY_2 (Cons dY_3 Nil)))
+
+
+  function coords_from_X_p (x: tensor real) (x_p_coords : list int) ( pad_top pad_left :int) : real
+  =
+    let b = get_dim x_p_coords 0 in
+    let c = get_dim x_p_coords 1 in
+    let n = (get_dim x_p_coords 2) - pad_top in
+    let m = (get_dim x_p_coords 3) - pad_left in
+    let x_coords = Cons b (Cons c (Cons n (Cons m Nil))) in
+    if valid x_coords x.dims then
+      x.data x_coords
+    else
+      0.0
+
+  let rec ghost function w_cools_calculate (x w : tensor real) (c: int) (i:int) (j:int) (jj:int) (n m y_h y_w: int)  (str_h str_w :int) (dil_h dil_w :int) (pad_top pad_left :int) : real 
+  variant { j - jj }
+  =
+    if jj >= j then
+      0.0
+    else
+      let x_h = y_h * str_h + i * dil_h in
+      let x_w = y_w * str_w + jj * dil_w in
+      let x_val = coords_from_X_p x (Cons n (Cons c (Cons x_h (Cons x_w Nil))) ) pad_top pad_left in
+      let w_val = w.data (Cons m (Cons c (Cons i (Cons jj Nil)))) in
+      Real.(x_val * w_val + w_cools_calculate x w c i j Int.(jj + 1) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+
+  let rec lemma w_cools_split (x w : tensor real) (c i j jj k n m y_h y_w : int) (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { jj <= k < j }
+    variant  { k - jj }
+    ensures {
+      let x_h = y_h * str_h + i * dil_h in
+      let x_w = y_w * str_w + k * dil_w in
+      let x_val = coords_from_X_p x (Cons n (Cons c (Cons x_h (Cons x_w Nil))) ) pad_top pad_left in
+      let w_val = w.data (Cons m (Cons c (Cons i (Cons k Nil)))) in
+      w_cools_calculate x w c i Int.(k+1) jj n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left = 
+      Real.(x_val * w_val + w_cools_calculate x w c i k jj n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+    }
+    =
+      if jj < k then w_cools_split x w c i j Int.(jj+1) k n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+  let rec ghost function w_lines_calculate (x w : tensor real) (c: int) (i:int) (ii:int) (j:int) (n m y_h y_w: int)  (str_h str_w :int) (dil_h dil_w :int) (pad_top pad_left :int) : real
+  variant { i - ii }
+  =
+    if ii >= i then
+      0.0
+    else
+      w_cools_calculate x w c ii j 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left + w_lines_calculate x w c i Int.(ii + 1) j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+
+  let rec lemma w_lines_split (x w : tensor real) (c i ii k j n m y_h y_w : int) (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { ii <= k < i }
+    variant  { k - ii }
+    ensures {
+      w_lines_calculate x w c Int.(k+1) ii j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left =
+      Real.(w_cools_calculate x w c k j 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left + w_lines_calculate x w c k ii j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+    }
+    =
+      if ii < k then w_lines_split x w c i Int.(ii+1) k j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+  let rec ghost function w_channels_calculate (x w :tensor real) (c:int )(cc:int) (i:int) (j:int) (n m y_h y_w: int)  (str_h str_w :int) (dil_h dil_w :int) (pad_top pad_left :int) : real
+  variant { c - cc }
+  =
+    if cc >= c then
+      0.0
+    else
+      w_lines_calculate x w cc i 0 j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left + w_channels_calculate x w c Int.(cc + 1) i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+
+  let rec lemma w_channels_split (x w : tensor real) (c i cc k j n m y_h y_w : int) (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { cc <= k < c }
+    variant  { k - cc }
+    ensures {
+      w_channels_calculate x w Int.(k+1) cc i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left =
+      Real.(w_lines_calculate x w k i 0 j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left + w_channels_calculate x w k cc i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+    }
+    =
+      if cc < k then w_channels_split x w c i Int.(cc+1) k j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+  function dconv (x w : tensor real) (y_dims : list int) (str_h str_w :int) (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : data real
+  = 
+  let c = get_dim w.dims 1 in
+  let i = get_dim w.dims 2 in
+  let j = get_dim w.dims 3 in
+  fun ks ->
+    if valid ks y_dims then
+      let n = get_dim ks 0 in
+      let m = get_dim ks 1 in
+      let y_h = get_dim ks 2 in
+      let y_w = get_dim ks 3 in
+      w_channels_calculate x w c 0 i j n m y_h y_w str_h str_w dir_h dir_w pad_top pad_left
+    else
+      x.background
+
+  let rec lemma get_dim_positive (ds : list int)
+    requires { positive ds }
+    ensures { forall i. 0 <= i < length ds -> 0 < get_dim ds i }
+    variant { ds }
+    = match ds with 
+        | Nil -> () 
+        | Cons d ds -> get_dim_positive ds end
+
+  let ghost function conv (x w : tensor real) (str_h str_w :int) (dir_h dir_w :int) (pad_top pad_left pad_bottom pad_right :int) : tensor real
+  (*Strides [C1]*)
+  requires { str_h > 0 /\ str_w > 0 }
+  (*Pads [C1], [C2] *)
+  requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
+  (*Dilations [C1], [C2]*)
+  requires { dir_h > 0 /\ dir_w > 0 }
+  (*X [C1],[C4]*)
+  requires { length x.dims = 4 }
+  (*X [C2] *)
+  requires { get_dim x.dims 1 = get_dim w.dims 1 }
+  (* W [C4]*)
+  requires { length w.dims = 4 }
+  (* Strides [C2] *)
+  requires { let y_shape = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+              get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0
+           }
+  =
+  let y_dims = convDims x w str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+  { dims = y_dims;
+    data = dconv x w y_dims str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right;
+    background = x.background;
+  }
+end
+
+
+module COPConv2d
+
+    use OPConv2d
+    use tensor.Tensor
+    use tensor.Range
+    use real.Real
+    use int.Int
+    use list.List
+    use layout.CFlat
+ 
+    use libtensor.CTensor
+    use libvector.CIndex
+    use std.Clib
+    use mach.int.Int32
+    use std.Cfloat
+    use std.Int
+    use list.Length
+    use layout.CFlat
+    use tensor.Range
+
+
+  let rec lemma ivector_get_dim_value_at (coords: iarray) (n: int) (i: int)
+        requires { n = 4 } 
+        requires { 0 <= i < n }
+        requires { valid_range coords 0 n }
+        ensures  { get_dim (ivector coords n) i = value_at coords i }
+        variant  { i }
+    =
+        if i > 0 then
+        ivector_get_dim_value_at coords n (i - 1)
+
+  
+
+  let coords_from_X_p (x: ctensor) (x_p_coords : iarray) ( pad_top pad_left :int32) : (float, bool) = 
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { valid_range x_p_coords 0 4 }
+    requires { writable x_p_coords }
+    requires { in_bounds (value_at x_p_coords 2 - pad_top) }
+    requires { in_bounds (value_at x_p_coords 3 - pad_left) }
+
+    ensures { let (value, flag) = result in
+              flag -> coords_from_X_p (tensor x) (ivector x_p_coords 4) (to_int pad_top) (to_int pad_left) = value
+            }
+
+    let ref flag = False in
+    let b = x_p_coords[0] in
+    let c = x_p_coords[1] in
+    let n = (x_p_coords[2]) - pad_top in
+    let m = (x_p_coords[3]) - pad_left in
+    let x_coords_array = malloc (to_uint32 4) in
+    if is_not_null x_coords_array then begin
+      flag <- True;
+      x_coords_array[0] <- b;
+      x_coords_array[1] <- c;
+      x_coords_array[2] <- n;
+      x_coords_array[3] <- m;
+
+      assert { ivector x_coords_array 4 = Cons (to_int b) (Cons (to_int c) (Cons (to_int n) (Cons (to_int m) Nil))) } ;
+      
+      let x_coords = coffset x_coords_array x.t_dims x.t_rank in
+      if x_coords >= 0 then begin
+        (x.t_data[x_coords], flag)
+      end
+      else begin
+        ((f32 0.0), flag)
+      end
+    end
+    else begin
+      flag <- False;
+      ((f32 0.0), flag)
+    end
+
+
+  let conv2d (x w r : ctensor) (str_h str_w : int32) (dir_h dir_w : int32) 
+             (pad_top pad_left pad_bottom pad_right : int32) : ctensor
+
+  requires { valid_tensor x}
+  requires { valid_tensor w}
+  requires { valid_tensor r}
+  requires { x.t_rank = w.t_rank = r.t_rank = 4 }
+  requires { ivector r.t_dims r.t_rank = convDims (tensor x) (tensor w) str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right }
+  ensures { (tensor r).dims = convDims (tensor x) (tensor w) str_h str_w dir_h dir_w pad_top pad_left pad_bottom pad_right }
+  =
+    r
+
+
+  let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
+    requires { p <= q }
+    requires { valid_range ks p q }
+    requires { valid_range ds p q }
+    requires { pdim ds p q }
+    requires  { forall i. p <= i < q -> 0 <= value_at ks i < value_at ds i }
+    ensures { Range.valid (islice ks p q) (islice ds p q) }
+    variant  { q - p }
+    = if p < q then
+        begin
+          assert { islice ks p q = Cons (Int32.to_int (value_at ks p)) (islice ks (p+1) q) };
+          assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
+          valid_bounds_2 ks ds (p+1) q
+        end
+
+  let w_cools_calculate (x w: ctensor) (c: int32) (i:int32) (n m y_h y_w: int32)  (str_h str_w :int32) (dil_h dil_w :int32) (pad_top pad_left :int32) : (float, bool)
+  requires { valid_tensor x }
+  requires { valid_tensor w }
+  requires { x.t_rank = w.t_rank = 4 }
+  requires { 0 <= m < value_at w.t_dims 0 }
+  requires { 0 <= c < value_at w.t_dims 1 }
+  requires { 0 <= i < value_at w.t_dims 2 }
+  
+  (*Try to remove this block like Loic do it*)
+  requires { in_bounds (i * dil_h) }
+  requires { in_bounds (y_h * str_h) }
+  requires { in_bounds (y_h * str_h + i * dil_h) }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (jj * dil_w) }
+  requires { in_bounds (y_w * str_w) }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+  requires { let x_h = y_h * str_h + i * dil_h in
+              in_bounds (x_h - pad_top) 
+            }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> 
+              let x_w = y_w * str_w + jj * dil_w in
+              in_bounds (x_w - pad_left) 
+            }
+
+  ensures { let (value, flag) = result in
+            flag -> w_cools_calculate (tensor x) (tensor w) c i (value_at w.t_dims 3) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left = value
+          }
+  =
+    let ref flag = False in
+    let ref sum = (f32 0.0) in
+    let x_coords_array = malloc (to_uint32 4) in
+    let w_coords_array = malloc (to_uint32 4) in
+    let cols = w.t_dims[3] in
+    if is_not_null x_coords_array && is_not_null w_coords_array then begin
+      flag <- True;
+      for jj = 0 to cols - 1 do
+        invariant { sum = w_cools_calculate (tensor x) (tensor w) c i jj 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left }
+        let x_h = y_h * str_h + i * dil_h in
+        let x_w = y_w * str_w + jj * dil_w in
+        x_coords_array[0] <- n;
+        x_coords_array[1] <- c;
+        x_coords_array[2] <- x_h;
+        x_coords_array[3] <- x_w;
+        assert { ivector x_coords_array 4 = Cons (to_int n) (Cons (to_int c) (Cons (to_int x_h) (Cons (to_int x_w) Nil))) } ;
+        let (x_val, aux_flag) = coords_from_X_p x x_coords_array pad_top pad_left in
+        assert { aux_flag ->  x_val = coords_from_X_p (tensor x) (ivector x_coords_array 4) (to_int pad_top) (to_int pad_left) } ;
+        if aux_flag then begin
+          w_coords_array[0] <- m;
+          w_coords_array[1] <- c;
+          w_coords_array[2] <- i;
+          w_coords_array[3] <- jj;
+
+          ghost
+            begin
+                valid_bounds_2 w_coords_array w.t_dims 0 4;
+                assert { Range.valid (ivector w_coords_array w.t_rank) (ivector w.t_dims w.t_rank) }; 
+                w_cools_split (tensor x) (tensor w) (to_int c) (to_int i) (to_int cols) 0 (to_int jj) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left)
+            end;
+
+ 
+          let w_coords = coffset w_coords_array w.t_dims w.t_rank in
+          let w_val = w.t_data[w_coords] in
+          assert {Cons (to_int m) (Cons (to_int c) (Cons (to_int i) (Cons (jj) Nil))) = ivector w_coords_array w.t_rank } ;
+          assert { (tensor w).Tensor.data (Cons (to_int m) (Cons (to_int c) (Cons (to_int i) (Cons (jj) Nil)))) = w_val } ;
+          assert { x_val = coords_from_X_p (tensor x) (ivector x_coords_array 4) (to_int pad_top) (to_int pad_left) } ;
+          sum <- sum .+ (x_val .* w_val);
+          assert { sum = w_cools_calculate (tensor x) (tensor w) c i Int.(jj+1) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left }
+        end
+        else begin
+          flag <- False;
+          return (f32 0.0, flag)
+        end
+      done;
+      (sum, flag)
+    end
+    else begin
+      flag <- False;
+      (f32 0.0, flag)
+    end
+
+  let w_lines_calculate (x w : ctensor) (c: int32) (n m y_h y_w: int32)  (str_h str_w :int32) (dil_h dil_w :int32) (pad_top pad_left :int32) : (float, bool)
+  requires { valid_tensor x }
+  requires { valid_tensor w }
+  requires { x.t_rank = w.t_rank = 4 }
+  requires { 0 <= m < value_at w.t_dims 0 }
+  requires { 0 <= c < value_at w.t_dims 1 }
+
+  (*Try to remove this block like Loic do it*)
+  requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
+  requires { in_bounds (y_h * str_h) }
+  requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (jj * dil_w) }
+  requires { in_bounds (y_w * str_w) }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+
+  requires { forall ii: int. 0 <= ii < value_at w.t_dims 2 -> 
+              let x_h = y_h * str_h + ii * dil_h in
+              in_bounds (x_h - pad_top) 
+            }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> 
+              let x_w = y_w * str_w + jj * dil_w in
+              in_bounds (x_w - pad_left) 
+            }
+  ensures { let (value, flag) = result in
+            flag -> w_lines_calculate (tensor x) (tensor w) c (value_at w.t_dims 2) 0 (value_at w.t_dims 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left = value
+          }
+  =
+  let i = w.t_dims[2] in
+  let ref flag = False in
+  let ref sum = (f32 0.0) in
+  for ii = 0 to i - 1 do
+    invariant { sum = w_lines_calculate (tensor x) (tensor w) c ii 0 (value_at w.t_dims 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left }
+    let (value, aux_flag) = w_cools_calculate x w c ii n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left in
+    if aux_flag then begin
+      flag <- True;
+      ghost 
+        begin
+          w_lines_split (tensor x) (tensor w) (to_int c) (to_int i) 0 (to_int ii) (to_int(value_at w.t_dims 3)) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left)
+        end;
+      sum <- sum .+ value;
+    end
+    else begin
+      flag <- False;
+      return (f32 0.0, flag)
+    end
+  done;
+  (sum, flag)
+
+
+let w_channels_calculate (x w : ctensor) (n m y_h y_w: int32)  (str_h str_w :int32) (dil_h dil_w :int32) (pad_top pad_left :int32) : (float, bool)
+  requires { valid_tensor x }
+  requires { valid_tensor w }
+  requires { x.t_rank = w.t_rank = 4 }
+  requires { 0 <= m < value_at w.t_dims 0 }
+
+  (*Try to remove this block like Loic do it*)
+  requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
+  requires { in_bounds (y_h * str_h) }
+  requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (jj * dil_w) }
+  requires { in_bounds (y_w * str_w) }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+
+  requires { forall ii: int. 0 <= ii < value_at w.t_dims 2 -> 
+              let x_h = y_h * str_h + ii * dil_h in
+              in_bounds (x_h - pad_top) 
+            }
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> 
+              let x_w = y_w * str_w + jj * dil_w in
+              in_bounds (x_w - pad_left) 
+            }
+  ensures { let (value, flag) = result in
+            flag -> w_channels_calculate (tensor x) (tensor w) (to_int(value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) = value
+          }
+  =
+  let c = w.t_dims[1] in
+  let ref flag = False in
+  let ref sum = (f32 0.0) in
+  for cc = 0 to c - 1 do
+    invariant { sum = w_channels_calculate (tensor x) (tensor w) cc 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) }
+    let (value, aux_flag) = w_lines_calculate x w cc n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left in
+    if aux_flag then begin
+      flag <- True;
+      (*Lemma is not needed on this function*)
+      (*
+      ghost
+        begin
+          w_channels_split (tensor x) (tensor w) (to_int c) (to_int(value_at w.t_dims 2)) 0 (to_int cc) (to_int(value_at w.t_dims 3)) (to_int n) (to_int m) (to_int y_h) (to_int y_w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left)
+        end;
+      *)
+      sum <- sum .+ value;
+    end
+    else begin
+      flag <- False;
+      return (f32 0.0, flag)
+    end
+  done;
+  (sum, flag)
+
+
+let c_conv (x w r : ctensor) (str_h str_w : int32) (dil_h dil_w : int32) 
+             (pad_top pad_left pad_bottom pad_right : int32) : bool
+
+  requires { valid_tensor x}
+  requires { valid_tensor w}
+  requires { valid_tensor r}
+  requires { x.t_rank = w.t_rank = r.t_rank = 4 }
+  requires { ivector r.t_dims r.t_rank = convDims (tensor x) (tensor w) str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right }
+  (*Strides [C1]*)
+  requires { str_h > 0 /\ str_w > 0 }
+  (*Pads [C1], [C2] *)
+  requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
+  (*Dilations [C1], [C2]*)
+  requires { dil_h > 0 /\ dil_w > 0 }
+  (*X [C1],[C4]*)
+  requires { length (tensor x).dims = 4 }
+  (*X [C2] *)
+  requires { get_dim (tensor x).dims 1 = get_dim (tensor w).dims 1 }
+  (* W [C4]*)
+  requires { length (tensor w).dims = 4 }
+  (* Strides [C2] *)
+  requires { let y_shape = convDims (tensor x) (tensor w) str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+              get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0
+           }
+
+  (*Try to remove this block like Loic do it*)
+  requires { forall ii:int. 0 <= ii < value_at w.t_dims 2 -> in_bounds (ii * dil_h) }
+  requires { forall y_h: int. 0 <= y_h < value_at r.t_dims 2 -> in_bounds (y_h * str_h) }
+  requires { forall ii y_h:int. 0 <= ii < value_at w.t_dims 2 /\ 0 <= y_h < value_at r.t_dims 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+
+  requires { forall jj. 0 <= jj < value_at w.t_dims 3 -> in_bounds (jj * dil_w) }
+  requires { forall y_w: int. 0 <= y_w < value_at r.t_dims 3 -> in_bounds (y_w * str_w) }
+  requires { forall jj y_w:int. 0 <= jj < value_at w.t_dims 3 /\ 0 <= y_w < value_at r.t_dims 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+
+  requires { forall ii y_h: int. 0 <= ii < value_at w.t_dims 2 /\ 0 <= y_h < value_at r.t_dims 2 -> 
+              let x_h = y_h * str_h + ii * dil_h in
+              in_bounds (x_h - pad_top) 
+            }
+  requires { forall jj y_w: int. 0 <= jj < value_at w.t_dims 3 /\ 0 <= y_w < value_at r.t_dims 3 -> 
+              let x_w = y_w * str_w + jj * dil_w in
+              in_bounds (x_w - pad_left) 
+            }
+
+  requires { forall mm:int. 0 <= mm < value_at r.t_dims 1 -> mm < value_at w.t_dims 0 }
+
+  ensures { result -> tensor r = conv (tensor x) (tensor w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) }
+  
+  =
+    let n = r.t_dims[0] in
+    let m = r.t_dims[1] in
+    let y_h = r.t_dims[2] in
+    let y_w = r.t_dims[3] in
+    let r_coords_array = malloc (to_uint32 4) in
+    if is_not_null r_coords_array then begin
+      for nn = 0 to n - 1 do
+        invariant { 
+          forall nn_: int. 0 <= nn_ < nn ->
+            (forall mm: int. 0 <= mm < m ->
+              (forall yy_hh: int. 0 <= yy_hh < y_h ->
+                (forall yy_ww: int. 0 <= yy_ww < y_w ->
+                  let coords = Cons (nn_) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                  let dims = ivector r.t_dims r.t_rank in
+                  let off = CFlat.offset coords dims in
+                  value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn_ mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                )
+              )
+            )
+        }
+        r_coords_array[0] <- nn;
+        for mm = 0 to m - 1 do
+          invariant { value_at r_coords_array 0 = nn }
+          invariant { 
+            forall nn_: int. 0 <= nn_ < nn ->
+              (forall mm: int. 0 <= mm < m ->
+                (forall yy_hh: int. 0 <= yy_hh < y_h ->
+                  (forall yy_ww: int. 0 <= yy_ww < y_w ->
+                    let coords = Cons (nn_) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                    let dims = ivector r.t_dims r.t_rank in
+                    let off = CFlat.offset coords dims in
+                    value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn_ mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                  )
+                )
+              )
+          }
+          invariant {
+            forall mm_. 0 <= mm_ < mm ->
+              (forall yy_hh. 0 <= yy_hh < y_h ->
+                (forall yy_ww. 0 <= yy_ww < y_w ->
+                  let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                  let dims = ivector r.t_dims r.t_rank in
+                  let off = CFlat.offset coords dims in
+                  value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                )
+              )
+          }
+          r_coords_array[1] <- mm;
+          for y_hh = 0 to y_h - 1 do
+            invariant { value_at r_coords_array 0 = nn /\ value_at r_coords_array 1 = mm }
+            invariant { 
+              forall nn_: int. 0 <= nn_ < nn ->
+                (forall mm: int. 0 <= mm < m ->
+                  (forall yy_hh: int. 0 <= yy_hh < y_h ->
+                    (forall yy_ww: int. 0 <= yy_ww < y_w ->
+                      let coords = Cons (nn_) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                      let dims = ivector r.t_dims r.t_rank in
+                      let off = CFlat.offset coords dims in
+                      value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn_ mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                    )
+                  )
+                )
+            }
+            invariant {
+              forall mm_. 0 <= mm_ < mm ->
+                (forall yy_hh. 0 <= yy_hh < y_h ->
+                  (forall yy_ww. 0 <= yy_ww < y_w ->
+                    let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                    let dims = ivector r.t_dims r.t_rank in
+                    let off = CFlat.offset coords dims in
+                    value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                  )
+                )
+            }
+            invariant {
+              forall yy_hh. 0 <= yy_hh < y_hh ->
+                (forall yy_ww. 0 <= yy_ww < y_w ->
+                  let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                  let dims = ivector r.t_dims r.t_rank in
+                  let off = CFlat.offset coords dims in
+                  value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                )
+            
+            }
+            r_coords_array[2] <- y_hh;
+            for y_ww = 0 to y_w - 1 do
+              invariant { value_at r_coords_array 0 = nn /\ value_at r_coords_array 1 = mm /\ value_at r_coords_array 2 = y_hh }
+              invariant { 
+                forall nn_: int. 0 <= nn_ < nn ->
+                  (forall mm: int. 0 <= mm < m ->
+                    (forall yy_hh: int. 0 <= yy_hh < y_h ->
+                      (forall yy_ww: int. 0 <= yy_ww < y_w ->
+                        let coords = Cons (nn_) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                        let dims = ivector r.t_dims r.t_rank in
+                        let off = CFlat.offset coords dims in
+                        value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn_ mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                      )
+                    )
+                  )
+              }
+              invariant {
+                forall mm_. 0 <= mm_ < mm ->
+                  (forall yy_hh. 0 <= yy_hh < y_h ->
+                    (forall yy_ww. 0 <= yy_ww < y_w ->
+                      let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                      let dims = ivector r.t_dims r.t_rank in
+                      let off = CFlat.offset coords dims in
+                      value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                    )
+                  )
+              }
+              invariant {
+                forall yy_hh. 0 <= yy_hh < y_hh ->
+                  (forall yy_ww. 0 <= yy_ww < y_w ->
+                    let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                    let dims = ivector r.t_dims r.t_rank in
+                    let off = CFlat.offset coords dims in
+                    value_at r.t_data off = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left
+                  )
+              }
+              invariant {
+                forall yy_ww. 0 <= yy_ww < y_ww -> 
+                  let coords = Cons (nn) (Cons (mm) (Cons (y_hh) (Cons yy_ww Nil))) in
+                  let dims = ivector r.t_dims r.t_rank in
+                  let off = CFlat.offset coords dims in
+                  (value_at r.t_data off) = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) ( nn) ( mm) ( y_hh) yy_ww ( str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left)
+              }
+              r_coords_array[3] <- y_ww;
+              let (value, flag) = w_channels_calculate x w nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left in
+              if flag then begin
+                let r_coords = coffset r_coords_array r.t_dims r.t_rank in
+                r.t_data[r_coords] <- value;
+                
+                assert { ivector r_coords_array r.t_rank = Cons ( nn) (Cons ( mm) (Cons ( y_hh) (Cons ( y_ww) Nil))) } ;
+                assert { value = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left } ;
+                assert { let r_coords = CFlat.offset (ivector r_coords_array r.t_rank) (ivector r.t_dims r.t_rank) in
+                         value_at r.t_data r_coords = w_channels_calculate (tensor x) (tensor w) (to_int (value_at w.t_dims 1)) 0 (to_int(value_at w.t_dims 2)) (to_int(value_at w.t_dims 3)) nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left };
+                
+
+                assert { forall yy_ww. 0 <= yy_ww < y_ww -> 
+                          let coords = Cons (nn) (Cons (mm) (Cons (y_hh) (Cons yy_ww Nil)) ) in
+                          coords <> (ivector r_coords_array r.t_rank)
+                        };
+                
+                assert  { forall yy_ww. 0 <= yy_ww < y_ww -> 
+                          let coords = Cons (nn) (Cons (mm) (Cons (y_hh) (Cons yy_ww Nil)) ) in
+                          Range.valid coords (ivector r.t_dims r.t_rank)
+                        };
+
+                assert { forall yy_ww. 0 <= yy_ww < y_ww -> 
+                          let coords = Cons (nn) (Cons (mm) (Cons (y_hh) (Cons yy_ww Nil)) ) in
+                          let dims = ivector r.t_dims r.t_rank in
+                          let off = CFlat.offset coords dims in
+                          let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                          off <> off1 
+                        };
+                
+                assert {
+                        forall yy_ww. 0 <= yy_ww < y_ww -> 
+                                  let coords = Cons (nn) (Cons (mm) (Cons (y_hh) (Cons yy_ww Nil)) ) in
+                                  let dims = ivector r.t_dims r.t_rank in
+                                  let off = CFlat.offset coords dims in
+                                  off <> r_coords
+                      };
+
+
+                assert { forall yy_hh. 0 <= yy_hh < y_hh -> 
+                          (forall yy_ww. 0 <= yy_ww < y_w ->
+                            let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                            coords <> (ivector r_coords_array r.t_rank)
+                          )
+                        };
+                assert { forall yy_hh. 0 <= yy_hh < y_hh -> 
+                          (forall yy_ww. 0 <= yy_ww < y_w ->
+                            let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                            Range.valid coords (ivector r.t_dims r.t_rank)
+                          )
+                        };
+
+                assert { forall yy_hh. 0 <= yy_hh < y_hh -> 
+                          (forall yy_ww. 0 <= yy_ww < y_w ->
+                            let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                            let dims = ivector r.t_dims r.t_rank in
+                            let off = CFlat.offset coords dims in
+                            let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                            off <> off1
+                          )
+                        };
+                
+                assert { forall yy_hh. 0 <= yy_hh < y_hh -> 
+                          (forall yy_ww. 0 <= yy_ww < y_w ->
+                            let coords = Cons (nn) (Cons (mm) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                            let dims = ivector r.t_dims r.t_rank in
+                            let off = CFlat.offset coords dims in
+                            off <> r_coords
+                          )
+                        };
+                  
+
+                assert { forall mm_. 0 <= mm_ < mm ->
+                          (forall yy_hh. 0 <= yy_hh < y_h ->
+                            (forall yy_ww. 0 <= yy_ww < y_w ->
+                              let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                              coords <> (ivector r_coords_array r.t_rank)
+                            )
+                          )
+                        };
+                
+                assert { forall mm_. 0 <= mm_ < mm ->
+                          (forall yy_hh. 0 <= yy_hh < y_h ->
+                            (forall yy_ww. 0 <= yy_ww < y_w ->
+                              let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                              Range.valid coords (ivector r.t_dims r.t_rank)
+                            )
+                          )
+                        };
+                
+                assert { forall mm_. 0 <= mm_ < mm ->
+                          (forall yy_hh. 0 <= yy_hh < y_h ->
+                            (forall yy_ww. 0 <= yy_ww < y_w ->
+                              let coords = Cons (nn) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                              let dims = ivector r.t_dims r.t_rank in
+                              let off = CFlat.offset coords dims in
+                              let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                              off <> off1
+                            )
+                          )
+                        };
+                
+                assert { 
+                  forall nn_. 0 <= nn_ < nn ->
+                    (forall mm_. 0 <= mm_ < m ->
+                      (forall yy_hh. 0 <= yy_hh < y_h ->
+                        (forall yy_ww. 0 <= yy_ww < y_w ->
+                          let coords = Cons (nn_) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                          coords <> (ivector r_coords_array r.t_rank)
+                        )
+                      )
+                    )
+                };
+
+                assert { 
+                  forall nn_. 0 <= nn_ < nn ->
+                    (forall mm_. 0 <= mm_ < m ->
+                      (forall yy_hh. 0 <= yy_hh < y_h ->
+                        (forall yy_ww. 0 <= yy_ww < y_w ->
+                          let coords = Cons (nn_) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                          Range.valid coords (ivector r.t_dims r.t_rank)
+                        )
+                      )
+                    )
+                };
+
+                assert { forall nn_. 0 <= nn_ < nn ->
+                          (forall mm_. 0 <= mm_ < m ->
+                            (forall yy_hh. 0 <= yy_hh < y_h ->
+                              (forall yy_ww. 0 <= yy_ww < y_w ->
+                                let coords = Cons (nn_) (Cons (mm_) (Cons yy_hh (Cons yy_ww Nil)) ) in
+                                let dims = ivector r.t_dims r.t_rank in
+                                let off = CFlat.offset coords dims in
+                                let off1 = CFlat.offset (ivector r_coords_array r.t_rank) dims in
+                                off <> off1
+                              )
+                            )
+                          )}
+              end
+              else
+                return false
+            done;
+          done;
+        done;
+      done;
+    assert { tensor r == conv (tensor x) (tensor w) (to_int str_h) (to_int str_w) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_right) } ;
+    true
+    end
+    else
+      false
+
+end

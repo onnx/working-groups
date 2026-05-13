@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module std.Cfloat</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="std.index.html">std</a></code> — <code>module Cfloat</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Cfloat</span><a href="std.proof.html#Cfloat" title="10 value parameters, 0 instance found" class="icon small warning icofont-warning-alt"></a><a href="std.proof.html#Cfloat" title="Valid (no goals)" class="icon remark icofont-check"></a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> real.<a title="real.Real" href="https://www.why3.org/stdlib/real.html#Real_">Real</a>
+
+  <span class="keyword">type</span> <a id="float">float</a> = <span class="keyword">abstract</span> { <a id="to_real">to_real</a> : real }
+  <span class="keyword">meta</span> coercion <span class="keyword">function</span> <a title="std.Cfloat.to_real" href="#to_real">to_real</a>
+
+  <span class="keyword">type</span> <a id="f32">f32</a> = &lt; float 8 24 &gt;  <span class="comment">(* single precision literals *)</span>
+  <span class="keyword">type</span> <a id="f64">f64</a> = &lt; float 11 53 &gt; <span class="comment">(* double precision literals *)</span>
+
+  <span class="keyword">val</span> <span class="keyword">function</span> <a id="f32">f32</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (k : <a title="std.Cfloat.f32" href="#f32">f32</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { result = <a title="std.Cfloat.f32'real" href="#f32%27real">f32&#39;real</a> k }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> <a id="f64">f64</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> (k : <a title="std.Cfloat.f64" href="#f64">f64</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { result = <a title="std.Cfloat.f64'real" href="#f64%27real">f64&#39;real</a> k }
+
+  <span class="keyword">let</span> <span class="keyword">constant</span> <a id="zero">zero</a><a href="std.proof.html#Cfloat.zero" title="Valid (no goals)" class="icon remark icofont-check"></a> = <a title="std.Cfloat.f64" href="#f64">f64</a> 0.0
+  <span class="keyword">let</span> <span class="keyword">constant</span> <a id="one">one</a><a href="std.proof.html#Cfloat.one" title="Valid (no goals)" class="icon remark icofont-check"></a>  = <a title="std.Cfloat.f64" href="#f64">f64</a> 1.0
+
+  <span class="keyword">val</span> <span class="keyword">function</span> (<a id="infix%20.%2B">.+</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span>) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { Real.( result = a <a title="real.Real.(+)" href="https://www.why3.org/stdlib/real.html#infix%20+_19">+</a> b ) }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> (<a id="infix%20.-">.-</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span>) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { Real.( result = a <a title="real.Real.(-)" href="https://www.why3.org/stdlib/real.html#infix%20-_156">-</a> b ) }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> (<a id="prefix%20.-">.-_</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span>) (a : <a title="std.Cfloat.float" href="#float">float</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { Real.( result = (<a title="real.Real.(-)" href="https://www.why3.org/stdlib/real.html#prefix%20-_18">-</a> a) ) }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> ( <a id="infix%20.%2A">.*</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> ) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">ensures</span> { Real.( result = a <a title="real.Real.(*)" href="https://www.why3.org/stdlib/real.html#infix%20*_20">*</a> b ) }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> ( <a id="infix%20.%2F">./</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> ) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : <a title="std.Cfloat.float" href="#float">float</a>
+    <span class="keyword">requires</span> { b &lt;&gt; 0.0 }
+    <span class="keyword">ensures</span> { Real.( result = a <a title="real.Real.(/)" href="https://www.why3.org/stdlib/real.html#infix%20/_157">/</a> b ) }
+
+  <span class="keyword">val</span> <span class="keyword">predicate</span> ( <a id="infix%20.%3D">.=</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> ) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : bool
+    <span class="keyword">ensures</span> { result &lt;-&gt; Real.( a = b ) }
+
+  <span class="keyword">val</span> <span class="keyword">predicate</span> ( <a id="infix%20.%3C">.&lt;</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> ) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : bool
+    <span class="keyword">ensures</span> { result &lt;-&gt; Real.( a <a title="real.Real.(<)" href="https://www.why3.org/stdlib/real.html#infix%20%3C_21">&lt;</a> b ) }
+
+  <span class="keyword">val</span> <span class="keyword">predicate</span> ( <a id="infix%20.%3C%3D">.&lt;=</a><span title="Value Parameter" class="icon small warning icofont-warning-alt"></span> ) (a b : <a title="std.Cfloat.float" href="#float">float</a>) : bool
+    <span class="keyword">ensures</span> { result &lt;-&gt; Real.( a <a title="real.Real.(<=)" href="https://www.why3.org/stdlib/real.html#infix%20%3C=_24">&lt;=</a> b ) }
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

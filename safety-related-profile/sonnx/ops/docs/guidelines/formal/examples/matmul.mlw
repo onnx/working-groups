@@ -1,0 +1,43 @@
+module OPMatmul
+    use tensor.Tensor
+    use std.Int
+    use list.List
+    use tensor.Range
+    use list.Length
+    use int.Int
+    use real.Real
+ 
+    let rec function dot_product (a b: tensor real) (row col i iter: int) : real
+      variant { Int.(iter - i) }
+    =
+        if Int.(>=) i iter then
+            0.0
+        else
+            let a_val = a.data (Cons row (Cons i Nil)) in
+            let b_val = b.data (Cons i (Cons col Nil)) in
+            Real.(a_val * b_val + dot_product a b row col Int.(i + 1) iter)
+ 
+    function dmatmul ( a b: tensor real) (a_rows b_cols : int) : data real
+    =  
+        let iter = get_dim a.dims 1 in
+        let y_shape = Cons a_rows (Cons b_cols Nil) in
+        fun ks ->
+            if valid ks y_shape then
+                let row = get_dim ks 0 in
+                let col = get_dim ks 1 in
+                dot_product a b row col 0 iter
+            else
+                a.background
+ 
+    let ghost function matmul ( a b: tensor real) : tensor real
+    requires { a.background = b.background }
+    requires { length a.dims = length b.dims = 2 }
+    requires { get_dim a.dims 1 = get_dim b.dims 0 }
+    ensures { result.background = a.background }
+    ensures { result.dims = Cons (get_dim a.dims 0) (Cons (get_dim b.dims 1) Nil) }
+    ensures { length result.dims = 2 }
+    ensures { result.data = dmatmul a b (get_dim a.dims 0) (get_dim b.dims 1) }
+    =
+    { dims = Cons (get_dim a.dims 0) (Cons (get_dim b.dims 1) Nil) ; data = dmatmul a b (get_dim a.dims 0) (get_dim b.dims 1) ; background = a.background }
+ 
+end

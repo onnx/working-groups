@@ -1,0 +1,31 @@
+- In ONNX, the operator is `Where`, not `WHERE`. (To be checked for `Conv`.)
+- Should we generalize the restriction on the usage of [sparse tensors](https://onnx.ai/onnx/intro/concepts.html#sparse-tensor)?  
+- Put R2 as the first restriction so that R1 and R3 are in sequence. 
+- Restrictions about sparse tensors and broadcasting, no shape / type inference should probably put in a unique / common document.
+- "- `Z`: output tensor based on the `condition`, `X`, and `Y`" => "- `Z`: output tensor"
+- "if the corresponding entry" => make "corresponding" more explicit? (to be discussed since there is a mathematical expression just after...)
+- "is different of false" => "is True" (to be homogeneous with the previous statements)
+- figure
+  - if the figure has been copied, please indicate the source.
+  - "Cond" => "condition"
+  - show the condition tensor on the figure
+- examples
+  - give an example not using Booleans but numerical values
+- python
+  - **To be discussed: should we generalize this (e.g., provide a jupyter notebook with examples)** This could be a good idea...
+- Description of condition`
+  - constraints
+    - "consistency in shape" => "shape consistency"?
+    - "N" must be defined and check if it is necessary.
+- Description of `X
+    - Add the type
+    - "[...] based on the [...]" => "[...] based on [...]"
+    - constraint : use a cross-ref to the previous constraint.
+- Description of `Y`
+  - *same remarks as for `X`*
+- Description of `Z`
+  - "The tensor `Z` [...]" => "Tensor `Z` [...]"
+- Attributes
+  - "The where operator does not require any attributes." =?=> "The where operator has no attribute." or "Not applicable".
+- Formal specification 
+  - To be removed for the moment.

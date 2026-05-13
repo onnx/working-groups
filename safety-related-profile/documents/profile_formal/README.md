@@ -1,0 +1,1 @@
+This directory contains the formal specification of operators, expressed using the Why3 formal language.

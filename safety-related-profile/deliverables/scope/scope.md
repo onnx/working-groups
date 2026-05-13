@@ -137,21 +137,22 @@ YoloNAS
 5) Add
 6) Mul
 7) Concat
+8) Reshape
+9) Slice
+10) Transpose
+11) Softplus
 
 ### Priority 2 list:
-8) FullyConnected
-9) Conv2D (grouping & depthwise)
-10) Sub
-11) Abs
-12) ReduceSum
-13) Transpose
-14) Split
-15) Slice
-16) Gather
-17) Squeeze
-18) Unsqueeze
-19) Reshape
-20) Flatten
+12) MatMul (FullyConnected)
+13) Conv2D (grouping & depthwise)
+14) Sub
+15) Abs
+16) ReduceSum
+17) Split
+18) Gather
+19) Squeeze
+20) Unsqueeze
+21) Flatten
 
 # Use case `Helicopters` - `Valot Nicolas`
 
