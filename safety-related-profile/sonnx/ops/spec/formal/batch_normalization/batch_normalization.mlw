@@ -1,0 +1,182 @@
+(** Formal specification of the BatchNormalization operator (inference mode) *)
+
+(** -----------------------------------------------------------------------
+    Abstract-level specification (tensor.mlw)
+    ----------------------------------------------------------------------- *)
+
+module OPBatchNorm
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+  use int.Int
+  use real.Real
+  use real.Square
+  use tensor.std.Cfloat
+  use list.List
+
+  (** Per-channel normalization function.
+      For a given channel c, value v, mean m, variance s, scale g and bias b:
+        batchnorm_elt v m s g b epsilon = g * (v - m) / sqrt(s + epsilon) + b *)
+  function batchnorm_elt (v : real) (m : real) (s : real) (g : real) (b : real) (eps : real) : real 
+  =
+    g * (v - m) / sqrt (s + eps) + b
+
+  (** Data-level operator: applies batchnorm_elt element-wise.
+      [chan] extracts the channel index (axis 1) from a multi-index k.
+      For a tensor of shape (N, C, d2, ...), the channel index is the
+      second component of k (index 1). *)
+  function chan (k : list int) : int =
+    match k with
+    | Cons _ (Cons c _) -> c
+    | Cons c _          -> c   (* 1-D case: C is implicitly 1, c = 0 *)
+    | Nil               -> 0
+    end
+
+  let ghost function dbatchnorm
+      (x mean var scale bias : data real)
+      (eps : real)
+      : data real
+    = fun k ->
+        batchnorm_elt
+          (x k)
+          (mean (Cons (chan k) Nil))
+          (var  (Cons (chan k) Nil))
+          (scale (Cons (chan k) Nil))
+          (bias  (Cons (chan k) Nil))
+          eps
+
+  (** Tensor-level operator.
+      Requires:
+        - [x] and [y] have the same shape and background
+        - [mean], [var], [scale], [bias] are 1-D tensors of size C
+        - [epsilon] > 0
+        - [var] is non-negative channel-wise *)
+  let ghost function opbatchnorm
+      (x : tensor real)
+      (scale mean var bias : tensor real)
+      (eps : real)
+      : tensor real
+    requires { Real.(eps > 0.0) }
+    requires { forall c. valid (Cons c Nil) var.dims ->
+                 Real.(var.data (Cons c Nil) >= 0.0) }
+    ensures { result ~ x }
+    ensures { result.background = x.background }
+    ensures { result.data =
+                dbatchnorm x.data mean.data var.data scale.data bias.data eps }
+    (*proof*)
+    = { dims       = x.dims ;
+        data       = dbatchnorm x.data mean.data var.data scale.data bias.data eps ;
+        background = x.background }
+    (*qed*)
+
+end
+
+
+(** -----------------------------------------------------------------------
+    Concrete-level implementation (libtensor.mlw)
+    ----------------------------------------------------------------------- *)
+
+module CTensorBatchNorm
+  use int.Int
+  use real.Real
+  use real.Square
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Int
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use OPBatchNorm
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.libtensor.CTensor
+  use ref.Ref
+
+  (** [csqrt f] computes sqrt(f) for a non-negative real value f. *)
+  val function csqrt (v : float) : float
+    requires { Real.(v >= 0.0) }
+    ensures  { Real.(result = sqrt v) }
+
+  (** [ctensor_batchnorm x scale input_mean input_var bias epsilon r]
+      implements the BatchNormalization operator in inference mode.
+
+      Preconditions
+      -------------
+      - [x], [scale], [input_mean], [input_var], [bias], [r] are valid tensors
+      - [x] and [r] have the same shape and background (shape consistency, C1)
+      - [scale], [input_mean], [input_var], [bias] are 1-D tensors of size C,
+        where C is the number of channels of [x] (shape consistency, C1 on params)
+      - [scale], [input_mean], [input_var], [bias] have the same type (C2)
+      - [epsilon] > 0 (attribute constraint C1)
+      - [input_var[c] >= 0] for all c (non-negativity, C3 on input_var)
+
+      Postcondition
+      -------------
+      - [tensor r = opbatchnorm (tensor x) (tensor scale) (tensor input_mean)
+                                (tensor input_var) (tensor bias) epsilon]  *)
+  let ctensor_batchnorm
+      (x scale input_mean input_var bias : ctensor)
+      (eps : float)
+      (r : ctensor)
+    (*proof*)
+    requires { valid_tensor x }
+    requires { valid_tensor scale }
+    requires { valid_tensor input_mean }
+    requires { valid_tensor input_var }
+    requires { valid_tensor bias }
+    requires { valid_tensor r }
+    (* Shape consistency: x and r have the same shape *)
+    requires { tensor x ~= tensor r }
+    (* Shape consistency: parameter tensors are 1-D of size C *)
+    requires { tensor scale     ~ tensor input_mean }
+    requires { tensor input_mean ~ tensor input_var }
+    requires { tensor input_var  ~ tensor bias }
+    requires { scale.t_rank = 1 }
+    (* Attribute constraint: epsilon strictly positive *)
+    requires { Real.(eps > 0.0) }
+    (* Non-negativity of variance channel-wise *)
+    requires { forall c. 0 <= c < tensor_size input_var ->
+                 Real.(value_at input_var.t_data c >= 0.0) }
+    (*qed*)
+    ensures { tensor r =
+                opbatchnorm (tensor x) (tensor scale) (tensor input_mean)
+                            (tensor input_var) (tensor bias) eps }
+    =
+    let n_size     = x.t_dims[of_int 0]              in  (* N: batch size      *)
+    let c_size     = scale.t_dims[of_int 0]           in  (* C: channel count   *)
+    let spatial    = cdim_size r.t_dims r.t_rank      in  (* N*C*d2*..          *)
+    let nc         = n_size * c_size                  in  (* N * C              *)
+    let stride     = spatial / nc                     in  (* spatial stride     *)
+    let ref flat   = of_int 0                         in  (* flat index into data *)
+    for n = 0 to n_size - 1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < flat ->
+        value_at r.t_data k =
+          let idx   = index ( k) (tensor_dim x) in
+          let c     = chan idx                               in
+          let v     = value_at x.t_data ( k)    in
+          let mu    = value_at input_mean.t_data c           in
+          let sigma = value_at input_var.t_data c            in
+          let g     = value_at scale.t_data c                in
+          let b     = value_at bias.t_data c                 in
+          batchnorm_elt v mu sigma g b eps
+      }
+      (*qed*)
+      for c = 0 to c_size - 1 do
+        let mu    = input_mean.t_data[c] in
+        let sigma = input_var.t_data[c]  in
+        let g     = scale.t_data[c]      in
+        let b     = bias.t_data[c]       in
+        for s = 0 to stride - 1 do
+          let v = x.t_data[flat] in
+          r.t_data[flat] <- g .* ((v .- mu) ./ csqrt (sigma .+ eps)) .+ b ;
+          flat <- flat + of_int 1
+        done
+      done
+    done
+    (*proof*)
+    ; assert { tensor r == opbatchnorm (tensor x) (tensor scale) (tensor input_mean)
+                                       (tensor input_var) (tensor bias) eps }
+    (*qed*)
+
+end
