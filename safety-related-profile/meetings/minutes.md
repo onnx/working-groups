@@ -1,4 +1,36 @@
-  # 2026/05/06
+# 2026/05/20
+## Participants
+- Eric,...
+## Agenda 
+- Review of actions (Eric)
+- Status of papers (Ricardo+João)
+- Test strategy (Eric). See [doc](../sonnx/ops/docs/guidelines/tests-part2.md). 
+- An "idea" about formal spec... (eric)
+- Status of AIDGE integration (Eric+Hamza)
+- Roundtable
+## Minutes
+## Actions
+### New actions
+### Previous actions
+- [ ] (0605-1, J&R) Check the modeling of varargs operators
+- [ ] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
+- [ ] (0804-1) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+- To be done during next local meeting
+- [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
+  - Spec of second output of MaxPool by Mariem (concrete part to be completed)
+- [ ] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
+  - **MaxPool** was incomplete because the informal spec not clear on the second output. Inconsistency between R&J and Jean
+    - Check Jean's formula.
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+
+
+# 2026/05/06
 ## Participants
 - Eric, Mariem, Jean, Edoardo, Jean-Loup, Ricardo, João, Franck
 ## Agenda 
