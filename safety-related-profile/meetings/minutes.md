@@ -17,7 +17,7 @@
     - The approach is to first complete the definition of our test strategy (based on equivalence classes) and then see if Hypothesis facilitates or not its implementation. 
   - Discussion on the equivalence class-based strategy. 
     - See Eric's [doc](../sonnx/ops/docs/guidelines/tests-part2.md).  
-- Formal spec and implemenation of MaxPool
+- Formal spec and implementation of MaxPool
   - The formal spec is complete for output Y what is missing is the specification of the indices output. This will be done once the problem with MaxPool is solved (see next point).
   - To generate the code, the driver must be changed. To be discussed with Mariem.
 - Discussion on the computation of indices for **MaxPool**.

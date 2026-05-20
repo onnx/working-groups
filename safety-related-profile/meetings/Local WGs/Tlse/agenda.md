@@ -1,3 +1,9 @@
+#### 2025/05/20
+- Jean-Loup comments on [testing strategy](../../../sonnx/ops/docs/guidelines/tests-part2.md)
+- Discussion about the use of Hypothesis 
+- Review of Franck guidelines for accuracy evaluation
+- Review of pending informal spec.
+
 #### 2025/04/16
 - Discussion about Jean-Loup's mail dated 10/04 "Re: SONNX Graph status"
 - Discussion on the test strategy
