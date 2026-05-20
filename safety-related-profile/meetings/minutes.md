@@ -6,21 +6,42 @@
 - Status of papers (Ricardo+João)
 - Test strategy (Eric). See [doc](../sonnx/ops/docs/guidelines/tests-part2.md). 
 - An "idea" about formal spec... (eric)
-- Status of AIDGE integration (Eric+Hamza)
+- Status of AIDGE integration (Eric)
 - Roundtable
 ## Minutes
+- Discussion about the formal specification of generic properties of operators (symmetry, commutativity, neural element, etc.)
+  - This is an additional jutification for the effort on formal spec., in addition to providing the (potential) capability to develop a certified embedded code generator (that require a formal spec).
+  - Such properties have already been added in the formal spec by Ricardo and João. In their case, they are used as lemma to support other proofs.However, these lemma may be part of the verification / validation process of the formal specification.
+- Discussion on testing
+  - There is a question about the pertinence of the use of Hypothesis: is it useful? does it facilitate the development of tests? 
+    - The approach is to first complete the definition of our test strategy (based on equivalence classes) and then see if Hypothesis facilitates or not its implementation. 
+  - Discussion on the equivalence class-based strategy. 
+    - See Eric's [doc](../sonnx/ops/docs/guidelines/tests-part2.md).  
+- Formal spec and implemenation of MaxPool
+  - The formal spec is complete for output Y what is missing is the specification of the indices output. This will be done once the problem with MaxPool is solved (see next point).
+  - To generate the code, the driver must be changed. To be discussed with Mariem.
+- Discussion on the computation of indices for **MaxPool**.
+  - A new "bug" has been discovered, when the tensor is padedd and full  of -inf. The index shall be taken in the tensor area, not in the padded area. In particular, this means that we shall not return the index of the top left most value of the padded tensor...
+- Presentation of the latest result on the formalization of the graph (J&R)
+  -  Some modification have been done so that the structure and the state of the graph are handled separately.
+  -  Proof has been carried out to demonstrate that when a node is executed, then all its parent nodes (the nodes from which it depends) have been executed.
+  -  Termination condition must be added: eventually, all nodes are executed.
+  -  Question about the refinement: there is no real constraint about the refinement since we are not concerned with performance. So we have to chose the refinement that facilitate the verification and/or translation to C...
+-  J&R theses: complete by end of June!!!!
 ## Actions
 ### New actions
 ### Previous actions
-- [ ] (0605-1, J&R) Check the modeling of varargs operators
+- [X] (0605-1, J&R) Check the modeling of varargs operators
 - [ ] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
-- [ ] (0804-1) Review Franck's work on **Div**, **Matmul**, **Tanh**.
-- To be done during next local meeting
+- [ ] (0804-1, Eric, local WG, Edoardo) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+  - Dirst [review by Eric](../sonnx/ops/docs/guidelines/reviews/accuracy/accuracy-eric.md).
+  - Next review by local WG and Edoardo
 - [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
   - Spec of second output of MaxPool by Mariem (concrete part to be completed)
 - [ ] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
   - **MaxPool** was incomplete because the informal spec not clear on the second output. Inconsistency between R&J and Jean
     - Check Jean's formula.
+    - Jean i scurrently updating the spec for the indices output. 
 - [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
   - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
   - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
