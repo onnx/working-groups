@@ -25,9 +25,9 @@ where:
 
 No specific restrictions apply to the **Div** operator.
 
-## Informal specification
+## Function
 
-<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_DIV_REAL_FUNC_010]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
@@ -42,10 +42,8 @@ A[i]/B[i] & \text{if } B[i] \text{ is different from 0} \\
 \end{cases}
 $$
 
-<span style="background: red; color: white; font-size:0.7em;">[/spec1]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
-
-<span style="font-size:0.7em;">[info]</br></span> 
 
 The effect of the operator is illustrated on the following examples.
 
@@ -94,7 +92,6 @@ C = \frac{A}{B} = \begin{bmatrix}
 No error condition.
 
 ## Attributes
-
 Operator **Div** has no attribute.
 
 ## Inputs
@@ -105,7 +102,7 @@ Numerator of the division.
 
 #### Constraints
 
- - `[C1]` <a id="C1ra"></a> Shape consistency
+ - `[E_DIV_REAL_CONSTR_A_010]` <a id="E_DIV_REAL_CONSTR_A_010"></a> Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
  
 ### $\text{B}$: real tensor
@@ -114,9 +111,9 @@ Denominator of the division.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
- - `[C2]` Definition domain
+ - `[E_DIV_REAL_CONSTR_B_010]` Shape consistency
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#E_DIV_REAL_CONSTR_A_010) on tensor $A$.
+ - `[E_DIV_REAL_CONSTR_B_020]` Avoid undefined behaviour
    - Statement: $\forall i, B[i] \neq 0$ 
 
 ## Outputs
@@ -127,12 +124,9 @@ Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
+ - `[E_DIV_REAL_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#E_DIV_REAL_CONSTR_A_010) on tensor $A$.
 
-## Formal specification
- 
-See the Why3 specification.
 
 <a id="float"></a>
 # **Div** (float, float)
@@ -153,8 +147,9 @@ where
 
 No specific restrictions apply to the **Div** operator.
 
-## Informal specification
+## Function
 
+<span style="background: red; color: white; font-size:0.7em;">[E_DIV_FLOAT_FUNC_010]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
@@ -172,6 +167,7 @@ $$
 
 In the second case, the sign of $\pm \text{inf}$ is determined from the signs of $A[i]$ and the zero ($\pm 0$) according to the IEEE754 rules.
 
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 ### Example 1
 
 ```math
@@ -210,19 +206,19 @@ Numerator of the division.
 
 #### Constraints
 
-- `[C1]` <a id="C1fa"></a> Shape consistency
+- `[E_DIV_FLOAT_CONSTR_A_0010]` <a id="E_DIV_FLOAT_CONSTR_A_0010"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $C$ must have the same shape. 
-- `[C2]` <a id="C2fa"></a> Type consistency
+- `[E_DIV_FLOAT_CONSTR_A_0020]` <a id="E_DIV_FLOAT_CONSTR_A_0020"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
 
 ### $\text{B}$: floating-point tensor
 Denominator of the division.
 
 #### Constraints
-- `[C1]` Shape consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1fa) on tensor $A$.
-- `[C2]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2fa) on tensor $A$.
+- `[E_DIV_FLOAT_CONSTR_B_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_0010</span></b>](#E_DIV_FLOAT_CONSTR_A_0010) on tensor $A$.
+- `[E_DIV_FLOAT_CONSTR_B_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_0020</span></b>](#E_DIV_FLOAT_CONSTR_A_0020) on tensor $A$.
 
 ## Outputs
 

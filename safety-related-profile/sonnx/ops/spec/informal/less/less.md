@@ -11,24 +11,23 @@ Based on ONNX documentation [Less version 13](https://onnx.ai/onnx/operators/onn
 
 ## Signature
 
-Definition of operator $\text{Less}$ signature:  
 $C = \textbf{Less}(A, B)$
 
 where
-- $A$: input tensor to compare
-- $B$: input tensor to compare with $A$
-- $C$: output boolean tensor based on element-wise comparison of $A$ and $B$
-
+- $A$: real input tensor to compare
+- $B$: real input tensor to compare with $A$
+- $C$: boolean result tensor of the element-wise comparison of $A$ and $B$
+- 
 ## Restrictions
 
 [General restrictions](./../common/general_restrictions.md) are applicable.
 
 No specific restrictions apply to the **Less** operator.
 
-## Informal specification
-
+## Function
+<span style="background: red; color: white; font-size:0.7em;">[E_ABS_REAL_LESS_010]</br></span>
 Operator **Less** compares two input tensors $A$ and $B$ element-wise.  
-For each element, if the corresponding entry in $A$ is strictly less than the corresponding entry in $B$, the resulting tensor $C$ contains the value $\text{True}$. Otherwise, the resulting tensor $C$ contains the value $\text{False}$.
+For each element, if the corresponding entry in $A$ is strictly less than the corresponding entry in $B$, the corresponding entry in $C$ contains the value $\text{True}$, otherwise it contains the value $\text{False}$.
 
 The mathematical definition of the operator is given hereafter.
 
@@ -41,6 +40,7 @@ C[i] =
 \text{False} & \text{otherwise}
 \end{cases}
 $$
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 The effect of the operator is illustrated on the following examples.
 
@@ -95,7 +95,7 @@ First input tensor to be compared.
 
 #### Constraints
 
-- `[C1]` <a id="C1ra"></a> Shape consistency  
+- `[E_LESS_REAL_CONSTR_A_010]` <a id="E_LESS_REAL_CONSTR_A_010"></a> Shape consistency  
   - Statement: Tensors $A$, $B$, and $C$ shall have the same shape.  
  
 ### $\text{B}$: real tensor
@@ -104,8 +104,8 @@ Second input tensor to be compared with $A$.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ra) on tensor $A$.
+ - `[E_LESS_REAL_CONSTR_B_010]` Shape consistency
+   -  Statement: See constraint [E_LESS_REAL_CONSTR_A_010](#E_LESS_REAL_CONSTR_A_010) on tensor $A$.
 
 ## Outputs
 
@@ -115,12 +115,8 @@ Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 #### Constraints
 
-- `[C1]` <a id="C1rc"></a> Shape consistency  
-  - Statement: See constraint [`[C1]`](#C1ra) on tensor $A$.
-
-## Formal specification
-
-See the Why3 specification.
+- `[E_LESS_REAL_CONSTR_C_010]` <a id="E_LESS_REAL_CONSTR_C_010"></a> Shape consistency  
+  - Statement: See constraint [E_LESS_REAL_CONSTR_A_010](#E_LESS_REAL_CONSTR_A_010) on tensor $A$.
 
 
 <a id="float"></a>
@@ -133,9 +129,9 @@ Definition of operator $\text{Less}$ signature:
 $C = \textbf{Less}(A, B)$
 
 where
-- $A$: input tensor to compare
-- $B$: input tensor to compare with $A$
-- $C$: output boolean tensor based on element-wise comparison of $A$ and $B$
+- $A$: float input tensor to compare
+- $B$: float input tensor to compare with $A$
+- $C$: boolean result tensor of the element-wise comparison of $A$ and $B$
 
 ## Restrictions
 
@@ -143,8 +139,8 @@ where
 
 No specific restrictions apply to the **Less** operator.
 
-## Informal specification
-
+## Function
+<span style="background: red; color: white; font-size:0.7em;">[E_ABS_FLOAT_LESS_010]</br></span>
 Operator **Less** compares two input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics.  
 For each element, if the corresponding entry in $A$ is strictly less than the corresponding entry in $B$, the resulting tensor $C$ contains the value $\text{True}$. Otherwise, the resulting tensor $C$ contains the value $\text{False}$.
 
@@ -152,21 +148,22 @@ The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
-
 $$
 Y[i] =
 \begin{cases}
-\text{False} & \text{if } A[i]=\text{NaN} \\
-\text{False} & \text{if } B[i]=\text{NaN} \\
+\text{False} & \text{if } A[i]=\text{NaN} & or & B[i]=\text{NaN} \\
 \text{False} & \text{if } A[i]=\text{-0.0} & and & B[i]=\text{0.0} \\
 \text{False} & \text{if } A[i]=\text{0.0} & and & B[i]=\text{-0.0} \\
 
 \text{True} & \text{if } A[i] < B[i] \\
+\text{False} & \text{otherwise}
+
 \end{cases}
 $$
 
-Note : \text{-inf} < float < \text{+inf}
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
+Note: Comparisons involving NaN follow IEEE 754 rules (e.g., $\text{NaN} < x$ or $x < \text{NaN}$  is False for any $x$). 
 
 The effect of the operator is illustrated on the following examples.
 
@@ -224,8 +221,7 @@ C = \begin{bmatrix} \text{False} & \text{True} & \text{True} &\text{False} &\tex
 
 ## Error conditions
 
-Values of the output tensor may be $\text{True}$ or $\text{False}$ according to IEEE 754 comparison semantics. 
-Comparisons involving NaN follow IEEE 754 rules (e.g., $\text{NaN} < x$ or $x < \text{NaN}$  is False for any $x$). 
+No error condition.
 
 ## Attributes
 
@@ -239,10 +235,10 @@ First input tensor to be compared.
 
 #### Constraints
 
-- `[C1]` <a id="C1fa"></a> Shape consistency  
+- `[E_LESS_FLOAT_CONSTR_A_010]` <a id="E_LESS_FLOAT_CONSTR_A_010"></a> Shape consistency  
   - Statement: Tensors $A$, $B$, and $C$ shall have the same shape.  
 
-- `[C2]` <a id="C2fa"></a> Type consistency  
+- `[E_LESS_FLOAT_CONSTR_A_020]` <a id="E_LESS_FLOAT_CONSTR_A_020"></a> Type consistency  
   - Statement: Tensors $A$ and $B$ shall have the same floating-point type.
 
 ### $\text{B}$: floating-point tensor
@@ -250,10 +246,10 @@ First input tensor to be compared.
 Second input tensor to be compared with $A$.
 
 #### Constraints
-- `[C1]` Shape consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1fa) on tensor $A$.
-- `[C2]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2fa) on tensor $A$.
+- `[E_LESS_FLOAT_CONSTR_B_010]` Shape consistency
+  - Statement: see constraint [E_LESS_FLOAT_CONSTR_A_010](#E_LESS_FLOAT_CONSTR_A_010) on tensor $A$.
+- `[E_LESS_FLOAT_CONSTR_B_020]` Type consistency
+  - Statement: see constraint [E_LESS_FLOAT_CONSTR_A_020](#E_LESS_FLOAT_CONSTR_A_020) on tensor $A$.
 
 ## Outputs
 
@@ -263,8 +259,8 @@ Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 #### Constraints
 
-- `[C1]` <a id="C1fc"></a> Shape consistency  
-  - Statement: See constraint [`[C1]`](#C1fa) on tensor $A$.
+- `[E_LESS_FLOAT_CONSTR_C_010]` <a id="E_LESS_FLOAT_CONSTR_C_010"></a> Shape consistency  
+  - Statement: See constraint [E_LESS_FLOAT_CONSTR_A_010](#E_LESS_FLOAT_CONSTR_A_010) on tensor $A$.
 
 ## Formal specification
  See Why3 specification.
@@ -281,9 +277,9 @@ Definition of operator $\text{Less}$ signature:
 $C = \textbf{Less}(A, B)$
 
 where
-- $A$: input tensor to compare
-- $B$: input tensor to compare with $A$
-- $C$: output boolean tensor based on element-wise comparison of $A$ and $B$
+- $A$: int input tensor to compare
+- $B$: int input tensor to compare with $A$
+- $C$: boolean result tensor of the element-wise comparison of $A$ and $B$
 
 ## Restrictions
 
@@ -292,7 +288,7 @@ where
 No specific restrictions apply to the **Less** operator.
 
 ## Informal specification
-
+<span style="background: red; color: white; font-size:0.7em;">[E_LESS_INT_FUNC_010]</br></span>
 Operator **Less** compares two input tensors $A$ and $B$ element-wise using integer comparison.  
 For each element, if the corresponding entry in $A$ is strictly less than the corresponding entry in $B$, the resulting tensor $C$ contains the value $\text{True}$. Otherwise, the resulting tensor $C$ contains the value $\text{False}$.
 
@@ -305,6 +301,8 @@ C[i] =
 \text{False} & \text{otherwise}
 \end{cases}
 $$
+
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 The examples given in the real section apply directly when restricted to integer values.
 ### Example 1
@@ -360,9 +358,9 @@ First input tensor to be compared.
 
 #### Constraints
 
-- `[C1]` <a id="C1ia"></a> Shape consistency  
+- `[E_LESS_INT_CONSTR_A_010]` <a id="E_LESS_INT_CONSTR_A_010"></a> Shape consistency  
   - Statement: Tensors $A$, $B$, and $C$ shall have the same shape.  
-- `[C2]` <a id="C2ia"></a> Type consistency  
+- `[E_LESS_INT_CONSTR_A_020]` <a id="E_LESS_INT_CONSTR_A_020"></a> Type consistency  
   - Statement: Tensors $A$ and $B$ shall have the same integer type.
 
 ### $\text{B}$: integer tensor
@@ -371,10 +369,10 @@ Second input tensor to be compared with $A$.
 
 #### Constraints
 
-- `[C1]` Shape consistency  
-  - Statement: See constraint [`[C1]`](#C1ia) on tensor $A$.
-- `[C2]` Type consistency  
-  - Statement: See constraint [`[C2]`](#C2ia) on tensor $A$.
+- `[E_LESS_INT_CONSTR_B_010]` Shape consistency  
+  - Statement: See constraint [`E_LESS_INT_CONSTR_A_010`](#E_LESS_INT_CONSTR_A_010) on tensor $A$.
+- `[E_LESS_INT_CONSTR_B_020]` Type consistency  
+  - Statement: See constraint [`E_LESS_INT_CONSTR_A_020`](#E_LESS_INT_CONSTR_A_020) on tensor $A$.
 
 ## Outputs
 
@@ -384,10 +382,8 @@ Output tensor formed by the element-wise comparison of $A$ and $B$.
 
 #### Constraints
 
-- `[C1]` <a id="C1ic"></a> Shape consistency  
-  - Statement: See constraint [`[C1]`](#C1ia) on tensor $A$.
+- `[E_LESS_INT_CONSTR_C_010]` <a id="E_LESS_INT_CONSTR_C_010"></a> Shape consistency  
+  - Statement: See constraint [E_LESS_INT_CONSTR_A_010](#E_LESS_INT_CONSTR_A_010) on tensor $A$.
 
 
-## Formal specification
- See Why3 specification.
 

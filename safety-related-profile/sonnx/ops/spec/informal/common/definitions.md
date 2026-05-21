@@ -14,5 +14,6 @@ A null tensor can be created by operators  such as **Slice** or **Where**.
 - **Vector**: A 1-rank tensor. 
 - **Matrix**: A 2-rank tensor. 
 - **Shape of a tensor**: The shape of a tensor is a list of its dimensions. The list is empty for a scalar tensor. 
-- Constants `minfloat16`,  `minfloat`,  `mindouble` (resp. `maxfloat16`, `maxfloat`, `maxdouble`) represent the minimum (resp. maximum) values for `float16`, `float`, `double`, `respectively`.  
-
+- Symbol `minfloat16`,  `minfloat`,  `mindouble` (resp. `maxfloat16`, `maxfloat`, `maxdouble`) represent the minimum (resp. maximum) values for `float16`, `float`, `double`, `respectively`.  
+- Symbol `minint8`, `minint16`, `minint32`, `minint64`(resp. `maxint8`, `maxint16`, `maxint32`, `maxint64`) represent the minimum (resp. maximum) values for `int8, `int16`, `int32`, `int64. 
+- Symbol `minint` (resp. `maxint`)  represent minimum (resp. maximum) values for the integer type considered in the context where it used. 
