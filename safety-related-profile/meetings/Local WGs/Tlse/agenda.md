@@ -4,6 +4,37 @@
 - Review of Franck guidelines for accuracy evaluation
 - Review of pending informal spec.
 
+###### New actions   
+- [ ] Update the tagging of requirements of all specs (see **Div**) [project::[[SONNX]]]➕ 2026-05-21 
+- [ ] Add tags on the general constraints  [assignee::[[SOUYRIS Jean]]] ➕ 2026-05-21 
+- [ ] Rename section "informal specification" to "Function" [project::[[SONNX]]] ➕ 2026-05-21  
+- [ ] In the signature section, add the types (see **Div**). [project::[[SONNX]]] ➕ 2026-05-21 
+- [ ] Have a closer look at the actual benefits of Hypothesis to support our test strategy [project::[[SONNX]]] ➕ 2026-05-21 
+- [ ] Update the priority list of operators [project::[[SONNX]]] [assignee::[[SOUYRIS Jean]]]] ➕ 2026-05-21 
+- [ ] Update the **Add** operator to match the latest update to **Div**  [project::[[SONNX]]] [assignee::[[SOUYRIS Jean]]] ➕ 2026-05-21 
+- [ ] Update the test strategy [project::[[SONNX]]] ➕ 2026-05-21 
+	- Add a "synthesis" section that provide clear explanation on how to implement it.
+	- Discriminate constraints concerning pre-conditions from constraints determined by the functional spec. Use different notation (e.g., $p$ and $q$).
+	- Modify the example on MC/DC to illustrate the handling of a functional constraint.
+	- Illustrate the approach on **Maxpool** 
+	- Take care of tests cases that are actually identical due to absorption.  
+- [ ] Create a "guide" to help reading the informal spec.  [project::[[SONNX]]] ➕ 2026-05-21 
+	- Introduce the notations, the compliance to IEEE
+	- Introduce the structure of the spec
+	- Explain how functional rules must be read (from top to bottom...).
+- [ ] Check problem with negation when dealing with NaNs [project::[[SONNX]]] ➕ 2026-05-21 
+	- Less is specified as $A< B$ . This is not equivalent to  $\neg A \ge B$ for NaNs... which means that the way we specify operators is important.
+
+
+###### Previous actions   
+- [ ] In the examples, check that we use consistent notations for tensors (use of square brackets)
+- [ ] In the guidelines,  give precise rules about the factorization of the spec. between types
+  - For structural operators, there is a unique spec for all types including "reals"
+  - [ ] Check if we could suppress "real" for structural operators.
+- [ ] Add tests for the "special" values of tensor dimensions: scalar (rank 0) and null tensors
+- [ ]  Address the case of negative axes 
+- [ ]  Check the behaviour of softmax for nb of axes > 2
+
 #### 2025/04/16
 - Discussion about Jean-Loup's mail dated 10/04 "Re: SONNX Graph status"
 - Discussion on the test strategy
@@ -22,7 +53,7 @@
   ```
   <span class="req" data-tag="req1"> This is a first traceable specification item. <span class="req" data-tag="req1.1"> This is another traceable specification item.</span> <span class="info" data-tag="info1.1"> This is some information. </span> </span> </span>
   ```
-  - [ ] Rollback to the previous version with visible tags.
+  - [X] Rollback to the previous version with visible tags.
 - [ ] In the guidelines,  give precise rules about the factorization of the spec. between types
   - For structural operators, there is a unique spec for all types including "reals"
   - [ ] Check if we could suppress "real" for structural operators.
