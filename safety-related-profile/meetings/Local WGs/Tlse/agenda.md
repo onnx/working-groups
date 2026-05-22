@@ -1,3 +1,6 @@
+#### 2025/06/05
+- Review BatchNorm.
+
 #### 2025/05/20
 - Jean-Loup comments on [testing strategy](../../../sonnx/ops/docs/guidelines/tests-part2.md)
 - Discussion about the use of Hypothesis 
