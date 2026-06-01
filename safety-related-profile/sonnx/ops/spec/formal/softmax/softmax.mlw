@@ -1,0 +1,584 @@
+(*
+   ==========================================================
+   Formal specification of Softmax
+   Based on ONNX Softmax version 13
+   ==========================================================
+
+   This file specifies the abstract behavior of Softmax.
+
+   It contains:
+   - Softmax over real tensors.
+   - Softmax over floating-point-like tensors with NaN, +inf and -inf.
+
+   This is a specification-level file.
+   It is not yet the concrete C-extractible implementation.
+*)
+
+module SoftmaxReal
+
+  use int.Int
+
+  (*
+     Integer comparison wrappers.
+
+     We define them before importing real.Real to avoid ambiguity between
+     integer comparisons and real comparisons.
+  *)
+  predicate ile (a:int) (b:int) = a <= b
+  predicate ilt (a:int) (b:int) = a < b
+
+  use real.Real
+  use list.List
+  use list.Length
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+
+  (*
+     Abstract exponential.
+
+     Only the positivity of exp is required for Softmax.
+  *)
+  function exp (x: real) : real
+
+  axiom exp_positive:
+    forall x: real. exp x > 0.0
+
+  (*
+     axis_dim dims axis
+
+     Abstract accessor for the size of the tensor shape along axis.
+
+     We use this instead of get_dim because get_dim is not visible in your
+     current Why3 environment.
+  *)
+  function axis_dim (dims: list int) (axis: int) : int
+
+  axiom axis_dim_positive:
+    forall dims: list int, axis: int.
+      ile 0 axis ->
+      ilt axis (length dims) ->
+      positive dims ->
+      ilt 0 (axis_dim dims axis)
+
+  (*
+     replace_axis ks axis j
+
+     Given:
+       ks = [i0, ..., iaxis, ..., ir-1]
+
+     returns:
+       [i0, ..., j, ..., ir-1]
+
+     This expresses that Softmax only varies the coordinate along the
+     selected axis while keeping all other coordinates fixed.
+  *)
+  let rec ghost function replace_axis
+    (ks: list int) (axis: int) (j: int) : list int
+    variant { ks }
+  =
+    match ks with
+    | Nil ->
+        Nil
+    | Cons k rest ->
+        if axis = 0 then
+          Cons j rest
+        else
+          Cons k (replace_axis rest (axis - 1) j)
+    end
+
+  (*
+     axis_max_real x ks axis
+
+     Abstract maximum along the Softmax axis:
+
+       M = max_j X[i0, ..., j, ..., ir-1]
+
+     This is the M used in the stable formulation:
+
+       exp(X[i] - M) / sum_j exp(X[j] - M)
+  *)
+  function axis_max_real
+    (x: tensor real) (ks: list int) (axis: int) : real
+
+  (*
+     axis_sum_exp_real x ks axis m
+
+     Abstract denominator:
+
+       sum_j exp(X[i0, ..., j, ..., ir-1] - M)
+
+     The summation is only over the selected axis.
+  *)
+  function axis_sum_exp_real
+    (x: tensor real) (ks: list int) (axis: int) (m: real) : real
+
+  axiom axis_sum_exp_real_positive:
+    forall x: tensor real, ks: list int, axis: int, m: real.
+      ile 0 axis ->
+      ilt axis (length x.dims) ->
+      positive x.dims ->
+      axis_sum_exp_real x ks axis m > 0.0
+
+  axiom axis_max_real_upper_bound:
+    forall x: tensor real, ks: list int, axis j: int.
+      ile 0 axis ->
+      ilt axis (length x.dims) ->
+      ile 0 j ->
+      ilt j (axis_dim x.dims axis) ->
+      x.data (replace_axis ks axis j) <= axis_max_real x ks axis
+
+  (*
+     Stable real Softmax value.
+
+     Y[ks] =
+       exp(X[ks] - M)
+       /
+       sum_j exp(X[replace_axis(ks, axis, j)] - M)
+
+     with:
+       M = max_j X[replace_axis(ks, axis, j)]
+  *)
+  function softmax_value_real
+    (x: tensor real) (axis: int) (ks: list int) : real
+  =
+    let m = axis_max_real x ks axis in
+    exp ((x.data ks) - m) / axis_sum_exp_real x ks axis m
+
+  function dsoftmax_real (axis: int) (x: tensor real) : data real =
+    fun ks -> softmax_value_real x axis ks
+
+  (*
+     Abstract Softmax operator over real tensors.
+
+     Constraints:
+     - axis >= 0
+     - axis < rank(X)
+     - X has positive dimensions
+     - Y has same shape as X
+     - Y follows the stable Softmax definition
+  *)
+  val softmax_real (x: tensor real) (axis: int) : tensor real
+    requires { ile 0 axis }
+    requires { ilt axis (length x.dims) }
+    requires { positive x.dims }
+    ensures  { result.dims = x.dims }
+    ensures  {
+      forall ks: list int.
+        valid ks x.dims ->
+        result.data ks = softmax_value_real x axis ks
+    }
+
+end
+
+
+module SoftmaxFloat
+
+  use int.Int
+
+  predicate ile (a:int) (b:int) = a <= b
+  predicate ilt (a:int) (b:int) = a < b
+
+  use real.Real
+  use list.List
+  use list.Length
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+
+  function exp (x: real) : real
+
+  axiom exp_positive:
+    forall x: real. exp x > 0.0
+
+  function axis_dim (dims: list int) (axis: int) : int
+
+  axiom axis_dim_positive:
+    forall dims: list int, axis: int.
+      ile 0 axis ->
+      ilt axis (length dims) ->
+      positive dims ->
+      ilt 0 (axis_dim dims axis)
+
+  (*
+     Abstract floating-point value.
+
+     This is a specification-level representation of float16, float and double.
+  *)
+  type fvalue =
+    | FFinite real
+    | FNaN
+    | FPosInf
+    | FNegInf
+
+  predicate is_nan (x: fvalue) =
+    match x with
+    | FNaN -> true
+    | _ -> false
+    end
+
+  predicate is_pos_inf (x: fvalue) =
+    match x with
+    | FPosInf -> true
+    | _ -> false
+    end
+
+  predicate is_neg_inf (x: fvalue) =
+    match x with
+    | FNegInf -> true
+    | _ -> false
+    end
+
+  predicate is_finite (x: fvalue) =
+    match x with
+    | FFinite _ -> true
+    | _ -> false
+    end
+
+  predicate finite_value (x: fvalue) (r: real) =
+    match x with
+    | FFinite v -> r = v
+    | _ -> false
+    end
+
+  let rec ghost function replace_axis
+    (ks: list int) (axis: int) (j: int) : list int
+    variant { ks }
+  =
+    match ks with
+    | Nil ->
+        Nil
+    | Cons k rest ->
+        if axis = 0 then
+          Cons j rest
+        else
+          Cons k (replace_axis rest (axis - 1) j)
+    end
+
+  (*
+     True if the slice along axis contains NaN or +inf.
+
+     Informal rule:
+     if a slice contains NaN or +inf, all outputs in that slice are NaN.
+  *)
+  predicate slice_has_nan_or_posinf
+    (x: tensor fvalue) (ks: list int) (axis: int)
+
+  axiom slice_has_nan_or_posinf_def:
+    forall x: tensor fvalue, ks: list int, axis: int.
+      slice_has_nan_or_posinf x ks axis <->
+      exists j: int.
+        ile 0 j /\
+        ilt j (axis_dim x.dims axis) /\
+        (
+          is_nan (x.data (replace_axis ks axis j)) \/
+          is_pos_inf (x.data (replace_axis ks axis j))
+        )
+
+  (*
+     Maximum over the finite values of the slice.
+
+     It is meaningful only when the slice has no NaN and no +inf.
+  *)
+  function axis_max_float
+    (x: tensor fvalue) (ks: list int) (axis: int) : real
+
+  axiom axis_max_float_upper_bound:
+    forall x: tensor fvalue, ks: list int, axis j: int, r: real.
+      ile 0 axis ->
+      ilt axis (length x.dims) ->
+      ile 0 j ->
+      ilt j (axis_dim x.dims axis) ->
+      finite_value (x.data (replace_axis ks axis j)) r ->
+      r <= axis_max_float x ks axis
+
+  (*
+     Exponential contribution for floating values.
+
+     - finite r contributes exp(r - M)
+     - -inf contributes 0
+     - NaN and +inf are handled before this branch and map to NaN output
+  *)
+  function exp_term_float (v: fvalue) (m: real) : real =
+    match v with
+    | FFinite r -> exp (r - m)
+    | FNegInf -> 0.0
+    | FNaN -> 0.0
+    | FPosInf -> 0.0
+    end
+
+  function axis_sum_exp_float
+    (x: tensor fvalue) (ks: list int) (axis: int) (m: real) : real
+
+  axiom axis_sum_exp_float_positive:
+    forall x: tensor fvalue, ks: list int, axis: int, m: real.
+      ile 0 axis ->
+      ilt axis (length x.dims) ->
+      positive x.dims ->
+      not (slice_has_nan_or_posinf x ks axis) ->
+      axis_sum_exp_float x ks axis m > 0.0
+
+  (*
+     Floating Softmax value.
+
+     Cases:
+     1. If the slice contains NaN or +inf:
+          output is NaN.
+
+     2. Else if X[ks] = -inf:
+          output is finite 0.
+
+     3. Else if X[ks] is finite r:
+          output is:
+            exp(r - M) / sum_j exp_term(X[j], M)
+  *)
+  function softmax_value_float
+    (x: tensor fvalue) (axis: int) (ks: list int) : fvalue
+  =
+    if slice_has_nan_or_posinf x ks axis then
+      FNaN
+    else
+      match x.data ks with
+      | FNegInf ->
+          FFinite 0.0
+      | FFinite r ->
+          let m = axis_max_float x ks axis in
+          FFinite (exp (r - m) / axis_sum_exp_float x ks axis m)
+      | FNaN ->
+          FNaN
+      | FPosInf ->
+          FNaN
+      end
+
+  function dsoftmax_float (axis: int) (x: tensor fvalue) : data fvalue =
+    fun ks -> softmax_value_float x axis ks
+
+  val softmax_float (x: tensor fvalue) (axis: int) : tensor fvalue
+    requires { ile 0 axis }
+    requires { ilt axis (length x.dims) }
+    requires { positive x.dims }
+    ensures  { result.dims = x.dims }
+    ensures  {
+      forall ks: list int.
+        valid ks x.dims ->
+        result.data ks = softmax_value_float x axis ks
+    }
+
+end
+
+
+(*
+   ==========================================================
+   Concrete C-extractible Softmax implementation
+   ==========================================================
+
+   This module is the concrete part used for C extraction.
+
+   It implements Softmax over a C tensor representation:
+
+      x : input tensor
+      r : output tensor
+      axis : axis along which Softmax is computed
+
+   The implementation assumes that:
+   - x and r have the same rank;
+   - x and r have the same dimensions;
+   - axis is valid;
+   - tensors are stored in flat contiguous memory.
+
+   The algorithm is the usual numerically stable Softmax:
+
+      M = max_j X[j]
+      Y[i] = exp(X[i] - M) / sum_j exp(X[j] - M)
+
+   The slice traversal uses the standard decomposition:
+
+      outer = product(dims[0 .. axis-1])
+      axis_size = dims[axis]
+      inner = product(dims[axis+1 .. rank-1])
+
+   For each pair (outer_index, inner_index), we traverse the axis dimension.
+*)
+
+module CtensorSoftmax
+
+  use int.Int
+  use mach.int.Int32
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use tensor.libvector.CIndex
+  use tensor.libtensor.CTensor
+
+  (*
+     C exponential.
+
+     This abstract Why3 function is mapped to exp() in C by softmax_driver.drv.
+  *)
+  val function c_exp (x: float) : float
+
+  (*
+     same_dims x r
+
+     Checks that x and r have the same rank and the same dimensions.
+
+     This is implemented as executable code so that c_softmax can return
+     false instead of assuming blindly that the output tensor is compatible.
+  *)
+  let same_dims (x r: ctensor) : bool
+    requires { valid_tensor x }
+    requires { valid_tensor r }
+  =
+    if x.t_rank <> r.t_rank then
+      False
+    else begin
+      let ref ok = True in
+      for i = 0 to x.t_rank - 1 do
+        if x.t_dims[i] <> r.t_dims[i] then
+          ok <- False
+      done;
+      ok
+    end
+
+  (*
+     product_dims_range dims first last
+
+     Computes product(dims[first] ... dims[last-1]).
+
+     If first = last, the product is 1.
+
+     This is used to compute:
+       - inner = product of dimensions after axis
+       - outer = product of dimensions before axis
+  *)
+  let product_dims_range (dims: iarray) (first last: int32) : int32
+    requires { valid_range dims 0 last }
+    requires { 0 <= first }
+    requires { first <= last }
+  =
+    let ref p = 1 in
+    for i = first to last - 1 do
+      p <- p * dims[i]
+    done;
+    p
+
+  (*
+     c_softmax x r axis
+
+     Concrete Softmax kernel.
+
+     Parameters:
+       x    : input ctensor
+       r    : output ctensor
+       axis : Softmax axis
+
+     Return:
+       True  if computation was performed;
+       False if tensors are incompatible or axis is invalid.
+
+     This function is the one we want to extract into C.
+  *)
+  let c_softmax (x r: ctensor) (axis: int32) : bool
+    requires { valid_tensor x }
+    requires { valid_tensor r }
+  =
+    if x.t_rank <= 0 then
+      False
+    else if axis < 0 then
+      False
+    else if axis >= x.t_rank then
+      False
+    else if not (same_dims x r) then
+      False
+    else begin
+
+      (*
+         rank = number of dimensions.
+         axis_size = size of the normalized dimension.
+      *)
+      let rank = x.t_rank in
+      let axis_size = x.t_dims[axis] in
+
+      if axis_size <= 0 then
+        False
+      else begin
+
+        (*
+           inner = product of dimensions after axis.
+
+           Example:
+             shape = [N, C, H, W]
+             axis = 1
+             inner = H * W
+
+           This is the stride between two consecutive values along axis
+           for a fixed outer/inner position.
+        *)
+        let inner = product_dims_range x.t_dims (axis + 1) rank in
+
+        (*
+           outer = product of dimensions before axis.
+
+           Example:
+             shape = [N, C, H, W]
+             axis = 1
+             outer = N
+        *)
+        let outer = product_dims_range x.t_dims 0 axis in
+
+        (*
+           For each independent Softmax slice:
+             - one outer position
+             - one inner position
+        *)
+        for o = 0 to outer - 1 do
+          for inn = 0 to inner - 1 do
+
+            (*
+               Base offset of the current slice.
+
+               For every a in [0, axis_size):
+                 offset = base + a * inner
+            *)
+            let base = o * axis_size * inner + inn in
+
+            (*
+               Step 1: compute M = max over the axis slice.
+            *)
+            let ref m = x.t_data[base] in
+
+            for a = 1 to axis_size - 1 do
+              let off = base + a * inner in
+              let v = x.t_data[off] in
+
+              if m .< v then
+                m <- v
+            done;
+
+            (*
+               Step 2: compute sum_j exp(x_j - M).
+            *)
+            let ref sum = zero in
+
+            for a = 0 to axis_size - 1 do
+              let off = base + a * inner in
+              let shifted = x.t_data[off] .- m in
+              let e = c_exp shifted in
+              sum <- sum .+ e
+            done;
+
+            (*
+               Step 3: compute y_i = exp(x_i - M) / sum.
+            *)
+            for a = 0 to axis_size - 1 do
+              let off = base + a * inner in
+              let shifted = x.t_data[off] .- m in
+              let e = c_exp shifted in
+              r.t_data[off] <- e ./ sum
+            done
+
+          done
+        done;
+
+        True
+      end
+    end
+
+end

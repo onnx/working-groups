@@ -130,29 +130,28 @@ YoloNAS
 
 ## Operators
 ### Priority 1 list: 
-1) Conv2D (no grouping nor depthwise)
-2) ConvTranspose/Deconvolution
+1) Conv (no grouping nor depthwise)
+2) ConvInteger
 3) MaxPool
-4) ReLU
-5) Add
-6) Mul
-7) Concat
-8) Reshape
-9) Slice
-10) Transpose
-11) Softplus
+4) Resize
+5) QuantizeLinear
+6) DequantizeLinear
+7) Add
+8) Mul
+9) Relu
+10) Concat
 
 ### Priority 2 list:
-12) MatMul (FullyConnected)
-13) Conv2D (grouping & depthwise)
-14) Sub
-15) Abs
+11) Conv (grouping & depthwise)
+12) Gemm
+13) MatMul
+14) Abs
+15) Sub
 16) ReduceSum
-17) Split
-18) Gather
-19) Squeeze
-20) Unsqueeze
-21) Flatten
+17) Gelu
+18) LeakyRelu
+19) LayerNormalization
+20) SoftMmx
 
 # Use case `Helicopters` - `Valot Nicolas`
 
