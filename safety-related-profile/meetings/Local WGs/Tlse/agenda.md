@@ -9,7 +9,7 @@
 - Review of pending informal spec.
 
 ###### New actions   
-- [ ] Update the specification guidelines to match with the current ones [project::[[SONNX]]]➕ 2026-05-21 
+- [ ] Update the specification guidelines to match with the current practice (see **Div**) [project::[[SONNX]]]➕ 2026-05-21 
 - [ ] Update the tagging of requirements of all specs (see **Div**) [project::[[SONNX]]]➕ 2026-05-21 
 - [ ] Add tags on the general constraints  [assignee::[[SOUYRIS Jean]]] ➕ 2026-05-21 
 - [ ] Rename section "informal specification" to "Function" [project::[[SONNX]]] ➕ 2026-05-21  
@@ -30,12 +30,11 @@
 - [ ] Check problem with negation when dealing with NaNs [project::[[SONNX]]] ➕ 2026-05-21 
 	- Less is specified as $A<B$ . This is not equivalent to  $\neg A \ge B$ for NaNs... which means that the way we specify operators is important.
 
-
 ###### Previous actions   
 - [ ] In the examples, check that we use consistent notations for tensors (use of square brackets)
 - [ ] In the guidelines,  give precise rules about the factorization of the spec. between types
   - For structural operators, there is a unique spec for all types including "reals"
-  - [ ] Check if we could suppress "real" for structural operators.
+- [ ] Check if we could suppress "real" for structural operators.
 - [ ] Add tests for the "special" values of tensor dimensions: scalar (rank 0) and null tensors
 - [ ]  Address the case of negative axes 
 - [ ]  Check the behaviour of softmax for nb of axes > 2

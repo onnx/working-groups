@@ -1,6 +1,61 @@
+# 2026/06/03
+## Participants
+- Ricardo, João, Eduardo, Jean-Loup, Franck, Jean, Eric
+## Agenda 
+- Review of actions (Eric)
+- A quick look at the [local WG actions](../meetings/Local%20WGs/Tlse/agenda.md)
+- A quick feedback on the use of Gemini to assist writing specs...
+- Status of Graph spec (Ricardo)
+- Calls for contributors? When and how?
+- A quick feedback on Hypothesis
+- Roundtable
+## Minutes
+- Short presentation of the use of Gemini to generate an informal spec. Application to **Resize** 
+- Graph spec:
+  - Abstract spec is OK
+  - Concrete spec is close to completion. J&R Thesis report will document the model design and proof. 
+- Publicity actions
+  - The number of participants to our WG  meeting seems to be steady, but it is low. R&J will both leave to the project by the end of Jun, and this will be a great loss ;-(... See actions (0306-2) and (0306-3) below.
+## Actions
+### New actions
+- [ ] (0306-1, Jean) Update the spec of **Maxpool** (indices generation part). 
+  - Do not refer to "upper" but "min". 
+  - Modify the definition of "indices" to specify the tie break rule when multiple values are equal to the max...  
+  - To be review on Friday 5th. 
+- [ ] (0306-2, Eric) Contact the industrialists that have shown some interest in ONNX (especially those that have expressed some specific needs in [scope.md](../deliverables/scope/scope.md)).
+- [ ] (0306-3, Eric) Organize a (remote) presentation of our work to the community in Sept or Oct. 
+### Previous actions
+- [X] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
+  - We have to ensure that the number of arguments is correct. 
+  - Conclusion : we keep things as is.
+- [ ] (0804-1, Eric, local WG, Edoardo) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+  - First [review by Eric](../sonnx/ops/docs/guidelines/reviews/accuracy/accuracy-eric.md).
+  - Next review by local WG and Edoardo
+    - 3 things
+      - [ ] **guidelines**
+      - [ ] **applied guidelines on some ops (see above)**
+      - [ ] code to help generating the spec 
+- [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
+  - Spec of second output of MaxPool by Mariem (concrete part to be completed)
+- [X] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
+  - **MaxPool** was incomplete because the informal spec not clear on the second output. Inconsistency between R&J's and Jean's interpretation
+    - Check Jean's formula.
+    - Jean is currently updating the spec for the indices output. 
+    - The spec has been updated. 
+    - There is still a corner case to be sorted out...
+    - Spec to commit.
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
+  - Doc reworked
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+
 # 2026/05/20
 ## Participants
-- Eric,...
+- Ricardo, João, Eduardo, Jean-Loup, Franck, Jean, Eric
 ## Agenda 
 - Review of actions (Eric)
 - Status of papers (Ricardo+João)
@@ -34,7 +89,7 @@
 - [X] (0605-1, J&R) Check the modeling of varargs operators
 - [ ] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
 - [ ] (0804-1, Eric, local WG, Edoardo) Review Franck's work on **Div**, **Matmul**, **Tanh**.
-  - Dirst [review by Eric](../sonnx/ops/docs/guidelines/reviews/accuracy/accuracy-eric.md).
+  - First [review by Eric](../sonnx/ops/docs/guidelines/reviews/accuracy/accuracy-eric.md).
   - Next review by local WG and Edoardo
 - [ ] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
   - Spec of second output of MaxPool by Mariem (concrete part to be completed)
@@ -49,7 +104,6 @@
   - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
 - [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
 - [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
-
 
 # 2026/05/06
 ## Participants
