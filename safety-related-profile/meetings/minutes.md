@@ -14,8 +14,15 @@
 - Graph spec:
   - Abstract spec is OK
   - Concrete spec is close to completion. J&R Thesis report will document the model design and proof. 
-- Publicity actions
-  - The number of participants to our WG  meeting seems to be steady, but it is low. R&J will both leave to the project by the end of Jun, and this will be a great loss ;-(... See actions (0306-2) and (0306-3) below.
+- Call for contributors
+  - The number of participants to our WG  meeting seems to be steady, but it is low. 
+  - R&J will both leave to the project by the end of Jun, and this will be a great loss ;-(... 
+  - We have already done several communications (at ERTS and DATE) and other are soon to come (two workshops in Lisbon by J&R and CTIC by Eric in Tlse). The Lisbon SAIV conf. may raise some interest in the academic community.
+  - The current outputs of the WG  (guidelines, specs...) represent a good basis to embark other people. Concerning formal methods, for example, we have good examples that can be reused and adapted to create (some of) the remaining ones with a reasonable effort. 
+  - Edoardo could possibly propose students project in Q4.
+  - We have to contact the industrialists that were involved at the beginning of the project, and other that have contributed heavily at some point (Airbus Helico, Thales AVS, etc.)
+  - See actions (0306-2) and (0306-3) below.
+  
 ## Actions
 ### New actions
 - [ ] (0306-1, Jean) Update the spec of **Maxpool** (indices generation part). 
