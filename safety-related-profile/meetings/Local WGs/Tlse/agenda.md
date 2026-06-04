@@ -1,6 +1,7 @@
 #### 2025/06/05
 - Review BatchNorm.
 - Discussion about the relation between the informal and formal spec. Are we really convinced on the benefits of formal spec if we don't add functional invariants? See e.g. ![](../Tlse/attachments/conv_informa_formal.png).
+- Check [this ONNX PR](https://github.com/onnx/onnx/issues/8054#issuecomment-4622938091)
 
 #### 2025/05/21
 - Jean-Loup comments on [testing strategy](../../../sonnx/ops/docs/guidelines/tests-part2.md)
