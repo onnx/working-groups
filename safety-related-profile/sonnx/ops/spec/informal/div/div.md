@@ -228,14 +228,10 @@ Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
-- `[C1]` Shape consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1fa) on tensor $A$.
-- `[C2]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2fa) on tensor $A$.
-
-## Numeric accuracy
-
-[See the numeric accuracy note](./div_acc.md).
+ - `[E_DIV_FLOAT_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_010</span></b>](#E_DIV_FLOAT_CONSTR_A_010) on tensor $A$.
+- `[E_DIV_FLOAT_CONSTR_C_020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_0020</span></b>](#E_DIV_FLOAT_CONSTR_A_020) on tensor $A$.
 
 
 <a id="int"></a>
@@ -257,7 +253,7 @@ Definition of operator $\text{Div}$ signature:
 
 No specific restrictions apply to the **Div** operator.
 
-## Informal specification
+## Function
 <span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span> 
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. 
 
@@ -306,9 +302,9 @@ Numerator of the division.
 
 #### Constraints
 
-- `[C1]` <a id="C1ia"></a> Shape consistency
+- `[E_DIV_INT_CONSTR_A_0010]` <a id="E_DIV_INT_CONSTR_A_0010"></a> Shape consistency
   - Statement: Tensors $A$, $B$ and $C$ must have the same shape. 
-- `[C2]` <a id="C2ia"></a> Type consistency
+- `[E_DIV_INT_CONSTR_A_0020]` <a id="E_INT_FLOAT_CONSTR_A_0020"></a> Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type. 
   
 ### $\text{B}$: integer tensor
@@ -317,11 +313,11 @@ Denominator of the division.
 
 #### Constraints
 
-- `[C1]` Shape consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ia) on tensor $A$.
-- `[C2]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
-- `[C3]` Definition domain
+- `[E_DIV_INT_CONSTR_B_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_0010</span></b>](#E_DIV_INT_CONSTR_A_0010) on tensor $A$.
+- `[E_DIV_INT_CONSTR_B_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_0020</span></b>](#E_DIV_INT_CONSTR_A_0020) on tensor $A$.
+- `[E_DIV_INT_CONSTR_B_0030]` Definition domain
   - Statement: $\forall i, B|i]\neq 0$.
 
 ## Outputs
@@ -332,18 +328,7 @@ Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
-- `[C1]` Shape consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1ia) on tensor $A$.
-- `[C2]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C2]</span></b>](#C2ia) on tensor $A$.
-
-
-
-
-
-
-
-
-
-
-
+- `[E_DIV_INT_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_010</span></b>](#E_DIV_INT_CONSTR_A_010) on tensor $A$.
+- `[E_DIV_INT_CONSTR_C_020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_0020</span></b>](#E_DIV_INT_CONSTR_A_020) on tensor $A$.
