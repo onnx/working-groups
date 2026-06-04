@@ -41,25 +41,71 @@ Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across
 
 Operator **MaxPool** stores in $\textit{Indices}$ the indices of the input tensor $X$ from which the max values are taken. The index values are those of a flatten 1-D view of $X$.
 
-In any position of the kernel over $X_p$, if the max value is present more than once, then the corresponding index value in $\textit{Indices}$ points the most upper left max value.
+In any position of the kernel over $X_p$, if the max value is present more than once, then the corresponding index value in $\textit{Indices}$ points the most upper left max value that belongs the input tensor X.
 
 The mathematical definition of output $Y$ and $\textit{Indices}$ are given hereafter:
 
 $$\begin{gathered}
-    Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot \text{strides}[1]+ w \cdot \text{dilations}[1] ]
+    Y[b, c, m, n] = \text{max}_{h=0}^{dW_0-1} \text{max}_{w=0}^{dW_1-1} \\ X_p[b,c,m \cdot \text{strides}[0]+ h \cdot \text{dilations}[0], n \cdot c+ w \cdot \text{dilations}[1] ]
 \end{gathered}$$
 
 $$\begin{gathered}
-   \textit{Indices}[b, c, m, n] = (h \cdot dX_3 + w) ~~\text{if}~~ Y[b, c, m, n] = X[h,w] 
+    \textit{Indices}[b, c, m, n] = b \cdot (dX_1 \cdot dX_2 \cdot dX_3) + c \cdot (dX_2 \cdot dX_3) + h \cdot dX_3 + w 
+\end{gathered}$$
+$$\text{with:} \quad \text{Y[b, c, m, n] = X[h,w]}$$
+
+__ALTERNATIVE__:
+
+$$\begin{gathered}
+    Y[b, c, h_{\text{out}}, w_{\text{out}}] = \max_{(j_h, j_w) \in \mathcal{V}} X[b, c, h_{\text{in}}, w_{\text{in}}]
+\end{gathered}$$
+
+Definition of $\mathcal{V}$:
+
+$$\begin{gathered}
+  \mathcal{V} = \{ (j_h, j_w) \mid 0 \le h_{\text{in}} < dX_2 \quad \text{and} \quad 0 \le w_{\text{in}} < dX_3 \}
+\end{gathered}$$
+
+Definition of $h_{\text{in}}$ and $w_{\text{in}}$:
+$$\begin{gathered}
+    h_{\text{in}} = h_{\text{out}} \cdot \text{strides}[0] + j_h \cdot \text{dilations}[0] - x1\_begin
+\end{gathered}$$
+
+$$\begin{gathered}
+    w_{\text{in}} = w_{\text{out}} \cdot \text{dilations}[1]  + j_W \cdot \text{dilations}[1]  - x2\_begin
+\end{gathered}$$
+
+Where: $0 \le j_h < dW_0$ et $0 \le j_w < dW_1$.
+
+
+$\textit{Indices}$:
+
+$$\begin{gathered}
+    (j_h^*, j_w^*) = \operatorname{argmax}_{(j_h, j_w) \in \mathcal{V}} X[n, c, h_{\text{out}} \cdot \text{strides}[0] + j_h \cdot {dilations}[0] - x1\_begin, w_{\text{out}} \cdot \text{strides}[1] + j_W \cdot \text{dilations}[1] - x2\_begin]
+\end{gathered}$$
+
+On calcule ensuite les coordonnées absolues correspondantes dans le tenseur d'entrée $X$ :
+$$\begin{gathered}
+    h_{\text{in}}^* = h_{\text{out}} \cdot \text{strides}[0] + j_h^* \cdot {dilations}[0] - x1\_begin
+\end{gathered}$$
+
+$$\begin{gathered}
+    w_{\text{in}}^* = w_{\text{out}} \cdot \text{strides}[1] + j_w^* \cdot {dilations}[1] - x2\_begin
+\end{gathered}$$
+
+Finally:
+
+$$\begin{gathered}
+    \textit{Indices}[b, c, m, n] = b \cdot (dX_1 \cdot dX_2 \cdot dX_3) + c \cdot (dX_2 \cdot dX_3) + h_{\text{in}}^* \cdot dX_3 + w_{\text{in}}^* 
 \end{gathered}$$
 
 Where
-- $h \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
-- $w \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
+- $h_{\text{in}} \in [0,dX_2-1]$ is the index on the first spatial axis of $X_p$, whose dimension is $dX_2$.
+- $w_{\text{in}} \in [0,dX_3-1]$ is the index on the second spatial axis of $X_p$, whose dimension is $dX_3$.
 - $b \in [0,dY_0-1]$ is the batch index. $dY_0$ is the batch size of output $Y$
 - $c \in [0,dY_1-1]$ is the data channel. $dY_1$ is the number of data channels of output $Y$
-- $m \in [0,dY_2-1]$ is the index along the first spatial axis of output $Y$
-- $n \in [0,dY_3-1]$ is the index along the second spatial axis of output $Y$
+- $h_{\text{out}} \in [0,dY_2-1]$ is the index along the first spatial axis of output $Y$
+- $w_{\text{out}} \in [0,dY_3-1]$ is the index along the second spatial axis of output $Y$
 - $dW_0$ is the dimension of the first spatial axis of the kernel, i.e., the first value of attribute `kernel_shape`
 - $dW_1$ is the dimension of the second spatial axis of the kernel, i.e., the second value of attribute `kernel_shape`
 - `strides` is an attribute of the operator. It will be described later in this section.
