@@ -1,14 +1,14 @@
 # Contents
-> - $\text{Add}$ [operator for type real](#real)
-> - $\text{Add}$ [operator for types `float16`, `float32`, `double`](#float)
-> - $\text{Add}$ [operator for types `int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32`, `uint64`](#int)
+- **Add** operator for type real[real](#real)
+- **Add** operator for types [float16, float32, double](#float)
+- **Add** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
-Based on ONNX documentation version 14.
+Based on ONNX documentation [Add version 14](https://onnx.ai/onnx/operators/onnx__Add.html#l-onnx-doc-add).
 
 ---
 
 <a id="real"></a>
-# $\text{Add}$ (real, real)
+# **Div** (real, real)
 
 ## Signature
 
@@ -24,25 +24,27 @@ where:
 
 ## Restrictions
 
-The following restrictions apply to the **Add** operator for the SONNX profile:
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
+No specific restrictions apply to the **Add** operator.
 
-
-## Informal specification
-
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
-
-The definition of the operator is given hereafter.
+## Function
 
 For any index i:
 
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_010]</br></span>
+Operator **ADD** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
+
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
+
 $$
-Y[i] = A[i] + B[i]
+C[i] = A[i] + B[i]
 $$
+
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
+
 
 The effect of the operator is illustrated on the following examples:
 
@@ -67,88 +69,77 @@ Y = A + B = \begin{bmatrix} 8.1 & 12.5 & 39.7 \end{bmatrix}
 ## Error conditions
 No error condition.
 
+## Attributes
+Operator **Add** has no attribute.
+
 ## Inputs
 
-### $\text{A}$: `real tensor`
+### $\text{A}$: real tensor
 Tensor $A$ is the first operand of the addition.
 
 #### Constraints
 
- - `[C1]` <a id="R1"></a> &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape. 
+ - `[E_ADD_REAL_CONSTR_A_010]` <a id="E_ADD_REAL_CONSTR_A_010"></a> Shape consistency
+   - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
 
  
-### $\text{B}$: `real tensor`
+### $\text{B}$: real tensor
 Tensor $B$ is the second operand of the addition.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
- - `[C2]` Definition domain
-   - Statement: all elements must be non null.
+ - `[E_ADD_REAL_CONSTR_B_010]` Shape consistency
+  -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_010</span></b>](#E_ADD_REAL_CONSTR_A_010) on tensor $A$.
+
 
 ## Outputs
 
-### $\text{Y}$: `real tensor`
+### $\text{Y}$: real tensor
 
-Tensor $Y$ is the element-wise result of $A$ Added by $B$.
+Tensor $C$ is the element-wise result of $A$ Added by $B$.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+ - `[E_ADD_REAL_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_010</span></b>](#E_ADD_REAL_CONSTR_A_010) on tensor $A$.
 
-
-## Attributes
-
-The $\text{Add}$ operator has no attribute.
-
-## Formal specification
- 
-See Why3 specification.
-
-## Numerical Accuracy
-*(To be completed)*
-
----
 
 <a id="float"></a>
-# $\text{Add}$ (float, float)
+# **Add** (float, float)
 where float is in {float16, float, double}
 
 ## Signature
 
 Definition of operator $\text{Add}$ signature:
 
-$Y = \text{Add}(A, B)$
+$C = \text{Add}(A, B)$
 
 where
 
  - $A$: first operand tensor
  - $B$: second operand  tensor
- - $Y$: output tensor, result of element-wise addition of $A$ to $B$
+ - $C$: output tensor, result of element-wise addition of $A$ to $B$
  
 ## Restrictions
-The following restrictions apply to the `Add` operator for the SONNX profile:
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[R2]` <a id="R2"></a>     | All tensors shall have the same datatype  | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
+No specific restrictions apply to the **Add** operator.
 
- 
 
-## Informal specification
+## Function
 
-Operator $\text{Add}$ Adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics, placing the result in output tensor $Y$. Each element $Y[i]$ is computed as follows:
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_010]</br></span>
+Operator **ADD** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
+
+The mathematical definition of the operator is given hereafter.
+
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = A[i] + B[i]
 $$
 
----
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 ### Example 1 (2D tensors)
 
@@ -164,78 +155,72 @@ Y = A + B = \begin{bmatrix} 6.0 & 6.5 \\ 20.0 & 1.0 \\ 30.5 & 28.25 \end{bmatrix
 ### Error conditions
 No error condition.
 
+## Attributes
+
+Operator **ADD** has no attribute.
+
 ## Inputs
 
-### $\text{A}$: `floating-point tensor`
-Tensor $A$ is the first opearand of the addition.
+### $\text{A}$: floating-point tensor
+First opearand of the addition.
 
 #### Constraints
 
-- `[C1]` <a id="R1"></a> Shape consistency
-  - Statement: Tensors $A$, $B$ and $Y$ must have the same shape. 
+- `[E_ADD_FLOAT_CONSTR_A_0010]` <a id="E_ADD_FLOAT_CONSTR_A_0010"></a> Shape consistency
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
+- `[E_ADD_FLOAT_CONSTR_A_0020]` <a id="E_ADD_FLOAT_CONSTR_A_0020"></a> Type consistency
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
-### $\text{B}$: `floating-point tensor`
+### $\text{B}$: floating-point tensor
 Tensor $B$ is the second operand of the addition.
 
 #### Constraints
- - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
+- `[E_ADD_FLOAT_CONSTR_B_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0010</span></b>](#E_ADD_FLOAT_CONSTR_A_0010) on tensor $A$.
+- `[E_ADD_FLOAT_CONSTR_B_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0020</span></b>](#E_ADD_FLOAT_CONSTR_A_0020) on tensor $A$.
 
 ## Outputs
 
-### $\text{Y}$: `floating-point tensor`
+### $\text{C}$: floating-point tensor
 
-Tensor $Y$ is the element-wise result of $A$ Added to $B$.
+Result of the element-wise result of $A$ Added to $B$.
 
 #### Constraints
 
- - `[C1]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">[C1]</span></b>](#C1) on tensor $A$.
-
-## Attributes
-
-The $\text{Add}$ operator has no attribute.
-
- ## Formal specification
- See Why3 specification.
-
-## Numerical Accuracy
-
-*(To be completed)*
-
----
+ - `[E_ADD_FLOAT_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_010</span></b>](#E_ADD_FLOAT_CONSTR_A_010) on tensor $A$.
+- `[E_ADD_FLOAT_CONSTR_C_020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0020</span></b>](#E_ADD_FLOAT_CONSTR_A_020) on tensor $A$.
 
 <a id="int"></a>
 
-# $\text{Add}$ (int, int)
+# **Add** (int, int)
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
 Definition of operator $\text{Add}$ signature:
 
- $Y = \text{add}(A,B)$
+ $C = \text{add}(A,B)$
 
  where
  - $A$: first operand of the addition
  - $B$: second operand of the addition
- - $Y$: result of the element-wise addition of $A$ to $B$
+ - $C$: result of the element-wise addition of $A$ to $B$
  
 ## Restrictions
-The following restrictions apply to the `Add` operator for the SONNX profile:
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
-| Restriction | Statement                                                   | Origin                                                                                      |
-|-------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `[R1]` <a id="R1"></a>     | The shape of tensors shall be explicit          | Restriction [Explicit types and shape](../../../../../deliverables/reqs/reqs.md#req-gr-000-explicit-types-and-shapes) |
-| `[GR1]`     | Sparse tensors are not supported                            | General restrictions ([gen.restrict](../common/general_restrictions.md))                                  |
+No specific restrictions apply to the **Add** operator.
 
+## Function
 
-## Informal specification
-
-Operator $\text{Add}$ adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_010]</br></span>
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
-For unsigned values (type `uintn`):
+For unsigned values (type uint\<n>):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- k.2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n}-1 \\
@@ -245,7 +230,7 @@ $$Y[i]=\left\{
 
 with $k \in N$ such that $0 \le A[i] + B[i]- k.2^{n} < 2^n$
 
-For signed values (type `intn`):
+For signed values (type int\<n>):
 $$Y[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- k_1.2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n-1}-1 \\
@@ -260,6 +245,7 @@ $k_1 \in N$ such that $xxx \le A[i] + B[i]-k_1.2^{n} < 2^n$
 
 $k_2 \in N$ such that $xxx \le A[i] + B[i]+k.2^{n} > -2^{n-1}$
 
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 ### Example 1 (1D uint8 tensors)
 
@@ -286,6 +272,10 @@ Y = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
 ## Error conditions
 - According to the definition, the result of the addition differs from the value that would be expected in $N$ (for unsigned) or $Z$ (for signed) when under- or overflow occur.
 
+## Attributes
+
+The $\text{Add}$ operator has no attribute.
+
 ## Inputs
 
 ### $\text{A}$: `integer tensor`
@@ -293,12 +283,12 @@ Y = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
 Tensor $A$ is the first operand of the addition.
 
 #### Constraints
-This section gives all constraints applicable to the input.
 
- - `[C1]` &lt;Shape consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$ and $Y$ must have the same shape.`[R1]`&gt;.
- - `[C2]` &lt;Type consistency&gt;
-   - Statement: &lt;Tensors $A$, $B$, and $C$ share the same integer type. `[R2]`&gt;. 
+- `[E_ADD_INT_CONSTR_A_0010]` <a id="E_ADD_INT_CONSTR_A_0010"></a> Shape consistency
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
+- `[E_ADD_INT_CONSTR_A_0020]` <a id="E_ADD_INT_CONSTR_A_0020"></a> Type consistency
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type.
+
 
 
 ### $\text{B}$: `integer tensor`
@@ -307,8 +297,10 @@ Tensor $B$ is the second operand of the addition.
 
 #### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+- `[E_ADD_INT_CONSTR_B_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0010</span></b>](#E_ADD_INT_CONSTR_A_0010) on tensor $A$.
+- `[E_ADD_INT_CONSTR_B_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0020</span></b>](#E_ADD_INT_CONSTR_A_0020) on tensor $A$.
 
 ## Outputs
 
@@ -318,18 +310,11 @@ Tensor $Y$ is the element-wise integer addition result.
 
 #### Constraints
 
- - `[C1]` &lt;Shape consistency&gt; : See constraint on $A$.
- - `[C2]` &lt;Type consistency&gt; : See constraint on $A$.
+ - `[E_ADD_INT_CONSTR_C_010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_010</span></b>](#E_ADD_INT_CONSTR_A_010) on tensor $A$.
+- `[E_ADD_INT_CONSTR_C_020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0020</span></b>](#E_ADD_INT_CONSTR_A_020) on tensor $A$.
 
-## Attributes
-
-The $\text{Add}$ operator has no attribute.
-
-## Formal specification
-See Why3 specification.
-
-## Numerical Accuracy
-*(To be completed.)*
 
 
 
