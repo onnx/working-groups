@@ -102,7 +102,7 @@ Numerator of the division.
 
 #### Constraints
 
- - `[E_DIV_REAL_CONSTR_A_010]` <a id="E_DIV_REAL_CONSTR_A_010"></a> Shape consistency
+ - `[E_DIV_REAL_CONSTR_A_010]` <a id="EDIVREALCONSTRA010"></a> Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
  
 ### $\text{B}$: real tensor
@@ -112,7 +112,7 @@ Denominator of the division.
 #### Constraints
 
  - `[E_DIV_REAL_CONSTR_B_010]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#E_DIV_REAL_CONSTR_A_010) on tensor $A$.
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#EDIVREALCONSTRA010) on tensor $A$.
  - `[E_DIV_REAL_CONSTR_B_020]` Avoid undefined behaviour
    - Statement: $\forall i, B[i] \neq 0$ 
 
