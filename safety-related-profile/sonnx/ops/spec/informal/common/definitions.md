@@ -1,6 +1,6 @@
 # Definitions
-
-- <a id="tensor_index"></a> **Tensor index** (or **multi-index**): For an $n$-dimensional tensor $T$, i.e., a tensor of rank $n$, a single element is addressed by an index tuple $i=(i_0,i_1,\dots,i_{n-1})$ where $i_k$ is the index along axis $k$. We have $i_k \in [0,dT_k]$ where $dT_k$ is the number of elements along the $k$-th axis. 
+<a id="tensor_index"></a>
+-  **Tensor index** (or **multi-index**): For an $n$-dimensional tensor $T$, i.e., a tensor of rank $n$, a single element is addressed by an index tuple $i=(i_0,i_1,\dots,i_{n-1})$ where $i_k$ is the index along axis $k$. We have $i_k \in [0,dT_k]$ where $dT_k$ is the number of elements along the $k$-th axis. 
 
 - **Empty tensor (null tensor)**: A tensor with at least one zero dimension. 
 A null tensor can be created by operators  such as **Slice** or **Where**. 
