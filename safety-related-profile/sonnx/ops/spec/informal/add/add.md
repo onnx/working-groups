@@ -32,7 +32,7 @@ No specific restrictions apply to the **Add** operator.
 
 For any index i:
 
-<span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_010]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_0010]</br></span>
 Operator **ADD** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
@@ -78,8 +78,8 @@ Operator **Add** has no attribute.
 Tensor $A$ is the first operand of the addition.
 
 #### Constraints
-<a id="E_ADD_REAL_CONSTR_A_010"></a>
- - `[E_ADD_REAL_CONSTR_A_010]`  Shape consistency
+<a id="E_ADD_REAL_CONSTR_A_0010"></a>
+ - `[E_ADD_REAL_CONSTR_A_0010]`  Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
 
  
@@ -88,8 +88,8 @@ Tensor $B$ is the second operand of the addition.
 
 #### Constraints
 
- - `[E_ADD_REAL_CONSTR_B_010]` Shape consistency
-  -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_010</span></b>](#E_ADD_REAL_CONSTR_A_010) on tensor $A$.
+ - `[E_ADD_REAL_CONSTR_B_0010]` Shape consistency
+  -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_0010</span></b>](#E_ADD_REAL_CONSTR_A_0010) on tensor $A$.
 
 
 ## Outputs
@@ -100,8 +100,8 @@ Tensor $C$ is the element-wise result of $A$ Added by $B$.
 
 #### Constraints
 
- - `[E_ADD_REAL_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_010</span></b>](#E_ADD_REAL_CONSTR_A_010) on tensor $A$.
+ - `[E_ADD_REAL_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_REAL_CONSTR_A_0010</span></b>](#E_ADD_REAL_CONSTR_A_0010) on tensor $A$.
 
 
 <a id="float"></a>
@@ -128,7 +128,7 @@ No specific restrictions apply to the **Add** operator.
 
 ## Function
 
-<span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_010]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_0010]</br></span>
 Operator **ADD** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
@@ -165,10 +165,11 @@ Operator **ADD** has no attribute.
 First opearand of the addition.
 
 #### Constraints
-
-- `[E_ADD_FLOAT_CONSTR_A_0010]` <a id="E_ADD_FLOAT_CONSTR_A_0010"></a> Shape consistency
+<a id="E_ADD_FLOAT_CONSTR_A_0010"></a>
+- `[E_ADD_FLOAT_CONSTR_A_0010]`  Shape consistency
   - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
-- `[E_ADD_FLOAT_CONSTR_A_0020]` <a id="E_ADD_FLOAT_CONSTR_A_0020"></a> Type consistency
+<a id="E_ADD_FLOAT_CONSTR_A_0020"></a>
+- `[E_ADD_FLOAT_CONSTR_A_0020]`  Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
 ### $\text{B}$: floating-point tensor
@@ -188,8 +189,8 @@ Result of the element-wise result of $A$ Added to $B$.
 
 #### Constraints
 
- - `[E_ADD_FLOAT_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_010</span></b>](#E_ADD_FLOAT_CONSTR_A_010) on tensor $A$.
+ - `[E_ADD_FLOAT_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0010</span></b>](#E_ADD_FLOAT_CONSTR_A_0010) on tensor $A$.
 - `[E_ADD_FLOAT_CONSTR_C_020]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0020</span></b>](#E_ADD_FLOAT_CONSTR_A_020) on tensor $A$.
 
@@ -215,7 +216,7 @@ No specific restrictions apply to the **Add** operator.
 
 ## Function
 
-<span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_010]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_0010]</br></span>
 Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
@@ -310,8 +311,8 @@ Tensor $Y$ is the element-wise integer addition result.
 
 #### Constraints
 
- - `[E_ADD_INT_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_010</span></b>](#E_ADD_INT_CONSTR_A_010) on tensor $A$.
+ - `[E_ADD_INT_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0010</span></b>](#E_ADD_INT_CONSTR_A_0010) on tensor $A$.
 - `[E_ADD_INT_CONSTR_C_020]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0020</span></b>](#E_ADD_INT_CONSTR_A_020) on tensor $A$.
 
