@@ -1,5 +1,5 @@
 # Contents
-- **Add** operator for type real[real](#real)
+- **Add** operator for type [real](#real)
 - **Add** operator for types [float16, float32, double](#float)
 - **Add** operator for types [int8, int16, int32, int64, uint8, uint16, uint32, uint64](#int)
 
@@ -8,7 +8,7 @@ Based on ONNX documentation [Add version 14](https://onnx.ai/onnx/operators/onnx
 ---
 
 <a id="real"></a>
-# **Div** (real, real)
+# **Add** (real, real)
 
 ## Signature
 
