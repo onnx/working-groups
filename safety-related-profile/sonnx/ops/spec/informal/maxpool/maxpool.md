@@ -67,9 +67,9 @@ $$\begin{gathered}
 \end{gathered}$$
 
 Definition of $h_{\text{in}}$ and $w_{\text{in}}$:
+
 $$\begin{gathered}
-    h_{\text{in}} = h_{\text{out}} \cdot \text{strides}[0] + j_h \cdot \text{dilations}[0] - x1\_begin
-\end{gathered}$$
+    h_{\text{in}} = h_{\text{out}} \cdot \text{strides}[0] + j_h \cdot \text{dilations}[0] - \text{x1\_begin}\end{gathered}$$
 
 $$\begin{gathered}
     w_{\text{in}} = w_{\text{out}} \cdot \text{dilations}[1]  + j_W \cdot \text{dilations}[1]  - x2\_begin
