@@ -27,7 +27,7 @@ No specific restrictions apply to the **Div** operator.
 
 ## Function
 
-<span style="background: red; color: white; font-size:0.7em;">[E_DIV_REAL_FUNC_010]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_DIV_REAL_FUNC_0010]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
@@ -102,7 +102,7 @@ Numerator of the division.
 
 #### Constraints
 
- - `[E_DIV_REAL_CONSTR_A_010]` <a id="E_DIV_REAL_CONSTR_A_010"></a> Shape consistency
+ - `[E_DIV_REAL_CONSTR_A_0010]` <a id="E_DIV_REAL_CONSTR_A_0010"></a> Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
  
 ### $\text{B}$: real tensor
@@ -111,8 +111,8 @@ Denominator of the division.
 
 #### Constraints
 
- - `[E_DIV_REAL_CONSTR_B_010]` Shape consistency
-   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#E_DIV_REAL_CONSTR_A_010) on tensor $A$.
+ - `[E_DIV_REAL_CONSTR_B_0010]` Shape consistency
+   -  Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_0010</span></b>](#E_DIV_REAL_CONSTR_A_0010) on tensor $A$.
  - `[E_DIV_REAL_CONSTR_B_020]` Avoid undefined behaviour
    - Statement: $\forall i, B[i] \neq 0$ 
 
@@ -124,8 +124,8 @@ Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 
 #### Constraints
 
- - `[E_DIV_REAL_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_010</span></b>](#E_DIV_REAL_CONSTR_A_010) on tensor $A$.
+ - `[E_DIV_REAL_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_REAL_CONSTR_A_0010</span></b>](#E_DIV_REAL_CONSTR_A_0010) on tensor $A$.
 
 
 <a id="float"></a>
@@ -149,7 +149,7 @@ No specific restrictions apply to the **Div** operator.
 
 ## Function
 
-<span style="background: red; color: white; font-size:0.7em;">[E_DIV_FLOAT_FUNC_010]</br></span>
+<span style="background: red; color: white; font-size:0.7em;">[E_DIV_FLOAT_FUNC_0010]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/lexicon.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
@@ -228,8 +228,8 @@ Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
- - `[E_DIV_FLOAT_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_010</span></b>](#E_DIV_FLOAT_CONSTR_A_010) on tensor $A$.
+ - `[E_DIV_FLOAT_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_0010</span></b>](#E_DIV_FLOAT_CONSTR_A_0010) on tensor $A$.
 - `[E_DIV_FLOAT_CONSTR_C_020]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_FLOAT_CONSTR_A_0020</span></b>](#E_DIV_FLOAT_CONSTR_A_020) on tensor $A$.
 
@@ -328,7 +328,7 @@ Result of the element-wise division of $A$ by $B$.
 
 #### Constraints
 
-- `[E_DIV_INT_CONSTR_C_010]` Shape consistency
-   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_010</span></b>](#E_DIV_INT_CONSTR_A_010) on tensor $A$.
+- `[E_DIV_INT_CONSTR_C_0010]` Shape consistency
+   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_0010</span></b>](#E_DIV_INT_CONSTR_A_0010) on tensor $A$.
 - `[E_DIV_INT_CONSTR_C_020]` Type consistency
   - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_DIV_INT_CONSTR_A_0020</span></b>](#E_DIV_INT_CONSTR_A_020) on tensor $A$.
