@@ -1,7 +1,64 @@
 #### 2025/06/05
-- Review BatchNorm.
 - Discussion about the relation between the informal and formal spec. Are we really convinced on the benefits of formal spec if we don't add functional invariants? See e.g. ![](../Tlse/attachments/conv_informa_formal.png).
 - Check [this ONNX PR](https://github.com/onnx/onnx/issues/8054#issuecomment-4622938091)
+
+##### Minutes
+
+### Meeting Notes
+- Discussion about formal specification 
+	-  The status 
+		- Before being an input to the code generation process, the formal specification is **a specification**. So it shall define precisely what an operator shall do. 
+		- Initially, we wanted to have a formal spec that is "close to the informal spec". We used to sad that the formal spec (i) should allow the user to express as intuitively as possible what he/she has in mind, (ii) should be easily traceable to the informal spec.
+		- As of today, this is not really the case. 
+			- First, the formal spec is very large since it covers two levels of spec (abstract and concrete) and contains code only needed for the proof. 
+			- In the abstract spec, specification often use induction, which slightly differs to the using of loops (sums, products) in the informal spec. 
+			- The notation is a bit complicated
+			- For the **Conv** operator, for instance, the informal spec is specified using simple nested loops whereas a the abstract formal spec is broken down in a series of functions, each corresponding to a level of loops, and expressed inductively. 
+			- The concrete specification is actually closer to the informal spec.
+		- So the first question is: **What can we do to facilitate the validation of the formal spec ?**
+			- Stick as much as possible to the notations used in the informal spec
+			- Introduce functions that would "mimick" the classical $\sum$ , or $\prod$ ? 
+			- Improve the formal specification guidelines with rules to improve traceability? 
+		- Finally, the main usage of the formal spec is to support the automatic generation of the  implementation. But for most operators, the implementation is not complex once the specification is available, so being able to generate it automatically is interesting but not fundamental. So,  besides being used to generate the code another use of the formal spec could be to verify some interesting properties of the spec, and so improve our confidence in the spec
+			- For **Conv**, we have for instance the following properties:
+				- **Conv**(X, W1 + W2) = **Conv**(X, W1) + **Conv**(X, W2)
+				- **Conv**(a X, W) = a **Conv**(X, W)
+				- **Conv**(X, a W) = a **Conv**(X, W)
+				- **Conv**(0, W) = 0
+				- **Conv**(X, 0) = 0
+				- **Conv**(X, W, B) = Conv(**X**, W, 0) + broadcast(B)
+				- permutation symmetry
+				- identity when applying a 1x1 kernel
+				- For stride 1, dilation 1, and no padding, shifting the input down and right by one cell should shift the output down and right by one cell, on the overlapping output domain.
+				- etc.
+			- If we could verify those properties on the formal spec, this would contribute to our confidence on the spec.
+			- The question is: **are such properties provable using Why3 with a reasonable effort?**
+- Templating...
+	- We see that whatever our effort, 
+		- we leave some errors in the informal spec, 
+		- we have hard times keeping the existing specs in-line with the ever-changing guidelines. 
+	- One solution could be to create a template that would capture the recurrent part of the spec.  
+		- [ ] Propose a templating scheme [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 hivaem 
+	- An additional solution consists to apply a LLM to check our production. First tests show the efficiency of the approach.
+-  [ ] In **MatMul**, exchange the **Float** and **Int** sections [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 8b7vr2 
+- We are still experiencing formatting issues with formulas. 
+	- [ ] Check and correct formatting problems [project::[[SONXX]]] [assignee::[[SONNX]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 azjdc5 
+- For the **Maxpool** operator. 
+	- We keep the use of the padded kernel $X_p$ because it is intuitive (even if we know that a real implementation will never create this padded kernel...). 
+	- The existing formula for the indice have to be updated. They will be using the $argmax$
+	- [ ] Update the **Maxpool** operator to reflect the decision taken about its specification [project::[[SONXX]]] [assignee::[[SOUYRIS Jean]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 tspe86 
+	- [ ] Send a mail to J&R to explain how the indice is computed [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 l2vlgb 
+- Hyperlinks
+	- Update hyperlinks according to what has been done for Div.
+- Use of mathematical operators 
+	- Most operators refer to mathematical operators such as $+$ or $\times$ (including in $\sum$ or $\prod$ ), but these operators are not defined. For floating point number, it seems that we have made a general statement saying that they refer to IEEE, but not for int.
+	- One possibility could be to specify operators using the **Add** and **Mul** operators (e.g, for scalar). But this will make the informal spec harder to read. 
+	- The other solution can be to use the usual $+$ and $\times$  and add a general notice saying that whenever those operators are used, they respectively refer to **Add** and **Mul**. 
+	- We opt for the second solution.
+	- [ ] Add a general notice saying that whenever those operators are used, they respectively refer to **Add** and **Mul**.  [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 afe7zu 
+		- This notice shall belong to the "SONNX Reader user manual"
+
+
 
 #### 2025/05/21
 - Jean-Loup comments on [testing strategy](../../../sonnx/ops/docs/guidelines/tests-part2.md)
