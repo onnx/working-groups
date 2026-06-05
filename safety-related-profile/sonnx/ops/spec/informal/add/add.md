@@ -33,11 +33,11 @@ No specific restrictions apply to the **Add** operator.
 For any index i:
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_010]</br></span>
-Operator **ADD** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **ADD** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](./../common/definitions.md) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 C[i] = A[i] + B[i]
@@ -129,11 +129,11 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_010]</br></span>
-Operator **ADD** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
+Operator **ADD** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
 
-For any [tensor index](./../common/definitions.md) $i$:
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
 Y[i] = A[i] + B[i]
@@ -216,7 +216,7 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_010]</br></span>
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md).
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
