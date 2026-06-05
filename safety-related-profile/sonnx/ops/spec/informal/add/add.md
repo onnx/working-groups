@@ -79,7 +79,7 @@ Tensor $A$ is the first operand of the addition.
 
 #### Constraints
 <a id="E_ADD_REAL_CONSTR_A_0010"></a>
- - `[E_ADD_REAL_CONSTR_A_0010]`  Shape consistency
+ - `[E_ADD_REAL_CONSTR_A_0010]` Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
 
  
@@ -166,10 +166,10 @@ First opearand of the addition.
 
 #### Constraints
 <a id="E_ADD_FLOAT_CONSTR_A_0010"></a>
-- `[E_ADD_FLOAT_CONSTR_A_0010]`  Shape consistency
+- `[E_ADD_FLOAT_CONSTR_A_0010]` Shape consistency
   - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
 <a id="E_ADD_FLOAT_CONSTR_A_0020"></a>
-- `[E_ADD_FLOAT_CONSTR_A_0020]`  Type consistency
+- `[E_ADD_FLOAT_CONSTR_A_0020]` Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
 ### $\text{B}$: floating-point tensor
@@ -284,10 +284,11 @@ The $\text{Add}$ operator has no attribute.
 Tensor $A$ is the first operand of the addition.
 
 #### Constraints
-
-- `[E_ADD_INT_CONSTR_A_0010]` <a id="E_ADD_INT_CONSTR_A_0010"></a> Shape consistency
+<a id="E_ADD_INT_CONSTR_A_0010"></a>
+- `[E_ADD_INT_CONSTR_A_0010]` Shape consistency
   - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
-- `[E_ADD_INT_CONSTR_A_0020]` <a id="E_ADD_INT_CONSTR_A_0020"></a> Type consistency
+<a id="E_ADD_INT_CONSTR_A_0020"></a>
+- `[E_ADD_INT_CONSTR_A_0020]` Type consistency
   - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
 
