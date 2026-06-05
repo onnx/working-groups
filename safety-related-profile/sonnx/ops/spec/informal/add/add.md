@@ -33,7 +33,7 @@ No specific restrictions apply to the **Add** operator.
 For any index i:
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_0010]</br></span>
-Operator **ADD** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$.
+Operator **ADD** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
 
@@ -129,7 +129,7 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_0010]</br></span>
-Operator **ADD** divides input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of dividing $A[i]$ by $B[i]$
+Operator **ADD** adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
 
