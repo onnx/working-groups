@@ -78,8 +78,8 @@ Operator **Add** has no attribute.
 Tensor $A$ is the first operand of the addition.
 
 #### Constraints
-
- - `[E_ADD_REAL_CONSTR_A_010]` <a id="E_ADD_REAL_CONSTR_A_010"></a> Shape consistency
+<a id="E_ADD_REAL_CONSTR_A_010"></a>
+ - `[E_ADD_REAL_CONSTR_A_010]`  Shape consistency
    - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
 
  
