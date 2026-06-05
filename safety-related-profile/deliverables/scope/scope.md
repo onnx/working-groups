@@ -151,7 +151,7 @@ YoloNAS
 17) Gelu
 18) LeakyRelu
 19) LayerNormalization
-20) SoftMmx
+20) SoftMax
 
 # Use case `Helicopters` - `Valot Nicolas`
 
