@@ -191,8 +191,8 @@ Result of the element-wise result of $A$ Added to $B$.
 
  - `[E_ADD_FLOAT_CONSTR_C_0010]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0010</span></b>](#E_ADD_FLOAT_CONSTR_A_0010) on tensor $A$.
-- `[E_ADD_FLOAT_CONSTR_C_020]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0020</span></b>](#E_ADD_FLOAT_CONSTR_A_020) on tensor $A$.
+- `[E_ADD_FLOAT_CONSTR_C_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_FLOAT_CONSTR_A_0020</span></b>](#E_ADD_FLOAT_CONSTR_A_0020) on tensor $A$.
 
 <a id="int"></a>
 
@@ -314,8 +314,8 @@ Tensor $Y$ is the element-wise integer addition result.
 
  - `[E_ADD_INT_CONSTR_C_0010]` Shape consistency
    - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0010</span></b>](#E_ADD_INT_CONSTR_A_0010) on tensor $A$.
-- `[E_ADD_INT_CONSTR_C_020]` Type consistency
-  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0020</span></b>](#E_ADD_INT_CONSTR_A_020) on tensor $A$.
+- `[E_ADD_INT_CONSTR_C_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_ADD_INT_CONSTR_A_0020</span></b>](#E_ADD_INT_CONSTR_A_0020) on tensor $A$.
 
 
 
