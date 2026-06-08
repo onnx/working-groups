@@ -33,7 +33,7 @@ No specific restrictions apply to the **Add** operator.
 For any index i:
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_0010]</br></span>
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$.
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ and $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
 
@@ -96,7 +96,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{C}$: real tensor
 
-Tensor $C$ is the element-wise result of the addition of $A$ and $B$.
+Tensor $C$ is the result of the element-wise addition of $A$ and $B$.
 
 #### Constraints
 
@@ -129,7 +129,7 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_0010]</br></span>
-Operator **ADD** adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$
+Operator **Add** adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ and $B[i]$
 
 The mathematical definition of the operator is given hereafter.
 
@@ -152,17 +152,17 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```math
 C = A + B = \begin{bmatrix} 6.0 & 6.5 \\ 20.0 & 1.0 \\ 30.5 & 28.25 \end{bmatrix}
 ```
-### Error conditions
+## Error conditions
 No error condition.
 
 ## Attributes
 
-Operator **ADD** has no attribute.
+Operator **Add** has no attribute.
 
 ## Inputs
 
 ### $\text{A}$: floating-point tensor
-First opearand of the addition.
+Tensor $A$ is the first operand of the addition.
 
 #### Constraints
 <a id="E_ADD_FLOAT_CONSTR_A_0010"></a>
@@ -185,7 +185,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{C}$: floating-point tensor
 
-Result of the element-wise result of $A$ Added to $B$.
+Tensor $C$ is the result of the element-wise floating-point addition of $A$ and $B$.
 
 #### Constraints
 
@@ -217,7 +217,7 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_0010]</br></span>
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of adding $A[i]$ and $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
@@ -263,15 +263,15 @@ C = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
 ```
 
 ## Error conditions
-- According to the definition, the result of the addition differs from the value that would be expected in $N$ (for unsigned) or $Z$ (for signed) when under- or overflow occur.
+- According to the definition, the result of the addition differs from the value that would be expected in $\mathbb{N}$ (for unsigned) or $\mathbb{Z}$ (for signed) when under- or overflow occur.
 
 ## Attributes
 
-The $\text{Add}$ operator has no attribute.
+The **Add** operator has no attribute.
 
 ## Inputs
 
-### $\text{A}$: `integer tensor`
+### $\text{A}$: integer tensor
 
 Tensor $A$ is the first operand of the addition.
 
@@ -300,7 +300,7 @@ Tensor $B$ is the second operand of the addition.
 
 ### $\text{C}$: `integer tensor`
 
-Tensor $C$ is the element-wise integer addition result.
+Tensor $C$ is the result of the element-wise integer addition of $A$ and $B$.
 
 #### Constraints
 
