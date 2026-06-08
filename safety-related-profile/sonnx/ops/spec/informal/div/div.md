@@ -83,8 +83,7 @@ C = \frac{A}{B} = \begin{bmatrix}
   16.2/4.1 & 0.5 \\
   25.3/5.2 & 6.2
 \end{bmatrix}
-```
-<span style="font-size:0.7em;">[/info]</br></span> 
+``` 
 
 ## Error conditions
 No error condition.
@@ -163,7 +162,7 @@ A[i]/B[i] & \text{if } A[i] \text{ and } B[i] \text{ are different from 0} \\
 \end{cases}
 $$
 
-In the second case the sign of $\pm \text{0}$ is determined from the sign of $B[i]$ according to the IEEE754 rules.
+In the second case, the sign of $\pm \text{0}$ is determined from the sign of $B[i]$ according to the IEEE754 rules.
 
 In the third case, the sign of $\pm \text{inf}$ is determined from the signs of $A[i]$ and the zero ($\pm 0$) according to the IEEE754 rules.
 
