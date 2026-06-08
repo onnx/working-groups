@@ -14,12 +14,12 @@ Based on ONNX documentation [Add version 14](https://onnx.ai/onnx/operators/onnx
 
 Definition of operator $\text{Add}$ signature:
 
-$Y = \text{Add}(A, B)$
+$C = \text{Add}(A, B)$
 
 where:
 - $A$: first operand of the addition  
 - $B$: second operand of the addition  
-- $Y$: result of the element-wise addition of $A$ to $B$
+- $C$: result of the element-wise addition of $A$ to $B$
  
 
 ## Restrictions
@@ -33,14 +33,14 @@ No specific restrictions apply to the **Add** operator.
 For any index i:
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_0010]</br></span>
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $Y[i]$ is the result of adding $A[i]$ by $B[i]$.
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$.
 
 The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] = A[i] + B[i]
+C[i] = A[i] + B[i]
 $$
 
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
@@ -61,7 +61,7 @@ B = \begin{bmatrix} 2 & 3 & 4 \end{bmatrix}
 ```
 
 ```math
-Y = A + B = \begin{bmatrix} 8.1 & 12.5 & 39.7 \end{bmatrix}
+C = A + B = \begin{bmatrix} 8.1 & 12.5 & 39.7 \end{bmatrix}
 ```
 
 ---
@@ -80,7 +80,7 @@ Tensor $A$ is the first operand of the addition.
 #### Constraints
 <a id="E_ADD_REAL_CONSTR_A_0010"></a>
  - `[E_ADD_REAL_CONSTR_A_0010]` Shape consistency
-   - Statement: Tensors $A$, $B$, and $Y$ shall have the same shape. 
+   - Statement: Tensors $A$, $B$, and $C$ shall have the same shape. 
 
  
 ### $\text{B}$: real tensor
@@ -94,9 +94,9 @@ Tensor $B$ is the second operand of the addition.
 
 ## Outputs
 
-### $\text{Y}$: real tensor
+### $\text{C}$: real tensor
 
-Tensor $Y$ is the element-wise result of the addition of $A$ and $B$.
+Tensor $C$ is the element-wise result of the addition of $A$ and $B$.
 
 #### Constraints
 
@@ -112,13 +112,13 @@ where float is in {float16, float, double}
 
 Definition of operator $\text{Add}$ signature:
 
-$Y = \text{Add}(A, B)$
+$C = \text{Add}(A, B)$
 
 where
 
  - $A$: first operand tensor
  - $B$: second operand  tensor
- - $Y$: output tensor, result of element-wise addition of $A$ to $B$
+ - $C$: output tensor, result of element-wise addition of $A$ to $B$
  
 ## Restrictions
 [General restrictions](./../common/general_restrictions.md) are applicable.
@@ -129,14 +129,14 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_FLOAT_FUNC_0010]</br></span>
-Operator **ADD** adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $Y$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $Y[i]$ is the result of adding $A[i]$ by $B[i]$
+Operator **ADD** adds input tensors $A$ and $B$ element-wise according to IEEE 754 floating-point semantics and stores the result in output tensor $C$. If $i$ is a [tensor index](../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ by $B[i]$
 
 The mathematical definition of the operator is given hereafter.
 
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-Y[i] = A[i] + B[i]
+C[i] = A[i] + B[i]
 $$
 
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
@@ -150,7 +150,7 @@ B = \begin{bmatrix} 3.0 & 2.0 \\ 4.0 & 0.0 \\ 5.0 & 4.0 \end{bmatrix}
 ```
 
 ```math
-Y = A + B = \begin{bmatrix} 6.0 & 6.5 \\ 20.0 & 1.0 \\ 30.5 & 28.25 \end{bmatrix}
+C = A + B = \begin{bmatrix} 6.0 & 6.5 \\ 20.0 & 1.0 \\ 30.5 & 28.25 \end{bmatrix}
 ```
 ### Error conditions
 No error condition.
@@ -167,10 +167,10 @@ First opearand of the addition.
 #### Constraints
 <a id="E_ADD_FLOAT_CONSTR_A_0010"></a>
 - `[E_ADD_FLOAT_CONSTR_A_0010]` Shape consistency
-  - Statement: Tensors $A$, $B$ and $Y$ must have the same shape.
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
 <a id="E_ADD_FLOAT_CONSTR_A_0020"></a>
 - `[E_ADD_FLOAT_CONSTR_A_0020]` Type consistency
-  - Statement: Tensors $A$, $B$, and $Y$ must have the same type.
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
 ### $\text{B}$: floating-point tensor
 Tensor $B$ is the second operand of the addition.
@@ -183,7 +183,7 @@ Tensor $B$ is the second operand of the addition.
 
 ## Outputs
 
-### $\text{Y}$: floating-point tensor
+### $\text{C}$: floating-point tensor
 
 Result of the element-wise result of $A$ Added to $B$.
 
@@ -202,12 +202,12 @@ where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 ## Signature
 Definition of operator $\text{Add}$ signature:
 
- $Y = \text{Add}(A,B)$
+ $C = \text{Add}(A,B)$
 
  where
  - $A$: first operand of the addition
  - $B$: second operand of the addition
- - $Y$: result of the element-wise addition of $A$ to $B$
+ - $C$: result of the element-wise addition of $A$ to $B$
  
 ## Restrictions
 [General restrictions](./../common/general_restrictions.md) are applicable.
@@ -217,12 +217,12 @@ No specific restrictions apply to the **Add** operator.
 ## Function
 
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_INT_FUNC_0010]</br></span>
-Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $Y$. Each element $Y[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
+Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of Adding $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer addition is performed as follows (considering that all tensors have the same type):
 
 For unsigned values (type uint\<n>):
-$$Y[i]=\left\{ 
+$$C[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- 2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n}-1 \\
    A[i] + B[i] & \quad \textrm{otherwise}
@@ -230,7 +230,7 @@ $$Y[i]=\left\{
 \right.$$
 
 For signed values (type int\<n>):
-$$Y[i]=\left\{ 
+$$C[i]=\left\{ 
   \begin{array}{ c l }
     A[i] + B[i]- 2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n-1}-1 \\
    A[i] + B[i] + 2^{n} & \quad \textrm{if } A[i] + B[i] < -2^{n-1} \\
@@ -248,7 +248,7 @@ A = \begin{bmatrix} 6 & 200 & 35 \end{bmatrix}
 B = \begin{bmatrix} 3 & 100 & 5 \end{bmatrix}
 ```
 ```math
-Y = \begin{bmatrix} 9 & 44 & 40 \end{bmatrix}
+C = \begin{bmatrix} 9 & 44 & 40 \end{bmatrix}
 ```
 
 ### Example 2 (1D int8 tensors)
@@ -259,7 +259,7 @@ A = \begin{bmatrix} -6 & 100 & -100  \end{bmatrix}
 B = \begin{bmatrix} -3 & 100 & -100  \end{bmatrix}
 ```
 ```math
-Y = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
+C = \begin{bmatrix} -9 & -56 & 56  \end{bmatrix}
 ```
 
 ## Error conditions
@@ -278,10 +278,10 @@ Tensor $A$ is the first operand of the addition.
 #### Constraints
 <a id="E_ADD_INT_CONSTR_A_0010"></a>
 - `[E_ADD_INT_CONSTR_A_0010]` Shape consistency
-  - Statement: Tensors $A$, $B$ and $Y$ must have the same shape.
+  - Statement: Tensors $A$, $B$ and $C$ must have the same shape.
 <a id="E_ADD_INT_CONSTR_A_0020"></a>
 - `[E_ADD_INT_CONSTR_A_0020]` Type consistency
-  - Statement: Tensors $A$, $B$, and $Y$ must have the same type.
+  - Statement: Tensors $A$, $B$, and $C$ must have the same type.
 
 
 
@@ -298,9 +298,9 @@ Tensor $B$ is the second operand of the addition.
 
 ## Outputs
 
-### $\text{Y}$: `integer tensor`
+### $\text{C}$: `integer tensor`
 
-Tensor $Y$ is the element-wise integer addition result.
+Tensor $C$ is the element-wise integer addition result.
 
 #### Constraints
 
