@@ -35,12 +35,10 @@ The mathematical definition of the operator is given hereafter.
 For any [tensor index](./../common/definitions.md#tensor_index) $i$:
 
 $$
-C[i] = 
-\begin{cases} 
-A[i]/B[i] & \text{if } B[i] \text{ is different from 0} \\
-\text{ undefined} & \text{otherwise}
-\end{cases}
-$$
+C[i] = A[i]/B[i]
+$$ 
+If $B[i] \neq 0$ otherwise $C[i]$ is not defined. 
+
 
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
@@ -133,7 +131,6 @@ Tensor $C$ is the element-wise result of the division of $A$ by $B$.
 where float is in {float16, float, double}
 
 ## Signature
-Definition of operator $\text{Div}$ signature:
 $C = \textbf{Div}(A, B)$
 
 where
@@ -241,7 +238,7 @@ Result of the element-wise division of $A$ by $B$.
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
 ## Signature
-Definition of operator $\text{Div}$ signature:
+
  $C = \textbf{Div}(A,B)$
 
  where
@@ -255,14 +252,13 @@ Definition of operator $\text{Div}$ signature:
 No specific restrictions apply to the **Div** operator.
 
 ## Function
-<span style="background: red; color: white; font-size:0.7em;">[spec1]</br></span> 
+<span style="background: red; color: white; font-size:0.7em;">[E_DIV_INT_FUNC_0010]</br></span>
 Operator **Div** divides input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. 
 
 The result of the division is the algebraic quotient of $A[i]$ by $B[i]$ with any fractional part discarded.
 
-<span style="background: red; color: white; font-size:0.7em;">[/spec1]</br></span> 
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span> 
 
-<span style="font-size:0.7em;">[info]</br></span> 
 ### Example 1
 
 ```math

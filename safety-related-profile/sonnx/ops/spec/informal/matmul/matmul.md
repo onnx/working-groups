@@ -148,151 +148,6 @@ Tensor $Y$ is the output tensor.
   - See constraint [<b><span style="font-family: 'Courier New', monospace">E_MATMUL_REAL_CONSTR_A_0030</span></b>](#E_MATMUL_REAL_CONSTR_A_0030) of A and constraint [<b><span style="font-family: 'Courier New', monospace">E_MATMUL_REAL_CONSTR_B_0030</span></b>](#E_MATMUL_REAL_CONSTR_B_0030) of B
 
 
-<a id="int"></a>
-# **MatMul** (int, int)
-
-where int is in {int32, int64, uint32, uint64}
-
-# Signature
-$Y = \textbf{MatMul}(A, B)$
-where
-- $A$: left-side of the multiplication
-- $B$: right-side of the multiplication
-- $Y$: result of the multiplication
-
-
-[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
-
-The following specific restrictions apply to the **MatMul** operator for the SONNX profile:
-
-| Restriction    | Statement | Origin |
-| -------- | ------- | ------- |
-| `R1` | Input tensors $A$ and $B$ have 2 dimensions | Transient |
-
-## Informal specification
-
-Operator **MatMul** computes a matrix multiplication. 
-
-The mathematical definition of the operator is given hereafter.
-
-$$
-  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
-$$
-
-with $dA_1 = dB_0$
-
-where 
-- $x+y$ = [**Add**](../add/add.md#add-int-int)$(x,y)$
-- $x\times y$ = [**Mul**](../mul/mul.md#mul-int-int)$(x,y)$
-
-### Example 1
-$$
-A = \begin{bmatrix}
-      1 & 2 \\
-      3 & 4
-  \end{bmatrix}
-$$
-
-$$
-B = \begin{bmatrix}
-      5 & 6 \\
-      7 & 8
-  \end{bmatrix}
-$$
-
-$$
-Y = \begin{bmatrix}
-      19 & 22 \\
-      43 & 50
-\end{bmatrix}
-$$
-
-### Example 2
-$$
-A = \begin{bmatrix}
-      1 & 2 \\
-      3 & 4 \\
-      5 & 6
-  \end{bmatrix}
-$$
-
-$$
-B = \begin{bmatrix}
-      7 & 8 & 9 \\
-      10 & 11 & 12
-  \end{bmatrix}
-$$
-
-$$
-Y = \begin{bmatrix}
-      27 & 30 & 33 \\
-      61 & 68 & 75 \\
-      95 & 106 & 117
-\end{bmatrix}
-$$
-
-## Error conditions
-
-No error conditions.
-
-## Attributes
-
-Operator **MatMul** has no attributes.
-
-## Inputs 
-
-### $\text{A}$: itype
-
-Tensor $A$ is the left-side input tensor.
-
-#### Constraints
-
-- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $A$
-  - Statement: The number of spatial axes of tensor $A$ is 2.
-
-- `[C2]` <a id="C2i"></a> Consistency of $A$ and $B$ shapes  
-  - Statement:  $dA_1=dB_0$
-  - Rationale: Application of the mathematical definition of matrix multiplication.
-
-- `[C3]` <a id="C3i"></a> Consistency of $A$ and $Y$ shapes
-  - Statement: $dY_0=dA_0$
-  - Rationale: Application of the mathematical definition of matrix multiplication.
-
-### $\text{B}$: itype
-
-Tensor $B$ is the right-side input tensor.
-
-#### Constraints
-
-- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $B$
-  - Statement: The number of spatial axes of tensor $B$ is 2.
-  
-- `[C2]` <a id="C2i"></a> Consistency of $A$ and $B$ shapes  
-  - [See constraint (C2) of A](#C2i)
-
-- `[C3]` <a id="C4i"></a> Consistency of $B$ and $Y$ shapes
-  - Statement: $dY_1=dB_1$
-  - Rationale: Application of the mathematical definition of matrix multiplication.
-
-## Outputs 
-
-### $\text{Y}$: itype
-
-Tensor $Y$ is the output tensor.
-
-#### Constraints
-
-- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $Y$
-  - Statement: The number of spatial axes of tensor $Y$ is 2.
-
-- `[C2]` <a id="C5i"></a> Consistency of $A$, $B$ and $Y$ shapes
-  - [See constraint (C3) of A](#C3i) and [constraint (C3) of B](#C4i)
-
-## Formal specification
-See Why3 specification [here](../../formal/matmul/matmul.mlw).
-
-## Numerical Accuracy
-To be completed.
 
 <a id="float"></a>
 # **MatMul** (float, float)
@@ -481,8 +336,144 @@ Tensor $Y$ is the output tensor.
 - `[C2]` <a id="C5f"></a> Consistency of $A$, $B$ and $Y$ shapes
   - [See constraint (C3) of A](#C3f) and [constraint (C3) of B](#C4f)
 
-## Formal specification
-See Why3 specification [here](../../formal/matmul/matmul.mlw).
+<a id="int"></a>
+# **MatMul** (int, int)
 
-## Numerical Accuracy
-To be completed.
+where int is in {int32, int64, uint32, uint64}
+
+# Signature
+$Y = \textbf{MatMul}(A, B)$
+where
+- $A$: left-side of the multiplication
+- $B$: right-side of the multiplication
+- $Y$: result of the multiplication
+
+
+[General restrictions](/working-groups/safety-related-profile/sonnx/ops/spec/informal/common/general_restrictions.md) are applicable.
+
+The following specific restrictions apply to the **MatMul** operator for the SONNX profile:
+
+| Restriction    | Statement | Origin |
+| -------- | ------- | ------- |
+| `R1` | Input tensors $A$ and $B$ have 2 dimensions | Transient |
+
+## Informal specification
+
+Operator **MatMul** computes a matrix multiplication. 
+
+The mathematical definition of the operator is given hereafter.
+
+$$
+  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
+$$
+
+with $dA_1 = dB_0$
+
+where 
+- $x+y$ = [**Add**](../add/add.md#add-int-int)$(x,y)$
+- $x\times y$ = [**Mul**](../mul/mul.md#mul-int-int)$(x,y)$
+
+### Example 1
+$$
+A = \begin{bmatrix}
+      1 & 2 \\
+      3 & 4
+  \end{bmatrix}
+$$
+
+$$
+B = \begin{bmatrix}
+      5 & 6 \\
+      7 & 8
+  \end{bmatrix}
+$$
+
+$$
+Y = \begin{bmatrix}
+      19 & 22 \\
+      43 & 50
+\end{bmatrix}
+$$
+
+### Example 2
+$$
+A = \begin{bmatrix}
+      1 & 2 \\
+      3 & 4 \\
+      5 & 6
+  \end{bmatrix}
+$$
+
+$$
+B = \begin{bmatrix}
+      7 & 8 & 9 \\
+      10 & 11 & 12
+  \end{bmatrix}
+$$
+
+$$
+Y = \begin{bmatrix}
+      27 & 30 & 33 \\
+      61 & 68 & 75 \\
+      95 & 106 & 117
+\end{bmatrix}
+$$
+
+## Error conditions
+
+No error conditions.
+
+## Attributes
+
+Operator **MatMul** has no attributes.
+
+## Inputs 
+
+### $\text{A}$: itype
+
+Tensor $A$ is the left-side input tensor.
+
+#### Constraints
+
+- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $A$
+  - Statement: The number of spatial axes of tensor $A$ is 2.
+
+- `[C2]` <a id="C2i"></a> Consistency of $A$ and $B$ shapes  
+  - Statement:  $dA_1=dB_0$
+  - Rationale: Application of the mathematical definition of matrix multiplication.
+
+- `[C3]` <a id="C3i"></a> Consistency of $A$ and $Y$ shapes
+  - Statement: $dY_0=dA_0$
+  - Rationale: Application of the mathematical definition of matrix multiplication.
+
+### $\text{B}$: itype
+
+Tensor $B$ is the right-side input tensor.
+
+#### Constraints
+
+- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $B$
+  - Statement: The number of spatial axes of tensor $B$ is 2.
+  
+- `[C2]` <a id="C2i"></a> Consistency of $A$ and $B$ shapes  
+  - [See constraint (C2) of A](#C2i)
+
+- `[C3]` <a id="C4i"></a> Consistency of $B$ and $Y$ shapes
+  - Statement: $dY_1=dB_1$
+  - Rationale: Application of the mathematical definition of matrix multiplication.
+
+## Outputs 
+
+### $\text{Y}$: itype
+
+Tensor $Y$ is the output tensor.
+
+#### Constraints
+
+- `[C1]` <a id="C1i"></a> Number of spatial axes of tensor $Y$
+  - Statement: The number of spatial axes of tensor $Y$ is 2.
+
+- `[C2]` <a id="C5i"></a> Consistency of $A$, $B$ and $Y$ shapes
+  - [See constraint (C3) of A](#C3i) and [constraint (C3) of B](#C4i)
+
+
