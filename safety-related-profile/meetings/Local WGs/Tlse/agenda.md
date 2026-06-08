@@ -40,14 +40,15 @@
 	- One solution could be to create a template that would capture the recurrent part of the spec.  
 		- [ ] Propose a templating scheme [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 hivaem 
 	- An additional solution consists to apply a LLM to check our production. First tests show the efficiency of the approach.
--  [ ] In **MatMul**, exchange the **Float** and **Int** sections [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 8b7vr2 
+-  [X] In **MatMul**, exchange the **Float** and **Int** sections [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 8b7vr2 
 - We are still experiencing formatting issues with formulas. 
 	- [ ] Check and correct formatting problems [project::[[SONXX]]] [assignee::[[SONNX]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 azjdc5 
 - For the **Maxpool** operator. 
 	- We keep the use of the padded kernel $X_p$ because it is intuitive (even if we know that a real implementation will never create this padded kernel...). 
 	- The existing formula for the indice have to be updated. They will be using the $argmax$
 	- [ ] Update the **Maxpool** operator to reflect the decision taken about its specification [project::[[SONXX]]] [assignee::[[SOUYRIS Jean]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 tspe86 
-	- [ ] Send a mail to J&R to explain how the indice is computed [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 l2vlgb 
+	- [X] Send a mail to J&R to explain how the indice is computed [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 l2vlgb 
+  	- Mail sent on 08/06/2026
 - Hyperlinks
 	- Update hyperlinks according to what has been done for Div.
 - Use of mathematical operators 
@@ -55,8 +56,9 @@
 	- One possibility could be to specify operators using the **Add** and **Mul** operators (e.g, for scalar). But this will make the informal spec harder to read. 
 	- The other solution can be to use the usual $+$ and $\times$  and add a general notice saying that whenever those operators are used, they respectively refer to **Add** and **Mul**. 
 	- We opt for the second solution.
-	- [ ] Add a general notice saying that whenever those operators are used, they respectively refer to **Add** and **Mul**.  [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 afe7zu 
+	- [X] Add a general notice saying that whenever those operators are used, they respectively refer to **Add** and **Mul**.  [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 afe7zu 
 		- This notice shall belong to the "SONNX Reader user manual"
+		- First version of the ["User manual"](../../../sonnx/ops/docs/guidelines/sonnx_user_manual.md) created.
 
 
 
