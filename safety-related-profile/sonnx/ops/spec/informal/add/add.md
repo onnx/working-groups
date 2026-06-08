@@ -222,21 +222,25 @@ Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the resu
 The integer addition is performed as follows (considering that all tensors have the same type):
 
 For unsigned values (type uint\<n>):
-$$C[i]=\left\{ 
-  \begin{array}{ c l }
-    A[i] + B[i]- 2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n}-1 \\
-   A[i] + B[i] & \quad \textrm{otherwise}
-  \end{array}
-\right.$$
+
+$$
+C[i] = 
+\begin{cases} 
+  A[i] + B[i] - 2^{n} & \text{if } A[i] + B[i] > 2^{n}-1 \\ 
+  A[i] + B[i]         & \text{otherwise} 
+\end{cases}
+$$
 
 For signed values (type int\<n>):
-$$C[i]=\left\{ 
-  \begin{array}{ c l }
-    A[i] + B[i]- 2^{n} & \quad \textrm{if }  A[i] + B[i] > 2^{n-1}-1 \\
-   A[i] + B[i] + 2^{n} & \quad \textrm{if } A[i] + B[i] < -2^{n-1} \\
-   A[i] + B[i] & \quad \textrm{otherwise}
-  \end{array}
-\right\}.$$
+
+$$
+C[i] = 
+\begin{cases} 
+  A[i] + B[i] - 2^{n} & \text{if } A[i] + B[i] > 2^{n-1}-1 \\ 
+  A[i] + B[i] + 2^{n} & \text{if } A[i] + B[i] < -2^{n-1} \\ 
+  A[i] + B[i]         & \text{otherwise} 
+\end{cases}
+$$
 
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
