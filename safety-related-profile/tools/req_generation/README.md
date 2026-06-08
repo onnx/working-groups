@@ -1,8 +1,6 @@
 # SONNX specification generator
 
-This application uses [Jinja2}() to generate the markdown specification of an operator defined in a YAML file.
-
-See the example given for the [**Div**](./div.yaml) operator.
+This application uses [Jinja2](https://pypi.org/project/Jinja2/) to generate the markdown specification of an operator defined in a YAML file.
 
 Install the dependencies:
 ```
@@ -16,3 +14,4 @@ To generate a specification
 python render_operator.py --metadata op.yaml --template operator_spec.md.j2 --output op.generated.md
 ```
 
+See the example given for the [**Div**](./div.yaml) operator.
