@@ -30,8 +30,6 @@ No specific restrictions apply to the **Add** operator.
 
 ## Function
 
-For any index i:
-
 <span style="background: red; color: white; font-size:0.7em;">[E_ADD_REAL_FUNC_0010]</br></span>
 Operator **Add** adds input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. If $i$ is a [tensor index](./../common/definitions.md#tensor_index), each element $C[i]$ is the result of adding $A[i]$ and $B[i]$.
 
