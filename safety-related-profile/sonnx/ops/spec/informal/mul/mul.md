@@ -232,11 +232,11 @@ For unsigned values (type uint\<n>):
 $$
 C[i]= 
 \begin{cases}
-A[i] \times B[i]- k.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n}-1 
-\\
-A[i] \times B[i] & \quad \textrm{otherwise}
+  A[i] \times B[i]- k.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n}-1 \\
+  A[i] \times B[i] & \quad \textrm{otherwise}
 \end{cases}
 $$
+
 with $k \in \mathbb{N}$ such that $0 \le A[i] \times B[i]- k.2^{n} \le 2^n-1$
 
 For signed values (type int\<n>):
@@ -244,11 +244,12 @@ For signed values (type int\<n>):
 $$
 C[i]= 
 \begin{cases}
-A[i] \times B[i]- k_1.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n-1}-1 \\
-A[i] \times B[i] + k_2.2^{n} & \quad \textrm{if } A[i] \times B[i] < -2^{n-1} \\
-A[i] \times B[i] & \quad \textrm{otherwise}
+  A[i] \times B[i]- k_1.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n-1}-1 \\
+  A[i] \times B[i] + k_2.2^{n} & \quad \textrm{if } A[i] \times B[i] < -2^{n-1} \\
+  A[i] \times B[i] & \quad \textrm{otherwise}
 \end{cases}
 $$
+
 with: 
 $k_1 \in \mathbb{N}$ such that $-2^{n-1} \le A[i] \times B[i]-k_1.2^{n} \le 2^{n-1}-1$
 $k_2 \in \mathbb{N}$ such that $-2^{n-1} \le A[i] \times B[i]+k_2.2^{n} \le 2^{n-1}-1$
