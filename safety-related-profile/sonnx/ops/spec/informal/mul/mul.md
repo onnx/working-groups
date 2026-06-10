@@ -224,11 +224,13 @@ No specific restrictions apply to the **Mul** operator.
 
 <span style="background: red; color: white; font-size:0.7em;">
 [E_MUL_INT_FUNC_0010]</br></span>
+
 Operator **Mul** multiplies input tensors $A$ and $B$ element-wise and stores the result in output tensor $C$. Each element $C[i]$ is the result of multiplying $A[i]$ by $B[i]$ where $i$ is a [tensor index](../common/definitions.md#tensor_index).
 
 The integer multiplication is performed as follows (considering that all tensors have the same type):
 
 For unsigned values (type uint\<n>):
+
 $$
 C[i]= 
 \begin{cases}
@@ -250,8 +252,10 @@ C[i]=
 \end{cases}
 $$
 
-with: 
+with:
+
 $k_1 \in \mathbb{N}$ such that $-2^{n-1} \le A[i] \times B[i]-k_1.2^{n} \le 2^{n-1}-1$
+
 $k_2 \in \mathbb{N}$ such that $-2^{n-1} \le A[i] \times B[i]+k_2.2^{n} \le 2^{n-1}-1$
 
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
