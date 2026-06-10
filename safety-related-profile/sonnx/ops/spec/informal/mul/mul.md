@@ -228,13 +228,17 @@ Operator **Mul** multiplies input tensors $A$ and $B$ element-wise and stores th
 
 The integer multiplication is performed as follows (considering that all tensors have the same type):
 
-For unsigned values (type uint<n>):$$C[i]=\left\{ 
+For unsigned values (type uint<n>):
+$$C[i]=\left\{ 
 \begin{array}{ c l }
 A[i] \times B[i]- k.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n}-1 
 \\
 A[i] \times B[i] & \quad \textrm{otherwise}
 \end{array}
-\right\}.$$with $k \in \mathbb{N}$ such that $0 \le A[i] \times B[i]- k.2^{n} \le 2^n-1$For signed values (type int<n>):$$C[i]=\left\{ 
+\right\}.$$
+with $k \in \mathbb{N}$ such that $0 \le A[i] \times B[i]- k.2^{n} \le 2^n-1$
+
+For signed values (type int<n>):$$C[i]=\left\{ 
 \begin{array}{ c l }
 A[i] \times B[i]- k_1.2^{n} & \quad \textrm{if }   A[i] \times B[i] > 2^{n-1}-1 \\
 A[i] \times B[i] + k_2.2^{n} & \quad \textrm{if } A[i] \times B[i] < -2^{n-1} \\
