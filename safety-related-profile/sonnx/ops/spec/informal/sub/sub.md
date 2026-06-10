@@ -239,6 +239,7 @@ C[i]=
 $$
 
 For signed values (type int\<n>):
+
 $$C[i]= 
 \begin{cases}
   A[i] - B[i] - 2^{n} & \quad \textrm{if } A[i] - B[i] > 2^{n-1}-1 \\
