@@ -1,18 +1,64 @@
-(**
-    Specification of Mul operation on tensors.
- *)
-
-module Mul
+module OPMul
+  use tensor.tensor.Tensor
   use int.Int
-  use map.Map
-  use utils.Same
-  use tensor.Shape
-  use tensor.Tensor
+  use real.Real
+  use tensor.std.Cfloat
+  use tensor.tensor.Range
 
-  let function mul (a b : tensor 'a) : tensor 'a =
-  {
-    shape = same a.shape b.shape ;
-    value = fun i -> a.value[i] * b.value[i] ;
-  }
+  let ghost function dmul (a b : tensor real) : data real
+    = fun ks ->
+        if valid ks a.dims then
+          a.data ks * b.data ks
+        else
+          a.background
+
+  let ghost function opmul (a b : tensor real) : tensor real
+    requires { a ~= b }
+    ensures  { result ~= a }
+    ensures  { result.data = dmul a b }
+    = { dims = a.dims ;
+        data = dmul a b ;
+        background = a.background }
+
+end
+
+module CTensorMul
+  use int.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use ref.Ref
+  use OPMul
+  use tensor.libtensor.CTensor
+
+let ctensor_mul (a b r : ctensor) =
+  requires { valid_tensor a }
+  requires { valid_tensor b }
+  requires { valid_tensor r }
+  requires { tensor a ~= tensor b ~= tensor r }
+
+  ensures  { tensor r = opmul (tensor a) (tensor b) }
+
+  let m = cdim_size r.t_dims r.t_rank in
+
+  for i = 0 to m-1 do
+    invariant {
+      forall k.
+      0 <= k < i ->
+        value_at r.t_data k =
+        value_at a.t_data k .*
+        value_at b.t_data k
+    }
+
+    r.t_data[i] <- a.t_data[i] .* b.t_data[i]
+
+  done;
+
+  assert { tensor r == opmul (tensor a) (tensor b) }
 
 end
