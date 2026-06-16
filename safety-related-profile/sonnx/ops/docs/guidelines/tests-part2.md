@@ -1,3 +1,7 @@
+```table-of-contents
+title: **Table of contents**
+hideWhenEmpty: true
+```
 ## Introduction
 This document proposes an approach to develop tests of the SONNX operators. 
 
@@ -193,11 +197,7 @@ In the case of the **Maxpool** operator for instance, the input domain is define
 
 (\*) This constraint is due to the fact that the operator also returns the index of the maximum value **in the input tensor**. This index does not makes sense if the kernel completely "fits" in the padding area since, in that case, the maximum value is found in the padded area. 
 In ONNX runtime, the constraint is stronger: the padding shall be smaller than the kernel size (before dilation).
-(\*\*) If the size of output tensor is $dY_2$ , it means that the kernel has been applied $dY_2$ times on the input. The application of the kernel shall not overflow the padded tensor, so 
-
-$$(dY_2-1)\times\text{strides}[0]+(\text{dilations}[0] (dW_0-1)+1) \le dX2+\text{pads}[0]+\text{pads}[2]$$ 
-
-But the kernel shall be applied as many times as possible, so we have also 
+(\*\*) If the size of output tensor is $dY_2$ , it means that the kernel has been applied $dY_2$ times on the input. The application of the kernel shall not overflow the padded tensor, so $$(dY_2-1)\times\text{strides}[0]+(\text{dilations}[0] (dW_0-1)+1) \le dX2+\text{pads}[0]+\text{pads}[2]$$ But the kernel shall be applied as many times as possible, so we have also 
 $$dY_2\times\text{strides}[0]+(\text{dilations}[0] (dW_0-1)+1) \gt dX2+\text{pads}[0]+\text{pads}[2]$$
 
 ##### Solving the system of equations
