@@ -233,7 +233,7 @@ For unsigned values (type uint\<n>):
 $$
 C[i]=
 \begin{cases}
-  A[i] - B[i] - 2^{n} & \quad \textrm{if }  A[i] - B[i] > 2^{n}-1 \\
+  A[i] - B[i] + 2^{n} & \quad \textrm{if }  A[i] < B[i] \\
   A[i] - B[i] & \quad \textrm{otherwise}
 \end{cases}
 $$
