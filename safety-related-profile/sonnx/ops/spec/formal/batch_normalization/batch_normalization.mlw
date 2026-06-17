@@ -142,12 +142,12 @@ module CTensorBatchNorm
                 opbatchnorm (tensor x) (tensor scale) (tensor input_mean)
                             (tensor input_var) (tensor bias) eps }
     =
-    let n_size     = x.t_dims[of_int 0]              in  (* N: batch size      *)
-    let c_size     = scale.t_dims[of_int 0]           in  (* C: channel count   *)
+    let n_size     = x.t_dims[ 0]              in  (* N: batch size      *)
+    let c_size     = scale.t_dims[ 0]           in  (* C: channel count   *)
     let spatial    = cdim_size r.t_dims r.t_rank      in  (* N*C*d2*..          *)
     let nc         = n_size * c_size                  in  (* N * C              *)
     let stride     = spatial / nc                     in  (* spatial stride     *)
-    let ref flat   = of_int 0                         in  (* flat index into data *)
+    let ref flat   =  0                         in  (* flat index into data *)
     for n = 0 to n_size - 1 do
       (*proof*)
       invariant { forall k. 0 <= k < flat ->
@@ -170,7 +170,7 @@ module CTensorBatchNorm
         for s = 0 to stride - 1 do
           let v = x.t_data[flat] in
           r.t_data[flat] <- g .* ((v .- mu) ./ csqrt (sigma .+ eps)) .+ b ;
-          flat <- flat + of_int 1
+          flat <- flat +  1
         done
       done
     done

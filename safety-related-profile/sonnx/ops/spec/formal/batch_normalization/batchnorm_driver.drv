@@ -27,7 +27,11 @@ end
 module batch_normalization.CTensorBatchNorm
   interface "#include <stdlib.h>"
   interface "#include <stdint.h>"
+   interface "#include <stdbool.h>"
+   interface "#include <math.h>"
   interface "#include \"cindex.h\""
   interface "#include \"ctensor.h\""
+  
+  syntax val csqrt "sqrt(%1)"
   
 end
