@@ -1,10 +1,19 @@
+#### 2025/06/25
+
+- [X] Faire mail Loïc pour améliorer l'approche formelle [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
+  - Voir demande à Loïc par mail du 25/06
+- [ ] Prendre en compte les remarques de J-L dans les guidelines "spécification formelle" [project::[[SONNX]]] [assignee::[[FARGES Jean-Loup]]] ➕ 2026-06-25 
+- [ ] Discriminer les opérateurs en fonction du domaine. [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
+	- Par ex., pour l'addition:  $+$ dans les nombres réels, $+_{int8}$ en int8, etc. 
+- [ ] Refaire mapping ED324 - SONNX avant sollicitation WG114  [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
+- [ ] Clarifier / systématiser l'approche de factorisation des specs informelles (voir par ex. **MaxPool**). [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
+- [ ] Finaliser **MaxPool** [project::[[SONNX]]]  ➕ 2026-06-25 
+
 #### 2025/06/05
 - Discussion about the relation between the informal and formal spec. Are we really convinced on the benefits of formal spec if we don't add functional invariants? See e.g. ![](../Tlse/attachments/conv_informa_formal.png).
 - Check [this ONNX PR](https://github.com/onnx/onnx/issues/8054#issuecomment-4622938091)
 
-##### Minutes
-
-### Meeting Notes
+##### Meeting Notes
 - Discussion about formal specification 
 	-  The status 
 		- Before being an input to the code generation process, the formal specification is **a specification**. So it shall define precisely what an operator shall do. 
@@ -38,7 +47,8 @@
 		- we leave some errors in the informal spec, 
 		- we have hard times keeping the existing specs in-line with the ever-changing guidelines. 
 	- One solution could be to create a template that would capture the recurrent part of the spec.  
-		- [ ] Propose a templating scheme [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 hivaem 
+		- [X] Propose a templating scheme [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 hivaem 
+  		- Template and generator developed. Benefits are pretty low... 
 	- An additional solution consists to apply a LLM to check our production. First tests show the efficiency of the approach.
 -  [X] In **MatMul**, exchange the **Float** and **Int** sections [project::[[SONXX]]] [assignee::[[JENN Eric]]]  📅 2026-06-15 ➕ 2026-06-05 🆔 8b7vr2 
 - We are still experiencing formatting issues with formulas. 
