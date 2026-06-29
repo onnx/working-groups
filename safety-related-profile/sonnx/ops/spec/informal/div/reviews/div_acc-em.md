@@ -1,7 +1,5 @@
 # Numerical Accuracy
 
-**[EM: add link to tanh specification file (so that the reader has some context)?]**
-
 $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
 
 **[EM: also, I would say something prescriptive like "Any SONNX-compliant implementation of Div shall provide sound error propagation bounds in the form outlined above. In the remainder of the document, we show how to manually compute such bounds for a naive reference implementation of Div. More precise implementations exist, but the derivation of their bounds is left to the implementor."]**
