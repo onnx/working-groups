@@ -33,7 +33,7 @@ for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$.
 
 Floating-point division introduces rounding error bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
-a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$). **[EM: add rationale, e.g. "according to the IEEE-754 standard, division $c=a/b$ is implemented as rounding the infinite-precision result to the nearest floating-point number, i.e. $\hat{c}=round(a/b)$. As a result, the rounding error is..."]
+a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$). **[EM: add rationale, e.g. "according to the IEEE-754 standard, division $c=a/b$ is implemented as rounding the infinite-precision result to the nearest floating-point number, i.e. $\hat{c}=round(a/b)$. As a result, the rounding error is..."]**
 
 - $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{|A[I]|}{|B[I]|}\times\textit{\bf u}$.
 
