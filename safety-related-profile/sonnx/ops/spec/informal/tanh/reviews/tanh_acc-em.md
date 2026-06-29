@@ -1,7 +1,5 @@
 # Numerical Accuracy
 
-**[EM: add link to tanh specification file (so that the reader has some context)?]**
-
 $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
 **[EM: also, I would say something prescriptive like "Any SONNX-compliant implementation of TanH shall provide sound error propagation bounds in the form outlined above. In the remainder of the document, we show how to manually compute such bounds for a naive reference implementation of TanH. More precise implementations exist, but the derivation of their bounds is left to the implementor."]**
