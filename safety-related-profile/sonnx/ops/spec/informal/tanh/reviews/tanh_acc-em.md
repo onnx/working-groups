@@ -17,10 +17,10 @@ else
     Y = (1 - exp(-2X)) / (1 + exp(-2X))
 ```
 
-**[EM: a number of correctly-rounded implementations of TanH exist, for example:
+**[EM: a number of correctly-rounded implementations of TanH exist, for example:]**
 - https://core-math.gitlabpages.inria.fr/
 - https://people.cs.rutgers.edu/~sn349/rlibm/
-All of these would provide smaller error than the above naive implementation. Are we mandating the naive implementation? If not, is the above intended as a general warning for those interested in using the naive implementation? AFAIK, many CPU/GPU provide assembly-level support for some elementary functions (including TanH). Are those allowed (as long as we can estimate the error they introduce)?]**
+**[EM: all of these would provide smaller error than the above naive implementation. Are we mandating the naive implementation? If not, is the above intended as a general warning for those interested in using the naive implementation? AFAIK, many CPU/GPU provide assembly-level support for some elementary functions (including TanH). Are those allowed (as long as we can estimate the error they introduce)?]**
 
 ## Error Propagation - for information - see [guidelines](../../../docs/guidelines/accuracy.md#error-propagation)
 
