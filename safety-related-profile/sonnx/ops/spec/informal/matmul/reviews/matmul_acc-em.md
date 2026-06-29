@@ -62,7 +62,7 @@ the input errors $A_{\textit{err}}[i, j]$ and $B_{\textit{err}}[i, j]$.
 Using the derivative of Matmul, a first-order bound is:
 
 - For every index $i, j$:
-  - $|Y_{\textit{err}}^{\textit{propag}}[i, j]| = \left(\sum_{k=0}^{n-1} A_{\textit{err}}[i, k]\times B[k, j]\right) + \left(\sum_{k=0}^{n-1} A[i, k]\times B_{\textit{err}}[k, j]\right) +\mathcal{O}(|A_{\textit{err}}|\times |B_{\textit{err}}|)$ **[EM: some absolute values are missing here! Note however how some of the terms will be smaller than $|A_{err}|$, $|B_{err}|$ and even more importantly some of the terms have a chance to cancel out! Both whould yield a much tighter estimation of the propagated error.]**
+  - $|Y_{\textit{err}}^{\textit{propag}}[i, j]| = \left(\sum_{k=0}^{n-1} A_{\textit{err}}[i, k]\times B[k, j]\right) + \left(\sum_{k=0}^{n-1} A[i, k]\times B_{\textit{err}}[k, j]\right) +\mathcal{O}(|A_{\textit{err}}|\times |B_{\textit{err}}|)$ **[EM: some absolute values are missing here! Note however how some of the terms will be smaller than $|A_{err}|$, $|B_{err}|$ and, even more importantly, positive and negative terms have a chance to cancel out! Both would yield a much tighter estimation of the propagated error.]**
 
 - The complete definition of $\mathcal{O}(|A_{\textit{err}}|\times |B_{\textit{err}}|)$
   is available in the [guidelines](../../../docs/guidelines/accuracy.md#error-propagation).  
