@@ -20,6 +20,7 @@ else
 **[EM: a number of correctly-rounded implementations of TanH exist, for example:]**
 - https://core-math.gitlabpages.inria.fr/
 - https://people.cs.rutgers.edu/~sn349/rlibm/
+
 **[EM: all of these would provide smaller error than the above naive implementation. Are we mandating the naive implementation? If not, is the above intended as a general warning for those interested in using the naive implementation? AFAIK, many CPU/GPU provide assembly-level support for some elementary functions (including TanH). Are those allowed (as long as we can estimate the error they introduce)?]**
 
 ## Error Propagation - for information - see [guidelines](../../../docs/guidelines/accuracy.md#error-propagation)
@@ -138,6 +139,10 @@ Note that the test `if X < 0` may induce some timing penalties for some architec
     Y = (1 - exp(-2*abs(X)) / (1 + exp(-2*abs(X)))
 ```
 
+# Error Introduction (int)
+
+**[EM: this section is missing]**
+
 ## Unit Verification
 
 This section contains a test scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
@@ -147,7 +152,7 @@ This section contains a test scenario to verify the above specification for any 
 - The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
 - The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
 
-**[EM: see comments in the code]**
+**[EM: see comments in the code (capital letters)]**
 
 ```c++
 Tensor<SymbolicDomainError> X;
