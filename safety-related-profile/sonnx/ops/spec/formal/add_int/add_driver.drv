@@ -23,24 +23,6 @@ module tensor.std.Cfloat
   syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
 end
 
-module tensor.log.Log
-  syntax val log "/* %1 */" prec 0
-end
-
-
-module tensor.libvector.CIndex
-  interface "#include <stdlib.h>"
-  interface "#include <stdint.h>"
-end
-
-module tensor.libtensor.CTensor
-  interface "#include <stdlib.h>"
-  interface "#include <stdint.h>"
-  interface "#include \"cindex.h\""
-  
-  
-end
-
 module tensor.std.Cint
   syntax type int      "int"
   syntax val ( .+ )    "%1 + %2"  prec 8 8 7
@@ -53,10 +35,19 @@ module tensor.std.Cint
   syntax val malloc_int32 "malloc(sizeof(int32_t) * (size_t)(%1))"
 end
 
-module tensor.libtensor.CTensorInt
-  interface export "#include <stdlib.h>"
-  interface export "#include <stdint.h>"
-  interface "#include \"cindex.h\""
 
+module addint.CTensorAdd
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+  interface "#include \"ctensor.h\""
+  
 end
 
+module addint.CTensorAddInt
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+  interface "#include \"ctensorint.h\""
+
+end
