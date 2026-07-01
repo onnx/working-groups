@@ -1,3 +1,10 @@
 module tensor.libtensor.CTensor
     syntax type ctensor "struct ctensor"
 end
+
+
+module tensor.libtensor.CTensorInt
+   
+    syntax type ctensorint "struct ctensorint"
+
+end
