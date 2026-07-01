@@ -1,3 +1,63 @@
+# 2026/07/01
+## Participants
+- Ricardo, João, Eduardo, Jean, Eric, Mariem, Andreas
+## Agenda 
+- Review of actions (Eric)
+## Minutes  
+- Communication actions 
+  - CTIC Eric, June 19th)
+  - ONNX Meetup (Eric, June 26th)
+  - SAIV (Ricardo and João, July 24-25th)
+  - OVERLAY (Ricardo and João, July 18-19th)
+- Work
+  - Status of code generation (Mariem)
+  - Proposal to improve traceability for conv-type operators involving loops.
+  - Status of graph formal spec: model completed, cleanup ongoing (graph code extraction not done)
+  - **MaxPool**: formal spec quasi-complete: the concrete part needs to be updated to use the integer data type. 
+- Other
+  - Rocardo and João internship is now finished. They are currently completing their report that would explain (in particular) the graph formalization. The document is expected to be delivered beg of September, but a version for review should be available beg. of August.
+## Actions
+### New actions
+- [ ] (010726-1, Edoardo) Get in touch with Franck to take into account his remarks on the accuracy evaluation guidelines.
+- [ ] (010726-2, Eric) Organize a meeting with the Operator SIG to (contact: Ram)
+- [ ] (010726-3, Mariem) Update the status of issues related to code generation  
+- [ ] (010726-4, Eric) Integrate Loïc recommendation to improve traceability using the sum op in the formal spec guidelines.  
+### Previous actions
+- [X] (0306-1, Jean) Update the spec of **Maxpool** (indices generation part). 
+  - Do not refer to "upper" but "min". 
+  - Modify the definition of "indices" to specify the tie break rule when multiple values are equal to the max...  
+  - To be review on Friday 5th. 
+  - Review and correction done. Some "cosmetic" modification remain to be done...
+- [ ] (0306-2, Eric) Contact the industrialists that have shown some interest in ONNX (especially those that have expressed some specific needs in [scope.md](../deliverables/scope/scope.md)).
+- [ ] (0306-3, Eric) Organize a (remote) presentation of our work to the community in Sept or Oct. 
+- [X] (0605-2, J&R) Check if possible to avoid operator specific logic (arg checking) in the graph formalization 
+  - We have to ensure that the number of arguments is correct. 
+  - Conclusion : we keep things as is.
+- [X] (0804-1, Eric, local WG, Edoardo) Review Franck's work on **Div**, **Matmul**, **Tanh**.
+  - First [review by Eric](../sonnx/ops/docs/guidelines/reviews/accuracy/accuracy-eric.md).
+  - Next review by local WG and Edoardo
+    - 3 things
+      - [X] **guidelines**
+      - [X] **applied guidelines on some ops (see above)**
+      - [X] code to help generating the spec 
+- [X] (0804-2, Hamza) Complete R&J's formal spec on **MaxPool**
+  - Spec of second output of MaxPool by Mariem (concrete part to be completed)
+- [X] (0804-2, J&R, Jean) Check the problem of the **MaxPool** informal spec on the indices output...
+  - **MaxPool** was incomplete because the informal spec not clear on the second output. Inconsistency between R&J's and Jean's interpretation
+    - Check Jean's formula.
+    - Jean is currently updating the spec for the indices output. 
+    - The spec has been updated. 
+    - There is still a corner case to be sorted out...
+    - Spec to commit.
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
+  - Doc reworked
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+
 # 2026/06/03
 ## Participants
 - Ricardo, João, Eduardo, Jean-Loup, Franck, Jean, Eric
