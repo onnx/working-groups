@@ -94,6 +94,7 @@ No implementation details should be present at this level, which means that the 
       | Cons d ds -> 0 < d /\ positive ds
       end
       ```
+      Note that this code assumes that the Why3 standard library list ( https://why3.org/stdlib/list.html ) is used, i.e. `use list.List`.
     - `invariant { positive dims }`
 
   2. **Valid values**
