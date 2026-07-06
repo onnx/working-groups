@@ -2,7 +2,7 @@
 
 A structured guide for writing formal specifications of SONNX operators in Why3.
 
-This guidelines do not cover the basics of Why3, so familiarity with its syntax, semantics and features is expected. The reader unfamiliar with Why3 should read https://why3.org/doc/index.html before reading this document.
+This guidelines do not cover the basics of Why3, so familiarity with its syntax, semantics and features is expected. The reader unfamiliar with Why3 should read https://why3.org/doc/index.html and https://why3.org/stdlib/index.html before reading this document.
 
 ---
 
