@@ -69,7 +69,7 @@ No implementation details should be present at this level, which means that the 
 
   - `data` - A map from coordinates to values
  
-    > (Jean-Loup) May be valid coordinates or in-bounds coordinates instead of just coordinates. "coordinates" seems to be equal to "tensor index". If it is the case, a link to tensor index should be added.
+    > (Jean-Loup) May be valid coordinates or in-bounds coordinates instead of just coordinates. "coordinates" seems to be equal to "tensor index". If it is the case, a link to tensor index should be added. **done**
 
   - `background` - The default value for out-of-bounds coordinates
 
