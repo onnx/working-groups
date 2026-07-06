@@ -39,9 +39,9 @@
 
 In SONNX, every operator is formalized at **two distinct levels**. 
 
-> (Jean-Loup) "is" or "must be" or "should be"?
+> (Jean-Loup) "is" or "must be" or "should be"? **done**
 > 
-> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization."
+> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization." **done**
 
 Each level serves a different purpose and follows a different style. 
 
