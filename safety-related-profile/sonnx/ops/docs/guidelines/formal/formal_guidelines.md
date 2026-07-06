@@ -84,6 +84,8 @@ No implementation details should be present at this level, which means that the 
       This constraint may be relaxed in a lated version of the specification to support tensors with **null** dimensions. [***Work in Progress***]
 
     - Predicate `positive`
+ 
+      Why3 code:
 
       ```why3
       predicate positive (ds : list int) =
