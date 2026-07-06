@@ -61,7 +61,7 @@ No implementation details should be present at this level, which means that the 
             This means that the specifier should be as generic as possible when defining an operator. <br>
             More details in - [2.5 - Operator tensor types](#25-operator-tensor-types).
 
-  > (Jean-Loup) I have no idea of what a specifier is. Depending on the targeted reader the term should be defined.
+  > (Jean-Loup) I have no idea of what a specifier is. Depending on the targeted reader the term should be defined. **done**
 
 - **Representation**: Tensors are represented as structures containing the following records:
 
