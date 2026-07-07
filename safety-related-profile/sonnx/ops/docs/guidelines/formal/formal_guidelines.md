@@ -231,7 +231,7 @@ We can have any of the following function signatures:
 
 - `let rec ghost function`: Belongs to the **programming namespace**, however, it represents **pure functions**, that are **recursive** and **can only** be used at the **logical namespace**.
 
--  A precise definition of these constructs is given in the [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html)
+A precise definition of these constructs is given in the [Why3 manual, section 6.5.5](https://why3.org/doc/syntaxref.html)
 
 Ideally, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
 
