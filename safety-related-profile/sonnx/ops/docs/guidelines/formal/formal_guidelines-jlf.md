@@ -129,7 +129,7 @@ Throughout this level, the specification should be carried out in a **purely fun
 
 Looping constructs are forbidden at this level, and instead, **recursive functions** and **mathematical constructs** should be used to define the behavior of the operator.
 
-> (Jean-Loup) The concept of mathematical construct should be defined.
+> (Jean-Loup) The concept of mathematical construct should be defined. **done**
 
 ### Importance of this level
 
