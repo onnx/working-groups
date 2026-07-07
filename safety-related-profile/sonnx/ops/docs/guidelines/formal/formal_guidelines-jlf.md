@@ -171,7 +171,7 @@ Throughout this level, the specification should be carried out in an **imperativ
 
 It provides the necessary details to extract executable C code and reason about memory, bounds, and machine integers.
 
-> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.
+> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.**done**
 
 ## 1.3 Link between the two levels
 
