@@ -42,7 +42,7 @@ In SONNX, every operator must be formalized at two distinct levels: abstract for
 
 Each level serves a different purpose and follows a different style.
 
-We start from an abstract formalization — which captures the mathematical semantics of the operator and serves as the **source of truth** for correctness — and progressively refine it into a concrete formalization that is close enough to the target implementation to be automatically extracted into C code - reasoning about memory, bounds, and machine data types.
+We start from an abstract formalization — which captures the mathematical semantics of the operator and serves as the **source of truth** for correctness — and then refine it into a concrete formalization that is close enough to the target implementation to be automatically extracted into C code - reasoning about memory, bounds, and machine data types.
 
 Understanding both is essential before writing any specification.
 
