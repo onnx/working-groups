@@ -121,7 +121,7 @@ No implementation details should be present at this level, which means that the 
 
   An alternative was to define the data through recursive definitions once the shape is already computed, but this approach is much more complex and usually requires auxiliary lemmas to help the proof.
 
-  The above predicates and invariants are available in the [tensors library](../../../spec/formal/common/libs/tensor/).
+  The above predicates and invariants are available in the [tensors library](../../../spec/formal/common/libs/tensor/) inclusion should be done through `use tensor.tensor.Tensor`.
 
 ### Specification Style
 
