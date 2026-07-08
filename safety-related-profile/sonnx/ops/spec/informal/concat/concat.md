@@ -1,162 +1,299 @@
+# Contents
 
-### Contents
+* **Concat** operator for types [INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL](#types)
 
-- `concat` [operator (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)](#types) 
+Based on ONNX documentation [Concat version 13](https://onnx.ai/onnx/operators/onnx__Concat.html#concat-13).
 
-Based on ONNX documentation version 13. 
 <a id="types"></a>
 
-## `concat` (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)
+# **Concat** (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)
 
-### Signature
+## Signature
 
-$Y = \text{concat}(X_{0}, \dots, X_{n})$
+$Y = \textbf{Concat}(X_0, \dots, X_n)$
 
-where
-<a id="T1"></a>
-- <b><span style="font-family: 'Courier New', monospace">[T1]</span></b> $X_{0}, \dots ,X_{n}$ input tensors with $n \in [0, 2^{31}-1[$
--  `Y`: output concatenated tensor
+where:
 
-#### Restrictions
+* $X_0, \dots, X_n$: input tensors to concatenate
+* $Y$: output tensor resulting from the concatenation
 
-The following restriction applies to the `concat` operator for the SONNX profile:
+## Restrictions
 
+[General restrictions](./../common/general_restrictions.md) are applicable.
 
-| Restriction    | Statement | Origin |
-| -------- | ------- | ------- |
-| `[R1]`   | Attribute `axis` is positive. | Transient | 
+The following specific restriction applies to the **Concat** operator for the SONNX profile:
 
+| Restriction            | Statement                                   | Origin    |
+| ---------------------- | ------------------------------------------- | --------- |
+| `[R1]` <a id="R1"></a> | Attribute `axis` shall be positive or null. | Transient |
 
+## Informal specification
 
-#### Informal specification
+Operator **Concat** concatenates the input tensors $X_0, \dots, X_n$ along the axis specified by attribute `axis`, and stores the result in output tensor $Y$.
 
-The  `concat` operator concatenates the input tensors $X_{0}, \dots , X_{n}$ along the `axis` into a single output tensor `Y`. The operator `concat` is not commutative so the input tensors order impacts on the output tensor.
+The operator is structural: it does not perform arithmetic or logical computation on tensor values. It only copies input tensor elements into the output tensor according to their position and the selected concatenation axis. Therefore, the behaviour of **Concat** does not depend on the datatype of the tensor elements.
 
-Let $a$ be the concatenation axis and $dX_{k,a}$ ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T6]</span></b>](#T6)) the dimension of the $X_{k}$ along the axis $a$. The mathematical definition of the operator `concat` is given hereafter. 
+The order of the input tensors is significant. In general:
 
-<a id="T2"></a>
-<a id="T3"></a>
-$$\begin{gathered}
- \texttt{[T2]} \text{  } Y[i_{0}, \dots , i_{r-1}] = X_{k}[i_{0}, \dots,  i_{a}', \dots, i_{r-1}], \text{  } \texttt{[T3]}  \text{  if } \text{  } \exists k \in [0, n], \text{  } s_k \le i_a \le s_k + dX_{k,a}
-\end{gathered}$$
+$$
+\textbf{Concat}(X_0, X_1) \neq \textbf{Concat}(X_1, X_0)
+$$
 
+Let:
 
-Where
+* $a$ be the concatenation axis;
+* $r$ be the rank of the input tensors;
+* $dX_{k,j}$ be the size of tensor $X_k$ along axis $j$;
+* $s_k$ be the cumulative offset before tensor $X_k$ along axis $a$.
 
-- $k$ ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T3]</span></b>](#T3)) refers to the unique index of the source input tensor. Since there is always at least one input tensor ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T1]</span></b>](#T1)), $k$ is guaranteed to exist and is found by the condition:
-<a id="T4"></a>
-```math
- \texttt{[T4]} \text{  } s_k \leq i_{a} < s_k + dX_{k,a}
-``` 
-- $i_{a}'$ the local index in $X_{k}$ corresponding to the global index $i_{a}$ along dimension $a$, is defined as follows:
-<a id="T5"></a>
-```math
-  \texttt{[T5]}\mathord{:} \text{  } i_{a}' = i_{a} - s_k
-```
-- with $s_k$ the cumulative offset along axis before input $X_{k}$ defined as:  
-<a id="T6"></a>
-```math
-\texttt{[T6]}  \text{  } s_k= \sum_{j=0}^{k-1} dX_{j,a}
-```
+For each input tensor $X_k$, the cumulative offset $s_k$ is defined as:
 
-The following example illustrates the concept explained above:
+$$
+s_k = \sum_{j=0}^{k-1} dX_{j,a}
+$$
 
-![Concat example 1](./assets/imgs/Concat_example.png)
+For any output index $(i_0, \dots, i_{r-1})$, the value of $Y$ is copied from the unique input tensor $X_k$ such that:
 
-Let's compute the concatenation illustrated by the example above:
-```math
-Y = \text{concat}(X_0, X_1, X_2) \text{ along axis}=1
-```
-Now, let's calculate for \( $i_a = 3$ \):
-```math
-Y[0, 3] = X_k[0, 3 - s_k]
-```
-According to the inequality ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T4]</span></b>](#T4)):
-```math
+$$
 s_k \leq i_a < s_k + dX_{k,a}
-```
-We check for which \( $k$ \) this holds ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T3]</span></b>](#T3)):
-```math
-s_1 \leq i_a < s_1 + dX_{1,a} \Rightarrow 3 \leq 3 < 3 + 2 = 5
-```
-Thus,
-```math
-k = 1
-```
-So,
-```math
-Y[0,3] = X_1[0, 3 - s_1] = X_1[0, 3 - 3] = X_1[0, 0]
-```
+$$
 
-You can find more examples in [tests](./tests/.) folder.
+The local index $i'_a$ inside tensor $X_k$ is then:
 
+$$
+i'_a = i_a - s_k
+$$
 
-#### Error conditions
-No error conditions since there is no computation for `concat` operator. 
+The output value is defined as:
 
-#### Inputs
+$$
+Y[i_0, \dots, i_a, \dots, i_{r-1}]
+==================================
 
+X_k[i_0, \dots, i'*a, \dots, i*{r-1}]
+$$
 
-#####  **$X_{0},...,X_{n}$** (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)
+The shape of output tensor $Y$ is identical to the input tensor shapes on all axes except the concatenation axis. On the concatenation axis, the output dimension is the sum of the corresponding input dimensions:
 
-`concat` operator accepts a variable number of input tensors. 
-<a id="T7"></a>
+$$
+dY_j =
+\begin{cases}
+\sum_{k=0}^{n} dX_{k,j} & \text{if } j = a \
+dX_{0,j} & \text{otherwise}
+\end{cases}
+$$
 
-<b><span style="font-family: 'Courier New', monospace">[T7]</span></b> All inputs must have the same total count of dimensions. Dimension sizes must match on all axes other than the concatenation axis ([see traceability tag <b><span style="font-family: 'Courier New', monospace">[T8]</span></b>](#T8)). 
+## Example
 
-#####  Constraints
-
-- `[C1]:` Limit on argument number
-	- Statement: The number of input tensors must range from [1, $2^{31}-1$]. 
-- `[C2]:` Shape consistency
-    - Statement: All tensors must have the same shape except for the concatenation axis, i.e, 
-
-<a id="T8"></a>
-```math
- \texttt{[T8]} \text{  } \forall i,k \text{ and all } j \neq a: dX_{i,j} = dX_{k,j}
-```
-- `[C3]:` Limit on scalars
-    - Statement: All input tensors must be non-scalar, meaning they must have a number of dimensions of at least one.  
+Let:
 
 ```math
-  \forall i,k : \sum dX_{i,j} \in [1, 2^{31}-1]
+X_0 =
+\begin{bmatrix}
+1 & 2 & 3
+\end{bmatrix}
 ```
 
-#### Attributes
-
-##### `axis`: int (required)
-Attribute  `axis`  determines the axis along which concatenation should done. 
-
-##### Constraints
-
--   `[C1]:`Valid axis domain
-    -   Statement: `axis` must be an integer identifying a valid dimension.
 ```math
- \forall i,k \text{  axis } \in [0, \sum dX_{i,j}-1]
+X_1 =
+\begin{bmatrix}
+4 & 5
+\end{bmatrix}
 ```
 
-#### Output
-
-##### `Y` (INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, FP16, FP32, FP64, BFLOAT16, STRING, BOOL)
-
-Tensor  `Y`  is the output tensor of the concatenation.
-
-##### Constraints
-
--   `[C1]:` Dimension of the concatenation axis
-	-	 Statement: Output tensor must have the same shape as input tensors except for the concatenation axis where this dimension is the sum of the dimensions of the inputs i.e,
-
 ```math
-   \forall i,k : r = \sum dX_{i,j}, \text{  }  \texttt{[T9]} \text{  } shape(Y) = (dX_0,dX_1, \dots, dX_{r-1})
+X_2 =
+\begin{bmatrix}
+6 & 7 & 8 & 9
+\end{bmatrix}
 ```
+
+If the concatenation is performed along axis `1`, then:
+
 ```math
-dX_j = \sum_{i=1}^{n} dX_{i,j} \text{ if } j=a \text{ and } d_{j} = d_{1,j} \text{ otherwise }
-```      
+Y = \textbf{Concat}(X_0, X_1, X_2)
+```
 
+and:
 
-#### Formal specification
-The formal specification of the `concat` operator using the Why3 language is provided in the folder [why3](./why3/.). This specification ensures the consistency and desired behavior of the operator within the constraints described.
+```math
+Y =
+\begin{bmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9
+\end{bmatrix}
+```
 
-#### Numerical Accuracy
-`concat` operator does not perform numerical operations thus numerical accuracy issues are not considered here. 
+In this example:
 
+* $dX_{0,1} = 3$
+* $dX_{1,1} = 2$
+* $dX_{2,1} = 4$
+* $dY_1 = 3 + 2 + 4 = 9$
+
+For instance, index $i_1 = 3$ in $Y$ belongs to $X_1$, because:
+
+$$
+s_1 = dX_{0,1} = 3
+$$
+
+and:
+
+$$
+3 \leq i_1 < 3 + 2
+$$
+
+Therefore:
+
+$$
+Y[0,3] = X_1[0,0]
+$$
+
+## Error conditions
+
+No error condition is associated with the values stored in the input tensors, because **Concat** does not perform numerical computation.
+
+The operator is undefined if one of the shape, rank, type, or axis constraints is not satisfied.
+
+## Attributes
+
+### `axis`: int
+
+Attribute `axis` determines the axis along which the input tensors are concatenated.
+
+#### Constraints
+
+<a id="C1attr"></a>
+
+* `[C1]` Valid axis domain
+
+  * Statement: `axis` shall identify a valid dimension of the input tensors.
+
+<a id="C2attr"></a>
+
+* `[C2]` SONNX axis restriction
+
+  * Statement: `axis` shall be positive or null. `[R1]`
+
+Formally, for input tensors of rank $r$:
+
+$$
+0 \leq axis < r
+$$
+
+## Inputs
+
+### $X_0, \dots, X_n$: tensor
+
+Input tensors to concatenate.
+
+All input tensors shall have the same datatype. Supported datatypes are:
+
+`INT8`, `INT16`, `INT32`, `INT64`, `UINT8`, `UINT16`, `UINT32`, `UINT64`, `FP16`, `FP32`, `FP64`, `BFLOAT16`, `STRING`, `BOOL`.
+
+#### Constraints
+
+<a id="C1x"></a>
+
+* `[C1]` Number of inputs
+
+  * Statement: The number of input tensors shall be in the range $[1, 2^{31}-1]$.
+
+<a id="C2x"></a>
+
+* `[C2]` Rank consistency
+
+  * Statement: All input tensors shall have the same rank.
+
+Formally:
+
+$$
+\forall i,k,; rank(X_i) = rank(X_k)
+$$
+
+<a id="C3x"></a>
+
+* `[C3]` Shape consistency
+
+  * Statement: All input tensors shall have the same shape on every axis except the concatenation axis.
+
+Formally, for all axes $j$ such that $j \neq axis$:
+
+$$
+\forall i,k,; dX_{i,j} = dX_{k,j}
+$$
+
+<a id="C4x"></a>
+
+* `[C4]` Non-scalar inputs
+
+  * Statement: All input tensors shall be non-scalar tensors.
+
+Formally:
+
+$$
+\forall k,; rank(X_k) \geq 1
+$$
+
+<a id="C5x"></a>
+
+* `[C5]` Type consistency
+
+  * Statement: All input tensors shall have the same datatype.
+
+## Outputs
+
+### $Y$: tensor
+
+Tensor $Y$ is the result of concatenating input tensors $X_0, \dots, X_n$ along attribute `axis`.
+
+#### Constraints
+
+<a id="C1y"></a>
+
+* `[C1]` Rank consistency
+
+  * Statement: Tensor $Y$ shall have the same rank as the input tensors.
+
+Formally:
+
+$$
+rank(Y) = rank(X_0)
+$$
+
+<a id="C2y"></a>
+
+* `[C2]` Shape consistency
+
+  * Statement: Tensor $Y$ shall have the same shape as the input tensors on every axis except the concatenation axis.
+
+Formally, for all axes $j$ such that $j \neq axis$:
+
+$$
+dY_j = dX_{0,j}
+$$
+
+<a id="C3y"></a>
+
+* `[C3]` Concatenation axis dimension
+
+  * Statement: The size of tensor $Y$ on the concatenation axis shall be the sum of the input tensor sizes on this axis.
+
+Formally:
+
+$$
+dY_{axis} = \sum_{k=0}^{n} dX_{k,axis}
+$$
+
+<a id="C4y"></a>
+
+* `[C4]` Type consistency
+
+  * Statement: Tensor $Y$ shall have the same datatype as the input tensors.
+
+## Formal specification
+
+See the Why3 specification.
+
+## Numerical Accuracy
+
+Operator **Concat** does not perform numerical operations. Therefore, numerical accuracy issues are not applicable.
