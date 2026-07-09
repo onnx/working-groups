@@ -145,16 +145,17 @@ end
 
 module MyCtensor
 
-  use tensor.std.Int
-  use tensor.std.List
-  use tensor.std.Clib
+  use std.Int
+  use std.List
+  use std.Clib
   use ExtendedCFloat
   use ExtendedReal
   use mach.int.Int32
-  use tensor.tensor.Range
-  use tensor.tensor.Tensor
-  use tensor.layout.CFlat
-  use tensor.libvector.CIndex
+  use tensor.Range
+  use tensor.Tensor
+  use tensor.OPWhere
+  use layout.CFlat
+  use libvector.CIndex
   
   (** C Tensor **)
 
@@ -255,13 +256,13 @@ end
 
 module OPMaxPool2d
 
-    use tensor.tensor.Tensor
+    use tensor.Tensor
     use real.Real
     use int.Int
-    use tensor.std.Int
+    use std.Int
     use list.List
     use int.EuclideanDivision
-    use tensor.tensor.Range
+    use tensor.Range
     use list.Length
     use ExtendedReal
 
@@ -362,6 +363,49 @@ module OPMaxPool2d
     else
         ()
 
+    let rec ghost function find_in_row (x: tensor extended_real) (value: extended_real) (h: int) (w:int) (ww:int) (b c m n :int) (dX1 dX2 dX3 :int) (dil_h dil_w :int) (pad_top pad_left pad_bottom pad_rigth :int) (str_h str_w :int) : int
+    variant { w - ww }
+    =
+    if Int.(ww >= w) then
+        (-1)
+    else
+        let x_h = m * str_h + h * dil_h in
+        let x_w = n * str_w + ww * dil_w in
+        let x_val = coords_from_X_p  x (Cons b (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left in
+        if x_val = value then
+            let hmin = x_h - pad_top in
+            let wmin = x_w - pad_left in
+            b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + hmin * dX3 + wmin
+        else
+            find_in_row x value h w Int.(ww+1) b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w
+
+
+    let lemma find_in_row_unfold (x: tensor extended_real) (value: extended_real) (h w ww b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w: int)
+    requires { 0 <= ww < w }
+    requires {
+        let x_h = m * str_h + h * dil_h in
+        let x_w = n * str_w + ww * dil_w in
+        coords_from_X_p x (Cons b (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left = value
+    }
+    ensures {
+        let x_h = m * str_h + h * dil_h in
+        let x_w = n * str_w + ww * dil_w in
+        find_in_row x value h w ww b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w
+        = b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + (x_h - pad_top) * dX3 + (x_w - pad_left)
+    }
+    = ()
+
+    let rec ghost function find_in_line (x: tensor extended_real) (value: extended_real) (h: int) (hh: int) (w:int) (b c m n :int) (dX1 dX2 dX3 :int) (dil_h dil_w :int) (pad_top pad_left pad_bottom pad_rigth :int) (str_h str_w :int) : int
+    variant { h - hh }
+    =
+    if Int.(hh >= h) then
+        (-1)
+    else
+        let idx = find_in_row x value hh w 0 b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w in
+        if Int.(idx >= 0) then
+            idx
+        else
+            find_in_line x value h Int.(hh+1) w b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w
 
     function dmaxpool (x : tensor extended_real) (y_dims: list int) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : data extended_real
     =
@@ -375,6 +419,50 @@ module OPMaxPool2d
             else
                 x.background
 
+    function dindicesmaxpool (x : tensor extended_real) (y_dims: list int) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : data int
+    =
+        fun ks ->
+            if valid ks y_dims then
+                let b = get_dim ks 0 in
+                let c = get_dim ks 1 in
+                let m = get_dim ks 2 in
+                let n = get_dim ks 3 in
+                let dX1 = get_dim x.dims 1 in
+                let dX2 = get_dim x.dims 2 in
+                let dX3 = get_dim x.dims 3 in
+                let value = w_lines_calculate x h 0 w b c m n dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w in
+                find_in_line x value h 0 w b c m n dX1 dX2 dX3 dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w
+            else
+                (-1)
+
+    let ghost function indicesmaxpool (x : tensor extended_real) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : tensor int
+    (*dilations [C1] [C2]*)
+    requires { dir_h > 0 /\ dir_w > 0 }
+    (*pads [C1] - yes*)
+    (*strides [C1]*)
+    requires { str_h > 0 /\ str_w > 0 }
+    (* X[C1]*)
+    requires { length x.dims = 4 }
+    (*Y[C1]*)
+    requires { let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+            get_dim y_dims 2 > 0 /\ get_dim y_dims 3 > 0
+        }
+    (*Add this to informal?*)
+    requires { h > 0 /\ w > 0}
+
+    ensures { result.dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right }
+    ensures {let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+             result.data = dindicesmaxpool x y_dims h w dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w
+            
+            }
+    ensures { result.background = (-1) }
+    =
+        let y_dims = maxpoolDims x str_h str_w h w dir_h dir_w pad_top pad_left pad_bottom pad_right in
+        {
+            dims = y_dims ;
+            data = dindicesmaxpool x y_dims h w dir_h dir_w pad_top pad_left pad_bottom pad_right str_h str_w ;
+            background = (-1) ;
+        }
 
     let ghost function maxpool (x : tensor extended_real) (h w: int) (dir_h dir_w: int) (pad_top pad_left pad_bottom pad_right: int) (str_h str_w: int) : tensor extended_real
     (*dilations [C1] [C2]*)
@@ -411,20 +499,20 @@ end
 module COPMaxpool2d
 
     use OPMaxPool2d
-    use tensor.tensor.Tensor
-    use tensor.tensor.Range
+    use tensor.Tensor
+    use tensor.Range
     use real.Real
     use int.Int
     use list.List
-    use tensor.layout.CFlat
+    use layout.CFlat
  
-    use tensor.libvector.CIndex
-    use tensor.std.Clib
+    use libvector.CIndex
+    use std.Clib
     use mach.int.Int32
-    use tensor.std.Int
+    use std.Int
     use list.Length
-    use tensor.layout.CFlat
-    use tensor.tensor.Range
+    use layout.CFlat
+    use tensor.Range
 
     use MyCtensor
     use ExtendedCFloat
@@ -564,7 +652,7 @@ module COPMaxpool2d
     (max_value, True)
 
 
-  let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
+    let rec lemma valid_bounds_2 (ks ds: iarray) (p q: int)
     requires { p <= q }
     requires { valid_range ks p q }
     requires { valid_range ds p q }
@@ -578,6 +666,148 @@ module COPMaxpool2d
           assert { islice ds p q = Cons (Int32.to_int (value_at ds p)) (islice ds (p+1) q) };
           valid_bounds_2 ks ds (p+1) q
         end
+
+    let find_in_row (x: ctensor) (value: float) (h w: int32) (b c m n: int32) (dX1 dX2 dX3: int32) (dil_h dil_w :int32) (pad_top pad_left pad_bottom pad_rigth :int32) (str_h str_w :int32) : (int32, bool)
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { w > 0 }
+
+    requires { in_bounds (h*dil_h)}
+    requires { in_bounds (m*str_h)}
+    requires { in_bounds(m*str_h+h*dil_h) /\ in_bounds( (m*str_h+h*dil_h) - pad_top) }
+
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(ww*dil_w)    
+            }
+    requires { in_bounds(n*str_w)}
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(n*str_w+ww*dil_w) /\ in_bounds( (n*str_w+ww*dil_w) - pad_left)    
+            }
+
+
+    requires { 
+                let x_h = m * str_h + h * dil_h in
+                in_bounds ((x_h - pad_top) * dX3)
+    }
+    requires { in_bounds (dX3 * dX2) }
+    requires { in_bounds (c * (dX2 * dX3)) }
+    requires { in_bounds (dX1 * dX2) }
+    requires { in_bounds (dX1 * dX2 * dX3) }
+    requires { in_bounds (b * (dX1 * dX2 * dX3)) }
+    requires { in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3)) }
+    requires {
+        let h_min = m * str_h + h * dil_h - pad_top in
+        in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + h_min * dX3)
+    }
+    requires {
+        forall ww. 0 <= ww < w ->
+            let x_w = n * str_w + ww * dil_w in
+            in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + (m * str_h + h * dil_h - pad_top) * dX3 + (x_w - pad_left))
+    }
+
+
+    ensures {
+        let (idx, flag) = result in
+        flag -> to_int idx = find_in_row (tensor x) value (to_int h) (to_int w) 0 (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+    }
+    =
+    let ref flag = False in
+    let x_p_coords_array = malloc (to_uint32 4) in
+    if is_not_null x_p_coords_array then begin
+        flag <- True;
+        let x_h = m * str_h + h * dil_h in
+        for ww = 0 to w-1 do
+            invariant { flag }
+            invariant {
+                find_in_row (tensor x) value (to_int h) (to_int w) 0 (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+                =
+                find_in_row (tensor x) value (to_int h) (to_int w) ww (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+            }
+            let x_w = n * str_w + ww * dil_w in
+            x_p_coords_array[0] <- b ;
+            x_p_coords_array[1] <- c ;
+            x_p_coords_array[2] <- x_h ;
+            x_p_coords_array[3] <- x_w ;
+            let (x_val, aux_flag) = coords_from_X_p x x_p_coords_array pad_top pad_left in
+            if aux_flag then begin
+                assert { ivector x_p_coords_array 4 = Cons (to_int b) (Cons (to_int c) (Cons (to_int x_h) (Cons (to_int x_w) Nil))) } ;
+                if x_val .= value then begin
+                    let hmin = x_h - pad_top in
+                    let wmin = x_w - pad_left in
+                    ghost find_in_row_unfold (tensor x) (to_extended_real value) (to_int h) (to_int w) (to_int ww) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w) ;
+                    assert {
+                        in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + (m * str_h + h * dil_h - pad_top) * dX3 + (n * str_w + ww * dil_w - pad_left) )
+                    };
+                    return (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + hmin * dX3 + wmin, True)
+                end
+                else
+                    ()
+            end
+            else
+                return ((-1), False)
+        done ;
+        ((-1), flag)
+    end
+    else
+        ((-1), flag)
+
+
+    let find_in_line (x: ctensor) (value: float) (h w: int32) (b c m n: int32) (dX1 dX2 dX3: int32) (dil_h dil_w :int32) (pad_top pad_left pad_bottom pad_rigth :int32) (str_h str_w :int32) : (int32, bool)
+    requires { valid_tensor x }
+    requires { x.t_rank = 4 }
+    requires { h > 0 }
+    requires { w > 0 }
+
+    requires { forall hh. 0 <= hh < h -> in_bounds (hh*dil_h) }
+    requires { in_bounds (m*str_h) }
+    requires { forall hh. 0 <= hh < h ->
+                in_bounds(m*str_h+hh*dil_h) /\ in_bounds( (m*str_h+hh*dil_h) - pad_top) }
+
+    requires { forall ww. 0 <= ww < w -> in_bounds(ww*dil_w) }
+    requires { in_bounds(n*str_w) }
+    requires { forall ww. 0 <= ww < w ->
+                in_bounds(n*str_w+ww*dil_w) /\ in_bounds( (n*str_w+ww*dil_w) - pad_left) }
+
+    requires { forall hh. 0 <= hh < h ->
+                let x_h = m * str_h + hh * dil_h in
+                in_bounds ((x_h - pad_top) * dX3) }
+    requires { in_bounds (dX3 * dX2) }
+    requires { in_bounds (c * (dX2 * dX3)) }
+    requires { in_bounds (dX1 * dX2) }
+    requires { in_bounds (dX1 * dX2 * dX3) }
+    requires { in_bounds (b * (dX1 * dX2 * dX3)) }
+    requires { in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3)) }
+    requires { forall hh. 0 <= hh < h ->
+                let h_min = m * str_h + hh * dil_h - pad_top in
+                in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + h_min * dX3) }
+    requires { forall hh ww. 0 <= hh < h /\ 0 <= ww < w ->
+                let x_w = n * str_w + ww * dil_w in
+                in_bounds (b * (dX1 * dX2 * dX3) + c * (dX2 * dX3) + (m * str_h + hh * dil_h - pad_top) * dX3 + (x_w - pad_left)) }
+
+    ensures {
+        let (idx, flag) = result in
+        flag -> to_int idx = find_in_line (tensor x) value (to_int h) 0 (to_int w) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+    }
+    =
+    let ref flag = True in
+    for hh = 0 to h-1 do
+        invariant { flag }
+        invariant {
+            find_in_line (tensor x) value (to_int h) 0 (to_int w) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+            =
+            find_in_line (tensor x) value (to_int h) hh (to_int w) (to_int b) (to_int c) (to_int m) (to_int n) (to_int dX1) (to_int dX2) (to_int dX3) (to_int dil_h) (to_int dil_w) (to_int pad_top) (to_int pad_left) (to_int pad_bottom) (to_int pad_rigth) (to_int str_h) (to_int str_w)
+        }
+        let (idx, aux_flag) = find_in_row x value hh w b c m n dX1 dX2 dX3 dil_h dil_w pad_top pad_left pad_bottom pad_rigth str_h str_w in
+        if aux_flag then begin
+            if idx >= 0 then
+                return (idx, True)
+            else
+                ()
+        end
+        else
+            return ((-1), False)
+    done ;
+    ((-1), flag)
 
 
     let c_maxpool (x r: ctensor) (h w: int32) (dil_h dil_w: int32) (pad_top pad_left pad_bottom pad_right: int32) (str_h str_w: int32) : bool
@@ -927,4 +1157,3 @@ module COPMaxpool2d
         false
 
 end
-  
