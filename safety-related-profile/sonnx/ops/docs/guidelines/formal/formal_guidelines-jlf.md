@@ -6,25 +6,52 @@
 
 ## Table of Contents
 
+- [SONNX — Formalization Guidelines](#sonnx--formalization-guidelines)
+  - [Table of Contents](#table-of-contents)
 - [Part 1 — Formalization Styles](#part-1--formalization-styles)
-  - [1.1 — Abstract Formalization](#11-abstract-formalization)
-  - [1.2 — Concrete Formalization](#12-concrete-formalization)
-  - [1.3 — Link between the two levels](#13-link-between-the-two-levels)
+  - [1.1 Abstract Formalization](#11-abstract-formalization)
+    - [Tensor](#tensor)
+    - [Specification Style](#specification-style)
+    - [Importance of this level](#importance-of-this-level)
+  - [1.2 Concrete Formalization](#12-concrete-formalization)
+    - [Tensor](#tensor-1)
+    - [Specification Style](#specification-style-1)
+    - [Importance of this level](#importance-of-this-level-1)
+  - [1.3 Link between the two levels](#13-link-between-the-two-levels)
+    - [Why is it important to have two levels?](#why-is-it-important-to-have-two-levels)
 - [Part 2 — Guidelines for Abstract Formalization](#part-2--guidelines-for-abstract-formalization)
-  - [2.1 — Module Structure](#21-module-structure)
-  - [2.2 — Function Declarations](#22-function-declarations)
-  - [2.3 — Contracts on the Main Function](#23-contracts-on-the-main-function)
-  - [2.4 — Data Function Pattern](#24-data-function-pattern)
-  - [2.5 — Operator tensor types](#25-operator-tensor-types)
+  - [2.1. Module Structure](#21-module-structure)
+  - [2.2 Function Declarations](#22-function-declarations)
+    - [2.2.1 Termination and Variants](#221-termination-and-variants)
+    - [2.2.2 Verification Conditions and Requires Clauses](#222-verification-conditions-and-requires-clauses)
+    - [2.2.3 TypeInvariant Lemmas](#223-typeinvariant-lemmas)
+    - [2.2.4 Main Operator Function](#224-main-operator-function)
+    - [2.2.5 Guidelines](#225-guidelines)
+    - [Examples](#examples)
+  - [2.3. Contracts on the Main Function](#23-contracts-on-the-main-function)
+    - [Example](#example)
+  - [2.4. Data Function Pattern](#24-data-function-pattern)
+    - [Anonymous function declaration](#anonymous-function-declaration)
+    - [Recursive dimensions constructs](#recursive-dimensions-constructs)
+    - [Examples](#examples-1)
+  - [2.5 Operator tensor types](#25-operator-tensor-types)
 - [Part 3 — Guidelines for Concrete Formalization](#part-3--guidelines-for-concrete-formalization)
-  - [3.1 — Module Structure](#31-module-structure)
-  - [3.2 — Auxiliary helper functions](#32-auxiliary-helper-functions)
-  - [3.3 — Main operator function](#33-main-operator-function)
-  - [3.4 — Invariants](#34-invariants)
-- [Part 4 — Tips, Hints and Strategies](#part-4---tips-hints-and-strategies)
-  - [4.1 — Scope Resolution](#41-scope-resolution)
-  - [4.2 — IDE Transformations and Prover Hints](#42-ide-transformations-and-prover-hints)
-  - [4.3 — How to Debug](#43-how-to-debug)
+  - [3.1. Module Structure](#31-module-structure)
+    - [3.2 Auxiliary helper functions](#32-auxiliary-helper-functions)
+    - [3.3 Main operator function](#33-main-operator-function)
+      - [3.3.1 Contracts](#331-contracts)
+    - [3.4 Invariants](#34-invariants)
+    - [Loop Invariants for Proving Data Refinement](#loop-invariants-for-proving-data-refinement)
+    - [The innermost loop](#the-innermost-loop)
+    - [The outer loops](#the-outer-loops)
+- [Part 4 - Tips, Hints and Strategies](#part-4---tips-hints-and-strategies)
+  - [4.1. Scope Resolution](#41-scope-resolution)
+  - [4.2. IDE Transformations and Prover Hints](#42-ide-transformations-and-prover-hints)
+    - [Lemma / Axiom Instantiation](#lemma--axiom-instantiation)
+    - [Instantiation via Lemma Functions](#instantiation-via-lemma-functions)
+    - [Function Unfolding](#function-unfolding)
+  - [4.3. How to Debug](#43-how-to-debug)
+    - [Reading the Logical Context](#reading-the-logical-context)
 
   
 
@@ -33,7 +60,7 @@
 ---
 
 <br>
-> (Jean-Loup) I think that the use of Why3 shall be recomended from the start and that some usefull links shall be provided for readers not familiar with Why3.
+> (Jean-Loup) I think that the use of Why3 shall be recomended from the start and that some usefull links shall be provided for readers not familiar with Why3.**Done**
 
 # Part 1 — Formalization Styles
 
@@ -247,7 +274,7 @@ Ideally, according to Loïc's proposal, **at the abstract level** we should only
 
 > (Jean-Loup) To remove "according to Loïc's proposal". May be describe shortly the proposal. **done**
 >
-> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.
+> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.**done**
 
 However, this happens to be not always possible.
 
@@ -286,7 +313,7 @@ However, `function` **does not support contracts** and therefore **variants** ar
 end
 ```
 
-> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"?
+> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"? **Done**
 
 ### 2.2.2 Verification Conditions and Requires Clauses
 
