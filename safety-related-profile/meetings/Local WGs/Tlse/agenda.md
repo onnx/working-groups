@@ -1,5 +1,8 @@
-#### 2025/06/25
+#### 2025/07/10
+- Mise à jour des guidelines
+- Traitement d'un opérateur... 
 
+#### 2025/06/25
 - [X] Faire mail Loïc pour améliorer l'approche formelle [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
   - Voir demande à Loïc par mail du 25/06
 - [ ] Prendre en compte les remarques de J-L dans les guidelines "spécification formelle" [project::[[SONNX]]] [assignee::[[FARGES Jean-Loup]]] ➕ 2026-06-25 
