@@ -97,13 +97,13 @@ error $E = (e^i)_{0 \leq i < n}$ for the vector argument $X = (x^i)_{0 \leq i
 The **propagated error** of the $\textbf{f} = (f^0, \ldots, f^{m-1})$ function as ideal
 operator is
 
-$$\forall 0 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1}$$
+$$\forall 0 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$$
 
 Hence if $\textbf{f}$ is derivable two times, the formula
 
 $$\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
   (x^0, \ldots, x^{n-1})\times e^i + \mathcal{O}(E^2)
-  \textit{ where } E = \max(e^0, \ldots, e^{n-1}}) \ll 1$$
+  \textit{ where } E = \max(e^0, \ldots, e^{n-1}) \ll 1$$
 
 is a correct propagated error with the natural following definition for
 $\mathcal{O}^j(E^2)$:
@@ -114,8 +114,8 @@ $$\mathcal{O}^j(E^2) = \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0
 
 In term of matrix computations, this means
 
-$$\mathcal{O}^j(E^2) = \left(\textbf{f}(X + E) - \textbf{f}(X)\right)
-- (\textbf{J}_{\textbf{f}}) (E)$$
+$$\mathcal{O}^j(E^2) = \left(\textbf{f}(X + E) - \textbf{f}(X)\right) -
+  (\textbf{J}_{\textbf{f}}) (E)$$
 
 where $\textbf{J}_{\textbf{f}}$ is the Jacobian matrix of the function $\textbf{f}$.
 
@@ -129,11 +129,11 @@ formulations below:
   (x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
   \ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
   \ldots, x^{n-1})\times e^i\right)$ 
-* $(\textbf{J}_{\textbf{f}}) (E) + \left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}}) (E)\right)$  
+* $(\textbf{J}_{\textbf{f}}) (E) + \left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
   by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
-  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i| \left( \left|
+  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|} \left( \left|
   \frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
   \right) \times |e^i|$ (mean value inequality theorem)
 
@@ -196,10 +196,11 @@ $$\begin{array}{rcl}
 PE(g) & = & \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1 + \mathcal{O}(E^2)
 \end{array}$$
 
-with
+with the generic definition for $ \mathcal{O}(E^2)$
 
 $$\begin{array}{rcl}
-  \mathcal{O}(E^2) & = & \left(f(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f(x^0, \ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0, \ldots, x^{n-1})\times e^i\\
+  \mathcal{O}(E^2) & = & \left(f(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) -
+    f(x^0, \ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0, \ldots, x^{n-1})\times e^i\\
   & = & \frac{x^1\times e^0 - x^0\times e^1}{x^1(x^1 + e^1)} - \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1\\
   & = & \frac{x^0\times y^2_{\textit{err}} - x^1\times e^0\times e^1}{x^1^2(x^1 + e^1)}
 \end{array}$$
@@ -216,8 +217,7 @@ $$\begin{array}{rcl}
 |PE(f)| & \leq & \max_{-|e^0| \leq e'_0 \leq |e^0|, -|e^1| \leq e'_1 \leq |e^1}\left(
 \frac{1}{|x^1-e'_1|}\times |e^0| + \frac{|x^0+e'_0|}{(x^1-e'_1)^2}
 \times |e^1|\right)\\
-& \leq & |PE(f)| & \leq &
-\frac{1}{\max(|x^1|-|e^1|, 0)}\times |e^0| + \frac{|x^0|+|e^0|}{\max((|x^1|-|e^1|, 0))^2}
+& \leq & \frac{1}{\max(|x^1|-|e^1|, 0)}\times |e^0| + \frac{|x^0|+|e^0|}{\max((|x^1|-|e^1|, 0))^2}
 \times |e^1|
 \end{array}$$
 
