@@ -18,7 +18,6 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 
 | Working Group      | Objectives    |
 | ------------------ | ------------- |
-| [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX |
 | Safety-Related-Profile | |
 | [Generative-AI](https://lfaifoundation.slack.com/archives/C08MERYU84T) | Accelerate GenAI support in ONNX |
 | Probabilistic Programming |  Extending ONNX with probabilistic modeling and Bayesian inference capabilities | 
@@ -32,6 +31,7 @@ Working Groups store these artifacts, including meeting notes, in this repositor
 | [Control Flow and Loops](https://gitter.im/onnx/ControlFlowWG) | Enable dynamic control structures to enable advanced models for NLP, speech, and video/image processing | Completed - If, Loop, and Scan operators were added in ONNX 1.3 release. |
 | Quantization | Enhance ONNX to support quantized data types and operators on a variety of runtimes and hardware devices | Completed - added in ONNX 1.5 release. |
 | Foundation | Identify and evaluate non-profit foundation options for the ONNX consortium.  Execute on best option. | Completed - ONNX joined LF AI in November 2019|
+| [Multi-device](https://lfaifoundation.slack.com/archives/C05JY32GCCS)  | Multi-device support in ONNX |
 
 ## Inactive working groups
 
