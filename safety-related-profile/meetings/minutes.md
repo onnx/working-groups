@@ -1,3 +1,32 @@
+# 2026/07/15
+## Participants
+- 
+## Agenda 
+- Review of actions (Eric)
+- Status of code generation (Mariem)
+- Status of formal spec guidelines review
+- Status of J&R report 
+- Update of informal spec guidelines
+## Minutes  
+## Actions
+### New actions
+### Previous actions
+- [ ] (010726-1, Edoardo) Get in touch with Franck to take into account his remarks on the accuracy evaluation guidelines.
+- [ ] (010726-2, Eric) Organize a meeting with the Operator SIG (contact: Ram)
+- [ ] (010726-3, Mariem) Update the status of issues related to code generation  
+- [ ] (010726-4, Eric) Integrate Loïc recommandations to improve traceability using the sum op in the formal spec guidelines.  
+- [ ] (0306-2, Eric) Contact the industrialists that have shown some interest in ONNX (especially those that have expressed some specific needs in [scope.md](../deliverables/scope/scope.md)).
+- [ ] (0306-3, Eric) Organize a (remote) presentation of our work to the community in Sept or Oct. 
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
+  - Doc reworked
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+
+
 # 2026/07/01
 ## Participants
 - Ricardo, João, Eduardo, Jean, Eric, Mariem, Andreas
@@ -15,7 +44,7 @@
   - Status of graph formal spec: model completed, cleanup ongoing (graph code extraction not done)
   - **MaxPool**: formal spec quasi-complete: the concrete part needs to be updated to use the integer data type. 
 - Other
-  - Rocardo and João internship is now finished. They are currently completing their report that would explain (in particular) the graph formalization. The document is expected to be delivered beg of September, but a version for review should be available beg. of August.
+  - Ricardo and João internship is now finished. They are currently completing their report that would explain (in particular) the graph formalization. The document is expected to be delivered beg of September, but a version for review should be available beg. of August.
 ## Actions
 ### New actions
 - [ ] (010726-1, Edoardo) Get in touch with Franck to take into account his remarks on the accuracy evaluation guidelines.
