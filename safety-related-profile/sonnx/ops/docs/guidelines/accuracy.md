@@ -196,13 +196,13 @@ $$\begin{array}{rcl}
 PE(g) & = & \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1 + \mathcal{O}(E^2)
 \end{array}$$
 
-with the generic definition for $ \mathcal{O}(E^2)$
+with the generic definition for $\mathcal{O}(E^2)$
 
 $$\begin{array}{rcl}
   \mathcal{O}(E^2) & = & \left(f(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) -
     f(x^0, \ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0, \ldots, x^{n-1})\times e^i\\
-  & = & \frac{x^1\times e^0 - x^0\times e^1}{x^1(x^1 + e^1)} - \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1\\
-  & = & \frac{x^0\times y^2_{\textit{err}} - x^1\times e^0\times e^1}{x^1^2(x^1 + e^1)}
+  & = & \frac{x^1\times e^0 - x^0\times e^1}{x^1(x^1 + e^1)} - \frac{1}{x^1}\times e^0 - \frac{x^0}{(x^1)^2}\times e^1\\
+  & = & \frac{x^0\times (e^1)^2 - x^1\times e^0\times e^1}{(x^1)^2(x^1 + e^1)}
 \end{array}$$
 
 Hence, the accuracy definition of the operator will either indicate
