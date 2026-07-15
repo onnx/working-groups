@@ -1,139 +1,226 @@
-#### Objectives and limits
+# Objectives and limits
 
-This document provides theory and techniques to write a formal specification for the
-accuracy of numerical components used in neural networks. The result is
-a specification that should be verified by any implementation for the
-considered hypotheses. Here is a list of acceptable hypotheses :
+## Introduction
 
-* floating-point computation conformed to the IEEE-754 standard  
-* fixed-point computation  
-* concrete or symbolic range for the input values  
-* symbolic constraints over some computations  
+This document provides guidelines to conduct the accuracy analysis of the SONNX
+numerical operators. 
 
-There exists many possible specifications for the accuracy. For instance, the specification
-for the matrix multiplication will be different if one matrix is diagonal or if both matrices
-are dense with a same order of magnitude for every coefficients.
+SONNX does not provide a definitive specification of accuracy. Instead, it
+provides a way to estimate the error of a specific implementation with respect
+to an ideal algorithm that would implement integer arithmetic or floating point
+arithmetic according to IEEE754.
 
-We will favour short formulas, even if they may seem approximate.
+Towards that goal, SONNX provides:
+- an analytical expression of the upper bound of the error considering some
+  ideal algorithm applying integer or IEEE 754 arithmetic and
+  under a narrow set of acceptable assumptions  
+- a tool to estimate numerically an upper bound of the error of a given implementation.
+  
+Notes:  
+1. There may exist multiple ideal algorithms for any operator. In SONNX, we use
+   the algorithm that is given in the informal specification.
+2. There exists an infinite number of upper bounds of the error, some of them
+   being more conservative (less accurate) than others. The accuracy of the
+   estimation first depends on the simplifications done to facilitate calculus.
+   It may also depend on the hypotheses done concerning the domain of the
+   operator arguments. For instance, the estimation of the error bound for a
+   matrix multiplication may be different under the hypothesis that one matrix
+   is diagonal or under the hypothesis that both matrices are dense with a same
+   order of magnitude for every coefficients.</br>
+   In SONNX, we estimate accuracies according to the following principles:
+   - we favour manageable formulas (simple and short) even if this leads to
+     very conservative accuracy estimation
+   - we make no hypothesis about the domain of the arguments of operators.  
+3. The acceptable assumptions provide concrete or symbolic ranges for the imput values
+   in first-order logical expressions.
 
-#### Numerical Accuracy
+# Principles of Numerical Accuracy Estimation
  
-This section provides a tight and verifiable specification of the numerical error
-on the operator's results. The numerical error is the difference between the
-current implementation on data with error resulting from previous approximated
-computations and an ideal algorithm operating on data also coming from previous ideal
-computations.
+The numerical error is the difference between the implemented algorithm
+$op_{\textit{impl}}$ applied on data with error resulting from previous
+approximated computations and an ideal algorithm $op_{\textit{ideal}}$
+operating on data also coming from previous ideal computations:
 
 $$op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x})$$
 
-This framework decomposes the error into two parts:
+Note: we consider the problem of error accumulation throughout the SONNX graph,
+rather than studying each operator in isolation
 
-* the first, the <span style="color:blue">propagated error</span>, depends on the numerical
-  error and the numerical values of the inputs - in particular, it is independent of the
-  implementation and the storage format  
-* the second part, the <span style="color:red">introduced error</span>, depends on the
+We decompose the error into
+
+* a <span style="color:blue">propagated error</span> depending on the numerical
+  error and the numerical values of the inputs $-$ in particular, it is
+  independent of the implementation and the storage format  
+* a <span style="color:red">introduced error</span> depending on the
   concrete value of the inputs and the implementation with its storage format. 
 
 $$op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x}) = \textcolor{blue}{(op_{\textit{ideal}}(\overrightarrow{x+e}) - op_{\textit{ideal}}(\overrightarrow{x}))} + \textcolor{red}{(op_{\textit{impl}}(\overrightarrow{x + e}) - op_{\textit{ideal}}(\overrightarrow{x+e}))}$$
 
-The error associated with the result of the operator corresponds to the sum of the propagated
-errors and the introduced error and this new error is then propagated by the next operator.
+The error associated with the result of the operator corresponds to the sum of
+the propagated errors and the introduced error. This new error is then
+propagated to the next operator.
 
-The provided specification results from an over-approximated semantics (ex: IEEE-754) of the
-numerical error of native computer operations approximating real number
-operations. In order to preserve the readability of the formulas, the general specification introduces additional (conservative) simplifications compared to the original specifications.
-However, this general specification may be too over-approximated for some specific inputs (ex tensor representing diagonal matrices). In this case, more precise specific specifications are provided alongside the general specification.
+## Specification and Verification Strategy
 
-The error specification comes with unit verification scenarios to verify the implementation's conformity. In the absence of value ranges for the inputs, the unit verification scenarios operate on symbolic values and errors to propagate correct formulas throughout the scenario and thus provide a proof for the assertions. In particular, the C implementation generated from the Why3 formal specification must be verified using these scenarios, for example by using symbolic instrumentation libraries.
+In order to simplify the calculus and preserve the readability of the formulas,
+the provided estimations may result from the application of conservative
+simplifications   of the native computer operations (e.g., IEEE 754). In some
+cases, additional hypotheses about the operator arguments (e.g., the fact that
+the matrices are diagonal) are done alongside the general formulation to
+provide more accurate estimations.
 
-###### Error Propagation
+The error specification comes with unit verification scenarios to verify the
+implementation's conformity. In the absence of value ranges for the inputs, the
+unit verification scenarios operate on symbolic values and errors to propagate
+correct formulas throughout the scenario and thus provide a proof for the
+assertions. In particular, the C implementation generated from the Why3 formal
+specification must be verified using these scenarios, for example by using
+symbolic instrumentation libraries.
 
-This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$, the propagated error, where $Y$ is the tensor result of an operator.
+## Error Propagation
 
-**It is only for information**, since the properties does not depend on the implementation.
-The formula aims to explain how an input error is amplified by the operator just from its
-functional description.
+This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$,
+the propagated error, where $Y$ is the tensor result of an operator.
 
-From the theoretical point of view, let us consider a function $f: \mathbb{R}^n \longrightarrow \mathbb{R}^n$ and
-an existing error for each argument $x^i = (x^i_{\textit{val}}, x^i_{\textit{err}})$.
+**This section is only for information**: the propagated error is not part of
+the SONNX specification since it is completly independent from the
+implementation. The formula aims to explain how an input error is amplified by
+the operator just from its functional description. However, it is useful for
+the error specification of a sequence of operators since the numerical error
+created by the first operator is then amplified by the next operators.
 
-The **propagated error** of the $f$ function as ideal operator is
+From the theoretical point of view, let us consider $op_{ideal}$ as a function
+$\textbf{f}: \mathbb{R}^n \longrightarrow \mathbb{R}^m$ and an existing vector
+error $E = (e^i)_{0 \leq i < n}$ for the vector argument $X = (x^i)_{0 \leq i
+< n}$.
 
-$$f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})$$
+The **propagated error** of the $\textbf{f} = (f^0, \ldots, f^{m-1})$ function as ideal
+operator is
 
-Hence if $f$ is derivable two times, the formula
+$$\forall 0 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1}$$
 
-$$\sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}} + \mathcal{O}(X^2_{\textit{err}})
-  \textit{ where } X_{\textit{err}} = \max(x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{err}}) \leq 1$$
+Hence if $\textbf{f}$ is derivable two times, the formula
 
-is a correct propagated error with the natural following definition for $\mathcal{O}(X^2_{\textit{err}})$:
+$$\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
+  (x^0, \ldots, x^{n-1})\times e^i + \mathcal{O}(E^2)
+  \textit{ where } E = \max(e^0, \ldots, e^{n-1}}) \ll 1$$
 
-$$\mathcal{O}(X^2_{\textit{err}}) = \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}$$
+is a correct propagated error with the natural following definition for
+$\mathcal{O}^j(E^2)$:
+
+$$\mathcal{O}^j(E^2) = \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
+\ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
+\ldots, x^{n-1})\times e^i$$
+
+In term of matrix computations, this means
+
+$$\mathcal{O}^j(E^2) = \left(\textbf{f}(X + E) - \textbf{f}(X)\right)
+- (\textbf{J}_{\textbf{f}}) (E)$$
+
+where $\textbf{J}_{\textbf{f}}$ is the Jacobian matrix of the function $\textbf{f}$.
 
 If there are no error on the arguments, the propagated error is $0$.
-Otherwise, we preconise a first order expression like:
+Otherwise, we propose to choose the more concise formula between the
+formulations below:
 
-The absolute value of the propagated error is less or equal than
+* $\forall 1 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$  
+* $\textbf{f}(X+E) - \textbf{f}(X)$  
+* $\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
+  (x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
+  \ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
+  \ldots, x^{n-1})\times e^i\right)$ 
+* $(\textbf{J}_{\textbf{f}}) (E) + \left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}}) (E)\right)$  
+* $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
+  by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
+* $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
+  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i| \left( \left|
+  \frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
+  \right) \times |e^i|$ (mean value inequality theorem)
 
-$$\sum_{0 \leq i < n} \left| \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}}) \right| \times |x^i_{\textit{err}}|$$
+### Example 1: Multiplication
 
-**Example:** multiplication $f(x, y) = x\times y$ and division $g(x, y) = x / y$ in $\mathbb{R}\times\mathbb{R}\longrightarrow\mathbb{R}$
-
+Let us consider the multiplication operation $f(x^0, x^1) = x^0\times x^1$ in
+$\mathbb{R}\times\mathbb{R}\longrightarrow\mathbb{R}$
+ 
 For the multiplication, the **propagated error** $PE(f)$ is
 
 $$\begin{array}{rcl}
-PE(f) & = & (x_{\textit{val}} + x_{\textit{err}})\times (y_{\textit{val}} + y_{\textit{err}}) - x_{\textit{val}}\times y_{\textit{val}} \\
-    & = & y_{\textit{val}}\times x_{\textit{err}} + x_{\textit{val}}\times y_{\textit{err}} + x_{\textit{err}}\times y_{\textit{err}}
+PE(f) & = & (x^0 + e^0)\times (x^1 + e^1) - x^0\times x^1 \\
+      & = & x^1\times e^0 + x^0\times e^1 + e^0\times e^1
 \end{array}$$
 
-that is simplified into
+that is simplified by using the first-order Taylor expansion into
 
 $$\begin{array}{rcl}
-PE(f) & = & y_{\textit{val}}\times x_{\textit{err}} + x_{\textit{val}}\times y_{\textit{err}} + \mathcal{O}(X^2_{\textit{err}})
+PE(f) & = & x^1\times e^0 + x^0\times e^1 + \mathcal{O}(E^2)
 \end{array}$$
 
-with $\mathcal{O}(X^2_{\textit{err}}) = x_{\textit{err}}\times y_{\textit{err}}$.
+with $\mathcal{O}(E^2) = e^0\times e^1$.
 
-Hence, the accuracy definition of the operator will just indicate that
+Hence, the accuracy definition of the operator will either indicate
 
 $$\begin{array}{rcl}
-|PE(f)| & \leq & |y_{\textit{val}}| \times |x_{\textit{err}}| + |x_{\textit{val}}|\times |y_{\textit{err}}| + |\mathcal{O}(X^2_{\textit{err}})|
+|PE(f)| & \leq & |x^1| \times |e^0| + |x^0|\times |e^1| + |\mathcal{O}(E^2)|
 \end{array}$$
 
-The definition of $\mathcal{O}(X^2_{\textit{err}})$ is optional, since it is always
+with the generic definition for $\mathcal{O}(E^2)$
 
 $$\begin{array}{rcl}
-  \mathcal{O}(X^2_{\textit{err}}) & = & \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}\\
-  & = & (x_{\textit{val}} + x_{\textit{err}})\times(y_{\textit{val}} + y_{\textit{err}}) - x_{\textit{val}}\times y_{\textit{val}} - (y_{\textit{val}}\times x_{\textit{err}} + x_{\textit{val}}\times y_{\textit{err}})\\
-  & = & x_{\textit{err}}\times y_{\textit{err}}
+  \mathcal{O}(E^2) & = & \left(f(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f(x^0, \ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0, \ldots, x^{n-1})\times e^i\\
+  & = & (x^0 + e^0)\times(x^1 + e^1) - x^0\times x^1 - (x^1\times e^0 + x^0\times e^1)\\
+  & = & e^0\times e^1
 \end{array}$$
+
+or indicate
+
+$$\begin{array}{rcl}
+|PE(f)| & \leq & \max_{-|e^0| \leq e'_0 \leq |e^0|, -|e^1| \leq e'_1 \leq |e^1} |x^1+e'_1| \times |e^0| + |x^0+e'_0|\times |e^1| \\
+|PE(f)| & \leq & (|x^1|+|e^1|) \times |e^0| + (|x^0|+|e^0|)\times |e^1|
+\end{array}$$
+
+### Example 2: Division
+
+Let us consider the division operation $g(x, y) = x / y$ in
+$\mathbb{R}\times\mathbb{R}\longrightarrow\mathbb{R}$
 
 For the division, the **propagated error** $PE(g)$ is
 
 $$\begin{array}{rcl}
-PE(g) & = & \frac{x_{\textit{val}} + x_{\textit{err}}}{y_{\textit{val}} + y_{\textit{err}}} - \frac{x_{\textit{val}}}{y_{\textit{val}}} \\
-    & = & \frac{y_{\textit{val}}\times x_{\textit{err}} - x_{\textit{val}}\times y_{\textit{err}}}{y_{\textit{val}}(y_{\textit{val}} + y_{\textit{err}})}
+PE(g) & = & \frac{x^0 + e^0}{x^1 + e^1} - \frac{x^0}{x^1} \\
+    & = & \frac{x^1\times e^0 - x^0\times e^1}{x^1(x^1 + e^1)}
 \end{array}$$
 
-that is simplified into
+that is simplified by using the first-order Taylor expansion into
 
 $$\begin{array}{rcl}
-PE(g) & = & \frac{1}{y_{\textit{val}}}\times x_{\textit{err}} - \frac{x_{\textit{val}}}{y^2_{\textit{val}}}\times y_{\textit{err}} + \mathcal{O}(X^2_{\textit{err}})
+PE(g) & = & \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1 + \mathcal{O}(E^2)
 \end{array}$$
 
-The definition of $\mathcal{O}(X^2_{\textit{err}})$ is optional
+with
 
 $$\begin{array}{rcl}
-  \mathcal{O}(X^2_{\textit{err}}) & = & \left(f(x^0_{\textit{val}} + x^0_{\textit{err}}, \ldots, x^{n-1}_{\textit{val}} + x^{n-1}_{\textit{err}}) - f(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0_{\textit{val}}, \ldots, x^{n-1}_{\textit{val}})\times x^i_{\textit{err}}\\
-  & = & \frac{y_{\textit{val}}\times x_{\textit{err}} - x_{\textit{val}}\times y_{\textit{err}}}{y_{\textit{val}}(y_{\textit{val}} + y_{\textit{err}})} - \frac{1}{y_{\textit{val}}}\times x_{\textit{err}} - \frac{x_{\textit{val}}}{y^2_{\textit{val}}}\times y_{\textit{err}}\\
-  & = & \frac{x_{\textit{val}}\times y^2_{\textit{err}} - y_{\textit{val}}\times x_{\textit{err}}\times y_{\textit{err}}}{y_{\textit{val}}^2(y_{\textit{val}} + y_{\textit{err}})}
+  \mathcal{O}(E^2) & = & \left(f(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f(x^0, \ldots, x^{n-1})\right) - \sum_{0 \leq i < n} \frac{\delta f}{\delta x^i}(x^0, \ldots, x^{n-1})\times e^i\\
+  & = & \frac{x^1\times e^0 - x^0\times e^1}{x^1(x^1 + e^1)} - \frac{1}{x^1}\times e^0 - \frac{x^0}{y^2_{\textit{val}}}\times e^1\\
+  & = & \frac{x^0\times y^2_{\textit{err}} - x^1\times e^0\times e^1}{x^1^2(x^1 + e^1)}
 \end{array}$$
 
-Hence, the accuracy definition of the operator will just indicate that
+Hence, the accuracy definition of the operator will either indicate
 
 $$\begin{array}{rcl}
-|PE(g)| & \leq & \frac{1}{|y_{\textit{val}}|}\times |x_{\textit{err}}| + \frac{|x_{\textit{val}}|}{y^2_{\textit{val}}}\times |y_{\textit{err}}| + |\mathcal{O}(X^2_{\textit{err}})|
+|PE(g)| & \leq & \frac{1}{|x^1|}\times |e^0| + \frac{|x^0|}{(x^1)^2}\times |e^1| + |\mathcal{O}(E^2)|
 \end{array}$$
+
+or indicate
+
+$$\begin{array}{rcl}
+|PE(f)| & \leq & \max_{-|e^0| \leq e'_0 \leq |e^0|, -|e^1| \leq e'_1 \leq |e^1}\left(
+\frac{1}{|x^1-e'_1|}\times |e^0| + \frac{|x^0+e'_0|}{(x^1-e'_1)^2}
+\times |e^1|\right)\\
+& \leq & |PE(f)| & \leq &
+\frac{1}{\max(|x^1|-|e^1|, 0)}\times |e^0| + \frac{|x^0|+|e^0|}{\max((|x^1|-|e^1|, 0))^2}
+\times |e^1|
+\end{array}$$
+
 
 **Example:** 2D Matrix multiplication
 
