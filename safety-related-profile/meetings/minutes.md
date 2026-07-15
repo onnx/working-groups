@@ -1,6 +1,6 @@
 # 2026/07/15
 ## Participants
-- 
+- Andreas, Xavier, Jean, Mariem, Franck, Edorado
 ## Agenda 
 - Review of actions (Eric)
 - Status of code generation (Mariem)
@@ -8,23 +8,37 @@
 - Status of J&R report 
 - Update of informal spec guidelines
 ## Minutes  
+- See agenda +
+- Welcome to Xavier Dupré (Microsoft), based in Paris, work on various things related to ONNX.
+- Discussion on accuracy analysis guidelines
+  - Another possibility , not mentioned in the guidelines, could be to compute the error along with the output, and monitor it. This would raise some performance issues but it remains a possible solution... To be added in the guidelines (will be done when taking into account Edoardo's remarks, see related action...) 
+  
 ## Actions
 ### New actions
 ### Previous actions
 - [ ] (010726-1, Edoardo) Get in touch with Franck to take into account his remarks on the accuracy evaluation guidelines.
+    - On 15/07: Franck has just started integrating the Edoardo's and Eric's remarks. 
 - [ ] (010726-2, Eric) Organize a meeting with the Operator SIG (contact: Ram)
-- [ ] (010726-3, Mariem) Update the status of issues related to code generation  
+- [X] (010726-3, Mariem) Update the status of issues related to code generation
+  - On 15/07: Issues created an set. 
 - [ ] (010726-4, Eric) Integrate Loïc recommandations to improve traceability using the sum op in the formal spec guidelines.  
 - [ ] (0306-2, Eric) Contact the industrialists that have shown some interest in ONNX (especially those that have expressed some specific needs in [scope.md](../deliverables/scope/scope.md)).
 - [ ] (0306-3, Eric) Organize a (remote) presentation of our work to the community in Sept or Oct. 
+  - On 15/07 : prepare agenda
 - [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
   - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
   - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
   - Doc reworked
+  - On 15/07 : work still in progress.
 - [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
   - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+    - On 15/07 : 
+      - MaxPool
+      - [ ] Eric to create a list of issues encountered so far..., classify issues with respect to e.g., IEEE, corner cases related to the structure of tensors, etc. To be presented to / discussed with Xavier.
 - [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
 - [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+  - On 15/07: This is part of the larger problem of validating all spec wrt the (updated) guidelines... 
+
 
 
 # 2026/07/01
