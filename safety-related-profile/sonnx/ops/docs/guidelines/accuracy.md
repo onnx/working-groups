@@ -32,7 +32,8 @@ Notes:
      very conservative accuracy estimation
    - we make no hypothesis about the domain of the arguments of operators.  
 3. The acceptable assumptions provide concrete or symbolic ranges for the imput values
-   in first-order logical expressions.
+   in first-order logical expressions. It is likely to provide a floating-point
+   or an integer format for the operator interface.
 
 # Principles of Numerical Accuracy Estimation
  
@@ -77,6 +78,22 @@ assertions. In particular, the C implementation generated from the Why3 formal
 specification must be verified using these scenarios, for example by using
 symbolic instrumentation libraries.
 
+An implementation that claims to check the accuracy specification should
+precise the set of the specification assumptions it has been verified.
+It should also define the verification method with the guarantees it brings.
+Here is a list of possible verification methods that can be combined:
+
+* manual (or aided with tools) symbolic reasoning about the accuracy of
+  the implementation,  
+* static analysis verification with additional ranges assumptions for the
+  input values - CPU offline verification for small components,  
+* dynamic analysis synchronous stochastic verification - CPU or GPU,
+  off-line for big compononents, on-line for small components,  
+* dynamic analysis asynchronous stochastic verification - CPU or GPU,
+  off-line for big compononents, on-line for small components,
+* dynamic analysis asynchronous concrete verification - CPU or GPU,
+  could be on-line for big compononents.
+
 ## Error Propagation
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$,
@@ -90,9 +107,11 @@ the error specification of a sequence of operators since the numerical error
 created by the first operator is then amplified by the next operators.
 
 From the theoretical point of view, let us consider $op_{ideal}$ as a function
-$\textbf{f}: \mathbb{R}^n \longrightarrow \mathbb{R}^m$ and an existing vector
+$\textbf{f}: \mathbb{R}^n \longrightarrow \mathbb{R}^m$ and an input vector
 error $E = (e^i)_{0 \leq i < n}$ for the vector argument $X = (x^i)_{0 \leq i
 < n}$.
+
+### Estimation of the propagated error
 
 The **propagated error** of the $\textbf{f} = (f^0, \ldots, f^{m-1})$ function as ideal
 operator is
@@ -129,11 +148,11 @@ formulations below:
   (x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
   \ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
   \ldots, x^{n-1})\times e^i\right)$ 
-* $(\textbf{J}_{\textbf{f}}) (E) + \left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
+* $(\textbf{J}_{\textbf{f}}) (E)$ + $\left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
   by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
-  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|} \left( \left|
+  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|}\left(\left|
   \frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
   \right) \times |e^i|$ (mean value inequality theorem)
 
@@ -221,13 +240,48 @@ $$\begin{array}{rcl}
 \times |e^1|
 \end{array}$$
 
+### Example 3: 2D Matrix multiplication
 
-**Example:** 2D Matrix multiplication
+Tensor operators require a more complex methodology, since the algorithm
+combine many atomic operations on $\mathbb{R}$. Again, the objective is
+deriving a sound over-approximation of the propagated error.
 
-Tensor operators require a methodology to propose an **over-approximation of the propagated error**,
-since the algorithm combine many atomic operations on $\mathbb{R}$.
+The mathematical definition specified in
+[ SONNX informal specification](../../../../spec/informal/matmul/matmul.md) of
+the operator is given hereafter .
+
+$$
+  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
+$$
+
+with $dA_1 = dB_0$.
+
+This suggests the combination of the operators $+$ and $\times$, each one
+being likely to introduce numerical errors.
+
+Here are possible specifications of the propagated error
+
+1. If all the coefficients of the matrix $A$ are bound by $a$ and the error by $ea$
+   and if all the coefficients of the matrix $B$ are bound by $b$ and the error by $eb$,
+   then all the coefficients of the result matrix carry a propagated error
+   bound by $p\times((a + ea)\times(b + eb)- a\times b)$.  
+
+1. The coefficients $c[i][j]$ of the result matrix carry a propagated error
+   $ec[i][j]$ bound by following computation (Wolfram language of Mathematica) in real
+   number.
+
+   ```
+   ec[i]j] = 0;
+   For (k = 0, k < p, k = k+1, ec[i][j] += ((a[i][k]+ea[i][k])*(b[k][j]+eb[k][j]) - a[i][k]*b[k][j]))
+   ```
+
+It is possible to incrementaly build these specifications with the 
+following methodology. Here is how we build the first specification
 
 1. Naïve Algorithm Description
+
+Since it is simpler to provide intermediate annotations inside code lines than a formula,
+we suggest to translate the formula in a naive way to compute it.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -241,6 +295,19 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
 
 2. Progressive decoration of the algorithm starting from inner loop
 
+To simplify the specification and to benefit from simplifications in the
+annotations, we add some assumptions:
+
+* the absolute value of every coefficient of A is bound by 'a' with an error
+  whose absolute value is bound by 'ae'  
+* the absolute value of every coefficient of B is bound by 'b' with an error
+  whose absolute value is bound by 'be'
+
+These assumptions are likely to introduce big over-approximations, especially
+for non-dense matrices. The specifier can introduce different assumptions
+or not introduce any assumption but provide a code in real numbers to
+"compute" the specification of the error (see point 4. instead of a formula).
+
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
     // C result matrix of dimension n x q
@@ -251,14 +318,15 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
           C[i][j] += A[i][0]*B[0][j];
         // the absolute value of every coefficient of A is bound by 'a' with an error whose absolute value is bound by 'ae'
         // the absolute value of every coefficient of B is bound by 'b' with an error whose absolute value is bound by 'be'
-        // |PE(C[i][j])| <= a*be + b*ae
+        // |PE(C[i][j])| <= a*be + b*ae + ae*be
           C[i][j] += A[i][1]*B[1][j];
-        // |PE(C[i][j])| <= 2*a*be + 2*b*ae
+        // |PE(C[i][j])| <= 2*a*be + 2*b*ae + 2*ae*be
         for (int k = 2; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    By symplifying the formula, we progressively build a pattern that is candidate for a loop invariant
+    By symplifying the formula, we progressively build a pattern that is candidate
+    for a proof by induction
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -271,12 +339,14 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
         // |PE(C[i][j]| = 0
         for (int k = 0; k < 2; ++k)
           C[i][j] += A[i][k]*B[l][j];
-          // |PE(C[i][j]| <= k*a*be + k*b*ae
+          // |PE(C[i][j]| <= k*a*be + k*b*ae + k*ae*be
         for (int k = 2; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    If the pattern verify a loop induction, it becomes a loop invariant
+    If the pattern verifies the loop induction - the annotations at the end of the
+    loop body matches with (or are included in) the annotations at the beginning of
+    the loop body, it becomes a property that holds (infinitely) for every loop cycle.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -289,18 +359,19 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
         // PE(C[i][j]) = 0
         for (int k = 0; k < 2; ++k)
           C[i][j] += A[i][k]*B[l][j];
-          // |PE(C[i][j])| <= k*a*be + k*b*ae
+          // |PE(C[i][j])| <= k*a*be + k*b*ae + k*ae*be
 
         int k = 2;
-        // if |PE(C[i][j])| <= k*a*be + k*b*ae
+        // if |PE(C[i][j])| <= k*a*be + k*b*ae + k*ae*be
           C[i][j] += A[i][k]*B[k][j];
         ++k;
-        // then |PE(C[i][j])| <= k*a*be + k*b*ae // same formula than the induction hypotheses
+        // then |PE(C[i][j])| <= k*a*be + k*b*ae + k*ae*be // same formula than the induction hypotheses
         for (int k = 3; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    Then the loop invariant enables to establish the post-condition when exiting the loop
+    Then the porpoerty inside the loop enables to establish a property that
+    holds after the loop by adding the constraints exiting the loop.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -313,8 +384,8 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
         // PE(C[i][j]) = 0
         for (int k = 0; k < p; ++k)
           C[i][j] += A[i][k]*B[l][j];
-          // |OAPE(C[i][j]| <= k*a*be + k*b*ae
-        // |PE(C[i][j])| <= p*a*be + p*b*ae
+          // |OAPE(C[i][j]| <= k*a*be + k*b*ae + k*ae*be
+        // |PE(C[i][j])| <= p*a*be + p*b*ae + p*ae*be
     ```
 
 3. Final specification
@@ -324,9 +395,13 @@ since the algorithm combine many atomic operations on $\mathbb{R}$.
     * If A is a matrix of dimension $n \times p$, B a matrix of dimension $p \times q$,
     * if the absolute value of every coefficient of A is bound by $a$ with an error whose absolute value is bound by $ae$,  
     * if the absolute value of every coefficient of B is bound by $b$ with an error whose absolute value is bound by $be$,  
-    * then the propagated error of every coefficient of C is bound by $p\times a\times be + p\times b \times ae$
+    * then the propagated error of every coefficient of C is bound by $p\times a\times be + p\times b \times ae + p\times ae\times be$
 
-###### Error Introduction
+4. Generic specification as a Mathematica code
+
+[TODO]
+
+## Error Introduction with non-Ideal Operators
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$,
 the introduced error, where $Y$ is the tensor result of an operator.
@@ -348,12 +423,14 @@ $|r| \times \frac{\varepsilon}{2} = |r| \times \textit{\bf u}$ in the standard m
 round to nearest even. Moreover if $r \in [a, b]$ with $a$ and $b$ normal numbers (the interval
 may contain denormal numbers), the introduced error is less or equal than
 $\max(|a|, |b|) \times \textit{\bf u}$ in the standard mode round to nearest even.
-There exists more accurate formulas, but such formulas usually take too much
-details into account.
 
-**Example:** multiplication $f(x, y) = x * y$ and division $g(x, y) = x / y$
+Note that there exists more accurate formulas, but by application of the principles stated introduction, we use a formulation that is remains simple and acceptably conservative. 
 
-For the multiplication, the **introduced error** $IE(f)$ should be less or equal than
+### Example 1: multiplication
+
+Let us consider the multiplication operation: $f(x, y) = x * y$ 
+
+The **introduced error** $IE(f)$ should be less or equal than
 
 $$\begin{array}{rcl}
 |IE(f)| & \leq & |x|\times |y|\times\textit{\bf u}
@@ -381,9 +458,12 @@ $$\begin{array}{rcl}
 |IE(f)| & < & 1
 \end{array}$$
 
-for any fixpoint implementation.
+for any integer implementation.
 
-For the division, the **introduced error** $IE(g)$ should be less or equal than
+### Example 2: division
+Let us consider the division operation: $g(x, y) = x / y$
+
+The **introduced error** $IE(g)$ should be less or equal than
 
 $$\begin{array}{rcl}
 |IE(g)| & \leq & \frac{|x|}{|y|}\times\textit{\bf u}
@@ -410,9 +490,9 @@ $$\begin{array}{rcl}
 |IE(g)| & < & 1
 \end{array}$$
 
-for any fixpoint implementation.
+for any integer implementation.
 
-**Example:** 2D Matrix multiplication
+### Example 3: 2D Matrix multiplication
 
 Tensor operators require a methodology to find an **over-approximation of the introduced error**,
 since their algorithms combine many atomic operations.
@@ -444,6 +524,9 @@ since their algorithms combine many atomic operations.
         // |IE(C[i][j])| <= a*b*u
         // |C[i][j]| <= a*b*(1+u)
           C[i][j] += A[i][1]*B[1][j];
+        // The introduced error is the one due to the multiplication  
+        // at [0] and at [1]:  a*b*u + a*b*u
+        // plus the one due to the addition: (a*b*(1+u)+a*b(1+u))*u  
         // |IE(C[i][j])| <= a*b*u + a*b*u + 2*a*b*(1+u)*u = a*b*u*(4+2u)
         // |C[i][j])| <= (a*b*(1+u) + a*b*(1+u))*(1+u) = 2*a*b*(1+u)²
           C[i][j] += A[i][2]*B[2][j];
@@ -472,7 +555,9 @@ since their algorithms combine many atomic operations.
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    If the pattern verify a loop induction, it becomes a loop invariant
+    If the pattern verifies a loop induction, it becomes a proved property inside
+    the loop (inductive loop invariant). Hence it holds as a proved property
+    after the loop with the loop termination constraints.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -528,15 +613,39 @@ $$\begin{array}{rcl}
 
 where the absolute value of every coefficient of A is bound by $a$ and the absolute value of every coefficient of B is bound by $b$.
 
-###### Unit Verification
+[TODO] > Are we sure to be able to do the same analysis for higher dimension tensors? 
 
-This section contains a verification scenario to verify the above specification for any C/C++ implementation. It uses an abstract type `SymbolicDomainError` replacing each real number in the Why3 specification. `SymbolicDomainError` is a data structure with 4 fields:
+## Unit Verification
 
-* The `real` field is a symbolic abstract domain for ideal (infinitely precise) C/C++ floating-point (or fixed-point) computations.  
-* The `float` field is a symbolic abstract domain for the computed value.  
-* The `err` field is a symbolic abstract domain for the absolute error, that is the difference between the possible values of `float` and `real`.  
-* The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
+In the previous sections, we have described how to derive a possible error
+upper bound considering (i) the semantics of computer arithmetic in integers
+and floating point numbers and (ii) the algorithm used to define the operator
+in the informal and formal specifications. In this section, we propose a
+solution to evaluate the error upper bound on an actual C/C++ implementation.
+Examples are given for the reference implementation developed in SONNX. The
+same approach can be applied on a end-user implementation.   
 
-# Formal specification guidelines
+The solution uses an abstract type `SymbolicDomainError` replacing each real
+number in the Why3 specification. `SymbolicDomainError` is a data structure with
+4 fields:
 
-*To be completed.*
+> Why do you refer to the specification? Should n't we write "replacing each floating point number in the implementation"? 
+
+* The `real` field is a symbolic abstract domain for ideal (infinitely precise)
+  C/C++ floating-point (or integer) computations.
+* The `float` field is a symbolic abstract domain for the computed value.
+* The `err` field is a symbolic abstract domain for the absolute error, that is
+  the difference between the possible values of float and real.
+* The `rel_err` field is a symbolic abstract domain for the relative error,
+  that is the difference between the possible values of float and real divided by real.
+
+[TODO] > It would be nice to give links to the library (e.g., github with user manual).
+
+[TODO] > ### Example : division
+
+[TODO] > It would be nice to give the actual result of the analysis.
+
+[TODO] Verification of the Implementation, By static analysis, At Run-time.
+
+
+
