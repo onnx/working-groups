@@ -717,9 +717,6 @@ The solution uses an abstract type `SymbolicDomainError` replacing each
 numerical data-type in the implementation. `SymbolicDomainError` is a data
 structure with 4 fields:
 
-> Why do you refer to the specification? Should n't we write "replacing
- each floating point number in the implementation"? 
-
 * The `real` field is a symbolic abstract domain for ideal (infinitely precise)
   C/C++ floating-point (or integer) computations.
 * The `float` field is a symbolic abstract domain for the computed value.
