@@ -246,15 +246,15 @@ Tensor operators require a more complex methodology, since the algorithm
 combine many atomic operations on $\mathbb{R}$. Again, the objective is
 deriving a sound over-approximation of the propagated error.
 
-The mathematical definition specified in
-[ SONNX informal specification](../../../../spec/informal/matmul/matmul.md) of
+The mathematical definition specified in the
+[SONNX informal specification](../../spec/informal/matmul/matmul.md) of
 the operator is given hereafter .
 
 $$
   \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
 $$
 
-with $dA_1 = dB_0$.
+with $p = dA_1 = dB_0$, $n = dA_0$, $q = dB_1$.
 
 This suggests the combination of the operators $+$ and $\times$, each one
 being likely to introduce numerical errors.
@@ -266,12 +266,12 @@ Here are possible specifications of the propagated error
    then all the coefficients of the result matrix carry a propagated error
    bound by $p\times((a + ea)\times(b + eb)- a\times b)$.  
 
-1. The coefficients $c[i][j]$ of the result matrix carry a propagated error
+2. The coefficients $c[i][j]$ of the result matrix carry a propagated error
    $ec[i][j]$ bound by following computation (Wolfram language of Mathematica) in real
    number.
 
    ```
-   ec[i]j] = 0;
+   ec[i][j] = 0;
    For (k = 0, k < p, k = k+1, ec[i][j] += ((a[i][k]+ea[i][k])*(b[k][j]+eb[k][j]) - a[i][k]*b[k][j]))
    ```
 
@@ -405,16 +405,27 @@ or not introduce any assumption but provide a code in real numbers to
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$,
 the introduced error, where $Y$ is the tensor result of an operator.
-The objective is to provide a specification that any implementation should respect. Hence
+The objective is to provide a specification over the actual implementation of
+an operator. Hence
 
 $$Y_{\textit{err}}^{\textit{intro}} = op_{\textit{impl}}(\overrightarrow{x}) - op_{\textit{ideal}}(\overrightarrow{x})$$
 
-From the theoretical point of view, the introduced error depends on the storage format of the result of any intermediate computation.
-It is always defined as the difference between the implementation result and the ideal result, for which we additionaly
-substract the propagated error of the previous section.
+The introduced error is an over-approximation of difference between the
+implementation result and the ideal result when there is no error on the input.
 
-The introduced error is an over-approximation of difference between the implementation result and the ideal result
-when there is no error on the input.
+In this section, we switch back to the notation $op$ instead of
+$f = op_{\textit{ideal}}$ to make a clear distinction between
+$op_{\textit{impl}}$ and $op_{\textit{ideal}}$.
+
+From the theoretical point of view, the introduced error depends on the storage
+format of the result of any intermediate computation. It is always defined as
+the difference between the implementation result and the ideal result, for
+which we additionaly substract the propagated error of the previous section.
+
+### IEEE-754 implementations
+
+The introduced error is an over-approximation of difference between the
+implementation result and the ideal result when there is no error on the input.
 
 For IEEE-754 format, let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
 for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$. For every floating-point operator
@@ -424,13 +435,16 @@ round to nearest even. Moreover if $r \in [a, b]$ with $a$ and $b$ normal number
 may contain denormal numbers), the introduced error is less or equal than
 $\max(|a|, |b|) \times \textit{\bf u}$ in the standard mode round to nearest even.
 
-Note that there exists more accurate formulas, but by application of the principles stated introduction, we use a formulation that is remains simple and acceptably conservative. 
+Note that there exists more accurate formulas, but by application of the
+principles stated introduction, we use a formulation that is remains simple and
+acceptably conservative. 
 
-### Example 1: multiplication
+#### Example 4 (IEEE-754 multiplication)
 
-Let us consider the multiplication operation: $f(x, y) = x * y$ 
+Let us consider the multiplication operation: $op_{\textit{impl}}(x, y) = f(x, y) = x * y$. 
 
-The **introduced error** $IE(f)$ should be less or equal than
+The **introduced error** of any SONNX-compliant implementation $IE(f)$ should be less or equal
+than
 
 $$\begin{array}{rcl}
 |IE(f)| & \leq & |x|\times |y|\times\textit{\bf u}
@@ -454,16 +468,11 @@ for any floating-point implementation with other rounding mode, provided
 $x \in [a, b], y \in [c, d]$ and $\max(|a|, |b|)\times \max(|c|, |d|)$ is a normal number.
 
 
-$$\begin{array}{rcl}
-|IE(f)| & < & 1
-\end{array}$$
+### Example 5 (IEEE-754 division)
 
-for any integer implementation.
+Let us consider the division operation: $op_{\textit{impl}}(x, y) = g(x, y) = x / y$
 
-### Example 2: division
-Let us consider the division operation: $g(x, y) = x / y$
-
-The **introduced error** $IE(g)$ should be less or equal than
+The **introduced error** of any SONNX-compliant implementation $IE(g)$ should be less or equal than
 
 $$\begin{array}{rcl}
 |IE(g)| & \leq & \frac{|x|}{|y|}\times\textit{\bf u}
@@ -486,16 +495,47 @@ $$\begin{array}{rcl}
 for any floating-point implementation with other rounding mode, provided
 $x \in [a, b], y \in [c, d], 0 \not\in [c, d]$ and $\frac{\max(|a|, |b|)}{\min(|c|, |d|)}$ is a normal number
 
-$$\begin{array}{rcl}
-|IE(g)| & < & 1
-\end{array}$$
+### Example 6 (IEEE-754 2D matrix multiplication)
 
-for any integer implementation.
+The mathematical definition specified in the
+[SONNX informal specification](../../spec/informal/matmul/matmul.md) of
+the operator is given hereafter .
 
-### Example 3: 2D Matrix multiplication
+$$
+  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
+$$
 
-Tensor operators require a methodology to find an **over-approximation of the introduced error**,
-since their algorithms combine many atomic operations.
+with $p = dA_1 = dB_0$, $n = dA_0$, $q = dB_1$.
+
+Tensor operators require the [methodology of the propagated error](#example-3:-2d-matrix-multiplication)
+to find an **over-approximation of the introduced error**, due to the
+combination of many atomic operations.
+
+Here are possible specifications for the introduced error of any IEEE-754 SONNX-compliant
+implementation
+
+1. If all the coefficients of the matrix $A$ are bound by $a$
+   and if all the coefficients of the matrix $B$ are bound by $b$,
+   then all the coefficients of the result matrix should carry an introduced
+   error bound by $\left((1+u)^2\times \frac{(1+u)^p-1}{u} - n\right)\times a\times b$.  
+
+2.  Let us define `min_normalized` is the smallest positive normalized number, then
+   Then, the coefficients $c[i][j]$ of the result matrix carry a propagated error
+   $eic[i][j]$ bound by following computation (Wolfram language of Mathematica) in real
+   number.
+
+   ```
+   eic[i][j] = 0; epc[i][j] = 0; c[i](j] = 0; eic[i](j] = 0;
+   For (k = 0, k < p, k = k+1,
+     m[i][j] = a[i][k] * b[k][j];
+     eim[i][j] = u*max(abs(m[i][j]), min_normalized);
+     c[i][j] = c[i][j] + m[i][j];
+     eic[i][j] = (1+u)*(eic[i][j] + eim[i][j]) + u*max(abs(c[i][j] ), min_normalized))
+   ```
+
+It is possible to incrementaly build these specifications with the 
+following methodology. Here is how we build the first specification
+
 
 1. Naïve Algorithm Description
 
@@ -525,7 +565,7 @@ since their algorithms combine many atomic operations.
         // |C[i][j]| <= a*b*(1+u)
           C[i][j] += A[i][1]*B[1][j];
         // The introduced error is the one due to the multiplication  
-        // at [0] and at [1]:  a*b*u + a*b*u
+        // at A[i][0]*B[0][j] and at  A[i][1]*B[1][j]:  a*b*u + a*b*u
         // plus the one due to the addition: (a*b*(1+u)+a*b(1+u))*u  
         // |IE(C[i][j])| <= a*b*u + a*b*u + 2*a*b*(1+u)*u = a*b*u*(4+2u)
         // |C[i][j])| <= (a*b*(1+u) + a*b*(1+u))*(1+u) = 2*a*b*(1+u)²
@@ -536,7 +576,8 @@ since their algorithms combine many atomic operations.
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    By symplifying the formula, we progressively build a pattern that is candidate for a loop invariant
+    By symplifying the formula, we progressively build a pattern that is candidate
+    for a proof by induction
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -555,9 +596,9 @@ since their algorithms combine many atomic operations.
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    If the pattern verifies a loop induction, it becomes a proved property inside
-    the loop (inductive loop invariant). Hence it holds as a proved property
-    after the loop with the loop termination constraints.
+    If the pattern verifies the loop induction - the annotations at the end of the
+    loop body matches with (or are included in) the annotations at the beginning of
+    the loop body, it becomes a property that holds (infinitely) for every loop cycle.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -585,7 +626,9 @@ since their algorithms combine many atomic operations.
           C[i][j] += A[i][k]*B[k][j];
     ```
 
-    Then the loop invariant enables to establish the post-condition when exiting the loop
+    Then the porpoerty inside the loop enables to establish a property that
+    holds after the loop by adding the constraints exiting the loop.
+
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -600,20 +643,43 @@ since their algorithms combine many atomic operations.
           C[i][j] += A[i][k]*B[l][j];
           // |IE(C[i][j])| <= (((1+u)^(k+1)-1)/u*(1+u)² - k-1)*a*b // same formula than the induction hypotheses
           // |C[i][j])| <= ((1+u)^(k+1)-1)/u*a*b*(1+u)²
-        // |IE(C[i][j])| <= (((1+u)^(p+1)-1)/u*(1+u)² - p-1)*a*b // same formula than the induction hypotheses
-        // |C[i][j])| <= ((1+u)^(p+1)-1)/u*a*b*(1+u)²
+        // |IE(C[i][j])| <= (((1+u)^p-1)/u*(1+u)² - p)*a*b // same formula than the induction hypotheses
+        // |C[i][j])| <= ((1+u)^p)-1)/u*a*b*(1+u)²
     ```
 
-Hence, for the matrix multiplication of A, matrix of dimension $n \times p$ with B, matrix of dimension $p \times q$, the **introduced error** should be less or equal than
+Hence, for the matrix multiplication of A, matrix of dimension $n \times p$
+with B, matrix of dimension $p \times q$, the **introduced error** should be
+less or equal than
 
 $$\begin{array}{rcl}
-  |IE(C[i][j])| & \leq & \left(\frac{(1+u)^{p+1}-1}{u}\times(1+u)^2 - p-1\right)\times a \times b\\
-                & \leq & \left(\frac{(1+u)^{p+1}-1-(p+1)\times u }{u^2}\times(1+u)^2 - (p+1)\times(2+u)\right)\times a \times b \times u\\
+  |IE(C[i][j])| & \leq & \left(\frac{(1+u)^{p}-1}{u}\times(1+u)^2 - p\right)\times a \times b\\
+                & \leq & \left(\frac{(1+u)^{p}-1-p\times u}{u^2}\times(1+u)^2 - p\times(2+u)\right)\times a \times b \times u\\
 \end{array}$$
 
-where the absolute value of every coefficient of A is bound by $a$ and the absolute value of every coefficient of B is bound by $b$.
+where the absolute value of every coefficient of A is bound by $a$ and the
+absolute value of every coefficient of B is bound by $b$.
 
 [TODO] > Are we sure to be able to do the same analysis for higher dimension tensors? 
+
+### integer implementation
+
+[TODO]
+
+#### Example 4 (Integer multiplication)
+
+$$\begin{array}{rcl}
+|IE(f)| & < & 1
+\end{array}$$
+
+for any integer implementation.
+
+#### Example 4 (Integer division)
+
+$$\begin{array}{rcl}
+|IE(g)| & < & 1
+\end{array}$$
+
+for any integer implementation.
 
 ## Unit Verification
 
