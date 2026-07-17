@@ -151,9 +151,9 @@ formulations below:
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
   by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
-  by $\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|}\left(\left|
+  by $$\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|}\left(\left|
   \frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
-  \right) \times |e^i|$ (mean value inequality theorem)
+  \right) \times |e^i|$$ (mean value inequality theorem)
 
 ### Example 1: Multiplication
 
