@@ -108,7 +108,7 @@ created by the first operator is then amplified by the next operators.
 
 From the theoretical point of view, let us consider $op_{ideal}$ as a function
 $\textbf{f}: \mathbb{R}^n \longrightarrow \mathbb{R}^m$ and an input vector
-error $E = (e^i)$ $\mbox{}_{0 \leq i < n}$ for the vector argument $X = (x^i)_{0 \leq i
+error $E = (e^i)_{\textit{i} \in [0, n-1]}$ for the vector argument $X = (x^i)_{0 \leq i
 < n}$.
 
 ### Estimation of the propagated error
