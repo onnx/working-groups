@@ -139,25 +139,28 @@ where $\textbf{J}_{\textbf{f}}$ is the Jacobian matrix of the function $\textbf{
 
 If there are no error on the arguments, the propagated error is $0$.
 Otherwise, we propose to choose the more concise formula between the
-formulations below:
+6 formulations below:
 
-* $\forall 1 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$  
-* $\textbf{f}(X+E) - \textbf{f}(X)$  
-* $\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
-  (x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
-  \ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
-  \ldots, x^{n-1})\times e^i\right)$  
-* $(\textbf{J}_{\textbf{f}}) (E)$ + $\left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
-* $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
-  by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
-* $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
-  by
+$$\forall 1 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$$
 
-  $$\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|}\left(\left|
-  \frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
-  \right) \times |e^i|$$
+$$\textbf{f}(X+E) - \textbf{f}(X)$$
 
-  (mean value inequality theorem)
+$$\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
+(x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
+\ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
+\ldots, x^{n-1})\times e^i\right)$$
+
+$$(\textbf{J}_{\textbf{f}})(E) + \left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$$
+
+$$\forall 0 \leq j < m,
+\textit{the absolute value of the propagated error is bound by }
+|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$$
+
+$$\forall 0 \leq j < m,
+\textit{the absolute value of the propagated error is bound by }
+\sum_{0 \leq i < n} \max_{-|e^i| \leq e'_i \leq |e^i|}\left(\left|
+\frac{\delta f}{\delta x^i}(x^0+e'_0, \ldots, x^{n-1}+e'_{n-1}) \right|
+\right) \times |e^i| \textit{(mean value inequality theorem)}$$
 
 ### Example 1: Multiplication
 
@@ -283,8 +286,8 @@ following methodology. Here is how we build the first specification
 
 1. Naïve Algorithm Description
 
-Since it is simpler to provide intermediate annotations inside code lines than a formula,
-we suggest to translate the formula in a naive way to compute it.
+   Since it is simpler to provide intermediate annotations inside code lines than a formula,
+   we suggest to translate the formula in a naive way to compute it.
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -294,22 +297,23 @@ we suggest to translate the formula in a naive way to compute it.
         C[i][j] = 0;
         for (int k = 0; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
 2. Progressive decoration of the algorithm starting from inner loop
 
-To simplify the specification and to benefit from simplifications in the
-annotations, we add some assumptions:
+   To simplify the specification and to benefit from simplifications in the
+   annotations, we add some assumptions:
 
-* the absolute value of every coefficient of A is bound by 'a' with an error
-  whose absolute value is bound by 'ae'  
-* the absolute value of every coefficient of B is bound by 'b' with an error
-  whose absolute value is bound by 'be'
+   * the absolute value of every coefficient of A is bound by 'a' with an error
+     whose absolute value is bound by 'ae'  
+   * the absolute value of every coefficient of B is bound by 'b' with an error
+     whose absolute value is bound by 'be'
 
-These assumptions are likely to introduce big over-approximations, especially
-for non-dense matrices. The specifier can introduce different assumptions
-or not introduce any assumption but provide a code in real numbers to
-"compute" the specification of the error (see point 4. instead of a formula).
+   These assumptions are likely to introduce big over-approximations, especially
+   for non-dense matrices. The specifier can introduce different assumptions
+   or not introduce any assumption but provide a code in real numbers to
+   "compute" the specification of the error (see point 4. instead of a formula).
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -326,6 +330,7 @@ or not introduce any assumption but provide a code in real numbers to
         // |PE(C[i][j])| <= 2*a*be + 2*b*ae + 2*ae*be
         for (int k = 2; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     By symplifying the formula, we progressively build a pattern that is candidate
@@ -345,6 +350,7 @@ or not introduce any assumption but provide a code in real numbers to
           // |PE(C[i][j]| <= k*a*be + k*b*ae + k*ae*be
         for (int k = 2; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     If the pattern verifies the loop induction - the annotations at the end of the
@@ -371,6 +377,7 @@ or not introduce any assumption but provide a code in real numbers to
         // then |PE(C[i][j])| <= k*a*be + k*b*ae + k*ae*be // same formula than the induction hypotheses
         for (int k = 3; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     Then the porpoerty inside the loop enables to establish a property that
@@ -389,6 +396,7 @@ or not introduce any assumption but provide a code in real numbers to
           C[i][j] += A[i][k]*B[l][j];
           // |OAPE(C[i][j]| <= k*a*be + k*b*ae + k*ae*be
         // |PE(C[i][j])| <= p*a*be + p*b*ae + p*ae*be
+      }
     ```
 
 3. Final specification
@@ -402,7 +410,7 @@ or not introduce any assumption but provide a code in real numbers to
 
 4. Generic specification as a Mathematica code
 
-[TODO]
+    [todo] > 
 
 ## Error Introduction with non-Ideal Operators
 
@@ -522,19 +530,19 @@ implementation
    then all the coefficients of the result matrix should carry an introduced
    error bound by $\left((1+u)^2\times \frac{(1+u)^p-1}{u} - n\right)\times a\times b$.  
 
-2.  Let us define `min_normalized` is the smallest positive normalized number, then
-   Then, the coefficients $c[i][j]$ of the result matrix carry a propagated error
-   $eic[i][j]$ bound by following computation (Wolfram language of Mathematica) in real
-   number.
-
-   ```
-   eic[i][j] = 0; epc[i][j] = 0; c[i](j] = 0; eic[i](j] = 0;
-   For (k = 0, k < p, k = k+1,
-     m[i][j] = a[i][k] * b[k][j];
-     eim[i][j] = u*max(abs(m[i][j]), min_normalized);
-     c[i][j] = c[i][j] + m[i][j];
-     eic[i][j] = (1+u)*(eic[i][j] + eim[i][j]) + u*max(abs(c[i][j] ), min_normalized))
-   ```
+2.  Let us define `min_normalized` is the smallest positive normalized number.
+    Then, the coefficients $c[i][j]$ of the result matrix carry a propagated error
+    $eic[i][j]$ bound by following computation (Wolfram language of Mathematica) in real
+    numbers:
+ 
+    ```
+    eic[i][j] = 0; epc[i][j] = 0; c[i](j] = 0; eic[i](j] = 0;
+    For (k = 0, k < p, k = k+1,
+      m[i][j] = a[i][k] * b[k][j];
+      eim[i][j] = u*max(abs(m[i][j]), min_normalized);
+      c[i][j] = c[i][j] + m[i][j];
+      eic[i][j] = (1+u)*(eic[i][j] + eim[i][j]) + u*max(abs(c[i][j]), min_normalized))
+    ```
 
 It is possible to incrementaly build these specifications with the 
 following methodology. Here is how we build the first specification
@@ -550,9 +558,10 @@ following methodology. Here is how we build the first specification
         C[i][j] = 0;
         for (int k = 0; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
-2. Progressive decoration of the algorithm starting from inner loop
+2. Progressive decoration with annotations starting from inner loop
 
     ```c++
     // A matrix of dimension n x p, B matrix of dimension p x q.
@@ -577,6 +586,7 @@ following methodology. Here is how we build the first specification
         // |C[i][j]| <= (2*a*b*(1+u)² + a*b*(1+u))*(1+u) = (3+2*u)*a*b*(1+u)²
         for (int k = 3; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     By symplifying the formula, we progressively build a pattern that is candidate
@@ -597,6 +607,7 @@ following methodology. Here is how we build the first specification
           // |C[i][j])| <= ((1+u)^(k+1)-1)/u*a*b*(1+u)²
         for (int k = 2; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     If the pattern verifies the loop induction - the annotations at the end of the
@@ -627,6 +638,7 @@ following methodology. Here is how we build the first specification
         // and then |C[i][j])| <= ((1+u)^(k+1)-1)/u*a*b*(1+u)²
         for (int k = 3; k < p; ++k)
           C[i][j] += A[i][k]*B[k][j];
+      }
     ```
 
     Then the porpoerty inside the loop enables to establish a property that
@@ -648,6 +660,7 @@ following methodology. Here is how we build the first specification
           // |C[i][j])| <= ((1+u)^(k+1)-1)/u*a*b*(1+u)²
         // |IE(C[i][j])| <= (((1+u)^p-1)/u*(1+u)² - p)*a*b // same formula than the induction hypotheses
         // |C[i][j])| <= ((1+u)^p)-1)/u*a*b*(1+u)²
+      }
     ```
 
 Hence, for the matrix multiplication of A, matrix of dimension $n \times p$
@@ -662,27 +675,33 @@ $$\begin{array}{rcl}
 where the absolute value of every coefficient of A is bound by $a$ and the
 absolute value of every coefficient of B is bound by $b$.
 
-[TODO] > Are we sure to be able to do the same analysis for higher dimension tensors? 
+    [todo] > Are we sure to be able to do the same analysis for higher dimension tensors? 
 
-### integer implementation
+### Integer Implementation
 
-[TODO]
+We assume that the integer implementations rounds their result to the closest integer value.
 
-#### Example 4 (Integer multiplication)
+#### Example 7 (Integer multiplication)
 
-$$\begin{array}{rcl}
-|IE(f)| & < & 1
-\end{array}$$
+    [todo] > to check
 
-for any integer implementation.
-
-#### Example 4 (Integer division)
+For the integer multiplication, the **introduced error** should be
+less or equal than
 
 $$\begin{array}{rcl}
-|IE(g)| & < & 1
+|IE(f)| & \leq & 0.5
 \end{array}$$
 
-for any integer implementation.
+#### Example 8 (Integer division)
+
+    [todo] > to check
+
+For the integer division, the **introduced error** should be
+less or equal than
+
+$$\begin{array}{rcl}
+|IE(g)| & \leq & 0.5
+\end{array}$$
 
 ## Unit Verification
 
@@ -694,11 +713,12 @@ solution to evaluate the error upper bound on an actual C/C++ implementation.
 Examples are given for the reference implementation developed in SONNX. The
 same approach can be applied on a end-user implementation.   
 
-The solution uses an abstract type `SymbolicDomainError` replacing each real
-number in the Why3 specification. `SymbolicDomainError` is a data structure with
-4 fields:
+The solution uses an abstract type `SymbolicDomainError` replacing each
+numerical data-type in the implementation. `SymbolicDomainError` is a data
+structure with 4 fields:
 
-> Why do you refer to the specification? Should n't we write "replacing each floating point number in the implementation"? 
+> Why do you refer to the specification? Should n't we write "replacing
+ each floating point number in the implementation"? 
 
 * The `real` field is a symbolic abstract domain for ideal (infinitely precise)
   C/C++ floating-point (or integer) computations.
@@ -708,13 +728,8 @@ number in the Why3 specification. `SymbolicDomainError` is a data structure with
 * The `rel_err` field is a symbolic abstract domain for the relative error,
   that is the difference between the possible values of float and real divided by real.
 
-[TODO] > It would be nice to give links to the library (e.g., github with user manual).
+    [todo] > It would be nice to give links to the library (e.g., github with user manual).
 
-[TODO] > ### Example : division
-
-[TODO] > It would be nice to give the actual result of the analysis.
-
-[TODO] Verification of the Implementation, By static analysis, At Run-time.
-
-
+    [todo] Verification of the Implementation, By static analysis, At Run-time. Putting
+    into practice the section [Specification and Verification Strategy](#specification-and-verification-strategy)
 
