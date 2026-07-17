@@ -113,13 +113,13 @@ error $E = (e^i)$ for the vector argument $X = (x^i)$ with $i \in [0, n-1]$.
 ### Estimation of the propagated error
 
 The **propagated error** of the $\textbf{f} = (f^0, \ldots, f^{m-1})$ function as ideal
-operator is
+operator is $\forall 0 \leq j < m$
 
-$$\forall 0 \leq j < m. \, f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$$
+$$f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})$$
 
-Hence if $\textbf{f}$ is derivable two times, the formula
+Hence if $\textbf{f}$ is derivable two times, the formula $\forall 0 \leq j < m$
 
-$$\forall 0 \leq j < m. \, \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
+$$\sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
   (x^0, \ldots, x^{n-1})\times e^i + \mathcal{O}(E^2)
   \textit{ where } E = \max(e^0, \ldots, e^{n-1}) \ll 1$$
 
@@ -147,7 +147,7 @@ formulations below:
   (x^0, \ldots, x^{n-1})\times e^i + \left(f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0,
   \ldots, x^{n-1}) - \sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}(x^0,
   \ldots, x^{n-1})\times e^i\right)$ 
-* $(\textbf{J}_{\textbf{f}}) (E)$ + $\left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
+* $\textbf{J}_{\textbf{f}}(E)$ + $\left(\textbf{f}(X + E) - \textbf{f}(X) - (\textbf{J}_{\textbf{f}})(E)\right)$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
   by $|f^j(x^0 + e^0, \ldots, x^{n-1} + e^{n-1}) - f^j(x^0, \ldots, x^{n-1})|$  
 * $\forall 0 \leq j < m$, the absolute value of the propagated error is bound
