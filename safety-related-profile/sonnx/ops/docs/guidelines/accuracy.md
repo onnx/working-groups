@@ -1,5 +1,3 @@
-# Objectives and limits
-
 ## Introduction
 
 This document provides guidelines to conduct the accuracy analysis of the SONNX
@@ -121,7 +119,7 @@ Hence if $\textbf{f}$ is derivable two times, the formula $\forall 0 \leq j < m$
 
 $$\sum_{0 \leq i < n} \frac{\delta f^j}{\delta x^i}
   (x^0, \ldots, x^{n-1})\times e^i + \mathcal{O}(E^2)
-  \textit{ where } E = \max(e^0, \ldots, e^{n-1}) \ll 1$$
+  \textit{ where } E = \max(|e^0|, \ldots, |e^{n-1}|) \ll 1$$
 
 is a correct propagated error with the natural following definition for
 $\mathcal{O}^j(E^2)$:
