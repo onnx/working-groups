@@ -1,0 +1,25 @@
+module Same
+
+  val function same (a b : 'a) : 'a
+    ensures { a = b -> result = a = b }
+
+end
+
+module Product
+  use int.Int
+
+  (**
+    Notation for product, for `a <= i < b` of `f i`
+  *)
+  let rec function product (a b : int) (f : int -> int) : int
+    (*proof*)
+    variant { b-a }
+    = if b <= a then 1 else f a * product (a+1) b f
+    (*qed*)
+
+  lemma empty: forall a b f. b <= a -> product a b f = 1
+
+  axiom equal: forall a b f g.
+    (forall i. a <= i < b -> f i = g i) -> product a b f = product a b g
+
+end

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="unsqueeze.mlw"/>
+<theory name="OPUnsqueeze" proved="true">
+ <goal name="my_nth&#39;vc" expl="VC for my_nth" proved="true">
+ <proof prover="2"><result status="valid" time="0.011981" steps="75492"/></proof>
+ </goal>
+ <goal name="nth_tail" proved="true">
+ <proof prover="2"><result status="valid" time="0.007815" steps="45120"/></proof>
+ </goal>
+ <goal name="partition&#39;vc" expl="VC for partition" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="75111"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2251874"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="partition&#39;vc.0" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.143243" steps="16897"/></proof>
+  </goal>
+  <goal name="partition&#39;vc.1" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.064147" steps="9695"/></proof>
+  </goal>
+  <goal name="partition&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.571406" steps="87998"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="quicksort&#39;vc" expl="VC for quicksort" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="88211"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2194189"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="quicksort&#39;vc.0" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.010457" steps="64263"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.1" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.016754" steps="61152"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.2" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.102193" steps="16997"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.3" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.119637" steps="16736"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.4" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.139908" steps="19258"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.5" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.117803" steps="21454"/></proof>
+  </goal>
+  <goal name="quicksort&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.347409" steps="49388"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="normalize_axis&#39;vc" expl="VC for normalize_axis" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="75601"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="0.786165" steps="2379352"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="normalize_axis&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003678" steps="5183"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.181105" steps="25961"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.028555" steps="85811"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004543" steps="5187"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.173818" steps="25895"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.027839" steps="85793"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.062520" steps="13779"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.175608" steps="31087"/></proof>
+  </goal>
+  <goal name="normalize_axis&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.091406" steps="19337"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="insert_at&#39;vc" expl="VC for insert_at" proved="true">
+ <proof prover="0"><result status="valid" time="0.185804" steps="8755"/></proof>
+ </goal>
+ <goal name="calculate_y_dims&#39;vc" expl="VC for calculate_y_dims" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="74181"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="0.795049" steps="2047582"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="calculate_y_dims&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.003944" steps="4889"/></proof>
+  </goal>
+  <goal name="calculate_y_dims&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="107093"/></proof>
+  <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="2379227"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="calculate_y_dims&#39;vc.1.0" expl="precondition" proved="true">
+   <proof prover="0" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="354058"/></proof>
+   <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="4611367"/></proof>
+   <transf name="inline_goal" proved="true" >
+    <goal name="calculate_y_dims&#39;vc.1.0.0" expl="precondition" proved="true">
+    <transf name="split_all_full" proved="true" >
+     <goal name="calculate_y_dims&#39;vc.1.0.0.0" expl="precondition" proved="true">
+     <proof prover="1"><result status="valid" time="0.058350" steps="20455"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="calculate_y_dims&#39;vc.1.1" expl="precondition" proved="true">
+   <proof prover="0" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="356932"/></proof>
+   <proof prover="1" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000"/></proof>
+   <proof prover="2" timelimit="5" memlimit="2000"><result status="timeout" time="5.000000" steps="4396720"/></proof>
+   <transf name="inline_goal" proved="true" >
+    <goal name="calculate_y_dims&#39;vc.1.1.0" expl="precondition" proved="true">
+    <transf name="split_all_full" proved="true" >
+     <goal name="calculate_y_dims&#39;vc.1.1.0.0" expl="precondition" proved="true">
+     <proof prover="1"><result status="valid" time="0.066129" steps="20558"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="calculate_y_dims&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.010099" steps="5532"/></proof>
+  </goal>
+  <goal name="calculate_y_dims&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.264428" steps="36365"/></proof>
+  </goal>
+  <goal name="calculate_y_dims&#39;vc.4" expl="postcondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.026553" steps="75931"/></proof>
+  </goal>
+  <goal name="calculate_y_dims&#39;vc.5" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.050245" steps="10550"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="decrease_axis&#39;vc" expl="VC for decrease_axis" proved="true">
+ <proof prover="0"><result status="valid" time="0.122563" steps="7353"/></proof>
+ </goal>
+ <goal name="sorted_decrease&#39;vc" expl="VC for sorted_decrease" proved="true">
+ <proof prover="1"><result status="valid" time="0.133112" steps="21290"/></proof>
+ </goal>
+ <goal name="remove_at&#39;vc" expl="VC for remove_at" proved="true">
+ <proof prover="0"><result status="valid" time="0.105400" steps="9644"/></proof>
+ </goal>
+ <goal name="my_nth_head" proved="true">
+ <proof prover="2"><result status="valid" time="0.011735" steps="53971"/></proof>
+ </goal>
+ <goal name="positive_tail&#39;vc" expl="VC for positive_tail" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="87402"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2149654"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="positive_tail&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.015747" steps="62238"/></proof>
+  </goal>
+  <goal name="positive_tail&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.203893" steps="37987"/></proof>
+  </goal>
+  <goal name="positive_tail&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.064596" steps="178013"/></proof>
+  </goal>
+  <goal name="positive_tail&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.422982" steps="82539"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="calculate_x_coords&#39;vc" expl="VC for calculate_x_coords" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="85806"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2172771"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="calculate_x_coords&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.142871" steps="26285"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.071932" steps="13592"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.2" expl="variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.017105" steps="69093"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.137003" steps="27452"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.193082" steps="33337"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="1" timelimit="5" memlimit="2000"><result status="valid" time="1.385283" steps="156075"/></proof>
+  </goal>
+  <goal name="calculate_x_coords&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.058215" steps="13011"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="build_list&#39;vc" expl="VC for build_list" proved="true">
+ <proof prover="0"><result status="valid" time="0.065311" steps="1678"/></proof>
+ </goal>
+ <goal name="dunsqueeze&#39;vc" expl="VC for dunsqueeze" proved="true">
+ <proof prover="2"><result status="valid" time="0.023155" steps="62505"/></proof>
+ </goal>
+ <goal name="valid_length&#39;vc" expl="VC for valid_length" proved="true">
+ <proof prover="1"><result status="valid" time="0.067291" steps="14731"/></proof>
+ </goal>
+ <goal name="unsqueeze_list&#39;vc" expl="VC for unsqueeze_list" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="15941"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="2940775"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="unsqueeze_list&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.015878" steps="73102"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.011470" steps="77173"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.016347" steps="74092"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.018774" steps="83524"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.011276" steps="87322"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.004194" steps="7895"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.016236" steps="97001"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.016274" steps="96405"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.032011" steps="101337"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.9" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.008058" steps="7895"/></proof>
+  </goal>
+  <goal name="unsqueeze_list&#39;vc.10" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.052275" steps="17637"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="unsqueeze&#39;vc" expl="VC for unsqueeze" proved="true">
+ <proof prover="0"><result status="valid" time="0.068169" steps="553"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

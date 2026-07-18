@@ -1,0 +1,10 @@
+{
+  "fast": 0.2,
+  "time": 1.0,
+  "depth": 4,
+  "packages": [],
+  "provers": [ "alt-ergo@2.5.4", "z3@4.13.4", "cvc5@1.2.1" ],
+  "tactics": [ "split_vc", "inline_goal" ],
+  "drivers": [],
+  "warnoff": []
+}

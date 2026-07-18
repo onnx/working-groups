@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="0.706392" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="0.986863" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="0.607257" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="tensor.mlw"/>
+<theory name="Range" proved="true">
+ <goal name="valid_push&#39;vc" expl="VC for valid_push" proved="true">
+ <proof prover="0" timelimit="0.025289"><result status="valid" time="0.025289" steps="0"/></proof>
+ </goal>
+ <goal name="size_append&#39;vc" expl="VC for size_append" proved="true">
+ <proof prover="0" timelimit="0.018862"><result status="valid" time="0.018862" steps="0"/></proof>
+ </goal>
+ <goal name="size_push" proved="true">
+ <proof prover="0" timelimit="0.006945"><result status="valid" time="0.006945" steps="0"/></proof>
+ </goal>
+ <goal name="positive_size&#39;vc" expl="VC for positive_size" proved="true">
+ <proof prover="0" timelimit="0.013937"><result status="valid" time="0.013937" steps="0"/></proof>
+ </goal>
+ <goal name="positive_valid&#39;vc" expl="VC for positive_valid" proved="true">
+ <proof prover="0" timelimit="0.019062"><result status="valid" time="0.019062" steps="0"/></proof>
+ </goal>
+</theory>
+<theory name="Tensor" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <proof prover="0" timelimit="0.007973"><result status="valid" time="0.007973" steps="0"/></proof>
+ </goal>
+ <goal name="exteq" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="exteq.0" proved="true">
+  <proof prover="0" timelimit="0.012127"><result status="valid" time="0.012127" steps="0"/></proof>
+  </goal>
+  <goal name="exteq.1" proved="true">
+  <proof prover="0" timelimit="0.008936"><result status="valid" time="0.008936" steps="0"/></proof>
+  </goal>
+  <goal name="exteq.2" proved="true">
+  <proof prover="0" timelimit="0.007412"><result status="valid" time="0.007412" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="scalar&#39;vc" expl="VC for scalar" proved="true">
+ <proof prover="0" timelimit="0.00849"><result status="valid" time="0.008490" steps="0"/></proof>
+ </goal>
+ <goal name="zero&#39;vc" expl="VC for zero" proved="true">
+ <proof prover="0" timelimit="0.011266"><result status="valid" time="0.011266" steps="0"/></proof>
+ </goal>
+ <goal name="const&#39;vc" expl="VC for const" proved="true">
+ <proof prover="0" timelimit="0.009333"><result status="valid" time="0.009333" steps="0"/></proof>
+ </goal>
+ <goal name="zero_is_const" proved="true">
+ <proof prover="0" timelimit="0.009292"><result status="valid" time="0.009292" steps="0"/></proof>
+ </goal>
+</theory>
+<theory name="OPWhere" proved="true">
+ <goal name="dwhere&#39;vc" expl="VC for dwhere" proved="true">
+ <proof prover="0" timelimit="0.007323"><result status="valid" time="0.007323" steps="0"/></proof>
+ </goal>
+ <goal name="opwhere&#39;vc" expl="VC for opwhere" proved="true">
+ <proof prover="0" timelimit="0.010199"><result status="valid" time="0.010199" steps="0"/></proof>
+ </goal>
+</theory>
+<theory name="OPAdd">
+ <goal name="dadd&#39;vc" expl="VC for dadd" proved="true">
+ <proof prover="0" timelimit="0.008838"><result status="valid" time="0.008838" steps="0"/></proof>
+ </goal>
+ <goal name="opadd&#39;vc" expl="VC for opadd">
+ <transf name="split_vc" >
+  <goal name="opadd&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.008918" steps="11"/></proof>
+  </goal>
+  <goal name="opadd&#39;vc.1" expl="precondition">
+  <proof prover="0" timelimit="1.41278"><result status="timeout" time="1.412784" steps="0"/></proof>
+  <proof prover="1" timelimit="0.099697"><result status="unknown" time="0.099697" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="0.607257" steps="0"/></proof>
+  </goal>
+  <goal name="opadd&#39;vc.2" expl="postcondition" proved="true">
+  <transf name="inline_goal" proved="true" >
+   <goal name="opadd&#39;vc.2.0" expl="postcondition" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="opadd&#39;vc.2.0.0" expl="postcondition" proved="true">
+    <proof prover="0"><result status="valid" time="0.006722" steps="16"/></proof>
+    </goal>
+    <goal name="opadd&#39;vc.2.0.1" expl="postcondition" proved="true">
+    <proof prover="0" timelimit="0.141278"><result status="valid" time="0.011267" steps="14"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="opadd&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.010116" steps="16"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="OPConv2d">
+ <goal name="padded_value&#39;vc" expl="VC for padded_value" proved="true">
+ <proof prover="0" timelimit="0.009271"><result status="valid" time="0.009271" steps="0"/></proof>
+ </goal>
+ <goal name="dconv2d&#39;vc" expl="VC for dconv2d" proved="true">
+ <proof prover="0" timelimit="0.082901"><result status="valid" time="0.082901" steps="0"/></proof>
+ </goal>
+ <goal name="opconv2d&#39;vc" expl="VC for opconv2d">
+ <transf name="split_vc" >
+  <goal name="opconv2d&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010048"><result status="valid" time="0.010048" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013116"><result status="valid" time="0.013116" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.015857"><result status="valid" time="0.015857" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011965"><result status="valid" time="0.011965" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010021"><result status="valid" time="0.010021" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010101"><result status="valid" time="0.010101" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010534"><result status="valid" time="0.010534" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.012363"><result status="valid" time="0.012363" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011737"><result status="valid" time="0.011737" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.9" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.014075"><result status="valid" time="0.014075" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.10" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.012163"><result status="valid" time="0.012163" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.11" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.01346"><result status="valid" time="0.013460" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.12" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.014111"><result status="valid" time="0.014111" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.13" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.012721"><result status="valid" time="0.012721" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.14" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013129"><result status="valid" time="0.013129" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.15" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013122"><result status="valid" time="0.013122" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.16" expl="precondition">
+  <proof prover="0" timelimit="1.41278"><result status="timeout" time="1.412784" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="0.986863" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="0.607257" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.17" expl="precondition">
+  <proof prover="0" timelimit="1.41278"><result status="timeout" time="1.412784" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="0.986863" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="0.607257" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.18" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.022275"><result status="valid" time="0.022275" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.19" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.139218"><result status="valid" time="0.139218" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.20" expl="postcondition" proved="true">
+  <proof prover="2" timelimit="0.014269"><result status="valid" time="0.014269" steps="0"/></proof>
+  </goal>
+  <goal name="opconv2d&#39;vc.21" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.013327"><result status="valid" time="0.013327" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

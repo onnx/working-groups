@@ -1,0 +1,10 @@
+{
+  "profile": [ { "prover": "alt-ergo@2.5.4", "size": 16, "time": 0.207 } ],
+  "proofs": {
+    "Product": {
+      "empty": { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+      "product": { "prover": "alt-ergo@2.5.4", "time": 0.012 }
+    },
+    "Same": {}
+  }
+}

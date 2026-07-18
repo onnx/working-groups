@@ -1,0 +1,6 @@
+pytest
+numpy
+hypothesis
+onnx
+onnxruntime
+tensorflow

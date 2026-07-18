@@ -1,0 +1,116 @@
+{
+  "profile": [ { "prover": "alt-ergo@2.5.4", "size": 16, "time": 0.207 } ],
+  "proofs": {
+    "FlatTensor": {
+      "mixfix [<-]": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 }
+        ]
+      },
+      "mixfix []": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 }
+        ]
+      },
+      "mixfix []<-": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 }
+        ]
+      },
+      "scalar": { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+      "shape": { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.013 }
+    },
+    "Index": {
+      "valid": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.044 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.015 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.019 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.032 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.023 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.046 },
+                  { "prover": "alt-ergo@2.5.4", "time": 0.018 }
+                ]
+              }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.028 }
+            ]
+          }
+        ]
+      }
+    },
+    "Shape": {
+      "product": { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+      "product1": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.028 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.051 }
+        ]
+      },
+      "shape": { "prover": "alt-ergo@2.5.4", "time": 0.031 },
+      "shift": { "prover": "alt-ergo@2.5.4", "time": 0.022 }
+    },
+    "Tensor": {
+      "get": { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+      "mem": { "prover": "alt-ergo@2.5.4", "time": 0.022 }
+    }
+  }
+}
