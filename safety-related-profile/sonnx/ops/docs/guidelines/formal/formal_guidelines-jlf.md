@@ -6,25 +6,52 @@
 
 ## Table of Contents
 
+- [SONNX — Formalization Guidelines](#sonnx--formalization-guidelines)
+  - [Table of Contents](#table-of-contents)
 - [Part 1 — Formalization Styles](#part-1--formalization-styles)
-  - [1.1 — Abstract Formalization](#11-abstract-formalization)
-  - [1.2 — Concrete Formalization](#12-concrete-formalization)
-  - [1.3 — Link between the two levels](#13-link-between-the-two-levels)
+  - [1.1 Abstract Formalization](#11-abstract-formalization)
+    - [Tensor](#tensor)
+    - [Specification Style](#specification-style)
+    - [Importance of this level](#importance-of-this-level)
+  - [1.2 Concrete Formalization](#12-concrete-formalization)
+    - [Tensor](#tensor-1)
+    - [Specification Style](#specification-style-1)
+    - [Importance of this level](#importance-of-this-level-1)
+  - [1.3 Link between the two levels](#13-link-between-the-two-levels)
+    - [Why is it important to have two levels?](#why-is-it-important-to-have-two-levels)
 - [Part 2 — Guidelines for Abstract Formalization](#part-2--guidelines-for-abstract-formalization)
-  - [2.1 — Module Structure](#21-module-structure)
-  - [2.2 — Function Declarations](#22-function-declarations)
-  - [2.3 — Contracts on the Main Function](#23-contracts-on-the-main-function)
-  - [2.4 — Data Function Pattern](#24-data-function-pattern)
-  - [2.5 — Operator tensor types](#25-operator-tensor-types)
+  - [2.1. Module Structure](#21-module-structure)
+  - [2.2 Function Declarations](#22-function-declarations)
+    - [2.2.1 Termination and Variants](#221-termination-and-variants)
+    - [2.2.2 Verification Conditions and Requires Clauses](#222-verification-conditions-and-requires-clauses)
+    - [2.2.3 TypeInvariant Lemmas](#223-typeinvariant-lemmas)
+    - [2.2.4 Main Operator Function](#224-main-operator-function)
+    - [2.2.5 Guidelines](#225-guidelines)
+    - [Examples](#examples)
+  - [2.3. Contracts on the Main Function](#23-contracts-on-the-main-function)
+    - [Example](#example)
+  - [2.4. Data Function Pattern](#24-data-function-pattern)
+    - [Anonymous function declaration](#anonymous-function-declaration)
+    - [Recursive dimensions constructs](#recursive-dimensions-constructs)
+    - [Examples](#examples-1)
+  - [2.5 Operator tensor types](#25-operator-tensor-types)
 - [Part 3 — Guidelines for Concrete Formalization](#part-3--guidelines-for-concrete-formalization)
-  - [3.1 — Module Structure](#31-module-structure)
-  - [3.2 — Auxiliary helper functions](#32-auxiliary-helper-functions)
-  - [3.3 — Main operator function](#33-main-operator-function)
-  - [3.4 — Invariants](#34-invariants)
-- [Part 4 — Tips, Hints and Strategies](#part-4---tips-hints-and-strategies)
-  - [4.1 — Scope Resolution](#41-scope-resolution)
-  - [4.2 — IDE Transformations and Prover Hints](#42-ide-transformations-and-prover-hints)
-  - [4.3 — How to Debug](#43-how-to-debug)
+  - [3.1. Module Structure](#31-module-structure)
+    - [3.2 Auxiliary helper functions](#32-auxiliary-helper-functions)
+    - [3.3 Main operator function](#33-main-operator-function)
+      - [3.3.1 Contracts](#331-contracts)
+    - [3.4 Invariants](#34-invariants)
+    - [Loop Invariants for Proving Data Refinement](#loop-invariants-for-proving-data-refinement)
+    - [The innermost loop](#the-innermost-loop)
+    - [The outer loops](#the-outer-loops)
+- [Part 4 - Tips, Hints and Strategies](#part-4---tips-hints-and-strategies)
+  - [4.1. Scope Resolution](#41-scope-resolution)
+  - [4.2. IDE Transformations and Prover Hints](#42-ide-transformations-and-prover-hints)
+    - [Lemma / Axiom Instantiation](#lemma--axiom-instantiation)
+    - [Instantiation via Lemma Functions](#instantiation-via-lemma-functions)
+    - [Function Unfolding](#function-unfolding)
+  - [4.3. How to Debug](#43-how-to-debug)
+    - [Reading the Logical Context](#reading-the-logical-context)
 
   
 
@@ -33,15 +60,15 @@
 ---
 
 <br>
-> (Jean-Loup) I think that the use of Why3 shall be recomended from the start and that some usefull links shall be provided for readers not familiar with Why3.
+> (Jean-Loup) I think that the use of Why3 shall be recomended from the start and that some usefull links shall be provided for readers not familiar with Why3.**Done**
 
 # Part 1 — Formalization Styles
 
 In SONNX, every operator is formalized at **two distinct levels**. 
 
-> (Jean-Loup) "is" or "must be" or "should be"?
+> (Jean-Loup) "is" or "must be" or "should be"? **done**
 > 
-> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization."
+> (Jean-Loup) To name the levels ": Abstract formalization and concrete formalization." **done**
 
 Each level serves a different purpose and follows a different style. 
 
@@ -61,7 +88,7 @@ No implementation details should be present at this level, which means that the 
             This means that the specifier should be as generic as possible when defining an operator. <br>
             More details in - [2.5 - Operator tensor types](#25-operator-tensor-types).
 
-  > (Jean-Loup) I have no idea of what a specifier is. Depending on the targeted reader the term should be defined.
+  > (Jean-Loup) I have no idea of what a specifier is. Depending on the targeted reader the term should be defined. **done**
 
 - **Representation**: Tensors are represented as structures containing the following records:
 
@@ -69,13 +96,13 @@ No implementation details should be present at this level, which means that the 
 
   - `data` - A map from coordinates to values
  
-    > (Jean-Loup) May be valid coordinates or in-bounds coordinates instead of just coordinates. "coordinates" seems to be equal to "tensor index". If it is the case, a link to tensor index should be added.
+    > (Jean-Loup) May be valid coordinates or in-bounds coordinates instead of just coordinates. "coordinates" seems to be equal to "tensor index". If it is the case, a link to tensor index should be added. **done**
 
   - `background` - The default value for out-of-bounds coordinates
 
 - **Type Invariants**: There are two important invariants that must be satisfied by this tensor representatio:
 
-  > (Jean-Loup) "representatio" <- "representation"
+  > (Jean-Loup) "representatio" <- "representation" **done**
 
   1. **Positive Dimensions**
     
@@ -95,7 +122,7 @@ No implementation details should be present at this level, which means that the 
         ```
       - `invariant { positive dims }`
     
-  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil (Even if I intuitively understand...). There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates? May be the begining of the guidelines should indicate that Why3 should be used and that the reader should first be familiarized with Why3.
+  > (Jean-Loup) Indicate this is Why3 code in the text. Looking at https://why3.gitlabpages.inria.fr/why3/syntaxref.html , I can't find a definition of Cons and Nil (Even if I intuitively understand...). There is only list and forest examples using Cons and Nil. Are Cons and Nil defined by other predicates? May be the begining of the guidelines should indicate that Why3 should be used and that the reader should first be familiarized with Why3. **done**
 
   2. **Valid values**
   
@@ -121,7 +148,7 @@ No implementation details should be present at this level, which means that the 
   
   For example, while computing the data of the tensor it is **highly recommended** to use the predicate `valid`, essentially to capture and pass the invariant.
 
-  > (Jean-Loup) Are the predicates positive and valid in a Why3 library? If it is the case, inclusion of the library should be recomended to avoid copy errors.
+  > (Jean-Loup) Are the predicates positive and valid in a Why3 library? If it is the case, inclusion of the library should be recomended to avoid copy errors. **done**
 
 ### Specification Style
 
@@ -129,7 +156,7 @@ Throughout this level, the specification should be carried out in a **purely fun
 
 Looping constructs are forbidden at this level, and instead, **recursive functions** and **mathematical constructs** should be used to define the behavior of the operator.
 
-> (Jean-Loup) The concept of mathematical construct should be defined.
+> (Jean-Loup) The concept of mathematical construct should be defined. **done**
 
 ### Importance of this level
 
@@ -159,7 +186,7 @@ It describes it based on a **target C representation** for tensors called **cten
 
 Note that, unlike the previous level, here the tensors are defined based on a concrete target representation - tensors are essentially flat arrays in memory. 
 
-> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures". May be it should be "target C representation" or "C built in concrete representation".
+> (Jean-Loup) I guess it depends on what is meant by "concrete representation". Asking to ChatGPT the first answer is "yes lists and maps are concrete data structures". May be it should be "target C representation" or "C built in concrete representation".**done**
 
 Moreover, there is no `background` value in this representation - **tensors entries must be accessed only in valid coordinates** (i.e., coordinates that are within the bounds of the tensor shape).
 
@@ -171,7 +198,7 @@ Throughout this level, the specification should be carried out in an **imperativ
 
 It provides the necessary details to extract executable C code and reason about memory, bounds, and machine integers.
 
-> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.
+> (Jean-Loup) I think the information in sub-sections "Importance of this level" for abstract and concrete representations should be given at the begining, i.e. before 1.1.**done**
 
 ## 1.3 Link between the two levels
 
@@ -245,9 +272,9 @@ We can have any of the following function signatures:
 
 Ideally, according to Loïc's proposal, **at the abstract level** we should only declare function with the signature `function` and no contracts (`requires` / `ensures`) for auxiliary functions should be used.
 
-> (Jean-Loup) To remove "according to Loïc's proposal". May be describe shortly the proposal.
+> (Jean-Loup) To remove "according to Loïc's proposal". May be describe shortly the proposal. **done**
 >
-> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.
+> (Jean-Loup) I don't understand why an abstract formalization of a specification cannot be a predicate using "Cons" + an invariant.**done**
 
 However, this happens to be not always possible.
 
@@ -286,7 +313,7 @@ However, `function` **does not support contracts** and therefore **variants** ar
 end
 ```
 
-> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"?
+> (Jean-Loup) In the why3 Langage Reference it is written "Recursive program functions must be defined using let rec." and some examples don't use the keyword "function". Is it possible to have only "let rec summation"? Is there a difference between "let rec" and "let rec function"? **Done**
 
 ### 2.2.2 Verification Conditions and Requires Clauses
 

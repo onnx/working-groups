@@ -1,9 +1,11 @@
-#### 2025/06/25
+#### 2025/07/10
+- Mise à jour des guidelines
 
+#### 2025/06/25
 - [X] Faire mail Loïc pour améliorer l'approche formelle [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
   - Voir demande à Loïc par mail du 25/06
-- [ ] Prendre en compte les remarques de J-L dans les guidelines "spécification formelle" [project::[[SONNX]]] [assignee::[[FARGES Jean-Loup]]] ➕ 2026-06-25 
-- [ ] Discriminer les opérateurs en fonction du domaine. [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
+- [X] Prendre en compte les remarques de J-L dans les guidelines "spécification formelle" [project::[[SONNX]]] [assignee::[[FARGES Jean-Loup]]] ➕ 2026-06-25 
+- [X] Discriminer les opérateurs en fonction du domaine. [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
 	- Par ex., pour l'addition:  $+$ dans les nombres réels, $+_{int8}$ en int8, etc. 
 - [ ] Refaire mapping ED324 - SONNX avant sollicitation WG114  [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
 - [ ] Clarifier / systématiser l'approche de factorisation des specs informelles (voir par ex. **MaxPool**). [project::[[SONNX]]] [assignee::[[JENN Eric]]] ➕ 2026-06-25 
