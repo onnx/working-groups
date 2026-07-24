@@ -446,7 +446,7 @@ Candidate values:
 
 `T` in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
 
-Constrain output types to float tensors.
+Constrain output types to all tensor types.
 
 Should be `INT64`.
 
@@ -532,7 +532,7 @@ Constrain to any tensor type. If the `dtype` attribute is not provided, this mus
 
 **T2** in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
 
-Constrain output types to float tensors.
+Constrain output types to any tensor type.
 
 ---
 
