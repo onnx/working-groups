@@ -418,11 +418,6 @@ The data type is specified by the `dtype` argument. The `dtype` argument must be
 | **low** | `T` | Lower boundary of the output values. |
 | **shape** | `INTS` (required) | The shape of the output tensor. |
 
-Candidate values:
-
-- `uniform_float`
-- `raw_bits`
-
 ---
 
 ### Inputs
@@ -444,11 +439,9 @@ Candidate values:
 
 ### Type Constraints
 
-`T` in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
+**T** in (`tensor(bfloat16)`, `tensor(bool)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`, `tensor(int16)`, `tensor(int32)`, `tensor(int64)`, `tensor(int8)`, `tensor(uint16)`, `tensor(uint32)`, `tensor(uint64)`, `tensor(uint8)`):
 
-Constrain output types to all tensor types.
-
-Should be `INT64`.
+Constrain to any non-complex numerical tensor type.
 
 ---
 
@@ -530,9 +523,9 @@ This updated version removes the `seed` attribute and instead uses an explicit `
 
 Constrain to any tensor type. If the `dtype` attribute is not provided, this must be a valid output type.
 
-**T2** in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
+**T2** in (`tensor(bfloat16)`, `tensor(bool)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`, `tensor(int16)`, `tensor(int32)`, `tensor(int64)`, `tensor(int8)`, `tensor(uint16)`, `tensor(uint32)`, `tensor(uint64)`, `tensor(uint8)`):
 
-Constrain output types to any tensor type.
+Constrain to any non-complex numerical tensor type.
 
 ---
 
@@ -612,7 +605,7 @@ This updated version removes the `seed` attribute and instead uses an explicit `
 
 **T** in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
 
-Constrain output types to any tensor type.
+Constrain output types to any floating point tensor type.
 
 ---
 
@@ -698,7 +691,7 @@ Constrain to any tensor type. If the `dtype` attribute is not provided, this mus
 
 **T2** in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
 
-Constrain output types to float tensors.
+Constrain output types to any floating point tensor type.
 
 ---
 
