@@ -612,7 +612,7 @@ This updated version removes the `seed` attribute and instead uses an explicit `
 
 **T** in (`tensor(bfloat16)`, `tensor(double)`, `tensor(float)`, `tensor(float16)`):
 
-Constrain output types to float tensors.
+Constrain output types to any tensor type.
 
 ---
 
