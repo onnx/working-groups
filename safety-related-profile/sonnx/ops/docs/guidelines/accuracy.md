@@ -100,7 +100,7 @@ Here is a list of possible verification methods that can be combined:
 ## Error Propagation
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{propag}}$,
-the propagated error, where $Y$ is the tensor result of an operator.
+the propagated error, where $C$ is the tensor result of an operator.
 
 **This section is for information**: the propagated error is not part of
 the SONNX accuracy specification since it is completly independent from the
@@ -263,7 +263,7 @@ The mathematical definition specified in the
 the operator is given hereafter .
 
 $$
-  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
+  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad C[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
 $$
 
 with $p = dA_1 = dB_0$, $n = dA_0$, $q = dB_1$.
@@ -422,7 +422,7 @@ following methodology. Here is how we build the first specification
 ## Error Introduction with non-Ideal Operators
 
 This section contains tight properties of $Y_{\textit{err}}^{\textit{intro}}$,
-the introduced error, where $Y$ is the tensor result of an operator.
+the introduced error, where $C$ is the tensor result of an operator.
 The objective is to provide a specification over the actual implementation of
 an operator. Hence
 
@@ -520,7 +520,7 @@ The mathematical definition specified in the
 the operator is given hereafter .
 
 $$
-  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad Y[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
+  \forall i \in [0, dA_0 - 1], \forall j \in [0, dB_1 - 1] \quad C[i,j] = \sum_{k=0}^{dA_1-1} A[i,k]\times B[k,j]
 $$
 
 with $p = dA_1 = dB_0$, $n = dA_0$, $q = dB_1$.
