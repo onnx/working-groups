@@ -1,6 +1,19 @@
 # Numerical Accuracy
 
+The numerical accuracy of `Div` is defined by the propagated error and the
+introduced error.
+
 $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
+
+Any SONNX-compliant implementation of `Div` shall provide sound bounds for the
+introduced error. The propagated error defined below comes from the [SONNX informal
+specification](div.md).
+
+$$
+C[i] = A[i]/B[i]
+$$ 
+If $B[i] \neq 0$ otherwise $C[i]$ is not defined. 
+
 
 ## Error Propagation - for information - see [guidelines](../../../docs/guidelines/accuracy.md#error-propagation)
 
@@ -8,11 +21,10 @@ This section contains tight properties of $C_{\textit{err}}^{\textit{propag}}$, 
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\textit{err}}$). For $C = A/B$, the propagated error $C_{\textit{err}}^{\textit{propag}}$ combines contributions from both $A$ and $B$:
 
 - For every $I$ such that $B[I] \neq 0$ and $B[I]$ does not cross zero under perturbation:
-  - $|C_{\textit{err}}^{\textit{propag}}[I]| \le \left|\frac{A_{\textit{err}}[I]}{B[I]}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2}\right| + \mathcal{O}\left(\max(|A_{\textit{err}}[I]|, |B_{\textit{err}}[I]|)^2\right)$
-
-- The complete definition of $\mathcal{O}\left(\max(|A_{\textit{err}}[I]|, |B_{\textit{err}}[I]|)^2\right)$
-  is available in the [guidelines](../../../docs/guidelines/accuracy.md#error-propagation).  
-- If $B[I]$ and $B[I] + B_{\textit{err}}[I]$ have different signs, the bound may be unbounded (division by a near-zero denominator).
+  - $C_{\textit{err}}^{\textit{propag}}[I] = \left|\frac{A_{\textit{err}}[I]}{B[I]}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2}\right| + \mathcal{O}\left(\max(|A_{\textit{err}}[I]|, |B_{\textit{err}}[I]|)^2\right)$  
+  - $C_{\textit{err}}^{\textit{propag}}[I] = \frac{A_{\textit{err}}[I]\cdot B[I] - B_{\textit{err}}[I]\cdot A[I]}{B[I]^2\cdot(\cdot(B[I] + B_{\textit{err}}[I])}$  
+  - $C_{\textit{err}}^{\textit{propag}}[I] = \frac{A_{\textit{err}}[I]}{B[I]} - \frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2} - \frac{A_{\textit{err}}[I]\cdot B_{\textit{err}}[I]\cdot B[i] -  B_{\textit{err}}[I]^2\cdot A[i]}{B[I]^2\cdot (B[I] + B_{\textit{err}}[I])}$  
+  - $|C_{\textit{err}}^{\textit{propag}}[I]| \leq \left|\frac{A_{\textit{err}}[I]}{B[I]^2\cdot(\cdot(B[I] + B_{\textit{err}}[I])}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]\cdot (B[I] + B_{\textit{err}}[I])}\right|$  
 
 ## Error Introduction (real)
 
@@ -25,7 +37,10 @@ Error introduction for real (ideal) arithmetic is null:
 Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
 for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$.
 
-Floating-point division introduces rounding error bounded by $|C[i]|\times\textit{\bf u}$
+According to the IEEE-754 standard, division $c=a/b$ is implemented as rounding
+the infinite-precision result to the nearest floating-point number in the 
+mode round to nearest even, i.e.  $\hat{c}=round(a/b)$. As a result, the
+rounding (introduced) error is bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
 a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$).
 
@@ -35,9 +50,9 @@ a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|
 
 where int is in {int8, int16, int32, int64, uint8, uint16, uint32, uint64}.
 
-Error introduction for int arithmetic is less than 1:
+Error introduction for int arithmetic is less than 0.5:
 
-- $|C_{\textit{err}}^{\textit{intro}}| < [1]$.
+- $|C_{\textit{err}}^{\textit{intro}}| < [0.5]$.
 
 Division by zero remains undefined and shall be prevented by input constraints.
 
@@ -60,14 +75,28 @@ auto result = [&A,&B](auto I) {
       /* undefined */ SymbolicDomainError::undef();
 };
 
-for (auto I : A.indexes()) {
-   auto a = A[I];
-   auto b = B[I];
-   if (b.real != 0 && b.real + b.err != 0) {
-      auto c = result(I);
-      double bound = std::abs(a.err / b.real) +
-        std::abs(a.real * b.err / (b.real * b.real));
-      assert(std::abs(c.err) <= bound + 1e-12);
+void init() { // initialization with a default scenario
+  for (auto I : A.indexes()) {
+    A[I] = BETWEEN(-MAX, +MAX); // no error for A
+    B[I] = BETWEEN(-MAX, +MAX); // no error for B
+  }
+}
+
+template <std::floating_type T>
+Real getSpecError(T val) { return std::abs(val.real)*std::numeric_limits<T>::epsilon/2.0; }
+
+template <std::integral T>
+Real getError(T val) { return 0.5; }
+
+int main() {
+   init();
+   for (auto I : A.indexes()) {
+      auto a = A[I];
+      auto b = B[I];
+      if (b != 0) {
+         auto c = result(I);
+         assert(std::abs(c.err) <= getSpecError(c));
+      }
    }
 }
 ```

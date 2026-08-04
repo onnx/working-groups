@@ -3,6 +3,7 @@
 $C_{\textit{err}} = C_{\textit{err}}^{\textit{propag}} + C_{\textit{err}}^{\textit{intro}}$.
 
 **[EM: I would say something prescriptive like "Any SONNX-compliant implementation of Div shall provide sound error propagation bounds in the form outlined above. In the remainder of the document, we show how to manually compute such bounds."]**
+**[FV: Corrected with reminders to the guideline and the div informal specification]**
 
 **[EM: for consistency, we use $Y$ instead of $C$ in other accuracy guidelines]**
 
@@ -16,7 +17,9 @@ Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\t
 
 - The complete definition of $\mathcal{O}\left(\max(|A_{\textit{err}}[I]|, |B_{\textit{err}}[I]|)^2\right)$
   is available in the [guidelines](../../../docs/guidelines/accuracy.md#error-propagation). **[EM: the guidelines only show the single-variable version of the second-order term. In particular, it is not clear whence the $\max$ operator is derived from.]**
+  **[FV: $\mathcal{O}$ removed and 4 formulas has been exposed among the 6 possible described in the guidelines]  
 - If $B[I]$ and $B[I] + B_{\textit{err}}[I]$ have different signs, the bound may be unbounded (division by a near-zero denominator). **[EM: isn't the unboundedness condition regulated by $B[I]-B_{\textit{err}}[I]$ rather than $B[I]$?]**
+  **[FV: removed sentence since the error formula are valid for any error. The remark would have been valid for $B_{\textit{err}}[I]$ in an interval; but, here, we reason with a symbolic (single) error, so the original bullet point is not relevant]
 
 ## Error Introduction (real)
 
@@ -31,7 +34,11 @@ for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$.
 
 Floating-point division introduces rounding error bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
-a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$). **[EM: add rationale, e.g. "according to the IEEE-754 standard, division $c=a/b$ is implemented as rounding the infinite-precision result to the nearest floating-point number, i.e. $\hat{c}=round(a/b)$. As a result, the rounding error is..."]**
+a normal number (or for any normal number greater or equal than
+$\frac{|A[I]|}{|B[I]|}$). **[EM: add rationale, e.g. "according to the IEEE-754
+standard, division $c=a/b$ is implemented as rounding the infinite-precision
+result to the nearest floating-point number, i.e. $\hat{c}=round(a/b)$. As a
+result, the rounding error is..."]**
 
 - $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{|A[I]|}{|B[I]|}\times\textit{\bf u}$.
 
@@ -70,6 +77,9 @@ for (auto I : A.indexes()) {
    auto a = A[I];
    auto b = B[I];
    if (b.real != 0 && b.real + b.err != 0) { // WRONG CONDITION? SEE NEXT LINE FOR SUGGESTIONS
+      // [FV: If the error verification is symbolic, the previous condition may be adequate for the scenario]
+      // [FV: The new condition is a good one for a verification by Abstract Interpretation with convex domains]
+      // [FV: I propose to remove any error for the input, since the unit verification only concerns the error introduction]
    // if (b.real - std::abs(b.err) > 0 || b.real + std::abs(b.err) < 0) {
       auto c = result(I);
       double bound = std::abs(a.err / b.real) +
