@@ -21,10 +21,9 @@ This section contains tight properties of $C_{\textit{err}}^{\textit{propag}}$, 
 Let tensors of numerical errors be denoted by subscripts “err” (e.g., $A_{\textit{err}}$). For $C = A/B$, the propagated error $C_{\textit{err}}^{\textit{propag}}$ combines contributions from both $A$ and $B$:
 
 - For every $I$ such that $B[I] \neq 0$ and $B[I]$ does not cross zero under perturbation:
-  - $C_{\textit{err}}^{\textit{propag}}[I] = \left|\frac{A_{\textit{err}}[I]}{B[I]}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2}\right| + \mathcal{O}\left(\max(|A_{\textit{err}}[I]|, |B_{\textit{err}}[I]|)^2\right)$  
-  - $C_{\textit{err}}^{\textit{propag}}[I] = \frac{A_{\textit{err}}[I]\cdot B[I] - B_{\textit{err}}[I]\cdot A[I]}{B[I]^2\cdot(\cdot(B[I] + B_{\textit{err}}[I])}$  
+  - $C_{\textit{err}}^{\textit{propag}}[I] = \frac{A_{\textit{err}}[I]\cdot B[I] - B_{\textit{err}}[I]\cdot A[I]}{B[I]^2\cdot(B[I] + B_{\textit{err}}[I])}$  
   - $C_{\textit{err}}^{\textit{propag}}[I] = \frac{A_{\textit{err}}[I]}{B[I]} - \frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]^2} - \frac{A_{\textit{err}}[I]\cdot B_{\textit{err}}[I]\cdot B[i] -  B_{\textit{err}}[I]^2\cdot A[i]}{B[I]^2\cdot (B[I] + B_{\textit{err}}[I])}$  
-  - $|C_{\textit{err}}^{\textit{propag}}[I]| \leq \left|\frac{A_{\textit{err}}[I]}{B[I]^2\cdot(\cdot(B[I] + B_{\textit{err}}[I])}\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]\cdot (B[I] + B_{\textit{err}}[I])}\right|$  
+  - $|C_{\textit{err}}^{\textit{propag}}[I]| \leq \frac{1}{|B[I]|\cdot |B[I] + B_{\textit{err}}[I]|} \times\left(\left|A_{\textit{err}}[I]\right| + \left|\frac{A[I]\cdot B_{\textit{err}}[I]}{B[I]}\right|\right)$  
 
 ## Error Introduction (real)
 
@@ -35,7 +34,8 @@ Error introduction for real (ideal) arithmetic is null:
 ## Error Introduction (IEEE-754 floating-point)
 
 Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
-for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$.
+for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$. Let us also define
+$\textit{min\_norm}$ the minimal normalized number for the considered format.
 
 According to the IEEE-754 standard, division $c=a/b$ is implemented as rounding
 the infinite-precision result to the nearest floating-point number in the 
@@ -44,7 +44,7 @@ rounding (introduced) error is bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
 a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$).
 
-- $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{|A[I]|}{|B[I]|}\times\textit{\bf u}$.
+- $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \textit{\bf u}\times\max\left(\frac{|A[I]|}{|B[I]|}, \textit{min\_norm}\right)$.
 
 ## Error Introduction (int)
 
@@ -66,7 +66,7 @@ This section contains a verification scenario to verify the above specification 
 - The `rel_err` field is a symbolic abstract domain for the relative error, that is the difference between the possible values of `float` and `real` divided by `real`.
 
 ```c++
-Tensor<SymbolicDomainError> A, B;
+Tensor<TSymbolicDomainError<...>> A, B;
 
 /* A, B symbolic initialization */
 
@@ -82,11 +82,15 @@ void init() { // initialization with a default scenario
   }
 }
 
+template <typename T>
+Real getSpecError(T val) { return Real(); }
+
 template <std::floating_type T>
-Real getSpecError(T val) { return std::abs(val.real)*std::numeric_limits<T>::epsilon/2.0; }
+Real getSpecError(const TSymbolicDomainError<T>& val)
+   { return std::abs(val.real)*std::numeric_limits<T>::epsilon/2.0; }
 
 template <std::integral T>
-Real getError(T val) { return 0.5; }
+Real getSpecError(const TSymbolicDomainError<T>& val) { return 0.5; }
 
 int main() {
    init();

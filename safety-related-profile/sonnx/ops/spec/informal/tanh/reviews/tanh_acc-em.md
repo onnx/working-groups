@@ -2,7 +2,13 @@
 
 $Y_{\textit{err}} = Y_{\textit{err}}^{\textit{propag}} + Y_{\textit{err}}^{\textit{intro}}$.
 
-**[EM: also, I would say something prescriptive like "Any SONNX-compliant implementation of TanH shall provide sound error propagation bounds in the form outlined above. In the remainder of the document, we show how to manually compute such bounds for a naive reference implementation of TanH. More precise implementations exist, but the derivation of their bounds is left to the implementor."]**
+**[EM: also, I would say something prescriptive like "Any SONNX-compliant
+implementation of TanH shall provide sound error propagation bounds in the form
+outlined above. In the remainder of the document, we show how to manually
+compute such bounds for a naive reference implementation of TanH. More precise
+implementations exist, but the derivation of their bounds is left to the implementor."]**
+**[FV: First comment taken into account. Second comment dispatched in the note algorithm
+and in the introduced error section]**
 
 ## Note Algorithm
 Tanh is subject to exponent overflow when evaluating large positive exponents (e.g. exp(2X) for very positive values of X).
@@ -20,6 +26,10 @@ else
 - https://people.cs.rutgers.edu/~sn349/rlibm/
 
 **[EM: all of these would provide smaller error than the above naive implementation. Are we mandating the naive implementation? If not, is the above intended as a general warning for those interested in using the naive implementation? AFAIK, many CPU/GPU provide assembly-level support for some elementary functions (including TanH). Are those allowed (as long as we can estimate the error they introduce)?]**
+**[FV: Added; A SONNX-compliant implementation should prove that it respects these bounds
+for the introduced error or exhibit a correct additional reasonable factor
+in the formula of the introduced error. The idea is that the implemetor provides
+here a specification to be used to roughly estimate a sound accuracy of a graph containing the `Tanh` component]**
 
 ## Error Propagation - for information - see [guidelines](../../../docs/guidelines/accuracy.md#error-propagation)
 
@@ -40,6 +50,8 @@ This operator does not amplify the initial error.
 
 **[EM: indeed, for most inputs, it reduces it. Is there a specific reason behind the desire to simplify the above to $|Y_{err}|\leq |X_{err}|$ instead of keeping the whole first-order term $|Y_{err}|\leq|1-\tanh^2(X)|\cdot|X_{err}|$? The latter will be much smaller.]**
 
+**[FV: found sound formula for the propagated error providing different bounds for different cases (small error)]**
+
 ## Error Introduction (real)
 
 Error introduction for real (ideal) arithmetic is null:
@@ -52,10 +64,13 @@ Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/
 for the considered format and $\textit{\textbf{u}} = \frac{\varepsilon}{2}$.
 
 The accuracy of the implementation relies of the accuracy of the `exp` available function. **[EM: hard disagree, unless we are mandating a specific naive implementation. See above comment on correctly-rounded libm.]**
+**[FV: ok to provide different formula - the implementor should provide the evaluation framework
+(correctly rounded, machine-epsilon accuracy, implementation relative to a naïve exp implementation, ...)]**
 We can consider that this function has a $2\varepsilon$ accuracy in the interval $[-1, 0]$.
 With the properties $e^{2x} = (e^x)^2$ and $e^{-x} = \frac{1}{e^x}$, the relative
 accuracy of `exp` for any number in $[-2^n, -1]$ can be bound by $(2+n/2)\varepsilon$ if the result
-is a normal number **[EM: the derivation of the value $(2+n/2)$ is unclear, as well as all the mathematical statements below]**.  Here is a possible definition of $\textit{err}_{\textit{rel}}(\exp(x))$
+is a normal number **[EM: the derivation of the value $(2+n/2)$ is unclear, as well as all the mathematical statements below]**.  Here is a possible definition of $\textit{err}_{\textit{rel}}(\exp(x))$. **[FV: reference to the Exp operator,
+to be completed]**
 
 $$\begin{array}{rcl}
   \textit{err}_{\textit{rel}}(\exp(x)) & = & 2\varepsilon \textit{ if } x\in [-1, 0] \\
@@ -65,7 +80,7 @@ $$\begin{array}{rcl}
   \end{array}$$
 
 Nevertheless, any implementor can claim a better precision for this function. In such a case,
-it should adapt the formula below to show that the `tanh` operator verifies it.**[EM: after a few minutes of thinking, I presume the below can be used by "plugging in" a custom definition of $err_{rel}(\exp(x))$? If that is correct, we should be more explicit about it. Also, some implementations (e.g. based on polynomial approximation) might yield a direct guarantee on $Y_{err}$ that does not rely on $\exp$.]**
+it should adapt the formula below to show that the `tanh` operator verifies it.**[EM: after a few minutes of thinking, I presume the below can be used by "plugging in" a custom definition of $err_{rel}(\exp(x))$? If that is correct, we should be more explicit about it. Also, some implementations (e.g. based on polynomial approximation) might yield a direct guarantee on $Y_{err}$ that does not rely on $\exp$.]** **[FV: yes, it was the intent. I reformulate it.]**
 
 $$\begin{array}{rcl}
   |Y_{\textit{err}}^{\textit{intro}}[I]| & \leq & 
@@ -92,7 +107,7 @@ else
 ```
 
 The bounds are tighter than the following computations **[EM: but we said at the beginning that this implementation can overflow! Should we not exclude it?]**
-
+**[FV: It can underflow, but not overflow. In case of underflow, the result is 1 or -1 and the error is very tight]**
 ```
     Y = (exp(2X) - 1) / (exp(2X) + 1)
 ```
@@ -132,6 +147,7 @@ $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-
 
 An implementation can nevertheless use one of these algorithm and verify the adequate accuracy formula, but it should motivate its choice.
 Note that the test `if X < 0` may induce some timing penalties for some architecture and the following implementation avoids it **[EM: not really, we just hide the branch inside the abs operator.]**
+**[FV: example removed to avoid the confusion]**
 
 ```
     Y = (1 - exp(-2*abs(X)) / (1 + exp(-2*abs(X)))
