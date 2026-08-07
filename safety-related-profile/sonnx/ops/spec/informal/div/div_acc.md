@@ -38,7 +38,11 @@ $\textit{min-normalized}$ the minimal normalized number for the considered forma
 
 According to the IEEE-754 standard, division $c=a/b$ is implemented as rounding
 the infinite-precision result to the nearest floating-point number in the 
-mode round to nearest even, i.e. $\hat{c}=round(a/b)$ . As a result, the
+mode round to nearest even, i.e.
+
+$$\hat{c}=round(a/b)$$
+
+As a result, the
 rounding (introduced) error is bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
 a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$).
