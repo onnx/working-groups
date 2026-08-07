@@ -141,7 +141,7 @@ else
 
 Let us now compare the specification with another reference algorithm.
 To avoid overflows in this algorithm, we arbitrarily restrict the inputs between
-$[$`numeric_limits<T>::lowest()`$, 10^7]$.
+$[$ `numeric\_limits<T>::lowest()` $, 10^7]$.
 
 ```
     Y = (exp(2X) - 1) / (exp(2X) + 1)
@@ -156,7 +156,7 @@ $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}$$
 
 For the following reference algorithm, whose inputs are arbitrarily restricted to
-$[-10^7, $ `numeric_limits<T>::highest()`$]$
+$[-10^7, $ `numeric\_limits<T>::highest()` $]$
 
 ```
     Y = (1 - exp(-2X)) / (1 + exp(-2X))
