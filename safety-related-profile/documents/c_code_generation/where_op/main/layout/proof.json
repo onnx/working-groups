@@ -1,0 +1,39 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 33, "time": 0.865 },
+    { "prover": "cvc5@1.2.1", "size": 42, "time": 0.492 },
+    { "prover": "alt-ergo@2.5.4", "size": 16, "time": 0.171 }
+  ],
+  "proofs": {
+    "CFlat": {
+      "index_of_offset": { "prover": "cvc5@1.2.1", "time": 0.055 },
+      "index_range": { "prover": "alt-ergo@2.5.4", "time": 0.197 },
+      "offset_of_index": { "prover": "alt-ergo@2.5.4", "time": 0.343 },
+      "offset_push": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.075 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 1.6 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.049 }
+            ]
+          }
+        ]
+      },
+      "offset_size": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.017 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "z3@4.13.4", "time": 0.02 },
+          { "prover": "cvc5@1.2.1", "time": 0.137 }
+        ]
+      }
+    }
+  }
+}

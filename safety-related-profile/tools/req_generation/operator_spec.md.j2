@@ -1,0 +1,131 @@
+Generated on: {{ generation.date }}
+
+# Contents
+
+{% for item in contents -%}
+- {{ item.label }}
+{% endfor %}
+
+Based on ONNX documentation [{{ document.operator }} version {{ document.onnx.version }}]({{ document.onnx.url }}).
+
+{% for variant in variants %}
+{% if not loop.first %}
+---
+{% endif %}
+
+<a id="{{ variant.datatype }}"></a>
+# {{ variant.title }}
+
+{% set type_note = variant.get("type_note", "") %}
+{% if type_note %}
+{{ type_note }}
+
+{% endif %}
+## Signature
+
+{{ variant.signature.expression }}
+
+where:
+{% for arg in variant.signature.inputs %}
+- ${{ arg.name }}$ ({{ arg.type }}): {{ arg.role }}
+{% endfor %}
+{% for out in variant.signature.outputs %}
+- ${{ out.name }}$ ({{ out.type }}): {{ out.role }}
+{% endfor %}
+
+## Restrictions
+
+[General restrictions]({{ document.general_restrictions_path }}) are applicable.
+
+{% if variant.restrictions.specific %}
+{% for restriction in variant.restrictions.specific %}
+- {{ restriction }}
+{% endfor %}
+{% else %}
+No specific restrictions apply to the **{{ document.operator }}** operator.
+{% endif %}
+
+## Function
+
+{% for req in variant.function.requirements %}
+<a id="{{ req.req_id }}"></a>
+<span style="background: red; color: white; font-size:0.7em;">[{{ req.req_id }}]</br></span>
+{{ req.text }}
+
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
+{% endfor %}
+
+{% set examples = variant.get("examples", []) %}
+{% if examples %}
+The effect of the operator is illustrated on the following examples.
+
+{% for example in examples %}
+### {{ example.title }}
+
+{{ example.body }}
+{% endfor %}
+{% endif %}
+
+## Error conditions
+
+{% set error_conditions = variant.get("error_conditions", []) %}
+{% if error_conditions %}
+{% for condition in error_conditions %}
+- {{ condition }}
+{% endfor %}
+{% else %}
+No error condition.
+{% endif %}
+
+## Attributes
+
+{% set attributes = variant.get("attributes", []) %}
+{% if attributes %}
+{% for attr in attributes %}
+### {{ attr.name }}
+
+{{ attr.role }}
+{% endfor %}
+{% else %}
+Operator **{{ document.operator }}** has no attribute.
+{% endif %}
+
+## Inputs
+
+{% for arg in variant.signature.inputs %}
+### $\text{ {{- arg.name -}} }$: {{ arg.type }}
+
+{{ arg.role }}
+
+{% set arg_constraints = variant.constraints.get(arg.name, []) %}
+{% if arg_constraints %}
+#### Constraints
+
+{% for constraint in arg_constraints %}
+<a id="{{ constraint.req_id }}"></a>
+- `[{{ constraint.req_id }}]` {{ constraint.title }}
+  - Statement: {{ constraint.statement | indent(4) }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+## Outputs
+
+{% for out in variant.signature.outputs %}
+### $\text{ {{- out.name -}} }$: {{ out.type }}
+
+{{ out.role }}
+
+{% set out_constraints = variant.constraints.get(out.name, []) %}
+{% if out_constraints %}
+#### Constraints
+
+{% for constraint in out_constraints %}
+<a id="{{ constraint.req_id }}"></a>
+- `[{{ constraint.req_id }}]` {{ constraint.title }}
+  - Statement: {{ constraint.statement | indent(4) }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endfor %}

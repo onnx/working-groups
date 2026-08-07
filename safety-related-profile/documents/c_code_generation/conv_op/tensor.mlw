@@ -1,0 +1,318 @@
+(** Formalization of coordinates and dimensions *)
+
+module Range
+  use int.Int
+  use std.List
+
+  function size (ds : list int) : int =
+    match ds with
+    | Nil -> 1
+    | Cons d ds -> d * size ds
+    end
+
+  predicate positive (ds : list int) =
+    match ds with
+    | Nil -> true
+    | Cons d ds -> 0 < d /\ positive ds
+    end
+
+  predicate valid (ks ds : list int) =
+    match ks , ds with
+    | Nil , Nil -> true
+    | Cons k ks , Cons d ds -> 0 <= k < d /\ valid ks ds
+    | _ -> false
+    end
+
+  let rec lemma valid_push (ks ds : list int) (k d : int)
+    requires { 0 <= k < d }
+    requires { valid ks ds }
+    ensures { valid (push ks k) (push ds d) }
+    (*proof*)
+    variant { ks }
+    = match ks , ds with
+      | Nil , Nil -> ()
+      | Cons _ ks , Cons _ ds -> valid_push ks ds k d
+      | _ -> absurd
+      end
+    (*qed*)
+
+  let rec lemma size_append (xs ys : list int)
+    ensures { size (xs ++ ys) = size xs * size ys }
+    (*proof*)
+    variant { xs }
+    = match xs with Cons _ rxs -> size_append rxs ys | Nil -> () end
+    (*qed*)
+
+  lemma size_push: forall xs x. size (push xs x) = size xs * x
+
+  let rec lemma positive_size (ds : list int)
+    requires { positive ds }
+    ensures { 0 < size ds }
+    (*proof*)
+    variant { ds }
+    = match ds with Nil -> () | Cons _ ds -> positive_size ds end
+    (*qed*)
+
+  let rec lemma positive_valid (ks ds : list int)
+    requires { valid ks ds }
+    ensures { positive ds }
+    ensures { 0 < size ds }
+    (*proof*)
+    variant { ds }
+    = match ks , ds with
+      | Cons _ ks , Cons _ ds -> positive_valid ks ds
+      | _ -> ()
+      end
+    (*qed*)
+
+end
+
+(** Formalization of Tensor *)
+module Tensor
+  use int.Int
+  use map.Map
+  use list.List
+  use Range
+
+  type data 'a = map (list int) 'a
+
+  type tensor 'a = {
+    dims : list int ;
+    data : data 'a ;
+    background : 'a ; (* default value, or value for 0-dimensions tensor *)
+  }
+  invariant { positive dims }
+  invariant { forall k. valid k dims \/ data k = background }
+  (*proof*)
+  by let d = any 'a in { dims = Nil ; data = (fun _ -> d) ; background = d }
+  (*qed*)
+
+  meta coercion function dims
+  meta coercion function data
+
+  (** Tensor with the same dimensions *)
+  predicate (~) (a : tensor 'a) (b : tensor 'b) = a.dims = b.dims
+
+  (** Tensor with the same dimensions and background value *)
+  predicate (~=) (a : tensor 'a) (b : tensor 'a) =
+    a ~ b /\ a.background = b.background
+
+  (** Equal tensors *)
+  predicate (==) (a b : tensor 'a) =
+    a ~= b /\ forall k. valid k a.dims -> a.data k = b.data k
+
+  (** Extensionality *)
+  lemma exteq: forall a b : tensor 'a. a == b <-> a = b
+  (*proof*) by tensor'eq a b (*qed*)
+
+  (** Scalar Tensor *)
+  let ghost function scalar (v : 'a) : tensor 'a
+    ensures { result.dims = Nil }
+    ensures { result.background = v }
+    ensures { forall k. result k = v }
+    (*proof*)
+    = { dims = Nil ; data = (fun _ -> v) ; background = v }
+    (*qed*)
+
+  (** Null Tensor *)
+  let ghost function zero (e : 'a) (ds : list int) : tensor 'a
+    requires { positive ds }
+    ensures { result.dims = ds }
+    ensures { result.background = e }
+    ensures { forall k. result k = e }
+    (*proof*)
+    = { dims = ds ; data = (fun _ -> e) ; background = e }
+    (*qed*)
+
+
+  (** Constant Tensor *)
+  let ghost function const (v : 'a) (bg : 'a) (ds : list int): tensor 'a
+    ensures { result.dims = ds }
+    requires { positive ds }
+    ensures { result.background = bg }
+    ensures { forall k. valid k ds -> result k = v }
+    (*proof*)
+    = { dims = ds ; data = pure { fun k -> if valid k ds then v else bg } ; background = bg }
+    (*qed*)
+
+  (** Constant & Null *)
+  goal zero_is_const: forall e : 'a, ds. positive ds -> zero e ds == const e e ds
+
+end
+
+(** OP-Where Tensor Operation *)
+module OPWhere
+  use Tensor
+
+  let ghost function dwhere (c : data bool) (a b : data 'a) : data 'a
+    = fun ks -> if c ks then a ks else b ks
+
+  let ghost function opwhere (c : tensor bool) (a b : tensor 'a) : tensor 'a
+    requires { a ~= b }
+    requires { c ~ a ~ b }
+    ensures { result ~= a ~= b }
+    ensures { result = dwhere c a b }
+    (*proof*)
+    = { dims = c.dims ; data = dwhere c.data a.data b.data ; background = a.background }
+    (*qed*)
+
+end
+
+module OPAdd
+  use Tensor
+  use int.Int
+  use real.Real
+  use std.Cfloat
+
+  let ghost function dadd (a b : data real) : data real
+    = fun ks -> a ks + b ks
+  
+
+  let ghost function opadd (a b : tensor real) : tensor real
+    requires { a ~= b }
+    ensures { result ~= a }
+    ensures { result.data = dadd a.data b.data }
+    = { dims = a.dims ;
+        data = dadd a.data b.data ;
+        background = a.background + b.background }
+
+end
+
+module OPConv2d
+  use Tensor
+  use Range
+  use int.Int
+  use real.Real
+  use std.List
+  use std.Int
+  use std.Cint
+  use list.List
+  use list.Length
+  use list.Nth
+  use std.Cfloat
+  use ref.Ref
+  
+
+
+(* ===== SECTION 1: Helper function for padding (Zero-Padding) ===== *)
+
+(** A helper function to access the padded input tensor value. *)
+(* Goal: Retrieves a value from the input tensor X, accounting for zero-padding.
+ * If the effective coordinates (x_h, x_w), after removing padding, fall outside the original tensor bounds, it returns 0.0.
+ * Inputs:
+ * x: data real - The input tensor data function.
+ * x_dims: list int - The dimensions of the input tensor X [N, C, H, W].
+ * pad_top, pad_left: int - The padding applied to the top/left of the height/width dimensions.
+ * n, c: int - Batch and input channel indices.
+ * x_h, x_w: int - The coordinates in the conceptually padded input space (derived from output position, stride, and dilation).
+ * Outputs: real - The value from the input tensor, or 0.0 if padded. *)
+  let ghost function padded_value (x : data real) (x_dims : list int)
+    (pad_top pad_left : int) (n c x_h x_w : int) : real =
+     requires { length x_dims = 4 }
+    let padded_h = x_h - pad_top in (* Convert padded index to original index *)
+    let padded_w = x_w - pad_left in (* Convert padded index to original index *)
+    let padded_ks = Cons n (Cons c (Cons padded_h (Cons padded_w Nil))) in
+    if valid padded_ks x_dims then
+      x padded_ks (* Return value if coordinates are within bounds *)
+    else
+      0.0 (* Return 0.0 if coordinates are out of bounds *)
+
+(* --- *)
+
+(* ===== SECTION 2: Data-level Convolution (Weighted Sum) ===== *)
+
+(** The main 2D convolution data operation. *)
+(* Goal: Defines the function that computes the value of a single output pixel Y[n, m, y_h, y_w].
+ * This is achieved by iterating over all input channels (c), kernel height (i), and kernel width (j), performing the dot product, and adding the bias.
+ * Inputs: Tensors (data functions) X, W, B, their dimensions, and all convolution attributes.
+ * Outputs: data real - The data function for the output tensor Y. *)
+  let ghost function dconv2d (x : data real) (x_dims : list int)
+    (w : data real) (w_dims : list int) (b : data real) (b_dims : list int)
+    (pad_top pad_bottom pad_left pad_right : int) (dil_h dil_w : int)
+    (str_h str_w : int) : data real
+    requires { length x_dims = 4 }  (* X shape: [N, C, H, W] *)
+    requires { length w_dims = 4 }  (* W shape: [M, C, kH, kW] where M=C_out *)
+    requires { length b_dims = 1 }  (* [M, C, kH, kW] *)
+    requires { get_dim x_dims 1 = get_dim w_dims 1 }  (* C_in = C_kernel *)
+    requires { get_dim w_dims 0 = get_dim b_dims 0 }  (* M = M_bias (Output Channels must match Bias size) *)
+    requires { str_h > 0 /\ str_w > 0 }
+    requires { dil_h > 0 /\ dil_w > 0 }
+    = fun yks ->  (* Input 'yks' is the output coordinate list: [n, m, y_h, y_w] *)
+        if length yks <> 4 then 0.0 else
+        let Cons n (Cons m (Cons y_h (Cons y_w Nil))) = yks in (* Destructure output coordinates *)
+        let c_in = get_dim w_dims 1 in (* Number of input channels *)
+        let kh = get_dim w_dims 2 in (* Kernel height *)
+        let kw = get_dim w_dims 3 in (* Kernel width *)
+        
+        let sum_value = ref 0.0 in (* Accumulator for the convolution sum *)
+        for c = 0 to c_in - 1 do (* Loop over input channels *)
+          invariant { true }
+          for i = 0 to kh - 1 do (* Loop over kernel height (i) *)
+            invariant { true }
+            for j = 0 to kw - 1 do (* Loop over kernel width (j) *)
+              invariant { true }
+              (* Calculate corresponding H/W coordinate in the padded input X *)
+              let x_h = y_h * str_h + i * dil_h in
+              let x_w = y_w * str_w + j * dil_w in
+              let x_val = padded_value x x_dims pad_top pad_left n c x_h x_w in (* Get padded input value *)
+              let w_coords = Cons m (Cons c (Cons i (Cons j Nil))) in
+              let w_val = w w_coords in (* Get kernel weight value *)
+              sum_value := !sum_value + (x_val * w_val) (* Accumulate the product *)
+            done
+          done
+        done;
+        let bias_coords = Cons m Nil in
+        let bias_val = b bias_coords in (* Get the bias value for output channel m *)
+        !sum_value + bias_val (* Final output value = Weighted Sum + Bias *)
+
+(* --- *)
+
+(* ===== SECTION 3: Tensor-level Convolution Operator and Shape Calculation ===== *)
+(** The tensor-level 2D convolution operator. *)
+(* Goal: Constructs the final output tensor Y, calculating its dimensions and assigning the dconv2d data function.
+ * Inputs: The three tensors X, W, B, and all convolution attributes.
+ * Outputs: tensor real - The resulting output tensor Y [N_out, C_out, H_out, W_out]. *)
+  let ghost function opconv2d (x w b : tensor real)
+    (pad_top pad_bottom pad_left pad_right : int) (dil_h dil_w : int)
+    (str_h str_w : int) : tensor real
+    requires { length x.dims = 4 }  (* [N, C, H, W] *)
+    requires { length w.dims = 4 }  (* [M, C, kH, kW] *)
+    requires { length b.dims = 1 }  (* [M] *)
+    requires { get_dim x.dims 1 = get_dim w.dims 1 }  (* C_in = C_kernel *)
+    requires { get_dim w.dims 0 = get_dim b.dims 0 }  (* M = M_bias *)
+    requires { str_h > 0 /\ str_w > 0 }
+    requires { dil_h > 0 /\ dil_w > 0 }
+    requires { pad_top >= 0 /\ pad_bottom >= 0 /\ pad_left >= 0 /\ pad_right >= 0 }
+    ensures { length result.dims = 4 }
+    ensures { get_dim result.dims 0 = get_dim x.dims 0 }  (* N_out = N_in *)
+    ensures { get_dim result.dims 1 = get_dim w.dims 0 }  (* C_out = M *)
+    (* Main ensures clause: the output data must be exactly the function dconv2d *)
+    ensures {result.data = dconv2d x.data x.dims w.data w.dims b.data b.dims 
+                     pad_top pad_bottom pad_left pad_right dil_h dil_w str_h str_w} 
+    (*proof*)
+    = let n = get_dim x.dims 0 in
+      let c_in = get_dim x.dims 1 in
+      let h_in = get_dim x.dims 2 in
+      let w_in = get_dim x.dims 3 in
+      let m_out = get_dim w.dims 0 in
+      let kh = get_dim w.dims 2 in
+      let kw = get_dim w.dims 3 in
+      
+      (* Calculate Effective Kernel Size (with dilation) *)
+      let effective_kh = (kh - 1) * dil_h + 1 in
+      let effective_kw = (kw - 1) * dil_w + 1 in
+      (* Calculate Output Height (H_out) using the convolution formula:
+       * H_out = floor((H_in + P_top + P_bottom - effective_kH) / S_h) + 1 *)
+      let out_h = (h_in + pad_top + pad_bottom - effective_kh) ./ (str_h + 1) in
+      (* Calculate Output Width (W_out) *)
+      let out_w = (w_in + pad_left + pad_right - effective_kw) ./ (str_w + 1) in
+      let output_dims = Cons n (Cons m_out (Cons out_h (Cons out_w Nil))) in
+      (* Return the final output tensor record *)
+      { dims = output_dims ;
+      data = dconv2d x.data x.dims w.data w.dims b.data b.dims 
+                     pad_top pad_bottom pad_left pad_right dil_h dil_w str_h str_w ;
+        
+        background = 0.0 }
+    
+end
+

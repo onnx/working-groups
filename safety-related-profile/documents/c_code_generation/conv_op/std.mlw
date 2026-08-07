@@ -1,0 +1,231 @@
+(* Extensions to Standard Library *)
+
+module Int
+  use export int.Int
+  use export int.Abs
+  use export int.ComputerDivision
+  use list.List
+  use list.Length
+
+  (** Unicity of euclidian division decomposition *)
+  let ghost euclide (a b q r : int)
+    requires { 0 <= a /\ 0 <= r < q }
+    requires { a = b * q + r }
+    ensures { b = div a q }
+    ensures { r = mod a q }
+    (*proof*)
+    = let rec kernel (b r : int)
+        requires { b * q + r = 0 }
+        requires { abs r < q }
+        ensures { b = r = 0 }
+        variant { abs b }
+        = if b < 0 then kernel (b + 1) (r - q) else
+          if b > 0 then kernel (b - 1) (r + q) else ()
+      in kernel (b - div a q) (r - mod a q)
+    (*qed*)
+
+  (** Multiplication upper-bound *)
+  let ghost mult_bound (a b c : int)
+    requires { 0 < a * b <= c }
+    ensures { abs a <= c }
+    ensures { abs b <= c }
+    = ()
+(** Helper function to extract element from list at given position *)
+  let rec function get_dim (dims : list int) (idx : int) : int
+    requires { 0 <= idx < length dims }
+    variant { dims }
+    = match dims with
+      | Nil -> 0  (* should not happen due to precondition *)
+      | Cons h t -> if idx = 0 then h else get_dim t (idx - 1)
+      end
+
+end
+
+module List
+  use export list.List
+  use export list.Map
+  use export list.Append
+
+  (** Appends an element to the end of the list *)
+  function push (xs : list 'a) (x : 'a) : list 'a =
+    xs ++ Cons x Nil
+
+  let rec lemma map_concat (f : 'a -> 'b) (xs ys : list 'a)
+    ensures { map f (xs ++ ys) = map f xs ++ map f ys }
+    (*proof*)
+    variant { xs }
+    = match xs with Cons _ rxs -> map_concat f rxs ys | Nil -> () end
+    (*qed*)
+
+end
+
+module Clib
+  use map.Map
+  use int.Int
+  use mach.int.Int32
+  use export mach.c.C
+
+  type int32 = Int32.int32
+  type uint32 = UInt32.uint32
+
+  val function to_uint32 (v : int32) : uint32
+    requires { 0 <= v }
+    ensures { Int32.to_int v = UInt32.to_int result }
+
+  (** Null-Pointer *)
+  val predicate is_null (vp : ptr 'a) : bool
+    ensures { result <-> vp.zone = null_zone }
+
+  (** Array-range validity *)
+  predicate valid_range (vp : ptr 'a) (p q : int) =
+    q <= p \/
+    ( 0 <= vp.min <= vp.offset /\
+      0 <= p <= q <= max_int32 /\
+      0 <= vp.min <= vp.offset + p /\
+      vp.offset + q <= vp.max <= vp.plength )
+
+  let lemma valid_in_range (vp : ptr 'a) (p k q : int)
+    (*proof*)
+    requires { p <= k < q }
+    requires { valid_range vp p q }
+    ensures { valid_ptr_shift vp k }
+    = ()
+    (*qed*)
+
+  (** Array as map *)
+  let ghost function value_at (vp : ptr 'a) : map int 'a =
+    pure { fun k -> vp.data.Array.elts (vp.offset + k) }
+
+  (** Array access (ghost) *)
+  function ([]) (vp : ptr 'a) (k : int) : 'a = value_at vp k
+
+  (** Array access (C, inlined) *)
+  let ([]) (vp : ptr 'a) (k : int32) : 'a
+    (*proof*)
+    requires { vp.min <= vp.offset + k < vp.max }
+    ensures { result = vp[k] }
+    = get_ofs vp k
+    (*qed*)
+
+  (** Array update (C, inlined) *)
+  let ([]<-) (vp : ptr 'a) (k : int32) (v : 'a) : unit
+    requires { writable vp }
+    requires { vp.min <= vp.offset + k < vp.max }
+    ensures { value_at vp = Map.([<-]) (old (value_at vp)) k v }
+    = set_ofs vp k v
+
+  (** Array as list *)
+  use List
+
+  let rec ghost function slice (u : ptr 'a) (p q : int) : list 'a =
+    (*proof*)
+    variant { q - p }
+    (*qed*)
+    if q <= p then Nil else Cons (value_at u p) (slice u (p+1) q)
+
+  let rec lemma slice_append (u : ptr 'a) (p q r : int)
+    requires { p <= q <= r }
+    ensures { slice u p r = slice u p q ++ slice u q r }
+    (*proof*)
+    variant { q - p }
+    = if p < q then slice_append u (p+1) q r
+    (*qed*)
+
+  let ghost function vector (u : ptr 'a) (n : int) = slice u 0 n
+
+  let lemma vector_push (u : ptr 'a) (n : int)
+    requires { 0 <= n }
+    ensures { vector u (n+1) = push (vector u n) (value_at u n) }
+    (*proof*)
+    = slice_append u 0 n (n+1)
+    (*qed*)
+
+   val function malloc_int32 (s: uint32) : ptr int32
+  ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+
+end
+
+module Cint
+  use int.Int
+  use mach.int.Int32
+  use mach.int.Int32 as Int32
+  use mach.int.UInt32
+  use mach.int.UInt32 as UInt32
+  use int.ComputerDivision
+  use Clib
+  
+  val function ( .+ ) (a b : int) : int
+    ensures { result = a + b }
+
+  val function ( .- ) (a b : int) : int
+    ensures { result = a - b }
+
+  val function ( .* ) (a b : int) : int
+    ensures { result = a * b }
+
+  val function ( ./ ) (a b : int) : int
+    requires { b <> 0 }
+    ensures { result = ComputerDivision.div (a) ( b) }
+  
+  val function of_int (v : int) : Int32.int32
+    ensures { Int32.to_int result = v }
+
+  val function malloc_int (s: uint32) : ptr int
+    ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+    
+  val function get (p: ptr int) (k: Int32.int32) : int
+    ensures { result = p[k] }
+    
+  val function malloc_int32 (s: uint32) : ptr int32
+  ensures { is_null result || valid_range result 0 (UInt32.to_int s) }
+  
+  let ([]) (p : ptr int) (k :Int32.int32) : int = get p k
+    
+end
+
+
+module Cfloat
+  use int.Int
+  use real.Real
+
+  type float = abstract { to_real : real }
+  meta coercion function to_real
+
+  type f32 = < float 8 24 >  (* single precision literals *)
+  type f64 = < float 11 53 > (* double precision literals *)
+
+  val function f32 (k : f32) : float
+    ensures { result = f32'real k }
+
+  val function f64 (k : f64) : float
+    ensures { result = f64'real k }
+
+  let constant zero = f64 0.0
+  let constant one  = f64 1.0
+
+  val function (.+) (a b : float) : float
+    ensures { Real.( result = a + b ) }
+
+  val function (.-) (a b : float) : float
+    ensures { Real.( result = a - b ) }
+
+  val function (.-_) (a : float) : float
+    ensures { Real.( result = (- a) ) }
+
+  val function ( .* ) (a b : float) : float
+    ensures { Real.( result = a * b ) }
+
+  val function ( ./ ) (a b : float) : float
+    requires { b <> 0.0 }
+    ensures { Real.( result = a / b ) }
+
+  val predicate ( .= ) (a b : float) : bool
+    ensures { result <-> Real.( a = b ) }
+
+  val predicate ( .< ) (a b : float) : bool
+    ensures { result <-> Real.( a < b ) }
+
+  val predicate ( .<= ) (a b : float) : bool
+    ensures { result <-> Real.( a <= b ) }
+
+end

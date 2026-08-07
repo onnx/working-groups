@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module tensor.OPWhere</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>module OPWhere</code></header>
+<div class="doc">
+<div class="doc">
+<p>OP&ndash;Where Tensor Operation</p>
+</div>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">OPWhere</span><a href="tensor.proof.html#OPWhere" title="Valid (one goal)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> <a title="tensor.Tensor" href="tensor.Tensor.html">Tensor</a>
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="dwhere">dwhere</a><a href="tensor.proof.html#OPWhere.dwhere" title="Valid (no goals)" class="icon remark icofont-check"></a> (c : <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> bool) (a b : <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> &#39;a) : <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> &#39;a
+    = <span class="keyword">fun</span> ks -&gt; <span class="keyword">if</span> c ks <span class="keyword">then</span> a ks <span class="keyword">else</span> b ks
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a id="opwhere">opwhere</a><a href="tensor.proof.html#OPWhere.opwhere" title="Valid (one goal)" class="icon valid icofont-check"></a> (c : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> bool) (a b : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> &#39;a) : <a title="tensor.Tensor.tensor" href="tensor.Tensor.html#tensor">tensor</a> &#39;a
+    <span class="keyword">requires</span> { a <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> b }
+    <span class="keyword">requires</span> { c <a title="tensor.Tensor.(~)" href="tensor.Tensor.html#infix%20~">~</a> a <a title="tensor.Tensor.(~)" href="tensor.Tensor.html#infix%20~">~</a> b }
+    <span class="keyword">ensures</span> { result <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> a <a title="tensor.Tensor.(~=)" href="tensor.Tensor.html#infix%20~%3D">~=</a> b }
+    <span class="keyword">ensures</span> { result = <a title="tensor.OPWhere.dwhere" href="#dwhere">dwhere</a> c a b }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    = { <a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> = c.<a title="tensor.Tensor.dims" href="tensor.Tensor.html#dims">dims</a> ; <a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> = <a title="tensor.OPWhere.dwhere" href="#dwhere">dwhere</a> c.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> a.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> b.<a title="tensor.Tensor.data" href="tensor.Tensor.html#data">data</a> ; <a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> = a.<a title="tensor.Tensor.background" href="tensor.Tensor.html#background">background</a> }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

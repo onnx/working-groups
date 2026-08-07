@@ -1,0 +1,274 @@
+(*@ # Finite Sequences
+
+    This modules provides a persistent array interface to lists.
+    It is typically used to model byte arrays of COSMO implementation.
+*)
+
+module Seq
+
+  use int.Int
+  use int.MinMax
+  use option.Option
+  use list.ListRich as L
+
+  (*@ ## Definition
+
+      A sequence `s` is defined by its size `n = length s` and its elements
+      `s[i]` with `0 <= i < n`.
+
+      All other operations on sequences are defined
+      in terms of the length and elements of the returned sequences.
+  *)
+
+  type seq 'a = L.list 'a
+
+  (*@ Length of a sequence. *)
+  let function length (u : seq 'a) = L.length u
+  meta coercion function length
+
+  (*@ Elements of a sequence. *)
+  let rec function ([]) (u : seq 'a) (k : int) : 'a
+    requires { 0 <= k < u }
+    ensures { L.nth k u = Some result }
+    (*proof*)
+    variant { u }
+    = match u with L.Cons x w -> if k = 0 then x else w[k-1] end
+    (*qed*)
+
+  lemma head: forall x:'a, u. (L.Cons x u)[0] = x
+  lemma tail: forall x:'a, u k. 0 < k <= length u -> (L.Cons x u)[k] = u[k-1]
+
+  (*@ Definitionnal equality: `u == v` states that sequences `u` and `v` have
+      the same length and same elements. *)
+  predicate (==) (u v : seq 'a) =
+    length u = length v /\ forall k. 0 <= k < u -> u[k] = v[k]
+
+  (*@ Equal lists are definitionnaly equals. *)
+  lemma reflexivity : forall u : seq 'a. u == u
+
+  (*@ Definitionnaly equal lists _are_ equals. *)
+  let rec lemma extensivity (a b : seq 'a)
+    requires { a == b }
+    ensures { a = b }
+    (*proof*)
+    variant { a, b }
+    = match a, b with
+      | L.Cons x a' , L.Cons y b' ->
+        assert { x = y } ;
+        let lemma shift (k: int)
+          requires { 0 <= k < length a' }
+          ensures { a'[k] = b'[k] }
+          = assert { a'[k] = a[k+1] } ;
+            assert { b'[k] = b[k+1] }
+        in extensivity a' b'
+      | _ -> ()
+      end
+    (*qed*)
+
+  (*@ Functional equality. *)
+  let rec equal (eq : 'a -> 'a -> bool) (u v : seq 'a) : bool
+    requires { forall x y. L.mem x u -> L.mem y v -> (eq x y <-> x = y) }
+    ensures { result <-> u = v }
+    (*proof*)
+    variant { u, v }
+    = match u, v with
+      | L.Cons x u', L.Cons y v' -> eq x y && equal eq u' v'
+      | L.Nil, L.Nil -> true
+      | _ -> false
+      end
+    (*qed*)
+
+  (*@ ## Constructors
+
+      Helper functions for constructing sequences.
+  *)
+
+  (*@ Empty sequence of length `0`. *)
+  let constant empty : seq 'a = L.Nil
+
+  (*@ Singleton sequence with a unique element. *)
+  let function elt (e : 'a) : seq 'a = L.Cons e L.Nil
+
+  (*@ Head element *)
+  let function hd (s : seq 'a) : 'a
+    requires { 0 < s.length }
+    ensures { result = s[0] }
+    (*proof*) = match s with L.Cons x _ -> x end (*qed*)
+
+  (*@ Tail element *)
+  let function tl (s : seq 'a) : 'a
+    requires { 0 < s.length }
+    ensures { result = s[ s.length - 1 ] }
+    (*proof*) = s[ s.length - 1 ] (*qed*)
+
+  (*@ `create e n` returns a sequence of length `n` filled with `e` elements. *)
+  let rec function create (e : 'a) (n : int) : seq 'a
+    requires { 0 <= n }
+    ensures { length result = n }
+    ensures { forall k. 0 <= k < result -> result[k] = e }
+    (*proof*)
+    variant { n }
+    = if n > 0 then L.Cons e (create e (n-1)) else L.Nil
+    (*qed*)
+
+  (*@ `reset e s` returns a sequence of same length `s` filled with `e` elements. *)
+  let function reset (e : 'a) (s : seq 'b) : seq 'a = create e s.length
+
+  (*@ `init f a b` returns the sequence of elements `f i` for `a <= i < b`. *)
+  let rec function init (f : int -> 'a) (a b : int) : seq 'a
+    requires { a <= b }
+    ensures { length result = b-a }
+    ensures { forall k. 0 <= k < result -> result[k] = f (a+k) }
+    (*proof*)
+    variant { b-a }
+    = if a < b then L.Cons (f a) (init f (a+1) b) else L.Nil
+    (*qed*)
+
+  (*@ `map f s` applies `f` to all elements f `s` *)
+  let rec function map (f : 'a -> 'b) (s : seq 'a) : seq 'b
+    ensures { length result = length s }
+    ensures { forall k. 0 <= k < result -> result[k] = f s[k] }
+    (*proof*)
+    variant { s }
+    = match s with L.Nil -> L.Nil | L.Cons x xs -> L.Cons (f x) (map f xs) end
+    (*qed*)
+
+  (*@ ## Slices
+
+      Sequences are commonly operated by a slice of their elements.
+      By convention, a slice `i..j` of elements denotes the range of elements
+      from `i` (_included_) to `j` (_excluded_), hence the range of indices `k`
+      such that `i <= k < j`.
+
+      The slice of all elements of a sequence of size `n` is then `0..n`, and
+      we also denote slice `0..i` by `..i` and slice `i..n` by `i..`.
+      Slice operations are properly defined only for a valid range of indices.
+
+      The dual operation of slice is the concatenation, here denoted by `(++)`.
+   *)
+
+  (*@ `u ++ v` is the concatenation of `u` and `v`,
+      where `u` elements comes first, and `v` elements follows. *)
+  let rec function (++) (u v : seq 'a) : seq 'a
+    ensures { length result = length u + length v }
+    ensures { forall k. 0 <= k < u -> result[k] = u[k] }
+    ensures { forall k. u <= k < result -> result[k] = v[k - u] }
+    (*proof*)
+    variant { u }
+    = match u with L.Nil -> v | L.Cons x w -> L.Cons x (w ++ v) end
+    (*qed*)
+
+  (*@ `u[i..j]` is the slice of `u` elements
+      from index `i` (_included_) to index `j` (_excluded_). *)
+  let rec function ([..]) (u : seq 'a) (i j : int) : seq 'a
+    requires { 0 <= i <= j <= u }
+    ensures { length result = j-i }
+    ensures { forall k. 0 <= k < result -> result[k] = u[i+k] }
+    (*proof*)
+    variant { u }
+    = match u with
+      | L.Nil -> L.Nil
+      | L.Cons x w ->
+         if 0 < i then w[i-1..j-1] else
+         if 0 < j then L.Cons x w[0..j-1]
+         else L.Nil
+      end
+    (*qed*)
+
+  (*@ `u[..i]` is the slice of `u` elements up to index `i` (_excluded_). *)
+  let function ([.._]) (u : seq 'a) (i : int) : seq 'a
+    requires { 0 <= i <= u }
+    ensures { length result = i }
+    ensures { forall k. 0 <= k < result -> result[k] = u[k] }
+    = u[0..i]
+
+  (*@ `u[i..]` is the slice of `u` elements from index `i` (_included_). *)
+  let function ([_..]) (u : seq 'a) (i : int) : seq 'a
+    requires { 0 <= i <= u }
+    ensures { result = u - i }
+    ensures { forall k. 0 <= k < result -> result[k] = u[i+k] }
+    = u[i..length u]
+
+  (*@ This property illustrates the duality of slice & concat. *)
+  goal split: forall u : seq 'a, i.
+    0 <= i <= u ->
+       u[..i] ++ u[i..] = u
+    (*proof*)
+    by u[..i] ++ u[i..] == u
+    (*qed*)
+
+  (*@ This property illustrates the duality of slice & concat. *)
+  goal fullsplit: forall u : seq 'a, i j.
+    0 <= i <= j <= u ->
+       u[..i] ++ u[i..j] ++ u[j..] = u
+    (*proof*)
+    by u[..i] ++ u[i..j] ++ u[j..] == u
+    (*qed*)
+
+  (*@ Tail insertion *)
+  let function (+.) (s : seq 'a) (e : 'a) : seq 'a
+    ensures { length result = length s + 1 }
+    ensures { forall k. 0 <= k < s -> result[k] = s[k] }
+    ensures { result[ s ] = e }
+    (*proof*) = s ++ elt e (*qed*)
+
+  (*@ Head insertion *)
+  let function (.+) (e : 'a) (s : seq 'a) : seq 'a
+    ensures { length result = length s + 1 }
+    ensures { forall k. 0 <= k < s -> result[1+k] = s[k] }
+    ensures { result[ 0 ] = e }
+    (*proof*) = elt e ++ s (*qed*)
+
+  (*@ ## Updates & Copies *)
+
+  (*@ `u[i<-x]` returns a copy of the sequence `u` where the element `u[i]`
+      has been replaced by `x`. *)
+  let rec function ([<-]) (u : seq 'a) (i : int) (x : 'a) : seq 'a
+    requires { 0 <= i < u }
+    ensures { length result = length u }
+    ensures { forall k. 0 <= k < result -> result[k] = if k=i then x else u[k] }
+    (*proof*)
+    variant { u }
+    = match u with L.Cons x0 w ->
+        if i = 0 then L.Cons x w else L.Cons x0 w[ i-1 <- x ]
+      end
+    (*qed*)
+
+  (*@ `memcpy u i v j n` returns a copy of `u` where the slice `u[i..i+n]` has been
+      replaced with the slice `v[j..j+n]` (last excluded). *)
+  let function memcpy (u : seq 'a) (i : int) (v : seq 'a) (j : int) (n : int)
+    requires { 0 <= i <= i+n <= u }
+    requires { 0 <= j <= j+n <= v }
+    ensures { length result = length u }
+    ensures { forall k. 0 <= k < i -> result[k] = u[k] }
+    ensures { forall k. i <= k < i+n -> result[k] = v[j+k-i] }
+    ensures { forall k. i+n <= k < u -> result[k] = u[k] }
+    = u[..i] ++ v[j..j+n] ++ u[i+n..]
+
+  (*@ `havoc u v p n` asserts that sequences `u` and `v` have identical elements
+      but elements in range `p..p+n` (last excluded). *)
+  predicate havoc (u v: seq 'a) (p n : int) =
+    u.length = v.length /\
+    (forall k. 0 <= k < p -> u[k] = v[k]) /\
+    (forall k. p+n <= k < u -> u[k] = v[k])
+
+end
+
+(*@ ## Sequence Codomain *)
+
+module Codomain
+
+  use int.Int
+  use set.Set
+  use Seq
+
+  let rec ghost function codomain (s : seq 'a) : set 'a
+    ensures { forall v. Set.mem v result <-> exists i. 0 <= i < s /\ s[i] = v }
+    (*proof*)
+    variant { s.length }
+    = if s.length = 0 then Set.empty else
+        let k = s.length-1 in
+        Set.add s[k] (codomain s[0..k])
+    (*qed*)
+
+end

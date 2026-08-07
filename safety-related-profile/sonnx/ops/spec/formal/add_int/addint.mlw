@@ -1,0 +1,165 @@
+module SignedWrap32
+
+  use int.Int
+  use int.EuclideanDivision
+
+  constant n : int = 32
+  constant min32 : int = -2147483648
+  constant max32 : int =  2147483647
+  constant mod32 : int =  4294967296
+
+  function add_int_n (a b : int) : int =
+    let s = a + b in
+    let r = EuclideanDivision.mod s mod32 in
+    if r > max32 then r - mod32 else r
+
+  lemma add_int_n_bounds :
+    forall a b : int. min32 <= add_int_n a b <= max32
+
+
+end
+
+module AddWrapInt32
+
+  use int.Int
+  use mach.int.Int32
+  use SignedWrap32
+
+ 
+  val add_wrap_int32 (a b : int32) : int32
+    ensures { Int32.to_int result =
+                add_int_n (Int32.to_int a) (Int32.to_int b) }
+
+end
+
+
+
+module OPAdd
+  use tensor.tensor.Tensor
+  use int.Int
+  use real.Real
+  use tensor.std.Cfloat
+  use tensor.tensor.Range
+
+   let ghost function dadd (a b : tensor real) : data real
+    = fun ks -> 
+        if valid ks a.dims then
+          a.data ks + b.data ks
+        else
+          a.background
+  
+
+  let ghost function opadd (a b : tensor real) : tensor real
+    requires { a ~= b }
+    ensures { result ~= a }
+    ensures { result.data = dadd a b }
+    = { dims = a.dims ;
+        data = dadd a b ;
+        background = a.background }
+
+end
+
+module CTensorAdd
+  use int.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use ref.Ref
+  use OPAdd
+  use tensor.libtensor.CTensor
+
+let ctensor_add (a b r : ctensor) =
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    ensures { tensor r = opadd (tensor a) (tensor b) }
+    (*proof*)
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k.
+        0 <= k < i ->
+          value_at r.t_data k =
+            value_at a.t_data k .+ value_at b.t_data k
+      }
+      r.t_data[i] <- a.t_data[i] .+ b.t_data[i]
+    done
+    ;
+    assert { tensor r == opadd (tensor a) (tensor b) }
+    (*qed*)
+
+
+    end
+
+(** Integer version of the add operator **)
+
+module OPAddInt
+
+  use tensor.tensor.Tensor
+  use int.Int
+  use tensor.tensor.Range
+  use SignedWrap32
+
+  let ghost function dadd_int (a b : tensor int) : data int
+    = fun ks ->
+        if valid ks a.dims then
+          add_int_n (a.data ks) (b.data ks)
+        else
+          a.background
+
+  let ghost function opadd_int (a b : tensor int) : tensor int
+    requires { a ~= b }
+    ensures  { result ~= a }
+    ensures  { result.data = dadd_int a b }
+    = { dims       = a.dims ;
+        data       = dadd_int a b ;
+        background = a.background }
+
+end
+module CTensorAddInt
+
+  use int.Int
+  use mach.int.Int32
+  use tensor.std.Clib
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use SignedWrap32
+  use OPAddInt
+  use AddWrapInt32
+  use tensor.libtensor.CTensorInt
+  use list.List
+
+  let ctensor_add_int (a b r : ctensorint) =
+    requires { valid_tensor a }
+    requires { valid_tensor b }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor b ~= tensor r }
+    ensures  { tensor r = opadd_int (tensor a) (tensor b) }
+    (*proof*)
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i ->
+        Int32.to_int (value_at r.t_data k) =
+          add_int_n
+            (Int32.to_int (value_at a.t_data k))
+            (Int32.to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- add_wrap_int32 a.t_data[i] b.t_data[i]
+    done
+    (*proof*)
+    ; assert { (tensor r).dims = (tensor a).dims }
+    ; assert { (tensor r).dims = (tensor b).dims }
+    ; assert { forall k : list int. valid_index k r ->
+        tensor_value_at k r =
+          add_int_n (tensor_value_at k a) (tensor_value_at k b) }
+    ; assert { tensor r == opadd_int (tensor a) (tensor b) }
+    (*qed*)
+
+end

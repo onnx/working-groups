@@ -1,0 +1,5 @@
+(library
+ (name tensorlib)
+ (package onnx))
+
+(include_subdirs unqualified)

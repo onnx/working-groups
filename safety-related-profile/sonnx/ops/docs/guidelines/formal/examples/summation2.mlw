@@ -1,0 +1,41 @@
+module OPSummation
+    use int.Int
+    use real.Real
+    use real.FromInt
+
+    let rec function summation (i : int) (iter : int) : real =
+    variant { Int.(iter - i) }
+        if i < iter then
+            1.0 + summation (i + 1) iter
+        else
+        0.0
+    
+    let rec lemma summation_correctness (i: int) (iter: int)
+        requires { Int.(0 <= i /\ i <= iter) }
+        variant  { Int.(iter - i) }
+        ensures  { summation i iter = from_int (Int.(iter - i)) }
+        = if i < iter then
+            summation_correctness (i + 1) iter
+        else
+            () 
+end
+
+
+module COPSummation
+    use OPSummation
+    use mach.int.Int32
+    use int.Int
+    use std.Cfloat
+    use real.Real
+
+    let summation  (iter: int32) : float =
+    requires { Int.(iter >= 0) }
+    requires { Int.(iter < max_int32) }
+
+        let ref sum = (f32 0.0) in
+        for k = 0 to iter - 1 do
+            invariant { sum = summation 0 k }
+            sum <- sum .+ (f32 1.0);
+        done;
+        sum
+end

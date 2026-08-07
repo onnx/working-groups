@@ -1,0 +1,160 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module libvector.CIndex</title>
+</head>
+<body>
+<nav>
+<a class="toc1" href="#_1">Dimensions</a>
+<a class="toc1" href="#_2">Coordinates</a>
+</nav>
+<header><a href="index.html">index</a> — <code>library <a href="libvector.index.html">libvector</a></code> — <code>module CIndex</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">CIndex</span><a href="libvector.proof.html#CIndex" title="Partial proof (50/51 goals)" class="icon warning icofont-error"></a>
+  <span class="keyword">use</span> std.<a title="std.Int" href="std.Int.html">Int</a>
+  <span class="keyword">use</span> std.<a title="std.List" href="std.List.html">List</a>
+  <span class="keyword">use</span> std.<a title="std.Clib" href="std.Clib.html">Clib</a>
+  <span class="keyword">use</span> mach.int.<a title="mach.int.Int32" href="https://www.why3.org/stdlib/mach.int.html#Int32_">Int32</a>
+  <span class="keyword">use</span> tensor.<a title="tensor.Range" href="tensor.Range.html">Range</a>
+  <span class="keyword">use</span> layout.<a title="layout.CFlat" href="layout.CFlat.html">CFlat</a>
+
+  <span class="keyword">type</span> <a id="iarray">iarray</a> = <a title="mach.c.C.ptr" href="https://www.why3.org/stdlib/mach.c.html#ptr_21">ptr</a> <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>
+
+  <span class="keyword">function</span> <a id="ivector">ivector</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (n : int) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int
+    = <a title="list.Map.map" href="https://www.why3.org/stdlib/list.html#map_584">map</a> Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_287">to_int</a> (<a title="std.Clib.vector" href="std.Clib.html#vector">vector</a> u n)
+
+  <span class="keyword">function</span> <a id="islice">islice</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (p q : int) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int
+    = <a title="list.Map.map" href="https://www.why3.org/stdlib/list.html#map_584">map</a> Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_287">to_int</a> (<a title="std.Clib.slice" href="std.Clib.html#slice">slice</a> u p q)
+</pre>
+<div class="doc">
+<h1><a id="_1">Dimensions</a></h1>
+</div>
+<pre class="src">
+  <span class="keyword">function</span> <a id="vdim">vdim</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (n : int) : int = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> u n)
+  <span class="keyword">function</span> <a id="sdim">sdim</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (p q : int) : int = <a title="tensor.Range.size" href="tensor.Range.html#size">size</a> (<a title="libvector.CIndex.islice" href="#islice">islice</a> u p q)
+
+  <span class="keyword">predicate</span> <a id="pdim">pdim</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (p q : int) =
+    <span class="keyword">forall</span> k. p <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q -&gt; 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> u k
+
+  <span class="keyword">predicate</span> <a id="dimension">dimension</a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (n : int) =
+    0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> n /\ <a title="std.Clib.valid_range" href="std.Clib.html#valid_range">valid_range</a> u 0 n /\ <a title="libvector.CIndex.pdim" href="#pdim">pdim</a> u 0 n /\ 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="libvector.CIndex.vdim" href="#vdim">vdim</a> u n <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="mach.int.Int32.max_int32" href="https://www.why3.org/stdlib/mach.int.html#max_int32_286">max_int32</a>
+</pre>
+<div class="doc">
+<p>Equivalence betwen <code class="src"><a title="libvector.CIndex.pdim" href="libvector.CIndex.html#pdim">pdim</a></code> and <code class="src"><a title="tensor.Range.positive" href="tensor.Range.html#positive">tensor.Range.positive</a></code>.</p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="positive_pdim">positive_pdim</a><a href="libvector.proof.html#CIndex.positive_pdim" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (p q : int)
+  <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">ensures</span> { <a title="libvector.CIndex.pdim" href="#pdim">pdim</a> u p q &lt;-&gt; <a title="tensor.Range.positive" href="tensor.Range.html#positive">positive</a> (<a title="libvector.CIndex.islice" href="#islice">islice</a> u p q) }
+    <span class="keyword">variant</span> { q <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> p }
+    = <span class="keyword">if</span> p <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q <span class="keyword">then</span> positive_pdim u (p<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) q
+  <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">ghost</span> <a id="sdim_split">sdim_split</a><a href="libvector.proof.html#CIndex.sdim_split" title="Valid (one goal)" class="icon valid icofont-check"></a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (p k q : int)
+  <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { p <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q }
+    <span class="keyword">requires</span> { <a title="libvector.CIndex.pdim" href="#pdim">pdim</a> u p q }
+    <span class="keyword">ensures</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u p k <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> u k <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u (k<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) q = <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u p q }
+    = <span class="keyword">assert</span> { <a title="libvector.CIndex.islice" href="#islice">islice</a> u p k <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> <a title="libvector.CIndex.islice" href="#islice">islice</a> u k q = <a title="libvector.CIndex.islice" href="#islice">islice</a> u p q }
+  <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+</pre>
+<div class="doc">
+<p>Extracted Library</p>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> <a id="cdim_size">cdim_size</a><a href="libvector.proof.html#CIndex.cdim_size" title="Valid (12 goals)" class="icon valid icofont-check"></a> (u : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (n : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>): <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a> =
+    <span class="keyword">ensures</span> { result = <a title="libvector.CIndex.vdim" href="#vdim">vdim</a> u n }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="libvector.CIndex.dimension" href="#dimension">dimension</a> u n }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">begin</span>
+      <span class="keyword">let</span> ref p = 1 <span class="keyword">in</span>
+      <span class="keyword">for</span> i = 0 <span class="keyword">to</span> n <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> 1 <span class="keyword">do</span>
+        <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+        <span class="keyword">invariant</span> { p = <a title="libvector.CIndex.vdim" href="#vdim">vdim</a> u i }
+        <span class="keyword">ghost</span>
+          <span class="keyword">begin</span>
+            <span class="keyword">ensures</span> { 1 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> u[i] <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="mach.int.Int32.max_int32" href="https://www.why3.org/stdlib/mach.int.html#max_int32_286">max_int32</a> }
+            <span class="keyword">let</span> <span class="keyword">ghost</span> dl = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u 0 i } <span class="keyword">in</span>
+            <span class="keyword">let</span> <span class="keyword">ghost</span> di = Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> u[i] <span class="keyword">in</span>
+            <span class="keyword">let</span> <span class="keyword">ghost</span> dr = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u (i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) n } <span class="keyword">in</span>
+            <span class="keyword">let</span> <span class="keyword">ghost</span> dn = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> u 0 n } <span class="keyword">in</span>
+            <a title="libvector.CIndex.sdim_split" href="#sdim_split">sdim_split</a> u 0 (Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> i) (Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> n) ;
+            <a title="std.Int.mult_bound" href="std.Int.html#mult_bound">mult_bound</a> (dl <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> di) dr dn ;
+          <span class="keyword">end</span> ;
+        <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+        p &lt;- p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> u[i] ;
+      <span class="keyword">done</span> ; p
+    <span class="keyword">end</span>
+
+  <span class="keyword">let</span> <a id="cdim_create_1">cdim_create_1</a><a href="libvector.proof.html#CIndex.cdim_create_1" title="Valid (one goal)" class="icon valid icofont-check"></a> (n : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>) : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a> =
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> n }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="libvector.CIndex.vdim" href="#vdim">vdim</a> result 1 = n }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="libvector.CIndex.dimension" href="#dimension">dimension</a> result 1 }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> result 0 = n }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">let</span> cd = <a title="mach.c.C.malloc" href="https://www.why3.org/stdlib/mach.c.html#malloc_100">malloc</a> 1 <span class="keyword">in</span>
+    <span class="keyword">if</span> <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> cd <span class="keyword">then</span> cd[0] &lt;- n ; cd
+
+  <span class="keyword">let</span> <a id="cdim_create_2">cdim_create_2</a><a href="libvector.proof.html#CIndex.cdim_create_2" title="Valid (13 goals)" class="icon valid icofont-check"></a> (p q : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>) : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a> =
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> p /\ 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> q /\ p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> q <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> <a title="mach.int.Int32.max_int32" href="https://www.why3.org/stdlib/mach.int.html#max_int32_286">max_int32</a> }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="libvector.CIndex.vdim" href="#vdim">vdim</a> result 2 = p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> q }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="libvector.CIndex.dimension" href="#dimension">dimension</a> result 2 }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> result 0 = p }
+    <span class="keyword">ensures</span> { <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> result -&gt; <a title="std.Clib.value_at" href="std.Clib.html#value_at">value_at</a> result 1 = q }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">let</span> cd = <a title="mach.c.C.malloc" href="https://www.why3.org/stdlib/mach.c.html#malloc_100">malloc</a> 2 <span class="keyword">in</span>
+    <span class="keyword">if</span> <a title="mach.c.C.is_not_null" href="https://www.why3.org/stdlib/mach.c.html#is_not_null_40">is_not_null</a> cd <span class="keyword">then</span> (cd[0] &lt;- p ; cd[1] &lt;- q) ; cd
+</pre>
+<div class="doc">
+<h1><a id="_2">Coordinates</a></h1>
+</div>
+<pre class="src">
+  <span class="keyword">let</span> <a id="coffset">coffset</a><a href="libvector.proof.html#CIndex.coffset" title="Partial proof (22/23 goals)" class="icon warning icofont-error"></a> (ks : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (ds : <a title="libvector.CIndex.iarray" href="#iarray">iarray</a>) (n : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a>) : <a title="mach.int.Int32.int32" href="https://www.why3.org/stdlib/mach.int.html#int32_283">int32</a> =
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> n }
+    <span class="keyword">requires</span> { <a title="std.Clib.valid_range" href="std.Clib.html#valid_range">valid_range</a> ks 0 n }
+    <span class="keyword">requires</span> { <a title="libvector.CIndex.dimension" href="#dimension">dimension</a> ds n }
+    <span class="keyword">ensures</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> result -&gt; <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ks n) (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ds n) }
+    <span class="keyword">ensures</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> result -&gt; result = <a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ks n) (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ds n) }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">begin</span>
+      <span class="keyword">let</span> ref p = 0 <span class="keyword">in</span>
+      <span class="keyword">for</span> i = 0 <span class="keyword">to</span> n <a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a> 1 <span class="keyword">do</span>
+        <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+        <span class="keyword">invariant</span> { <a title="tensor.Range.valid" href="tensor.Range.html#valid">valid</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ks i) (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ds i) }
+        <span class="keyword">invariant</span> { p = <a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ks i) (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ds i) }
+        <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+        <span class="keyword">let</span> d = ds[i] <span class="keyword">in</span>
+        <span class="keyword">let</span> k = ks[i] <span class="keyword">in</span>
+        <span class="keyword">if</span> 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k &amp;&amp; k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> d <span class="keyword">then</span>
+          <span class="keyword">begin</span>
+            <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+            <span class="keyword">assert</span> { p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> d <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k = <a title="mach.c.C.offset" href="https://www.why3.org/stdlib/mach.c.html#offset_23">offset</a> (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ks (i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1)) (<a title="libvector.CIndex.ivector" href="#ivector">ivector</a> ds (i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1)) } ;
+            <span class="keyword">ghost</span>
+              <span class="keyword">begin</span>
+                <span class="keyword">ensures</span> { Int32.<a title="mach.int.Int32.in_bounds" href="https://www.why3.org/stdlib/mach.int.html#in_bounds_54">in_bounds</a> (p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> d) }
+                <span class="keyword">ensures</span> { Int32.<a title="mach.int.Int32.in_bounds" href="https://www.why3.org/stdlib/mach.int.html#in_bounds_54">in_bounds</a> (p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> d <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k) }
+                <span class="keyword">let</span> <span class="keyword">ghost</span> dl = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> ds 0 i } <span class="keyword">in</span>
+                <span class="keyword">let</span> <span class="keyword">ghost</span> di = Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> ds[i] <span class="keyword">in</span>
+                <span class="keyword">let</span> <span class="keyword">ghost</span> dr = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> ds (i<a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a>1) n } <span class="keyword">in</span>
+                <span class="keyword">let</span> <span class="keyword">ghost</span> dn = <span class="keyword">pure</span> { <a title="libvector.CIndex.sdim" href="#sdim">sdim</a> ds 0 n } <span class="keyword">in</span>
+                <a title="libvector.CIndex.sdim_split" href="#sdim_split">sdim_split</a> ds 0 (Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> i) (Int32.<a title="mach.int.Int32.to_int" href="https://www.why3.org/stdlib/mach.int.html#to_int_289">to_int</a> n) ;
+                <a title="std.Int.mult_bound" href="std.Int.html#mult_bound">mult_bound</a> (dl <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> di) dr dn ;
+              <span class="keyword">end</span> ;
+            <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+            p &lt;- p <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> d <a title="int.Int.(+)" href="https://www.why3.org/stdlib/int.html#infix%20+_19">+</a> k ;
+          <span class="keyword">end</span>
+        <span class="keyword">else</span> <span class="keyword">return</span> (-1)
+      <span class="keyword">done</span> ; p
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 34, "time": 0.538 },
+    { "prover": "cvc5@1.2.1", "size": 50, "time": 0.537 },
+    { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.525 }
+  ],
+  "proofs": {
+    "CTensorBatchNorm": {
+      "ctensor_batchnorm": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.041 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          null,
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.128 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "cvc5@1.2.1", "time": 0.226 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.178 },
+              { "prover": "alt-ergo@2.5.4", "time": 1.0 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.189 },
+              { "prover": "alt-ergo@2.5.4", "time": 1.0 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.183 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.985 }
+            ]
+          },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.18 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.989 }
+            ]
+          },
+          { "prover": "alt-ergo@2.5.4", "time": 0.106 },
+          null,
+          {
+            "tactic": "split_vc",
+            "children": [ { "prover": "alt-ergo@2.5.4", "time": 1.2 } ]
+          },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.05 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.052 },
+          null,
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.039 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              null, { "prover": "alt-ergo@2.5.4", "time": 0.023 }
+            ]
+          }
+        ]
+      }
+    },
+    "OPBatchNorm": {
+      "dbatchnorm": { "prover": "alt-ergo@2.5.4", "time": 0.008 },
+      "opbatchnorm": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.01 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.01 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.009 }
+        ]
+      }
+    }
+  }
+}
