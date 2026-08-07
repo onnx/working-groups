@@ -75,7 +75,7 @@ Error introduction for real (ideal) arithmetic is null:
 
 Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
 for the considered format and $\textit{\textbf{u}} = \frac{\varepsilon}{2}$. Let us also define
-$\textit{min\_norm}$ the minimal normalized number for the considered format.
+$\textit{min-normalized}$ the minimal normalized number for the considered format.
 
 In this section, wo do not provide a specification for the accuracy, but we explain
 on some examples how to derive sound bounds from reference algorithms, $x = X[I]$ and $u$. 
@@ -88,9 +88,9 @@ A correctly-rounded libm (see [https://core-math.gitlabpages.inria.fr](https://c
 or [https://people.cs.rutgers.edu/~sn349/rlibm](https://people.cs.rutgers.edu/~sn349/rlibm)
 rounds the infinite-precision result to the nearest floating-point number in the 
 mode round to nearest even. As a result, the rounding (introduced) error is bounded
-by $\max(|Y[i]|, \textit{min\_norm})\times\textit{\bf u}$.
+by $\max(|Y[i]|, \textit{min-normalized})\times\textit{\bf u}$.
 
-- $|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \textit{\bf u}\times\max\left(\tanh(|X[I]|), \textit{min\_norm}\right)$.
+- $|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \textit{\bf u}\times\max\left(\tanh(|X[I]|), \textit{min-normalized}\right)$.
 
 ### Specification of `Tanh` from a non-optimised `Exp` implementation
 
@@ -141,7 +141,7 @@ else
 
 Let us now compare the specification with another reference algorithm.
 To avoid overflows in this algorithm, we arbitrarily restrict the inputs between
-$[\texttt{numeric\_limits<T>::lowest}(), 10^7]$.
+$[$`numeric_limits<T>::lowest()`$, 10^7]$.
 
 ```
     Y = (exp(2X) - 1) / (exp(2X) + 1)
@@ -156,7 +156,7 @@ $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}$$
 
 For the following reference algorithm, whose inputs are arbitrarily restricted to
-$[-10^7, \texttt{numeric\_limits<T>::highest}()]$
+$[-10^7, $ `numeric_limits<T>::highest()`$]$
 
 ```
     Y = (1 - exp(-2X)) / (1 + exp(-2X))
