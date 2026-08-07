@@ -139,9 +139,9 @@ else
     Y = (1 - exp(-2X)) / (1 + exp(-2X))
 ```
 
-Let us now compare the specifictaion with another reference algorithm to establish the specifications.
+Let us now compare the specification with another reference algorithm.
 To avoid overflows in this algorithm, we arbitrarily restrict the inputs between
-$[-\texttt{numeric\_limits<T>::lowest}(), 10^7]$.
+$[\texttt{numeric\_limits<T>::lowest}(), 10^7]$.
 
 ```
     Y = (exp(2X) - 1) / (exp(2X) + 1)
@@ -155,26 +155,28 @@ $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + \textcolor{red}{9}(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - \textcolor{red}{4.5}\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [0, 1]$$
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}$$
 
-and
+For the following reference algorithm, whose inputs are arbitrarily restricted to
+$[-10^7, \texttt{numeric\_limits<T>::highest}()]$
 
 ```
     Y = (1 - exp(-2X)) / (1 + exp(-2X))
 ```
 
-for which the accuracy would be bound by
+the accuracy is bound by
 
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + \textcolor{red}{9}(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - \textcolor{red}{4.5}\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right)\textit{ if } x\in [-1, 0]$$
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + (\textcolor{red}{9}+n)(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{4.5}+\frac{n}{2})\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right) \textit{ if } x\in [-2^n, -1] \textit{ with integer } n >= 0 \textit { and } \exp(x) \textit{ is normal}$$
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + 8(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - 4\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [0, 1]$$
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{-2x}} \left(\frac{2 + (8+n)(1+\textit{\textbf{u}})e^{-2x}-2e^{-4x}}{(1 + e^{-2x})\times(1-\textit{\textbf{u}}) - (4+\frac{n}{2})\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{-2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{-2x}\right) \textit{ if } x\in [1, 2^n] \textit{ with integer } n >= 0 \textit { and } \exp(-x) \textit{ is normal}$$
 
-and
+And for the last reference algorithm, whose inputs are arbitrarily restricted to
+$[-10^7, 10^7]$
 
 ```
     Y = (exp(X) - exp(-X)) / (exp(X) + exp(-X))
 ```
 
-for which the accuracy would be bound by
+the accuracy would be bound by
 
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + \textcolor{red}{17}(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - \textcolor{red}{8.5}\textit{\textbf{u}}(1+\textit{\textbf{u}})e^{2x}}\times(1+\textit{\textbf{u}}) + 1 - e^{2x}\right)\textit{ if } x\in [-1, 0]$$
 $$|Y_{\textit{err}}^{\textit{intro}}[I]| \leq \frac{\textit{\textbf{u}}}{1+2e^{2x}} \left(\frac{2 + (\textcolor{red}{17}+n)(1+\textit{\textbf{u}})e^{2x}-2e^{4x}}{(1 + e^{2x})\times(1-\textit{\textbf{u}}) - (\textcolor{red}{8.5}+\frac{n}{2})\textit{\textbf{u}}(1 + \textit{\textbf{u}})e^{2x}}\times(1 + \textit{\textbf{u}}) + 1 - e^{2x}\right) \textit{ if } x\in [-2^n, -1] \textit{ with integer } n >= 0 \textit { and } \exp(x) \textit{ is normal}$$
