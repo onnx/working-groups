@@ -9,9 +9,8 @@ Any SONNX-compliant implementation of `Div` shall provide sound bounds for the
 introduced error. The propagated error defined below comes from the [SONNX informal
 specification](div.md).
 
-$$
-C[i] = A[i]/B[i]
-$$ 
+$$ C[i] = A[i]/B[i] $$ 
+
 If $B[i] \neq 0$ otherwise $C[i]$ is not defined. 
 
 
@@ -35,7 +34,7 @@ Error introduction for real (ideal) arithmetic is null:
 
 Let us define $\varepsilon$ the [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon)
 for the considered format and $\textit{\bf u} = \frac{\varepsilon}{2}$. Let us also define
-$\textit{min\_norm}$ the minimal normalized number for the considered format.
+$\textit{min-normalized}$ the minimal normalized number for the considered format.
 
 According to the IEEE-754 standard, division $c=a/b$ is implemented as rounding
 the infinite-precision result to the nearest floating-point number in the 
@@ -44,7 +43,7 @@ rounding (introduced) error is bounded by $|C[i]|\times\textit{\bf u}$
 for the standard rounding mode round to nearest even, provided $\frac{|A[I]|}{|B[I]|}$ is
 a normal number (or for any normal number greater or equal than $\frac{|A[I]|}{|B[I]|}$).
 
-- $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \textit{\bf u}\times\max\left(\frac{|A[I]|}{|B[I]|}, \textit{min\_norm}\right)$.
+- $|C_{\textit{err}}^{\textit{intro}}[I]| \leq \textit{\bf u}\times\max\left(\frac{|A[I]|}{|B[I]|}, \textit{min-normalized}\right)$.
 
 ## Error Introduction (int)
 

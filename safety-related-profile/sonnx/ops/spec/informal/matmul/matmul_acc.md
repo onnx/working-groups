@@ -82,8 +82,8 @@ Using the derivative of Matmul, a first-order bound is:
     A[i, k]\times B_{\textit{err}}[k, j]\right) + \left(\sum_{k=0}^{n-1}
     A_{\textit{err}}[i, k]\times  B_{\textit{err}}[k, j]\right)$  
   - $|Y_{\textit{err}}^{\textit{propag}}[i, j]| \leq n\times
-    (|A_{\textit{err}}|\times|B| + |B_{\textit{err}}|\times |A|
-    + |A_{\textit{err}}|\times|B_{\textit{err}}|)$  
+    (|A_{\textit{err}}|\times|B| + |B_{\textit{err}}|\times |A| +
+    |A_{\textit{err}}|\times|B_{\textit{err}}|)$  
 
 In the worst case, this operator amplifies an initial error by the matrix
 dimension and by the maximum of the absolute value of the coefficients of the
