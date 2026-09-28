@@ -1,0 +1,101 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 34, "time": 0.538 },
+    { "prover": "cvc5@1.2.1", "size": 50, "time": 0.537 },
+    { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.525 }
+  ],
+  "proofs": {
+    "CTensor": {
+      "ctensor_clear": { "prover": "alt-ergo@2.5.4", "time": 0.117 },
+      "ctensor_create": { "prover": "alt-ergo@2.5.4", "time": 0.023 },
+      "ctensor_reset": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.016 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.04 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.016 }
+        ]
+      },
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+      "tensorb": { "prover": "alt-ergo@2.5.4", "time": 0.018 }
+    },
+    "CTensorQuantizeLinear": {
+      "ctensor_quantize_linear": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.061 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.019 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.032 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.069 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.045 },
+          { "prover": "cvc5@1.2.1", "time": 0.121 },
+          { "prover": "cvc5@1.2.1", "time": 0.576 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.037 }
+        ]
+      }
+    },
+    "CTensorUInt8": {
+      "ctensor_add_ui8": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.037 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.05 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.05 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.123 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.027 }
+        ]
+      },
+      "ctensor_clear_ui8": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.014 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 },
+          { "prover": "cvc5@1.2.1", "time": 0.763 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.025 }
+        ]
+      },
+      "ctensor_create_ui8": { "prover": "cvc5@1.2.1", "time": 0.116 },
+      "ctensor_reset_ui8": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.02 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.018 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.026 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.03 },
+          { "prover": "cvc5@1.2.1", "time": 0.732 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.022 }
+        ]
+      },
+      "tensor": { "prover": "alt-ergo@2.5.4", "time": 0.054 }
+    },
+    "OPQuantizeLinear": {
+      "dquantize": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "opquantizelinear": { "prover": "alt-ergo@2.5.4", "time": 0.014 }
+    }
+  }
+}

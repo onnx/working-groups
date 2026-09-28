@@ -1,0 +1,9 @@
+module tensor.libtensor.CTensor
+    syntax type ctensor "struct ctensor"
+    
+end
+
+module libtensor.CTensorUInt8
+    syntax type ctensor_ui8 "struct ctensor_ui8"
+    
+end

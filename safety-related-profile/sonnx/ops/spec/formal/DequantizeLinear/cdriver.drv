@@ -1,0 +1,82 @@
+module tensor.std.Clib
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  syntax val to_uint32 "(uint32_t) %1"
+  syntax val is_null "!%1" prec 0
+  syntax val ([]) "%1[%2]" prec 1 1 15
+  syntax val ([]<-) "%1[%2] = %3" prec 14 14 15 14
+end
+
+module tensor.std.Cfloat
+  syntax type float    "float"
+  syntax val zero      "0.0"
+  syntax val one       "1.0"
+  syntax val f32       "(float) %1"
+  syntax val f64       "(double) %1"
+  syntax val      ( .+ )     "%1 + %2"   prec 8 8 7
+  syntax val      ( .- )     "%1 - %2"   prec 8 8 7
+  syntax val      (.-_)      "- %1"      prec 5 4
+  syntax val      ( .* )     "%1 * %2"   prec 7 7 6
+  syntax val      ( ./ )     "%1 / %2"   prec 7 7 6
+  syntax val      ( .= )     "%1 = %2"   prec 11 11 10
+  syntax val      ( .< )     "%1 < %2"   prec 11 11 10
+  syntax val      ( .<= )    "%1 <= %2"  prec 11 11 10
+end
+
+
+
+
+module tensor.libvector.CIndex
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+end
+
+module tensor.libtensor.CTensor
+
+  interface "#include <stdlib.h>"
+  interface "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+  
+  
+end
+
+
+module tensor.std.Cint
+  syntax type int      "int"
+  syntax val ( .+ )    "%1 + %2"  prec 8 8 7
+  syntax val ( .- )    "%1 - %2"  prec 8 8 7
+  syntax val ( .* )    "%1 * %2"  prec 7 7 6
+  syntax val ( ./ )    "%1 / %2"  prec 7 7 6
+  syntax val of_int    "(int) %1"
+  syntax val malloc_int "malloc(sizeof(int) * (size_t)(%1))"
+  syntax val get       "%1[%2]"   prec 1 1 15
+  syntax val malloc_int32 "malloc(sizeof(int32_t) * (size_t)(%1))"
+end
+
+
+
+module tensorint.mint.WInt32
+  interface export "#include <stdint.h>"
+  syntax type t            "int32_t"
+  syntax val czero        "((int32_t) 0)"
+  syntax val ( .+. )     "(int32_t)((uint32_t)%1 + (uint32_t)%2)" prec 8 8 7
+  syntax val ( .-. )     "(int32_t)((uint32_t)%1 - (uint32_t)%2)" prec 8 8 7
+  syntax val ( .*. )     "(int32_t)((uint32_t)%1 * (uint32_t)%2)" prec 7 7 6
+  syntax val ( .~. )     "(int32_t)(- (uint32_t)%1)"               prec 5 4
+end
+
+module libtensor.CTensorInt32
+
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+end
+
+module libtensor.CTensorDequantizeLinear
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  interface "#include <math.h>"
+  interface "#include \"ctensor.h\""
+  interface "#include \"ctensorint32.h\""
+  syntax val int32_to_float "((float) %1)"
+end

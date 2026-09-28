@@ -1,3 +1,7 @@
+#### 2025/10/02
+- Retour sur les actions en cours.
+- Orientation des travaux...
+  
 #### 2025/07/10
 - Mise à jour des guidelines
 

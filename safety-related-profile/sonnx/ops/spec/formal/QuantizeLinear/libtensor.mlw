@@ -1,0 +1,400 @@
+module CTensor
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  (* Raw C-level storage: a flat pointer to floats. *)
+  type farray = ptr float
+
+  (* 
+     t_rank  = number of dimensions
+     t_dims  = array of dimension sizes
+     t_data  = flat backing array 
+  *)
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : farray ;
+  }
+
+
+  (* The dimension list, as a math `list int`, read from the C arrays. *)
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+
+  (* Total number of elements *)
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  (* ctensor is safely usable:
+     - its dims array actually describes `t_rank` positive dimensions,
+     - its data pointer covers the whole flat range [0, tensor_size),
+     - and that range is writable *)
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  (* read the flat array at the right offset if k is in range, else 0.0. *)
+  function tensor_value_at (k : list int) (t : ctensor) : real =
+    if valid_index k t then
+      value_at t.t_data (tensor_offset k t)
+    else 0.0
+
+  function tensor_value (t : ctensor) : list int -> real =
+    fun k -> tensor_value_at k t
+
+  function tensor_valueb (t : ctensor) : list int -> bool =
+    fun k -> Real.(tensor_value_at k t > 0.0)
+
+  (* Turns a valid C ctensor into an abstract Tensor.tensor real *)
+  let ghost function tensor (t : ctensor) : tensor real
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0.0 }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0.0 ;
+    }
+
+  let ghost function tensorb (t : ctensor) : tensor bool
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_valueb t }
+    ensures { result.background = false }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_valueb t } ;
+      background = false ;
+    }
+
+  (* Allocates a new ctensor of shape `ds` `n`. Returns an "empty" (t_rank = 0) tensor if malloc failed *)
+  let ctensor_create (ds : iarray) (n : int32) : ctensor =
+    (*proof*)
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    (*qed*)
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  (* Sets every element to 0.0 *)
+  let ctensor_clear (r : ctensor) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      (* At this point in the loop, every flat index k < i has already
+         been set to 0.0 by a previous iteration. *)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = 0.0 }
+      (*qed*)
+      r.t_data[i] <- f32 0.0
+    done
+    ; assert { tensor r == Tensor.zero 0.0 (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_reset (r : ctensor) (v : float) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = v }
+      (*qed*)
+      r.t_data[i] <- v
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    (*qed*)
+
+end
+
+
+(* Same structure as CTensor, but for the uint8 output tensors *)
+module CTensorUInt8
+
+  use tensorint.mint.WUInt8
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  (* view a WUInt8.t as a plain math int in [0,255]. *)
+  function to_int (x : WUInt8.t) : int = WUInt8.to_int x
+
+  function wrap (v : int) : int = WUInt8.uwrap v
+
+  type carray_ui8 = ptr WUInt8.t
+
+  type ctensor_ui8 = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_ui8 ;
+  }
+
+  function tensor_dim (t : ctensor_ui8) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor_ui8) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor_ui8) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor_ui8) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor_ui8) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor_ui8) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor_ui8) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor_ui8) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor_ui8) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_ui8 (ds : iarray) (n : int32) : ctensor_ui8
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_ui8 (r : ctensor_ui8)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WUInt8.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_ui8 (r : ctensor_ui8) (v : WUInt8.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+  (* Element-wise addition with hardware wrap-around (uint8 overflow
+     wraps modulo 256, matching real C `uint8_t` arithmetic. *)
+  let ctensor_add_ui8 (a b r : ctensor_ui8)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WUInt8.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end
+
+
+(** Formal specification of ONNX QuantizeLinear
+    (default attributes: per-tensor quantization, axis irrelevant since
+    y_scale/y_zero_point are scalars, saturate = 1)
+
+      y = clamp( round_half_even( x / y_scale ) + y_zero_point , 0 , 255 )
+
+    T1 = float32 (input x)
+    T2 = float32 (y_scale)
+    T3 = uint8   (y_zero_point, output y)
+
+    This module is pure math: no C, no pointers, just the reference
+    semantics that the C implementation is proved to match on the valid index domain.
+*)
+module OPQuantizeLinear
+  use tensor.tensor.Tensor
+  use int.Int
+  use int.ComputerDivision
+  use real.Real
+  use real.FromInt
+  use real.Truncate
+  use tensor.std.Cfloat
+  use tensor.tensor.Range
+
+  (** Round-to-nearest, ties-to-even : the default IEEE-754 rounding mode
+      used by the reference ONNX implementation of QuantizeLinear.
+  *)
+  function round_half_even (x : real) : int =
+    let f = Truncate.floor x in
+    let r = Real.( x - FromInt.from_int f ) in
+    if Real.( r < 0.5 ) then f
+    else if Real.( r > 0.5 ) then Int.( f + 1 )
+    else if mod f 2 = 0 then f else Int.( f + 1 )
+
+  (** Saturating cast into [lo,hi].*)
+  function clamp (v lo hi : int) : int =
+    if Int.( v < lo ) then lo else if Int.( v > hi ) then hi else v
+
+  (** Quantization of a single scalar *)
+  function quantize_value (v scale : real) (zero_point : int) : int =
+    clamp Int.( round_half_even (Real.( v / scale )) + zero_point ) 0 255
+
+  (* Pointwise application of quantize_value over an entire tensor data map *)
+  let ghost function dquantize (x : tensor real) (scale : real) (zero_point : int) : data int
+    = fun ks -> quantize_value (x.data ks) scale zero_point
+
+  (** The reference tensor-level spec of QuantizeLinear *)
+  let ghost function opquantizelinear (x : tensor real) (scale : real) (zero_point : int) : tensor int
+    requires { Real.( scale > 0.0 ) }
+    requires { Int.( 0 <= zero_point <= 255 ) }
+    ensures { result.dims = x.dims }
+    ensures { result.data = dquantize x scale zero_point }
+    ensures { result.background = quantize_value x.background scale zero_point }
+    (*proof*)
+    = { dims = x.dims ;
+        data = dquantize x scale zero_point ;
+        background = quantize_value x.background scale zero_point }
+    (*qed*)
+
+end
+
+
+(*  The actual C-extractable QuantizeLinear kernel *)
+module CTensorQuantizeLinear
+  use int.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use ref.Ref
+  use OPQuantizeLinear
+  use tensor.libtensor.CTensor
+  use CTensorUInt8
+  use tensorint.mint.WUInt8
+  use tensorint.mint.WInt32
+
+  (* Fused round+add+saturate in one double-precision step *)
+  val function fquantize32 (x : float) (zp : Int32.int32) : Int32.int32
+    ensures { Int32.to_int result = clamp (round_half_even (to_real x) + Int32.to_int zp) 0 255 }
+
+  (* Saturating narrow of an int32 already known to lie in [0,255] *)
+  val function narrow8 (v : Int32.int32) : WUInt8.t
+    requires { Int32.( 0 <= v <= 255 ) }
+    ensures { WUInt8.to_int result = Int32.to_int v }
+
+  let ctensor_quantize_linear
+      (x : CTensor.ctensor) (scale : float) (zero_point : WUInt8.t) (r : CTensorUInt8.ctensor_ui8)
+    requires { CTensor.valid_tensor x }
+    requires { CTensorUInt8.valid_tensor r }
+    requires { CTensor.tensor_dim x = CTensorUInt8.tensor_dim r }
+    requires { Cfloat.zero .< scale }
+
+
+    (* Every element matches the spec on the valid domain. Why not full `==` ? 
+       CTensorUInt8.tensor r always has background = 0 (fixed convention). opquantizelinear's background is forced to
+       quantize_value(0.0, scale, zero_point) = zero_point (since
+       zero_point in [0,255]). These only match when zero_point = 0 *)
+    ensures  {
+      CTensorUInt8.tensor r
+        ~ opquantizelinear (CTensor.tensor x) (to_real scale) (WUInt8.to_int zero_point)
+    }
+
+    ensures  {
+      forall k. valid k (CTensorUInt8.tensor_dim r) ->
+        (CTensorUInt8.tensor r) k
+          = (opquantizelinear (CTensor.tensor x) (to_real scale) (WUInt8.to_int zero_point)) k
+    }
+    (*proof*)
+    =
+    let m = cdim_size r.CTensorUInt8.t_dims r.CTensorUInt8.t_rank in
+    for i = 0 to m-1 do
+       (* Prefix correctness: everything written so far (k < i)
+         already matches quantize_value. At i = m this covers every
+         valid index. *)
+      invariant { forall k. 0 <= k < i ->
+        WUInt8.to_int (value_at r.CTensorUInt8.t_data k)
+          = quantize_value (value_at x.CTensor.t_data k) (to_real scale) (WUInt8.to_int zero_point) }
+
+      let v = x.CTensor.t_data[i] in
+      let wz = WUInt8.widen32 zero_point in
+      (* fquantize32's postcondition IS quantize_value's definition
+         (once `v ./ scale` is identified with the exact real
+         division, already guaranteed by Cfloat) — no bridging
+         asserts needed. *)
+      let c = fquantize32 (v ./ scale) wz in
+
+      (* narrow8's precondition `0 <= Int32.to_int c <= 255` holds automatically *)
+      r.CTensorUInt8.t_data[i] <- narrow8 c
+    done
+    ;
+    (* Lift the loop invariant (valid for every index) to both postconditions. *)
+    assert {
+      CTensorUInt8.tensor r
+        ~ opquantizelinear (CTensor.tensor x) (to_real scale) (WUInt8.to_int zero_point)
+    }
+    ;
+  
+    assert {
+      forall k. valid k (CTensorUInt8.tensor_dim r) ->
+        (CTensorUInt8.tensor r) k
+          = (opquantizelinear (CTensor.tensor x) (to_real scale) (WUInt8.to_int zero_point)) k
+    }
+    (*qed*)
+
+end

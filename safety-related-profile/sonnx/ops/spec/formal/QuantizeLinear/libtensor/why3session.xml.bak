@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="0.030311" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="0.762259" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="libtensor.mlw"/>
+<theory name="CTensor" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <proof prover="0" timelimit="0.017639"><result status="valid" time="0.017639" steps="0"/></proof>
+ </goal>
+ <goal name="tensorb&#39;vc" expl="VC for tensorb" proved="true">
+ <proof prover="0" timelimit="0.018169"><result status="valid" time="0.018169" steps="0"/></proof>
+ </goal>
+ <goal name="ctensor_create&#39;vc" expl="VC for ctensor_create" proved="true">
+ <proof prover="0" timelimit="0.022906"><result status="valid" time="0.022906" steps="0"/></proof>
+ </goal>
+ <goal name="ctensor_clear&#39;vc" expl="VC for ctensor_clear" proved="true">
+ <proof prover="0" timelimit="0.116623"><result status="valid" time="0.116623" steps="0"/></proof>
+ </goal>
+ <goal name="ctensor_reset&#39;vc" expl="VC for ctensor_reset" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_reset&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011764"><result status="valid" time="0.011764" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.01498"><result status="valid" time="0.014980" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.01096"><result status="valid" time="0.010960" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.016195"><result status="valid" time="0.016195" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.019231"><result status="valid" time="0.019231" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.5" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.024076"><result status="valid" time="0.024076" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.6" expl="assertion" proved="true">
+  <proof prover="0" timelimit="0.039835"><result status="valid" time="0.039835" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.01413"><result status="valid" time="0.014130" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset&#39;vc.8" expl="out of loop bounds" proved="true">
+  <proof prover="0" timelimit="0.01605"><result status="valid" time="0.016050" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="CTensorUInt8" proved="true">
+ <goal name="tensor&#39;vc" expl="VC for tensor" proved="true">
+ <proof prover="0" timelimit="0.053493"><result status="valid" time="0.053493" steps="0"/></proof>
+ </goal>
+ <goal name="ctensor_create_ui8&#39;vc" expl="VC for ctensor_create_ui8" proved="true">
+ <proof prover="1" timelimit="0.116114"><result status="valid" time="0.116114" steps="0"/></proof>
+ </goal>
+ <goal name="ctensor_clear_ui8&#39;vc" expl="VC for ctensor_clear_ui8" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_clear_ui8&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013463"><result status="valid" time="0.013463" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.019587"><result status="valid" time="0.019587" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.012146"><result status="valid" time="0.012146" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.014007"><result status="valid" time="0.014007" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.026302"><result status="valid" time="0.026302" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.5" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.024823"><result status="valid" time="0.024823" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.6" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.762259" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.020162"><result status="valid" time="0.020162" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_clear_ui8&#39;vc.8" expl="out of loop bounds" proved="true">
+  <proof prover="0" timelimit="0.02455"><result status="valid" time="0.024550" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_reset_ui8&#39;vc" expl="VC for ctensor_reset_ui8" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_reset_ui8&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.01538"><result status="valid" time="0.015380" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.019578"><result status="valid" time="0.019578" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.01233"><result status="valid" time="0.012330" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.018072"><result status="valid" time="0.018072" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.0259"><result status="valid" time="0.025900" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.5" expl="loop invariant preservation" proved="true">
+  <proof prover="0"><result status="valid" time="0.030311" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.6" expl="assertion" proved="true">
+  <proof prover="1" timelimit="0.731861"><result status="valid" time="0.731861" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.015119"><result status="valid" time="0.015119" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_reset_ui8&#39;vc.8" expl="out of loop bounds" proved="true">
+  <proof prover="0" timelimit="0.022461"><result status="valid" time="0.022461" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="ctensor_add_ui8&#39;vc" expl="VC for ctensor_add_ui8" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="ctensor_add_ui8&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.014092"><result status="valid" time="0.014092" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.1" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.022303"><result status="valid" time="0.022303" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.01383"><result status="valid" time="0.013830" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.03512"><result status="valid" time="0.035120" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.037076"><result status="valid" time="0.037076" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.017757"><result status="valid" time="0.017757" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.049775"><result status="valid" time="0.049775" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.7" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.050041"><result status="valid" time="0.050041" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.122658"><result status="valid" time="0.122658" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_add_ui8&#39;vc.9" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.027443"><result status="valid" time="0.027443" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

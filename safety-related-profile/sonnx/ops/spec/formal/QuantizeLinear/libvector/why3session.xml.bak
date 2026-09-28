@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="0.014778" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="2" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="2.00152" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="libvector.mlw"/>
+<theory name="CIndex">
+ <goal name="positive_pdim&#39;vc" expl="VC for positive_pdim" proved="true">
+ <proof prover="0" timelimit="0.047965"><result status="valid" time="0.047965" steps="0"/></proof>
+ </goal>
+ <goal name="sdim_split&#39;vc" expl="VC for sdim_split" proved="true">
+ <proof prover="0" timelimit="0.122634"><result status="valid" time="0.122634" steps="0"/></proof>
+ </goal>
+ <goal name="cdim_size&#39;vc" expl="VC for cdim_size" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="cdim_size&#39;vc.0" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.013191"><result status="valid" time="0.013191" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.1" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.016992"><result status="valid" time="0.016992" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.01414"><result status="valid" time="0.014140" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010953"><result status="valid" time="0.010953" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013083"><result status="valid" time="0.013083" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.028306"><result status="valid" time="0.028306" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.44438"><result status="valid" time="0.444380" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.018151"><result status="valid" time="0.018151" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.8" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.010793"><result status="valid" time="0.010793" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.9" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.085653"><result status="valid" time="0.085653" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.0121"><result status="valid" time="0.012100" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_size&#39;vc.11" expl="VC for cdim_size" proved="true">
+  <proof prover="0" timelimit="0.011985"><result status="valid" time="0.011985" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="cdim_create_1&#39;vc" expl="VC for cdim_create_1" proved="true">
+ <proof prover="0" timelimit="0.110762"><result status="valid" time="0.110762" steps="0"/></proof>
+ </goal>
+ <goal name="cdim_create_2&#39;vc" expl="VC for cdim_create_2" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="cdim_create_2&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011545"><result status="valid" time="0.011545" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011589"><result status="valid" time="0.011589" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010644"><result status="valid" time="0.010644" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.012257"><result status="valid" time="0.012257" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010133"><result status="valid" time="0.010133" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.5" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.181476"><result status="valid" time="0.181476" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.023429"><result status="valid" time="0.023429" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.013966"><result status="valid" time="0.013966" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.014482"><result status="valid" time="0.014482" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.9" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.012458"><result status="valid" time="0.012458" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.008995"><result status="valid" time="0.008995" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.11" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.012478"><result status="valid" time="0.012478" steps="0"/></proof>
+  </goal>
+  <goal name="cdim_create_2&#39;vc.12" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.010684"><result status="valid" time="0.010684" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="valid_bounds&#39;vc" expl="VC for valid_bounds" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="valid_bounds&#39;vc.0" expl="assertion" proved="true">
+  <proof prover="0" timelimit="0.017355"><result status="valid" time="0.017355" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.1" expl="assertion" proved="true">
+  <proof prover="0" timelimit="0.023982"><result status="valid" time="0.023982" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.2" expl="assertion" proved="true">
+  <proof prover="0"><result status="valid" time="0.014778" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.3" expl="variant decrease" proved="true">
+  <proof prover="0" timelimit="0.015311"><result status="valid" time="0.015311" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.011133"><result status="valid" time="0.011133" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.5" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.01851"><result status="valid" time="0.018510" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.015114"><result status="valid" time="0.015114" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.014546"><result status="valid" time="0.014546" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013525"><result status="valid" time="0.013525" steps="0"/></proof>
+  </goal>
+  <goal name="valid_bounds&#39;vc.9" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.019175"><result status="valid" time="0.019175" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="coffset&#39;vc" expl="VC for coffset">
+ <transf name="split_vc" >
+  <goal name="coffset&#39;vc.0" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.011373"><result status="valid" time="0.011373" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.1" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.017626"><result status="valid" time="0.017626" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="0" timelimit="0.019237"><result status="valid" time="0.019237" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.018521"><result status="valid" time="0.018521" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.4" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.013844"><result status="valid" time="0.013844" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.5" expl="assertion" proved="true">
+  <proof prover="0" timelimit="0.670194"><result status="valid" time="0.670194" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.6" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.026858"><result status="valid" time="0.026858" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.7" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.010973"><result status="valid" time="0.010973" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.8" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.015763"><result status="valid" time="0.015763" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.9" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.045811"><result status="valid" time="0.045811" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.10" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.108159"><result status="valid" time="0.108159" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.11" expl="postcondition">
+  <transf name="split_vc" >
+   <goal name="coffset&#39;vc.11.0" expl="postcondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.001520" steps="0"/></proof>
+   </goal>
+   <goal name="coffset&#39;vc.11.1" expl="postcondition" proved="true">
+   <proof prover="0" timelimit="0.009381"><result status="valid" time="0.009381" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="coffset&#39;vc.12" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.012994"><result status="valid" time="0.012994" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.13" expl="integer overflow" proved="true">
+  <proof prover="0" timelimit="0.012725"><result status="valid" time="0.012725" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.14" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.672955"><result status="valid" time="0.672955" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.15" expl="loop invariant preservation" proved="true">
+  <proof prover="0" timelimit="0.010564"><result status="valid" time="0.010564" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.16" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.042428"><result status="valid" time="0.042428" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.17" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.013636"><result status="valid" time="0.013636" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.18" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.011754"><result status="valid" time="0.011754" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.19" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.010247"><result status="valid" time="0.010247" steps="0"/></proof>
+  </goal>
+  <goal name="coffset&#39;vc.20" expl="out of loop bounds" proved="true">
+  <proof prover="0" timelimit="0.010232"><result status="valid" time="0.010232" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>
