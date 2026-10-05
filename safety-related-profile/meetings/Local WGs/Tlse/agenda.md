@@ -2,6 +2,20 @@
 - Retour sur les actions en cours.
 - Orientation des travaux...
   
+##### Meeting Notes
+
+- Discussions sur les tenseurs dynamiques
+	- Comme déjà dit, on s'interdit l'usage de tenseurs dynamiques en entrée du réseau. Par conséquent, la dimension de tous les tenseurs est fixée dans le fichier ONNX (il faut que l'inférence des tailles de tenseurs soit faite avant la sérialisation).
+- [x] Ajouter les opérateurs de comparaison à la liste des opérateurs de base 
+	- (05/10) Fait
+- [x] Concernant les "errors conditions", décrire une démarche en 3 étapes : prise en compte dans la spec, prise en compte dans les contraintes (pré-conditions), description dans la section "errors conditions" 
+	- (05/10) Fait
+- [ ] Spécifier que nous utilisons l'opérateur `maximum` de IEEEE qui propage le NaN (l'autre op. est `maximumNumber`)  [project::[[SONNX]]]
+- [x] Identifier quelle est la pratique de gestion des valeurs par défaut chez AI [project::[[SONNX]]]
+	- (02/10) Les valeurs doivent être fixées explicitement
+- [ ] Produire une version complète des guidelines et de la spécification d'un opérateur à partir desquelles on pourra tenter de générer automatiquement d'autres spécifications. 
+  - (02/10) En cours (eric)
+
 #### 2025/07/10
 - Mise à jour des guidelines
 
