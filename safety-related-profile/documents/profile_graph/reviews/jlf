@@ -1,0 +1,92 @@
+[Answers from EJN]
+
+> I think that inputs and outputs shall be defined as elements of the graph.
+
+OK.Yes. Especially since we have (c1) saying that "A graph has zero or more inputs and at least one output."... 
+However, I also think  that we have to keep things simple since the concept of "input" and "output" is pretty intuitive.
+
+=> I propose to remove C1 and update the definition of a graph to introduce the concept of input/output
+
+> Edge: "the input" <-- "a specific input", idem for "output" and idem for the "graph". 
+
+KO: Not convinced that it makes the definition clearer.\
+=> No modification
+
+
+> May be the concept of "port" could be used.
+
+??:  I don't want to make the definition more complicated than needed, as far as 
+there is no ambiguity for a "typical" reader.
+
+The concept of "port" would allow introducing the concept of "port delegation"  
+that would make the connection between graph inputs (resp. outputs) 
+and nodes inputs ( resp. outputs) cleaner (but not necessarily clearer).
+
+
+> The illustration highlights ports and a hierarchical graph structure
+> (one node includes the four nodes).
+
+OK: Yes, definitely. 
+The squares in the diagram are actually "ports".\
+=> No modification. See my previous remark.
+
+
+> (C1): Why zero input? I would prefer at least one input.
+
+??: A graph may encode a constant (so, no input). Alone, such a graph will certainly nover be used in any actual use case, but a graph may also be called by a SCAN op (for instance). In that case, it may make sense to define a constant graph...
+
+
+> Add (C8): At least one output of each node is connected either to an output
+> of the graph or to an input of another node.
+
+> Rationale: Each component should have a function. May be redondant with [R1].
+
+KO: It is actually redundant with R1 which is not a constraint in the sense that it is part of the semantics. 
+It is really a SONNX restriction since a valid ONNX graph may have unconnected nodes. 
+
+> "Please note that the sub operator has been removed since it is not used
+
+> by any other node or as an output of the graph."
+
+> is contradictory with "%op4_out = Sub(%I1, %I2)".
+
+OK: Yes, you are absolutely right. I am wondering why I have written this…\
+=> Suppressed.
+
+> Behaviour: Add "Initially, all input values of the graph are defined."
+
+OK\: 
+=> Added.
+
+> and "When an output of a node is connected to the input of another node
+> by an edge the definition of the value of the output of the first
+> node implies the definition of the value of the input of the second node".
+
+OK/KO: This is already part of the edge definition:
+
+"- An edge represents a connection between the input and the output
+ of two different nodes, or a connection between the input (resp. output) of the graph and the input (resp. output) of a node.
+
+-
+At any time, the inputs and outputs connected by an edge have the same value
+"
+
+But there is a slight difference in the sense that I am only talking about "values" here. Implicitly, I consider that "undefined" is a value. Which it is not.\ 
+=> At any time, the inputs and outputs connected by an edge have the same status (defined/undefined) and values
+
+
+
+
+> May be the definition of the graph should be exended to include
+
+> in its structure the special nodes.
+
+OK
+=> Moved.
+
+
+ 
+
+ 
+
+

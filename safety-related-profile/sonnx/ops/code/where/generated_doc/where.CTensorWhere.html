@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module where.CTensorWhere</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="where.index.html">where</a></code> — <code>module CTensorWhere</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">CTensorWhere</span><a href="where.proof.html#CTensorWhere" title="Valid (12 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> tensor.std.<a title="tensor.std.Int" href="https://www.why3.org/stdlib/tensor.std.html#Int_">Int</a>
+  <span class="keyword">use</span> tensor.std.<a title="tensor.std.List" href="https://www.why3.org/stdlib/tensor.std.html#List_">List</a>
+  <span class="keyword">use</span> tensor.std.<a title="tensor.std.Clib" href="https://www.why3.org/stdlib/tensor.std.html#Clib_">Clib</a>
+  <span class="keyword">use</span> tensor.std.<a title="tensor.std.Cfloat" href="https://www.why3.org/stdlib/tensor.std.html#Cfloat_">Cfloat</a>
+  <span class="keyword">use</span> mach.int.<a title="mach.int.Int32" href="https://www.why3.org/stdlib/mach.int.html#Int32_">Int32</a>
+  <span class="keyword">use</span> tensor.tensor.<a title="tensor.tensor.Range" href="https://www.why3.org/stdlib/tensor.tensor.html#Range_">Range</a>
+  <span class="keyword">use</span> tensor.tensor.<a title="tensor.tensor.Tensor" href="https://www.why3.org/stdlib/tensor.tensor.html#Tensor_">Tensor</a>
+  <span class="keyword">use</span> <a title="where.OPWhere" href="where.OPWhere.html">OPWhere</a>
+  <span class="keyword">use</span> tensor.layout.<a title="tensor.layout.CFlat" href="https://www.why3.org/stdlib/tensor.layout.html#CFlat_">CFlat</a>
+  <span class="keyword">use</span> tensor.libvector.<a title="tensor.libvector.CIndex" href="https://www.why3.org/stdlib/tensor.libvector.html#CIndex_">CIndex</a>
+  <span class="keyword">use</span> tensor.libtensor.<a title="tensor.libtensor.CTensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#CTensor_">CTensor</a>
+
+
+
+<span class="keyword">let</span> <a id="ctensor_where">ctensor_where</a><a href="where.proof.html#CTensorWhere.ctensor_where" title="Valid (12 goals)" class="icon valid icofont-check"></a> (cond a b r : <a title="tensor.libtensor.CTensor.ctensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#ctensor_15">ctensor</a>) =
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.valid_tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#valid_tensor_26">valid_tensor</a> cond }
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.valid_tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#valid_tensor_26">valid_tensor</a> a }
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.valid_tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#valid_tensor_26">valid_tensor</a> b }
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.valid_tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#valid_tensor_26">valid_tensor</a> r }
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> a <a title="tensor.tensor.Tensor.(~=)" href="https://www.why3.org/stdlib/tensor.tensor.html#infix%20~=_97">~=</a> <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> b <a title="tensor.tensor.Tensor.(~=)" href="https://www.why3.org/stdlib/tensor.tensor.html#infix%20~=_97">~=</a> <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> r }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+    <span class="keyword">requires</span> { <a title="tensor.libtensor.CTensor.tensorb" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensorb_57">tensorb</a> cond <a title="tensor.tensor.Tensor.(~)" href="https://www.why3.org/stdlib/tensor.tensor.html#infix%20~_94">~</a> <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> a <a title="tensor.tensor.Tensor.(~)" href="https://www.why3.org/stdlib/tensor.tensor.html#infix%20~_94">~</a> <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> b }
+    <span class="keyword">ensures</span> { <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> r = <a title="where.OPWhere.opwhere" href="where.OPWhere.html#opwhere">opwhere</a> (<a title="tensor.libtensor.CTensor.tensorb" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensorb_57">tensorb</a> cond) (<a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> a) (<a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> b) }
+    <span class="keyword">let</span> m = <a title="tensor.libvector.CIndex.cdim_size" href="https://www.why3.org/stdlib/tensor.libvector.html#cdim_size_48">cdim_size</a> r.<a title="tensor.libtensor.CTensor.t_dims" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_dims_17">t_dims</a> r.<a title="tensor.libtensor.CTensor.t_rank" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_rank_16">t_rank</a> <span class="keyword">in</span>
+    <span class="keyword">for</span> i = 0 <span class="keyword">to</span> m<a title="int.Int.(-)" href="https://www.why3.org/stdlib/int.html#infix%20-_23">-</a>1 <span class="keyword">do</span>
+      <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+      <span class="keyword">invariant</span> {
+        <span class="keyword">forall</span> k. 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> i -&gt;
+          <a title="tensor.std.Clib.value_at" href="https://www.why3.org/stdlib/tensor.std.html#value_at_86">value_at</a> r.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a> k =
+            <span class="keyword">if</span> Real.(0.0 <a title="real.Real.(<)" href="https://www.why3.org/stdlib/real.html#infix%20%3C_21">&lt;</a> <a title="tensor.std.Clib.value_at" href="https://www.why3.org/stdlib/tensor.std.html#value_at_86">value_at</a> cond.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a> k)
+            <span class="keyword">then</span> a.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[k] <span class="keyword">else</span> b.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[k]
+      }
+      <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+      r.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[i] &lt;-
+        <span class="keyword">if</span> (<a title="tensor.std.Cfloat.f32" href="https://www.why3.org/stdlib/tensor.std.html#f32_145">f32</a> 0.0) <a title="tensor.std.Cfloat.(.<)" href="https://www.why3.org/stdlib/tensor.std.html#infix%20.%3C_173">.&lt;</a> cond.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[i] <span class="keyword">then</span> a.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[i] <span class="keyword">else</span> b.<a title="tensor.libtensor.CTensor.t_data" href="https://www.why3.org/stdlib/tensor.libtensor.html#t_data_18">t_data</a>[i]
+    <span class="keyword">done</span>
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    ; <span class="keyword">assert</span> { <a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> r <a title="tensor.tensor.Tensor.(==)" href="https://www.why3.org/stdlib/tensor.tensor.html#infix%20==_101">==</a> <a title="where.OPWhere.opwhere" href="where.OPWhere.html#opwhere">opwhere</a> (<a title="tensor.libtensor.CTensor.tensorb" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensorb_57">tensorb</a> cond) (<a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> a) (<a title="tensor.libtensor.CTensor.tensor" href="https://www.why3.org/stdlib/tensor.libtensor.html#tensor_44">tensor</a> b) }
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

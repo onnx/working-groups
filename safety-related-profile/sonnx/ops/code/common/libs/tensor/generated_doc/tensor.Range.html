@@ -1,0 +1,80 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module tensor.Range</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="tensor.index.html">tensor</a></code> — <code>module Range</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">Range</span><a href="tensor.proof.html#Range" title="Valid (5 goals)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> int.<a title="int.Int" href="https://www.why3.org/stdlib/int.html#Int_">Int</a>
+  <span class="keyword">use</span> tensor.std.<a title="tensor.std.List" href="https://www.why3.org/stdlib/tensor.std.html#List_">List</a>
+
+  <span class="keyword">function</span> <a id="size">size</a> (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) : int =
+    <span class="keyword">match</span> ds <span class="keyword">with</span>
+    | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; 1
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d ds -&gt; d <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="tensor.Range.size" href="#size">size</a> ds
+    <span class="keyword">end</span>
+
+  <span class="keyword">predicate</span> <a id="positive">positive</a> (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) =
+    <span class="keyword">match</span> ds <span class="keyword">with</span>
+    | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; <span class="keyword">true</span>
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d ds -&gt; 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> d /\ <a title="tensor.Range.positive" href="#positive">positive</a> ds
+    <span class="keyword">end</span>
+
+  <span class="keyword">predicate</span> <a id="valid">valid</a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) =
+    <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+    | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> , <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; <span class="keyword">true</span>
+    | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> k ks , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> d ds -&gt; 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> d /\ <a title="tensor.Range.valid" href="#valid">valid</a> ks ds
+    | _ -&gt; <span class="keyword">false</span>
+    <span class="keyword">end</span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="valid_push">valid_push</a><a href="tensor.proof.html#Range.valid_push" title="Valid (one goal)" class="icon valid icofont-check"></a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int) (k d : int)
+    <span class="keyword">requires</span> { 0 <a title="int.Int.(<=)" href="https://www.why3.org/stdlib/int.html#infix%20%3C=_25">&lt;=</a> k <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> d }
+    <span class="keyword">requires</span> { <a title="tensor.Range.valid" href="#valid">valid</a> ks ds }
+    <span class="keyword">ensures</span> { <a title="tensor.Range.valid" href="#valid">valid</a> (<a title="tensor.std.List.push" href="https://www.why3.org/stdlib/tensor.std.html#push_40">push</a> ks k) (<a title="tensor.std.List.push" href="https://www.why3.org/stdlib/tensor.std.html#push_40">push</a> ds d) }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ks }
+    = <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+      | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> , <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; ()
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ks , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ds -&gt; valid_push ks ds k d
+      | _ -&gt; <span class="keyword">absurd</span>
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="size_append">size_append</a><a href="tensor.proof.html#Range.size_append" title="Valid (one goal)" class="icon valid icofont-check"></a> (xs ys : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">ensures</span> { <a title="tensor.Range.size" href="#size">size</a> (xs <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> ys) = <a title="tensor.Range.size" href="#size">size</a> xs <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> <a title="tensor.Range.size" href="#size">size</a> ys }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { xs }
+    = <span class="keyword">match</span> xs <span class="keyword">with</span> <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ rxs -&gt; size_append rxs ys | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; () <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">lemma</span> <a id="size_push">size_push</a><a href="tensor.proof.html#Range.size_push" title="Valid (one goal)" class="icon valid icofont-check"></a>: <span class="keyword">forall</span> xs x. <a title="tensor.Range.size" href="#size">size</a> (<a title="tensor.std.List.push" href="https://www.why3.org/stdlib/tensor.std.html#push_40">push</a> xs x) = <a title="tensor.Range.size" href="#size">size</a> xs <a title="int.Int.(*)" href="https://www.why3.org/stdlib/int.html#infix%20*_20">*</a> x
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="positive_size">positive_size</a><a href="tensor.proof.html#Range.positive_size" title="Valid (one goal)" class="icon valid icofont-check"></a> (ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.positive" href="#positive">positive</a> ds }
+    <span class="keyword">ensures</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.Range.size" href="#size">size</a> ds }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ds <span class="keyword">with</span> <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; () | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ds -&gt; positive_size ds <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="positive_valid">positive_valid</a><a href="tensor.proof.html#Range.positive_valid" title="Valid (one goal)" class="icon valid icofont-check"></a> (ks ds : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> int)
+    <span class="keyword">requires</span> { <a title="tensor.Range.valid" href="#valid">valid</a> ks ds }
+    <span class="keyword">ensures</span> { <a title="tensor.Range.positive" href="#positive">positive</a> ds }
+    <span class="keyword">ensures</span> { 0 <a title="int.Int.(<)" href="https://www.why3.org/stdlib/int.html#infix%20%3C_21">&lt;</a> <a title="tensor.Range.size" href="#size">size</a> ds }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { ds }
+    = <span class="keyword">match</span> ks , ds <span class="keyword">with</span>
+      | <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ks , <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ ds -&gt; positive_valid ks ds
+      | _ -&gt; ()
+      <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

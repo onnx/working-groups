@@ -1,0 +1,41 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 34, "time": 0.538 },
+    { "prover": "cvc5@1.2.1", "size": 50, "time": 0.537 },
+    { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.525 }
+  ],
+  "proofs": {
+    "OPConvInteger": {
+      "convInteger": {
+        "tactic": "split_vc",
+        "children": [
+          null,
+          { "prover": "alt-ergo@2.5.4", "time": 0.032 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.013 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.016 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.015 }
+        ]
+      },
+      "get_dim_positive": { "prover": "cvc5@1.2.1", "time": 0.074 },
+      "w_channels_calculate": { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+      "w_channels_split": { "prover": "alt-ergo@2.5.4", "time": 0.036 },
+      "w_cools_calculate": { "prover": "alt-ergo@2.5.4", "time": 0.012 },
+      "w_cools_split": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo@2.5.4", "time": 0.009 },
+          { "prover": "alt-ergo@2.5.4", "time": 0.006 },
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo@2.5.4", "time": 0.024 },
+              { "prover": "alt-ergo@2.5.4", "time": 0.522 }
+            ]
+          }
+        ]
+      },
+      "w_lines_calculate": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "w_lines_split": { "prover": "cvc5@1.2.1", "time": 0.063 }
+    }
+  }
+}

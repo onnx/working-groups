@@ -1,0 +1,449 @@
+module CTensorInt8
+
+  use tensorint.mint.WInt8
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  function to_int (x : WInt8.t) : int = WInt8.to_int x
+  function wrap (v : int) : int = WInt8.swrap v
+
+  type carray_i8 = ptr WInt8.t
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_i8 ;
+  }
+  
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_i8 (ds : iarray) (n : int32) : ctensor
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_i8 (r : ctensor)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WInt8.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_i8 (r : ctensor) (v : WInt8.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+  (* Element-wise addition with hardware wrap-around *)
+  let ctensor_add_i8 (a b r : ctensor)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WInt8.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end
+
+module CTensorUInt8
+
+  use tensorint.mint.WUInt8
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  function to_int (x : WUInt8.t) : int = WUInt8.to_int x
+  function wrap (v : int) : int = WUInt8.uwrap v
+
+  type carray_ui8 = ptr WUInt8.t
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_ui8 ;
+  }
+  
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_ui8 (ds : iarray) (n : int32) : ctensor
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_ui8 (r : ctensor)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WUInt8.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_ui8 (r : ctensor) (v : WUInt8.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+  (* Element-wise addition with hardware wrap-around *)
+  let ctensor_add_ui8 (a b r : ctensor)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WUInt8.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end
+
+module CTensorInt32
+
+  use tensorint.mint.WInt32
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  function to_int (x : WInt32.t) : int = WInt32.to_int x
+  function wrap (v : int) : int = WInt32.swrap v
+
+  type carray_i32 = ptr WInt32.t
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_i32 ;
+  }
+  
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_i32 (ds : iarray) (n : int32) : ctensor
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_i32 (r : ctensor)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WInt32.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_i32 (r : ctensor) (v : WInt32.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+ 
+  let ctensor_add_i32 (a b r : ctensor)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WInt32.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end
+
+module CTensorUInt32
+
+  use tensorint.mint.WUInt32
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  function to_int (x : WUInt32.t) : int = WUInt32.to_int x
+  function wrap (v : int) : int = WUInt32.uwrap v
+
+  type carray_ui32 = ptr WUInt32.t
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_ui32 ;
+  }
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_ui32 (ds : iarray) (n : int32) : ctensor
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_ui32 (r : ctensor)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WUInt32.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_ui32 (r : ctensor) (v : WUInt32.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+  let ctensor_add_ui32 (a b r : ctensor)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WUInt32.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end

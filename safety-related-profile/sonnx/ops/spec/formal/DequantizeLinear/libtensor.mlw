@@ -1,0 +1,348 @@
+(* ============================================================
+   libtensor.mlw (DequantizeLinear)
+
+   Same architecture as QuantizeLinear's libtensor.mlw:
+     - CTensor        : C-extractable float32 tensor (output y)
+     - CTensorInt32    : C-extractable int32 tensor (input x)
+     - OPDequantizeLinear     : pure math spec (reference truth)
+     - CTensorDequantizeLinear: C kernel + proof against the spec
+   ============================================================ *)
+
+module CTensor
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  type farray = ptr float
+
+  type ctensor = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : farray ;
+  }
+
+
+  function tensor_dim (t : ctensor) : list int = ivector t.t_dims t.t_rank
+
+  function tensor_size (t : ctensor) : int = vdim t.t_dims t.t_rank
+
+  predicate valid_index (k : list int) (t : ctensor) = valid k (tensor_dim t)
+
+  predicate empty_tensor (t : ctensor) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor) : real =
+    if valid_index k t then
+      value_at t.t_data (tensor_offset k t)
+    else 0.0
+
+  function tensor_value (t : ctensor) : list int -> real =
+    fun k -> tensor_value_at k t
+
+  function tensor_valueb (t : ctensor) : list int -> bool =
+    fun k -> Real.(tensor_value_at k t > 0.0)
+
+  let ghost function tensor (t : ctensor) : tensor real
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0.0 }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0.0 ;
+    }
+
+  let ghost function tensorb (t : ctensor) : tensor bool
+    (*proof*)
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_valueb t }
+    ensures { result.background = false }
+    (*qed*)
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_valueb t } ;
+      background = false ;
+    }
+
+  let ctensor_create (ds : iarray) (n : int32) : ctensor =
+    (*proof*)
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    (*qed*)
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear (r : ctensor) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = 0.0 }
+      (*qed*)
+      r.t_data[i] <- f32 0.0
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.zero 0.0 (tensor_dim r) }
+    (*qed*)
+
+  let ctensor_reset (r : ctensor) (v : float) =
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      (*proof*)
+      invariant { forall k. 0 <= k < i -> value_at r.t_data k = v }
+      (*qed*)
+      r.t_data[i] <- v
+    done
+    (*proof*)
+    ; assert { tensor r == Tensor.const (to_real v) 0.0 (tensor_dim r) }
+    (*qed*)
+
+end
+
+(* Same structure as CTensor, but for the int32 output tensors *)
+module CTensorInt32
+
+  use tensorint.mint.WInt32
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+
+  function to_int (x : WInt32.t) : int = WInt32.to_int x
+  function wrap (v : int) : int = WInt32.swrap v
+
+  type carray_i32 = ptr WInt32.t
+
+  type ctensor_i32 = {
+    t_rank : int32 ;
+    t_dims : iarray ;
+    t_data : carray_i32 ;
+  }
+
+
+  function tensor_dim (t : ctensor_i32) : list int = ivector t.t_dims t.t_rank
+  function tensor_size (t : ctensor_i32) : int = vdim t.t_dims t.t_rank
+  predicate valid_index (k : list int) (t : ctensor_i32) = valid k (tensor_dim t)
+  predicate empty_tensor (t : ctensor_i32) = t.t_rank = 0
+
+  predicate valid_tensor (t : ctensor_i32) =
+    dimension t.t_dims t.t_rank /\
+    valid_range t.t_data 0 (tensor_size t) /\
+    writable t.t_data
+
+  function tensor_offset (k : list int) (t : ctensor_i32) : int = offset k (tensor_dim t)
+
+  function tensor_value_at (k : list int) (t : ctensor_i32) : int =
+    if valid_index k t then
+      to_int (value_at t.t_data (tensor_offset k t))
+    else 0
+
+  function tensor_value (t : ctensor_i32) : list int -> int =
+    fun k -> tensor_value_at k t
+
+  let ghost function tensor (t : ctensor_i32) : tensor int
+    requires { valid_tensor t }
+    ensures { result.dims = tensor_dim t }
+    ensures { result.data = tensor_value t }
+    ensures { result.background = 0 }
+    = {
+      dims = pure { tensor_dim t } ;
+      data = pure { tensor_value t } ;
+      background = 0 ;
+    }
+
+  let ctensor_create_i32 (ds : iarray) (n : int32) : ctensor_i32
+    requires { dimension ds n }
+    ensures { empty_tensor result \/ valid_tensor result }
+    ensures { empty_tensor result \/ result.t_rank = n }
+    ensures { empty_tensor result \/ result.t_dims = ds }
+    =
+    let m = cdim_size ds n in
+    let vs = malloc (to_uint32 m) in
+    {
+      t_rank = if is_null vs then 0 else n ;
+      t_dims = ds ;
+      t_data = vs ;
+    }
+
+  let ctensor_clear_i32 (r : ctensor_i32)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.zero 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = 0 }
+      r.t_data[i] <- WInt32.czero
+    done ;
+    assert { tensor r == Tensor.zero 0 (tensor_dim r) }
+
+  let ctensor_reset_i32 (r : ctensor_i32) (v : WInt32.t)
+    requires { valid_tensor r }
+    ensures { tensor r = Tensor.const (to_int v) 0 (tensor_dim r) }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k. 0 <= k < i -> to_int (value_at r.t_data k) = to_int v }
+      r.t_data[i] <- v
+    done ;
+    assert { tensor r == Tensor.const (to_int v) 0 (tensor_dim r) }
+
+ 
+  let ctensor_add_i32 (a b r : ctensor_i32)
+    requires { valid_tensor a /\ valid_tensor b /\ valid_tensor r }
+    requires { tensor_dim a = tensor_dim b }
+    requires { tensor_dim a = tensor_dim r }
+    ensures  {
+      forall k. valid_index k r ->
+        tensor_value_at k r = wrap (tensor_value_at k a + tensor_value_at k b)
+    }
+    =
+    let m = cdim_size r.t_dims r.t_rank in
+    for i = 0 to m-1 do
+      invariant {
+        forall k. 0 <= k < i ->
+          to_int (value_at r.t_data k)
+            = wrap (to_int (value_at a.t_data k) + to_int (value_at b.t_data k))
+      }
+      r.t_data[i] <- WInt32.( .+. ) a.t_data[i] b.t_data[i]
+    done
+
+end
+
+(** ONNX DequantizeLinear, default attributes (per-tensor: scale/zero_point
+    are scalars).
+
+      y = (x - x_zero_point) * y_scale
+
+    T1 = int32 (x, x_zero_point), T2 = float32 (y_scale), T3 = float32 (y)
+
+    zero_point is kept fully general (not forced to 0). *)
+
+module OPDequantizeLinear
+  use tensor.tensor.Tensor
+  use int.Int
+  use real.Real
+  use real.FromInt
+  use tensor.tensor.Range
+  use tensorint.mint.WInt32
+
+  (** int32 wrap-around subtraction: matches hardware (x - zero_point)
+     semantics before the cast to float. *)
+  function wrap (v : int) : int = WInt32.swrap v
+
+  (** Dequantization of a single scalar *)
+  function dequantize_value (v : int) (scale : real) (zero_point : int) : real =
+    let d = wrap Int.( v - zero_point ) in
+    Real.( FromInt.from_int d * scale )
+
+(* Applies dequantize_value everywhere *)
+  let ghost function ddequantize (x : tensor int) (scale : real) (zero_point : int) : data real
+    = fun ks -> dequantize_value (x.data ks) scale zero_point
+
+
+  let ghost function opdequantizelinear (x : tensor int) (scale : real) (zero_point : int) : tensor real
+    requires { Real.( scale > 0.0 ) }
+    ensures { result.dims = x.dims }
+    ensures { result.data = ddequantize x scale zero_point }
+    ensures { result.background = dequantize_value x.background scale zero_point }
+    (*proof*)
+    = { dims = x.dims ;
+        data = ddequantize x scale zero_point ;
+        background = dequantize_value x.background scale zero_point }
+    (*qed*)
+
+end
+
+module CTensorDequantizeLinear
+  use int.Int
+  use real.FromInt
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use ref.Ref
+  use OPDequantizeLinear
+  use tensor.libtensor.CTensor
+  use CTensorInt32
+  use tensorint.mint.WInt32
+
+  (** Models the hardware cast of a machine int32 into a float *)
+  val function int32_to_float (v : WInt32.t) : float
+    ensures { to_real result = FromInt.from_int (WInt32.to_int v) }
+
+   let ctensor_dequantize_linear
+      (x : CTensorInt32.ctensor_i32) (scale : float) (zero_point : WInt32.t) (r : CTensor.ctensor)
+    requires { CTensorInt32.valid_tensor x }
+    requires { CTensor.valid_tensor r }
+    requires { CTensorInt32.tensor_dim x = CTensor.tensor_dim r }
+    requires { Cfloat.zero .< scale }
+    ensures  {
+      CTensor.tensor r
+        ~ opdequantizelinear (CTensorInt32.tensor x) (to_real scale) (WInt32.to_int zero_point)
+    }
+    ensures  {
+      forall k. valid k (CTensor.tensor_dim r) ->
+        (CTensor.tensor r) k
+          = (opdequantizelinear (CTensorInt32.tensor x) (to_real scale) (WInt32.to_int zero_point)) k
+    }
+    (*proof*)
+    =
+    let m = cdim_size r.CTensor.t_dims r.CTensor.t_rank in
+    for i = 0 to m-1 do
+      invariant { forall k.
+        0 <= k < i ->
+          value_at r.CTensor.t_data k
+            = dequantize_value
+                (WInt32.to_int (value_at x.CTensorInt32.t_data k))
+                (to_real scale)
+                (WInt32.to_int zero_point)
+      }
+      let d = WInt32.( x.CTensorInt32.t_data[i] .-. zero_point ) in
+      r.CTensor.t_data[i] <- int32_to_float d .* scale
+    done
+    ;
+    let ghost tr = CTensor.tensor r in
+    let ghost tx = CTensorInt32.tensor x in
+    let ghost ty = opdequantizelinear tx (to_real scale) (WInt32.to_int zero_point) in
+    assert { tr ~ ty }
+    ;
+    assert {
+      forall k. valid k (CTensor.tensor_dim r) -> tr k = ty k
+    }
+    (*qed*)
+
+end

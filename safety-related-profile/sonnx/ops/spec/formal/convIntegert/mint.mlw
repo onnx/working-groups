@@ -1,0 +1,247 @@
+theory Wrap
+
+  use int.Int
+  use int.Power
+  use int.EuclideanDivision
+
+  constant bits : int
+  axiom bits_pos : bits > 0
+
+  constant modulus : int = power 2 bits
+
+  (* unsigned representative in [0, 2^bits) *)
+  function uwrap (v : int) : int = mod v modulus
+
+  (* signed (two's complement) representative in [-2^(bits-1), 2^(bits-1)) *)
+  function swrap (v : int) : int =
+    let m = uwrap v in
+    if m < div modulus 2 then m else m - modulus
+
+  lemma modulus_pos :
+    0 < modulus
+
+  lemma uwrap_bounds :
+    forall v : int. 0 <= uwrap v < modulus
+
+  lemma swrap_bounds :
+    forall v : int. - (div modulus 2) <= swrap v < div modulus 2
+
+  lemma uwrap_id :
+    forall v : int. 0 <= v < modulus -> uwrap v = v
+
+  lemma swrap_id :
+    forall v : int. - (div modulus 2) <= v < div modulus 2 -> swrap v = v
+
+  lemma uwrap_comm :
+    forall a b : int. uwrap (a + b) = uwrap (b + a)
+
+  lemma uwrap_assoc :
+    forall a b c : int. uwrap (uwrap (a + b) + c) = uwrap (a + uwrap (b + c))
+
+  let lemma div_mod_unique (a q r : int)
+    requires { 0 <= r < modulus }
+    requires { a = modulus * q + r }
+    ensures  { q = div a modulus }
+    ensures  { r = mod a modulus }
+    (*proof*)
+    = if q < div a modulus then
+        begin
+          assert { modulus * (div a modulus - q) = r - mod a modulus } ;
+          assert { modulus <= modulus * (div a modulus - q) } ;
+          assert { r - mod a modulus < modulus } ;
+          absurd
+        end
+      else if q > div a modulus then
+        begin
+          assert { modulus * (q - div a modulus) = mod a modulus - r } ;
+          assert { modulus <= modulus * (q - div a modulus) } ;
+          assert { mod a modulus - r < modulus } ;
+          absurd
+        end
+      else ()
+    (*qed*)
+
+  let lemma uwrap_shift (p k : int)
+    ensures { uwrap (p + k * modulus) = uwrap p }
+    (*proof*)
+    = div_mod_unique (p + k * modulus) (div p modulus + k) (mod p modulus)
+    (*qed*)
+
+  let lemma swrap_shift (p k : int)
+    ensures { swrap (p + k * modulus) = swrap p }
+    (*proof*)
+    = uwrap_shift p k
+    (*qed*)
+
+  let lemma swrap_add_swrap (a b : int)
+    ensures { swrap (swrap a + b) = swrap (a + b) }
+    (*proof*)
+    = if uwrap a < div modulus 2 then
+        begin
+          assert { swrap a = uwrap a } ;
+          assert { a - uwrap a = modulus * (div a modulus) } ;
+          assert { swrap a + b = (a + b) + (- modulus) * (div a modulus) } ;
+          swrap_shift (a + b) (- (div a modulus))
+        end
+      else
+        begin
+          assert { swrap a = uwrap a - modulus } ;
+          assert { a - uwrap a = modulus * (div a modulus) } ;
+          assert { swrap a + b = (a + b) + (- modulus) * (div a modulus + 1) } ;
+          swrap_shift (a + b) (- (div a modulus + 1))
+        end
+    (*qed*)
+
+end
+
+module Int8
+  use int.Int
+
+  type int8 = < range -0x80 0x7f >
+
+  constant min_int8 : int = -0x80
+  constant max_int8 : int = 0x7f
+
+  function to_int (x : int8) : int = int8'int x
+
+  clone export mach.int.Bounded_int with
+    type t             = int8,
+    constant min        = min_int8,
+    constant max        = max_int8,
+    function to_int      = int8'int,
+    lemma to_int_in_bounds,
+    lemma extensionality
+end
+
+module UInt8
+  use int.Int
+
+  type uint8 = < range 0x00 0xff >
+
+  constant min_uint8 : int = 0x00
+  constant max_uint8 : int = 0xff
+
+  function to_int (x : uint8) : int = uint8'int x
+
+  clone export mach.int.Bounded_int with
+    type t             = uint8,
+    constant min        = min_uint8,
+    constant max        = max_uint8,
+    function to_int      = uint8'int,
+    lemma to_int_in_bounds,
+    lemma extensionality
+end
+
+module WInt8
+  use Int8
+  use export int.Int
+  use mach.int.Int32
+
+  constant bits8 : int = 8
+  clone export Wrap with constant bits = bits8
+
+  type t = Int8.int8
+
+  function to_int (x : t) : int = Int8.to_int x
+
+  val constant czero : t
+    ensures { to_int result = 0 }
+
+  val function ( .+. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a + to_int b) }
+
+  val function ( .-. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a - to_int b) }
+
+  val function ( .*. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a * to_int b) }
+
+  val function ( .~. ) (a : t) : t
+    ensures { to_int result = swrap (- to_int a) }
+
+  val function widen32 (x : t) : Int32.int32
+    ensures { Int32.to_int result = to_int x }
+
+end
+
+module WUInt8
+  use UInt8
+  use export int.Int
+  use mach.int.Int32
+
+  constant bits8 : int = 8
+  clone export Wrap with constant bits = bits8
+
+  type t = UInt8.uint8
+
+  function to_int (x : t) : int = UInt8.to_int x
+
+  val constant czero : t
+    ensures { to_int result = 0 }
+
+  val function ( .+. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a + to_int b) }
+
+  val function ( .-. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a - to_int b) }
+
+  val function ( .*. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a * to_int b) }
+
+  val function widen32 (x : t) : Int32.int32
+    ensures { Int32.to_int result = to_int x }
+
+end
+
+module WInt32
+  use mach.int.Int32
+  use export int.Int
+
+  constant bits32 : int = 32
+  clone export Wrap with constant bits = bits32
+
+  type t = Int32.int32
+
+  function to_int (x : t) : int = Int32.to_int x
+
+  val constant czero : t
+    ensures { to_int result = 0 }
+
+  val function ( .+. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a + to_int b) }
+
+  val function ( .-. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a - to_int b) }
+
+  val function ( .*. ) (a b : t) : t
+    ensures { to_int result = swrap (to_int a * to_int b) }
+
+  val function ( .~. ) (a : t) : t
+    ensures { to_int result = swrap (- to_int a) }
+
+end
+
+module WUInt32
+  use mach.int.UInt32
+  use export int.Int
+
+  constant bits32 : int = 32
+  clone export Wrap with constant bits = bits32
+
+  type t = UInt32.uint32
+
+  function to_int (x : t) : int = UInt32.to_int x
+
+  val constant czero : t
+    ensures { to_int result = 0 }
+
+  val function ( .+. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a + to_int b) }
+
+  val function ( .-. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a - to_int b) }
+
+  val function ( .*. ) (a b : t) : t
+    ensures { to_int result = uwrap (to_int a * to_int b) }
+
+end
