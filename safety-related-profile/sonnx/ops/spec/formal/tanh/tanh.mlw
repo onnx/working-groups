@@ -1,0 +1,81 @@
+module OPTanh
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+  use int.Int
+  use real.Real
+  use tensor.std.Cfloat
+
+  val function exp_r (x : real) : real
+
+  val function tanh_r (x : real) : real
+    ensures {
+      result =
+      (exp_r x - exp_r (-x)) / (exp_r x + exp_r (-x))
+    }
+    ensures {
+      result =
+      (exp_r (2.0 * x) - 1.0) / (exp_r (2.0 * x) + 1.0)
+    }
+    ensures {
+      result =
+      (1.0 - exp_r (-2.0 * x)) / (1.0 + exp_r (-2.0 * x))
+    }
+
+  let ghost function dtanh (a : tensor real) : data real
+    = fun ks ->
+        if valid ks a.dims then
+          tanh_r (a.data ks)
+        else
+          a.background
+
+  let ghost function optanh (a : tensor real) : tensor real
+    ensures  { result ~= a }
+    ensures  { result.data = dtanh a }
+    = { dims = a.dims ;
+        data = dtanh a ;
+        background = a.background }
+
+end
+
+
+module CTensorTanh
+  use int.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use ref.Ref
+  use OPTanh
+  use tensor.libtensor.CTensor
+
+  val function ctanh (x : float) : float
+    ensures { result = tanh_r x }
+
+  let ctensor_tanh (a r : ctensor) =
+    requires { valid_tensor a }
+    requires { valid_tensor r }
+    requires { tensor a ~= tensor r }
+
+    ensures  { tensor r = optanh (tensor a) }
+
+    let m = cdim_size r.t_dims r.t_rank in
+
+    for i = 0 to m-1 do
+      invariant {
+        forall k.
+        0 <= k < i ->
+          value_at r.t_data k =
+          tanh_r (value_at a.t_data k)
+      }
+
+      r.t_data[i] <- ctanh a.t_data[i]
+
+    done;
+
+    assert { tensor r == optanh (tensor a) }
+
+end

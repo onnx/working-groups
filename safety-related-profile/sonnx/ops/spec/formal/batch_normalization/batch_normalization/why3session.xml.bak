@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="0.2" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="2" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="2" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="batch_normalization.mlw"/>
+<theory name="OPBatchNorm">
+ <goal name="dbatchnorm&#39;vc" expl="VC for dbatchnorm" proved="true">
+ <proof prover="0"><result status="valid" time="0.007573" steps="6"/></proof>
+ </goal>
+ <goal name="opbatchnorm&#39;vc" expl="VC for opbatchnorm">
+ <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <transf name="split_vc" >
+  <goal name="opbatchnorm&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.013305" steps="10"/></proof>
+  </goal>
+  <goal name="opbatchnorm&#39;vc.1" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  </goal>
+  <goal name="opbatchnorm&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.009720" steps="16"/></proof>
+  </goal>
+  <goal name="opbatchnorm&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.010218" steps="16"/></proof>
+  </goal>
+  <goal name="opbatchnorm&#39;vc.4" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.009073" steps="16"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="CTensorBatchNorm">
+ <goal name="ctensor_batchnorm&#39;vc" expl="VC for ctensor_batchnorm">
+ <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <transf name="split_vc" >
+  <goal name="ctensor_batchnorm&#39;vc.0" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.015189" steps="45"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.017528" steps="51"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.2" expl="integer overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.018710" steps="58"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.3" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="outofmemory" time="1.765584"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.4" expl="division by zero">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.5" expl="integer overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.089206" steps="2633"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.6" expl="integer overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.032717" steps="422"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.7" expl="loop invariant init" proved="true">
+  <proof prover="0"><result status="valid" time="0.016426" steps="52"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.8" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.8.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.9" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.040218" steps="608"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.10" expl="integer overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.102791" steps="2258"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.11" expl="precondition" proved="true">
+  <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+  <proof prover="1" timelimit="0.2"><result status="valid" time="0.092467" steps="25687"/></proof>
+  <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.12" expl="precondition">
+  <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.12.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+   <goal name="ctensor_batchnorm&#39;vc.12.1" expl="precondition" proved="true">
+   <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.099663" steps="26718"/></proof>
+   <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.13" expl="precondition">
+  <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.13.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+   <goal name="ctensor_batchnorm&#39;vc.13.1" expl="precondition" proved="true">
+   <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.100414" steps="26569"/></proof>
+   <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.14" expl="precondition">
+  <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.14.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+   <goal name="ctensor_batchnorm&#39;vc.14.1" expl="precondition" proved="true">
+   <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.098898" steps="26868"/></proof>
+   <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.15" expl="precondition">
+  <proof prover="0" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="2" timelimit="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.15.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+   <goal name="ctensor_batchnorm&#39;vc.15.1" expl="precondition" proved="true">
+   <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.088719" steps="26324"/></proof>
+   <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.16" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.16.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.17" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.17.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.18" expl="precondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.028821" steps="589"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.19" expl="precondition" proved="true">
+  <proof prover="0"><result status="timeout" time="0.200000" steps="0"/></proof>
+  <proof prover="1" timelimit="0.2"><result status="valid" time="0.101010" steps="27810"/></proof>
+  <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.20" expl="loop invariant preservation">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.20.0" expl="loop invariant preservation">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.21" expl="assertion">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="ctensor_batchnorm&#39;vc.21.0" expl="assertion">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.22" expl="postcondition" proved="true">
+  <proof prover="0"><result status="valid" time="0.021518" steps="125"/></proof>
+  </goal>
+  <goal name="ctensor_batchnorm&#39;vc.23" expl="out of loop bounds" proved="true">
+  <proof prover="0"><result status="valid" time="0.039025" steps="497"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -5,7 +5,8 @@
 - CAT: _category in {__OPERATOR__ , __GRAPH__ , __FORMAT__}_
 - CRIT: _criticality in { __LOW__  , __HIGH__ }_
 - REQ:	_Identification of the SONNX requirement that can't be satisfied due to this issue_
-- LOC: 	_Location in the standard, possibly using an hyperlink__
+- LOC: 	_Location in the standard, possibly using an hyperlink_
+- AUT: _author_ (optional)
 
 ### Issue
 _Description of the issue (in a synthetic way)_
@@ -19,38 +20,14 @@ _Proposal to solve the issue or mitigate its consequences_
 ### Remarks (opt)
 _Additional remarks_
 
-# Issues - Non operators
 
-## Issue #1.1: Execution order of graph nodes
-- CAT: GRAPH
-- CRI: LOW
-- REQ: (TBC)
-- LOC: [Open Neural Network Exchange Intermediate Representation (ONNX IR) Specification](https://github.com/onnx/onnx/blob/main/docs/IR.md)
-
-### Issue
-The ONNX specification states that "Each computation dataflow graph is structured as a topologically sorted list of nodes that form a graph, which MUST be free of cycles. [...] ". The topological order is a partial order.
-
-### Consequence
-Different implementations may execute nodes in different orders, leading to different results when computations are done using floating poit numbers. 
-
-### Proposal
-The SONNX standard should provide a means to impose a total ordering on the nodes. 
-
-### Remarks
-This constraint will prevent optimisations. 
-Note that nothing prevents a model to be ill-formed. Compliance with the syntax and semantics of the ONNX standard must be checked (it is certainly checked, but nothing is said about what is checked or not and whether these checkers are complete / correct or not). 
-
-Other constraints are given in the [onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3). E.g.: 
-
-    // One FunctionProto can reference other FunctionProto in the model, however, recursive reference
-    // is not allowed.
-
-## Issue #1.2: Overloading
+## Issue #1.1: Overloading
 
 - CAT: (to be completed)
 - CRIT: (to be completed)
-- REQ:	(to be completed)
-- LOC: 	ONNX file format definition ([onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3)) 
+- REQ: (to be completed)
+- LOC: 	ONNX file format definition ([onnx-ml.proto3](https://github.com/onnx/onnx/blob/main/onnx/onnx-ml.proto3))
+- AUT: (to be completed)
 
 ### Issue
 A [function in ONNX](https://onnx.ai/onnx/intro/concepts.html) is a way to reuse the same combination of operators at different locations in a model. A function may refer to operators that are in a different opset than the model itself. In that case, the standard leaves the runtimes the freedom to chose whether the local  
@@ -165,7 +142,6 @@ IR version 10 introduces overloading, i.e. the capability to have several defini
 ### Issue
 Variadic operators can accept any number of inputs.
 
-
 ### Consequence
 (TBC)
 
@@ -233,7 +209,58 @@ Do we need to specify our own encoding format?
 ONNX supports __Quantization__ operators. Quantization data types are not consistent accross operators.
 [QuantizeLinear](https://onnx.ai/onnx/operators/onnx__QuantizeLinear.html) is able to output int16, uint16, but [QLinearMatMul](https://onnx.ai/onnx/operators/onnx__QLinearMatMul.html), [QLinearConv](https://onnx.ai/onnx/operators/onnx__QLinearConv.html), [MatMulInteger](https://onnx.ai/onnx/operators/onnx__MatMulInteger.html) and [ConvInteger](https://onnx.ai/onnx/operators/onnx__ConvInteger.html#l-onnx-doc-convinteger) do not support these types.
 
-# Operators
+
+## Issue #1.11: Axis attributes 
+
+- CAT: Format
+- CRI: LOW
+- REQ: (TBC)
+- LOC: https://onnx.ai/onnx/operators/onnx__Split.html
+       https://onnx.ai/onnx/operators/onnx__Concat.html
+       https://onnx.ai/onnx/operators/onnx__Softmax.html
+       https://onnx.ai/onnx/operators/onnx__Slice.html
+       
+### Issue
+Several operators identified in CNNs present the « axis » attribute (ex : Split, Concat, Softmax, Slice). This attribute gives an integer to define the axis of the input tensor on which the operation applies. But the onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? 
+- axis = '0' <=> batch ?
+- axis = '1' <=> channels ?
+- axis = '2' <=> rows ?
+- axis = '3' <=> columns ?
+If the « axis » attribute is set to ‘1’, does this mean that the channels of the input tensors are operated (concatenated or splitted or sliced for example) ?
+
+### Consequence
+If the operation was performed along the wrong axis of the input tensors, the values of elements in the feature maps of the output tensor could be incorrect and then the next layer of the CNN would give an incorrect result by applying its operation on the wrong data.
+
+### Proposal
+Define in the documentation a dictionary associating integers with axis of tensors. 
+
+
+## Issue #1.12: Associate dimensions of input tensors with reshaping tensors 
+
+- CAT: Format
+- CRI: LOW
+- REQ: (TBC)
+- LOC: https://onnx.ai/onnx/operators/onnx__Resize.html
+       https://onnx.ai/onnx/operators/onnx__Reshape.html
+       https://onnx.ai/onnx/operators/onnx__Shape.html
+       
+### Issue
+This issue is linked to the previous issue (1.11). Some operators take as input a tensor defining the dimensions of the output tensor based on the input data tensor(s). But the onnx documentation does not specify exactly the correspondance between this reshaping tensor and the axis of the input data tensor to be reshaped. 
+- The input named 'scales' of the RESIZE operator (in CNNs) gives a tensor which indicate the resize of each dimension of the input data tensor. Each element of 'scales' corresponds to an axis of the input data tensor. But the documentation does not specify the correspondance between the position of the element on the 'scales' tensor and the axe of the input tensor. Does the first element of the 'scales' tensor correspond to batch of the input tensor ? Does the second element of the 'scales' tensor correspond to the channels of the input tensor ? Does the third element of the 'scales' tensor correspond to the rows of the input tensor ? ...
+- The input named 'shape' of the RESHAPE operator is a shape tensor which specifies the output shape. But the documentation does not specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor. Is it the value of the third element of the 'shape' tensor that determines the size of the ouput tensor rows (in case of CNNs) ? 
+- The SHAPE operator outputs an 1D tensor containing the shape of the input tensor. But the documentation does not specify the correspondance between the dimension of the input data tensor and the position of the element on the 'shape' output tensor. In case of CNNs, if the input was a tensor containing 16 channels of feature maps with size 80x80, what would the output tensor look like ? Would it be : 'shape' = [16,80,80] ? Or the sizes of each dimension of the input tensor should be written to the output tensor in another order ? 
+
+### Consequence
+- For RESIZE operator : The ouput tensor could be the incorrect shape with incorrect elements in the feature maps if the rescaling of the dimension was misunderstood. The operations of the next layers would be distorted.
+- For RESHAPE operator : The output tensor may be incorrect if the input tensor was reshaped based on the wrong axes.
+- For SHAPE operator : The output tensor could be incorrect if the implementation of the 'shape' operator did not list the dimensions of the input tensor in the correct order. 
+
+### Proposal
+- For RESIZE operator : Specify the correspondance between the elements of the "scales" input and the axis of the input tensor to be resized.
+- For RESHAPE operator : Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
+- For SHAPE operator : Specify in the documentation the correspondance between the dimension of the input tensor and the position of the value on the 'shape' output tensor.
+
+# Issues - Operators
 
 ## Issue #2.1: Incomplete specification of SPLIT operator
 
@@ -243,22 +270,13 @@ ONNX supports __Quantization__ operators. Quantization data types are not consis
 - LOC: https://onnx.ai/onnx/operators/onnx__Split.html
 
 ### Issue
-1. The "axis" attribute gives an integer to define the axis along which split the input tensor into a list of tensors. The onnx documentation does not specify the correspondance between the integer and the axis of the tensor. Is the following interpretation the correct representation ? : 
-- axis = '0' <=> batch ?
-- axis = '1' <=> channels ?
-- axis = '2' <=> rows ?
-- axis = '3' <=> columns ?
-
-2. Moreover, the "split" input gives a tensor which indicate the length of the 'axis' specified for each output tensor. For example, if the shape of the input tensor is [1,32,320,320] (assuming 32=channels, 320=lines and 320=columns) and the "split" input is [16,16] with the "axis" attribute = 1, then the operator splits the input tensor into two output tensors [1,16,320,320] and [1,16,320,320]. In general, the next layer of the network applies its operation on one of the two output tensors and the other one is kept for use in a deeper layer of the network. But the documentation does not specify which 16 channels are used in the next layer and which 16 channels are set aside. Is it the first 16 or the last 16 channels of the input tensor ?
+The input named "split" gives a tensor which indicate the length of the 'axis' specified for each output tensor. For example, if the shape of the input tensor is [1,32,320,320] and the "split" input is [16,16] with the "axis" attribute = 1, then the operator splits the input tensor into two output tensors [1,16,320,320] and [1,16,320,320]. These two output tensors are each an input tensor of a following layer of the CNN. However, the onnx documentation does not specify exactly which are the 16 feature maps of the input tensor which go into the first output and which are the 16 which generate the other output.
 
 ### Consequence
-1. When implementing a neural network containing a "split" operator, the split operation on an input tensor can be performed on the wrong axis et so it would give an incorrect result. 
-2. After the split of tensor's channels, the next layer of the neural network could receive the wrong feature maps and not those expected from the correct channels. 
+The next layers of the neural network could receive the wrong feature maps and not those expected from the correct channels. 
 
 ### Proposal
-Define in the documentation a dictionary associating integers with axis of tensors. 
-The onnx description should specify exactly how the axis of the input tensor is splited and indicate precisely where each of the outputs in the following layers of the network are used.
-
+The onnx description should specify exactly how the axis of the input tensor is splited by giving a correspondence between the input tensor data and the output tensors of the operator.
 
 ## Issue #2.2: Incomplete specification of CONCAT operator 
 
@@ -268,15 +286,13 @@ The onnx description should specify exactly how the axis of the input tensor is 
 - LOC: 	https://onnx.ai/onnx/operators/onnx__Concat.html
 
 ### Issue
-1. The "axis" attribute gives an integer which defines the axis along which the n input tensors should be concatenated. The onnx documentation does not specify the correspondance between the integer and the axis of the tensor. In general, the "axis" attribute of the concat operator is set to 1, but which axis corresponds to 1 ? Does this mean that we must concatenate the channels of the input tensors, if "axis=1" corresponds to the channels ?
-2. Moreover, the onnx description does not specify the order in which the input tensors are concatenated.
+The onnx description does not specify the order in which the input tensors are concatenated. A list of tensors is given as input for concatenation along the attributed axis but it is not specify in which order the concatenated output tensor contains the input tensors in the specified axis. 
 
 ### Consequence
-If the concatenation was done along the wrong axis of the input tensors or in the wrong order depending on the different input tensors, then the next layer of the network would give an incorrect result by applying its operation on the wrong feature maps. 
+If the concatenation was done in the wrong order depending on the different input tensors, then the next layer of the network would give an incorrect result by applying its operation on the wrong feature maps. 
 
 ### Proposal
-Define in the documentation a dictionary associating integers with axis of tensors. 
-The onnx description should specify the order in which the input tensors are concatenated.
+The onnx description should specify the order in which the input tensors are concatenated (by giving a number to each input tensor ?).
 
 ## Issue #2.3: Incomplete specification of RESIZE operator 
 
@@ -286,16 +302,14 @@ The onnx description should specify the order in which the input tensors are con
 - LOC: 	https://onnx.ai/onnx/operators/onnx__Resize.html
 
 ### Issue
-1. The "scales" input gives a tensor which indicate the resize of each dimension. Each element of 'scales' corresponds to an axe of the input tensor. The onnx documentation indicates that the "scales" tensor takes value greater than 0. If it’s less than 1, it’s sampling down, otherwise, it’s upsampling. But the documentation does not specify the correspondance between the position of the element on the 'scales' tensor and the axe of the input tensor. Does the first element of the 'scales' tensor correspond to batch of the input tensor ? Does the second element of the 'scales' tensor correspond to the channels of the input tensor ? Does the third element of the 'scales' tensor correspond to the rows of the input tensor ? ... Moreover, if it's the value '2', we understand that the dimension of the corresponding axis is upsampling but by how much ? Does it mean that it is multiplied by 2 ?
-2. The "nearest_mode" attribute indicates how to get “nearest” pixel in input tensor from x_original. There are 4 modes : "round_prefer_floor", "round_prefer_ceil", "floor", "ceil" but for no mode the documentation explains which operation applies to the tensor. What difference applies depending on the mode? 
+1. The input named "scales" gives a tensor which indicate the resize of each dimension. Each element of 'scales' corresponds to an axe of the input tensor. The onnx documentation indicates that the "scales" tensor takes value greater than 0. If it’s less than 1, it’s sampling down, otherwise, it’s upsampling. If it's the value '2', we understand that the dimension of the corresponding axis is upsampling but by how much ? Does it mean that it is multiplied by 2 ?
+2. The "nearest_mode" attribute indicates how to get “nearest” pixel in input tensor from x_original. There are 4 modes : "round_prefer_floor", "round_prefer_ceil", "floor", "ceil" but for no mode the documentation explains which operation applies to the tensor. What difference applies depending on the mode ? 
 
 ### Consequence
 The ouput tensor could be the incorrect shape with incorrect elements in the feature maps if the rescaling of the dimension was misunderstood. The operations of the next layers would be distorted. 
 
 ### Proposal
-1. Specify the correspondance between the elements of the "scales" input and the axis of the input tensor to be resized.
-2. Specify exactly the transformation applied to the input tensor depending on the assigned upsampling mode. Give an example of what the output tensor looks like from an input tensor for each of the modes
-
+Specify exactly the transformation applied to the input tensor depending on the assigned upsampling mode. Give an example of what the output tensor looks like from an input tensor for each of the modes
 
 ## Issue #2.4: Incomplete specification of RESHAPE operator 
 
@@ -305,86 +319,57 @@ The ouput tensor could be the incorrect shape with incorrect elements in the fea
 - LOC:  https://onnx.ai/onnx/operators/onnx__Reshape.html
 
 ### Issue
-The "shape" input is a shape tensor which specifies the output shape. If one dimension of the new shape is -1, the value of the output dimension is inferred from the size of the input tensor and the remaining dimensions. Let's suppose an input tensor with size [1,c,l,w] and 'shape'=[1,c,-1], in this case where the shape of the output tensor is inferior to the shape of the input tensor, does it mean that we have to reorganize the matrix lxw of feature map into an unique row of size l*w in order to obtain an output tensor with the shape [1,c,l*w] ? And how are the rows of w columns organized on a single line ? Are they concatenated one after the other ? Is an order to be respected ? The onnx documentation does not specify exactly how the dimension '-1' transform the tensor to be reshaped. And vice versa, if shape of the output tensor > shape of the input tensor (input tensor's size = [1,c,L] and 'shape'=[1,c,l,w]), then how is the data from a row organized into matrices (L=l*w) ? The onnx documentation does not specify exactly how the data from the input tensor is reorganized. Moreover, the documentation does not specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
+The input named "shape" is a tensor which specifies the output shape. If one dimension of the new shape is -1, the value of the output dimension is inferred from the size of the input tensor and the remaining dimensions. Let's suppose an input tensor with size [1,c,l,w] and 'shape'=[1,c,-1], in this case where the shape of the output tensor is inferior to the shape of the input tensor, does it mean that we have to reorganize the matrix lxw of feature map into an unique row of size l*w in order to obtain an output tensor with the shape [1,c,l*w] ? And how are the rows of w columns organized on a single line ? Are they concatenated one after the other ? Is an order to be respected ? The onnx documentation does not specify exactly how the dimension '-1' transform the tensor to be reshaped. And vice versa, if shape of the output tensor > shape of the input tensor (input tensor's size = [1,c,L] and 'shape'=[1,c,l,w]), then how is the data from a row organized into matrices (L=l*w) ? The onnx documentation does not specify exactly how the data from the input tensor is reorganized. 
 
 ### Consequence
-1. The output tensor may be incorrect if the input tensor was reshaped based on the wrong axes.
-2. The output tensor may be incorrect if the reordering data in one dimension was done in the wrong order --> the operations of the next layers would be distorted. 
+The output tensor may be incorrect if the reordering data in one dimension was done in the wrong order --> the operations of the next layers would be distorted. 
 
 ### Proposal
-1. Specify the correspondance between the position of the element on the 'shape' tensor and the axe of the input tensor.
-2. Specify exactly how the dimension '-1' transform the tensor to be reshaped.
-3. Specify exactly how the data from the tensor is reorganized.
+1. Specify exactly how the dimension '-1' transform the tensor to be reshaped.
+2. Specify exactly how the data from the input tensor is reorganized.
 
-
-## Issue #2.5: Incomplete specification of SOFTMAX operator 
-
-- CAT: Operator
-- CRIT: High
-- REQ:	(TBC)
-- LOC: 	https://onnx.ai/onnx/operators/onnx__Softmax.html
-
-### Issue
-Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1)
-The “axis” attribute indicates the dimension along which Softmax will be performed. But the onnx documentation does not specify the correspondance between the integer given to the "axis" attribute and the axe of the input tensor. If 'axis=1', does it mean that Softmax is performed along the channels of the input tensor ? 
-
-### Consequence
-The values of elements in the feature maps of the output tensor could be incorrect if the softmax was performed along the wrong axe of the input tensor. 
-
-### Proposal
-Specify in the documentation the correspondance between the integer given to the "axis" attribute and the axe of the input tensor.
-
-
-## Issue #2.6 : Incomplete specification of SHAPE operator 
-
-- CAT: Operator
-- CRIT: High
-- REQ:	(TBC)
-- LOC: 	https://onnx.ai/onnx/operators/onnx__Shape.html
-
-### Issue
-The "shape" operator outputs an 1D tensor containing the shape of the input tensor. But the onnx documentation does not specify the correspondance between the dimension of the input tensor and the position of the element on the 'shape' output tensor. If the input was a tensor containing 16 channels of feature maps with size 80x80, what would the output tensor look like ? 'shape' = [16,80,80] ? Or the sizes of each dimension of the input tensor should be written to the output tensor in another order ? 
-
-### Consequence
-The output tensor could be incorrect if the implementation of the 'shape' operator did not list the dimensions of the input tensor in the correct order. 
-
-### Proposal
-1. Specify in the documentation the correspondance between the dimension of the input tensor and the position of the value on the 'shape' output tensor.
-2. Note in the onnx file of description of the neural network the shape of the layer input as well as the layer output. 
-
-
-## Issue #2.7 : Incomplete specification of SLICE operator 
-
-- CAT: Operator 
-- CRIT: High
-- REQ:	(TBC)
-- LOC: 	https://onnx.ai/onnx/operators/onnx__Slice.html
-
-### Issue
-The "axes" attribute gives an integer which defines the axis along which the input tensor should be sliced. The onnx documentation does not specify the correspondance between the integer and the axis of the tensor. 
-
-### Consequence
-When implementing a neural network containing a "slice" operator, the slice operation on an input tensor can be performed on the wrong axis et so it would give an incorrect result. 
-
-### Proposal
-Define in the documentation a dictionary associating integers with axis of tensors. 
-
-
-## Issue #2.8: incomplete specification of CONV operator
+## Issue #2.5: incomplete specification of CONV operator
 - CAT: Operator
 - CRI: HIGH
 - REQ: (TBC)
 - LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__Conv.html), but this issue appear in other operators
 
 ### Issue
-The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
-
-The value of the padding is not defined (it is actually 0).
-
-Presentation of attributes makes it difficult to check if all dependencies are expressed. 
+- The description of the CONV operator is very abstract: "The convolution operator consumes an input tensor and a filter, and computes the output.". 
+- The value of the padding is not defined (it is actually 0).
+- Presentation of attributes makes it difficult to check if all dependencies are expressed. 
 
 ### Consequence
-Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementation may lead to different results.
+- Implementer needs to check the referece implementation (or other doc.) to understand what needs to be implemented. Different implementations may lead to different results.
 
 ### Proposal
 See [example](https://github.com/ericjenn/working-groups/tree/ericjenn-srpwg-wg1/safety-related-profile/documents/conv_specification_example)
+
+## Issue #2.6: Batches 
+- CAT: Operator
+- CRI: HIGH
+- REQ: (TBC)
+- LOC: [CONV operator](https://onnx.ai/onnx/operators/onnx__MatMul.html),
+- AUT: Nicolas
+  
+In the ONNX tensor semantics, there is no notion of a batch dimension.
+
+In principle, inconsistencies are detected at runtime through shape inference when convolutions are involved, because it is convolutions that introduce batch semantics, which then propagate to the preceding/following operators.
+
+However, if we consider a network without convolutions, there is no longer any batch semantics.
+
+So, if we take a MatMul that receives an input tensor with T.shape = [2,3], it's unclear whether this is a 1D batch of size 2, or a 2D tensor with no batch dimension.
+
+The ONNX specification for MatMul refers to NumPy:
+> If both arguments are 2-D they are multiplied like conventional matrices.
+> If either argument is N-D, N > 2, it is treated as a stack of matrices residing in the last two indexes and broadcast accordingly.
+
+Some frameworks (such as https://github.com/Verified-Intelligence/auto_LiRPA) assume that the first dimension is always the batch, but without stating it explicitly — which can lead to hours of debugging to figure out. In this case, in my opinion, it is a misinterpretation (bug) in the framework.
+
+Since we more or less agreed to be as explicit as possible in SONNX,
+I suggest that for MatMul and Gemm we explain the following:
+- [3] is a 1D tensor of dimension 3
+- [1,3] is a 2D tensor of dimensions 1 and 3
+- [1,1,3] is a batch of 1 tensor, each of shape [1,3]
+=> There is no way to specify a 1D tensor with batch size > 1
+Workaround: [2,1,3] is a batch of 2 tensors, each of shape [1,3]

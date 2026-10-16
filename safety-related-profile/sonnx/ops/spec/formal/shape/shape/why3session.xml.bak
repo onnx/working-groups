@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Z3" version="4.13.4" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="shape.mlw"/>
+<theory name="OPShape" proved="true">
+ <goal name="my_nth&#39;vc" expl="VC for my_nth" proved="true">
+ <proof prover="0"><result status="valid" time="0.004587" steps="24961"/></proof>
+ </goal>
+ <goal name="clamp_boundaries&#39;vc" expl="VC for clamp_boundaries" proved="true">
+ <proof prover="0"><result status="valid" time="0.000001" steps="20735"/></proof>
+ </goal>
+ <goal name="calculate_y_dims&#39;vc" expl="VC for calculate_y_dims" proved="true">
+ <proof prover="0"><result status="valid" time="0.149700" steps="689773"/></proof>
+ </goal>
+ <goal name="dshape_&#39;vc" expl="VC for dshape_" proved="true">
+ <proof prover="1"><result status="valid" time="0.101853" steps="13113"/></proof>
+ </goal>
+ <goal name="opshape&#39;vc" expl="VC for opshape" proved="true">
+ <proof prover="1"><result status="valid" time="0.073696" steps="11330"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

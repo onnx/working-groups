@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="icofont.min.css">
+<title>Module std.List</title>
+</head>
+<body>
+<header><a href="index.html">index</a> — <code>library <a href="std.index.html">std</a></code> — <code>module List</code></header>
+<pre class="src">
+<span class="keyword">module</span> <span class="scope">List</span><a href="std.proof.html#List" title="Valid (one goal)" class="icon valid icofont-check"></a>
+  <span class="keyword">use</span> <span class="keyword">export</span> list.<a title="list.List" href="https://www.why3.org/stdlib/list.html#List_">List</a>
+  <span class="keyword">use</span> <span class="keyword">export</span> list.<a title="list.Map" href="https://www.why3.org/stdlib/list.html#Map_">Map</a>
+  <span class="keyword">use</span> <span class="keyword">export</span> list.<a title="list.Append" href="https://www.why3.org/stdlib/list.html#Append_">Append</a>
+</pre>
+<div class="doc">
+<p>Appends an element to the end of the list</p>
+</div>
+<pre class="src">
+  <span class="keyword">function</span> <a id="push">push</a> (xs : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> &#39;a) (x : &#39;a) : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> &#39;a =
+    xs <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> x <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a>
+
+  <span class="keyword">let</span> <span class="keyword">rec</span> <span class="keyword">lemma</span> <a id="map_concat">map_concat</a><a href="std.proof.html#List.map_concat" title="Valid (one goal)" class="icon valid icofont-check"></a> (f : &#39;a -&gt; &#39;b) (xs ys : <a title="list.List.list" href="https://www.why3.org/stdlib/list.html#list_8">list</a> &#39;a)
+    <span class="keyword">ensures</span> { <a title="list.Map.map" href="https://www.why3.org/stdlib/list.html#map_584">map</a> f (xs <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> ys) = <a title="list.Map.map" href="https://www.why3.org/stdlib/list.html#map_584">map</a> f xs <a title="list.Append.(++)" href="https://www.why3.org/stdlib/list.html#infix%20++_202">++</a> <a title="list.Map.map" href="https://www.why3.org/stdlib/list.html#map_584">map</a> f ys }
+    <span class="section level1"><span class="comment">{</span><span class="attribute section-toggle">proof</span><span class="comment section-text active">…</span><span class="comment">}</span><span class="section-text">
+    <span class="keyword">variant</span> { xs }
+    = <span class="keyword">match</span> xs <span class="keyword">with</span> <a title="list.List.Cons" href="https://www.why3.org/stdlib/list.html#Cons_8">Cons</a> _ rxs -&gt; map_concat f rxs ys | <a title="list.List.Nil" href="https://www.why3.org/stdlib/list.html#Nil_8">Nil</a> -&gt; () <span class="keyword">end</span>
+    <span class="comment">{</span><span class="attribute section-toggle">qed</span><span class="comment">}</span></span></span>
+
+<span class="keyword">end</span>
+</pre>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

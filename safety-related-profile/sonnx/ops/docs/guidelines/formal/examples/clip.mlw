@@ -1,0 +1,27 @@
+module OPClip
+  use tensor.Tensor
+  use int.Int
+  use list.List
+  use tensor.Range
+  use real.Real
+  use real.MinMax
+
+  predicate is_scalar_tensor (t : tensor real) =
+    t.dims = Nil /\ t.data = (fun _ -> t.background)
+
+  function dclip (x l m : tensor real): data real
+    = fun ks ->
+        if valid ks x.dims then
+          min m.background (max (x.data ks) l.background)
+        else x.background
+
+  let ghost function opclip (x l m : tensor real): tensor real
+    requires { is_scalar_tensor l }
+    requires { is_scalar_tensor m }
+    ensures { result ~= x }
+    ensures { result.data = dclip x l m }
+    (*proof*)
+    = { dims = x.dims; data = dclip x l m; background = x.background }
+    (*qed*)
+
+end

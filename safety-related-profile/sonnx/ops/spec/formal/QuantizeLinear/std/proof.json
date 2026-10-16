@@ -1,0 +1,27 @@
+{
+  "profile": [
+    { "prover": "z3@4.13.4", "size": 34, "time": 0.538 },
+    { "prover": "alt-ergo@2.5.4", "size": 17, "time": 0.525 }
+  ],
+  "proofs": {
+    "Cfloat": {
+      "one": { "prover": "alt-ergo@2.5.4", "time": 0.008 },
+      "zero": { "prover": "alt-ergo@2.5.4", "time": 0.004 }
+    },
+    "Cint": { "mixfix []": { "prover": "alt-ergo@2.5.4", "time": 0.008 } },
+    "Clib": {
+      "mixfix []": { "prover": "alt-ergo@2.5.4", "time": 0.008 },
+      "mixfix []<-": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "slice": { "prover": "alt-ergo@2.5.4", "time": 0.008 },
+      "slice_append": { "prover": "alt-ergo@2.5.4", "time": 0.021 },
+      "valid_in_range": { "prover": "alt-ergo@2.5.4", "time": 0.009 },
+      "vector_push": { "prover": "alt-ergo@2.5.4", "time": 0.16 }
+    },
+    "Int": {
+      "euclide": { "prover": "alt-ergo@2.5.4", "time": 0.035 },
+      "get_dim": { "prover": "alt-ergo@2.5.4", "time": 0.011 },
+      "mult_bound": { "prover": "z3@4.13.4", "time": 0.004 }
+    },
+    "List": { "map_concat": { "prover": "alt-ergo@2.5.4", "time": 0.016 } }
+  }
+}

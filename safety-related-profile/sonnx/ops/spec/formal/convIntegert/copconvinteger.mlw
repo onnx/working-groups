@@ -1,0 +1,634 @@
+module OPConvInteger
+
+  use tensor.tensor.Tensor
+  use int.Int
+  use tensor.std.Int
+  use list.List
+  use int.EuclideanDivision
+  use tensor.tensor.Range
+  use list.Length
+  use tensorint.mint.WInt32
+
+
+  function convDims (x w : tensor int) (str_h str_w : int)
+                     (dil_h dil_w : int)
+                     (pad_top pad_left pad_bottom pad_right : int) : list int
+  =
+    let dY_0 = get_dim x.dims 0 in
+    let dY_1 = get_dim w.dims 0 in
+
+    let alpha = get_dim x.dims 2 + pad_top + pad_bottom in
+    let theta = dil_h * (get_dim w.dims 2 - 1) + 1 in
+    let dY_2 = div (alpha - theta) str_h + 1 in
+
+    let beta = get_dim x.dims 3 + pad_left + pad_right in
+    let gamma = dil_w * (get_dim w.dims 3 - 1) + 1 in
+    let dY_3 = div (beta - gamma) str_w + 1 in
+
+    Cons dY_0 (Cons dY_1 (Cons dY_2 (Cons dY_3 Nil)))
+
+  function w_zero_at (wz : tensor int) (m : int) : int
+  =
+    match wz.dims with
+    | Nil -> wz.data Nil
+    | Cons _ Nil -> wz.data (Cons m Nil)
+    | _ -> wz.background
+    end
+
+
+  function coords_from_X_p (x : tensor int) (x_zero : int) (x_p_coords : list int) (pad_top pad_left : int) : int
+  =
+    let b = get_dim x_p_coords 0 in
+    let c = get_dim x_p_coords 1 in
+    let n = (get_dim x_p_coords 2) - pad_top in
+    let m = (get_dim x_p_coords 3) - pad_left in
+    let x_coords = Cons b (Cons c (Cons n (Cons m Nil))) in
+    if valid x_coords x.dims then x.data x_coords - x_zero else 0 - x_zero
+
+  let rec ghost function w_cools_calculate
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c i j jj n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int) : int
+  variant { j - jj }
+  =
+    if jj >= j then
+      0
+    else
+      let x_h = y_h * str_h + i * dil_h in
+      let x_w = y_w * str_w + jj * dil_w in
+      let x_val = coords_from_X_p x x_zero (Cons n (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left in
+      let w_val = w.data (Cons m (Cons c (Cons i (Cons jj Nil)))) - w_zero_at wz m in
+      x_val * w_val + w_cools_calculate x w x_zero wz c i j (jj + 1) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+
+  let rec lemma w_cools_split
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c i j jj k n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { jj <= k < j }
+    variant  { k - jj }
+    ensures {
+      let x_h = y_h * str_h + i * dil_h in
+      let x_w = y_w * str_w + k * dil_w in
+      let x_val = coords_from_X_p x x_zero (Cons n (Cons c (Cons x_h (Cons x_w Nil)))) pad_top pad_left in
+      let w_val = w.data (Cons m (Cons c (Cons i (Cons k Nil)))) - w_zero_at wz m in
+      w_cools_calculate x w x_zero wz c i (k+1) jj n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+      = x_val * w_val + w_cools_calculate x w x_zero wz c i k jj n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+    }
+    = if jj < k then w_cools_split x w x_zero wz c i j (jj+1) k n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+  let rec ghost function w_lines_calculate
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c i ii j n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int) : int
+  variant { i - ii }
+  =
+    if ii >= i then
+      0
+    else
+      w_cools_calculate x w x_zero wz c ii j 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+      + w_lines_calculate x w x_zero wz c i (ii + 1) j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+
+  let rec lemma w_lines_split
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c i ii k j n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { ii <= k < i }
+    variant  { k - ii }
+    ensures {
+      w_lines_calculate x w x_zero wz c (k+1) ii j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+      = w_cools_calculate x w x_zero wz c k j 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+        + w_lines_calculate x w x_zero wz c k ii j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+    }
+    = if ii < k then w_lines_split x w x_zero wz c i (ii+1) k j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+  let rec ghost function w_channels_calculate
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c cc i j n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int) : int
+  variant { c - cc }
+  =
+    if cc >= c then
+      0
+    else
+      w_lines_calculate x w x_zero wz cc i 0 j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+      + w_channels_calculate x w x_zero wz c (cc + 1) i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+
+  let rec lemma w_channels_split
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (c i cc k j n m y_h y_w : int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int)
+    requires { cc <= k < c }
+    variant  { k - cc }
+    ensures {
+      w_channels_calculate x w x_zero wz (k+1) cc i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+      = w_lines_calculate x w x_zero wz k i 0 j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+        + w_channels_calculate x w x_zero wz k cc i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+    }
+    = if cc < k then w_channels_split x w x_zero wz c i (cc+1) k j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left else ()
+
+
+  function dconv
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (y_dims : list int)
+    (str_h str_w dil_h dil_w pad_top pad_left : int) : data int
+  =
+    let c = get_dim w.dims 1 in
+    let i = get_dim w.dims 2 in
+    let j = get_dim w.dims 3 in
+    fun ks ->
+      if valid ks y_dims then
+        let n = get_dim ks 0 in
+        let m = get_dim ks 1 in
+        let y_h = get_dim ks 2 in
+        let y_w = get_dim ks 3 in
+        WInt32.swrap (w_channels_calculate x w x_zero wz c 0 i j n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+      else
+        0
+
+  let rec lemma get_dim_positive (ds : list int)
+    requires { positive ds }
+    ensures { forall i. 0 <= i < length ds -> 0 < get_dim ds i }
+    variant { ds }
+    = match ds with
+      | Nil -> ()
+      | Cons _ ds -> get_dim_positive ds
+      end
+
+
+  let ghost function convInteger
+    (x w : tensor int) (x_zero : int) (wz : tensor int)
+    (str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right : int) : tensor int
+  requires { str_h > 0 /\ str_w > 0 }
+  requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
+  requires { dil_h > 0 /\ dil_w > 0 }
+  requires { length x.dims = 4 }
+  requires { get_dim x.dims 1 = get_dim w.dims 1 }   (* [R3], group = 1 *)
+  requires { length w.dims = 4 }
+  requires { wz.dims = Nil \/ wz.dims = Cons (get_dim w.dims 0) Nil }
+  requires { let y_shape = convDims x w str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+              get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0
+           }
+  ensures { result.background = 0 }
+  ensures { result.dims = convDims x w str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right }
+  ensures { let y_dims = convDims x w str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+            result.data = dconv x w x_zero wz y_dims str_h str_w dil_h dil_w pad_top pad_left
+         }
+  =
+  let y_dims = convDims x w str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+  { dims = y_dims ;
+    data = dconv x w x_zero wz y_dims str_h str_w dil_h dil_w pad_top pad_left ;
+    background = 0 ;
+  }
+
+end
+
+module COPConvInteger
+
+  use OPConvInteger
+  use tensor.tensor.Tensor
+  use tensor.tensor.Range
+  use int.Int
+  use list.List
+  use list.Length
+  use tensor.std.Int
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.std.Clib
+  use mach.int.Int32
+
+  use tensorint.libtensor_int.CTensorUInt8
+  use tensorint.libtensor_int.CTensorInt8
+  use tensorint.libtensor_int.CTensorInt32
+  use tensorint.mint.WUInt8
+  use tensorint.mint.WInt8
+  use tensorint.mint.WInt32
+
+
+  let lemma swrap_swrap_add (a b : int)
+    ensures { WInt32.swrap (WInt32.swrap a + WInt32.swrap b) = WInt32.swrap (a + b) }
+    (*proof*)
+    = WInt32.swrap_add_swrap a (WInt32.swrap b) ;
+      WInt32.swrap_add_swrap b a
+    (*qed*)
+
+ 
+  let lemma ivector_get_dim_value_at (coords : iarray) (n : int) (i : int)
+    requires { n = 4 }
+    requires { 0 <= i < n }
+    requires { valid_range coords 0 n }
+    ensures  { get_dim (ivector coords n) i = value_at coords i }
+    =
+    assert { ivector coords 4 = Cons (to_int (value_at coords 0))
+                              (Cons (to_int (value_at coords 1))
+                              (Cons (to_int (value_at coords 2))
+                              (Cons (to_int (value_at coords 3)) Nil))) };
+    assert { i = 0 \/ i = 1 \/ i = 2 \/ i = 3 }
+
+
+  let lemma offset_injective (ks1 ks2 ds : list int)
+    requires { Range.valid ks1 ds }
+    requires { Range.valid ks2 ds }
+    requires { CFlat.offset ks1 ds = CFlat.offset ks2 ds }
+    ensures  { ks1 = ks2 }
+    = CFlat.index_of_offset ks1 ds ; CFlat.index_of_offset ks2 ds
+
+
+  let coords_from_X_p (x : CTensorUInt8.ctensor) (x_zero : WUInt8.t) (x_p_coords : iarray) (pad_top pad_left : int32) : (Int32.int32, bool)
+    requires { CTensorUInt8.valid_tensor x }
+    requires { (CTensorUInt8.t_rank x) = 4 }
+    requires { valid_range x_p_coords 0 4 }
+    requires { writable x_p_coords }
+    requires { in_bounds (value_at x_p_coords 2 - pad_top) }
+    requires { in_bounds (value_at x_p_coords 3 - pad_left) }
+    ensures  { let (value, flag) = result in
+               flag -> coords_from_X_p (CTensorUInt8.tensor x) (WUInt8.to_int x_zero) (ivector x_p_coords 4) (Int32.to_int pad_top) (Int32.to_int pad_left) = Int32.to_int value
+             }
+    =
+    let ref flag = False in
+    let b = x_p_coords[0] in
+    let c = x_p_coords[1] in
+    let n = (x_p_coords[2]) - pad_top in
+    let m = (x_p_coords[3]) - pad_left in
+    let x_coords_array = malloc (to_uint32 4) in
+    if is_not_null x_coords_array then begin
+      flag <- True;
+      x_coords_array[0] <- b;
+      x_coords_array[1] <- c;
+      x_coords_array[2] <- n;
+      x_coords_array[3] <- m;
+
+      assert { ivector x_coords_array 4 = Cons (Int32.to_int b) (Cons (Int32.to_int c) (Cons (Int32.to_int n) (Cons (Int32.to_int m) Nil))) } ;
+
+      let x_coords = coffset x_coords_array (CTensorUInt8.t_dims x) (CTensorUInt8.t_rank x) in
+      if x_coords >= 0 then begin
+      
+        assert { in_bounds (WUInt8.to_int (CTensorUInt8.t_data x)[x_coords] - WUInt8.to_int x_zero) } ;
+        ((widen32 (CTensorUInt8.t_data x)[x_coords]) - (widen32 x_zero), flag)
+      end
+      else begin
+        assert { in_bounds (0 - WUInt8.to_int x_zero) } ;
+        (((0 : int32)) - (widen32 x_zero), flag)
+      end
+    end
+    else begin
+      flag <- False;
+      ((0 : int32), flag)
+    end
+
+  let w_cools_calculate (x : CTensorUInt8.ctensor) (w : CTensorInt8.ctensor) (x_zero : WUInt8.t) (w_zero : WInt8.t)
+                         (c i n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left : int32) : (WInt32.t, bool)
+    requires { CTensorUInt8.valid_tensor x }
+    requires { CTensorInt8.valid_tensor w }
+    requires { (CTensorUInt8.t_rank x) = (CTensorInt8.t_rank w) = 4 }
+    requires { 0 <= m < value_at (CTensorInt8.t_dims w) 0 }
+    requires { 0 <= c < value_at (CTensorInt8.t_dims w) 1 }
+    requires { 0 <= i < value_at (CTensorInt8.t_dims w) 2 }
+
+    requires { in_bounds (i * dil_h) }
+    requires { in_bounds (y_h * str_h) }
+    requires { in_bounds (y_h * str_h + i * dil_h) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (jj * dil_w) }
+    requires { in_bounds (y_w * str_w) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+    requires { let x_h = y_h * str_h + i * dil_h in in_bounds (x_h - pad_top) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 ->
+                let x_w = y_w * str_w + jj * dil_w in in_bounds (x_w - pad_left) }
+
+    ensures { let (value, flag) = result in
+              flag -> WInt32.to_int value =
+                WInt32.swrap (OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                c i (value_at (CTensorInt8.t_dims w) 3) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+            }
+    =
+    let ref flag = False in
+    let ref sum = WInt32.czero in
+    let x_coords_array = malloc (to_uint32 4) in
+    let w_coords_array = malloc (to_uint32 4) in
+    let cols = (CTensorInt8.t_dims w)[3] in
+    if is_not_null x_coords_array && is_not_null w_coords_array then begin
+      flag <- True;
+      for jj = 0 to cols - 1 do
+        invariant { WInt32.to_int sum =
+                      WInt32.swrap (OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                      (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                      c i jj 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) }
+        let x_h = y_h * str_h + i * dil_h in
+        let x_w = y_w * str_w + jj * dil_w in
+        x_coords_array[0] <- n;
+        x_coords_array[1] <- c;
+        x_coords_array[2] <- x_h;
+        x_coords_array[3] <- x_w;
+        assert { ivector x_coords_array 4 = Cons (Int32.to_int n) (Cons (Int32.to_int c) (Cons (Int32.to_int x_h) (Cons (Int32.to_int x_w) Nil))) } ;
+        let (x_val, aux_flag) = coords_from_X_p x x_zero x_coords_array pad_top pad_left in
+        if aux_flag then begin
+          w_coords_array[0] <- m;
+          w_coords_array[1] <- c;
+          w_coords_array[2] <- i;
+          w_coords_array[3] <- jj;
+          let w_coords = coffset w_coords_array (CTensorInt8.t_dims w) (CTensorInt8.t_rank w) in
+          let w_raw = (CTensorInt8.t_data w)[w_coords] in
+          
+          let w_val = (widen32 w_raw) - (widen32 w_zero) in
+     
+          assert { -65025 <= Int32.to_int x_val * Int32.to_int w_val <= 65025 } ;
+          assert { WInt32.to_int (x_val .*. w_val) = Int32.to_int x_val * Int32.to_int w_val } ;
+         
+          assert {
+            OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+              (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+              c i (jj+1) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+            = (Int32.to_int x_val * Int32.to_int w_val)
+              + OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                  (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                  c i jj 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+          } ;
+          sum <- sum .+. (x_val .*. w_val);
+          assert { WInt32.to_int sum =
+                      WInt32.swrap (OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                      (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                      c i (jj+1) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) }
+        end
+        else begin
+          flag <- False;
+          return (WInt32.czero, flag)
+        end
+      done;
+      (sum, flag)
+    end
+    else begin
+      flag <- False;
+      (WInt32.czero, flag)
+    end
+
+  let w_lines_calculate (x : CTensorUInt8.ctensor) (w : CTensorInt8.ctensor) (x_zero : WUInt8.t) (w_zero : WInt8.t)
+                         (c n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left : int32) : (WInt32.t, bool)
+    requires { CTensorUInt8.valid_tensor x }
+    requires { CTensorInt8.valid_tensor w }
+    requires { (CTensorUInt8.t_rank x) = (CTensorInt8.t_rank w) = 4 }
+    requires { 0 <= m < value_at (CTensorInt8.t_dims w) 0 }
+    requires { 0 <= c < value_at (CTensorInt8.t_dims w) 1 }
+
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 -> in_bounds (ii * dil_h) }
+    requires { in_bounds (y_h * str_h) }
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (jj * dil_w) }
+    requires { in_bounds (y_w * str_w) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 ->
+                let x_h = y_h * str_h + ii * dil_h in in_bounds (x_h - pad_top) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 ->
+                let x_w = y_w * str_w + jj * dil_w in in_bounds (x_w - pad_left) }
+
+    ensures { let (value, flag) = result in
+              flag -> WInt32.to_int value =
+                WInt32.swrap (OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                c (value_at (CTensorInt8.t_dims w) 2) 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+            }
+    =
+    let i = (CTensorInt8.t_dims w)[2] in
+    let ref flag = False in
+    let ref sum = WInt32.czero in
+    for ii = 0 to i - 1 do
+      invariant { WInt32.to_int sum =
+                    WInt32.swrap (OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                    (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                    c ii 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) }
+      let (value, aux_flag) = w_cools_calculate x w x_zero w_zero c ii n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left in
+      if aux_flag then begin
+        flag <- True;
+    
+        assert {
+          OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+            (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+            c (ii+1) 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+          = OPConvInteger.w_cools_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+              (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+              c ii (value_at (CTensorInt8.t_dims w) 3) 0 n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+            + OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                c ii 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+        } ;
+        sum <- sum .+. value;
+        assert { WInt32.to_int sum =
+                    WInt32.swrap (OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                    (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                    c (ii+1) 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) } ;
+      end
+      else begin
+        flag <- False;
+        return (WInt32.czero, flag)
+      end
+    done;
+    (sum, flag)
+
+  let w_channels_calculate (x : CTensorUInt8.ctensor) (w : CTensorInt8.ctensor) (x_zero : WUInt8.t) (w_zero : WInt8.t)
+                            (n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left : int32) : (WInt32.t, bool)
+    requires { CTensorUInt8.valid_tensor x }
+    requires { CTensorInt8.valid_tensor w }
+    requires { (CTensorUInt8.t_rank x) = (CTensorInt8.t_rank w) = 4 }
+    requires { 0 <= m < value_at (CTensorInt8.t_dims w) 0 }
+
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 -> in_bounds (ii * dil_h) }
+    requires { in_bounds (y_h * str_h) }
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (jj * dil_w) }
+    requires { in_bounds (y_w * str_w) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 ->
+                let x_h = y_h * str_h + ii * dil_h in in_bounds (x_h - pad_top) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 ->
+                let x_w = y_w * str_w + jj * dil_w in in_bounds (x_w - pad_left) }
+
+    ensures { let (value, flag) = result in
+              flag -> WInt32.to_int value =
+                WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left)
+            }
+    =
+    let c = (CTensorInt8.t_dims w)[1] in
+    let ref flag = False in
+    let ref sum = WInt32.czero in
+    for cc = 0 to c - 1 do
+      invariant { WInt32.to_int sum =
+                    WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                    (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                    cc 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) }
+      let (value, aux_flag) = w_lines_calculate x w x_zero w_zero cc n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left in
+      if aux_flag then begin
+        flag <- True;
+        assert {
+          OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+            (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+            (cc+1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+          = OPConvInteger.w_lines_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+              (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+              cc (value_at (CTensorInt8.t_dims w) 2) 0 (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+            + OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                cc 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left
+        } ;
+        sum <- sum .+. value;
+        assert { WInt32.to_int sum =
+                    WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                    (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                    (cc+1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) n m y_h y_w str_h str_w dil_h dil_w pad_top pad_left) } ;
+      end
+      else begin
+        flag <- False;
+        return (WInt32.czero, flag)
+      end
+    done;
+    (sum, flag)
+
+  let cconvinteger (x : CTensorUInt8.ctensor) (w : CTensorInt8.ctensor) (x_zero : WUInt8.t) (w_zero : WInt8.t)
+                    (r : CTensorInt32.ctensor)
+                    (str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right : int32) : bool
+    requires { CTensorUInt8.valid_tensor x }
+    requires { CTensorInt8.valid_tensor w }
+    requires { CTensorInt32.valid_tensor r }
+    requires { (CTensorUInt8.t_rank x) = (CTensorInt8.t_rank w) = 4 /\ (CTensorInt32.t_rank r) = 4 }
+    requires { ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r) =
+                 OPConvInteger.convDims (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                   str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right }
+    requires { str_h > 0 /\ str_w > 0 }
+    requires { pad_top >= 0 /\ pad_left >= 0 /\ pad_bottom >= 0 /\ pad_right >= 0 }
+    requires { dil_h > 0 /\ dil_w > 0 }
+    requires { length (CTensorUInt8.tensor x).dims = 4 }
+    requires { get_dim (CTensorUInt8.tensor x).dims 1 = get_dim (CTensorInt8.tensor w).dims 1 }
+    requires { length (CTensorInt8.tensor w).dims = 4 }
+    requires { let y_shape = OPConvInteger.convDims (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                               str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right in
+               get_dim y_shape 2 > 0 /\ get_dim y_shape 3 > 0 }
+
+    requires { forall ii. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 -> in_bounds (ii * dil_h) }
+    requires { forall y_h. 0 <= y_h < value_at (CTensorInt32.t_dims r) 2 -> in_bounds (y_h * str_h) }
+    requires { forall ii y_h. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 /\ 0 <= y_h < value_at (CTensorInt32.t_dims r) 2 -> in_bounds (y_h * str_h + ii * dil_h) }
+    requires { forall jj. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 -> in_bounds (jj * dil_w) }
+    requires { forall y_w. 0 <= y_w < value_at (CTensorInt32.t_dims r) 3 -> in_bounds (y_w * str_w) }
+    requires { forall jj y_w. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 /\ 0 <= y_w < value_at (CTensorInt32.t_dims r) 3 -> in_bounds (y_w * str_w + jj * dil_w) }
+    requires { forall ii y_h. 0 <= ii < value_at (CTensorInt8.t_dims w) 2 /\ 0 <= y_h < value_at (CTensorInt32.t_dims r) 2 ->
+                let x_h = y_h * str_h + ii * dil_h in in_bounds (x_h - pad_top) }
+    requires { forall jj y_w. 0 <= jj < value_at (CTensorInt8.t_dims w) 3 /\ 0 <= y_w < value_at (CTensorInt32.t_dims r) 3 ->
+                let x_w = y_w * str_w + jj * dil_w in in_bounds (x_w - pad_left) }
+    requires { forall mm. 0 <= mm < value_at (CTensorInt32.t_dims r) 1 -> mm < value_at (CTensorInt8.t_dims w) 0 }
+
+
+    ensures { result -> CTensorInt32.tensor r =
+                OPConvInteger.convInteger (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                  (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                  str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right }
+    =
+    let n = (CTensorInt32.t_dims r)[0] in
+    let m = (CTensorInt32.t_dims r)[1] in
+    let y_h = (CTensorInt32.t_dims r)[2] in
+    let y_w = (CTensorInt32.t_dims r)[3] in
+    let r_coords_array = malloc (to_uint32 4) in
+    if is_not_null r_coords_array then begin
+      for nn = 0 to n - 1 do
+        invariant {
+          forall nn_ mm yy_hh yy_ww. 0 <= nn_ < nn -> 0 <= mm < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+            let coords = Cons nn_ (Cons mm (Cons yy_hh (Cons yy_ww Nil))) in
+            let off = CFlat.offset coords (ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r)) in
+            value_at (CTensorInt32.t_data r) off = WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                       (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                       (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn_ mm yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left)
+        }
+        r_coords_array[0] <- nn;
+        for mm = 0 to m - 1 do
+          invariant { value_at r_coords_array 0 = nn }
+          invariant {
+            forall nn_ mm_ yy_hh yy_ww. (0 <= nn_ < nn \/ (nn_ = nn /\ 0 <= mm_ < mm)) -> 0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+              let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+              let off = CFlat.offset coords (ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r)) in
+              value_at (CTensorInt32.t_data r) off = WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                         (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                         (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn_ mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left)
+          }
+          r_coords_array[1] <- mm;
+          for y_hh = 0 to y_h - 1 do
+            invariant { value_at r_coords_array 0 = nn /\ value_at r_coords_array 1 = mm }
+            invariant {
+              forall nn_ mm_ yy_hh yy_ww.
+                (0 <= nn_ < nn \/ (nn_ = nn /\ (0 <= mm_ < mm \/ (mm_ = mm /\ 0 <= yy_hh < y_hh)))) ->
+                0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+                let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+                let off = CFlat.offset coords (ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r)) in
+                value_at (CTensorInt32.t_data r) off = WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                           (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                           (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn_ mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left)
+            }
+            r_coords_array[2] <- y_hh;
+            for y_ww = 0 to y_w - 1 do
+              invariant { value_at r_coords_array 0 = nn /\ value_at r_coords_array 1 = mm /\ value_at r_coords_array 2 = y_hh }
+              invariant {
+                forall nn_ mm_ yy_hh yy_ww.
+                  (0 <= nn_ < nn \/ (nn_ = nn /\ (0 <= mm_ < mm \/ (mm_ = mm /\ (0 <= yy_hh < y_hh \/ (yy_hh = y_hh /\ 0 <= yy_ww < y_ww)))))) ->
+                  0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+                  let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+                  let off = CFlat.offset coords (ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r)) in
+                  value_at (CTensorInt32.t_data r) off = WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                             (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                             (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn_ mm_ yy_hh yy_ww str_h str_w dil_h dil_w pad_top pad_left)
+              }
+              r_coords_array[3] <- y_ww;
+              let (value, flag) = w_channels_calculate x w x_zero w_zero nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left in
+              if flag then begin
+                let r_coords = coffset r_coords_array (CTensorInt32.t_dims r) (CTensorInt32.t_rank r) in
+                (CTensorInt32.t_data r)[r_coords] <- value;
+
+                assert { value_at (CTensorInt32.t_data r) r_coords =
+                           WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                                           (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                                           (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left) } ;
+
+                assert {
+                  forall nn_ mm_ yy_hh yy_ww.
+                    (0 <= nn_ < nn \/ (nn_ = nn /\ (0 <= mm_ < mm \/ (mm_ = mm /\ (0 <= yy_hh < y_hh \/ (yy_hh = y_hh /\ 0 <= yy_ww < y_ww)))))) ->
+                    0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+                    let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+                    coords <> ivector r_coords_array (CTensorInt32.t_rank r)
+                } ;
+                assert {
+                  forall nn_ mm_ yy_hh yy_ww.
+                    (0 <= nn_ < nn \/ (nn_ = nn /\ (0 <= mm_ < mm \/ (mm_ = mm /\ (0 <= yy_hh < y_hh \/ (yy_hh = y_hh /\ 0 <= yy_ww < y_ww)))))) ->
+                    0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+                    let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+                    let dims = ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r) in
+                    Range.valid coords dims -> Range.valid (ivector r_coords_array (CTensorInt32.t_rank r)) dims ->
+                    CFlat.offset coords dims <> CFlat.offset (ivector r_coords_array (CTensorInt32.t_rank r)) dims
+                } ;
+
+                assert {
+                  forall nn_ mm_ yy_hh yy_ww.
+                    (0 <= nn_ < nn \/ (nn_ = nn /\ (0 <= mm_ < mm \/ (mm_ = mm /\ (0 <= yy_hh < y_hh \/ (yy_hh = y_hh /\ 0 <= yy_ww < y_ww)))))) ->
+                    0 <= mm_ < m -> 0 <= yy_hh < y_h -> 0 <= yy_ww < y_w ->
+                    let coords = Cons nn_ (Cons mm_ (Cons yy_hh (Cons yy_ww Nil))) in
+                    let dims = ivector (CTensorInt32.t_dims r) (CTensorInt32.t_rank r) in
+                    let off = CFlat.offset coords dims in
+                    off <> r_coords
+                } ;
+
+                assert { CTensorInt32.tensor_value_at (ivector r_coords_array (CTensorInt32.t_rank r)) r
+                          = WInt32.swrap (OPConvInteger.w_channels_calculate (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                              (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                              (value_at (CTensorInt8.t_dims w) 1) 0 (value_at (CTensorInt8.t_dims w) 2) (value_at (CTensorInt8.t_dims w) 3) nn mm y_hh y_ww str_h str_w dil_h dil_w pad_top pad_left) }
+              end
+              else
+                return false
+            done;
+          done;
+        done;
+      done;
+      assert { CTensorInt32.tensor r == OPConvInteger.convInteger (CTensorUInt8.tensor x) (CTensorInt8.tensor w)
+                 (WUInt8.to_int x_zero) (Tensor.scalar (WInt8.to_int w_zero))
+                 str_h str_w dil_h dil_w pad_top pad_left pad_bottom pad_right } ;
+      true
+    end
+    else
+      false
+
+end
+

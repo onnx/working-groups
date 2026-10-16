@@ -1,0 +1,11 @@
+module OPBroadcast
+  use tensor.tensor.Tensor
+  use tensor.Range
+  use list.List
+  use list.Length
+
+
+  let ghost function broadcast (lx : list tensor 'a) : list tensor 'a
+
+
+end

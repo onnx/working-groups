@@ -1,0 +1,106 @@
+(* Abstract level *)
+module OPLeakyRelu
+  use tensor.tensor.Tensor
+  use real.Real
+  use tensor.std.Cfloat
+  use tensor.tensor.Range
+
+  (** Define the value for each coordinate ks *)
+  let ghost function dleaky_relu (alpha : real) (x : tensor real) : data real =
+    fun ks -> 
+      if valid ks x.dims then
+        let v = x.data ks in
+        if Real.(v >= 0.0) then v else Real.(alpha * v)
+      else
+        (* If not valid, map to the transformed background *)
+        if Real.(x.background >= 0.0) 
+        then x.background 
+        else Real.(alpha * x.background)
+
+  let ghost function opleaky_relu (alpha : real) (x : tensor real) : tensor real =
+    ensures { result.dims = x.dims }
+    ensures { result.data = dleaky_relu alpha x }
+    let bg = if Real.(x.background >= 0.0) 
+             then x.background 
+             else Real.(alpha * x.background) in
+    { dims = x.dims;
+      data = dleaky_relu alpha x;
+      background = bg }
+end
+
+(* Concrete level *)
+module CtensorLeakyRelu
+  use tensor.libtensor.Ctensor
+  use tensor.std.Int
+  use tensor.std.List
+  use tensor.std.Clib
+  use tensor.std.Cfloat
+  use mach.int.Int32
+  use tensor.tensor.Range
+  use tensor.tensor.Tensor
+  use tensor.layout.CFlat
+  use tensor.libvector.CIndex
+  use tensor.OPLeakyRelu
+
+let ctensor_leaky_relu (alpha : float) (x r : ctensor) =
+  (*proof*)
+  requires { valid_tensor x }
+  requires { valid_tensor r }
+  requires { tensor x ~ tensor r }
+  requires { 
+    let xb = (tensor x).background in
+    (tensor r).background = if Real.(xb >= 0.0) then xb else Real.(to_real alpha * xb) 
+  }
+  ensures { tensor r = opleaky_relu (to_real alpha) (tensor x) }
+  
+  (* Capture logic states here *)
+  let ghost x_logic = tensor x in
+  let ghost r_init = tensor r in
+  
+  (*qed*)
+
+  let m = cdim_size r.t_dims r.t_rank in
+  let a_real = to_real alpha in
+
+  for i = 0 to m - 1 do
+    (*proof*)
+    invariant { 0 <= i <= m }
+    invariant { (tensor r).background = r_init.background }
+    
+    (* Physical invariant *)
+    invariant { forall k. 0 <= k < i ->
+        value_at r.t_data k = 
+          let v = value_at x.t_data k in
+          if Real.(v >= 0.0) then v else Real.(a_real * v)
+    }
+    
+    (* Logical invariant using the ghost x_logic *)
+    invariant { forall ks. valid ks x_logic.dims ->
+        let idx = offset ks x_logic.dims in
+        if idx < i then
+          (tensor r).data ks = 
+            let v = x_logic.data ks in
+            if Real.(v >= 0.0) then v else Real.(a_real * v)
+        else
+          (tensor r).data ks = r_init.data ks
+    }
+    (*qed*)
+    
+    let v = x.t_data[i] in
+    r.t_data[i] <- if (f32 0.0) .<= v then v else alpha .* v
+  done
+  
+  (*proof*)
+  ; let ghost expected = opleaky_relu a_real x_logic in
+    (* Step 1: Prove shape equality *)
+    assert { (tensor r).dims = expected.dims }
+    (* Step 2: Prove functional equality of data (already done) *)
+  ; assert { (tensor r).data = expected.data }
+    (* Step 3: Prove background equality (already implied by invariant) *)
+  ; assert { (tensor r).background = expected.background }
+    (* Step 4: Final record equality *)
+  ; assert { tensor r == expected }
+  (*qed*)
+
+end
+

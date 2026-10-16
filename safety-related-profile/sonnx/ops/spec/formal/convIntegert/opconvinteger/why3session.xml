@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.5.4" timelimit="1" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.2.1" timelimit="1" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.13.4" timelimit="1" memlimit="1000"/>
+<file format="whyml">
+<path name=".."/><path name="opconvinteger.mlw"/>
+<theory name="OPConvInteger">
+ <goal name="w_cools_calculate&#39;vc" expl="VC for w_cools_calculate" proved="true">
+ <proof prover="0" timelimit="0.012277"><result status="valid" time="0.012277" steps="0"/></proof>
+ </goal>
+ <goal name="w_cools_split&#39;vc" expl="VC for w_cools_split" proved="true">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <transf name="split_vc" proved="true" >
+  <goal name="w_cools_split&#39;vc.0" expl="variant decrease" proved="true">
+  <proof prover="0" timelimit="0.009303"><result status="valid" time="0.009303" steps="0"/></proof>
+  </goal>
+  <goal name="w_cools_split&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.006072"><result status="valid" time="0.006072" steps="0"/></proof>
+  </goal>
+  <goal name="w_cools_split&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="0"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="0"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="w_cools_split&#39;vc.2.0" expl="postcondition" proved="true">
+   <proof prover="0" timelimit="0.024429"><result status="valid" time="0.024429" steps="0"/></proof>
+   </goal>
+   <goal name="w_cools_split&#39;vc.2.1" expl="postcondition" proved="true">
+   <proof prover="0" timelimit="0.522192"><result status="valid" time="0.522192" steps="0"/></proof>
+   <proof prover="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="w_lines_calculate&#39;vc" expl="VC for w_lines_calculate" proved="true">
+ <proof prover="0" timelimit="0.010588"><result status="valid" time="0.010588" steps="0"/></proof>
+ </goal>
+ <goal name="w_lines_split&#39;vc" expl="VC for w_lines_split" proved="true">
+ <proof prover="0" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+ <proof prover="1" timelimit="0.06303"><result status="valid" time="0.063030" steps="0"/></proof>
+ <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+ </goal>
+ <goal name="w_channels_calculate&#39;vc" expl="VC for w_channels_calculate" proved="true">
+ <proof prover="0" timelimit="0.012156"><result status="valid" time="0.012156" steps="0"/></proof>
+ </goal>
+ <goal name="w_channels_split&#39;vc" expl="VC for w_channels_split" proved="true">
+ <proof prover="0" timelimit="0.03604"><result status="valid" time="0.036040" steps="0"/></proof>
+ </goal>
+ <goal name="get_dim_positive&#39;vc" expl="VC for get_dim_positive" proved="true">
+ <proof prover="0" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+ <proof prover="1" timelimit="0.074165"><result status="valid" time="0.074165" steps="0"/></proof>
+ <proof prover="2" timelimit="0.2"><result status="timeout" time="0.200000" steps="0"/></proof>
+ </goal>
+ <goal name="convInteger&#39;vc" expl="VC for convInteger">
+ <proof prover="0"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="1"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="0"/></proof>
+ <transf name="split_vc" >
+  <goal name="convInteger&#39;vc.0" expl="precondition">
+  <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="1" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+  <proof prover="2" timelimit="2.00152"><result status="timeout" time="2.001520" steps="0"/></proof>
+  <transf name="split_vc" >
+   <goal name="convInteger&#39;vc.0.0" expl="precondition">
+   <proof prover="0" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="1" timelimit="2"><result status="timeout" time="2.000000" steps="0"/></proof>
+   <proof prover="2" timelimit="2.00152"><result status="timeout" time="2.001520" steps="0"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="convInteger&#39;vc.1" expl="precondition" proved="true">
+  <proof prover="0" timelimit="0.032108"><result status="valid" time="0.032108" steps="0"/></proof>
+  </goal>
+  <goal name="convInteger&#39;vc.2" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.013032"><result status="valid" time="0.013032" steps="0"/></proof>
+  </goal>
+  <goal name="convInteger&#39;vc.3" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.015595"><result status="valid" time="0.015595" steps="0"/></proof>
+  </goal>
+  <goal name="convInteger&#39;vc.4" expl="postcondition" proved="true">
+  <proof prover="0" timelimit="0.015199"><result status="valid" time="0.015199" steps="0"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

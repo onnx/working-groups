@@ -1,0 +1,9 @@
+module copconvinteger.COPConvInteger
+  interface export "#include <stdlib.h>"
+  interface export "#include <stdint.h>"
+  interface "#include \"cindex.h\""
+  interface "#include \"ctensorint32.h\""
+  interface "#include \"ctensorint8.h\""
+  interface "#include \"ctensoruint8.h\""
+
+end

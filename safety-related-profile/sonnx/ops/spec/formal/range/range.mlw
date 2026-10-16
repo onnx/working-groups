@@ -1,0 +1,54 @@
+module OPRange
+    use int.Int
+    use real.Real
+    use list.List
+    use tensor.Tensor
+    use real.Truncate
+    use int.MinMax
+    use real.FromInt
+    use tensor.Range
+    use list.Length
+
+
+    predicate is_scalar_tensor (t : tensor real) =
+        t.dims = Nil /\ t.data = (fun _ -> t.background)
+
+    let ghost function calculate_num_elements_y (s_background l_background d_background: real) : int
+    requires { d_background <> 0.0 }
+    ensures { Int.(>=) result 0 }
+    ensures { d_background > 0.0 /\ s_background <= l_background -> 
+            s_background + (from_int result) * d_background >= l_background }
+    ensures { d_background < 0.0 /\ s_background >= l_background -> 
+            s_background + (from_int result) * d_background <= l_background }
+    =
+        max (ceil((l_background - s_background) / d_background)) 0
+
+
+    let ghost function calculate_y_data (s_background d_background: real) (y_dims: list int) : data real
+    requires { d_background <> 0.0 }
+    requires { Int.(<=) (length y_dims) 1 }
+    ensures { forall ks. valid ks y_dims /\ y_dims <> Nil -> (exists i:int. Int.(<=) 0  i /\ Int.(<) i (size y_dims) /\
+                result ks = s_background + (from_int i) * d_background) }
+    =
+        fun ks ->
+            if valid ks y_dims then
+                match ks with
+                    | Cons i Nil ->
+                        let idx = from_int i in
+                        s_background + (idx * d_background)
+
+                    | _ -> 0.0
+                end
+            else
+                0.0
+
+    let ghost function oprange (s l d: tensor real) : tensor real
+    requires { is_scalar_tensor(s) /\ is_scalar_tensor(l) /\ is_scalar_tensor(d) }
+    requires { d.background <> 0.0 }
+    =
+        let num_elements = calculate_num_elements_y s.background l.background d.background in
+        let y_dims = if Int.(>) num_elements 0 then Cons (num_elements) Nil else Nil in
+        let y_data = calculate_y_data s.background d.background y_dims in
+        { dims = y_dims; data = y_data; background = 0.0 }
+
+end

@@ -1,0 +1,25 @@
+module tensor.libtensor.CTensor
+    syntax type ctensor "struct ctensor"
+    
+end
+
+module tensorint.libtensor_int.CTensorInt8
+    syntax type ctensor "struct ctensor_i8"
+    
+end
+
+module tensorint.libtensor_int.CTensorInt32
+    syntax type ctensor "struct ctensor_i32"
+    
+end
+
+module tensorint.libtensor_int.CTensorUInt8
+    syntax type ctensor "struct ctensor_ui8"
+    
+end
+
+
+
+
+
+
