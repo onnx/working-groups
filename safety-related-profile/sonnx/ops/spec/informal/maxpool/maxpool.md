@@ -32,8 +32,9 @@ The following specific restrictions apply to the **MaxPool** operator:
 | `[R4]` <a id="R4"></a> | Attribute `ceil_mode` is set to zero  | Transient
 | `[R5]` <a id="R5"></a> | Attribute `storage_order` is set to zero | Transient
 
-<a id="Informal_spec"></a>
-## Informal specification
+## Function
+
+<span style="background: red; color: white; font-size:0.7em;">[E_MAXPOOL_REAL_FUNC_0010]</br></span>
 
 Operator **MaxPool** consumes an input tensor $X$ and applies max pooling across the tensor according to the kernel shape, strides, dilations and pads. Max pooling consists of computing the max on all values of a subset of the input tensor according to the kernel shape and downsampling the data into the output tensor $Y$.
 
@@ -68,6 +69,8 @@ Where
 - `strides` is an attribute of the operator. It will be described later in this section.
 - `dilation` is an attribute of the operator. It will be described later in this section.
 - $X_{p} = \text{pad}(X,pads)$ is the padded version of the input tensor $X$. Function $\text{pad}$ applies padding as specified by attribute [pads](#real_pads).
+
+<span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 ### A graphical view of MaxPool
 
@@ -143,31 +146,39 @@ No error conditions.
 <a id="real_attributes"></a>
 ## Attributes
 
+<a id="auto_pad"></a>
 ### `auto_pad`: string
 
-The `auto_pad` attribute determines if and how automatic padding is done for the input tensor X.
+The `auto_pad` attribute determines if and how automatic padding is done for the input tensor $X$.
 
 #### Constraints
--  `[C1]`: Value domain 
-    - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}. 
-    - Rationale: [`[R2]`](#R2)
--  `[C2]`: Explicit padding 
-    - Statement: `auto_pad` shall be set to NOTSET. 
-    - Rationale: [`[R3]`](#R3)
+<a id="E_MAXPOOL_REAL_CONSTR_AUTO_PAD_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_AUTO_PAD_0010]` Value domain
+  - Statement: `auto_pad` shall be in set {NOTSET, VALID, SAME_UPPER, SAME_LOWER}.
+  - Rationale: [`[R2]`](#R2)
+
+<a id="E_MAXPOOL_REAL_CONSTR_AUTO_PAD_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_AUTO_PAD_0020]` Explicit padding
+  - Statement: `auto_pad` shall be set to NOTSET.
+  - Rationale: [`[R3]`](#R3)
 
 <a id="ceil_mode"></a>
 ### `ceil_mode`: int
 
-Whether to use floor (0, default) or ceil (1) to compute the output shape. See the description of output $Y$.
+Whether to use floor (0, the ONNX default) or ceil (1) to compute the output shape. See the description of output [$Y$](#E_MAXPOOL_REAL_CONSTR_Y_0010).
 
 #### Constraints
--  `[C1]`: Value domain 
-    - Statement: `ceil_mode` shall be in {0, 1}.
-    - Rationale: [`[R2]`](#R2)
--  `[C2]`: floor mode is selected 
-    - Statement: `ceil_mode` shall be set to 0.
-    - Rationale: [`[R4]`](#R4)
+<a id="E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0010]` Value domain
+  - Statement: `ceil_mode` shall be in {0, 1}.
+  - Rationale: [`[R2]`](#R2)
 
+<a id="E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0020]` Floor mode is selected
+  - Statement: `ceil_mode` shall be set to 0.
+  - Rationale: [`[R4]`](#R4)
+
+<a id="dilations"></a>
 ### `dilations`: list of ints
 
 Dilation value along each spatial axis of filter.
@@ -185,31 +196,41 @@ In the example above:
 - The offset between two '1' in the dilated $W$ along one spacial axis equals the dilation value for that axis, i.e., '2' in the example. Therefore, at a given position of $W$ on $X$, one value of $X$ over two is selected for computing the max along each spatial axis. 
   
 #### Constraints
-- `[C1]`: Value domain
-    - Statement: `dilations` is a list of strictly positive integers
-    - Rationale: The dilation is a *factor of expansion* along a certain axis.
-- `[C2]`: Relation between `dilations` and $X$ 
-    - Statement: the length of the `dilations` list is the number of spatial dimensions of $X$ ([see constraint `C1` of $X$](#C1ia)).
-    - Rationale: Dilation is defined for all spatial axes of $X$.
-- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [see constraint `C2` of $Y$](#shape_consist)
+<a id="E_MAXPOOL_REAL_CONSTR_DILATIONS_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_DILATIONS_0010]` Value domain
+  - Statement: `dilations` is a list of strictly positive integers.
+  - Rationale: The dilation is a *factor of expansion* along a certain axis.
+
+<a id="E_MAXPOOL_REAL_CONSTR_DILATIONS_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_DILATIONS_0020]` Relation between `dilations` and $X$
+  - Statement: The length of the `dilations` list is the number of spatial axes of $X$ (see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_X_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_X_0010)).
+  - Rationale: Dilation is defined for all spatial axes of $X$.
+
+- `[E_MAXPOOL_REAL_CONSTR_DILATIONS_0030]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
 
 
+<a id="kernel_shape"></a>
 ### `kernel_shape`: list of ints
 
 The size of the kernel along each spatial axis.
 
 #### Constraints
-- `[C1]`: Value domain
-    - Statement: `kernel_shape` is a list of strictly positive integers
-    - Rationale: The max must be computed on at least one element.
-- `[C2]`: Relation between `kernel_shape` and $X$ 
-    - Statement: the length of `kernel_shape` is the number of spatial axes of $X$.
-    - Rationale: `kernel_shape` is defined for all spatial axes of $X$.
-- `[C3]`: Relation between `kernel_shape`and `pads`
-    - Statement: [see constraint `[C2]` of `pads`](#Keff_less_than_pads)
-- `[C4]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [see constraint `[C1]` and `[C2]` of $Y$](#shape_consist)
+<a id="E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0010]` Value domain
+  - Statement: `kernel_shape` is a list of strictly positive integers.
+  - Rationale: The max must be computed on at least one element.
+
+<a id="E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0020]` Relation between `kernel_shape` and $X$
+  - Statement: The length of `kernel_shape` is the number of spatial axes of $X$.
+  - Rationale: `kernel_shape` is defined for all spatial axes of $X$.
+
+- `[E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0030]` Relation between `kernel_shape`, `pads` and `dilations`
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_PADS_0020</span></b>](#E_MAXPOOL_REAL_CONSTR_PADS_0020) on attribute `pads`.
+
+- `[E_MAXPOOL_REAL_CONSTR_KERNEL_SHAPE_0040]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
 
 <a id="real_pads"></a>
 ### `pads`: list of ints
@@ -227,78 +248,96 @@ The effect of the `pads` attribute is illustrated on the following figure on int
 <img src="../common/assets/sliding_window_ops/imgs/onnx_conv_padop2.png" alt="drawing" width="80%"/>
 
 #### Constraints
-- `[C1]`: Consistency between the shape of $X$ and the length of `pads`
-    - Statement: The length of the `pads` list is twice the number of spatial axes of $X$
-    - Rationale: Padding shall be given for all spatial axes, and a begining value and an end value must be given for each axis.
-- `[C2]`<a id="Keff_less_than_pads"></a> : Consistency between `pads`, `kernel_shape`, and `dilation`
-    - Statement: Each dimension of the possibly dilated kernel shall be strictly greater than the greatest value in `pads` for the same dimension, i.e.:
-        $Ke_i > \text{max}(pads[i], pads[i+2])$
-        where $Ke_i = (\texttt{dilations}[i] * (\texttt{kernel\_shape}[i] - 1) + 1)$
-    - Rationale: This constraint guarantees that the max value returned by **MaxPool** belongs to $X$.
-- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`  
-    - Statement: [See constraint `[C1]` of Y](#shape_consist)
+<a id="E_MAXPOOL_REAL_CONSTR_PADS_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_PADS_0010]` Consistency between the shape of $X$ and the length of `pads`
+  - Statement: The length of the `pads` list is twice the number of spatial axes of $X$.
+  - Rationale: Padding shall be given for all spatial axes, and a beginning value and an end value must be given for each axis.
 
+<a id="E_MAXPOOL_REAL_CONSTR_PADS_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_PADS_0020]` Consistency between `pads`, `kernel_shape` and `dilations`
+  - Statement: Each dimension of the possibly dilated kernel shall be strictly greater than the greatest value in `pads` for the same axis, i.e.:
+
+      $$
+    Ke_i > \max(\texttt{pads}[i], \texttt{pads}[i+2])
+    $$
+
+    where $Ke_i = \texttt{dilations}[i] \cdot (\texttt{kernel\_shape}[i] - 1) + 1$.
+  - Rationale: This constraint guarantees that the max value returned by **MaxPool** belongs to $X$.
+
+- `[E_MAXPOOL_REAL_CONSTR_PADS_0030]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
+
+<a id="storage_order"></a>
 ### `storage_order`: int
 
 The storage order of the tensor. 0 is row major, and 1 is column major.
 
 #### Constraints
--  `[C1]`: Explicit storage order
-    - Statement: `storage_order` shall be set to zero.
-    - Rationale: [`[R2]`](#R2), [`[R5]`](#R5)
+<a id="E_MAXPOOL_REAL_CONSTR_STORAGE_ORDER_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_STORAGE_ORDER_0010]` Explicit storage order
+  - Statement: `storage_order` shall be set to zero.
+  - Rationale: [`[R2]`](#R2), [`[R5]`](#R5)
 
+<a id="strides"></a>
 ### `strides`: list of ints
 
-Attribute `strides` determines how the kernel is applied on tensor $X$ during the **MaxPool**.
-
-For instance, with $\texttt{stride}[0]=3$ and $\texttt{stride}[1]=2$, the kernel is applied to data 2 units on right in the first spatial axis and to data 3 units down in the second spatial axis at each step of the max pooling.
+Attribute `strides` determines how the kernel is moved over tensor $X$ during the **MaxPool**: between two successive applications of the kernel, the kernel is shifted by `strides`[0] elements along the first spatial axis and by `strides`[1] elements along the second spatial axis.
 
 The effect of the `strides` attribute is illustrated on the following figure. In this example, `strides`=(3,2).
 
 <img src="../common/assets/sliding_window_ops/imgs/conv_stride3.png" width="300" />
 
 #### Constraints
-- `[C1]`: Value domain
-    - Statement: `strides` is a list of strictly positive integers.
-    - Rationale: Stride values represent the number of applications of the kernel in the two spatial dimensions
-- `[C2]`: Relation between `strides` and $X$ 
-    - Statement: the length of the `strides` list is the number of spatial dimensions of $X$ ([see constraint `C1` of $X$](#C1ia)).
-    - Rationale: Dilation is defined for all spatial axes of $X$.
-- `[C3]`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement: [See constraint `[C1]` of Y](#shape_consist)
+<a id="E_MAXPOOL_REAL_CONSTR_STRIDES_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_STRIDES_0010]` Value domain
+  - Statement: `strides` is a list of strictly positive integers.
+  - Rationale: A stride is a number of elements by which the kernel is shifted along a spatial axis.
+
+<a id="E_MAXPOOL_REAL_CONSTR_STRIDES_0020"></a>
+- `[E_MAXPOOL_REAL_CONSTR_STRIDES_0020]` Relation between `strides` and $X$
+  - Statement: The length of the `strides` list is the number of spatial axes of $X$ (see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_X_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_X_0010)).
+  - Rationale: Strides are defined for all spatial axes of $X$.
+
+- `[E_MAXPOOL_REAL_CONSTR_STRIDES_0030]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
+
 
 ## Inputs
 
 ### $\text{X}$: real
 
-$X$ is the input tensor from which the max values are selected. 
+$X$ is the input tensor from which the max values are selected. Its shape is $(dX_0, dX_1, dX_2, dX_3)$, where $dX_0$ is the number of batches, $dX_1$ the number of channels, and $dX_2$ and $dX_3$ the sizes of the two spatial axes.
 
 
 #### Constraints
 
-- `[C1]` <a id="C1ia"></a> Number of spatial axes
-    - Statement: The number of spatial axes of tensor $X$ is 2. 
-    - Rationale: [`[R1]`](#R1).
-- `[C2]`: Consistency between the shape of tensors $Y$, $X$ and  attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement: [See constraint `[C1]` of Y](#shape_consist)
+<a id="E_MAXPOOL_REAL_CONSTR_X_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_X_0010]` Number of spatial axes
+  - Statement: The number of spatial axes of tensor $X$ is 2.
+  - Rationale: [`[R1]`](#R1)
+
+- `[E_MAXPOOL_REAL_CONSTR_X_0020]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
 
 
 ## Outputs
 
 ### $\text{Y}$: real
 
-The shape of the output $Y$ is $(dY_0 , dY_1 , dY_2 , dY_3)$ where
+Output tensor containing the max values selected from $X$. The shape of $Y$ is $(dY_0, dY_1, dY_2, dY_3)$ where
 - $dY_0$ is the number of batches
 - $dY_1$ is the number of channels
-- $dY_2$ and $dY_3$ are the sizes of the output for the two spatial axes
+- $dY_2$ and $dY_3$ are the sizes of the output along the two spatial axes
 
 #### Constraints.
-- `[C1]`: <a id="shape_consist"></a> Consistency between the shape of tensors $Y$, $X$, and attributes `kernel_shape`, `pads`, `dilations` and `strides`
-    - Statement:
-        - $dY_2 = \left\lfloor{((dX_2 + pad\_shape[0] - (\texttt{dilations}[0] * (\texttt{kernel\_shape}[0] - 1) + 1)) / \texttt{strides}[0]) + 1}\right\rfloor$
-        - $dY_3 = \left\lfloor{((dX_3 + pad\_shape[1] - (\texttt{dilations}[1] * (\texttt{kernel\_shape}[1] - 1) + 1)) / \texttt{strides}[1]) + 1}\right\rfloor$
-        - where $pad\_shape[i]$ is the sum of the pads along spatial axis $i$ 
-        - In the previous formulae, `ceil_mode`(#ceil_mode) is considered set to 0 ([see `ceil_mode` definition](#ceil_mode)).
+<a id="E_MAXPOOL_REAL_CONSTR_Y_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_Y_0010]` Shape consistency between $Y$, $X$ and attributes `kernel_shape`, `pads`, `dilations` and `strides`
+  - Statement:
+    - $dY_0 = dX_0$ and $dY_1 = dX_1$
+    - $dY_2 = \left\lfloor \dfrac{dX_2 + pad\_shape[0] - (\texttt{dilations}[0] \cdot (\texttt{kernel\_shape}[0] - 1) + 1)}{\texttt{strides}[0]} + 1 \right\rfloor$
+    - $dY_3 = \left\lfloor \dfrac{dX_3 + pad\_shape[1] - (\texttt{dilations}[1] \cdot (\texttt{kernel\_shape}[1] - 1) + 1)}{\texttt{strides}[1]} + 1 \right\rfloor$
+    - where $pad\_shape[i]$ is the sum of the pads at the beginning and at the end of spatial axis $i$, i.e., $pad\_shape[0] = \texttt{pads}[0] + \texttt{pads}[2]$ and $pad\_shape[1] = \texttt{pads}[1] + \texttt{pads}[3]$
+    - In the previous formulae, attribute [`ceil_mode`](#ceil_mode) is considered set to 0 (see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0020</span></b>](#E_MAXPOOL_REAL_CONSTR_CEIL_MODE_0020)).
   
 
 ### $\text{Indices}$: int64
@@ -307,8 +346,9 @@ $\textit{Indices}$ contains the indices of the input tensor $X$ from which the m
 
 #### Constraints
 
- - `[C1]` <a id="C1iy"></a> First constraint on $\textit{Indices}$
-   - Statement: $\textit{Indices}$ and $Y$ shall have the same shape
+<a id="E_MAXPOOL_REAL_CONSTR_INDICES_0010"></a>
+- `[E_MAXPOOL_REAL_CONSTR_INDICES_0010]` Shape consistency
+  - Statement: Tensors $\textit{Indices}$ and $Y$ shall have the same shape.
 
 <a id="float"></a>
 # **MaxPool** (float)
@@ -316,21 +356,23 @@ where float is in {float16, float, double}
 
 
 ## Signature
-($Y, \textit{Indices}) = \textbf{MaxPool}(X)$
+$(Y, \textit{Indices}) = \textbf{MaxPool}(X)$
 
 where:
-- $X$: Input tensor
-- $Y$: Output tensor containing max value selected from $X$
-- $\textit{Indices}$: Output tensor containing the indices in $X$ from where the max values are taken.
+- $X$: input tensor
+- $Y$: output tensor containing the max values selected from $X$
+- $\textit{Indices}$: output tensor containing the indices in $X$ from where the max values are taken
    
 ## Restrictions
 
 See [Restrictions](#restrictions).
 
-## Informal specification
-The specification of **MaxPool** for the floating point numbers is identical to the specification for reals, with the following modifications:
-- The $\text{Max}$ operator becomes $\text{Max}_F$
-- The padding value becomes -Inf.
+## Function
+
+<span style="background: red; color: white; font-size:0.7em;">[E_MAXPOOL_FLOAT_FUNC_0010]</br></span>
+The specification of **MaxPool** for the floating point numbers is identical to the specification for realsc(see [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_FUNC_0010</span></b>](#E_MAXPOOL_REAL_FUNC_0010)), with the following modifications:
+- The $\text{Max}$ operator becomes $\text{Max}_F$, the maximum for floating-point numbers.
+- The padding value becomes $-\text{inf}$.
 
 The effect of the operator is illustrated on the following examples.
 
@@ -548,9 +590,10 @@ Y =
 \end {bmatrix}
 ```
 
-### Discrepancies observed in an existing implementations
+<span style="font-size:0.7em;"></br>[info]</br></span>
+### Discrepancies observed in an existing implementation
 
-**WARNING: Non compliances with the SONNX specification have been observed on the ONNX Runtime implementation (version 1.23.2).**
+**WARNING: Non-compliances with the SONNX specification have been observed on the ONNX Runtime implementation (version 1.23.2).**
 
 > S'assurer que les tests suivants ont été exécutés sur la bonne version d'ORT.
 
@@ -588,20 +631,54 @@ Two discrepancies appear:
 - in $Y$: -1.79769313e+308 instead of -inf as first element.
 - in $\textit{Indices}$: $-4$ instead of $0$ (first element of $X$).
 
+<span style="font-size:0.7em;"></br>[/info]</br></span>
+
 ## Error conditions
 No error conditions.
 
 ## Attributes
 
-Cf. float.
+See [attributes for real numbers](#real_attributes).
 
 ## Inputs
 
-Cf. float.
+$X$ is the input tensor from which the max values are selected.
+
+#### Constraints
+
+- `[E_MAXPOOL_FLOAT_CONSTR_X_0010]` Number of spatial axes
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_X_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_X_0010) on tensor $X$.
+
+- `[E_MAXPOOL_FLOAT_CONSTR_X_0020]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
+
+<a id="E_MAXPOOL_FLOAT_CONSTR_X_0030"></a>
+- `[E_MAXPOOL_FLOAT_CONSTR_X_0030]` Type consistency
+  - Statement: Tensors $X$ and $Y$ must have the same type.
+
 
 ## Outputs
 
-Cf. float.
+### $\text{Y}$: floating-point tensor
+
+Output tensor containing the max values selected from $X$.
+
+#### Constraints
+
+- `[E_MAXPOOL_FLOAT_CONSTR_Y_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_Y_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_Y_0010) on tensor $Y$.
+
+- `[E_MAXPOOL_FLOAT_CONSTR_Y_0020]` Type consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_FLOAT_CONSTR_X_0030</span></b>](#E_MAXPOOL_FLOAT_CONSTR_X_0030) on tensor $X$.
+
+### $\text{Indices}$: int64 tensor
+
+$\textit{Indices}$ contains the indices of the input tensor $X$ from which the max values are taken.
+
+#### Constraints
+
+- `[E_MAXPOOL_FLOAT_CONSTR_INDICES_0010]` Shape consistency
+  - Statement: see constraint [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_CONSTR_INDICES_0010</span></b>](#E_MAXPOOL_REAL_CONSTR_INDICES_0010) on tensor $\textit{Indices}$.
 
 <a id="int"></a>
 # **MaxPool** (int)
@@ -609,20 +686,22 @@ where int is in {int8, uint8}.
 
 ## Signature
 
-($Y, \textit{Indices}) = \text{MaxPool}(X)$
+$(Y, \textit{Indices}) = \textbf{MaxPool}(X)$
 
 where:
 - $X$: input tensor
-- $Y$: output tensor containing max value selected from $X$
-- $\textit{Indices}$: output tensor containing the indices in $X$ from where the max values are taken.
+- $Y$: output tensor containing the max values selected from $X$
+- $\textit{Indices}$: output tensor containing the indices in $X$ from where the max values are taken
    
 ## Restrictions
 
 See [Restrictions](#restrictions).
 
 
-## Informal specification
-The specification of **MaxPool** for integer numbers is identical to the specification for reals, with the following modification:
+## Function
+
+<span style="background: red; color: white; font-size:0.7em;">[E_MAXPOOL_INT_FUNC_0010]</br></span>
+The specification of **MaxPool** for integer numbers is identical to the specification for reals (see [<b><span style="font-family: 'Courier New', monospace">E_MAXPOOL_REAL_FUNC_0010</span></b>](#E_MAXPOOL_REAL_FUNC_0010)), with the following modification:
 - The padding value becomes the minimum value for the type (minint8 for int8 and 0 for uint8).
 
 The effect of the operator is illustrated on the following examples.
@@ -924,7 +1003,7 @@ No error conditions.
 
 ## Attributes
 
-See reals.
+See [attributes for real numbers](#real_attributes).
 
 ## Inputs
 
