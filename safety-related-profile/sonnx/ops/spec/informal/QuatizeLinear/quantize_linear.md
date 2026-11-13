@@ -49,6 +49,38 @@ where
 - $\text{round}$ is the round-to-nearest, ties-to-even function (the default IEEE 754 rounding mode),
 - $\text{clamp}(v, lo, hi)$ saturates $v$ into the range $[lo, hi]$, i.e., $\text{clamp}(v,lo,hi) = \min(\max(v,lo),hi)$.
 
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
+
+
+
+Let $T[i]$ be the unclipped quantized value before saturation:
+
+$$
+T[i] = \text{round}\left(\frac{X[i]}{y\_scale}\right) + y\_zero\_point
+$$
+
+The scalar equation using clamping is defined as:
+
+$$
+Y[i] = \text{clamp}(T[i],\ 0,\ 255)
+$$
+
+The complete mathematical definition of the operator by cases is given hereafter.
+
+For any [tensor index](./../common/definitions.md#tensor_index) $i$:
+
+$$
+Y[i] = 
+\begin{cases} 
+0 & \text{if } X[i] \text{ is finite and } T[i] < 0 \\
+255 & \text{if } X[i] \text{ is finite and } T[i] > 255 \\
+\text{uint8}(T[i]) & \text{if } X[i] \text{ is finite and } 0 \le T[i] \le 255 \\
+0 & \text{if } X[i] = -\text{inf} \\
+255 & \text{if } X[i] = +\text{inf} \\
+0 & \text{if } X[i] \text{ is NaN}
+\end{cases}
+$$
+
 <span style="background: red; color: white; font-size:0.7em;">[END]</br></span>
 
 The effect of the operator is illustrated on the following examples.
@@ -90,7 +122,6 @@ Here, $300/1.0 + 0 = 300$ is saturated (clamped) to $255$, and $-50/1.0+0=-50$ i
 
 ## Error conditions
 - If $y\_scale = 0$, the division $X[i]/y\_scale$ is not defined (see the constraint on $y\_scale$ below, which prevents this).
-- If $X[i]$ is $\pm\text{inf}$ or $\text{NaN}$, then $X[i]/y\_scale$ is respectively $\pm\text{inf}$ or $\text{NaN}$, and the result of rounding and saturating this value is implementation-dependent.
 
 ## Attributes
 
