@@ -1,6 +1,3 @@
-
-
-
 # 2026/10/21
 ## Participants
 - Franck, Edoardo, Jean, Mariem, Jean-Loup, 

@@ -1,3 +1,46 @@
+
+#### 2026/11/13
+
+##### Review of informal specifications
+- [ ] For each operator, make it clear if it is the classical mathematical operator such as +, - , \sigma, etc., or an operator for a specific type such as $+_{i32}$, $-_{f32}$, etc. 
+- [ ] Change the signatures so as to show the type of the output e.g. **int Div(int,int)**
+- **ConvInteger**
+	- [ ] In SONNX,  optional arguments are mandatory.  
+	- [ ] In the specification, as a warning to explain that as the operators are in intX, wraparound conditions can occur 
+- **QuantizeLinear**
+	- [ ] For operator **QuantizeLineaar**, do the following corrections:
+		- Correct the directory name: `QuatizeLinear` → `QuantizeLinear`.
+		- Remove the types from the argument descriptions and declare them in the function signature instead, as in `float Div(float, float)`
+		- Replace "restricted to its default value" with "restricted to value X".
+		- Remove "is not applicable" and specify a value instead.
+		- Remove "axis has no effect".
+		- For `output_dtype`, use the value `2`, which corresponds to `uint8`.
+		- For `precision`, use the value `1`, which corresponds to `float32`.
+		- Remove the redundant sentence "The mathematical definition of...".
+		- Replace `clamp` with `clip`.
+		- Replace the `round` operator with the actual IEEE 754 rounding operation: `roundTiesToEven`.
+		- Replace all arithmetic operators with their explicitly typed equivalents, such as $-_{f32}$, $/_{f32}$, etc.
+		- Check the behavior when `y_scale` is `0`, or when both `y_scale` and `X[i]` are `+∞`, and other edge cases that may produce `NaN`.
+		- Provide a few examples involving special floating-point values.
+- **DequantizeLinear**
+    - For **DequantizeLinear**, make the following corrections:
+        - The examples appear to have been calculated using 64-bit floating-point arithmetic. Correct them to use 32-bit floats.
+        - Replace the `float` operator with the IEEE 754-defined conversion operation `binary32-convertFromInt`.
+        - Verify the examples: it seems that the floating-point calculations were performed using 64-bit precision. With 32-bit floating-point arithmetic, rounding should occur.
+        - Remove the "Error Conditions" section, as the specification is complete.
+- **ArgMax**
+    - For **ArgMax**, make the following corrections:
+        - Correct the tensor representations to explicitly show the matrices.
+        - Provide an example involving `NaN` values.
+##### Code generation
+- [ ] For each operator, provide an API documentation
+- [ ] Produce a short guide explaining the relation between the signature in the C code and the informal specification of the operators. This shall at least cover: the input and output arguments (`struct c tensor`) and the attributes (which appear as arguments of the C function).
+##### Review of formal specification
+- **Conv**
+	- The low-level specification (`cconv`) uses a large set of `requires`that cannot be traced to the informal specification. (or to the formal specification of `conv`). It seems that they have been introduced to achieve the proof, but nothing ensures that those preconditions are satisfied in the code. 
+		- [ ] Correct the non-traceable `requires` clauses of `Conv`.
+
+
 #### 2026/10/16
 ##### Topics 
   - Status of actions
