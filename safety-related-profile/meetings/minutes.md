@@ -1,3 +1,32 @@
+# 2026/11/18
+## Participants
+- To be completed.
+## Agenda 
+- News about the [workshop](https://evenium.events/nhk0cwn5) (Eric)
+- Status of progress on informal/formal specs, code generation a,nd interagtion (Mariem)
+- Activities of the local working group (see minutes [here](../meetings/Local%20WGs/Tlse/agenda.md)). 
+### Previous actions
+- [ ] (010726-2, Eric) Organize a meeting with the Operator SIG (contact: Ram)
+  - On 15/07: Issues created an set. 
+- [ ] (010726-4, Eric) Integrate Loïc's recommendations to improve traceability using the sum op in the formal spec guidelines.  
+- [ ] (0306-2, Eric) Contact the industrialists that have shown some interest in ONNX (especially those that have expressed some specific needs in [scope.md](../deliverables/scope/scope.md)).
+- [ ] (0306-3, Eric) Organize a (remote) presentation of our work to the community in Sept or Oct. 
+  - On 15/07 : prepare agenda
+- [ ] (2503-2, Eric) Consolidate a test strategy for SONNX out of the two sets of guidelines on testing.  
+  - Jean is working on the test strategy. To be discussed during Toulouse's meeting.
+  - First draft by Eric reviewed by Jean-Loup. Corrections integrated, some comments still to be processed. Consolidation with existing doc to be done.
+  - Doc reworked
+  - On 15/07 : work still in progress.
+- [ ] (1103-3, all) Inform ONNX Runtime about the problem found in their implementation (**MaxPool** and others)
+  - Use the github issue mechanism ("For feature requests or bug reports, please file a GitHub Issue"). (Note that there are 838 opened issues in total, 66 on the core runtime; maybe worth having a look to the list...)
+    - On 15/07 : 
+      - MaxPool
+      - [ ] Eric to create a list of issues encountered so far..., classify issues with respect to e.g., IEEE, corner cases related to the structure of tensors, etc. To be presented to / discussed with Xavier.
+- [ ] (1103-7) Complete tests on **Conv** as they have been done on **MaxPool** (after action 1103-2 is closed)
+- [ ] (2801-3, all) Check how NaNs are addressed in the completed operators. They shouldn't be treated as "errors". Update the guidelines accordingly.
+  - On 15/07: This is part of the larger problem of validating all spec wrt the (updated) guidelines... 
+
+
 # 2026/10/21
 ## Participants
 - Franck, Edoardo, Jean, Mariem, Jean-Loup, 
@@ -9,10 +38,9 @@
   - A generated test against ORT: [Neg](https://github.com/ericjenn/sonnx/blob/main/agents/runs/Neg/cases.py)
 - Regarding accuracy, a quick review of [this note](https://share-is.pf.irt-saintexupery.com/s/BRSy3WHSgeFYorF) (eric)
 - other topics
-## Minutes  
-- To be completed
 ## Actions
 ### New actions
+- None.
 ### Previous actions
 - [X] (230926-1, Edoardo) Provide a short synthesis of what would be useful for the NN verification community 
   - Done
